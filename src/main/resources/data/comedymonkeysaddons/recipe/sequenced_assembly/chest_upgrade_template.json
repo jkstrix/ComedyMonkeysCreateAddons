@@ -1,0 +1,49 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "comedymonkeysaddons:upgrade_template"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "id": "comedymonkeysaddons:chest_upgrade_template"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_chest_upgrade_template"
+        },
+        {
+          "tag": "c:chests/wooden"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_chest_upgrade_template"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_chest_upgrade_template"
+        },
+        {
+          "item": "create:andesite_alloy"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_chest_upgrade_template"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "comedymonkeysaddons:incomplete_chest_upgrade_template"
+  }
+}

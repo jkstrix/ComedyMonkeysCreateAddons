@@ -1,0 +1,38 @@
+{
+  "parent": "comedymonkeysaddons:dripstone_upgrade",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:dripstone_upgrade"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.maxed_wellspring"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.maxed_wellspring.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "maxed": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "wellspring_upgrade",
+        "item": {
+          "items": [
+            "comedymonkeysaddons:water_upgrade",
+            "comedymonkeysaddons:dripstone_upgrade"
+          ]
+        },
+        "min_value": 3
+      }
+    }
+  },
+  "requirements": [
+    [
+      "maxed"
+    ]
+  ]
+}

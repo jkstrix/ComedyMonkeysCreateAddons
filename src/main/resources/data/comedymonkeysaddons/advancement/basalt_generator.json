@@ -1,0 +1,68 @@
+{
+  "parent": "comedymonkeysaddons:andesite_cobble_generator",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:andesite_basalt_generator"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.basalt_generator"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.basalt_generator.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "andesite": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:andesite_basalt_generator"
+          }
+        ]
+      }
+    },
+    "brass": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:brass_basalt_generator"
+          }
+        ]
+      }
+    },
+    "wireless_andesite": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:wireless_andesite_basalt_generator"
+          }
+        ]
+      }
+    },
+    "wireless_brass": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:wireless_brass_basalt_generator"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "andesite",
+      "brass",
+      "wireless_andesite",
+      "wireless_brass"
+    ]
+  ]
+}

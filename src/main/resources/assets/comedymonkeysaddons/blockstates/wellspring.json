@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "source=none,upgrades=0": {
+      "model": "comedymonkeysaddons:block/wellspring_0"
+    },
+    "source=none,upgrades=1": {
+      "model": "comedymonkeysaddons:block/wellspring_0"
+    },
+    "source=none,upgrades=2": {
+      "model": "comedymonkeysaddons:block/wellspring_0"
+    },
+    "source=none,upgrades=3": {
+      "model": "comedymonkeysaddons:block/wellspring_0"
+    },
+    "source=water,upgrades=0": {
+      "model": "comedymonkeysaddons:block/wellspring_0"
+    },
+    "source=water,upgrades=1": {
+      "model": "comedymonkeysaddons:block/wellspring_water_1"
+    },
+    "source=water,upgrades=2": {
+      "model": "comedymonkeysaddons:block/wellspring_water_2"
+    },
+    "source=water,upgrades=3": {
+      "model": "comedymonkeysaddons:block/wellspring_water_3"
+    },
+    "source=lava,upgrades=0": {
+      "model": "comedymonkeysaddons:block/wellspring_0"
+    },
+    "source=lava,upgrades=1": {
+      "model": "comedymonkeysaddons:block/wellspring_lava_1"
+    },
+    "source=lava,upgrades=2": {
+      "model": "comedymonkeysaddons:block/wellspring_lava_2"
+    },
+    "source=lava,upgrades=3": {
+      "model": "comedymonkeysaddons:block/wellspring_lava_3"
+    },
+    "source=honey,upgrades=0": {
+      "model": "comedymonkeysaddons:block/wellspring_0"
+    },
+    "source=chocolate,upgrades=0": {
+      "model": "comedymonkeysaddons:block/wellspring_0"
+    },
+    "source=honey,upgrades=1": {
+      "model": "comedymonkeysaddons:block/wellspring_honey_1"
+    },
+    "source=chocolate,upgrades=1": {
+      "model": "comedymonkeysaddons:block/wellspring_chocolate_1"
+    },
+    "source=honey,upgrades=2": {
+      "model": "comedymonkeysaddons:block/wellspring_honey_2"
+    },
+    "source=chocolate,upgrades=2": {
+      "model": "comedymonkeysaddons:block/wellspring_chocolate_2"
+    },
+    "source=honey,upgrades=3": {
+      "model": "comedymonkeysaddons:block/wellspring_honey_3"
+    },
+    "source=chocolate,upgrades=3": {
+      "model": "comedymonkeysaddons:block/wellspring_chocolate_3"
+    }
+  }
+}

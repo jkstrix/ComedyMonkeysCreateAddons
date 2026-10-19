@@ -1,0 +1,13 @@
+{
+  "type": "comedymonkeysaddons:pressure_crucible",
+  "ingredient": {
+    "item": "minecraft:quartz"
+  },
+  "count": 4,
+  "heat_requirement": "superheated",
+  "processing_time": 800,
+  "result": {
+    "id": "minecraft:amethyst_shard",
+    "count": 2
+  }
+}

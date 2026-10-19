@@ -1,0 +1,29 @@
+{
+  "parent": "comedymonkeysaddons:item/upgraded_barrel_copper",
+  "overrides": [
+    {
+      "predicate": {
+        "comedymonkeysaddons:tier": 0.05
+      },
+      "model": "comedymonkeysaddons:item/upgraded_barrel_iron"
+    },
+    {
+      "predicate": {
+        "comedymonkeysaddons:tier": 0.15
+      },
+      "model": "comedymonkeysaddons:item/upgraded_barrel_gold"
+    },
+    {
+      "predicate": {
+        "comedymonkeysaddons:tier": 0.25
+      },
+      "model": "comedymonkeysaddons:item/upgraded_barrel_diamond"
+    },
+    {
+      "predicate": {
+        "comedymonkeysaddons:tier": 0.35
+      },
+      "model": "comedymonkeysaddons:item/upgraded_barrel_netherite"
+    }
+  ]
+}

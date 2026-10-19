@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "sable"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BSB",
+    "GFG",
+    "BPB"
+  ],
+  "key": {
+    "B": {
+      "item": "create:brass_casing"
+    },
+    "S": {
+      "item": "create:shaft"
+    },
+    "G": {
+      "item": "create:framed_glass"
+    },
+    "F": {
+      "item": "create:flywheel"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:compact_gyroscope",
+    "count": 1
+  }
+}

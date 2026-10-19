@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:emerald_dust",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:pressure_crucible"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.pressure_crucible"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.pressure_crucible.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crucible": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:pressure_crucible"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crucible"
+    ]
+  ]
+}

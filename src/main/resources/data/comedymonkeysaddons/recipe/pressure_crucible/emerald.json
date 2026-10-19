@@ -1,0 +1,12 @@
+{
+  "type": "comedymonkeysaddons:pressure_crucible",
+  "ingredient": {
+    "item": "comedymonkeysaddons:emerald_dust"
+  },
+  "count": 9,
+  "heat_requirement": "heated",
+  "processing_time": 200,
+  "result": {
+    "id": "minecraft:emerald"
+  }
+}

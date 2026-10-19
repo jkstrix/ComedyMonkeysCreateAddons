@@ -1,0 +1,29 @@
+{
+  "parent": "comedymonkeysaddons:item/upgraded_chest_copper",
+  "overrides": [
+    {
+      "predicate": {
+        "comedymonkeysaddons:tier": 0.05
+      },
+      "model": "comedymonkeysaddons:item/upgraded_chest_iron"
+    },
+    {
+      "predicate": {
+        "comedymonkeysaddons:tier": 0.15
+      },
+      "model": "comedymonkeysaddons:item/upgraded_chest_gold"
+    },
+    {
+      "predicate": {
+        "comedymonkeysaddons:tier": 0.25
+      },
+      "model": "comedymonkeysaddons:item/upgraded_chest_diamond"
+    },
+    {
+      "predicate": {
+        "comedymonkeysaddons:tier": 0.35
+      },
+      "model": "comedymonkeysaddons:item/upgraded_chest_netherite"
+    }
+  ]
+}

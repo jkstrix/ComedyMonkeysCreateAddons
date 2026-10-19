@@ -1,0 +1,41 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "sable"
+    }
+  ],
+  "parent": "comedymonkeysaddons:root",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:compact_gyroscope"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.compact_gyroscope"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.compact_gyroscope.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crafted": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:compact_gyroscope"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafted"
+    ]
+  ]
+}

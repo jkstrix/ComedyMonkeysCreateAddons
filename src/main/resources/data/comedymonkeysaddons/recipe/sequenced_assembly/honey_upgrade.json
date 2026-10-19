@@ -1,0 +1,80 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "comedymonkeysaddons:drip_template"
+  },
+  "loops": 3,
+  "results": [
+    {
+      "id": "comedymonkeysaddons:honey_upgrade"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_honey_upgrade"
+        },
+        {
+          "item": "minecraft:honeycomb_block"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_honey_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_honey_upgrade"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 1000,
+          "fluid": "create:honey"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_honey_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_honey_upgrade"
+        },
+        {
+          "item": "create:precision_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_honey_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_honey_upgrade"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_honey_upgrade"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "comedymonkeysaddons:incomplete_honey_upgrade"
+  }
+}

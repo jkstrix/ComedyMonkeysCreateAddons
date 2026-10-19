@@ -1,0 +1,90 @@
+{
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:comedymonkey_head"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.root"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.root.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "create:textures/block/brass_casing.png"
+  },
+  "criteria": {
+    "upgrade_template": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:upgrade_template"
+          }
+        ]
+      }
+    },
+    "wellspring": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:wellspring"
+          }
+        ]
+      }
+    },
+    "pressure_crucible": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:pressure_crucible"
+          }
+        ]
+      }
+    },
+    "chest_upgrade_template": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:chest_upgrade_template"
+          }
+        ]
+      }
+    },
+    "emerald_dust": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:emerald_dust"
+          }
+        ]
+      }
+    },
+    "netherite_dust": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:netherite_dust"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "upgrade_template",
+      "wellspring",
+      "pressure_crucible",
+      "chest_upgrade_template",
+      "emerald_dust",
+      "netherite_dust"
+    ]
+  ]
+}

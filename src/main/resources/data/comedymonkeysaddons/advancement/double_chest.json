@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:copper_chest",
+  "display": {
+    "icon": {
+      "id": "minecraft:chest"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.double_chest"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.double_chest.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "extended": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "chest_extended"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "extended"
+    ]
+  ]
+}

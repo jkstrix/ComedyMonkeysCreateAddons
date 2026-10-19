@@ -1,0 +1,41 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "pipez"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "simulated"
+    }
+  ],
+  "parent": "comedymonkeysaddons:piped_blaze_burner",
+  "display": {
+    "icon": {
+      "id": "minecraft:lava_bucket"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.piped_engine_fuel"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.piped_engine_fuel.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fuelled": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "piped_engine_fuel"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "fuelled"
+    ]
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "parent": "comedymonkeysaddons:andesite_cobble_generator",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:tuff_generator"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.tuff_generator"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.tuff_generator.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "tuff_generator": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:tuff_generator"
+          }
+        ]
+      }
+    },
+    "wireless_tuff_generator": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:wireless_tuff_generator"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "tuff_generator",
+      "wireless_tuff_generator"
+    ]
+  ]
+}

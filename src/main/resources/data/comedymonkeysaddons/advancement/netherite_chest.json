@@ -1,0 +1,34 @@
+{
+  "parent": "comedymonkeysaddons:diamond_chest",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:netherite_chest_upgrade"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.netherite_chest"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.netherite_chest.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "upgraded": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "chest_upgrade",
+        "item": {
+          "items": "comedymonkeysaddons:netherite_chest_upgrade"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "upgraded"
+    ]
+  ]
+}

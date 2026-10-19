@@ -1,0 +1,12 @@
+{
+  "type": "comedymonkeysaddons:pressure_crucible",
+  "ingredient": {
+    "item": "comedymonkeysaddons:netherite_dust"
+  },
+  "count": 9,
+  "heat_requirement": "superheated",
+  "processing_time": 800,
+  "result": {
+    "id": "minecraft:netherite_scrap"
+  }
+}

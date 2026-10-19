@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "sable"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "gyro"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "gyro:gyroscope"
+    }
+  ],
+  "result": {
+    "id": "comedymonkeysaddons:compact_gyroscope",
+    "count": 1
+  }
+}

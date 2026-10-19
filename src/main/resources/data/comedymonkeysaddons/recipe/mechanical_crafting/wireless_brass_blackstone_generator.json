@@ -1,0 +1,33 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "pattern": [
+    " SBS ",
+    "SEDES",
+    "BDGDB",
+    "SEDES",
+    " SBS "
+  ],
+  "key": {
+    "S": {
+      "item": "create:brass_sheet"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "D": {
+      "item": "create:mechanical_drill"
+    },
+    "G": {
+      "item": "comedymonkeysaddons:wireless_andesite_blackstone_generator"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:wireless_brass_blackstone_generator"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "front": "comedymonkeysaddons:block/incinerator_front_lit",
+    "side": "comedymonkeysaddons:block/incinerator_side",
+    "top": "comedymonkeysaddons:block/incinerator_top_lit",
+    "bottom": "create:block/andesite_casing",
+    "particle": "create:block/andesite_casing"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "comedymonkeysaddons:pressure_crucible",
+  "ingredient": {
+    "item": "comedymonkeysaddons:quartz_dust"
+  },
+  "count": 4,
+  "heat_requirement": "heated",
+  "processing_time": 200,
+  "result": {
+    "id": "minecraft:quartz"
+  }
+}

@@ -1,0 +1,142 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'net.neoforged.moddev' version '2.0.148'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = "${mod_id}-${minecraft_version}"
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = project.neo_version
+
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+            programArgument '--nogui'
+        }
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.INFO
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+repositories {
+    // Create, Ponder/Catnip, Flywheel, Registrate
+    maven { name = 'Create'; url = 'https://maven.createmod.net' }
+    // Curios API
+    maven { name = 'Curios'; url = 'https://maven.theillusivec4.top/' }
+    // JEI (dev runtime only, handy for checking recipes)
+    maven { name = 'BlameJared'; url = 'https://maven.blamejared.com' }
+    exclusiveContent {
+        forRepository {
+            maven { name = 'Modrinth'; url = 'https://api.modrinth.com/maven' }
+        }
+        filter { includeGroup 'maven.modrinth' }
+    }
+}
+
+configurations {
+    sableJar
+}
+
+var extractSableCompanion = tasks.register('extractSableCompanion', Copy) {
+    from({ zipTree(configurations.sableJar.singleFile) }) {
+        include 'META-INF/jarjar/sable-companion-common-*.jar'
+        eachFile { path = name }
+    }
+    includeEmptyDirs = false
+    into layout.buildDirectory.dir('sableCompanion')
+}
+
+dependencies {
+    // Create API to compile against
+    compileOnly("com.simibubi.create:create-${minecraft_version}:${create_build}:slim") { transitive = false }
+    compileOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}") { transitive = false }
+    // Full Create release for running in dev (jar-in-jar bundles Flywheel, Ponder and Registrate)
+    runtimeOnly("maven.modrinth:create:${create_modrinth_version}")
+
+    implementation("top.theillusivec4.curios:curios-neoforge:${curios_version}")
+
+    // JEI: the Pressure Crucible recipe category (only loaded when JEI is installed)
+    compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}") { transitive = false }
+
+    // ---- Optional mods, dev runtime only (none are needed to compile) ----
+    // Pipez: Wellspring fluid capability + Blaze Burner feeding
+    runtimeOnly("maven.modrinth:pipez:${pipez_version}")
+    // Create Aeronautics (+ Sable, which it requires): Aviator's Goggles in the Curios slot
+    runtimeOnly("maven.modrinth:create-aeronautics:${aeronautics_version}")
+    runtimeOnly("maven.modrinth:sable:${sable_version}")
+    // Create: Liquid Fuel, to check it coexists with the Pipez Blaze Burner feeding
+    runtimeOnly("maven.modrinth:create-liquid-fuel:${liquid_fuel_version}")
+    // Carry On: picking up and placing upgraded chests and Wellsprings
+    runtimeOnly("maven.modrinth:carry-on:${carry_on_version}")
+
+    // Inventory Profiles Next: only its annotations, to tell it how to treat upgraded chests (optional at runtime)
+    compileOnly("maven.modrinth:inventory-profiles-next:vjuNnHLv") { transitive = false }
+    // ...and in the dev client, with its libIPN and Kotlin for Forge, to test chest sorting against it
+    runtimeOnly("maven.modrinth:inventory-profiles-next:vjuNnHLv") { transitive = false }
+    runtimeOnly("maven.modrinth:libipn:BGe4KMlE") { transitive = false }
+    runtimeOnly("maven.modrinth:kotlin-for-forge:uhJhCT7X") { transitive = false }
+
+    // Sable API: the Compact Gyroscope and Torque Rotor act on physics objects (only registered when Sable is present)
+    compileOnly("maven.modrinth:sable:${sable_version}") { transitive = false }
+    sableJar("maven.modrinth:sable:${sable_version}") { transitive = false }
+    // Sable's companion API ships inside the Sable jar; pulled out to compile against
+    compileOnly(fileTree(layout.buildDirectory.dir('sableCompanion')) {
+        include '*.jar'
+        builtBy extractSableCompanion
+    })
+}
+
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version_range    : minecraft_version_range,
+            neo_version_range          : neo_version_range,
+            loader_version_range       : loader_version_range,
+            create_version_range       : create_version_range,
+            curios_version_range       : curios_version_range,
+            aeronautics_version_range  : aeronautics_version_range,
+            mod_id                     : mod_id,
+            mod_name                   : mod_name,
+            mod_license                : mod_license,
+            mod_version                : mod_version,
+            mod_authors                : mod_authors,
+            mod_description            : mod_description,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}

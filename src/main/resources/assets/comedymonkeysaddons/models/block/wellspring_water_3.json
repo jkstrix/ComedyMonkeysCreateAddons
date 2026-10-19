@@ -1,0 +1,8 @@
+{
+  "parent": "comedymonkeysaddons:block/wellspring_base",
+  "textures": {
+    "side": "comedymonkeysaddons:block/wellspring_side",
+    "bottom": "comedymonkeysaddons:block/wellspring_bottom",
+    "top": "comedymonkeysaddons:block/wellspring_top_water_3"
+  }
+}

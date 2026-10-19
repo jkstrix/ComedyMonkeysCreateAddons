@@ -1,0 +1,11 @@
+{
+  "parent": "comedymonkeysaddons:block/upgraded_chest_right_closed",
+  "textures": {
+    "front": "comedymonkeysaddons:block/upgraded_chest_diamond_front_right",
+    "back": "comedymonkeysaddons:block/upgraded_chest_diamond_back_right",
+    "side": "comedymonkeysaddons:block/upgraded_chest_diamond_side",
+    "top": "comedymonkeysaddons:block/upgraded_chest_diamond_top_right",
+    "inner": "comedymonkeysaddons:block/upgraded_chest_inner_right",
+    "bottom": "comedymonkeysaddons:block/upgraded_chest_bottom"
+  }
+}

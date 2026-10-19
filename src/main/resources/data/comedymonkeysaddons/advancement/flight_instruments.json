@@ -1,0 +1,41 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "sable"
+    }
+  ],
+  "parent": "comedymonkeysaddons:compact_gyroscope",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:flight_instruments"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.flight_instruments"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.flight_instruments.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crafted": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:flight_instruments"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafted"
+    ]
+  ]
+}

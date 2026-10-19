@@ -1,0 +1,62 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "comedymonkeysaddons:iron_chest_upgrade"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "id": "comedymonkeysaddons:gold_chest_upgrade"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_gold_chest_upgrade"
+        },
+        {
+          "tag": "c:plates/gold"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_gold_chest_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_gold_chest_upgrade"
+        },
+        {
+          "tag": "c:plates/gold"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_gold_chest_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_gold_chest_upgrade"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_gold_chest_upgrade"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "comedymonkeysaddons:incomplete_gold_chest_upgrade"
+  }
+}

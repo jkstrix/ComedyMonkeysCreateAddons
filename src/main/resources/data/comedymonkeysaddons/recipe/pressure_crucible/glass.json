@@ -1,0 +1,12 @@
+{
+  "type": "comedymonkeysaddons:pressure_crucible",
+  "ingredient": {
+    "item": "minecraft:sand"
+  },
+  "count": 1,
+  "heat_requirement": "heated",
+  "processing_time": 40,
+  "result": {
+    "id": "minecraft:glass"
+  }
+}

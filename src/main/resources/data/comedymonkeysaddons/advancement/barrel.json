@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:chest_upgrade_template",
+  "display": {
+    "icon": {
+      "id": "minecraft:barrel"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.barrel"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.barrel.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "upgraded": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "barrel_upgrade"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "upgraded"
+    ]
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "tag": "c:plates/copper"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "id": "comedymonkeysaddons:upgrade_template"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_upgrade_template"
+        },
+        {
+          "item": "create:cogwheel"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_upgrade_template"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_upgrade_template"
+        },
+        {
+          "tag": "c:glass_blocks"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_upgrade_template"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_upgrade_template"
+        },
+        {
+          "item": "create:electron_tube"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_upgrade_template"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "comedymonkeysaddons:incomplete_upgrade_template"
+  }
+}

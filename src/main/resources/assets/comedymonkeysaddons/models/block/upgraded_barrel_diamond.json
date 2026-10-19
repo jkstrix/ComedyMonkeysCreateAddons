@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "comedymonkeysaddons:block/upgraded_barrel_diamond_top",
+    "bottom": "comedymonkeysaddons:block/upgraded_barrel_diamond_bottom",
+    "side": "comedymonkeysaddons:block/upgraded_barrel_diamond_side"
+  }
+}

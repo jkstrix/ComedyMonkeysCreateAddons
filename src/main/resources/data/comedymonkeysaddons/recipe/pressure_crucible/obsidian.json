@@ -1,0 +1,12 @@
+{
+  "type": "comedymonkeysaddons:pressure_crucible",
+  "ingredient": {
+    "item": "minecraft:cobblestone"
+  },
+  "count": 4,
+  "heat_requirement": "superheated",
+  "processing_time": 400,
+  "result": {
+    "id": "minecraft:obsidian"
+  }
+}

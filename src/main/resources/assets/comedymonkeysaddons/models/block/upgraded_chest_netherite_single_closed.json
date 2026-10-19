@@ -1,0 +1,11 @@
+{
+  "parent": "comedymonkeysaddons:block/upgraded_chest_single_closed",
+  "textures": {
+    "front": "comedymonkeysaddons:block/upgraded_chest_netherite_front",
+    "back": "comedymonkeysaddons:block/upgraded_chest_netherite_side",
+    "side": "comedymonkeysaddons:block/upgraded_chest_netherite_side",
+    "top": "comedymonkeysaddons:block/upgraded_chest_netherite_top",
+    "inner": "comedymonkeysaddons:block/upgraded_chest_inner",
+    "bottom": "comedymonkeysaddons:block/upgraded_chest_bottom"
+  }
+}

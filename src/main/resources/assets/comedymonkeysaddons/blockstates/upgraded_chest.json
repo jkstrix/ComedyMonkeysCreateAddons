@@ -1,0 +1,454 @@
+{
+  "variants": {
+    "facing=north,open=false,tier=copper,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_single_closed"
+    },
+    "facing=north,open=true,tier=copper,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_single"
+    },
+    "facing=east,open=false,tier=copper,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_single_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=copper,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_single",
+      "y": 90
+    },
+    "facing=south,open=false,tier=copper,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_single_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=copper,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_single",
+      "y": 180
+    },
+    "facing=west,open=false,tier=copper,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_single_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=copper,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_single",
+      "y": 270
+    },
+    "facing=north,open=false,tier=copper,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_left_closed"
+    },
+    "facing=north,open=true,tier=copper,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_left"
+    },
+    "facing=east,open=false,tier=copper,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_left_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=copper,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_left",
+      "y": 90
+    },
+    "facing=south,open=false,tier=copper,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_left_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=copper,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_left",
+      "y": 180
+    },
+    "facing=west,open=false,tier=copper,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_left_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=copper,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_left",
+      "y": 270
+    },
+    "facing=north,open=false,tier=copper,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_right_closed"
+    },
+    "facing=north,open=true,tier=copper,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_right"
+    },
+    "facing=east,open=false,tier=copper,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_right_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=copper,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_right",
+      "y": 90
+    },
+    "facing=south,open=false,tier=copper,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_right_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=copper,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_right",
+      "y": 180
+    },
+    "facing=west,open=false,tier=copper,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_right_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=copper,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_copper_right",
+      "y": 270
+    },
+    "facing=north,open=false,tier=iron,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_single_closed"
+    },
+    "facing=north,open=true,tier=iron,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_single"
+    },
+    "facing=east,open=false,tier=iron,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_single_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=iron,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_single",
+      "y": 90
+    },
+    "facing=south,open=false,tier=iron,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_single_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=iron,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_single",
+      "y": 180
+    },
+    "facing=west,open=false,tier=iron,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_single_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=iron,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_single",
+      "y": 270
+    },
+    "facing=north,open=false,tier=iron,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_left_closed"
+    },
+    "facing=north,open=true,tier=iron,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_left"
+    },
+    "facing=east,open=false,tier=iron,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_left_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=iron,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_left",
+      "y": 90
+    },
+    "facing=south,open=false,tier=iron,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_left_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=iron,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_left",
+      "y": 180
+    },
+    "facing=west,open=false,tier=iron,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_left_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=iron,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_left",
+      "y": 270
+    },
+    "facing=north,open=false,tier=iron,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_right_closed"
+    },
+    "facing=north,open=true,tier=iron,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_right"
+    },
+    "facing=east,open=false,tier=iron,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_right_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=iron,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_right",
+      "y": 90
+    },
+    "facing=south,open=false,tier=iron,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_right_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=iron,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_right",
+      "y": 180
+    },
+    "facing=west,open=false,tier=iron,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_right_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=iron,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_iron_right",
+      "y": 270
+    },
+    "facing=north,open=false,tier=gold,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_single_closed"
+    },
+    "facing=north,open=true,tier=gold,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_single"
+    },
+    "facing=east,open=false,tier=gold,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_single_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=gold,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_single",
+      "y": 90
+    },
+    "facing=south,open=false,tier=gold,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_single_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=gold,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_single",
+      "y": 180
+    },
+    "facing=west,open=false,tier=gold,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_single_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=gold,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_single",
+      "y": 270
+    },
+    "facing=north,open=false,tier=gold,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_left_closed"
+    },
+    "facing=north,open=true,tier=gold,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_left"
+    },
+    "facing=east,open=false,tier=gold,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_left_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=gold,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_left",
+      "y": 90
+    },
+    "facing=south,open=false,tier=gold,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_left_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=gold,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_left",
+      "y": 180
+    },
+    "facing=west,open=false,tier=gold,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_left_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=gold,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_left",
+      "y": 270
+    },
+    "facing=north,open=false,tier=gold,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_right_closed"
+    },
+    "facing=north,open=true,tier=gold,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_right"
+    },
+    "facing=east,open=false,tier=gold,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_right_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=gold,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_right",
+      "y": 90
+    },
+    "facing=south,open=false,tier=gold,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_right_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=gold,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_right",
+      "y": 180
+    },
+    "facing=west,open=false,tier=gold,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_right_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=gold,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_gold_right",
+      "y": 270
+    },
+    "facing=north,open=false,tier=diamond,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_single_closed"
+    },
+    "facing=north,open=true,tier=diamond,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_single"
+    },
+    "facing=east,open=false,tier=diamond,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_single_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=diamond,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_single",
+      "y": 90
+    },
+    "facing=south,open=false,tier=diamond,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_single_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=diamond,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_single",
+      "y": 180
+    },
+    "facing=west,open=false,tier=diamond,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_single_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=diamond,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_single",
+      "y": 270
+    },
+    "facing=north,open=false,tier=diamond,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_left_closed"
+    },
+    "facing=north,open=true,tier=diamond,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_left"
+    },
+    "facing=east,open=false,tier=diamond,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_left_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=diamond,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_left",
+      "y": 90
+    },
+    "facing=south,open=false,tier=diamond,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_left_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=diamond,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_left",
+      "y": 180
+    },
+    "facing=west,open=false,tier=diamond,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_left_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=diamond,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_left",
+      "y": 270
+    },
+    "facing=north,open=false,tier=diamond,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_right_closed"
+    },
+    "facing=north,open=true,tier=diamond,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_right"
+    },
+    "facing=east,open=false,tier=diamond,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_right_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=diamond,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_right",
+      "y": 90
+    },
+    "facing=south,open=false,tier=diamond,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_right_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=diamond,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_right",
+      "y": 180
+    },
+    "facing=west,open=false,tier=diamond,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_right_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=diamond,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_diamond_right",
+      "y": 270
+    },
+    "facing=north,open=false,tier=netherite,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_single_closed"
+    },
+    "facing=north,open=true,tier=netherite,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_single"
+    },
+    "facing=east,open=false,tier=netherite,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_single_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=netherite,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_single",
+      "y": 90
+    },
+    "facing=south,open=false,tier=netherite,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_single_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=netherite,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_single",
+      "y": 180
+    },
+    "facing=west,open=false,tier=netherite,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_single_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=netherite,type=single": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_single",
+      "y": 270
+    },
+    "facing=north,open=false,tier=netherite,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_left_closed"
+    },
+    "facing=north,open=true,tier=netherite,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_left"
+    },
+    "facing=east,open=false,tier=netherite,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_left_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=netherite,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_left",
+      "y": 90
+    },
+    "facing=south,open=false,tier=netherite,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_left_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=netherite,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_left",
+      "y": 180
+    },
+    "facing=west,open=false,tier=netherite,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_left_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=netherite,type=left": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_left",
+      "y": 270
+    },
+    "facing=north,open=false,tier=netherite,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_right_closed"
+    },
+    "facing=north,open=true,tier=netherite,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_right"
+    },
+    "facing=east,open=false,tier=netherite,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_right_closed",
+      "y": 90
+    },
+    "facing=east,open=true,tier=netherite,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_right",
+      "y": 90
+    },
+    "facing=south,open=false,tier=netherite,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_right_closed",
+      "y": 180
+    },
+    "facing=south,open=true,tier=netherite,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_right",
+      "y": 180
+    },
+    "facing=west,open=false,tier=netherite,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_right_closed",
+      "y": 270
+    },
+    "facing=west,open=true,tier=netherite,type=right": {
+      "model": "comedymonkeysaddons:block/upgraded_chest_netherite_right",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:brass_cobble_generator",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:wireless_brass_cobble_generator"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.wireless_brass_cobble_generator"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.wireless_brass_cobble_generator.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "generator": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:wireless_brass_cobble_generator"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "generator"
+    ]
+  ]
+}

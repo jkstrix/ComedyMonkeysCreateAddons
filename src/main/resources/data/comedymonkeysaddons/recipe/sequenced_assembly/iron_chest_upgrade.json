@@ -1,0 +1,62 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "comedymonkeysaddons:copper_chest_upgrade"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "id": "comedymonkeysaddons:iron_chest_upgrade"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_iron_chest_upgrade"
+        },
+        {
+          "tag": "c:plates/iron"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_iron_chest_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_iron_chest_upgrade"
+        },
+        {
+          "tag": "c:plates/iron"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_iron_chest_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_iron_chest_upgrade"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_iron_chest_upgrade"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "comedymonkeysaddons:incomplete_iron_chest_upgrade"
+  }
+}

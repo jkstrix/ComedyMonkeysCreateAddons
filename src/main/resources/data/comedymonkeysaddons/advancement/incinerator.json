@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:pressure_crucible",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:incinerator"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.incinerator"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.incinerator.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crafted": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:incinerator"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafted"
+    ]
+  ]
+}

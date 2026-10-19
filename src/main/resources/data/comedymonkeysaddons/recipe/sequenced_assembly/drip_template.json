@@ -1,0 +1,49 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "comedymonkeysaddons:upgrade_template"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "id": "comedymonkeysaddons:drip_template"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_drip_template"
+        },
+        {
+          "item": "minecraft:pointed_dripstone"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_drip_template"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_drip_template"
+        },
+        {
+          "item": "minecraft:pointed_dripstone"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_drip_template"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "comedymonkeysaddons:incomplete_drip_template"
+  }
+}

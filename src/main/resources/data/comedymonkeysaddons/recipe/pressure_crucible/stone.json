@@ -1,0 +1,11 @@
+{
+  "type": "comedymonkeysaddons:pressure_crucible",
+  "ingredient": {
+    "item": "minecraft:gravel"
+  },
+  "count": 1,
+  "processing_time": 40,
+  "result": {
+    "id": "minecraft:stone"
+  }
+}

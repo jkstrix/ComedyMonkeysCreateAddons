@@ -1,0 +1,6 @@
+{
+  "selector": "comedymonkeysaddons:compact_gyroscope",
+  "properties": {
+    "sable:mass": 4.0
+  }
+}

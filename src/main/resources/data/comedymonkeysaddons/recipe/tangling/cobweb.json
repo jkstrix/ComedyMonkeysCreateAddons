@@ -1,0 +1,15 @@
+{
+  "type": "comedymonkeysaddons:tangling",
+  "ingredient": {
+    "item": "minecraft:string"
+  },
+  "count": 4,
+  "extra": {
+    "tag": "c:slime_balls"
+  },
+  "extra_count": 1,
+  "processing_time": 160,
+  "result": {
+    "id": "minecraft:cobweb"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "comedymonkeysaddons:drip_template"
+  },
+  "loops": 3,
+  "results": [
+    {
+      "id": "comedymonkeysaddons:chocolate_upgrade"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_chocolate_upgrade"
+        },
+        {
+          "item": "minecraft:cocoa_beans"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_chocolate_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_chocolate_upgrade"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 1000,
+          "fluid": "create:chocolate"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_chocolate_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_chocolate_upgrade"
+        },
+        {
+          "item": "create:precision_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_chocolate_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_chocolate_upgrade"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_chocolate_upgrade"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "comedymonkeysaddons:incomplete_chocolate_upgrade"
+  }
+}

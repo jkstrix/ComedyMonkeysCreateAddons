@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": {
+      "tag": "c:plates/copper"
+    },
+    "P": {
+      "item": "create:mechanical_pump"
+    },
+    "G": {
+      "tag": "c:glass_blocks"
+    },
+    "T": {
+      "item": "create:fluid_tank"
+    },
+    "C": {
+      "item": "create:copper_casing"
+    }
+  },
+  "pattern": [
+    "SPS",
+    "GTG",
+    "SCS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "comedymonkeysaddons:wellspring"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/string_tangler"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/string_tangler",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/string_tangler",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/string_tangler",
+      "y": 270
+    }
+  }
+}

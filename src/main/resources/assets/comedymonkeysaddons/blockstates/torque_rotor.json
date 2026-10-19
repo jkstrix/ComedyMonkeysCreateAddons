@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "comedymonkeysaddons:block/torque_rotor"
+    },
+    "facing=down": {
+      "model": "comedymonkeysaddons:block/torque_rotor",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/torque_rotor",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/torque_rotor",
+      "x": 90,
+      "y": 180
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/torque_rotor",
+      "x": 90,
+      "y": 90
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/torque_rotor",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

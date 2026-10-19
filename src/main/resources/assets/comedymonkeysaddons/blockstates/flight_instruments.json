@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/flight_instruments"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/flight_instruments",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/flight_instruments",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/flight_instruments",
+      "y": 270
+    }
+  }
+}

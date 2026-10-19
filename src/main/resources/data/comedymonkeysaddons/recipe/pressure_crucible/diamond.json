@@ -1,0 +1,12 @@
+{
+  "type": "comedymonkeysaddons:pressure_crucible",
+  "ingredient": {
+    "item": "minecraft:coal"
+  },
+  "count": 64,
+  "heat_requirement": "superheated",
+  "processing_time": 3200,
+  "result": {
+    "id": "minecraft:diamond"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "values": [
+    "comedymonkeysaddons:wellspring",
+    "comedymonkeysaddons:pressure_crucible",
+    "comedymonkeysaddons:andesite_cobble_generator",
+    "comedymonkeysaddons:brass_cobble_generator",
+    "comedymonkeysaddons:wireless_andesite_cobble_generator",
+    "comedymonkeysaddons:wireless_brass_cobble_generator",
+    "comedymonkeysaddons:incinerator",
+    "comedymonkeysaddons:magma_engine",
+    {
+      "id": "comedymonkeysaddons:compact_gyroscope",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:torque_rotor",
+      "required": false
+    },
+    "comedymonkeysaddons:andesite_basalt_generator",
+    "comedymonkeysaddons:brass_basalt_generator",
+    "comedymonkeysaddons:wireless_andesite_basalt_generator",
+    "comedymonkeysaddons:wireless_brass_basalt_generator",
+    "comedymonkeysaddons:andesite_blackstone_generator",
+    "comedymonkeysaddons:brass_blackstone_generator",
+    "comedymonkeysaddons:wireless_andesite_blackstone_generator",
+    "comedymonkeysaddons:wireless_brass_blackstone_generator",
+    "comedymonkeysaddons:tuff_generator",
+    "comedymonkeysaddons:wireless_tuff_generator",
+    "comedymonkeysaddons:string_tangler",
+    "comedymonkeysaddons:stone_infuser",
+    {
+      "id": "comedymonkeysaddons:flight_instruments",
+      "required": false
+    }
+  ]
+}

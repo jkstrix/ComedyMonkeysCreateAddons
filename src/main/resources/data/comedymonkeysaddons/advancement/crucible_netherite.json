@@ -1,0 +1,37 @@
+{
+  "parent": "comedymonkeysaddons:crucible_emerald",
+  "display": {
+    "icon": {
+      "id": "minecraft:netherite_scrap"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.crucible_netherite"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.crucible_netherite.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "pressed": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "crucible_press",
+        "item": {
+          "items": "minecraft:netherite_scrap"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "pressed"
+    ]
+  ],
+  "rewards": {
+    "experience": 100
+  }
+}

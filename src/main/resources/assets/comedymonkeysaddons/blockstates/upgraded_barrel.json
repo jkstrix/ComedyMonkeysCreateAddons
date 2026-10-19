@@ -1,0 +1,264 @@
+{
+  "variants": {
+    "facing=up,open=false,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper"
+    },
+    "facing=up,open=true,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper_open"
+    },
+    "facing=down,open=false,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper",
+      "x": 180
+    },
+    "facing=down,open=true,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper_open",
+      "x": 180
+    },
+    "facing=north,open=false,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper",
+      "x": 90
+    },
+    "facing=north,open=true,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper_open",
+      "x": 90
+    },
+    "facing=south,open=false,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,open=true,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper_open",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west,open=false,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,open=true,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper_open",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east,open=false,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,open=true,tier=copper": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_copper_open",
+      "x": 90,
+      "y": 90
+    },
+    "facing=up,open=false,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron"
+    },
+    "facing=up,open=true,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron_open"
+    },
+    "facing=down,open=false,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron",
+      "x": 180
+    },
+    "facing=down,open=true,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron_open",
+      "x": 180
+    },
+    "facing=north,open=false,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron",
+      "x": 90
+    },
+    "facing=north,open=true,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron_open",
+      "x": 90
+    },
+    "facing=south,open=false,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,open=true,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron_open",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west,open=false,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,open=true,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron_open",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east,open=false,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,open=true,tier=iron": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_iron_open",
+      "x": 90,
+      "y": 90
+    },
+    "facing=up,open=false,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold"
+    },
+    "facing=up,open=true,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold_open"
+    },
+    "facing=down,open=false,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold",
+      "x": 180
+    },
+    "facing=down,open=true,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold_open",
+      "x": 180
+    },
+    "facing=north,open=false,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold",
+      "x": 90
+    },
+    "facing=north,open=true,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold_open",
+      "x": 90
+    },
+    "facing=south,open=false,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,open=true,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold_open",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west,open=false,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,open=true,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold_open",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east,open=false,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,open=true,tier=gold": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_gold_open",
+      "x": 90,
+      "y": 90
+    },
+    "facing=up,open=false,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond"
+    },
+    "facing=up,open=true,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond_open"
+    },
+    "facing=down,open=false,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond",
+      "x": 180
+    },
+    "facing=down,open=true,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond_open",
+      "x": 180
+    },
+    "facing=north,open=false,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond",
+      "x": 90
+    },
+    "facing=north,open=true,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond_open",
+      "x": 90
+    },
+    "facing=south,open=false,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,open=true,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond_open",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west,open=false,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,open=true,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond_open",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east,open=false,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,open=true,tier=diamond": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_diamond_open",
+      "x": 90,
+      "y": 90
+    },
+    "facing=up,open=false,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite"
+    },
+    "facing=up,open=true,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite_open"
+    },
+    "facing=down,open=false,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite",
+      "x": 180
+    },
+    "facing=down,open=true,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite_open",
+      "x": 180
+    },
+    "facing=north,open=false,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite",
+      "x": 90
+    },
+    "facing=north,open=true,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite_open",
+      "x": 90
+    },
+    "facing=south,open=false,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,open=true,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite_open",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west,open=false,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,open=true,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite_open",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east,open=false,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,open=true,tier=netherite": {
+      "model": "comedymonkeysaddons:block/upgraded_barrel_netherite_open",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "comedymonkeysaddons:pressure_crucible",
+  "display": {
+    "icon": {
+      "id": "minecraft:emerald"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.crucible_emerald"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.crucible_emerald.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "pressed": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "crucible_press",
+        "item": {
+          "items": "minecraft:emerald"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "pressed"
+    ]
+  ]
+}

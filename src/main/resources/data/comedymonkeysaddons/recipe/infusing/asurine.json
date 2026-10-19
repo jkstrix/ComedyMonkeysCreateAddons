@@ -1,0 +1,15 @@
+{
+  "type": "comedymonkeysaddons:infusing",
+  "ingredient": {
+    "item": "minecraft:cobblestone"
+  },
+  "count": 1,
+  "extra": {
+    "tag": "c:nuggets/zinc"
+  },
+  "extra_count": 9,
+  "processing_time": 200,
+  "result": {
+    "id": "create:asurine"
+  }
+}

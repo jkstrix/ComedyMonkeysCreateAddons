@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:root",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:string_tangler"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.string_tangler"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.string_tangler.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crafted": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:string_tangler"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafted"
+    ]
+  ]
+}

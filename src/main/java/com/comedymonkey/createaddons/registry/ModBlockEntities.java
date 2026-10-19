@@ -1,0 +1,77 @@
+package com.comedymonkey.createaddons.registry;
+
+import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.chest.UpgradedBarrelBlockEntity;
+import com.comedymonkey.createaddons.content.chest.UpgradedChestBlockEntity;
+import com.comedymonkey.createaddons.content.cobblegen.CobbleGeneratorBlockEntity;
+import com.comedymonkey.createaddons.content.crucible.PressureCrucibleBlockEntity;
+import com.comedymonkey.createaddons.content.engine.MagmaEngineBlockEntity;
+import com.comedymonkey.createaddons.content.incinerator.IncineratorBlockEntity;
+import com.comedymonkey.createaddons.content.machine.MachineKind;
+import com.comedymonkey.createaddons.content.machine.TwoInputMachineBlockEntity;
+import com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+public final class ModBlockEntities {
+	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
+		DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, ComedyMonkeysCreateAddons.MOD_ID);
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WellspringBlockEntity>> WELLSPRING =
+		BLOCK_ENTITY_TYPES.register("wellspring",
+			() -> BlockEntityType.Builder.of(WellspringBlockEntity::new, ModBlocks.WELLSPRING.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<UpgradedChestBlockEntity>> UPGRADED_CHEST =
+		BLOCK_ENTITY_TYPES.register("upgraded_chest",
+			() -> BlockEntityType.Builder.of(UpgradedChestBlockEntity::new, ModBlocks.UPGRADED_CHEST.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<UpgradedBarrelBlockEntity>> UPGRADED_BARREL =
+		BLOCK_ENTITY_TYPES.register("upgraded_barrel",
+			() -> BlockEntityType.Builder.of(UpgradedBarrelBlockEntity::new, ModBlocks.UPGRADED_BARREL.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PressureCrucibleBlockEntity>> PRESSURE_CRUCIBLE =
+		BLOCK_ENTITY_TYPES.register("pressure_crucible",
+			() -> BlockEntityType.Builder.of(PressureCrucibleBlockEntity::new, ModBlocks.PRESSURE_CRUCIBLE.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CobbleGeneratorBlockEntity>> COBBLE_GENERATOR =
+		BLOCK_ENTITY_TYPES.register("cobble_generator",
+			() -> BlockEntityType.Builder.of(CobbleGeneratorBlockEntity::new,
+				ModBlocks.generators().stream().map(DeferredBlock::get).toArray(Block[]::new)).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<IncineratorBlockEntity>> INCINERATOR =
+		BLOCK_ENTITY_TYPES.register("incinerator",
+			() -> BlockEntityType.Builder.of(IncineratorBlockEntity::new, ModBlocks.INCINERATOR.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MagmaEngineBlockEntity>> MAGMA_ENGINE =
+		BLOCK_ENTITY_TYPES.register("magma_engine",
+			() -> BlockEntityType.Builder.of(MagmaEngineBlockEntity::new, ModBlocks.MAGMA_ENGINE.get()).build(null));
+
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TwoInputMachineBlockEntity>> STRING_TANGLER =
+		machine("string_tangler", MachineKind.TANGLING, () -> ModBlocks.STRING_TANGLER.get());
+
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TwoInputMachineBlockEntity>> STONE_INFUSER =
+		machine("stone_infuser", MachineKind.INFUSING, () -> ModBlocks.STONE_INFUSER.get());
+
+	@SuppressWarnings("DataFlowIssue")
+	private static DeferredHolder<BlockEntityType<?>, BlockEntityType<TwoInputMachineBlockEntity>> machine(
+			String id, MachineKind kind, java.util.function.Supplier<Block> block) {
+		var holder = new java.util.concurrent.atomic.AtomicReference<DeferredHolder<BlockEntityType<?>, BlockEntityType<TwoInputMachineBlockEntity>>>();
+		holder.set(BLOCK_ENTITY_TYPES.register(id, () -> BlockEntityType.Builder.<TwoInputMachineBlockEntity>of(
+			(pos, state) -> new TwoInputMachineBlockEntity(holder.get().get(), pos, state, kind), block.get()).build(null)));
+		return holder.get();
+	}
+
+	private ModBlockEntities() {}
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/pressure_crucible"
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/pressure_crucible",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/pressure_crucible",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/pressure_crucible",
+      "y": 270
+    }
+  }
+}

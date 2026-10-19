@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CGC",
+    "GWG",
+    "CSC"
+  ],
+  "key": {
+    "C": {
+      "item": "create:copper_casing"
+    },
+    "G": {
+      "item": "create:framed_glass"
+    },
+    "W": {
+      "item": "create:whisk"
+    },
+    "S": {
+      "item": "create:shaft"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:string_tangler"
+  }
+}

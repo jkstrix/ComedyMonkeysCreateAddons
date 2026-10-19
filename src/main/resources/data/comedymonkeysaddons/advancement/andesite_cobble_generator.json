@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:root",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:andesite_cobble_generator"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.andesite_cobble_generator"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.andesite_cobble_generator.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "generator": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:andesite_cobble_generator"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "generator"
+    ]
+  ]
+}

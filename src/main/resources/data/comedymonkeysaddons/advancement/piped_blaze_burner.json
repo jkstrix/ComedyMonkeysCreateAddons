@@ -1,0 +1,37 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "pipez"
+    }
+  ],
+  "parent": "comedymonkeysaddons:root",
+  "display": {
+    "icon": {
+      "id": "pipez:item_pipe"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.piped_blaze_burner"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.piped_blaze_burner.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fed": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "piped_blaze_burner"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "fed"
+    ]
+  ]
+}

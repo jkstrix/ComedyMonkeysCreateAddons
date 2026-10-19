@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:root",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:upgrade_template"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.upgrade_template"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.upgrade_template.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "template": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:upgrade_template"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "template"
+    ]
+  ]
+}

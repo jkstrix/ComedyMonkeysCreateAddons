@@ -1,0 +1,62 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "comedymonkeysaddons:gold_chest_upgrade"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "id": "comedymonkeysaddons:diamond_chest_upgrade"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_diamond_chest_upgrade"
+        },
+        {
+          "tag": "c:gems/diamond"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_diamond_chest_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_diamond_chest_upgrade"
+        },
+        {
+          "tag": "c:gems/diamond"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_diamond_chest_upgrade"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_diamond_chest_upgrade"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_diamond_chest_upgrade"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "comedymonkeysaddons:incomplete_diamond_chest_upgrade"
+  }
+}

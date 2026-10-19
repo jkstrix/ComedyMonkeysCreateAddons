@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ILI",
+    "DCD",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "item": "create:andesite_alloy"
+    },
+    "L": {
+      "item": "minecraft:lava_bucket"
+    },
+    "I": {
+      "item": "minecraft:blue_ice"
+    },
+    "D": {
+      "item": "create:mechanical_drill"
+    },
+    "C": {
+      "item": "create:andesite_casing"
+    },
+    "B": {
+      "item": "minecraft:soul_soil"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:andesite_basalt_generator"
+  }
+}
