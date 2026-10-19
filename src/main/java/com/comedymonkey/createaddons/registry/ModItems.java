@@ -14,6 +14,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import com.comedymonkey.createaddons.compat.pipez.cover.PipeCover;
+import com.comedymonkey.createaddons.compat.pipez.cover.PipeCoverItem;
 
 public final class ModItems {
 	public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ComedyMonkeysCreateAddons.MOD_ID);
@@ -57,6 +59,11 @@ public final class ModItems {
 
 	/** Small chance from crushing cobblestone; nine are pressed into an Emerald. */
 	public static final DeferredItem<Item> EMERALD_DUST = ITEMS.registerSimpleItem("emerald_dust");
+	/** Pipez Covers: copycat-style covers for Pipez pipes (they only do anything with Pipez installed). */
+	public static final DeferredItem<PipeCoverItem> SNUG_PIPEZ_COVER = ITEMS.registerItem("snug_pipez_cover",
+		p -> new PipeCoverItem(p, PipeCover.Kind.SNUG));
+	public static final DeferredItem<PipeCoverItem> FULL_PIPEZ_COVER = ITEMS.registerItem("full_pipez_cover",
+		p -> new PipeCoverItem(p, PipeCover.Kind.FULL));
 
 	/** Small chance from crushing netherrack; nine are pressed into Netherite Scrap. */
 	public static final DeferredItem<Item> NETHERITE_DUST = ITEMS.registerSimpleItem("netherite_dust",

@@ -189,9 +189,21 @@ Recipe: Andesite Alloy, a Magma Block, a Furnace and Andesite Casing.
 
 Only present when Sable (Create Aeronautics) is installed.
 
-- **Compact Gyroscope**: the Gyroscope Stabilizers' Gyroscope in a single block, a flywheel spinning inside a brass-framed glass case. It runs the same controller with the same default strength, damping and lean correction: it pushes the ship back upright and calms its wobble, reaching full strength at 256 RPM (16 SU per RPM). It takes a shaft from above or below. Recipe: a Flywheel, a Precision Mechanism, a shaft, 4 Brass Casing and 2 Framed Glass. With Gyroscope Stabilizers installed you can also convert its Gyroscope by crafting it on its own (and turn a Compact one back the same way). Goggles show its spin, how hard it's correcting and the ship's tilt.
+- **Compact Gyroscope**: the Gyroscope Stabilizers' Gyroscope in a single block, a flywheel spinning inside a brass-framed glass case. It runs the same controller with the same default strength, damping and lean correction: it pushes the ship back upright and calms its wobble, reaching full strength at 256 RPM (16 SU per RPM). It takes a shaft from above or below. Recipe: a Flywheel, a Precision Mechanism, a shaft, 4 Brass Casing and 2 Framed Glass. With Gyroscope Stabilizers installed you can also convert its Gyroscope by crafting it on its own (and turn a Compact one back the same way). Goggles show its spin, how hard it's correcting and the ship's tilt. A **redstone signal brakes it**: the stronger the signal, the slower the flywheel spins and the less it holds the ship, and a full-strength signal stops it (the shaft keeps turning).
 - **Flight Instruments**: a sloping cockpit console with four live dials: an altimeter (long hand per 100 m, short per 1000 m), airspeed (0 to 60 m/s), an artificial horizon that tilts with roll and drops with pitch, and heading. Place it facing you; the way you face it counts as the ship's forward. Goggles show every reading, and Display Links can put **altitude, airspeed, climb rate, heading or pitch and roll** on Display Boards and Nixie Tubes (refreshed every second). Recipe: iron sheets, a compass, 2 clocks, a Precision Mechanism and an electron tube.
 - **Torque Rotor**: a propeller that turns the ship instead of pushing it. Its blades push the way they face (or pull, with the shaft reversed) exactly as hard as an Andesite Propeller at the same speed, and the ship turns about its centre of mass just as it would from a propeller in that spot, but without being pushed, so there's no sideways drift. Put it on the tail like a tail rotor, facing sideways, to yaw: the further from the middle, the harder it turns. It mounts on the face you click, with the shaft going into its base, and blows wind like a propeller. Recipe: iron sheets, Andesite Casing, 2 shafts and a Precision Mechanism.
+
+## Pipez Covers (with Pipez)
+
+Copycat-style covers for Pipez pipes, to hide pipework inside walls and floors. The pipe keeps working underneath.
+
+- **Snug Pipez Cover**: hugs the pipe a pixel proud all round, following its core, every connected arm and the collars on extracting sides.
+- **Full Pipez Cover**: fills the whole block, which becomes solid: you can stand on it, build against it and click anywhere on it.
+- **Right-click a pipe** with a cover to fit it (the other kind swaps it). **Right-click a covered pipe with any full block** to dress the cover in it, like a Create copycat: one block is used, and given back when you change it. Tinted blocks (grass, leaves) keep their colours, and see-through blocks like glass still show the pipe inside.
+- **Sneak + right-click with a wrench** takes the block off, then the cover. Breaking the pipe drops both.
+- Clicking the face where a pipe meets the cover still opens Pipez's settings for that side.
+- Engineer's or Aviator's Goggles on a covered pipe show what kind of pipe it is, and its cover.
+- Recipe: a Zinc Ingot on a Stonecutter makes 4 Snug or 2 Full covers.
 
 ## Compatibility
 

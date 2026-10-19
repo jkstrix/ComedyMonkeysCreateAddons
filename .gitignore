@@ -19,3 +19,6 @@ bin/
 run/
 runs/
 repo/
+
+# built jars copied out for release
+release/

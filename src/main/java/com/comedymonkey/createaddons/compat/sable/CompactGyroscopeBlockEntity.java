@@ -41,6 +41,11 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 
 	public final LerpedFloat effectiveSpeed = LerpedFloat.linear();
 	private boolean effectiveSpeedStarted;
+	/** Redstone signal, 0 to 15: brakes the flywheel, to a stop at full power. */
+	private int brake;
+	/** Client: the flywheel's own angle in degrees, since braking lets it fall behind the shaft. */
+	private float flywheelAngle;
+	private float flywheelAngleLast;
 
 	private final Vector3d currentUpWorld = new Vector3d();
 	private final Vector3d errorAxisWorld = new Vector3d();
@@ -73,10 +78,35 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 			effectiveSpeed.startWithValue(getSpeed());
 			effectiveSpeedStarted = true;
 		}
-		effectiveSpeed.chase(getSpeed(), CHASE_RATE, LerpedFloat.Chaser.EXP);
+		if (level != null && !level.isClientSide) {
+			int signal = level.getBestNeighborSignal(worldPosition);
+			if (signal != brake) {
+				brake = signal;
+				setChanged();
+				sendData();
+			}
+		}
+		// The brake holds the flywheel back from the shaft's speed; the stronger the signal, the slower it spins
+		effectiveSpeed.chase(getSpeed() * (15 - brake) / 15f, CHASE_RATE, LerpedFloat.Chaser.EXP);
 		effectiveSpeed.tickChaser();
+		if (level != null && level.isClientSide) {
+			flywheelAngleLast = flywheelAngle;
+			// RPM to degrees per tick
+			flywheelAngle = (flywheelAngle + effectiveSpeed.getValue() * 0.3f) % 360;
+		}
 		if (level != null && !level.isClientSide && level.getGameTime() % 10 == 0)
 			syncReadings();
+	}
+
+	/** The flywheel's angle in radians, smoothed between ticks. */
+	public float getFlywheelAngle(float partialTicks) {
+		float last = flywheelAngleLast, now = flywheelAngle;
+		// Unwrap across the 360 wrap so it doesn't spin backwards for a frame
+		if (now - last > 180)
+			last += 360;
+		else if (last - now > 180)
+			last -= 360;
+		return (float) Math.toRadians(last + (now - last) * partialTicks);
 	}
 
 	/** Passes what the physics step saw on to clients, when it has changed enough to show. */
@@ -178,6 +208,11 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 		tooltip.add(Component.literal("     ")
 			.append(Component.translatable("comedymonkeysaddons.gui.goggles.compact_gyroscope.spin").withStyle(ChatFormatting.GRAY))
 			.append(bar(spin, ChatFormatting.GOLD, ChatFormatting.YELLOW, ChatFormatting.GREEN)));
+		if (brake > 0)
+			new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID)
+				.translate(brake >= 15 ? "gui.goggles.compact_gyroscope.braked" : "gui.goggles.compact_gyroscope.braking",
+					Math.round(brake * 100 / 15f))
+				.style(ChatFormatting.RED).forGoggles(tooltip, 1);
 		if (!onShip) {
 			new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.compact_gyroscope.not_on_ship")
 				.style(ChatFormatting.DARK_GRAY).forGoggles(tooltip, 1);
@@ -195,6 +230,7 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 	@Override
 	protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.write(tag, registries, clientPacket);
+		tag.putInt("Brake", brake);
 		if (clientPacket) {
 			tag.putBoolean("OnShip", onShip);
 			tag.putFloat("Effort", effort);
@@ -205,6 +241,7 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 	@Override
 	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.read(tag, registries, clientPacket);
+		brake = tag.getInt("Brake");
 		if (clientPacket) {
 			onShip = tag.getBoolean("OnShip");
 			effort = tag.getFloat("Effort");

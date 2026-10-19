@@ -24,6 +24,10 @@ versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
+# Pipez Covers take their pipe's shape through a mixin, only applied when Pipez is installed
+[[mixins]]
+config = "${mod_id}.mixins.json"
+
 [[dependencies.${mod_id}]]
 modId = "create"
 type = "required"
@@ -43,5 +47,13 @@ side = "BOTH"
 modId = "aeronautics"
 type = "optional"
 versionRange = "${aeronautics_version_range}"
+ordering = "AFTER"
+side = "BOTH"
+
+# Optional: Pipez Covers, and Pipez feeding Blaze Burners.
+[[dependencies.${mod_id}]]
+modId = "pipez"
+type = "optional"
+versionRange = "*"
 ordering = "AFTER"
 side = "BOTH"

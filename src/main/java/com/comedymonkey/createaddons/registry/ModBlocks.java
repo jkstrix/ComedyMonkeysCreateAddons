@@ -14,6 +14,7 @@ import com.comedymonkey.createaddons.content.wellspring.WellspringSource;
 
 import java.util.List;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -175,6 +176,14 @@ public final class ModBlocks {
 			.noOcclusion()
 			.lightLevel(state -> state.getValue(MagmaEngineBlock.LIT) ? 10 : 0);
 	}
+
+	/** Not an item: just the look of a Pipez Cover with no block on it yet. */
+	public static final DeferredBlock<Block> PIPE_COVER_BLANK = BLOCKS.register("pipe_cover_blank",
+		() -> new Block(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.METAL)
+			.strength(1.5f)
+			.sound(SoundType.COPPER)
+			.noLootTable()));
 
 	private ModBlocks() {}
 }

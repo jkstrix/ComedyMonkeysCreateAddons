@@ -1,0 +1,16 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "com.comedymonkey.createaddons.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "PipeBlockMixin",
+    "PipeTileEntityMixin"
+  ],
+  "client": [
+    "PipeRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

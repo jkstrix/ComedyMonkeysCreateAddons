@@ -36,6 +36,10 @@ import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
+import com.comedymonkey.createaddons.compat.pipez.cover.PipeCoverEvents;
+import com.comedymonkey.createaddons.compat.pipez.cover.client.PipeCoverClient;
+import com.comedymonkey.createaddons.network.PipeCoverPayload;
+import com.comedymonkey.createaddons.registry.ModAttachments;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -62,6 +66,7 @@ public class ComedyMonkeysCreateAddons {
 		ModRecipes.SERIALIZERS.register(modBus);
 		ModDisplaySources.SOURCES.register(modBus);
 		ModAdvancements.TRIGGERS.register(modBus);
+		ModAttachments.ATTACHMENT_TYPES.register(modBus);
 
 		// Both specs show up in Create's "Access configs of other mods" screen
 		container.registerConfig(ModConfig.Type.SERVER, CMConfig.SERVER_SPEC);
@@ -69,6 +74,11 @@ public class ComedyMonkeysCreateAddons {
 
 		NeoForge.EVENT_BUS.addListener(ChestEvents::onRightClickBlock);
 		NeoForge.EVENT_BUS.addListener(ChestEvents::onBlockBreak);
+		if (ModList.get().isLoaded(PipezBlazeBurnerCompat.PIPEZ_ID)) {
+			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onRightClickBlock);
+			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onBlockBreak);
+			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onChunkSent);
+		}
 		modBus.addListener(this::registerCapabilities);
 		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::registerPayloads);
@@ -121,6 +131,9 @@ public class ComedyMonkeysCreateAddons {
 			(payload, context) -> context.enqueueWork(() -> ClientContraptionSync.handle(payload)));
 		// The Sort button on upgraded chests and barrels
 		event.registrar("1").playToServer(SortChestPayload.TYPE, SortChestPayload.STREAM_CODEC, SortChestPayload::handle);
+		// Covers on Pipez pipes
+		event.registrar("1").playToClient(PipeCoverPayload.TYPE, PipeCoverPayload.STREAM_CODEC,
+			(payload, context) -> context.enqueueWork(() -> PipeCoverClient.handle(payload)));
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event) {
@@ -162,6 +175,8 @@ public class ComedyMonkeysCreateAddons {
 			BlockStressValues.IMPACTS.register(ModBlocks.STONE_INFUSER.get(), CMConfig.SERVER::infuserStressImpact);
 			registerCreateTooltip(ModItems.MAGMA_ENGINE.get());
 			registerCreateTooltip(ModItems.SUPERCHARGED_MAGMA_ENGINE.get());
+			registerCreateTooltip(ModItems.SNUG_PIPEZ_COVER.get());
+			registerCreateTooltip(ModItems.FULL_PIPEZ_COVER.get());
 			// Capacity per RPM, so 128 at 64 RPM is 8192 SU
 			BlockStressValues.CAPACITIES.register(ModBlocks.MAGMA_ENGINE.get(), CMConfig.SERVER::magmaEngineCapacity);
 			BlockStressValues.CAPACITIES.register(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.get(),

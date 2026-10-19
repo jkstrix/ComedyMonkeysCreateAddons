@@ -93,7 +93,8 @@ public final class AeronauticsRenderers {
 			renderShaft(be, Direction.Axis.Y, angle, ms, vc, light, overlay);
 			ms.pushPose();
 			ms.translate(0.5, 0.5, 0.5);
-			ms.mulPose(Axis.YP.rotation(angle));
+			// The flywheel keeps its own angle: a redstone brake slows it while the shaft turns on
+			ms.mulPose(Axis.YP.rotation(be.getFlywheelAngle(partialTicks)));
 			ms.scale(FLYWHEEL_SCALE, FLYWHEEL_SCALE, FLYWHEEL_SCALE);
 			ms.translate(-0.5, -0.5, -0.5);
 			renderBaked(ms, vc, be.getBlockState(), model(FLYWHEEL), light, overlay);

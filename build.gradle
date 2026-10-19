@@ -82,6 +82,8 @@ dependencies {
     // ---- Optional mods, dev runtime only (none are needed to compile) ----
     // Pipez: Wellspring fluid capability + Blaze Burner feeding
     runtimeOnly("maven.modrinth:pipez:${pipez_version}")
+    // ...and to compile the Pipez Covers against its pipe classes (optional at runtime)
+    compileOnly("maven.modrinth:pipez:${pipez_version}") { transitive = false }
     // Create Aeronautics (+ Sable, which it requires): Aviator's Goggles in the Curios slot
     runtimeOnly("maven.modrinth:create-aeronautics:${aeronautics_version}")
     runtimeOnly("maven.modrinth:sable:${sable_version}")

@@ -49,6 +49,11 @@ public class ComedyMonkeysCreateAddonsClient {
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ChestSortButton::onScreenInit);
 		if (MagmaEngineSimModels.LOADED)
 			modBus.addListener(MagmaEngineSimModels::modifyBakingResult);
+		// Pipez Covers: covered pipes are drawn as their cover, tinted like its block
+		if (net.neoforged.fml.ModList.get().isLoaded("pipez")) {
+			modBus.addListener(com.comedymonkey.createaddons.compat.pipez.cover.client.CoveredPipeModel::wrapPipes);
+			modBus.addListener(com.comedymonkey.createaddons.compat.pipez.cover.client.PipeCoverClient::registerColors);
+		}
 	}
 
 	private void registerScreens(RegisterMenuScreensEvent event) {

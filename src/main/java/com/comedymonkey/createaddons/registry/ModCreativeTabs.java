@@ -53,6 +53,10 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.PRESSURE_CRUCIBLE.get());
 				output.accept(ModItems.MAGMA_ENGINE.get());
 				output.accept(ModItems.SUPERCHARGED_MAGMA_ENGINE.get());
+				if (net.neoforged.fml.ModList.get().isLoaded("pipez")) {
+					output.accept(ModItems.SNUG_PIPEZ_COVER.get());
+					output.accept(ModItems.FULL_PIPEZ_COVER.get());
+				}
 				output.accept(ModItems.INCINERATOR.get());
 				if (SableCompat.LOADED)
 					AeronauticsContent.addToTab(output);
