@@ -161,8 +161,11 @@ public class ComedyMonkeysCreateAddons {
 			BlockStressValues.IMPACTS.register(ModBlocks.STRING_TANGLER.get(), CMConfig.SERVER::tanglerStressImpact);
 			BlockStressValues.IMPACTS.register(ModBlocks.STONE_INFUSER.get(), CMConfig.SERVER::infuserStressImpact);
 			registerCreateTooltip(ModItems.MAGMA_ENGINE.get());
+			registerCreateTooltip(ModItems.SUPERCHARGED_MAGMA_ENGINE.get());
 			// Capacity per RPM, so 128 at 64 RPM is 8192 SU
 			BlockStressValues.CAPACITIES.register(ModBlocks.MAGMA_ENGINE.get(), CMConfig.SERVER::magmaEngineCapacity);
+			BlockStressValues.CAPACITIES.register(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.get(),
+				CMConfig.SERVER::superchargedMagmaEngineCapacity);
 			// A lit Incinerator heats a boiler like a lit Blaze Burner; cold, it's no heat source at all
 			BoilerHeater.REGISTRY.register(ModBlocks.INCINERATOR.get(),
 				(level, pos, state) -> state.getValue(IncineratorBlock.LIT) ? 1 : BoilerHeater.NO_HEAT);

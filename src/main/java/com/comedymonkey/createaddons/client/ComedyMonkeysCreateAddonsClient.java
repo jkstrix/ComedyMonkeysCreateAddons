@@ -81,6 +81,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.register(PressureCrucibleRenderer.SHAFT);
 		event.register(CobbleGeneratorRenderer.SHAFT);
 		event.register(MagmaEngineRenderer.HEAD);
+		event.register(MagmaEngineRenderer.SUPERCHARGED_HEAD);
 		if (MagmaEngineSimModels.LOADED)
 			MagmaEngineSimModels.registerModels(event);
 		if (SableCompat.LOADED)

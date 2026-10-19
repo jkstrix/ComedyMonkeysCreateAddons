@@ -68,6 +68,9 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue magmaEngineSpeed;
 		public final ModConfigSpec.DoubleValue magmaEngineCapacity;
 		public final ModConfigSpec.IntValue magmaEngineLavaPerSecond;
+		public final ModConfigSpec.IntValue superchargedMagmaEngineSpeed;
+		public final ModConfigSpec.DoubleValue superchargedMagmaEngineCapacity;
+		public final ModConfigSpec.IntValue superchargedMagmaEngineLavaPerSecond;
 
 		public final ModConfigSpec.DoubleValue gyroStrength;
 		public final ModConfigSpec.DoubleValue gyroDamping;
@@ -194,6 +197,22 @@ public final class CMConfig {
 				.comment("Lava burned while running, in millibuckets per second.")
 				.translation("comedymonkeysaddons.configuration.magmaEngineLavaPerSecond")
 				.defineInRange("lavaPerSecond", 10, 0, 1000);
+			builder.pop();
+
+			builder.comment("Supercharged Magma Engine: twice a Magma Engine's speed and power, for twice the lava.")
+				.push("superchargedMagmaEngine");
+			superchargedMagmaEngineSpeed = builder
+				.comment("Output speed in RPM.")
+				.translation("comedymonkeysaddons.configuration.superchargedMagmaEngineSpeed")
+				.defineInRange("speed", 128, 1, 256);
+			superchargedMagmaEngineCapacity = builder
+				.comment("Stress capacity per RPM. At the default 128 RPM, 128 gives 16384 stress units.")
+				.translation("comedymonkeysaddons.configuration.superchargedMagmaEngineCapacity")
+				.defineInRange("capacityPerRpm", 128.0, 0.0, 16384.0);
+			superchargedMagmaEngineLavaPerSecond = builder
+				.comment("Lava burned while running, in millibuckets per second.")
+				.translation("comedymonkeysaddons.configuration.superchargedMagmaEngineLavaPerSecond")
+				.defineInRange("lavaPerSecond", 20, 0, 1000);
 			builder.pop();
 
 			builder.comment("Create Aeronautics blocks (only present when Sable is installed)").push("aeronautics");
@@ -374,6 +393,18 @@ public final class CMConfig {
 
 		public int magmaEngineLavaPerSecond() {
 			return get(magmaEngineLavaPerSecond);
+		}
+
+		public int superchargedMagmaEngineSpeed() {
+			return get(superchargedMagmaEngineSpeed);
+		}
+
+		public double superchargedMagmaEngineCapacity() {
+			return get(superchargedMagmaEngineCapacity);
+		}
+
+		public int superchargedMagmaEngineLavaPerSecond() {
+			return get(superchargedMagmaEngineLavaPerSecond);
 		}
 
 		public double gyroStrength() {

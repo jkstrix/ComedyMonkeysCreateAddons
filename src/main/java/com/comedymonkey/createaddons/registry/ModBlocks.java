@@ -160,14 +160,21 @@ public final class ModBlocks {
 
 	/** Lava-burning engine: four Portable Engines' worth of power from one block. */
 	public static final DeferredBlock<MagmaEngineBlock> MAGMA_ENGINE = BLOCKS.register("magma_engine",
-		() -> new MagmaEngineBlock(BlockBehaviour.Properties.of()
+		() -> new MagmaEngineBlock(magmaEngineProperties(), false));
+	/** Twice the Magma Engine's speed, power and lava. */
+	public static final DeferredBlock<MagmaEngineBlock> SUPERCHARGED_MAGMA_ENGINE = BLOCKS.register("supercharged_magma_engine",
+		() -> new MagmaEngineBlock(magmaEngineProperties(), true));
+
+	private static BlockBehaviour.Properties magmaEngineProperties() {
+		return BlockBehaviour.Properties.of()
 			.mapColor(MapColor.TERRACOTTA_YELLOW)
 			.strength(3.5f, 8.0f)
 			.sound(SoundType.NETHERITE_BLOCK)
 			.requiresCorrectToolForDrops()
 			// Its body sits a little inside the block, so it mustn't hide its neighbours' faces
 			.noOcclusion()
-			.lightLevel(state -> state.getValue(MagmaEngineBlock.LIT) ? 10 : 0)));
+			.lightLevel(state -> state.getValue(MagmaEngineBlock.LIT) ? 10 : 0);
+	}
 
 	private ModBlocks() {}
 }

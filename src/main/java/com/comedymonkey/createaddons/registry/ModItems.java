@@ -52,6 +52,8 @@ public final class ModItems {
 	public static final DeferredItem<BlockItem> TUFF_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.TUFF_GENERATOR);
 	public static final DeferredItem<BlockItem> WIRELESS_TUFF_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.WIRELESS_TUFF_GENERATOR);
 	public static final DeferredItem<BlockItem> MAGMA_ENGINE = ITEMS.registerSimpleBlockItem(ModBlocks.MAGMA_ENGINE);
+	public static final DeferredItem<BlockItem> SUPERCHARGED_MAGMA_ENGINE =
+		ITEMS.registerSimpleBlockItem(ModBlocks.SUPERCHARGED_MAGMA_ENGINE);
 
 	/** Small chance from crushing cobblestone; nine are pressed into an Emerald. */
 	public static final DeferredItem<Item> EMERALD_DUST = ITEMS.registerSimpleItem("emerald_dust");

@@ -52,6 +52,7 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.STONE_INFUSER.get());
 				output.accept(ModItems.PRESSURE_CRUCIBLE.get());
 				output.accept(ModItems.MAGMA_ENGINE.get());
+				output.accept(ModItems.SUPERCHARGED_MAGMA_ENGINE.get());
 				output.accept(ModItems.INCINERATOR.get());
 				if (SableCompat.LOADED)
 					AeronauticsContent.addToTab(output);

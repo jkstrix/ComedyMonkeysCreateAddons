@@ -29,6 +29,8 @@ public class MagmaEngineRenderer extends SafeBlockEntityRenderer<MagmaEngineBloc
 	/** One cylinder head, modelled on the left-hand cylinder with the front facing north. */
 	public static final ModelResourceLocation HEAD =
 		ModelResourceLocation.standalone(ComedyMonkeysCreateAddons.asResource("block/magma_engine_head"));
+	public static final ModelResourceLocation SUPERCHARGED_HEAD =
+		ModelResourceLocation.standalone(ComedyMonkeysCreateAddons.asResource("block/supercharged_magma_engine_head"));
 	private static final int CYLINDERS = 3;
 	/** How far a head lifts, in pixels. */
 	private static final float STROKE = 1f;
@@ -64,6 +66,8 @@ public class MagmaEngineRenderer extends SafeBlockEntityRenderer<MagmaEngineBloc
 		}
 
 		// The heads, turned with the engine (modelled facing north) and a third of a turn apart
+		ModelResourceLocation head = MagmaEngineSimModels.partsFor(state) == MagmaEngineSimModels.SUPERCHARGED
+			? SUPERCHARGED_HEAD : HEAD;
 		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5);
 		ms.mulPose(Axis.YP.rotationDegrees(-(out.toYRot() + 180)));
@@ -72,7 +76,7 @@ public class MagmaEngineRenderer extends SafeBlockEntityRenderer<MagmaEngineBloc
 			float lift = STROKE / 16f * (0.5f + 0.5f * Mth.sin(angle - i * Mth.TWO_PI / CYLINDERS));
 			ms.pushPose();
 			ms.translate(i * CYLINDER_SPACING, lift, 0);
-			render(ms, vc, state, HEAD, light, overlay);
+			render(ms, vc, state, head, light, overlay);
 			ms.popPose();
 		}
 		ms.popPose();
@@ -85,19 +89,20 @@ public class MagmaEngineRenderer extends SafeBlockEntityRenderer<MagmaEngineBloc
 	private static void renderSimulatedParts(MagmaEngineBlockEntity be, float partialTicks, PoseStack ms, VertexConsumer vc,
 											 int light, int overlay, Direction out) {
 		BlockState state = be.getBlockState();
+		MagmaEngineSimModels.Parts parts = MagmaEngineSimModels.partsFor(state);
 		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5);
 		ms.mulPose(Axis.YP.rotationDegrees(-MagmaEngineSimModels.yRotation(out)));
 		ms.translate(-0.5, -0.5, -0.5);
 
-		render(ms, vc, state, MagmaEngineSimModels.HATCH_TOP, light, overlay);
+		render(ms, vc, state, parts.hatchTop(), light, overlay);
 		// The lower hatch swings down about its hinge
 		float open = be.getHatchOpen(partialTicks) * 0.65f;
 		ms.pushPose();
 		ms.translate(0, 0.30625, 0.23125);
 		ms.mulPose(Axis.XP.rotation(-open));
 		ms.translate(0, -0.30625, -0.23125);
-		render(ms, vc, state, MagmaEngineSimModels.HATCH_BOTTOM, light, overlay);
+		render(ms, vc, state, parts.hatchBottom(), light, overlay);
 		ms.popPose();
 
 		// Pipes and outlets breathe in step while the shaft turns, and glow full-bright while it burns
@@ -107,10 +112,10 @@ public class MagmaEngineRenderer extends SafeBlockEntityRenderer<MagmaEngineBloc
 		float time = net.createmod.catnip.animation.AnimationTickHolder.getRenderTime(be.getLevel()) / 20f * 7f;
 		float pipeScale = 1 + (float) (Math.max(Math.sin(time) + 0.65, 0) - 0.65) * 0.033f * strength;
 		float outletScale = 1 + (float) (Math.max(Math.sin(time - 1.15) + 0.65, 0) - 0.65) * 0.03f * strength;
-		pulse(ms, vc, state, lit ? MagmaEngineSimModels.PIPE_RIGHT_LIT : MagmaEngineSimModels.PIPE_RIGHT, 14 / 16f, pipeScale, pipeLight, overlay);
-		pulse(ms, vc, state, lit ? MagmaEngineSimModels.OUTLET_RIGHT_LIT : MagmaEngineSimModels.OUTLET_RIGHT, 14 / 16f, outletScale, pipeLight, overlay);
-		pulse(ms, vc, state, lit ? MagmaEngineSimModels.PIPE_LEFT_LIT : MagmaEngineSimModels.PIPE_LEFT, 2 / 16f, pipeScale, pipeLight, overlay);
-		pulse(ms, vc, state, lit ? MagmaEngineSimModels.OUTLET_LEFT_LIT : MagmaEngineSimModels.OUTLET_LEFT, 2 / 16f, outletScale, pipeLight, overlay);
+		pulse(ms, vc, state, lit ? parts.pipeRightLit() : parts.pipeRight(), 14 / 16f, pipeScale, pipeLight, overlay);
+		pulse(ms, vc, state, lit ? parts.outletRightLit() : parts.outletRight(), 14 / 16f, outletScale, pipeLight, overlay);
+		pulse(ms, vc, state, lit ? parts.pipeLeftLit() : parts.pipeLeft(), 2 / 16f, pipeScale, pipeLight, overlay);
+		pulse(ms, vc, state, lit ? parts.outletLeftLit() : parts.outletLeft(), 2 / 16f, outletScale, pipeLight, overlay);
 		ms.popPose();
 	}
 

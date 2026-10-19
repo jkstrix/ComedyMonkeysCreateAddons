@@ -138,7 +138,15 @@ A heavy brass engine that burns lava: by default **64 RPM and 8,192 SU**, four t
 
 Display Links can read its **lava level** (millibuckets and percent) and **output** (RPM and stress units, or "Out of lava").
 
+**Rotation direction:** like Simulated's Portable Engine, the value box on top (on the back without Aeronautics) sets the shaft turning clockwise or counter-clockwise.
+
 Recipe: an iron sheet over an Engine Assembly (Create Aeronautics) over a Blaze Burner, like a Portable Engine. Without Aeronautics it's brass sheets, a Steam Engine, 2 Fluid Tanks, Brass Casing and a Blaze Burner instead.
+
+### Supercharged Magma Engine
+
+Twice a Magma Engine in every way: **128 RPM and 16,384 SU** for **20 mB of lava a second**, with an 8-bucket tank. It looks the same but with brass trim, and works the same way (placement, filling from the back or bottom, Display Links). Speed, capacity and lava use have their own config section.
+
+Recipe: a Precision Mechanism over a Magma Engine over Brass Casing.
 
 ## String Tangler
 

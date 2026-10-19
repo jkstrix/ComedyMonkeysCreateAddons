@@ -1,0 +1,8 @@
+{
+  "parent": "simulated:block/portable_engine/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "0": "comedymonkeysaddons:block/supercharged_magma_engine_sim",
+    "particle": "comedymonkeysaddons:block/supercharged_magma_engine_sim"
+  }
+}

@@ -27,6 +27,7 @@ import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.IQuadTransformer;
 import net.neoforged.neoforge.client.model.QuadTransformers;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 /**
  * With Create Simulated installed, the Magma Engine takes the shape of its Portable Engine: our model JSONs name
@@ -38,22 +39,36 @@ public final class MagmaEngineSimModels {
 	public static final String SIMULATED_ID = "simulated";
 	public static final boolean LOADED = ModList.get().isLoaded(SIMULATED_ID);
 
-	public static final ModelResourceLocation BODY = standalone("magma_engine_sim");
-	public static final ModelResourceLocation BODY_LIT = standalone("magma_engine_sim_lit");
-	public static final ModelResourceLocation ITEM = standalone("magma_engine_sim_item");
-	public static final ModelResourceLocation HATCH_TOP = standalone("magma_engine_sim_hatch_top");
-	public static final ModelResourceLocation HATCH_BOTTOM = standalone("magma_engine_sim_hatch_bottom");
-	public static final ModelResourceLocation PIPE_LEFT = standalone("magma_engine_sim_exhaust_pipe_left");
-	public static final ModelResourceLocation PIPE_RIGHT = standalone("magma_engine_sim_exhaust_pipe_right");
-	public static final ModelResourceLocation OUTLET_LEFT = standalone("magma_engine_sim_exhaust_outlet_left");
-	public static final ModelResourceLocation OUTLET_RIGHT = standalone("magma_engine_sim_exhaust_outlet_right");
-	// The same exhaust parts glowing hot, drawn full-bright while the engine burns
-	public static final ModelResourceLocation PIPE_LEFT_LIT = standalone("magma_engine_sim_exhaust_pipe_left_lit");
-	public static final ModelResourceLocation PIPE_RIGHT_LIT = standalone("magma_engine_sim_exhaust_pipe_right_lit");
-	public static final ModelResourceLocation OUTLET_LEFT_LIT = standalone("magma_engine_sim_exhaust_outlet_left_lit");
-	public static final ModelResourceLocation OUTLET_RIGHT_LIT = standalone("magma_engine_sim_exhaust_outlet_right_lit");
-	private static final List<ModelResourceLocation> ALL = List.of(BODY, BODY_LIT, ITEM, HATCH_TOP, HATCH_BOTTOM,
-		PIPE_LEFT, PIPE_RIGHT, OUTLET_LEFT, OUTLET_RIGHT, PIPE_LEFT_LIT, PIPE_RIGHT_LIT, OUTLET_LEFT_LIT, OUTLET_RIGHT_LIT);
+	public static final Parts STANDARD = new Parts("magma_engine");
+	/** The same shapes in the Supercharged engine's brass-trimmed texture. */
+	public static final Parts SUPERCHARGED = new Parts("supercharged_magma_engine");
+
+	/** One engine's Simulated-shaped models, named {@code <prefix>_sim...}. */
+	public record Parts(ModelResourceLocation body, ModelResourceLocation bodyLit, ModelResourceLocation item,
+						ModelResourceLocation hatchTop, ModelResourceLocation hatchBottom,
+						ModelResourceLocation pipeLeft, ModelResourceLocation pipeRight,
+						ModelResourceLocation outletLeft, ModelResourceLocation outletRight,
+						// The same exhaust parts glowing hot, drawn full-bright while the engine burns
+						ModelResourceLocation pipeLeftLit, ModelResourceLocation pipeRightLit,
+						ModelResourceLocation outletLeftLit, ModelResourceLocation outletRightLit) {
+		Parts(String prefix) {
+			this(standalone(prefix + "_sim"), standalone(prefix + "_sim_lit"), standalone(prefix + "_sim_item"),
+				standalone(prefix + "_sim_hatch_top"), standalone(prefix + "_sim_hatch_bottom"),
+				standalone(prefix + "_sim_exhaust_pipe_left"), standalone(prefix + "_sim_exhaust_pipe_right"),
+				standalone(prefix + "_sim_exhaust_outlet_left"), standalone(prefix + "_sim_exhaust_outlet_right"),
+				standalone(prefix + "_sim_exhaust_pipe_left_lit"), standalone(prefix + "_sim_exhaust_pipe_right_lit"),
+				standalone(prefix + "_sim_exhaust_outlet_left_lit"), standalone(prefix + "_sim_exhaust_outlet_right_lit"));
+		}
+
+		List<ModelResourceLocation> all() {
+			return List.of(body, bodyLit, item, hatchTop, hatchBottom, pipeLeft, pipeRight, outletLeft, outletRight,
+				pipeLeftLit, pipeRightLit, outletLeftLit, outletRightLit);
+		}
+	}
+
+	public static Parts partsFor(BlockState state) {
+		return state.getBlock() instanceof MagmaEngineBlock engine && engine.isSupercharged() ? SUPERCHARGED : STANDARD;
+	}
 
 	private static ModelResourceLocation standalone(String name) {
 		return ModelResourceLocation.standalone(ComedyMonkeysCreateAddons.asResource("block/" + name));
@@ -68,23 +83,29 @@ public final class MagmaEngineSimModels {
 	}
 
 	public static void registerModels(ModelEvent.RegisterAdditional event) {
-		ALL.forEach(event::register);
+		STANDARD.all().forEach(event::register);
+		SUPERCHARGED.all().forEach(event::register);
 	}
 
-	/** Swaps in the Simulated-shaped body for every state of the engine, and its item. */
+	/** Swaps in the Simulated-shaped body for every state of both engines, and their items. */
 	public static void modifyBakingResult(ModelEvent.ModifyBakingResult event) {
-		Map<ModelResourceLocation, BakedModel> models = event.getModels();
-		BakedModel body = models.get(BODY);
-		BakedModel lit = models.get(BODY_LIT);
-		BakedModel item = models.get(ITEM);
+		swap(event.getModels(), ModBlocks.MAGMA_ENGINE, STANDARD);
+		swap(event.getModels(), ModBlocks.SUPERCHARGED_MAGMA_ENGINE, SUPERCHARGED);
+	}
+
+	private static void swap(Map<ModelResourceLocation, BakedModel> models, DeferredBlock<MagmaEngineBlock> block,
+							 Parts parts) {
+		BakedModel body = models.get(parts.body());
+		BakedModel lit = models.get(parts.bodyLit());
+		BakedModel item = models.get(parts.item());
 		if (body == null || lit == null || item == null)
 			return;
-		for (BlockState state : ModBlocks.MAGMA_ENGINE.get().getStateDefinition().getPossibleStates()) {
+		for (BlockState state : block.get().getStateDefinition().getPossibleStates()) {
 			BakedModel base = state.getValue(MagmaEngineBlock.LIT) ? lit : body;
 			models.put(BlockModelShaper.stateToModelLocation(state),
 				new Rotated(base, yRotation(state.getValue(MagmaEngineBlock.FACING))));
 		}
-		models.put(ModelResourceLocation.inventory(ModBlocks.MAGMA_ENGINE.getId()), item);
+		models.put(ModelResourceLocation.inventory(block.getId()), item);
 	}
 
 	/** A baked model turned about the block's vertical axis, the way a blockstate "y" rotation turns one. */

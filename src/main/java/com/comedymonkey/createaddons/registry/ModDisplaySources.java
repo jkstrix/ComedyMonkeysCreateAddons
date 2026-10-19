@@ -31,6 +31,8 @@ public final class ModDisplaySources {
 	public static void bindBlocks() {
 		DisplaySource.BY_BLOCK.add(ModBlocks.MAGMA_ENGINE.get(), MAGMA_ENGINE_LAVA.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.MAGMA_ENGINE.get(), MAGMA_ENGINE_OUTPUT.get());
+		DisplaySource.BY_BLOCK.add(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.get(), MAGMA_ENGINE_LAVA.get());
+		DisplaySource.BY_BLOCK.add(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.get(), MAGMA_ENGINE_OUTPUT.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_FLUID.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_FILL.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_FILL_BAR.get());

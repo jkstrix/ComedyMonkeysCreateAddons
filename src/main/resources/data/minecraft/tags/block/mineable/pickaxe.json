@@ -8,6 +8,7 @@
     "comedymonkeysaddons:wireless_brass_cobble_generator",
     "comedymonkeysaddons:incinerator",
     "comedymonkeysaddons:magma_engine",
+    "comedymonkeysaddons:supercharged_magma_engine",
     {
       "id": "comedymonkeysaddons:compact_gyroscope",
       "required": false

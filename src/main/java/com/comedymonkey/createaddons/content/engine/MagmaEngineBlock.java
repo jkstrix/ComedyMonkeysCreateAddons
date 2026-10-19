@@ -1,5 +1,6 @@
 package com.comedymonkey.createaddons.content.engine;
 
+import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.foundation.block.IBE;
@@ -34,8 +35,8 @@ import net.neoforged.neoforge.fluids.FluidUtil;
 
 /**
  * Magma Engine: a heavy lava-burning engine, four times a Portable Engine (by default 64 RPM with 8,192 SU, burning
- * 10 mB of lava a second). Pipes fill it through the back or the bottom only; a bucket works on any face. The shaft
- * comes out of the middle of the front ({@code facing}).
+ * 10 mB of lava a second). The Supercharged one doubles all of that, and its tank. Pipes fill it through the back or
+ * the bottom only; a bucket works on any face. The shaft comes out of the middle of the front ({@code facing}).
  */
 public class MagmaEngineBlock extends KineticBlock implements IBE<MagmaEngineBlockEntity> {
 	/** The side the output shaft comes out of. */
@@ -43,9 +44,36 @@ public class MagmaEngineBlock extends KineticBlock implements IBE<MagmaEngineBlo
 	/** Burning (lights the vents). */
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-	public MagmaEngineBlock(Properties properties) {
+	private final boolean supercharged;
+
+	public MagmaEngineBlock(Properties properties, boolean supercharged) {
 		super(properties);
+		this.supercharged = supercharged;
 		registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(LIT, false));
+	}
+
+	public boolean isSupercharged() {
+		return supercharged;
+	}
+
+	/** Output speed in RPM, from the config. */
+	public int speed() {
+		return supercharged ? CMConfig.SERVER.superchargedMagmaEngineSpeed() : CMConfig.SERVER.magmaEngineSpeed();
+	}
+
+	/** Stress capacity per RPM, from the config. */
+	public double capacityPerRpm() {
+		return supercharged ? CMConfig.SERVER.superchargedMagmaEngineCapacity() : CMConfig.SERVER.magmaEngineCapacity();
+	}
+
+	/** Lava burned while running, in mB per second, from the config. */
+	public int lavaPerSecond() {
+		return supercharged ? CMConfig.SERVER.superchargedMagmaEngineLavaPerSecond() : CMConfig.SERVER.magmaEngineLavaPerSecond();
+	}
+
+	/** 4 buckets, or 8 supercharged. */
+	public int tankCapacity() {
+		return supercharged ? 8000 : 4000;
 	}
 
 	@Override

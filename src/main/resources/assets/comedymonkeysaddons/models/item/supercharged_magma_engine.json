@@ -1,0 +1,15 @@
+{
+  "parent": "comedymonkeysaddons:item/magma_engine",
+  "textures": {
+    "plinth": "comedymonkeysaddons:block/supercharged_magma_engine_plinth",
+    "front": "comedymonkeysaddons:block/supercharged_magma_engine_front",
+    "side": "comedymonkeysaddons:block/supercharged_magma_engine_side",
+    "back": "comedymonkeysaddons:block/supercharged_magma_engine_back",
+    "deck": "comedymonkeysaddons:block/supercharged_magma_engine_deck",
+    "flange": "comedymonkeysaddons:block/supercharged_magma_engine_flange",
+    "head": "comedymonkeysaddons:block/supercharged_magma_engine_head",
+    "head_top": "comedymonkeysaddons:block/supercharged_magma_engine_head_top",
+    "hub_side": "comedymonkeysaddons:block/supercharged_magma_engine_plinth",
+    "particle": "comedymonkeysaddons:block/supercharged_magma_engine_front"
+  }
+}

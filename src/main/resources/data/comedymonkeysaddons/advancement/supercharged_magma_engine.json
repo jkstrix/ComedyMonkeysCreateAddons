@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:magma_engine",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:supercharged_magma_engine"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.supercharged_magma_engine"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.supercharged_magma_engine.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crafted": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:supercharged_magma_engine"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafted"
+    ]
+  ]
+}

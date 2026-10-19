@@ -56,7 +56,8 @@ public final class ModBlockEntities {
 	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MagmaEngineBlockEntity>> MAGMA_ENGINE =
 		BLOCK_ENTITY_TYPES.register("magma_engine",
-			() -> BlockEntityType.Builder.of(MagmaEngineBlockEntity::new, ModBlocks.MAGMA_ENGINE.get()).build(null));
+			() -> BlockEntityType.Builder.of(MagmaEngineBlockEntity::new, ModBlocks.MAGMA_ENGINE.get(),
+				ModBlocks.SUPERCHARGED_MAGMA_ENGINE.get()).build(null));
 
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TwoInputMachineBlockEntity>> STRING_TANGLER =
 		machine("string_tangler", MachineKind.TANGLING, () -> ModBlocks.STRING_TANGLER.get());

@@ -61,7 +61,7 @@ public class CMPonderPlugin implements PonderPlugin {
 				.map(DeferredBlock::getId).toList())
 			.addStoryBoard("cobble_generator", CobbleGeneratorScenes::generator);
 
-		helper.forComponents(ModBlocks.MAGMA_ENGINE.getId())
+		helper.forComponents(ModBlocks.MAGMA_ENGINE.getId(), ModBlocks.SUPERCHARGED_MAGMA_ENGINE.getId())
 			.addStoryBoard("magma_engine", NewBlockScenes::magmaEngine);
 		helper.forComponents(ModBlocks.INCINERATOR.getId())
 			.addStoryBoard("incinerator", NewBlockScenes::incinerator);
@@ -92,7 +92,8 @@ public class CMPonderPlugin implements PonderPlugin {
 			.add(ModBlocks.STONE_INFUSER.getId())
 			.add(ModBlocks.TUFF_GENERATOR.getId());
 		helper.addToTag(CREATE_KINETIC_SOURCES_TAG)
-			.add(ModBlocks.MAGMA_ENGINE.getId());
+			.add(ModBlocks.MAGMA_ENGINE.getId())
+			.add(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.getId());
 		if (SableCompat.LOADED)
 			helper.addToTag(CREATE_KINETIC_APPLIANCES_TAG)
 				.add(AeronauticsContent.COMPACT_GYROSCOPE.getId())
