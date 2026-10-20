@@ -58,6 +58,22 @@ public abstract class PipeBlockMixin {
 			cir.setReturnValue(shape);
 	}
 
+	/**
+	 * Pipes keep no shape cache, so the cover's real shape reaches everything that asks, not only the methods above:
+	 * a full cover is sturdy (torches, levers, rails go on it) and counts as a full block for pathfinding. Vanilla
+	 * builds the cache from this when blocks are registered; Pipez doesn't declare it, so it is added here.
+	 */
+	public boolean hasDynamicShape() {
+		return true;
+	}
+
+	/** However the pipe goes, its cover drops (with the block entity still there to read it from). */
+	@Inject(method = "onRemove", at = @At("HEAD"), require = 0)
+	private void comedymonkeysaddons$dropCover(BlockState state, Level level, BlockPos pos, BlockState newState,
+											   boolean movedByPiston, CallbackInfo ci) {
+		PipeCoverEvents.onPipeRemoved(state, level, pos, newState, movedByPiston);
+	}
+
 	/** A side starting or stopping extracting changes the snug cover's shape; tell clients to redraw it. */
 	@Inject(method = "setExtracting", at = @At("TAIL"), require = 0)
 	private void comedymonkeysaddons$extractingChanged(Level level, BlockPos pos, Direction side, boolean extracting,

@@ -270,7 +270,8 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 		float breakSpeed = Math.abs(getSpeed() / 100f);
 		int perHit = Math.max(1, (int) (breakSpeed / hardness));
 		int hits = (10 + perHit - 1) / perHit;
-		return hits * ((int) (hardness / breakSpeed) + 1);
+		// A tick per hit, with the wait between hits but none after the last (work() starts the next block at once)
+		return (hits - 1) * ((int) (hardness / breakSpeed) + 1) + 1;
 	}
 
 	// ---------------------------------------------------------------- output

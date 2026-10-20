@@ -1,7 +1,12 @@
 package com.comedymonkey.createaddons.content.wellspring;
 
+import com.comedymonkey.createaddons.content.MenuLayout;
+import com.comedymonkey.createaddons.content.ScreenBlockEntities;
+import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModBlocks;
 import com.comedymonkey.createaddons.registry.ModMenus;
+
+import org.anti_ad.mc.ipn.api.IPNIgnore;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,12 +18,14 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 /** Upgrade GUI: three generation slots, three capacity slots and the player's inventory. */
+/* Upgrades only: no quick moves, ours or Inventory Profiles Next's. */
+@IPNIgnore
 public class WellspringMenu extends AbstractContainerMenu {
 	public static final int SLOT_X = 8;
 	public static final int GENERATION_Y = 28;
 	public static final int CAPACITY_Y = 60;
-	public static final int INVENTORY_Y = 94;
-	public static final int HOTBAR_Y = 152;
+	/** The machine panel (the player's inventory panel sits under it). */
+	public static final int WIDTH = 176, HEIGHT = 84;
 
 	private static final int UPGRADE_SLOT_COUNT = WellspringUpgradeInventory.GENERATION_SLOTS
 		+ WellspringUpgradeInventory.CAPACITY_SLOTS;
@@ -28,8 +35,8 @@ public class WellspringMenu extends AbstractContainerMenu {
 
 	/** Client side: the block position comes from the open-menu packet. */
 	public WellspringMenu(int containerId, Inventory inventory, RegistryFriendlyByteBuf extraData) {
-		this(containerId, inventory, (WellspringBlockEntity) inventory.player.level()
-			.getBlockEntity(extraData.readBlockPos()));
+		this(containerId, inventory, ScreenBlockEntities.find(inventory, extraData.readBlockPos(),
+			ModBlockEntities.WELLSPRING.get(), ModBlocks.WELLSPRING.get()));
 	}
 
 	public WellspringMenu(int containerId, Inventory inventory, WellspringBlockEntity be) {
@@ -44,11 +51,7 @@ public class WellspringMenu extends AbstractContainerMenu {
 			addSlot(new UpgradeSlot(upgrades, WellspringUpgradeInventory.FIRST_CAPACITY_SLOT + i, SLOT_X + i * 18,
 				CAPACITY_Y));
 
-		for (int row = 0; row < 3; row++)
-			for (int col = 0; col < 9; col++)
-				addSlot(new Slot(inventory, col + row * 9 + 9, 8 + col * 18, INVENTORY_Y + row * 18));
-		for (int col = 0; col < 9; col++)
-			addSlot(new Slot(inventory, col, 8 + col * 18, HOTBAR_Y));
+		MenuLayout.addPlayerInventory(this::addSlot, inventory, MenuLayout.inventoryLeft(WIDTH), MenuLayout.inventoryTop(HEIGHT));
 	}
 
 	public WellspringBlockEntity getBlockEntity() {

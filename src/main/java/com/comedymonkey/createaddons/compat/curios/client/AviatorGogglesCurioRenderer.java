@@ -1,15 +1,19 @@
 package com.comedymonkey.createaddons.compat.curios.client;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.compat.curios.AviatorGogglesCurios;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -19,7 +23,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 /**
@@ -27,6 +33,19 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
  * outer armor head), following the wearer's head pose.
  */
 public class AviatorGogglesCurioRenderer implements ICurioRenderer {
+	/** Slightly inflated head, so the goggles sit on top of a worn helmet instead of z-fighting with it. */
+	public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(OVER_HELMET_LAYER,
+			() -> LayerDefinition.create(HumanoidModel.createMesh(new CubeDeformation(1.25f), 0f), 64, 32));
+	}
+
+	/** Registers the renderer for the goggles, if Aeronautics has them; only called with Curios installed. */
+	public static void register() {
+		if (AviatorGogglesCurios.AVIATORS_GOGGLES.isBound())
+			CuriosRendererRegistry.register(AviatorGogglesCurios.AVIATORS_GOGGLES.get(),
+				() -> new AviatorGogglesCurioRenderer(Minecraft.getInstance().getEntityModels()));
+	}
+
 	public static final ModelLayerLocation OVER_HELMET_LAYER =
 		new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("aviators_goggles_over_helmet"), "main");
 

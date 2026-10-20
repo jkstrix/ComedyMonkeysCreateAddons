@@ -21,12 +21,11 @@ import net.minecraft.world.entity.player.Inventory;
  */
 public class ChestUpgradeScreen extends AbstractContainerScreen<ChestUpgradeMenu> {
 	private static final ResourceLocation TEXTURE = ComedyMonkeysCreateAddons.asResource("textures/gui/chest_upgrade.png");
-	private static final int TEXT = 0x3B2A20;
 
 	public ChestUpgradeScreen(ChestUpgradeMenu menu, Inventory inventory, Component title) {
 		super(menu, inventory, title);
 		imageWidth = 176;
-		imageHeight = 50;
+		imageHeight = 48;
 	}
 
 	@Override
@@ -42,11 +41,15 @@ public class ChestUpgradeScreen extends AbstractContainerScreen<ChestUpgradeMenu
 	@Override
 	protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
 		graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+		ChestTier tier = menu.getTier();
+		if (tier != null)
+			GuiKit.tintBand(graphics, TEXTURE, leftPos, topPos, imageWidth, 256, 256, tier);
 	}
 
 	@Override
 	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-		graphics.drawString(font, title, titleLabelX, titleLabelY, TEXT, false);
+		ChestTier tier = menu.getTier();
+		GuiKit.title(graphics, font, title, imageWidth, tier == null ? GuiKit.TITLE : GuiKit.titleColour(tier));
 	}
 
 	private List<Component> slotTooltip() {
@@ -61,13 +64,18 @@ public class ChestUpgradeScreen extends AbstractContainerScreen<ChestUpgradeMenu
 		if (menu.getHalves() > 1)
 			lines.add(tr("gui.chest_upgrade.double", menu.getHalves()).withStyle(ChatFormatting.GRAY));
 
-		int lowest = menu.lowestFittingTier();
-		if (lowest == ChestUpgradeMenu.FITS_VANILLA) {
+		if (menu.canRemoveUpgrade()) {
 			lines.add(tr("gui.chest_upgrade.removable").withStyle(ChatFormatting.DARK_GRAY));
 		} else {
 			lines.add(tr("gui.chest_upgrade.too_full").withStyle(ChatFormatting.RED));
-			lines.add(tr("gui.chest_upgrade.lowest_tier", ChestTier.values()[lowest].chestName())
-				.withStyle(ChatFormatting.RED));
+			// Every tier its stacks fit, not just "this or better": the config can give a higher tier smaller stacks
+			MutableComponent fitting = Component.empty();
+			for (ChestTier fits : ChestTier.values())
+				if (menu.tierFits(fits))
+					fitting.append(fitting.getSiblings().isEmpty() ? Component.empty() : Component.literal(", "))
+						.append(fits.chestName());
+			if (!fitting.getSiblings().isEmpty())
+				lines.add(tr("gui.chest_upgrade.lowest_tier", fitting).withStyle(ChatFormatting.RED));
 		}
 		return lines;
 	}

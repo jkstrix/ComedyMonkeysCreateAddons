@@ -134,10 +134,14 @@ public final class MagmaEngineSimModels {
 		@Override
 		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand,
 										ModelData data, @Nullable RenderType renderType) {
-			if (side == null)
-				return unculled.computeIfAbsent(renderType, t -> turn(originalModel.getQuads(state, null, rand, data, t)));
-			return cache.computeIfAbsent(renderType, t -> new EnumMap<>(Direction.class))
-				.computeIfAbsent(side, s -> turn(originalModel.getQuads(state, Direction.rotate(inverse, s), rand, data, renderType)));
+			// Chunks are meshed on several threads at once, and the maps are filled as they go (the render type
+			// can be null, so no ConcurrentHashMap); after the first fill this is only a lookup
+			synchronized (this) {
+				if (side == null)
+					return unculled.computeIfAbsent(renderType, t -> turn(originalModel.getQuads(state, null, rand, data, t)));
+				return cache.computeIfAbsent(renderType, t -> new EnumMap<>(Direction.class))
+					.computeIfAbsent(side, s -> turn(originalModel.getQuads(state, Direction.rotate(inverse, s), rand, data, renderType)));
+			}
 		}
 
 		private List<BakedQuad> turn(List<BakedQuad> quads) {

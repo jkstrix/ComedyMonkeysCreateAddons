@@ -21,6 +21,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -93,6 +94,10 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearable, MenuProvider {
 	/** Animals the window shows at most. */
 	public static final int SHOWN = 4;
+	/** Animals each pen holds. */
+	public static final int CAPACITY = 128, BRASS_CAPACITY = 512;
+	/** The trough holds food for every animal, in normal stacks: 2 slots on the Animal Pen, 8 on the Brass one. */
+	public static final int TROUGH_SLOTS = CAPACITY / 64, BRASS_TROUGH_SLOTS = BRASS_CAPACITY / 64;
 	private static final int SYNC_INTERVAL = 10;
 
 	private ItemStack captive = ItemStack.EMPTY;
@@ -101,7 +106,9 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 	private int adults;
 	/** Babies by when they were born, oldest first; each litter grows up when its time runs out. */
 	private final List<Litter> young = new ArrayList<>();
-	private final FoodHandler food = new FoodHandler();
+	private final FoodHandler food;
+	/** Food from an older save that no longer fits the trough; put out with the output on the next tick. */
+	private final List<ItemStack> spilled = new ArrayList<>();
 	private final ItemStackHandler output;
 	private final FluidTank milk;
 	private final IItemHandler automation = new AutomationHandler();
@@ -125,6 +132,7 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 	public AnimalPenBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.ANIMAL_PEN.get(), pos, state);
 		boolean brass = isBrass(state);
+		food = new FoodHandler(brass ? BRASS_TROUGH_SLOTS : TROUGH_SLOTS);
 		output = new ItemStackHandler(brass ? 18 : 9) {
 			@Override
 			protected void onContentsChanged(int slot) {
@@ -148,7 +156,7 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 	}
 
 	public int getCapacity() {
-		return CMConfig.Server.get(isBrass() ? CMConfig.SERVER.brassPenCapacity : CMConfig.SERVER.penCapacity);
+		return isBrass() ? BRASS_CAPACITY : CAPACITY;
 	}
 
 	/** Ticks a birth takes, sped up by Fruitful. */
@@ -211,7 +219,9 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 
 	/** Ponder only: what's in the trough. */
 	public void setPonderFood(ItemStack stack) {
-		food.setStackInSlot(0, stack);
+		for (int i = 0; i < food.getSlots(); i++)
+			food.setStackInSlot(i, ItemStack.EMPTY);
+		food.spread(List.of(stack.copy()));
 	}
 
 	@Nullable
@@ -235,8 +245,31 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 
 	/** Some of the animal's own food (food left from another animal doesn't count). */
 	private boolean hasFood() {
-		ItemStack stack = food.getStackInSlot(0);
-		return !stack.isEmpty() && isFood(stack);
+		return getFoodCount() > 0;
+	}
+
+	/** How much of the animal's own food the trough holds, over all its slots. */
+	public int getFoodCount() {
+		int count = 0;
+		for (int i = 0; i < food.getSlots(); i++)
+			if (isFood(food.getStackInSlot(i)))
+				count += food.getStackInSlot(i).getCount();
+		return count;
+	}
+
+	/** The food to show lying in the trough: the first stack in it, or empty. */
+	public ItemStack getTroughFood() {
+		for (int i = 0; i < food.getSlots(); i++)
+			if (!food.getStackInSlot(i).isEmpty())
+				return food.getStackInSlot(i);
+		return ItemStack.EMPTY;
+	}
+
+	/** Eats {@code amount} of the animal's food, from whichever slots have it. */
+	private void eat(int amount) {
+		for (int i = 0; i < food.getSlots() && amount > 0; i++)
+			if (isFood(food.getStackInSlot(i)))
+				amount -= food.extractItem(i, amount, false).getCount();
 	}
 
 	/** One of the animal's breeding foods, to show in the empty food slot; found once per animal. */
@@ -298,11 +331,14 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 		foodHint = null;
 		shown.clear();
 		// Food left from the last animal that this one doesn't eat goes out with the rest of the output
-		ItemStack left = food.getStackInSlot(0);
-		if (!bottle.isEmpty() && !left.isEmpty() && !isFood(left) && level != null && !level.isClientSide) {
-			food.setStackInSlot(0, ItemStack.EMPTY);
-			store(List.of(left));
-		}
+		if (!bottle.isEmpty() && level != null && !level.isClientSide)
+			for (int i = 0; i < food.getSlots(); i++) {
+				ItemStack left = food.getStackInSlot(i);
+				if (!left.isEmpty() && !isFood(left)) {
+					food.setStackInSlot(i, ItemStack.EMPTY);
+					store(List.of(left));
+				}
+			}
 		breedTicks = 0;
 		woolReady = true;
 		woolTicks = 0;
@@ -360,7 +396,7 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 		}
 		if (isFood(stack)) {
 			if (!client) {
-				ItemStack left = food.insertItem(0, stack.copy(), false);
+				ItemStack left = ItemHandlerHelper.insertItemStacked(food, stack.copy(), false);
 				if (!player.getAbilities().instabuild)
 					stack.setCount(left.getCount());
 			}
@@ -494,6 +530,10 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 			clientTick();
 			return;
 		}
+		if (!spilled.isEmpty()) {
+			store(List.copyOf(spilled));
+			spilled.clear();
+		}
 		if (FixedStress.keep(this, wantedImpact()))
 			sendData();
 		if (isRunning())
@@ -523,8 +563,8 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 		if (canBreed()) {
 			if (++breedTicks >= breedTime()) {
 				breedTicks = 0;
-				int born = Math.min(Math.min(adults, getCapacity() - getCount()), food.getStackInSlot(0).getCount());
-				food.extractItem(0, born, false);
+				int born = Math.min(Math.min(adults, getCapacity() - getCount()), getFoodCount());
+				eat(born);
 				young.add(new Litter(born, growTime()));
 				if (getCount() >= getCapacity())
 					ModAdvancements.awardNearby(level, worldPosition,
@@ -601,6 +641,10 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 		// and percentage climb smoothly; the server's count replaces this whenever it arrives
 		if (isBreeding())
 			breedTicks = Math.min(breedTicks + 1, breedTime() - 1);
+		// The same for the young growing up (the "grows up in" time); growing up itself is left to the server
+		if (isRunning())
+			for (Litter litter : young)
+				litter.ticksLeft = Math.max(1, litter.ticksLeft - 1);
 		int total = getCount();
 		int want = hasAnimal() ? Math.min(total, SHOWN) : 0;
 		while (shown.size() > want)
@@ -763,7 +807,8 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 		if (hasAnimal())
 			all.addAll(butcher(server, Math.max(0, adults - 1), null, ItemStack.EMPTY));
 		all.add(captive);
-		all.add(food.getStackInSlot(0));
+		for (int i = 0; i < food.getSlots(); i++)
+			all.add(food.getStackInSlot(i));
 		for (int i = 0; i < output.getSlots(); i++)
 			all.add(output.getStackInSlot(i));
 		for (ItemStack stack : all)
@@ -773,7 +818,8 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 	}
 
 	int getComparatorOutput() {
-		return hasAnimal() ? Math.max(1, Math.round(15f * getCount() / getCapacity())) : 0;
+		// Clamped: a herd from when the pens held more (they used to be configurable) can be over capacity
+		return hasAnimal() ? Mth.clamp(Math.round(15f * getCount() / getCapacity()), 1, 15) : 0;
 	}
 
 	private void onInventoryChanged() {
@@ -788,7 +834,9 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 		adults = 0;
 		young.clear();
 		sample = null;
-		food.setStackInSlot(0, ItemStack.EMPTY);
+		for (int i = 0; i < food.getSlots(); i++)
+			food.setStackInSlot(i, ItemStack.EMPTY);
+		spilled.clear();
 		for (int i = 0; i < output.getSlots(); i++)
 			output.setStackInSlot(i, ItemStack.EMPTY);
 		milk.setFluid(FluidStack.EMPTY);
@@ -832,7 +880,7 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 			litters.add(entry);
 		}
 		tag.put("Young", litters);
-		tag.put("Food", food.save(registries));
+		tag.put("Food", food.serializeNBT(registries));
 		tag.put("Output", output.serializeNBT(registries));
 		tag.put("Milk", milk.writeToNBT(registries, new CompoundTag()));
 		tag.putInt("BreedTicks", breedTicks);
@@ -860,10 +908,7 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 		young.clear();
 		for (Tag entry : tag.getList("Young", Tag.TAG_COMPOUND))
 			young.add(new Litter(((CompoundTag) entry).getInt("Count"), ((CompoundTag) entry).getInt("Ticks")));
-		if (tag.get("Food") instanceof CompoundTag older)
-			food.deserializeNBT(registries, older); // saved before the trough held big stacks
-		else
-			food.load(tag.getList("Food", Tag.TAG_COMPOUND), registries);
+		food.load(tag.get("Food"), registries);
 		output.deserializeNBT(registries, tag.getCompound("Output"));
 		milk.readFromNBT(registries, tag.getCompound("Milk"));
 		breedTicks = tag.getInt("BreedTicks");
@@ -892,28 +937,16 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 		}
 	}
 
-	/**
-	 * The trough: one slot of the animal's food, holding enough for half the pen's animals so a full herd can double
-	 * at once (64 on the Animal Pen, 256 on the Brass one by default). Saved like the upgraded chests' big stacks,
-	 * since Minecraft won't save a stack above 99.
-	 */
+	/** The trough: normal stacks of the animal's food, enough slots to feed every animal the pen can hold. */
 	private class FoodHandler extends ItemStackHandler {
-		FoodHandler() {
-			super(1);
+		FoodHandler(int slots) {
+			super(slots);
 		}
 
-		private int limit() {
-			return Math.max(64, getCapacity() / 2);
-		}
-
+		/** A normal stack (vanilla's default would allow 99), so the slots hold exactly a food per animal. */
 		@Override
 		public int getSlotLimit(int slot) {
-			return limit();
-		}
-
-		@Override
-		protected int getStackLimit(int slot, ItemStack stack) {
-			return limit();
+			return 64;
 		}
 
 		@Override
@@ -926,12 +959,39 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 			onInventoryChanged();
 		}
 
-		ListTag save(HolderLookup.Provider registries) {
-			return ChestStacks.save(stacks, registries);
+		/**
+		 * Loads the trough, from this format or an older one (one slot, which could hold a big stack, saved as a
+		 * list like the upgraded chests' stacks or as a plain handler). Anything that no longer fits is spilled.
+		 */
+		void load(@Nullable Tag tag, HolderLookup.Provider registries) {
+			List<ItemStack> loaded = new ArrayList<>();
+			if (tag instanceof CompoundTag compound) {
+				ItemStackHandler saved = new ItemStackHandler();
+				saved.deserializeNBT(registries, compound);
+				for (int i = 0; i < saved.getSlots(); i++)
+					loaded.add(saved.getStackInSlot(i));
+			} else if (tag instanceof ListTag list) {
+				NonNullList<ItemStack> saved = NonNullList.withSize(Math.max(1, list.size()), ItemStack.EMPTY);
+				ChestStacks.load(saved, list, registries);
+				loaded.addAll(saved);
+			}
+			for (int i = 0; i < stacks.size(); i++)
+				stacks.set(i, ItemStack.EMPTY);
+			spilled.addAll(spread(loaded));
 		}
 
-		void load(ListTag list, HolderLookup.Provider registries) {
-			ChestStacks.load(stacks, list, registries);
+		/** Puts the stacks into the slots in normal-sized stacks, returning what didn't fit. */
+		List<ItemStack> spread(List<ItemStack> from) {
+			List<ItemStack> left = new ArrayList<>();
+			int next = 0;
+			for (ItemStack stack : from) {
+				stack = stack.copy();
+				while (!stack.isEmpty() && next < stacks.size())
+					stacks.set(next++, stack.split(Math.min(stack.getMaxStackSize(), getSlotLimit(0))));
+				if (!stack.isEmpty())
+					left.add(stack);
+			}
+			return left;
 		}
 	}
 
@@ -1008,26 +1068,30 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 		}
 	}
 
-	/** Automation: food in through slot 0 from any side, what it's made out of the rest. */
+	/** Automation: food in through the trough's slots from any side, what it's made out of the rest. */
 	private class AutomationHandler implements IItemHandler {
 		@Override
 		public int getSlots() {
-			return 1 + output.getSlots();
+			return food.getSlots() + output.getSlots();
+		}
+
+		private boolean isTrough(int slot) {
+			return slot < food.getSlots();
 		}
 
 		@Override
 		public ItemStack getStackInSlot(int slot) {
-			return slot == 0 ? food.getStackInSlot(0) : output.getStackInSlot(slot - 1);
+			return isTrough(slot) ? food.getStackInSlot(slot) : output.getStackInSlot(slot - food.getSlots());
 		}
 
 		@Override
 		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-			return slot == 0 ? food.insertItem(0, stack, simulate) : stack;
+			return isTrough(slot) ? food.insertItem(slot, stack, simulate) : stack;
 		}
 
 		@Override
 		public ItemStack extractItem(int slot, int amount, boolean simulate) {
-			return slot == 0 ? ItemStack.EMPTY : output.extractItem(slot - 1, amount, simulate);
+			return isTrough(slot) ? ItemStack.EMPTY : output.extractItem(slot - food.getSlots(), amount, simulate);
 		}
 
 		@Override
@@ -1037,7 +1101,7 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
-			return slot == 0 && isFood(stack);
+			return isTrough(slot) && isFood(stack);
 		}
 	}
 

@@ -117,7 +117,7 @@ public class UpgradedBarrelBlock extends BaseEntityBlock implements IWrenchable,
 		if (level.isClientSide)
 			return InteractionResult.SUCCESS;
 		if (player instanceof ServerPlayer serverPlayer && level.getBlockEntity(pos) instanceof UpgradedBarrelBlockEntity barrel)
-			ChestUpgrades.openChestMenu(serverPlayer, barrel, barrel.getDisplayName(), barrel.multiplier());
+			ChestUpgrades.openChestMenu(serverPlayer, barrel, barrel.getDisplayName(), barrel.multiplier(), barrel.getTier());
 		return InteractionResult.CONSUME;
 	}
 
@@ -126,7 +126,8 @@ public class UpgradedBarrelBlock extends BaseEntityBlock implements IWrenchable,
 		// Moved blocks (contraptions, physics objects) and Carry On keep their contents in the block entity data
 		if (!movedByPiston && !state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof UpgradedBarrelBlockEntity barrel) {
 			Containers.dropContents(level, pos, barrel);
-			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(state.getValue(TIER).upgradeItem()));
+			if (!barrel.upgradeTaken())
+				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(state.getValue(TIER).upgradeItem()));
 			level.updateNeighbourForOutputSignal(pos, this);
 		}
 		super.onRemove(state, level, pos, newState, movedByPiston);

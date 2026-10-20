@@ -168,8 +168,10 @@ public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity {
 		super.read(tag, registries, clientPacket);
 		energy.setEnergy(tag.getInt("Energy"));
 		if (tag.contains("SpeedSetting")) {
-			speed = tag.getInt("SpeedSetting");
-			stress = tag.getInt("StressSetting");
+			// Clamped like the screen's settings: a speed of 0 would give infinite stress capacity, and the most
+			// stress may have been lowered in the config since it was saved
+			speed = Mth.clamp(tag.getInt("SpeedSetting"), MIN_SPEED, MAX_SPEED);
+			stress = Mth.clamp(tag.getInt("StressSetting") / STRESS_STEP * STRESS_STEP, STRESS_STEP, maxStress());
 		}
 		reversed = tag.getBoolean("Reversed");
 		running = tag.getBoolean("Running");

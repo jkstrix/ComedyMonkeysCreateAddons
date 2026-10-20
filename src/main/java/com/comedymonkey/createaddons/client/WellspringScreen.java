@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.MenuLayout;
 import com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity;
 import com.comedymonkey.createaddons.content.wellspring.WellspringMenu;
 import com.comedymonkey.createaddons.content.wellspring.WellspringSource;
@@ -30,22 +31,19 @@ public class WellspringScreen extends AbstractContainerScreen<WellspringMenu> {
 	private static final int GAUGE_Y = 18;
 	private static final int GAUGE_W = 36;
 	private static final int GAUGE_H = 58;
-	// Sprites in the texture beside the panel
-	private static final int LOCK_U = 176, LOCK_V = 0;
-	private static final int GLASS_U = 176, GLASS_V = 16;
 
 	private static final int INFO_X = 68;
-	private static final int TEXT = 0x3B2A20;
-	private static final int LABEL = 0x6E5E4E;
-	private static final int WATER = 0x2A5DB0;
-	private static final int LAVA = 0xC0501A;
-	private static final int FULL = 0xB02020;
+	// Bright enough to read on the dark body
+	private static final int WATER = 0x5A8FE0;
+	private static final int LAVA = 0xE07838;
+	private static final int FULL = GuiKit.BAD;
 
 	public WellspringScreen(WellspringMenu menu, Inventory inventory, Component title) {
 		super(menu, inventory, title);
-		imageWidth = 176;
-		imageHeight = 176;
-		inventoryLabelY = imageHeight - 94;
+		imageWidth = WellspringMenu.WIDTH;
+		imageHeight = MenuLayout.screenHeight(WellspringMenu.HEIGHT);
+		inventoryLabelX = GuiKit.inventoryLabelX(WellspringMenu.WIDTH);
+		inventoryLabelY = GuiKit.inventoryLabelY(WellspringMenu.HEIGHT);
 	}
 
 	@Override
@@ -70,11 +68,11 @@ public class WellspringScreen extends AbstractContainerScreen<WellspringMenu> {
 		// Padlocks over slots beyond the configured limit
 		for (Slot slot : menu.slots)
 			if (slot instanceof WellspringMenu.UpgradeSlot upgradeSlot && !upgradeSlot.isActive())
-				graphics.blit(TEXTURE, leftPos + slot.x, topPos + slot.y, LOCK_U, LOCK_V, 16, 16);
+				graphics.blit(GuiKit.WIDGETS, leftPos + slot.x, topPos + slot.y, GuiKit.LOCK_U, GuiKit.LOCK_V, 16, 16);
 
 		renderFluid(graphics);
 		RenderSystem.enableBlend();
-		graphics.blit(TEXTURE, leftPos + GAUGE_X, topPos + GAUGE_Y, GLASS_U, GLASS_V, GAUGE_W, GAUGE_H);
+		graphics.blit(GuiKit.WIDGETS, leftPos + GAUGE_X, topPos + GAUGE_Y, GuiKit.GLASS_U, GuiKit.GLASS_V, GAUGE_W, GAUGE_H);
 		RenderSystem.disableBlend();
 	}
 
@@ -106,36 +104,36 @@ public class WellspringScreen extends AbstractContainerScreen<WellspringMenu> {
 
 	@Override
 	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-		graphics.drawString(font, title, titleLabelX, titleLabelY, TEXT, false);
-		graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, TEXT, false);
-		graphics.drawString(font, tr("gui.wellspring.generation"), 8, 18, LABEL, false);
-		graphics.drawString(font, tr("gui.wellspring.capacity"), 8, 50, LABEL, false);
+		GuiKit.title(graphics, font, title, WellspringMenu.WIDTH, GuiKit.TITLE);
+		graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, GuiKit.INVENTORY_TEXT, false);
+		graphics.drawString(font, tr("gui.wellspring.generation"), 8, 18, GuiKit.LABEL, false);
+		graphics.drawString(font, tr("gui.wellspring.capacity"), 8, 50, GuiKit.LABEL, false);
 
 		WellspringBlockEntity be = menu.getBlockEntity();
 		int fluidColor = fluidColor(be);
 
 		// Fill percentage, drawn large
-		graphics.drawString(font, tr("gui.wellspring.fill"), INFO_X, 18, LABEL, false);
+		graphics.drawString(font, tr("gui.wellspring.fill"), INFO_X, 19, GuiKit.LABEL, false);
 		graphics.pose().pushPose();
-		graphics.pose().translate(INFO_X, 29, 0);
+		graphics.pose().translate(INFO_X, 30, 0);
 		graphics.pose().scale(1.5f, 1.5f, 1);
-		graphics.drawString(font, be.getFillPercent() + "%", 0, 0, be.getTank().isEmpty() ? LABEL : fluidColor, false);
+		graphics.drawString(font, be.getFillPercent() + "%", 0, 0, be.getTank().isEmpty() ? GuiKit.LABEL : fluidColor, false);
 		graphics.pose().popPose();
 
 		// Generation rate
-		graphics.drawString(font, tr("gui.wellspring.output"), INFO_X, 50, LABEL, false);
+		graphics.drawString(font, tr("gui.wellspring.output"), INFO_X, 51, GuiKit.LABEL, false);
 		Component rate;
 		int rateColor = fluidColor;
 		if (be.getGenerationUpgradeCount() == 0) {
 			rate = tr("gui.wellspring.no_output");
-			rateColor = LABEL;
+			rateColor = GuiKit.LABEL;
 		} else if (be.getTank().getFluidAmount() >= be.getTank().getCapacity()) {
 			rate = tr("gui.wellspring.full");
 			rateColor = FULL;
 		} else {
 			rate = Component.literal(be.getGenerationRate() + " mB/s");
 		}
-		graphics.drawString(font, rate, INFO_X, 60, rateColor, false);
+		graphics.drawString(font, rate, INFO_X, 61, rateColor, false);
 	}
 
 	private List<Component> gaugeTooltip() {
@@ -160,7 +158,7 @@ public class WellspringScreen extends AbstractContainerScreen<WellspringMenu> {
 		return switch (source) {
 			case LAVA -> LAVA;
 			case HONEY -> 0xD8901C;
-			case CHOCOLATE -> 0x5E3418;
+			case CHOCOLATE -> 0xA8704A;
 			default -> WATER;
 		};
 	}

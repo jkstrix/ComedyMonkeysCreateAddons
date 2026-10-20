@@ -71,7 +71,8 @@ public class PressureCrucibleBlock extends HorizontalKineticBlock implements IBE
 		if (!level.isClientSide) {
 			ItemStack left = be.getInventory().insertItem(PressureCrucibleBlockEntity.INPUT, stack.copy(), false);
 			if (left.getCount() != stack.getCount()) {
-				player.setItemInHand(hand, left);
+				if (!player.isCreative())
+					player.setItemInHand(hand, left);
 				level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 0.6f, 0.8f);
 			}
 		}

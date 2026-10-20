@@ -29,7 +29,8 @@ public record MotorSettingsPayload(BlockPos pos, int speed, int stress, boolean 
 	public static void handle(MotorSettingsPayload payload, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			Player player = context.player();
-			if (player.distanceToSqr(payload.pos().getCenter()) > 64)
+			// Close by, and allowed to change things (not a spectator or in adventure mode)
+			if (player.distanceToSqr(payload.pos().getCenter()) > 64 || !player.mayBuild())
 				return;
 			if (player.level().getBlockEntity(payload.pos()) instanceof ElectricMotorBlockEntity motor)
 				motor.applySettings(payload.speed(), payload.stress(), payload.reversed());

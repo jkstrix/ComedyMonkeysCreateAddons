@@ -168,7 +168,9 @@ public class PressureCrucibleBlockEntity extends KineticBlockEntity implements C
 		ItemStack input = inventory.getStackInSlot(INPUT);
 		if (input.isEmpty() || level == null)
 			return null;
-		if (cachedRecipe != null && cachedRecipe.value().ingredient().test(input))
+		// The cached recipe still counts if it matches and is still the loaded one (a /reload replaces them all)
+		if (cachedRecipe != null && cachedRecipe.value().ingredient().test(input)
+			&& level.getRecipeManager().byKey(cachedRecipe.id()).orElse(null) == cachedRecipe)
 			return cachedRecipe.value();
 		cachedRecipe = findRecipe(input);
 		return cachedRecipe == null ? null : cachedRecipe.value();

@@ -17,6 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -51,15 +52,23 @@ public class BottledAnimalItem extends Item {
 		CustomData data = stack.get(DataComponents.ENTITY_DATA);
 		if (data == null)
 			return null;
-		return EntityType.by(data.copyTag()).orElse(null);
+		// byString, not by(tag): a malformed id is just no animal rather than an exception
+		return EntityType.byString(data.copyTag().getString("id")).orElse(null);
 	}
 
-	/** The animal in the bottle as a new entity (not yet in any world), or empty if it can't be made. */
+	/**
+	 * The animal in the bottle as a new entity (not yet in any world), or empty if it can't be made. Only something
+	 * the bottle could have caught comes out: a stack edited to hold any other entity (a command block minecart, say)
+	 * makes nothing, as vanilla's spawn eggs refuse such data from non-operators.
+	 */
 	public static Optional<Entity> create(ItemStack stack, Level level) {
 		CustomData data = stack.get(DataComponents.ENTITY_DATA);
 		if (data == null)
 			return Optional.empty();
-		return EntityType.create(data.copyTag(), level);
+		EntityType<?> type = typeOf(stack);
+		if (type == null || type.is(AnimalCapture.BLACKLIST))
+			return Optional.empty();
+		return EntityType.create(data.copyTag(), level).filter(entity -> entity instanceof Animal);
 	}
 
 	@Override

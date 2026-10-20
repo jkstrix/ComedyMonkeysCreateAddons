@@ -1,5 +1,10 @@
 package com.comedymonkey.createaddons.content.pen;
 
+import com.comedymonkey.createaddons.content.MenuLayout;
+import com.comedymonkey.createaddons.content.QuickTransferMenu;
+import com.comedymonkey.createaddons.content.ScreenBlockEntities;
+import com.comedymonkey.createaddons.registry.ModBlockEntities;
+import com.comedymonkey.createaddons.registry.ModBlocks;
 import com.comedymonkey.createaddons.registry.ModMenus;
 
 import org.anti_ad.mc.ipn.api.IPNIgnore;
@@ -14,24 +19,28 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 /**
- * Wrench screen of an Animal Pen: the captured animal's bottle (take it out to empty the pen), the trough's food,
- * what the pen has made (take only; three columns, six on the Brass pen) and the player's inventory.
+ * Wrench screen of an Animal Pen: the captured animal's bottle (take it out to empty the pen), what the pen has made
+ * (take only; three columns, six on the Brass pen), the trough's food in a row underneath, and the player's inventory.
  */
-/* Inventory Profiles Next's sorting would shuffle these machine slots (and can't handle the pen's big food stack). */
+/* Inventory Profiles Next's sorting would shuffle these machine slots. */
 @IPNIgnore
-public class AnimalPenMenu extends AbstractContainerMenu {
-	public static final int ANIMAL_X = 10, ANIMAL_Y = 20, FOOD_X = 10, FOOD_Y = 54;
+public class AnimalPenMenu extends AbstractContainerMenu implements QuickTransferMenu {
+	public static final int ANIMAL_X = 8, ANIMAL_Y = 18;
 	public static final int OUTPUT_X = 62, OUTPUT_Y = 18;
-	public static final int INVENTORY_Y = 106, HOTBAR_Y = 164;
-	private static final int ANIMAL_SLOT = 0, FOOD_SLOT = 1, FIRST_OUTPUT = 2;
+	public static final int TROUGH_X = 8, TROUGH_Y = 80;
+	/** The machine panel (the player's inventory panel sits under it). */
+	public static final int WIDTH = 176, HEIGHT = 124;
+	private static final int ANIMAL_SLOT = 0, FIRST_FOOD = 1;
 
 	private final AnimalPenBlockEntity be;
 	private final ContainerLevelAccess access;
+	private final int firstOutput;
 	private final int firstPlayer;
 
 	/** Client side: the block position comes from the open-menu packet. */
 	public AnimalPenMenu(int containerId, Inventory inventory, RegistryFriendlyByteBuf extraData) {
-		this(containerId, inventory, (AnimalPenBlockEntity) inventory.player.level().getBlockEntity(extraData.readBlockPos()));
+		this(containerId, inventory, ScreenBlockEntities.find(inventory, extraData.readBlockPos(),
+			ModBlockEntities.ANIMAL_PEN.get(), ModBlocks.ANIMAL_PEN.get()));
 	}
 
 	public AnimalPenMenu(int containerId, Inventory inventory, AnimalPenBlockEntity be) {
@@ -40,7 +49,10 @@ public class AnimalPenMenu extends AbstractContainerMenu {
 		this.access = ContainerLevelAccess.create(be.getLevel(), be.getBlockPos());
 
 		addSlot(new SlotItemHandler(be.getCaptiveSlot(), 0, ANIMAL_X, ANIMAL_Y));
-		addSlot(new SlotItemHandler(be.getFood(), 0, FOOD_X, FOOD_Y));
+		var food = be.getFood();
+		for (int i = 0; i < food.getSlots(); i++)
+			addSlot(new SlotItemHandler(food, i, TROUGH_X + i * 18, TROUGH_Y));
+		firstOutput = slots.size();
 		int columns = columns(be);
 		var output = be.getOutput();
 		for (int i = 0; i < output.getSlots(); i++)
@@ -51,12 +63,7 @@ public class AnimalPenMenu extends AbstractContainerMenu {
 				}
 			});
 		firstPlayer = slots.size();
-
-		for (int row = 0; row < 3; row++)
-			for (int col = 0; col < 9; col++)
-				addSlot(new Slot(inventory, col + row * 9 + 9, 8 + col * 18, INVENTORY_Y + row * 18));
-		for (int col = 0; col < 9; col++)
-			addSlot(new Slot(inventory, col, 8 + col * 18, HOTBAR_Y));
+		MenuLayout.addPlayerInventory(this::addSlot, inventory, MenuLayout.inventoryLeft(WIDTH), MenuLayout.inventoryTop(HEIGHT));
 	}
 
 	/** Output columns: three, or six on the Brass pen. */
@@ -66,6 +73,22 @@ public class AnimalPenMenu extends AbstractContainerMenu {
 
 	public AnimalPenBlockEntity getBlockEntity() {
 		return be;
+	}
+
+	@Override
+	public int firstPlayerSlot() {
+		return firstPlayer;
+	}
+
+	/** Quick moves only take what the pen has made: never the bottle (that releases the herd) or the trough's food. */
+	@Override
+	public boolean allowsQuickTransfer(Slot slot) {
+		return slot.index >= firstOutput;
+	}
+
+	@Override
+	public boolean allowsQuickTransferIn() {
+		return false;
 	}
 
 	@Override
@@ -79,15 +102,18 @@ public class AnimalPenMenu extends AbstractContainerMenu {
 			if (!moveItemStackTo(stack, firstPlayer, slots.size(), true))
 				return ItemStack.EMPTY;
 		} else if (slots.get(ANIMAL_SLOT).mayPlace(stack) && !slots.get(ANIMAL_SLOT).hasItem()) {
-			if (!moveItemStackTo(stack, ANIMAL_SLOT, FOOD_SLOT, false))
+			if (!moveItemStackTo(stack, ANIMAL_SLOT, FIRST_FOOD, false))
 				return ItemStack.EMPTY;
-		} else if (!slots.get(FOOD_SLOT).mayPlace(stack) || !moveItemStackTo(stack, FOOD_SLOT, FIRST_OUTPUT, false)) {
+		} else if (!slots.get(FIRST_FOOD).mayPlace(stack) || !moveItemStackTo(stack, FIRST_FOOD, firstOutput, false)) {
 			return ItemStack.EMPTY;
 		}
 		if (stack.isEmpty())
 			slot.setByPlayer(ItemStack.EMPTY);
+		else if (index == ANIMAL_SLOT)
+			slot.setChanged(); // setting the bottle slot would release and re-catch the herd
 		else
-			slot.setChanged();
+			// Through the handler: a SlotItemHandler's setChanged() tells nobody, so a partly moved stack wasn't saved
+			slot.set(stack);
 		return original;
 	}
 

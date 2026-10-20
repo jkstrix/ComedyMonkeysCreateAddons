@@ -31,6 +31,11 @@ public class FlightInstrumentsBlockEntity extends BlockEntity implements IHaveGo
 		public String compassPoint() {
 			return POINTS[(int) Math.round(heading / 45) & 7];
 		}
+
+		/** "045° NE": whole degrees, wrapping so that just short of 360 reads 000 rather than 360. */
+		public String headingText() {
+			return String.format(Locale.ROOT, "%03d° %s", Math.floorMod(Math.round(heading), 360), compassPoint());
+		}
 	}
 
 	public FlightInstrumentsBlockEntity(BlockPos pos, BlockState state) {
@@ -78,7 +83,7 @@ public class FlightInstrumentsBlockEntity extends BlockEntity implements IHaveGo
 		line(tooltip, "altitude", String.format(Locale.ROOT, "%.1f m", r.altitude()));
 		line(tooltip, "airspeed", String.format(Locale.ROOT, "%.1f m/s", r.airspeed()));
 		line(tooltip, "climb", String.format(Locale.ROOT, "%+.1f m/s", r.climb()));
-		line(tooltip, "heading", String.format(Locale.ROOT, "%03.0f° %s", r.heading(), r.compassPoint()));
+		line(tooltip, "heading", r.headingText());
 		line(tooltip, "attitude", String.format(Locale.ROOT, "%+.0f° / %+.0f°", r.pitch(), r.roll()));
 		if (!r.onShip())
 			lang().translate("gui.goggles.flight_instruments.grounded").style(ChatFormatting.DARK_GRAY).forGoggles(tooltip, 1);

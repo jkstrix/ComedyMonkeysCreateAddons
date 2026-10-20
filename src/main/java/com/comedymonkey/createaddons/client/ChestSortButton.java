@@ -14,10 +14,10 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/** Adds a small Sort button, an up and a down arrow, to the top right of upgraded chest and barrel screens. */
+/** Adds a small Sort button, an up and a down arrow, to the right of the band on upgraded chest and barrel screens. */
 public final class ChestSortButton {
-	private static final int WIDTH = 16;
-	private static final int HEIGHT = 12;
+	private static final int WIDTH = GuiKit.SORT_W;
+	private static final int HEIGHT = GuiKit.SORT_H;
 	private static final String UP = "↑";
 	private static final String DOWN = "↓";
 
@@ -27,12 +27,13 @@ public final class ChestSortButton {
 		if (!(event.getScreen() instanceof AbstractContainerScreen<?> screen) || !(screen.getMenu() instanceof UpgradedChestView))
 			return;
 		int x = screen.getGuiLeft() + screen.getXSize() - 7 - WIDTH;
-		int y = screen.getGuiTop() + 4;
+		int y = screen.getGuiTop() + 1;
 		Button button = new Button(x, y, WIDTH, HEIGHT, Component.empty(),
 				b -> PacketDistributor.sendToServer(new SortChestPayload()), narration -> narration.get()) {
 			@Override
 			protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-				super.renderWidget(graphics, mouseX, mouseY, partialTick);
+				graphics.blit(GuiKit.WIDGETS, getX(), getY(), isHoveredOrFocused() ? GuiKit.SORT_HOVER_U : GuiKit.SORT_U,
+					GuiKit.SORT_V, WIDTH, HEIGHT);
 				// Two arrows with a gap between them, rather than one cramped glyph
 				Font font = Minecraft.getInstance().font;
 				int colour = isHoveredOrFocused() ? 0xFFFFA0 : 0xFFFFFF;

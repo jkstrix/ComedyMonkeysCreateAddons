@@ -56,6 +56,16 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 		};
 	}
 
+	/** Like vanilla's chest: a wrench turning it moves the sides its pipes and cables connect on, so they look again. */
+	@Override
+	public void setBlockState(BlockState state) {
+		BlockState old = getBlockState();
+		super.setBlockState(state);
+		if (old.hasProperty(MagmaEngineBlock.FACING) && state.hasProperty(MagmaEngineBlock.FACING)
+			&& old.getValue(MagmaEngineBlock.FACING) != state.getValue(MagmaEngineBlock.FACING))
+			invalidateCapabilities();
+	}
+
 	/** The engine block: plain or Supercharged, which sets the numbers. */
 	private static MagmaEngineBlock engine(BlockState state) {
 		return state.getBlock() instanceof MagmaEngineBlock engine ? engine : ModBlocks.MAGMA_ENGINE.get();

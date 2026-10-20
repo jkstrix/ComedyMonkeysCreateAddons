@@ -19,21 +19,27 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.BambooSaplingBlock;
 import net.minecraft.world.level.block.BambooStalkBlock;
 import net.minecraft.world.level.block.BeetrootBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.FungusBlock;
 import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.GrowingPlantBlock;
+import net.minecraft.world.level.block.MushroomBlock;
 import net.minecraft.world.level.block.NetherWartBlock;
+import net.minecraft.world.level.block.PinkPetalsBlock;
+import net.minecraft.world.level.block.PitcherCropBlock;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.TallFlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -45,7 +51,8 @@ import net.minecraft.world.phys.Vec3;
  * What can go in an Auto Harvester and what each harvest gives. Nothing is configured per plant: a crop gives what
  * its block would drop fully grown (so wheat seeds give wheat and the odd extra seed, sweet berries give berries,
  * melon seeds give a melon's slices); a sapling gives logs of its wood plus a few rolls of its leaves' drops (more
- * saplings, sticks, apples). The planted item is never used up. Item tags {@code auto_harvester_plantable} and
+ * saplings, sticks, apples), and a nether fungus grows a huge fungus: stems, wart blocks and the odd shroomlight.
+ * The planted item is never used up. Item tags {@code auto_harvester_plantable} and
  * {@code auto_harvester_blacklist} add or forbid plants.
  */
 public final class HarvesterPlants {
@@ -63,13 +70,27 @@ public final class HarvesterPlants {
 		if (stack.isEmpty() || stack.is(BLACKLIST) || !(stack.getItem() instanceof BlockItem item))
 			return PlantKind.NONE;
 		Block block = item.getBlock();
-		if (stack.is(ItemTags.SAPLINGS) || block instanceof SaplingBlock)
+		if (stack.is(ItemTags.SAPLINGS) || block instanceof SaplingBlock || block instanceof FungusBlock)
 			return woodOf(block, "_log") != null ? PlantKind.TREE : PlantKind.NONE;
-		if (stack.is(PLANTABLE) || block instanceof BushBlock || block instanceof SugarCaneBlock || block instanceof CactusBlock
+		if (stack.is(PLANTABLE) || isGrownPlant(stack, block) || block instanceof SugarCaneBlock || block instanceof CactusBlock
 			|| block instanceof BambooSaplingBlock || block instanceof BambooStalkBlock || block instanceof CocoaBlock
 			|| block instanceof GrowingPlantBlock)
 			return PlantKind.CROP;
 		return PlantKind.NONE;
+	}
+
+	/**
+	 * The small plants worth growing: crops, stems, berry bushes, nether wart, pitcher pods, flowers (small and two
+	 * tall, vanilla's tags or any flower block, so modded ones count) and pink petals, and mushrooms (nether fungi grow
+	 * huge fungi, so they're trees).
+	 * Not grass, ferns, tall grass, dead bushes, roots, sprouts, seagrass or lily pads, which give nothing worth having.
+	 */
+	private static boolean isGrownPlant(ItemStack stack, Block block) {
+		return block instanceof CropBlock || block instanceof StemBlock || block instanceof SweetBerryBushBlock
+			|| block instanceof NetherWartBlock || block instanceof PitcherCropBlock
+			|| stack.is(ItemTags.SMALL_FLOWERS) || stack.is(ItemTags.TALL_FLOWERS)
+			|| block instanceof FlowerBlock || block instanceof TallFlowerBlock || block instanceof PinkPetalsBlock
+			|| block instanceof MushroomBlock;
 	}
 
 	/**
@@ -129,8 +150,12 @@ public final class HarvesterPlants {
 			out.add(new ItemStack(log, logs));
 		Block leaves = woodOf(sapling, "_leaves");
 		if (leaves != null)
-			for (int i = CMConfig.SERVER.harvesterLeafRolls.get(); i > 0; i--)
+			for (int i = CMConfig.SERVER.harvesterLeafRolls.get(); i > 0; i--) {
 				out.addAll(drops(leaves.defaultBlockState(), level, pos));
+				// A huge fungus has shroomlights dotted among its wart
+				if (sapling instanceof FungusBlock && level.random.nextInt(3) == 0)
+					out.add(new ItemStack(Items.SHROOMLIGHT));
+			}
 		return out;
 	}
 
@@ -167,7 +192,8 @@ public final class HarvesterPlants {
 
 	/**
 	 * The log or leaves of a sapling's wood, found by name in the sapling's own namespace (so modded trees work too):
-	 * oak_sapling to oak_log, mangrove_propagule to mangrove_log, azaleas to oak logs and their own leaves.
+	 * oak_sapling to oak_log, mangrove_propagule to mangrove_log, azaleas to oak logs and their own leaves, and a
+	 * fungus to its stem and wart block (crimson's is the nether wart block).
 	 */
 	@Nullable
 	public static Block woodOf(Block sapling, String suffix) {
@@ -178,6 +204,15 @@ public final class HarvesterPlants {
 			wood = path.substring(0, path.length() - "_sapling".length());
 		else if (path.endsWith("_propagule"))
 			wood = path.substring(0, path.length() - "_propagule".length());
+		else if (path.endsWith("_fungus")) {
+			wood = path.substring(0, path.length() - "_fungus".length());
+			if (suffix.equals("_leaves")) {
+				ResourceLocation wart = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), wood + "_wart_block");
+				if (BuiltInRegistries.BLOCK.containsKey(wart))
+					return BuiltInRegistries.BLOCK.get(wart);
+				return wood.equals("crimson") ? Blocks.NETHER_WART_BLOCK : null;
+			}
+		}
 		else if (path.equals("azalea") || path.equals("flowering_azalea"))
 			return suffix.equals("_log") ? Blocks.OAK_LOG : path.equals("azalea") ? Blocks.AZALEA_LEAVES : Blocks.FLOWERING_AZALEA_LEAVES;
 		else

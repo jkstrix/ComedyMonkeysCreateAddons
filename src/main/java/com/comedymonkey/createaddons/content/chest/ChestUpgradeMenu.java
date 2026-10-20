@@ -1,5 +1,6 @@
 package com.comedymonkey.createaddons.content.chest;
 
+import org.anti_ad.mc.ipn.api.IPNIgnore;
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.advancement.ModAdvancements;
@@ -11,6 +12,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -24,19 +26,21 @@ import net.minecraft.world.level.block.state.BlockState;
  * inventory. Anything that would leave stacks or slots that no longer fit is refused, and the server tells the client
  * which tiers still fit so the slot never pretends otherwise.
  */
+/* Just the upgrade slot: no quick moves, and Inventory Profiles Next's buttons have nothing to do here. */
+@IPNIgnore
 public class ChestUpgradeMenu extends AbstractContainerMenu {
 	public static final int UPGRADE_X = 80;
 	public static final int UPGRADE_Y = 24;
-	/** Lowest-fitting-tier value meaning "a plain vanilla chest is enough". */
-	public static final int FITS_VANILLA = -1;
+	/** In {@link #fittingTiers()}: a plain vanilla chest (or barrel) would do. Each tier has bit {@code ordinal()}. */
+	public static final int VANILLA_BIT = 1 << ChestTier.values().length;
 
 	private final Level level;
 	private final Player player;
 	private final BlockPos pos;
 	private final int halves;
 	private final SimpleContainer upgradeContainer = new SimpleContainer(1);
-	/** Client copy of the lowest tier ordinal that fits every half (or FITS_VANILLA). */
-	private int syncedLowestFit = ChestTier.values().length - 1;
+	/** Client copy of {@link #fittingTiers()}. */
+	private int syncedFits;
 
 	public ChestUpgradeMenu(int containerId, Inventory inventory, RegistryFriendlyByteBuf extraData) {
 		this(containerId, inventory, extraData.readBlockPos());
@@ -60,12 +64,12 @@ public class ChestUpgradeMenu extends AbstractContainerMenu {
 		addDataSlot(new DataSlot() {
 			@Override
 			public int get() {
-				return lowestFittingTier();
+				return fittingTiers();
 			}
 
 			@Override
 			public void set(int value) {
-				syncedLowestFit = value;
+				syncedFits = value;
 			}
 		});
 	}
@@ -82,29 +86,57 @@ public class ChestUpgradeMenu extends AbstractContainerMenu {
 		return state.getBlock() instanceof TieredStorageBlock block ? block.tierOf(state) : null;
 	}
 
-	/** Lowest tier ordinal whose stack size and slot count fit every half, or {@link #FITS_VANILLA}. Synced. */
-	public int lowestFittingTier() {
+	/**
+	 * Which tiers every part's contents would fit, as bits ({@code 1 << tier.ordinal()}), plus {@link #VANILLA_BIT} if
+	 * a plain chest would. Checked tier by tier: the config can give a higher tier a smaller stack size. Synced.
+	 */
+	public int fittingTiers() {
 		if (level.isClientSide)
-			return syncedLowestFit;
-		if (ChestUpgrades.fitsEachPart(level, pos, 1, ChestStacks.SLOTS))
-			return FITS_VANILLA;
+			return syncedFits;
+		int fits = ChestUpgrades.fitsEachPart(level, pos, 1, ChestStacks.SLOTS) ? VANILLA_BIT : 0;
 		for (ChestTier tier : ChestTier.values())
 			if (ChestUpgrades.fitsEachPart(level, pos, tier.multiplier(), tier.slots()))
-				return tier.ordinal();
-		return ChestTier.values().length - 1;
+				fits |= 1 << tier.ordinal();
+		return fits;
 	}
 
 	public boolean canRemoveUpgrade() {
-		return lowestFittingTier() == FITS_VANILLA;
+		return (fittingTiers() & VANILLA_BIT) != 0;
 	}
 
 	public boolean tierFits(ChestTier tier) {
-		return tier.ordinal() >= lowestFittingTier();
+		return (fittingTiers() & 1 << tier.ordinal()) != 0;
 	}
 
 	private boolean isValidReplacement(ItemStack stack) {
 		return stack.getItem() instanceof ChestUpgradeItem upgrade
 			&& tierFits(upgrade.getTier());
+	}
+
+	/**
+	 * Puts the block's current upgrade back in the slot. Someone else's upgrade screen (or a right-click with an
+	 * upgrade) may have changed the tier since, and the slot must never hand out an upgrade the block no longer has.
+	 */
+	private void refreshUpgrade() {
+		if (level.isClientSide)
+			return;
+		BlockState state = level.getBlockState(pos);
+		ItemStack current = state.getBlock() instanceof TieredStorageBlock block
+			? new ItemStack(block.tierOf(state).upgradeItem()) : ItemStack.EMPTY;
+		if (!ItemStack.isSameItem(current, upgradeContainer.getItem(0)))
+			upgradeContainer.setItem(0, current);
+	}
+
+	@Override
+	public void clicked(int slotId, int button, ClickType clickType, Player player) {
+		refreshUpgrade();
+		super.clicked(slotId, button, clickType, player);
+	}
+
+	@Override
+	public void broadcastChanges() {
+		refreshUpgrade();
+		super.broadcastChanges();
 	}
 
 	private void onUpgradeChanged() {

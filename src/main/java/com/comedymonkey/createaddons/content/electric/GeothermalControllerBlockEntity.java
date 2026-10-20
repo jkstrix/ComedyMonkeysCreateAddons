@@ -168,8 +168,23 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 			BlockState state = level.getBlockState(pos);
 			if (!GeothermalPartBlock.isPart(state, !pos.equals(centre)))
 				return false;
+			// A casing already working for another formed turbine (two built overlapping) can't be shared
+			if (level.getBlockEntity(pos) instanceof GeothermalCasingBlockEntity casing && casing.controller() != null
+				&& !worldPosition.equals(casing.getController()))
+				return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Forming or unforming changes what the controller and every casing offer pipes and cables, but NeoForge only
+	 * looks again when a block entity comes or goes; caches (Create's pipes, most cable mods) would keep the old
+	 * answer, even a dead controller's tanks.
+	 */
+	private void invalidateStructure() {
+		BlockPos centre = centre();
+		for (BlockPos pos : BlockPos.betweenClosed(centre.offset(-1, -1, -1), centre.offset(1, 1, 1)))
+			level.invalidateCapabilities(pos.immutable());
 	}
 
 	private void setFormed(boolean now) {
@@ -198,6 +213,7 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 				}
 		}
 		syncQueued = true;
+		invalidateStructure();
 		if (now)
 			ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.TURBINE_FORMED, ItemStack.EMPTY, 0);
 	}
@@ -217,6 +233,7 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 				if (level.getBlockEntity(pos) instanceof GeothermalCasingBlockEntity casing)
 					casing.setController(null);
 			}
+			invalidateStructure();
 		}
 	}
 
@@ -301,6 +318,9 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 
 		@Override
 		public int fill(FluidStack resource, FluidAction action) {
+			// A pipe still holding on to a broken turbine's inlets mustn't pour fluid into nothing
+			if (!formed || isRemoved())
+				return 0;
 			if (lava.isFluidValid(resource))
 				return lava.fill(resource, action);
 			if (water.isFluidValid(resource))

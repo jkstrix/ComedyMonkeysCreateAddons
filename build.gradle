@@ -35,6 +35,12 @@ neoForge {
             sourceSet(sourceSets.main)
         }
     }
+
+    // Unit tests run inside a bootstrapped FML (registries, items and blocks are available)
+    unitTest {
+        enable()
+        testedMod = mods."${mod_id}"
+    }
 }
 
 repositories {
@@ -54,6 +60,8 @@ repositories {
 
 configurations {
     sableJar
+    // Tests compile against the same optional APIs (Create, Ponder, Pipez, Sable...) as the mod
+    testCompileOnly.extendsFrom(compileOnly)
 }
 
 var extractSableCompanion = tasks.register('extractSableCompanion', Copy) {
@@ -72,7 +80,10 @@ dependencies {
     // Full Create release for running in dev (jar-in-jar bundles Flywheel, Ponder and Registrate)
     runtimeOnly("maven.modrinth:create:${create_modrinth_version}")
 
-    implementation("top.theillusivec4.curios:curios-neoforge:${curios_version}")
+    // Curios is optional (Aviator's Goggles in the head slot); -PnoCurios leaves it out of dev runs to check that
+    compileOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}")
+    if (!project.hasProperty('noCurios'))
+        runtimeOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}")
 
     // JEI: the Pressure Crucible recipe category (only loaded when JEI is installed)
     compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
@@ -110,6 +121,22 @@ dependencies {
         include '*.jar'
         builtBy extractSableCompanion
     })
+}
+
+dependencies {
+    testImplementation(platform('org.junit:junit-bom:5.10.2'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    maxHeapSize = '3G'
+    testLogging { events 'failed'; exceptionFormat 'full' }
+    // -PrunDisabled also runs the @Disabled tests that pin down known bugs (they should fail until fixed)
+    if (project.hasProperty('runDisabled')) {
+        systemProperty 'junit.jupiter.conditions.deactivate', 'org.junit.*DisabledCondition'
+    }
 }
 
 var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {

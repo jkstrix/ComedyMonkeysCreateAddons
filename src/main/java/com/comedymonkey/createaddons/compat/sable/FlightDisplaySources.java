@@ -19,7 +19,7 @@ public class FlightDisplaySources extends SingleLineDisplaySource {
 	public static final Function<FlightInstrumentsBlockEntity.Readings, String> CLIMB =
 		r -> String.format(Locale.ROOT, "%+.1f m/s", r.climb());
 	public static final Function<FlightInstrumentsBlockEntity.Readings, String> HEADING =
-		r -> String.format(Locale.ROOT, "%03.0f° %s", r.heading(), r.compassPoint());
+		FlightInstrumentsBlockEntity.Readings::headingText;
 	public static final Function<FlightInstrumentsBlockEntity.Readings, String> ATTITUDE =
 		r -> String.format(Locale.ROOT, "P %+.0f° R %+.0f°", r.pitch(), r.roll());
 

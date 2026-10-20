@@ -1,6 +1,7 @@
 package com.comedymonkey.createaddons.content.chest;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
@@ -11,6 +12,7 @@ import com.comedymonkey.createaddons.registry.ModBlocks;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.api.behaviour.interaction.MovingInteractionBehaviour;
 import com.simibubi.create.api.contraption.storage.item.MountedItemStorage;
+import com.simibubi.create.api.contraption.storage.item.menu.StorageInteractionWrapper;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.Contraption;
 
@@ -27,8 +29,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -82,6 +86,17 @@ public class ContraptionUpgradeInteraction extends MovingInteractionBehaviour {
 				parts.add(other);
 		}
 
+		// The config can give a higher tier a smaller stack size than what's stored needs
+		for (BlockPos part : parts) {
+			MountedItemStorage old = contraption.getStorage().getAllItemStorages().get(part);
+			if (old != null && !fits(old, tier)) {
+				player.displayClientMessage(Component.translatable(ComedyMonkeysCreateAddons.MOD_ID + ".chest.too_full_for_tier",
+					chest ? tier.chestName() : tier.barrelName()).withStyle(ChatFormatting.RED), true);
+				return true;
+			}
+		}
+
+		closeStorageScreens(entity);
 		CompoundTag storageTag = new CompoundTag();
 		contraption.getStorage().write(storageTag, player.registryAccess(), false);
 		ListTag storages = storageTag.getList("items", Tag.TAG_COMPOUND);
@@ -154,6 +169,36 @@ public class ContraptionUpgradeInteraction extends MovingInteractionBehaviour {
 			ModAdvancements.award(player, chest ? ModAdvancements.CHEST_UPGRADE : ModAdvancements.BARREL_UPGRADE,
 				new ItemStack(tier.upgradeItem()), tier.ordinal());
 		return true;
+	}
+
+	/**
+	 * The storage is about to be rebuilt from NBT, so a screen still open on any of it would keep editing the old
+	 * copies, and whatever was taken out of them would exist twice. Closes those screens first. Create's own storage
+	 * screens don't say which storage they show, so any of them still open within reach of a contraption is closed.
+	 */
+	private static void closeStorageScreens(AbstractContraptionEntity entity) {
+		Collection<MountedItemStorage> storages = entity.getContraption().getStorage().getAllItemStorages().values();
+		for (Player player : List.copyOf(entity.level().players())) {
+			AbstractContainerMenu menu = player.containerMenu;
+			if (menu != player.inventoryMenu && menu.stillValid(player)
+				&& menu.slots.stream().anyMatch(slot -> shows(slot.container, storages)))
+				player.closeContainer();
+		}
+	}
+
+	private static boolean shows(Container container, Collection<MountedItemStorage> storages) {
+		if (container instanceof BigCompoundContainer compound)
+			return shows(compound.first(), storages) || shows(compound.second(), storages);
+		if (container instanceof UpgradedChestMountedStorage.MountedView view)
+			return storages.contains(view.storage());
+		return container instanceof StorageInteractionWrapper;
+	}
+
+	private static boolean fits(MountedItemStorage storage, ChestTier tier) {
+		List<ItemStack> stacks = new ArrayList<>();
+		for (int slot = 0; slot < storage.getSlots(); slot++)
+			stacks.add(storage.getStackInSlot(slot));
+		return ChestStacks.fits(stacks, tier.multiplier(), tier.slots());
 	}
 
 	private static boolean holdsUpgrade(StructureBlockInfo info) {

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.MenuLayout;
 import com.comedymonkey.createaddons.content.pen.AnimalPenBlockEntity;
 import com.comedymonkey.createaddons.content.pen.AnimalPenMenu;
 import com.comedymonkey.createaddons.registry.ModItems;
@@ -29,18 +30,17 @@ public class AnimalPenScreen extends AbstractContainerScreen<AnimalPenMenu> {
 	private static final ResourceLocation BRASS = ComedyMonkeysCreateAddons.asResource("textures/gui/brass_animal_pen.png");
 
 	// Gauge interiors, relative to the GUI origin (must match the textures)
-	private static final int BREED_X = 32, MILK_X = 46, GAUGE_Y = 18, GAUGE_W = 10, GAUGE_H = 54;
-	private static final int HERD_Y = 78, STATUS_Y = 87;
-	private static final int TEXT = 0xD6D8D4;
-	private static final int BAD = 0xD07060;
+	private static final int BREED_X = 30, MILK_X = 44, GAUGE_Y = 18, GAUGE_W = 10, GAUGE_H = 54;
+	private static final int HERD_Y = 102, STATUS_Y = 112;
 	private static final int BREED = 0xFFB0745A, BREED_TOP = 0xFFC88A6C;
 	private static final int MILK = 0xFFDAD8CE, MILK_TOP = 0xFFF0EEE6;
 
 	public AnimalPenScreen(AnimalPenMenu menu, Inventory inventory, Component title) {
 		super(menu, inventory, title);
-		imageWidth = 176;
-		imageHeight = 188;
-		inventoryLabelY = 96;
+		imageWidth = AnimalPenMenu.WIDTH;
+		imageHeight = MenuLayout.screenHeight(AnimalPenMenu.HEIGHT);
+		inventoryLabelX = GuiKit.inventoryLabelX(AnimalPenMenu.WIDTH);
+		inventoryLabelY = GuiKit.inventoryLabelY(AnimalPenMenu.HEIGHT);
 	}
 
 	@Override
@@ -67,8 +67,8 @@ public class AnimalPenScreen extends AbstractContainerScreen<AnimalPenMenu> {
 		if (be.getCaptive().isEmpty())
 			ghost(graphics, new ItemStack(ModItems.CAPTURE_BOTTLE.get()), AnimalPenMenu.ANIMAL_X, AnimalPenMenu.ANIMAL_Y);
 		ItemStack food = be.getFoodHint();
-		if (be.getFood().getStackInSlot(0).isEmpty() && !food.isEmpty())
-			ghost(graphics, food, AnimalPenMenu.FOOD_X, AnimalPenMenu.FOOD_Y);
+		if (be.getTroughFood().isEmpty() && !food.isEmpty())
+			ghost(graphics, food, AnimalPenMenu.TROUGH_X, AnimalPenMenu.TROUGH_Y);
 		RenderSystem.disableBlend();
 	}
 
@@ -84,17 +84,18 @@ public class AnimalPenScreen extends AbstractContainerScreen<AnimalPenMenu> {
 	private void ghost(GuiGraphics graphics, ItemStack stack, int x, int y) {
 		graphics.renderFakeItem(stack, leftPos + x, topPos + y);
 		// Dimmed by the slot's own colour drawn over it
-		graphics.fill(RenderType.guiOverlay(), leftPos + x, topPos + y, leftPos + x + 16, topPos + y + 16, 0xA0363938);
+		graphics.fill(RenderType.guiOverlay(), leftPos + x, topPos + y, leftPos + x + 16, topPos + y + 16, 0xA062645F);
 	}
 
 	@Override
 	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-		graphics.drawString(font, title, titleLabelX, titleLabelY, TEXT, false);
-		graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, TEXT, false);
+		GuiKit.title(graphics, font, title, AnimalPenMenu.WIDTH, GuiKit.TITLE);
+		graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, GuiKit.INVENTORY_TEXT, false);
 		AnimalPenBlockEntity be = menu.getBlockEntity();
 		if (be.hasAnimal())
-			graphics.drawString(font, be.getHerd(), 8, HERD_Y, TEXT, false);
-		graphics.drawString(font, be.getStatus(), 8, be.hasAnimal() ? STATUS_Y : HERD_Y, be.isBreeding() ? TEXT : BAD, false);
+			graphics.drawString(font, be.getHerd(), 8, HERD_Y, GuiKit.TEXT, false);
+		graphics.drawString(font, be.getStatus(), 8, be.hasAnimal() ? STATUS_Y : HERD_Y,
+			be.isBreeding() ? GuiKit.TEXT : GuiKit.BAD, false);
 	}
 
 	private List<Component> breedTooltip(AnimalPenBlockEntity be) {

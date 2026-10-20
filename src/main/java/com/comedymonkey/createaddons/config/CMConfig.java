@@ -70,8 +70,6 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue harvesterLeafRolls;
 		public final ModConfigSpec.IntValue penStress;
 		public final ModConfigSpec.IntValue brassPenStress;
-		public final ModConfigSpec.IntValue penCapacity;
-		public final ModConfigSpec.IntValue brassPenCapacity;
 		public final ModConfigSpec.IntValue penBreedSeconds;
 		public final ModConfigSpec.DoubleValue penFruitfulBonus;
 		public final ModConfigSpec.IntValue penGrowSeconds;
@@ -233,14 +231,6 @@ public final class CMConfig {
 				.comment("Stress the Brass Animal Pen puts on the network, in SU, whatever the speed.")
 				.translation("comedymonkeysaddons.configuration.brassPenStress")
 				.defineInRange("brassStress", 1024, 0, 65536);
-			penCapacity = builder
-				.comment("Animals an Animal Pen holds (its trough holds food for half as many, enough to double them).")
-				.translation("comedymonkeysaddons.configuration.penCapacity")
-				.defineInRange("maxAnimals", 128, 1, 4096);
-			brassPenCapacity = builder
-				.comment("Animals a Brass Animal Pen holds (its trough holds food for half as many).")
-				.translation("comedymonkeysaddons.configuration.brassPenCapacity")
-				.defineInRange("brassMaxAnimals", 512, 1, 16384);
 			penBreedSeconds = builder
 				.comment("Seconds between breedings, as long as a vanilla animal's wait after breeding (300). Each time, every",
 					"animal eats one of its food and has a baby, so the herd doubles: 1, 2, 4, 8, 16...")

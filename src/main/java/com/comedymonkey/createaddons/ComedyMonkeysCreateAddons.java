@@ -16,6 +16,7 @@ import com.comedymonkey.createaddons.content.chest.ChestEvents;
 import net.neoforged.neoforge.common.NeoForge;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.network.ContraptionBlockSyncPayload;
+import com.comedymonkey.createaddons.network.QuickTransferPayload;
 import com.comedymonkey.createaddons.network.SortChestPayload;
 import com.comedymonkey.createaddons.client.ClientContraptionSync;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -35,6 +36,7 @@ import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
@@ -54,6 +56,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 public class ComedyMonkeysCreateAddons {
 	public static final String MOD_ID = "comedymonkeysaddons";
 	public static final String AERONAUTICS_ID = "aeronautics";
+	public static final String CURIOS_ID = "curios";
 
 	public ComedyMonkeysCreateAddons(IEventBus modBus, ModContainer container) {
 		// Adds its blocks to the registers below, so it has to come first
@@ -84,14 +87,15 @@ public class ComedyMonkeysCreateAddons {
 		NeoForge.EVENT_BUS.addListener(AnimalCapture::onEntityInteract);
 		if (ModList.get().isLoaded(PipezBlazeBurnerCompat.PIPEZ_ID)) {
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onRightClickBlock);
-			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onBlockBreak);
+			NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, PipeCoverEvents::onBlockBreak);
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onChunkSent);
 		}
 		modBus.addListener(this::registerCapabilities);
 		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::registerPayloads);
 
-		if (ModList.get().isLoaded(AERONAUTICS_ID))
+		// Aviator's Goggles in the Curios head slot: needs both mods, and neither is required
+		if (ModList.get().isLoaded(AERONAUTICS_ID) && ModList.get().isLoaded(CURIOS_ID))
 			AviatorGogglesCurios.init();
 	}
 
@@ -164,6 +168,8 @@ public class ComedyMonkeysCreateAddons {
 			(payload, context) -> context.enqueueWork(() -> ClientContraptionSync.handle(payload)));
 		// The Sort button on upgraded chests and barrels
 		event.registrar("1").playToServer(SortChestPayload.TYPE, SortChestPayload.STREAM_CODEC, SortChestPayload::handle);
+		event.registrar("1").playToServer(QuickTransferPayload.TYPE, QuickTransferPayload.STREAM_CODEC,
+			QuickTransferPayload::handle);
 		// The Electric Motor's settings screen
 		event.registrar("1").playToServer(MotorSettingsPayload.TYPE, MotorSettingsPayload.STREAM_CODEC, MotorSettingsPayload::handle);
 		// Covers on Pipez pipes

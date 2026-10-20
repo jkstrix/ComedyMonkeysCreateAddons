@@ -267,7 +267,7 @@ public class UpgradedChestBlock extends BaseEntityBlock implements IWrenchable, 
 		return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos));
 	}
 
-	/** Pick-block gives the chest's own item (with its tier); Ctrl + pick-block in creative also copies the contents. */
+	/** Pick-block gives the chest's own item, with its tier (never the contents: stacks over 99 can't go on an item). */
 	@Override
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
 		return UpgradedChestItem.of(state.getValue(TIER));

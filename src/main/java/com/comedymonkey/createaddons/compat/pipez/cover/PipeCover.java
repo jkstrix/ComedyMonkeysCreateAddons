@@ -22,7 +22,8 @@ public record PipeCover(Kind kind, BlockState material) {
 
 	public static final Codec<PipeCover> CODEC = RecordCodecBuilder.create(i -> i.group(
 		Kind.CODEC.fieldOf("kind").forGetter(PipeCover::kind),
-		BlockState.CODEC.optionalFieldOf("material", Blocks.AIR.defaultBlockState()).forGetter(PipeCover::material)
+		// Lenient: a material from a mod that has since been removed leaves a plain cover rather than losing it
+		BlockState.CODEC.lenientOptionalFieldOf("material", Blocks.AIR.defaultBlockState()).forGetter(PipeCover::material)
 	).apply(i, PipeCover::new));
 
 	public static final StreamCodec<ByteBuf, PipeCover> STREAM_CODEC = StreamCodec.composite(

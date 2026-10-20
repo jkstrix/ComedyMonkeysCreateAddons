@@ -33,7 +33,7 @@ public class ElectricMotorScreen extends AbstractSimiScreen {
 	private static final ResourceLocation BACKGROUND = ComedyMonkeysCreateAddons.asResource("textures/gui/electric_motor.png");
 	private static final int W = 224, H = 132;
 	private static final int[] SPEEDS = {1, 2, 4, 8, 16, 32, 64, 128, 256};
-	private static final int TEXT = 0xD8D2C4, BRASS = 0xCFB164, TEAL = 0x8FD6CC;
+	private static final int TEXT = 0xD8D2C4, TEAL = 0x8FD6CC;
 
 	private final BlockPos pos;
 	private final int[] stresses;
@@ -146,7 +146,7 @@ public class ElectricMotorScreen extends AbstractSimiScreen {
 	protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		int x = guiLeft, y = guiTop;
 		graphics.blit(BACKGROUND, x, y, 0, 0, W, H);
-		graphics.drawCenteredString(font, title, x + W / 2, y + 8, BRASS);
+		graphics.drawString(font, title, x + (W - font.width(title)) / 2, y + 3, GuiKit.TITLE, false);
 		graphics.drawString(font, tr("speed_label"), x + 12, y + 32, TEXT, true);
 		graphics.drawString(font, tr("stress_label"), x + 12, y + 54, TEXT, true);
 		graphics.drawString(font, tr("direction_label"), x + 12, y + 78, TEXT, true);

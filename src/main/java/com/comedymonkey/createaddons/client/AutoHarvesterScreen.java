@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.MenuLayout;
 import com.comedymonkey.createaddons.content.harvester.AutoHarvesterBlockEntity;
 import com.comedymonkey.createaddons.content.harvester.AutoHarvesterMenu;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -25,18 +26,17 @@ public class AutoHarvesterScreen extends AbstractContainerScreen<AutoHarvesterMe
 
 	// Gauge interior, relative to the GUI origin (must match the texture)
 	private static final int GAUGE_X = 144, GAUGE_Y = 18, GAUGE_W = 16, GAUGE_H = 54;
-	private static final int STATUS_Y = 76;
-	private static final int TEXT = 0xD6D8D4;
-	private static final int LABEL = 0xA8ACA8;
+	private static final int STATUS_Y = 78;
 	private static final int GROWTH = 0xFF587B3A;
 	private static final int GROWTH_TOP = 0xFF6E924A;
 	private static final int HARVEST = 0xFF9C8A4C;
 
 	public AutoHarvesterScreen(AutoHarvesterMenu menu, Inventory inventory, Component title) {
 		super(menu, inventory, title);
-		imageWidth = 176;
-		imageHeight = 178;
-		inventoryLabelY = 86;
+		imageWidth = AutoHarvesterMenu.WIDTH;
+		imageHeight = MenuLayout.screenHeight(AutoHarvesterMenu.HEIGHT);
+		inventoryLabelX = GuiKit.inventoryLabelX(AutoHarvesterMenu.WIDTH);
+		inventoryLabelY = GuiKit.inventoryLabelY(AutoHarvesterMenu.HEIGHT);
 	}
 
 	@Override
@@ -74,11 +74,11 @@ public class AutoHarvesterScreen extends AbstractContainerScreen<AutoHarvesterMe
 
 	@Override
 	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-		graphics.drawString(font, title, titleLabelX, titleLabelY, TEXT, false);
-		graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, TEXT, false);
-		graphics.drawString(font, tr("gui.auto_harvester.plant"), 20, 22, LABEL, false);
+		GuiKit.title(graphics, font, title, AutoHarvesterMenu.WIDTH, GuiKit.TITLE);
+		graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, GuiKit.INVENTORY_TEXT, false);
+		graphics.drawString(font, tr("gui.auto_harvester.plant"), 20, 22, GuiKit.LABEL, false);
 		AutoHarvesterBlockEntity be = menu.getBlockEntity();
-		graphics.drawString(font, be.getStatus(), 8, STATUS_Y, be.isWorking() ? TEXT : 0xD07060, false);
+		graphics.drawString(font, be.getStatus(), 8, STATUS_Y, be.isWorking() ? GuiKit.TEXT : GuiKit.BAD, false);
 	}
 
 	private List<Component> gaugeTooltip() {

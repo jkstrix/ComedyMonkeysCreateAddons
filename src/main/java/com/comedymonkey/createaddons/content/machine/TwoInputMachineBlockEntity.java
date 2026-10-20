@@ -175,7 +175,9 @@ public class TwoInputMachineBlockEntity extends KineticBlockEntity implements Cl
 		ItemStack extra = inventory.getStackInSlot(EXTRA);
 		if (main.isEmpty() || extra.isEmpty() || level == null)
 			return null;
-		if (cached != null && cached.value().ingredient().test(main) && cached.value().extra().test(extra))
+		// The cached recipe still counts if it matches and is still the loaded one (a /reload replaces them all)
+		if (cached != null && cached.value().ingredient().test(main) && cached.value().extra().test(extra)
+			&& level.getRecipeManager().byKey(cached.id()).orElse(null) == cached)
 			return cached.value();
 		cached = null;
 		for (RecipeHolder<TwoInputRecipe> holder : recipes())

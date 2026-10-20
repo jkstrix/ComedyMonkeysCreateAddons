@@ -1,7 +1,6 @@
 package com.comedymonkey.createaddons.client;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
-import com.comedymonkey.createaddons.compat.curios.AviatorGogglesCurios;
 import com.comedymonkey.createaddons.compat.curios.client.AviatorGogglesCurioRenderer;
 import com.comedymonkey.createaddons.client.ponder.CMPonderPlugin;
 import com.comedymonkey.createaddons.compat.sable.SableCompat;
@@ -14,11 +13,6 @@ import com.comedymonkey.createaddons.content.chest.UpgradedChestItem;
 import net.minecraft.client.renderer.item.ItemProperties;
 
 import net.createmod.ponder.foundation.PonderIndex;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.ContainerScreen;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -35,7 +29,6 @@ import com.comedymonkey.createaddons.content.chest.ChestTier;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 @Mod(value = ComedyMonkeysCreateAddons.MOD_ID, dist = Dist.CLIENT)
 public class ComedyMonkeysCreateAddonsClient {
@@ -51,6 +44,11 @@ public class ComedyMonkeysCreateAddonsClient {
 		modBus.addListener(this::registerModels);
 		modBus.addListener(this::registerClientExtensions);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ChestSortButton::onScreenInit);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onScreenInit);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseScrolled);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMousePressed);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseDragged);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseReleased);
 		if (MagmaEngineSimModels.LOADED)
 			modBus.addListener(MagmaEngineSimModels::modifyBakingResult);
 		// Pipez Covers: covered pipes are drawn as their cover, tinted like its block
@@ -62,8 +60,7 @@ public class ComedyMonkeysCreateAddonsClient {
 
 	private void registerScreens(RegisterMenuScreensEvent event) {
 		event.register(ModMenus.WELLSPRING.get(), WellspringScreen::new);
-		// Upgraded chests use the vanilla 3-row chest screen; only the slots behind it differ
-		event.register(ModMenus.UPGRADED_CHEST.get(), ContainerScreen::new);
+		event.register(ModMenus.UPGRADED_CHEST.get(), UpgradedChestScreen::new);
 		event.register(ModMenus.LARGE_UPGRADED_CHEST.get(), LargeUpgradedChestScreen::new);
 		event.register(ModMenus.CHEST_UPGRADE.get(), ChestUpgradeScreen::new);
 		event.register(ModMenus.AUTO_HARVESTER.get(), AutoHarvesterScreen::new);
@@ -121,9 +118,10 @@ public class ComedyMonkeysCreateAddonsClient {
 	}
 
 	private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-		// Slightly inflated head so the goggles sit on top of a worn helmet instead of z-fighting with it
-		event.registerLayerDefinition(AviatorGogglesCurioRenderer.OVER_HELMET_LAYER,
-			() -> LayerDefinition.create(HumanoidModel.createMesh(new CubeDeformation(1.25f), 0f), 64, 32));
+		// The goggles renderer is a Curios one, so its class can't even be loaded without Curios
+		if (ModList.get().isLoaded(ComedyMonkeysCreateAddons.AERONAUTICS_ID)
+			&& ModList.get().isLoaded(ComedyMonkeysCreateAddons.CURIOS_ID))
+			AviatorGogglesCurioRenderer.registerLayers(event);
 	}
 
 	private void clientSetup(FMLClientSetupEvent event) {
@@ -135,12 +133,9 @@ public class ComedyMonkeysCreateAddonsClient {
 			ComedyMonkeysCreateAddons.asResource("tier"),
 			(stack, level, entity, seed) -> UpgradedBarrelItem.tierOf(stack).ordinal() / 10f));
 
-		if (!ModList.get().isLoaded(ComedyMonkeysCreateAddons.AERONAUTICS_ID))
+		if (!ModList.get().isLoaded(ComedyMonkeysCreateAddons.AERONAUTICS_ID)
+			|| !ModList.get().isLoaded(ComedyMonkeysCreateAddons.CURIOS_ID))
 			return;
-		event.enqueueWork(() -> {
-			if (AviatorGogglesCurios.AVIATORS_GOGGLES.isBound())
-				CuriosRendererRegistry.register(AviatorGogglesCurios.AVIATORS_GOGGLES.get(),
-					() -> new AviatorGogglesCurioRenderer(Minecraft.getInstance().getEntityModels()));
-		});
+		event.enqueueWork(AviatorGogglesCurioRenderer::register);
 	}
 }

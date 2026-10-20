@@ -16,6 +16,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -78,13 +79,17 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 
 		@Override
 		protected boolean isOwnContainer(Player player) {
-			if (!(player.containerMenu instanceof UpgradedChestView view))
-				return false;
-			Container container = view.getChestContainer();
-			return container == UpgradedChestBlockEntity.this
-				|| container instanceof CompoundContainer compound && compound.contains(UpgradedChestBlockEntity.this);
+			return isOpenIn(player);
 		}
 	};
+
+	@Override
+	public boolean isOpenIn(Player player) {
+		if (!(player.containerMenu instanceof UpgradedChestView view))
+			return false;
+		Container container = view.getChestContainer();
+		return container == this || container instanceof CompoundContainer compound && compound.contains(this);
+	}
 
 	public UpgradedChestBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.UPGRADED_CHEST.get(), pos, state);
@@ -210,7 +215,18 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return new UpgradedChestMenu(containerId, inventory, this, getContainerSize() / 9);
+		return new UpgradedChestMenu(containerId, inventory, this, getContainerSize() / 9, getTier());
+	}
+
+	/**
+	 * Opened the vanilla way (another mod calling openMenu on this block entity): send the screen what it needs, as
+	 * {@link ChestUpgrades#openChestMenu} does, rather than leaving the client nothing to read.
+	 */
+	@Override
+	public void writeClientSideData(AbstractContainerMenu menu, RegistryFriendlyByteBuf buffer) {
+		buffer.writeVarInt(multiplier());
+		buffer.writeVarInt(getTier().ordinal());
+		buffer.writeVarInt(getContainerSize() / 9);
 	}
 
 	@Override
@@ -251,8 +267,9 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 	/** Keeps oversized stacks out of item components, which cannot store more than 99 per stack. */
 	@Override
 	protected void collectImplicitComponents(DataComponentMap.Builder components) {
-		if (getCustomName() != null)
-			components.set(DataComponents.CUSTOM_NAME, getCustomName());
+		// Vanilla's name and lock code, but not its contents component
+		super.collectImplicitComponents(components);
+		components.set(DataComponents.CONTAINER, null);
 	}
 
 	// ---------------------------------------------------------------- goggles

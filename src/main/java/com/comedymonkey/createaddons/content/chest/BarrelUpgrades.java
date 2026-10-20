@@ -53,6 +53,12 @@ public final class BarrelUpgrades {
 				current.barrelName()).withStyle(ChatFormatting.GOLD), true);
 			return;
 		}
+		if (!ChestUpgrades.fitsEachPart(level, pos, tier.multiplier(), tier.slots())) {
+			// The config can give a higher tier a smaller stack size than these stacks need
+			player.displayClientMessage(Component.translatable(ComedyMonkeysCreateAddons.MOD_ID + ".chest.too_full_for_tier",
+				tier.barrelName()).withStyle(ChatFormatting.RED), true);
+			return;
+		}
 		setTier(level, pos, tier);
 		upgrade.consume(1, player);
 		player.getInventory().placeItemBackInInventory(new ItemStack(current.upgradeItem()));
@@ -61,8 +67,12 @@ public final class BarrelUpgrades {
 
 	static void setTier(Level level, BlockPos pos, ChestTier tier) {
 		BlockState state = level.getBlockState(pos);
-		if (state.getBlock() instanceof UpgradedBarrelBlock && state.getValue(UpgradedBarrelBlock.TIER) != tier)
-			level.setBlock(pos, state.setValue(UpgradedBarrelBlock.TIER, tier), 3);
+		if (!(state.getBlock() instanceof UpgradedBarrelBlock) || state.getValue(UpgradedBarrelBlock.TIER) == tier)
+			return;
+		if (tier.slots() < state.getValue(UpgradedBarrelBlock.TIER).slots()
+			&& level.getBlockEntity(pos) instanceof UpgradedBarrelBlockEntity barrel)
+			UpgradedStorage.closeScreens(level, barrel);
+		level.setBlock(pos, state.setValue(UpgradedBarrelBlock.TIER, tier), 3);
 	}
 
 	/** Upgraded barrel -> vanilla barrel. Callers make sure every stack fits a normal barrel first. */
@@ -72,6 +82,8 @@ public final class BarrelUpgrades {
 			return;
 		NonNullList<ItemStack> contents = ChestStacks.resize(ChestStacks.copy(upgraded.getItems()), ChestStacks.SLOTS);
 		upgraded.clearContent();
+		// The upgrade GUI has already given the upgrade back, so replacing the barrel mustn't drop it too
+		upgraded.takeUpgrade();
 
 		level.setBlock(pos, Blocks.BARREL.defaultBlockState()
 			.setValue(BarrelBlock.FACING, state.getValue(UpgradedBarrelBlock.FACING)), 3);

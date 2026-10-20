@@ -43,7 +43,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * <li>right-click a pipe with a cover to fit it (or swap it for the other kind);</li>
  * <li>right-click a covered pipe with a full block to dress the cover in it (one is used, and the last one back);</li>
  * <li>sneak and right-click with a wrench to take the block off, then the cover;</li>
- * <li>breaking the pipe drops the cover and its block.</li>
+ * <li>the pipe going in any way (broken by a player, a drill or saw, an explosion, a command) drops the cover and its
+ * block; a creative player's break drops nothing, as for any block.</li>
  * </ul>
  * Only registered when Pipez is installed.
  */
@@ -58,6 +59,9 @@ public final class PipeCoverEvents {
 		if (!(level.getBlockState(pos).getBlock() instanceof PipeBlock pipeBlock))
 			return;
 		Player player = event.getEntity();
+		// Spectators, adventure mode and spawn protection: no changing other people's builds
+		if (!player.mayBuild() || !level.mayInteract(player, pos))
+			return;
 		ItemStack held = event.getItemStack();
 		// A plain run of pipe has no block entity until it's configured (or covered)
 		PipeCover cover = PipeCoverShapes.cover(level, pos);
@@ -123,14 +127,31 @@ public final class PipeCoverEvents {
 		return state;
 	}
 
+	/**
+	 * A creative player breaking a covered pipe: take the cover off first, so the pipe's removal drops nothing.
+	 * Registered at the lowest priority, so any mod that cancels the break (claims, protection) has already done so.
+	 */
 	public static void onBlockBreak(BlockEvent.BreakEvent event) {
-		if (!(event.getLevel() instanceof Level level) || !(level.getBlockEntity(event.getPos()) instanceof PipeTileEntity pipe)
-			|| !pipe.hasData(ModAttachments.PIPE_COVER) || event.getPlayer().isCreative())
+		if (event.isCanceled() || !event.getPlayer().isCreative() || !(event.getLevel() instanceof Level level)
+			|| !(level.getBlockEntity(event.getPos()) instanceof PipeTileEntity pipe) || !pipe.hasData(ModAttachments.PIPE_COVER))
+			return;
+		pipe.removeData(ModAttachments.PIPE_COVER);
+	}
+
+	/**
+	 * Called (by the PipeBlock mixin) as a pipe block is removed or replaced, while its block entity is still there.
+	 * When the pipe is really gone, not just changing state or carried off by a contraption, its cover and the block
+	 * dressing it drop. The cover is taken off as it drops, so it can't drop twice.
+	 */
+	public static void onPipeRemoved(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+		if (level.isClientSide || movedByPiston || state.is(newState.getBlock())
+			|| !(level.getBlockEntity(pos) instanceof PipeTileEntity pipe) || !pipe.hasData(ModAttachments.PIPE_COVER))
 			return;
 		PipeCover cover = pipe.getData(ModAttachments.PIPE_COVER);
-		Block.popResource(level, event.getPos(), new ItemStack(itemFor(cover.kind())));
+		pipe.removeData(ModAttachments.PIPE_COVER);
+		Block.popResource(level, pos, new ItemStack(itemFor(cover.kind())));
 		if (cover.hasMaterial())
-			Block.popResource(level, event.getPos(), new ItemStack(cover.material().getBlock()));
+			Block.popResource(level, pos, new ItemStack(cover.material().getBlock()));
 	}
 
 	/** Covers in a chunk go to a player along with it. */

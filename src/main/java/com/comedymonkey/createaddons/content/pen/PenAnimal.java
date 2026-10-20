@@ -24,6 +24,8 @@ public class PenAnimal {
 
 	PenAnimal(Entity entity, RandomSource random) {
 		this.entity = entity;
+		// As made from the bottle, which may hold a baby; setBaby only changes it when this differs
+		baby = entity instanceof AgeableMob mob && mob.isBaby();
 		x = prevX = targetX = Mth.lerp(random.nextFloat(), MIN_X, MAX_X);
 		z = prevZ = targetZ = Mth.lerp(random.nextFloat(), MIN_Z, MAX_Z);
 		yaw = prevYaw = random.nextFloat() * 360;

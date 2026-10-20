@@ -77,7 +77,8 @@ public class TwoInputMachineBlock extends KineticBlock implements IBE<TwoInputMa
 		if (stack.isEmpty() || !(level.getBlockEntity(pos) instanceof TwoInputMachineBlockEntity be))
 			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		if (!be.acceptsInput(stack))
-			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+			// Anything else (wrenches, goggles, blocks to place...) does its usual thing instead of emptying the machine
+			return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
 		if (!level.isClientSide) {
 			ItemStack left = be.getAutomationHandler().insertItem(be.inputSlotFor(stack), stack.copy(), false);
 			if (!player.isCreative())

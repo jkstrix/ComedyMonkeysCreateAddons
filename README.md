@@ -25,9 +25,8 @@ Everything works on Create contraptions and Create Aeronautics physics objects, 
 | Minecraft | 1.21.1 |
 | NeoForge | 21.1.248 (21.1.228+) |
 | Create | 6.0.10+mc1.21.1 |
-| Curios API | 9.5.1+1.21.1 |
 
-Optional: Create Aeronautics 1.3.2 (goggles in the Curios slot; Sable for the Compact Gyroscope and Torque Rotor), Create Aeronautics: Gyroscope Stabilizers (optional: converts into the Compact Gyroscope), Pipez (Blaze Burner and Portable Engine feeding, Pipez Covers, energy pipes for the generators). Tested alongside Create: Liquid Fuel, Carry On, Inventory Profiles Next and Supplementaries.
+Optional: Create Aeronautics 1.3.2 (with Curios API 9.5.1+1.21.1, goggles in the Curios head slot; Sable for the Compact Gyroscope and Torque Rotor), Create Aeronautics: Gyroscope Stabilizers (optional: converts into the Compact Gyroscope), Pipez (Blaze Burner and Portable Engine feeding, Pipez Covers, energy pipes for the generators). Tested alongside Create: Liquid Fuel, Carry On, Inventory Profiles Next and Supplementaries.
 
 ## Upgrade Template
 
@@ -154,15 +153,15 @@ A Create-style botany pot: the Cobblestone Generator's box with a planter behind
 A replacement for sprawling mob pens: one block that keeps a herd of one kind of animal, breeding and behaving as a vanilla pen would. Same box as the Auto Harvester, with straw on the floor and a feeding trough at the back, and the real animals wandering about behind the glass.
 
 - **Capture Bottle**: use it on any animal that breeds (modded ones too) to catch it; someone else's tamed pet can't be taken. The bottle shows the animal standing inside it, and keeps its colour, name and variant. Use it on the ground to let the animal out again. Empty bottles stack; a full one holds one animal. Recipe: a copper nugget on a glass bottle.
-- **Starting a herd**: use the Bottled Animal on a pen (one is enough), then put its breeding food in the trough by hand or with a funnel. The empty food slot shows which food it eats.
-- **Breeding**: with a shaft turning in the back, every **five minutes** each adult eats one food and has a baby. Babies grow up in **twenty minutes**, as in vanilla, and then breed too. The **Animal Pen** holds **128**, the **Brass Animal Pen** **512**; the trough holds enough food for half the pen, so a full herd can double at once.
+- **Starting a herd**: use the Bottled Animal on a pen (one is enough), then put its breeding food in the trough by hand or with a funnel. The empty trough shows which food it eats.
+- **Breeding**: with a shaft turning in the back, every **five minutes** each adult eats one food and has a baby. Babies grow up in **twenty minutes**, as in vanilla, and then breed too. The **Animal Pen** holds **128**, the **Brass Animal Pen** **512**; the trough (2 slots, 8 on the Brass pen) holds food for every animal the pen can hold.
 - **Only adults count**, as with vanilla animals: only they breed, give drops and XP, grow wool, lay eggs or make milk.
 - **Sword**: use a sword on the pen to take **half the adults** (rounded, always leaving one to breed), with their drops as if you killed them, so **Looting** and **Fire Aspect** count, and their XP. The young are left to grow up.
 - **Shears** take every adult sheep's wool (it grows back in a minute); a **bucket** takes milk from cows and goats, and pipes can draw the milk out; a **bowl** takes stew from mooshrooms; chickens lay **eggs** and armadillos shed **scutes** by themselves.
 - **Deployers** can use swords, shears and buckets on it, so a farm can run itself. A comparator reads how full of animals it is.
 - **Power**: it always uses the same stress (**256 SU**, **1,024 SU** for the Brass pen) at any speed, and none while empty. It only breeds, grows and produces while it turns.
 - **Output**: drops, wool and eggs go into a 9-slot buffer (18 on the Brass pen), emptied from any side by hoppers, chutes, funnels or arms, or empty-handed by hand.
-- **Wrench screen**: the animal's bottle (take it out to empty the pen; the other adults are butchered into the output), the food, a breeding gauge with the time until the next litter grows up, a milk gauge, the output, and a count of adults and young.
+- **Wrench screen**: the animal's bottle (take it out to empty the pen; the other adults are butchered into the output), the trough, a breeding gauge with the time until the next litter grows up, a milk gauge, the output, and a count of adults and young.
 - **Fruitful** (I to III): an enchantment for the pens only, put on with an anvil and kept when the pen is broken. Each level breeds and grows the herd 50% faster (2.5x at III). Buy the book from a **Librarian**.
 - Recipes: Animal Pen: andesite alloy corners, wooden fences, Andesite Casing and a hay bale. Brass Animal Pen: Mechanical Crafting around an Animal Pen, with brass sheets, Brass Casing, electron tubes and hay bales.
 

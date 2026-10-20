@@ -36,8 +36,9 @@ ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]
+# Optional: only for Aviator's Goggles in the head slot, which also needs Create Aeronautics
 modId = "curios"
-type = "required"
+type = "optional"
 versionRange = "${curios_version_range}"
 ordering = "AFTER"
 side = "BOTH"

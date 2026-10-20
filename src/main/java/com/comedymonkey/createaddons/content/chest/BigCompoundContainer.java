@@ -11,11 +11,25 @@ import net.minecraft.world.item.ItemStack;
  * item's own stack limit, so this restores the multiplied one.
  */
 public class BigCompoundContainer extends CompoundContainer {
+	private final Container first;
+	private final Container second;
 	private final IntSupplier multiplier;
 
 	public BigCompoundContainer(Container first, Container second, IntSupplier multiplier) {
 		super(first, second);
+		this.first = first;
+		this.second = second;
 		this.multiplier = multiplier;
+	}
+
+	/** The half shown in the top rows. */
+	public Container first() {
+		return first;
+	}
+
+	/** The half shown in the bottom rows. */
+	public Container second() {
+		return second;
 	}
 
 	@Override

@@ -57,6 +57,16 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 		super(ModBlockEntities.LAVA_GENERATOR.get(), pos, state);
 	}
 
+	/** Like vanilla's chest: a wrench turning it moves the sides its pipes and cables connect on, so they look again. */
+	@Override
+	public void setBlockState(BlockState state) {
+		BlockState old = getBlockState();
+		super.setBlockState(state);
+		if (old.hasProperty(LavaGeneratorBlock.FACING) && state.hasProperty(LavaGeneratorBlock.FACING)
+			&& old.getValue(LavaGeneratorBlock.FACING) != state.getValue(LavaGeneratorBlock.FACING))
+			invalidateCapabilities();
+	}
+
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {}
 

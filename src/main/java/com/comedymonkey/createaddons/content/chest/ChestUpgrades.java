@@ -96,6 +96,12 @@ public final class ChestUpgrades {
 				current.chestName()).withStyle(ChatFormatting.GOLD), true);
 			return;
 		}
+		if (!fitsEachPart(level, pos, tier.multiplier(), tier.slots())) {
+			// The config can give a higher tier a smaller stack size than these stacks need
+			player.displayClientMessage(Component.translatable(ComedyMonkeysCreateAddons.MOD_ID + ".chest.too_full_for_tier",
+				tier.chestName()).withStyle(ChatFormatting.RED), true);
+			return;
+		}
 		setTier(level, pos, tier);
 		upgrade.consume(1, player);
 		player.getInventory().placeItemBackInInventory(new ItemStack(current.upgradeItem()));
@@ -106,8 +112,12 @@ public final class ChestUpgrades {
 	static void setTier(Level level, BlockPos pos, ChestTier tier) {
 		for (BlockPos part : halves(level, pos, level.getBlockState(pos))) {
 			BlockState partState = level.getBlockState(part);
-			if (partState.getBlock() instanceof UpgradedChestBlock && partState.getValue(UpgradedChestBlock.TIER) != tier)
-				level.setBlock(part, partState.setValue(UpgradedChestBlock.TIER, tier), PAIR_FLAGS);
+			if (!(partState.getBlock() instanceof UpgradedChestBlock) || partState.getValue(UpgradedChestBlock.TIER) == tier)
+				continue;
+			if (tier.slots() < partState.getValue(UpgradedChestBlock.TIER).slots()
+				&& level.getBlockEntity(part) instanceof UpgradedChestBlockEntity chest)
+				UpgradedStorage.closeScreens(level, chest);
+			level.setBlock(part, partState.setValue(UpgradedChestBlock.TIER, tier), PAIR_FLAGS);
 		}
 	}
 
@@ -137,6 +147,8 @@ public final class ChestUpgrades {
 				Containers.dropItemStack(level, part.getX(), part.getY(), part.getZ(), stack);
 		}
 		upgraded.clearContent();
+		// The caller has already given the upgrade back, so replacing the half mustn't drop it too
+		upgraded.setHoldsUpgrade(false);
 
 		level.setBlock(part, Blocks.CHEST.defaultBlockState()
 			.setValue(ChestBlock.FACING, partState.getValue(UpgradedChestBlock.FACING))
@@ -238,17 +250,21 @@ public final class ChestUpgrades {
 	}
 
 	/** Opens the right chest screen for a container: 3 or 6 rows, or the 12x9 one for a diamond double chest. */
-	static void openChestMenu(ServerPlayer player, Container container, Component name, int multiplier) {
+	static void openChestMenu(ServerPlayer player, Container container, Component name, int multiplier, ChestTier tier) {
 		int size = container.getContainerSize();
 		if (size > LargeUpgradedChestMenu.SLOTS / 2) {
-			player.openMenu(new SimpleMenuProvider((id, inventory, p) -> new LargeUpgradedChestMenu(id, inventory, container),
-				name), buf -> buf.writeVarInt(multiplier));
+			player.openMenu(new SimpleMenuProvider((id, inventory, p) -> new LargeUpgradedChestMenu(id, inventory, container,
+				tier), name), buf -> {
+				buf.writeVarInt(multiplier);
+				buf.writeVarInt(tier.ordinal());
+			});
 			return;
 		}
 		int rows = size / 9;
-		player.openMenu(new SimpleMenuProvider((id, inventory, p) -> new UpgradedChestMenu(id, inventory, container, rows),
-			name), buf -> {
+		player.openMenu(new SimpleMenuProvider((id, inventory, p) -> new UpgradedChestMenu(id, inventory, container, rows,
+			tier), name), buf -> {
 			buf.writeVarInt(multiplier);
+			buf.writeVarInt(tier.ordinal());
 			buf.writeVarInt(rows);
 		});
 	}
@@ -266,7 +282,7 @@ public final class ChestUpgrades {
 			container = new BigCompoundContainer(selfFirst ? self : other, selfFirst ? other : self, self::multiplier);
 			name = Component.translatable(ComedyMonkeysCreateAddons.MOD_ID + ".chest.large", self.getTier().chestName());
 		}
-		openChestMenu(player, container, name, self.multiplier());
+		openChestMenu(player, container, name, self.multiplier(), self.getTier());
 	}
 
 	/** Wrench (or sneak + right-click with an upgrade) on an upgraded chest or barrel. */

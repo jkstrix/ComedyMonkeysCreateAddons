@@ -161,7 +161,7 @@ public class UpgradedChestMountedStorage extends MountedItemStorage {
 			}
 		}
 
-		ChestUpgrades.openChestMenu(player, container, name, multiplier());
+		ChestUpgrades.openChestMenu(player, container, name, multiplier(), tier);
 		playSound(level, contraption, localCenter, true, barrel);
 		return true;
 	}
@@ -175,13 +175,18 @@ public class UpgradedChestMountedStorage extends MountedItemStorage {
 	}
 
 	/** Container view of this storage for the chest screen. */
-	private class MountedView implements Container {
+	class MountedView implements Container {
 		private final Predicate<Player> stillValid;
 		private final Runnable onClose;
 
 		MountedView(Predicate<Player> stillValid, Runnable onClose) {
 			this.stillValid = stillValid;
 			this.onClose = onClose;
+		}
+
+		/** The storage this view shows. */
+		UpgradedChestMountedStorage storage() {
+			return UpgradedChestMountedStorage.this;
 		}
 
 		@Override

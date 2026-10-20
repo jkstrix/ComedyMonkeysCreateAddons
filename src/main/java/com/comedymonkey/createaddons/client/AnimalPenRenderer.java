@@ -52,11 +52,12 @@ public class AnimalPenRenderer extends SafeBlockEntityRenderer<AnimalPenBlockEnt
 	}
 
 	private static void renderFood(AnimalPenBlockEntity be, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
-		ItemStack food = be.getFood().getStackInSlot(0);
+		ItemStack food = be.getTroughFood();
 		if (food.isEmpty())
 			return;
 		// One, two or three lying in the trough, as it fills up
-		int shown = food.getCount() >= 32 ? 3 : food.getCount() >= 8 ? 2 : 1;
+		int count = be.getFoodCount();
+		int shown = count >= 32 ? 3 : count >= 8 ? 2 : 1;
 		var items = Minecraft.getInstance().getItemRenderer();
 		for (int i = 0; i < shown; i++) {
 			ms.pushPose();
