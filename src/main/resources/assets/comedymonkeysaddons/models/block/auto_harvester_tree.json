@@ -1,0 +1,189 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/auto_harvester_leaves",
+    "log": "comedymonkeysaddons:block/auto_harvester_log",
+    "leaves": "comedymonkeysaddons:block/auto_harvester_leaves"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        3,
+        7
+      ],
+      "to": [
+        9,
+        6.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#log",
+          "uv": [
+            7,
+            0,
+            9,
+            7
+          ]
+        },
+        "south": {
+          "texture": "#log",
+          "uv": [
+            7,
+            0,
+            9,
+            7
+          ]
+        },
+        "east": {
+          "texture": "#log",
+          "uv": [
+            7,
+            0,
+            9,
+            7
+          ]
+        },
+        "west": {
+          "texture": "#log",
+          "uv": [
+            7,
+            0,
+            9,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        6.5,
+        6
+      ],
+      "to": [
+        10,
+        9,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#leaves",
+          "uv": [
+            0,
+            0,
+            8,
+            5
+          ]
+        },
+        "south": {
+          "texture": "#leaves",
+          "uv": [
+            0,
+            0,
+            8,
+            5
+          ]
+        },
+        "east": {
+          "texture": "#leaves",
+          "uv": [
+            0,
+            0,
+            8,
+            5
+          ]
+        },
+        "west": {
+          "texture": "#leaves",
+          "uv": [
+            0,
+            0,
+            8,
+            5
+          ]
+        },
+        "up": {
+          "texture": "#leaves",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#leaves",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        9,
+        7
+      ],
+      "to": [
+        9,
+        10,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#leaves",
+          "uv": [
+            8,
+            0,
+            12,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#leaves",
+          "uv": [
+            8,
+            0,
+            12,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#leaves",
+          "uv": [
+            8,
+            0,
+            12,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#leaves",
+          "uv": [
+            8,
+            0,
+            12,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#leaves",
+          "uv": [
+            8,
+            8,
+            12,
+            12
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/auto_harvester_crop",
+    "crop": "comedymonkeysaddons:block/auto_harvester_crop"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        3,
+        4
+      ],
+      "to": [
+        6,
+        8,
+        12
+      ],
+      "faces": {
+        "east": {
+          "texture": "#crop",
+          "uv": [
+            0,
+            6,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#crop",
+          "uv": [
+            0,
+            6,
+            16,
+            16
+          ]
+        }
+      },
+      "shade": false
+    },
+    {
+      "from": [
+        10,
+        3,
+        4
+      ],
+      "to": [
+        10,
+        8,
+        12
+      ],
+      "faces": {
+        "east": {
+          "texture": "#crop",
+          "uv": [
+            0,
+            6,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#crop",
+          "uv": [
+            0,
+            6,
+            16,
+            16
+          ]
+        }
+      },
+      "shade": false
+    },
+    {
+      "from": [
+        4,
+        3,
+        6
+      ],
+      "to": [
+        12,
+        8,
+        6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crop",
+          "uv": [
+            0,
+            6,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#crop",
+          "uv": [
+            0,
+            6,
+            16,
+            16
+          ]
+        }
+      },
+      "shade": false
+    },
+    {
+      "from": [
+        4,
+        3,
+        10
+      ],
+      "to": [
+        12,
+        8,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crop",
+          "uv": [
+            0,
+            6,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#crop",
+          "uv": [
+            0,
+            6,
+            16,
+            16
+          ]
+        }
+      },
+      "shade": false
+    }
+  ]
+}

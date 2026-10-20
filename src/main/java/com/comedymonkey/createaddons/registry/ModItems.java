@@ -47,6 +47,7 @@ public final class ModItems {
 	public static final DeferredItem<BlockItem> BRASS_BLACKSTONE_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.BRASS_BLACKSTONE_GENERATOR);
 	public static final DeferredItem<BlockItem> WIRELESS_ANDESITE_BLACKSTONE_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.WIRELESS_ANDESITE_BLACKSTONE_GENERATOR);
 	public static final DeferredItem<BlockItem> WIRELESS_BRASS_BLACKSTONE_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.WIRELESS_BRASS_BLACKSTONE_GENERATOR);
+	public static final DeferredItem<BlockItem> AUTO_HARVESTER = ITEMS.registerSimpleBlockItem(ModBlocks.AUTO_HARVESTER);
 
 	public static final DeferredItem<BlockItem> INCINERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.INCINERATOR);
 	public static final DeferredItem<BlockItem> STRING_TANGLER = ITEMS.registerSimpleBlockItem(ModBlocks.STRING_TANGLER);
@@ -56,6 +57,12 @@ public final class ModItems {
 	public static final DeferredItem<BlockItem> MAGMA_ENGINE = ITEMS.registerSimpleBlockItem(ModBlocks.MAGMA_ENGINE);
 	public static final DeferredItem<BlockItem> SUPERCHARGED_MAGMA_ENGINE =
 		ITEMS.registerSimpleBlockItem(ModBlocks.SUPERCHARGED_MAGMA_ENGINE);
+	public static final DeferredItem<BlockItem> ELECTRIC_MOTOR = ITEMS.registerSimpleBlockItem(ModBlocks.ELECTRIC_MOTOR);
+	public static final DeferredItem<BlockItem> LAVA_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.LAVA_GENERATOR);
+	public static final DeferredItem<BlockItem> GEOTHERMAL_CASING = ITEMS.registerSimpleBlockItem(ModBlocks.GEOTHERMAL_CASING);
+	public static final DeferredItem<BlockItem> GEOTHERMAL_CORE = ITEMS.registerSimpleBlockItem(ModBlocks.GEOTHERMAL_CORE);
+	public static final DeferredItem<BlockItem> GEOTHERMAL_CONTROLLER =
+		ITEMS.registerSimpleBlockItem(ModBlocks.GEOTHERMAL_CONTROLLER);
 
 	/** Small chance from crushing cobblestone; nine are pressed into an Emerald. */
 	public static final DeferredItem<Item> EMERALD_DUST = ITEMS.registerSimpleItem("emerald_dust");

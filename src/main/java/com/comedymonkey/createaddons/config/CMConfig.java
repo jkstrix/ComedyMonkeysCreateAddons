@@ -62,6 +62,12 @@ public final class CMConfig {
 		public final ModConfigSpec.DoubleValue crucibleStressImpact;
 		public final ModConfigSpec.DoubleValue andesiteCobbleGenStressImpact;
 		public final ModConfigSpec.DoubleValue brassCobbleGenStressImpact;
+		public final ModConfigSpec.IntValue harvesterStress;
+		public final ModConfigSpec.IntValue harvesterCropSeconds;
+		public final ModConfigSpec.IntValue harvesterTreeSeconds;
+		public final ModConfigSpec.DoubleValue harvesterBountifulBonus;
+		public final ModConfigSpec.IntValue harvesterTreeLogs;
+		public final ModConfigSpec.IntValue harvesterLeafRolls;
 		public final ModConfigSpec.DoubleValue tanglerStressImpact;
 		public final ModConfigSpec.DoubleValue infuserStressImpact;
 
@@ -71,6 +77,13 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue superchargedMagmaEngineSpeed;
 		public final ModConfigSpec.DoubleValue superchargedMagmaEngineCapacity;
 		public final ModConfigSpec.IntValue superchargedMagmaEngineLavaPerSecond;
+		public final ModConfigSpec.IntValue motorMaxStress;
+		public final ModConfigSpec.DoubleValue motorFePerStress;
+		public final ModConfigSpec.IntValue generatorFePerTick;
+		public final ModConfigSpec.IntValue generatorLavaPerSecond;
+		public final ModConfigSpec.IntValue turbineFePerTick;
+		public final ModConfigSpec.IntValue turbineLavaPerSecond;
+		public final ModConfigSpec.IntValue turbineWaterPerSecond;
 
 		public final ModConfigSpec.DoubleValue gyroStrength;
 		public final ModConfigSpec.DoubleValue gyroDamping;
@@ -170,6 +183,35 @@ public final class CMConfig {
 				.defineInRange("brassStressImpact", 16.0, 0.0, 1024.0);
 			builder.pop();
 
+			builder.comment("Auto Harvester: grows a crop or sapling and harvests it. It uses the same stress at any speed and",
+					"runs no faster for more of it; only the Bountiful enchantment speeds it up.")
+				.push("autoHarvester");
+			harvesterStress = builder
+				.comment("Stress it puts on the network, in SU, whatever the speed.")
+				.translation("comedymonkeysaddons.configuration.harvesterStress")
+				.defineInRange("stress", 512, 0, 65536);
+			harvesterCropSeconds = builder
+				.comment("Seconds a crop takes to grow before each harvest, without Bountiful.")
+				.translation("comedymonkeysaddons.configuration.harvesterCropSeconds")
+				.defineInRange("cropSeconds", 40, 1, 3600);
+			harvesterTreeSeconds = builder
+				.comment("Seconds a tree takes to grow before it is felled, without Bountiful.")
+				.translation("comedymonkeysaddons.configuration.harvesterTreeSeconds")
+				.defineInRange("treeSeconds", 80, 1, 3600);
+			harvesterBountifulBonus = builder
+				.comment("Extra growing speed per level of Bountiful: 0.5 makes Bountiful I 1.5x, II 2x and III 2.5x as fast.")
+				.translation("comedymonkeysaddons.configuration.harvesterBountifulBonus")
+				.defineInRange("bountifulBonusPerLevel", 0.5, 0.0, 10.0);
+			harvesterTreeLogs = builder
+				.comment("Logs a felled tree gives at least (up to two more at random).")
+				.translation("comedymonkeysaddons.configuration.harvesterTreeLogs")
+				.defineInRange("treeLogs", 4, 0, 64);
+			harvesterLeafRolls = builder
+				.comment("Times a felled tree's leaves roll their drops (saplings, sticks, apples), as if broken by hand.")
+				.translation("comedymonkeysaddons.configuration.harvesterLeafRolls")
+				.defineInRange("leafRolls", 8, 0, 64);
+			builder.pop();
+
 			builder.comment("String Tangler and Stone Infuser. Their recipes (ingredients, counts, times) are data-driven:",
 					"see data/comedymonkeysaddons/recipe/tangling/ and infusing/ in the mod jar.")
 				.push("machines");
@@ -213,6 +255,39 @@ public final class CMConfig {
 				.comment("Lava burned while running, in millibuckets per second.")
 				.translation("comedymonkeysaddons.configuration.superchargedMagmaEngineLavaPerSecond")
 				.defineInRange("lavaPerSecond", 20, 0, 1000);
+			builder.pop();
+
+			builder.comment("Electricity: the Lava Generator and Geothermal Turbine make Forge Energy (FE), the Electric Motor",
+					"turns it into rotation. The defaults let one Lava Generator run a motor at 16,384 SU, and one turbine",
+					"run two and a half motors flat out.").push("electricity");
+			motorMaxStress = builder
+				.comment("The most stress an Electric Motor can be set to give, in SU (a full superheated boiler is 294,912).")
+				.translation("comedymonkeysaddons.configuration.motorMaxStress")
+				.defineInRange("motorMaxStress", 294912, 256, 4194304);
+			motorFePerStress = builder
+				.comment("FE an Electric Motor draws per tick for each SU it's set to give.")
+				.translation("comedymonkeysaddons.configuration.motorFePerStress")
+				.defineInRange("motorFePerStress", 0.0625, 0.0, 64.0);
+			generatorFePerTick = builder
+				.comment("FE a Lava Generator makes per tick while it burns.")
+				.translation("comedymonkeysaddons.configuration.generatorFePerTick")
+				.defineInRange("generatorFePerTick", 1024, 0, 1000000);
+			generatorLavaPerSecond = builder
+				.comment("Lava a Lava Generator burns, in millibuckets per second.")
+				.translation("comedymonkeysaddons.configuration.generatorLavaPerSecond")
+				.defineInRange("generatorLavaPerSecond", 20, 0, 10000);
+			turbineFePerTick = builder
+				.comment("FE a Geothermal Turbine makes per tick while it runs.")
+				.translation("comedymonkeysaddons.configuration.turbineFePerTick")
+				.defineInRange("turbineFePerTick", 46080, 0, 10000000);
+			turbineLavaPerSecond = builder
+				.comment("Lava a Geothermal Turbine burns, in millibuckets per second (ten times as efficient as the Lava Generator).")
+				.translation("comedymonkeysaddons.configuration.turbineLavaPerSecond")
+				.defineInRange("turbineLavaPerSecond", 90, 0, 10000);
+			turbineWaterPerSecond = builder
+				.comment("Water a Geothermal Turbine boils off, in millibuckets per second.")
+				.translation("comedymonkeysaddons.configuration.turbineWaterPerSecond")
+				.defineInRange("turbineWaterPerSecond", 250, 0, 10000);
 			builder.pop();
 
 			builder.comment("Create Aeronautics blocks (only present when Sable is installed)").push("aeronautics");
@@ -405,6 +480,34 @@ public final class CMConfig {
 
 		public int superchargedMagmaEngineLavaPerSecond() {
 			return get(superchargedMagmaEngineLavaPerSecond);
+		}
+
+		public int motorMaxStress() {
+			return get(motorMaxStress);
+		}
+
+		public double motorFePerStress() {
+			return get(motorFePerStress);
+		}
+
+		public int generatorFePerTick() {
+			return get(generatorFePerTick);
+		}
+
+		public int generatorLavaPerSecond() {
+			return get(generatorLavaPerSecond);
+		}
+
+		public int turbineFePerTick() {
+			return get(turbineFePerTick);
+		}
+
+		public int turbineLavaPerSecond() {
+			return get(turbineLavaPerSecond);
+		}
+
+		public int turbineWaterPerSecond() {
+			return get(turbineWaterPerSecond);
 		}
 
 		public double gyroStrength() {

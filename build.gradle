@@ -91,6 +91,9 @@ dependencies {
     runtimeOnly("maven.modrinth:create-liquid-fuel:${liquid_fuel_version}")
     // Carry On: picking up and placing upgraded chests and Wellsprings
     runtimeOnly("maven.modrinth:carry-on:${carry_on_version}")
+    // Supplementaries (+ its Moonlight library): modded crops such as flax in the Auto Harvester
+    runtimeOnly("maven.modrinth:supplementaries:${supplementaries_version}") { transitive = false }
+    runtimeOnly("maven.modrinth:moonlight:${moonlight_version}") { transitive = false }
 
     // Inventory Profiles Next: only its annotations, to tell it how to treat upgraded chests (optional at runtime)
     compileOnly("maven.modrinth:inventory-profiles-next:vjuNnHLv") { transitive = false }

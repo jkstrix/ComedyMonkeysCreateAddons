@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:magma_engine",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:lava_generator"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.lava_generator"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.lava_generator.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crafted": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:lava_generator"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafted"
+    ]
+  ]
+}

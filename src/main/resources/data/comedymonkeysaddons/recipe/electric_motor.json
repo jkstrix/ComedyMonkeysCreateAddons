@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PEP",
+    "CMC",
+    "IBI"
+  ],
+  "key": {
+    "P": {
+      "tag": "c:plates/brass"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "C": {
+      "tag": "c:ingots/copper"
+    },
+    "M": {
+      "item": "create:precision_mechanism"
+    },
+    "I": {
+      "item": "create:industrial_iron_block"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:electric_motor",
+    "count": 1
+  }
+}

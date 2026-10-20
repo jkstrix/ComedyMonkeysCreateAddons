@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:electric_motor",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:geothermal_controller"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.geothermal_turbine"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.geothermal_turbine.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "turbine_formed"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

@@ -6,6 +6,11 @@ import com.comedymonkey.createaddons.content.chest.UpgradedChestBlockEntity;
 import com.comedymonkey.createaddons.content.cobblegen.CobbleGeneratorBlockEntity;
 import com.comedymonkey.createaddons.content.crucible.PressureCrucibleBlockEntity;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineBlockEntity;
+import com.comedymonkey.createaddons.content.harvester.AutoHarvesterBlockEntity;
+import com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity;
+import com.comedymonkey.createaddons.content.electric.GeothermalCasingBlockEntity;
+import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlockEntity;
+import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlockEntity;
 import com.comedymonkey.createaddons.content.incinerator.IncineratorBlockEntity;
 import com.comedymonkey.createaddons.content.machine.MachineKind;
 import com.comedymonkey.createaddons.content.machine.TwoInputMachineBlockEntity;
@@ -49,6 +54,11 @@ public final class ModBlockEntities {
 				ModBlocks.generators().stream().map(DeferredBlock::get).toArray(Block[]::new)).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AutoHarvesterBlockEntity>> AUTO_HARVESTER =
+		BLOCK_ENTITY_TYPES.register("auto_harvester",
+			() -> BlockEntityType.Builder.of(AutoHarvesterBlockEntity::new, ModBlocks.AUTO_HARVESTER.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<IncineratorBlockEntity>> INCINERATOR =
 		BLOCK_ENTITY_TYPES.register("incinerator",
 			() -> BlockEntityType.Builder.of(IncineratorBlockEntity::new, ModBlocks.INCINERATOR.get()).build(null));
@@ -73,6 +83,26 @@ public final class ModBlockEntities {
 			(pos, state) -> new TwoInputMachineBlockEntity(holder.get().get(), pos, state, kind), block.get()).build(null)));
 		return holder.get();
 	}
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ElectricMotorBlockEntity>> ELECTRIC_MOTOR =
+		BLOCK_ENTITY_TYPES.register("electric_motor",
+			() -> BlockEntityType.Builder.of(ElectricMotorBlockEntity::new, ModBlocks.ELECTRIC_MOTOR.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LavaGeneratorBlockEntity>> LAVA_GENERATOR =
+		BLOCK_ENTITY_TYPES.register("lava_generator",
+			() -> BlockEntityType.Builder.of(LavaGeneratorBlockEntity::new, ModBlocks.LAVA_GENERATOR.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GeothermalCasingBlockEntity>> GEOTHERMAL_CASING =
+		BLOCK_ENTITY_TYPES.register("geothermal_casing",
+			() -> BlockEntityType.Builder.of(GeothermalCasingBlockEntity::new, ModBlocks.GEOTHERMAL_CASING.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GeothermalControllerBlockEntity>> GEOTHERMAL_CONTROLLER =
+		BLOCK_ENTITY_TYPES.register("geothermal_controller",
+			() -> BlockEntityType.Builder.of(GeothermalControllerBlockEntity::new, ModBlocks.GEOTHERMAL_CONTROLLER.get()).build(null));
 
 	private ModBlockEntities() {}
 }

@@ -4,6 +4,7 @@ import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.chest.ChestUpgradeMenu;
 import com.comedymonkey.createaddons.content.chest.LargeUpgradedChestMenu;
 import com.comedymonkey.createaddons.content.chest.UpgradedChestMenu;
+import com.comedymonkey.createaddons.content.harvester.AutoHarvesterMenu;
 import com.comedymonkey.createaddons.content.wellspring.WellspringMenu;
 
 import net.minecraft.core.registries.Registries;
@@ -27,6 +28,9 @@ public final class ModMenus {
 
 	public static final DeferredHolder<MenuType<?>, MenuType<ChestUpgradeMenu>> CHEST_UPGRADE =
 		MENUS.register("chest_upgrade", () -> IMenuTypeExtension.create(ChestUpgradeMenu::new));
+
+	public static final DeferredHolder<MenuType<?>, MenuType<AutoHarvesterMenu>> AUTO_HARVESTER =
+		MENUS.register("auto_harvester", () -> IMenuTypeExtension.create(AutoHarvesterMenu::new));
 
 	private ModMenus() {}
 }

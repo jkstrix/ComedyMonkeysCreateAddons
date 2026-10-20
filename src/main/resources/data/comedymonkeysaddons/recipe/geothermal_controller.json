@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TET",
+    "MCM",
+    "TET"
+  ],
+  "key": {
+    "T": {
+      "tag": "c:plates/brass"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "M": {
+      "item": "create:precision_mechanism"
+    },
+    "C": {
+      "item": "comedymonkeysaddons:geothermal_casing"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:geothermal_controller",
+    "count": 1
+  }
+}

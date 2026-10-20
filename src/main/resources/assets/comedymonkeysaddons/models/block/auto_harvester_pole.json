@@ -1,0 +1,61 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "create:block/axis",
+    "axis": "create:block/axis"
+  },
+  "elements": [
+    {
+      "from": [
+        3.5,
+        0,
+        9.5
+      ],
+      "to": [
+        4.5,
+        1,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#axis",
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#axis",
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#axis",
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#axis",
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

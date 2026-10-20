@@ -7,6 +7,7 @@ import com.comedymonkey.createaddons.content.cobblegen.GeneratorProduct;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.redstone.link.LinkRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
@@ -60,7 +61,8 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 			LinkRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
 	}
 
-	private static void renderShaft(CobbleGeneratorBlockEntity be, BlockState state, Direction back, PoseStack ms,
+	/** The shaft end going into {@code back}, turning with the network; shared with the Auto Harvester. */
+	static void renderShaft(KineticBlockEntity be, BlockState state, Direction back, PoseStack ms,
 									MultiBufferSource buffer, int light, int overlay) {
 		Direction.Axis axis = back.getAxis();
 		float angle = KineticBlockEntityRenderer.getAngleForBe(be, be.getBlockPos(), axis);

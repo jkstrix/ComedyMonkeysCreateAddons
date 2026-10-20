@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PIP",
+    "ICI",
+    "PIP"
+  ],
+  "key": {
+    "P": {
+      "tag": "c:plates/iron"
+    },
+    "I": {
+      "item": "create:industrial_iron_block"
+    },
+    "C": {
+      "item": "create:copper_casing"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:geothermal_casing",
+    "count": 4
+  }
+}

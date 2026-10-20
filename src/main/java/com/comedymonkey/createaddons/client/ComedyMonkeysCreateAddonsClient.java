@@ -62,6 +62,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.register(ModMenus.UPGRADED_CHEST.get(), ContainerScreen::new);
 		event.register(ModMenus.LARGE_UPGRADED_CHEST.get(), LargeUpgradedChestScreen::new);
 		event.register(ModMenus.CHEST_UPGRADE.get(), ChestUpgradeScreen::new);
+		event.register(ModMenus.AUTO_HARVESTER.get(), AutoHarvesterScreen::new);
 	}
 
 	private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -69,7 +70,11 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.UPGRADED_CHEST.get(), UpgradedChestRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.PRESSURE_CRUCIBLE.get(), PressureCrucibleRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.COBBLE_GENERATOR.get(), CobbleGeneratorRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.AUTO_HARVESTER.get(), AutoHarvesterRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.MAGMA_ENGINE.get(), MagmaEngineRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.ELECTRIC_MOTOR.get(), ElectricRenderers.Motor::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.GEOTHERMAL_CONTROLLER.get(), ElectricRenderers.Turbine::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.STRING_TANGLER.get(), MachineRenderers.Tangler::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.STONE_INFUSER.get(), MachineRenderers.Infuser::new);
 		if (SableCompat.LOADED)
@@ -85,8 +90,10 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.register(PressureCrucibleRenderer.ROD);
 		event.register(PressureCrucibleRenderer.SHAFT);
 		event.register(CobbleGeneratorRenderer.SHAFT);
+		AutoHarvesterRenderer.registerModels(event);
 		event.register(MagmaEngineRenderer.HEAD);
 		event.register(MagmaEngineRenderer.SUPERCHARGED_HEAD);
+		ElectricRenderers.registerModels(event);
 		if (MagmaEngineSimModels.LOADED)
 			MagmaEngineSimModels.registerModels(event);
 		if (SableCompat.LOADED)

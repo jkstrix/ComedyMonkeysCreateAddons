@@ -1,0 +1,182 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "create:block/axis",
+    "axis": "create:block/axis",
+    "harvester": "create:block/harvester"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        6,
+        4.5
+      ],
+      "to": [
+        10,
+        10,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#harvester",
+          "uv": [
+            0,
+            0,
+            12,
+            12
+          ],
+          "rotation": 0
+        },
+        "south": {
+          "texture": "#harvester",
+          "uv": [
+            0,
+            0,
+            12,
+            12
+          ],
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        6.25,
+        4.5
+      ],
+      "to": [
+        8,
+        9.75,
+        8.25
+      ],
+      "faces": {
+        "east": {
+          "texture": "#harvester",
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "rotation": 90
+        },
+        "west": {
+          "texture": "#harvester",
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "from": [
+        6.25,
+        8,
+        4.5
+      ],
+      "to": [
+        9.75,
+        8,
+        8.25
+      ],
+      "faces": {
+        "up": {
+          "texture": "#harvester",
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "rotation": 90
+        },
+        "down": {
+          "texture": "#harvester",
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        7.5,
+        4
+      ],
+      "to": [
+        8.5,
+        8.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#axis",
+          "uv": [
+            6,
+            0,
+            10,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#axis",
+          "uv": [
+            6,
+            0,
+            10,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#axis",
+          "uv": [
+            6,
+            0,
+            10,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#axis",
+          "uv": [
+            6,
+            0,
+            10,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#axis",
+          "uv": [
+            6,
+            0,
+            10,
+            4
+          ]
+        },
+        "down": {
+          "texture": "#axis",
+          "uv": [
+            6,
+            0,
+            10,
+            4
+          ]
+        }
+      }
+    }
+  ]
+}

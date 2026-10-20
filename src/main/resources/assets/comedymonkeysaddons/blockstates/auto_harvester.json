@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,plant=none": {
+      "model": "comedymonkeysaddons:block/auto_harvester_dirt"
+    },
+    "facing=north,plant=crop": {
+      "model": "comedymonkeysaddons:block/auto_harvester"
+    },
+    "facing=north,plant=tree": {
+      "model": "comedymonkeysaddons:block/auto_harvester_dirt"
+    },
+    "facing=east,plant=none": {
+      "model": "comedymonkeysaddons:block/auto_harvester_dirt",
+      "y": 90
+    },
+    "facing=east,plant=crop": {
+      "model": "comedymonkeysaddons:block/auto_harvester",
+      "y": 90
+    },
+    "facing=east,plant=tree": {
+      "model": "comedymonkeysaddons:block/auto_harvester_dirt",
+      "y": 90
+    },
+    "facing=south,plant=none": {
+      "model": "comedymonkeysaddons:block/auto_harvester_dirt",
+      "y": 180
+    },
+    "facing=south,plant=crop": {
+      "model": "comedymonkeysaddons:block/auto_harvester",
+      "y": 180
+    },
+    "facing=south,plant=tree": {
+      "model": "comedymonkeysaddons:block/auto_harvester_dirt",
+      "y": 180
+    },
+    "facing=west,plant=none": {
+      "model": "comedymonkeysaddons:block/auto_harvester_dirt",
+      "y": 270
+    },
+    "facing=west,plant=crop": {
+      "model": "comedymonkeysaddons:block/auto_harvester",
+      "y": 270
+    },
+    "facing=west,plant=tree": {
+      "model": "comedymonkeysaddons:block/auto_harvester_dirt",
+      "y": 270
+    }
+  }
+}

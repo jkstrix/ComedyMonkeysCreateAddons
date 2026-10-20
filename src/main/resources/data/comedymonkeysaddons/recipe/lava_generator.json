@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PEP",
+    "FMF",
+    "IBI"
+  ],
+  "key": {
+    "P": {
+      "tag": "c:plates/brass"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "F": {
+      "item": "create:fluid_tank"
+    },
+    "M": {
+      "item": "create:propeller"
+    },
+    "I": {
+      "item": "create:industrial_iron_block"
+    },
+    "B": {
+      "item": "create:blaze_burner"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:lava_generator",
+    "count": 1
+  }
+}

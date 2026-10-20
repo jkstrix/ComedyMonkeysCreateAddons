@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "formed=false": {
+      "model": "comedymonkeysaddons:block/geothermal_core"
+    },
+    "formed=true": {
+      "model": "comedymonkeysaddons:block/geothermal_core"
+    }
+  }
+}

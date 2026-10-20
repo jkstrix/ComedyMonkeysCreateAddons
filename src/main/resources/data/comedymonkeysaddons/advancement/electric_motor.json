@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:lava_generator",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:electric_motor"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.electric_motor"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.electric_motor.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crafted": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:electric_motor"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafted"
+    ]
+  ]
+}

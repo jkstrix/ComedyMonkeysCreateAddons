@@ -32,6 +32,12 @@
     {
       "id": "comedymonkeysaddons:flight_instruments",
       "required": false
-    }
+    },
+    "comedymonkeysaddons:electric_motor",
+    "comedymonkeysaddons:lava_generator",
+    "comedymonkeysaddons:geothermal_casing",
+    "comedymonkeysaddons:geothermal_core",
+    "comedymonkeysaddons:geothermal_controller",
+    "comedymonkeysaddons:auto_harvester"
   ]
 }

@@ -30,6 +30,8 @@ public final class ModAdvancements {
 	public static final String CRUCIBLE_PRESS = "crucible_press";
 	public static final String PIPED_BLAZE_BURNER = "piped_blaze_burner";
 	public static final String PIPED_ENGINE_FUEL = "piped_engine_fuel";
+	public static final String TURBINE_FORMED = "turbine_formed";
+	public static final String MOTOR_FULL_POWER = "motor_full_power";
 
 	/** How close a player has to be to machinery working on its own to earn its advancements. */
 	public static final int NEARBY = 16;

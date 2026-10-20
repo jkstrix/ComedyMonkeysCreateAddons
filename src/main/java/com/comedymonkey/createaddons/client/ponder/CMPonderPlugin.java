@@ -71,6 +71,13 @@ public class CMPonderPlugin implements PonderPlugin {
 			.addStoryBoard("stone_infuser", MachineScenes::infuser);
 		helper.forComponents(ModBlocks.TUFF_GENERATOR.getId(), ModBlocks.WIRELESS_TUFF_GENERATOR.getId())
 			.addStoryBoard("tuff_generator", MachineScenes::tuff);
+		helper.forComponents(ModBlocks.LAVA_GENERATOR.getId())
+			.addStoryBoard("electric_power", ElectricScenes::lavaGenerator);
+		helper.forComponents(ModBlocks.ELECTRIC_MOTOR.getId())
+			.addStoryBoard("electric_power", ElectricScenes::electricMotor);
+		helper.forComponents(ModBlocks.GEOTHERMAL_CONTROLLER.getId(), ModBlocks.GEOTHERMAL_CASING.getId(),
+				ModBlocks.GEOTHERMAL_CORE.getId())
+			.addStoryBoard("geothermal_turbine", ElectricScenes::geothermalTurbine);
 		if (SableCompat.LOADED)
 			AeronauticsScenes.register(helper);
 	}
@@ -93,7 +100,8 @@ public class CMPonderPlugin implements PonderPlugin {
 			.add(ModBlocks.TUFF_GENERATOR.getId());
 		helper.addToTag(CREATE_KINETIC_SOURCES_TAG)
 			.add(ModBlocks.MAGMA_ENGINE.getId())
-			.add(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.getId());
+			.add(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.getId())
+			.add(ModBlocks.ELECTRIC_MOTOR.getId());
 		if (SableCompat.LOADED)
 			helper.addToTag(CREATE_KINETIC_APPLIANCES_TAG)
 				.add(AeronauticsContent.COMPACT_GYROSCOPE.getId())

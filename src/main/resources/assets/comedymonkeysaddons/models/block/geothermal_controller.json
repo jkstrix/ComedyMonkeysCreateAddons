@@ -1,0 +1,84 @@
+{
+ "parent": "minecraft:block/block",
+ "textures": {
+  "all": "comedymonkeysaddons:block/geothermal_casing",
+  "particle": "comedymonkeysaddons:block/geothermal_casing",
+  "front": "comedymonkeysaddons:block/geothermal_controller"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#front",
+     "cullface": "north"
+    },
+    "east": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#all",
+     "cullface": "east"
+    },
+    "south": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#all",
+     "cullface": "south"
+    },
+    "west": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#all",
+     "cullface": "west"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#all",
+     "cullface": "up"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#all",
+     "cullface": "down"
+    }
+   }
+  }
+ ]
+}

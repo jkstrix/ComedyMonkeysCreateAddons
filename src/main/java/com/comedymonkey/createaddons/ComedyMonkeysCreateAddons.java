@@ -8,6 +8,7 @@ import com.comedymonkey.createaddons.compat.sable.AeronauticsContent;
 import com.comedymonkey.createaddons.compat.sable.SableCompat;
 import com.comedymonkey.createaddons.content.cobblegen.CobbleGeneratorBlock;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineBlock;
+import com.comedymonkey.createaddons.content.harvester.Bountiful;
 import com.comedymonkey.createaddons.content.incinerator.IncineratorBlock;
 import com.simibubi.create.api.boiler.BoilerHeater;
 import com.comedymonkey.createaddons.content.chest.ChestEvents;
@@ -39,6 +40,8 @@ import net.neoforged.fml.ModList;
 import com.comedymonkey.createaddons.compat.pipez.cover.PipeCoverEvents;
 import com.comedymonkey.createaddons.compat.pipez.cover.client.PipeCoverClient;
 import com.comedymonkey.createaddons.network.PipeCoverPayload;
+import com.comedymonkey.createaddons.network.MotorSettingsPayload;
+import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlock;
 import com.comedymonkey.createaddons.registry.ModAttachments;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
@@ -74,6 +77,8 @@ public class ComedyMonkeysCreateAddons {
 
 		NeoForge.EVENT_BUS.addListener(ChestEvents::onRightClickBlock);
 		NeoForge.EVENT_BUS.addListener(ChestEvents::onBlockBreak);
+		// Bountiful books from Librarians
+		NeoForge.EVENT_BUS.addListener(Bountiful::addTrades);
 		if (ModList.get().isLoaded(PipezBlazeBurnerCompat.PIPEZ_ID)) {
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onRightClickBlock);
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onBlockBreak);
@@ -98,6 +103,9 @@ public class ComedyMonkeysCreateAddons {
 		// Cobblestone out of the generators, from any side
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.COBBLE_GENERATOR.get(),
 			(be, side) -> be.getOutputHandler());
+		// The harvest out from any side; a seed or sapling in, while it's empty
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.AUTO_HARVESTER.get(),
+			(be, side) -> be.getAutomationHandler());
 		// Dust in from any side, results out from any side
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.PRESSURE_CRUCIBLE.get(),
 			(be, side) -> be.getAutomationHandler());
@@ -116,6 +124,23 @@ public class ComedyMonkeysCreateAddons {
 				(be, side) -> side == null || side == Direction.DOWN
 					|| side == be.getBlockState().getValue(MagmaEngineBlock.FACING).getOpposite() ? be.getTank() : null);
 
+		// Electricity: the motor takes FE on any side; the generator takes lava at the back and gives FE at the
+		// sides; the turbine takes lava and water and gives FE through its controller or any of its casings
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.ELECTRIC_MOTOR.get(),
+			(be, side) -> be.getEnergy());
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),
+			(be, side) -> side == null || side == LavaGeneratorBlock.inlet(be.getBlockState()) ? be.getTank() : null);
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),
+			(be, side) -> side == null || LavaGeneratorBlock.isTerminal(be.getBlockState(), side) ? be.getEnergy().extractOnly() : null);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.GEOTHERMAL_CONTROLLER.get(),
+			(be, side) -> be.isFormed() ? be.getFluids() : null);
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.GEOTHERMAL_CONTROLLER.get(),
+			(be, side) -> be.isFormed() ? be.getEnergyOut() : null);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.GEOTHERMAL_CASING.get(),
+			(be, side) -> be.controller() != null ? be.controller().getFluids() : null);
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.GEOTHERMAL_CASING.get(),
+			(be, side) -> be.controller() != null ? be.controller().getEnergyOut() : null);
+
 		// Optional: without Pipez nothing is registered and Blaze Burners behave exactly as in Create
 		if (ModList.get().isLoaded(PipezBlazeBurnerCompat.PIPEZ_ID)) {
 			PipezBlazeBurnerCompat.registerCapabilities(event);
@@ -131,6 +156,8 @@ public class ComedyMonkeysCreateAddons {
 			(payload, context) -> context.enqueueWork(() -> ClientContraptionSync.handle(payload)));
 		// The Sort button on upgraded chests and barrels
 		event.registrar("1").playToServer(SortChestPayload.TYPE, SortChestPayload.STREAM_CODEC, SortChestPayload::handle);
+		// The Electric Motor's settings screen
+		event.registrar("1").playToServer(MotorSettingsPayload.TYPE, MotorSettingsPayload.STREAM_CODEC, MotorSettingsPayload::handle);
 		// Covers on Pipez pipes
 		event.registrar("1").playToClient(PipeCoverPayload.TYPE, PipeCoverPayload.STREAM_CODEC,
 			(payload, context) -> context.enqueueWork(() -> PipeCoverClient.handle(payload)));
@@ -168,6 +195,7 @@ public class ComedyMonkeysCreateAddons {
 				registerCreateTooltip(block.asItem());
 			}
 
+			registerCreateTooltip(ModItems.AUTO_HARVESTER.get());
 			registerCreateTooltip(ModItems.INCINERATOR.get());
 			registerCreateTooltip(ModItems.STRING_TANGLER.get());
 			registerCreateTooltip(ModItems.STONE_INFUSER.get());
@@ -175,6 +203,11 @@ public class ComedyMonkeysCreateAddons {
 			BlockStressValues.IMPACTS.register(ModBlocks.STONE_INFUSER.get(), CMConfig.SERVER::infuserStressImpact);
 			registerCreateTooltip(ModItems.MAGMA_ENGINE.get());
 			registerCreateTooltip(ModItems.SUPERCHARGED_MAGMA_ENGINE.get());
+			registerCreateTooltip(ModItems.ELECTRIC_MOTOR.get());
+			registerCreateTooltip(ModItems.LAVA_GENERATOR.get());
+			registerCreateTooltip(ModItems.GEOTHERMAL_CONTROLLER.get());
+			registerCreateTooltip(ModItems.GEOTHERMAL_CASING.get());
+			registerCreateTooltip(ModItems.GEOTHERMAL_CORE.get());
 			registerCreateTooltip(ModItems.SNUG_PIPEZ_COVER.get());
 			registerCreateTooltip(ModItems.FULL_PIPEZ_COVER.get());
 			// Capacity per RPM, so 128 at 64 RPM is 8192 SU

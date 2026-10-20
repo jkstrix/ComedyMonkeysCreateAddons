@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AHA",
+    "DCD",
+    "ASA"
+  ],
+  "key": {
+    "A": {
+      "item": "create:andesite_alloy"
+    },
+    "H": {
+      "item": "create:mechanical_harvester"
+    },
+    "S": {
+      "item": "create:mechanical_saw"
+    },
+    "D": {
+      "item": "minecraft:dirt"
+    },
+    "C": {
+      "item": "create:andesite_casing"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:auto_harvester"
+  }
+}

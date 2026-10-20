@@ -48,11 +48,17 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.WIRELESS_BRASS_BLACKSTONE_GENERATOR.get());
 				output.accept(ModItems.TUFF_GENERATOR.get());
 				output.accept(ModItems.WIRELESS_TUFF_GENERATOR.get());
+				output.accept(ModItems.AUTO_HARVESTER.get());
 				output.accept(ModItems.STRING_TANGLER.get());
 				output.accept(ModItems.STONE_INFUSER.get());
 				output.accept(ModItems.PRESSURE_CRUCIBLE.get());
 				output.accept(ModItems.MAGMA_ENGINE.get());
 				output.accept(ModItems.SUPERCHARGED_MAGMA_ENGINE.get());
+				output.accept(ModItems.LAVA_GENERATOR.get());
+				output.accept(ModItems.ELECTRIC_MOTOR.get());
+				output.accept(ModItems.GEOTHERMAL_CONTROLLER.get());
+				output.accept(ModItems.GEOTHERMAL_CASING.get());
+				output.accept(ModItems.GEOTHERMAL_CORE.get());
 				if (net.neoforged.fml.ModList.get().isLoaded("pipez")) {
 					output.accept(ModItems.SNUG_PIPEZ_COVER.get());
 					output.accept(ModItems.FULL_PIPEZ_COVER.get());

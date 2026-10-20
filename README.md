@@ -132,6 +132,20 @@ One-block, lava-and-water cobblestone generators with a glass front onto a brick
   - Recipe: Andesite Alloy, a lava bucket, 2 Mechanical Drills, Andesite Casing, a water bucket and 2 gravel. Add a
     Transmitter (shapeless) for the Wireless one.
 
+## Auto Harvester
+
+A Create-style botany pot: the Cobblestone Generator's box with a planter behind the glass. Plant a crop or a sapling and it grows and harvests it over and over; the plant itself is never used up.
+
+- **Planting**: use a seed, crop or sapling on it, or open its screen with a **wrench** (sneak-wrench still picks it up) and put one in the planter slot. Funnels and arms can plant it while it's empty. Empty-handed, use takes the harvest out; sneak-use takes the plant back.
+- **What it takes**: any vanilla crop or bush (wheat, carrots, beetroot, melon and pumpkin seeds, sweet berries, nether wart, sugar cane, cactus, bamboo, cocoa, kelp, flowers, mushrooms...), every sapling, and modded crops built the same way (Supplementaries' flax, Farmer's Delight's cabbages and onions...). Item tags `comedymonkeysaddons:auto_harvester_plantable` and `auto_harvester_blacklist` add or forbid plants.
+- **What it gives**: a crop gives what it would drop fully grown (wheat and the odd seed, a melon's slices...); a tree gives 4 to 6 of its logs plus a few rolls of its leaves' drops (saplings, sticks, apples). It holds nine stacks, taken out from any side by hoppers, chutes, funnels, pipes or arms; full, it stops.
+- **Power**: a shaft into the back. It always uses **512 SU** and runs **no faster** for more speed. While empty or full it puts no stress on the network.
+- **Speed**: a crop grows in 40 seconds, scaled by how fast it grows in vanilla (sweet berries and sugar cane about three times as fast, beetroot a little slower); a tree takes 80 seconds. Each harvest then takes 4 seconds: the head drops, sweeps the planter with a harvester reel (crops) or a saw (trees), and parks.
+- **Bountiful** (I to III): an enchantment for the Auto Harvester only, put on with an anvil and kept when it's broken and placed again. Each level grows the plant 50% faster (2.5x at III). Enchanting tables don't offer it: buy the book from a **Librarian**, in their usual random book trades or as an extra Apprentice trade.
+- **The window** shows the real plant at its growth stage (flowers and other plants without stages grow in size), and a sapling growing into a little tree of its own wood.
+- **Wrench screen**: the planter slot, the harvest, and a growth gauge that shows its status, time per harvest and Bountiful level.
+- Recipe: andesite alloy in the corners, a Mechanical Harvester above, a Mechanical Saw below, dirt either side and Andesite Casing in the middle.
+
 ## Magma Engine
 
 A heavy brass engine that burns lava: by default **64 RPM and 8,192 SU**, four times a Portable Engine, for **10 mB of lava a second**. The shaft comes out of the middle of its front, which faces you when placed (sneak to place it facing away). It holds 4 buckets; pipes fill it through the back or the bottom only (a Fluid Wellspring with Lava Upgrades runs it forever) or right-click with a lava bucket. With Create Aeronautics installed it takes the shape of Simulated's Portable Engine in a dark steel finish with magma glowing in the firebox: the hatch swings open while it burns, the exhausts glow red-hot and pulse with the shaft, and smoke comes from the outlets. (The geometry is loaded from Aeronautics at runtime; only our texture ships.) Without Aeronautics it has its own model, a dark steel block with a gold cog round the shaft and three cylinders whose heads bob in turn. Either way, with no lava it stops. Speed, capacity and lava use are configurable.
@@ -193,6 +207,21 @@ Only present when Sable (Create Aeronautics) is installed.
 - **Flight Instruments**: a sloping cockpit console with four live dials: an altimeter (long hand per 100 m, short per 1000 m), airspeed (0 to 60 m/s), an artificial horizon that tilts with roll and drops with pitch, and heading. Place it facing you; the way you face it counts as the ship's forward. Goggles show every reading, and Display Links can put **altitude, airspeed, climb rate, heading or pitch and roll** on Display Boards and Nixie Tubes (refreshed every second). Recipe: iron sheets, a compass, 2 clocks, a Precision Mechanism and an electron tube.
 - **Torque Rotor**: a propeller that turns the ship instead of pushing it. Its blades push the way they face (or pull, with the shaft reversed) exactly as hard as an Andesite Propeller at the same speed, and the ship turns about its centre of mass just as it would from a propeller in that spot, but without being pushed, so there's no sideways drift. Put it on the tail like a tail rotor, facing sideways, to yaw: the further from the middle, the harder it turns. It mounts on the face you click, with the shaft going into its base, and blows wind like a propeller. Recipe: iron sheets, Andesite Casing, 2 shafts and a Precision Mechanism.
 
+## Electricity: Lava Generator, Geothermal Turbine and Electric Motor
+
+Burn lava for Forge Energy (FE), and turn FE back into rotation. All the numbers are configurable.
+
+| | Takes | Gives |
+|---|---|---|
+| **Lava Generator** | 20 mB/s lava, in at the middle of the back | **1,024 FE/t**, out of the terminals in the middle of each side |
+| **Geothermal Turbine** (3x3x3) | 90 mB/s lava and 250 mB/s water, through any casing | **46,080 FE/t**, through any casing or into anything touching it |
+| **Electric Motor** | 1 FE/t for every 16 SU it's set to give | Up to **294,912 SU** (a full superheated boiler) |
+
+- **Lava Generator**: a small lava-fired turbine; its wheel spins behind the intake glass while it burns. It pushes its power into whatever is on its sides (an Electric Motor, or a Pipez energy pipe). One generator runs a motor at 16,384 SU.
+- **Geothermal Turbine**: build a 3x3x3 of Geothermal Casings with a Turbine Core in the very middle and the Controller in the middle of the front, facing you. It forms into one big machine within a second. Lava heats water to steam that turns the turbine: ten times as efficient with lava as the Lava Generator, so two fully upgraded Lava Wellsprings and a water supply run it, and it powers two and a half motors flat out. Its gauges show the lava and water, and while it runs it steams and its vents flicker with flame.
+- **Electric Motor**: right-click it with a wrench for its settings. Speed snaps to Create's standard speeds (1 to 256 RPM); stress snaps to what the generators make (a quarter or half of a Lava Generator, whole generators, up to one Geothermal Turbine), and the screen shows the power it will draw. It stops when it runs short of power and restarts once it has half a second's worth stored.
+- Recipes: Lava Generator: brass sheets, an electron tube, 2 Fluid Tanks, a Propeller, Industrial Iron and a Blaze Burner. Electric Motor: brass sheets, an electron tube, copper, a Precision Mechanism, Industrial Iron and Brass Casing. Geothermal Casing (4): iron sheets, Industrial Iron and Copper Casing. Controller: brass sheets, electron tubes, Precision Mechanisms and a casing. Turbine Core: 4 Precision Mechanisms, 4 Propellers and a Flywheel.
+
 ## Pipez Covers (with Pipez)
 
 Copycat-style covers for Pipez pipes, to hide pipework inside walls and floors. The pipe keeps working underneath.
@@ -227,6 +256,7 @@ Mods → Create → Config → *Access configs of other mods* → ComedyMonkey's
 - **Pressure Crucible**: stress impact per RPM.
 - **Machines**: String Tangler and Stone Infuser stress impacts.
 - **Cobblestone Generators**: Andesite and Brass stress impacts (also used by the Basalt and Blackstone ones).
+- **Auto Harvester**: stress (SU, at any speed), crop and tree grow times, Bountiful's speed bonus per level, logs per tree and leaf drop rolls.
 - **Magma Engine**: speed, stress capacity per RPM and lava burned per second.
 - **Create Aeronautics**: Compact Gyroscope strength, damping, lean correction, full-strength speed and stress; Torque Rotor thrust per RPM and stress.
 - **Mod Compatibility**: Pipez Blaze Burner feeding, whether only Pipez (not hoppers or funnels) may feed them, and Portable Engine fluid fuel.

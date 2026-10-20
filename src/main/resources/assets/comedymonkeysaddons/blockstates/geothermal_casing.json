@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "formed=false": {
+      "model": "comedymonkeysaddons:block/geothermal_casing"
+    },
+    "formed=true": {
+      "model": "comedymonkeysaddons:block/geothermal_casing"
+    }
+  }
+}

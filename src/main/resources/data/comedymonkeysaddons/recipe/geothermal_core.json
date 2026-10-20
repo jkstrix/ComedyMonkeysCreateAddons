@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "MPM",
+    "PFP",
+    "MPM"
+  ],
+  "key": {
+    "M": {
+      "item": "create:precision_mechanism"
+    },
+    "P": {
+      "item": "create:propeller"
+    },
+    "F": {
+      "item": "create:flywheel"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:geothermal_core",
+    "count": 1
+  }
+}

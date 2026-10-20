@@ -6,6 +6,11 @@ import com.comedymonkey.createaddons.content.cobblegen.CobbleGeneratorBlock;
 import com.comedymonkey.createaddons.content.cobblegen.GeneratorProduct;
 import com.comedymonkey.createaddons.content.crucible.PressureCrucibleBlock;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineBlock;
+import com.comedymonkey.createaddons.content.harvester.AutoHarvesterBlock;
+import com.comedymonkey.createaddons.content.electric.ElectricMotorBlock;
+import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlock;
+import com.comedymonkey.createaddons.content.electric.GeothermalPartBlock;
+import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlock;
 import com.comedymonkey.createaddons.content.incinerator.IncineratorBlock;
 import com.comedymonkey.createaddons.content.machine.TwoInputMachineBlock;
 import com.comedymonkey.createaddons.content.chest.UpgradedChestBlock;
@@ -129,6 +134,16 @@ public final class ModBlocks {
 			TUFF_GENERATOR, WIRELESS_TUFF_GENERATOR);
 	}
 
+	/** Grows a crop or sapling behind glass and harvests it, at a fixed pace and stress. */
+	public static final DeferredBlock<AutoHarvesterBlock> AUTO_HARVESTER = BLOCKS.register("auto_harvester",
+		() -> new AutoHarvesterBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.STONE)
+			.strength(2.5f, 6.0f)
+			.sound(SoundType.STONE)
+			.noOcclusion()
+			.isViewBlocking((state, level, pos) -> false)
+			.requiresCorrectToolForDrops()));
+
 	/** Tangles string and slime into cobwebs, behind copper-framed glass. */
 	public static final DeferredBlock<TwoInputMachineBlock> STRING_TANGLER = BLOCKS.register("string_tangler",
 		() -> new TwoInputMachineBlock(BlockBehaviour.Properties.of()
@@ -184,6 +199,27 @@ public final class ModBlocks {
 			.strength(1.5f)
 			.sound(SoundType.COPPER)
 			.noLootTable()));
+
+	// ---- Electricity
+	public static final DeferredBlock<ElectricMotorBlock> ELECTRIC_MOTOR = BLOCKS.register("electric_motor",
+		() -> new ElectricMotorBlock(machine().lightLevel(state -> state.getValue(ElectricMotorBlock.POWERED) ? 6 : 0)));
+	public static final DeferredBlock<LavaGeneratorBlock> LAVA_GENERATOR = BLOCKS.register("lava_generator",
+		() -> new LavaGeneratorBlock(machine().lightLevel(state -> state.getValue(LavaGeneratorBlock.LIT) ? 9 : 0)));
+	public static final DeferredBlock<GeothermalPartBlock> GEOTHERMAL_CASING = BLOCKS.register("geothermal_casing",
+		() -> new GeothermalPartBlock(machine(), true));
+	public static final DeferredBlock<GeothermalPartBlock> GEOTHERMAL_CORE = BLOCKS.register("geothermal_core",
+		() -> new GeothermalPartBlock(machine(), false));
+	public static final DeferredBlock<GeothermalControllerBlock> GEOTHERMAL_CONTROLLER = BLOCKS.register("geothermal_controller",
+		() -> new GeothermalControllerBlock(machine().lightLevel(state -> state.getValue(GeothermalControllerBlock.LIT) ? 12 : 0)));
+
+	private static BlockBehaviour.Properties machine() {
+		return BlockBehaviour.Properties.of()
+			.mapColor(MapColor.METAL)
+			.strength(3.5f, 8.0f)
+			.sound(SoundType.NETHERITE_BLOCK)
+			.requiresCorrectToolForDrops()
+			.noOcclusion();
+	}
 
 	private ModBlocks() {}
 }
