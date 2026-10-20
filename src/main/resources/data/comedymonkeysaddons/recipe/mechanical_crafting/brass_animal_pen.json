@@ -1,0 +1,33 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "pattern": [
+    " SBS ",
+    "SEHES",
+    "BHPHB",
+    "SEHES",
+    " SBS "
+  ],
+  "key": {
+    "S": {
+      "item": "create:brass_sheet"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "H": {
+      "item": "minecraft:hay_block"
+    },
+    "P": {
+      "item": "comedymonkeysaddons:animal_pen"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:brass_animal_pen"
+  },
+  "show_notification": true
+}

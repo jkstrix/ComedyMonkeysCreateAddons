@@ -78,6 +78,10 @@ public class CMPonderPlugin implements PonderPlugin {
 		helper.forComponents(ModBlocks.GEOTHERMAL_CONTROLLER.getId(), ModBlocks.GEOTHERMAL_CASING.getId(),
 				ModBlocks.GEOTHERMAL_CORE.getId())
 			.addStoryBoard("geothermal_turbine", ElectricScenes::geothermalTurbine);
+		helper.forComponents(ModBlocks.AUTO_HARVESTER.getId())
+			.addStoryBoard("auto_harvester", FarmScenes::harvester);
+		helper.forComponents(ModBlocks.ANIMAL_PEN.getId(), ModBlocks.BRASS_ANIMAL_PEN.getId(), ModItems.CAPTURE_BOTTLE.getId())
+			.addStoryBoard("animal_pen", FarmScenes::animalPen);
 		if (SableCompat.LOADED)
 			AeronauticsScenes.register(helper);
 	}
@@ -97,7 +101,10 @@ public class CMPonderPlugin implements PonderPlugin {
 			.add(ModBlocks.INCINERATOR.getId())
 			.add(ModBlocks.STRING_TANGLER.getId())
 			.add(ModBlocks.STONE_INFUSER.getId())
-			.add(ModBlocks.TUFF_GENERATOR.getId());
+			.add(ModBlocks.TUFF_GENERATOR.getId())
+			.add(ModBlocks.AUTO_HARVESTER.getId())
+			.add(ModBlocks.ANIMAL_PEN.getId())
+			.add(ModBlocks.BRASS_ANIMAL_PEN.getId());
 		helper.addToTag(CREATE_KINETIC_SOURCES_TAG)
 			.add(ModBlocks.MAGMA_ENGINE.getId())
 			.add(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.getId())

@@ -38,6 +38,8 @@
     "comedymonkeysaddons:geothermal_casing",
     "comedymonkeysaddons:geothermal_core",
     "comedymonkeysaddons:geothermal_controller",
-    "comedymonkeysaddons:auto_harvester"
+    "comedymonkeysaddons:auto_harvester",
+    "comedymonkeysaddons:animal_pen",
+    "comedymonkeysaddons:brass_animal_pen"
   ]
 }

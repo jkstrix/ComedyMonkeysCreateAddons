@@ -40,16 +40,16 @@ public final class ElectricScenes {
 		scene.idle(15);
 		scene.overlay().showText(80)
 			.text("The Lava Generator: a little lava-fired turbine that makes Forge Energy")
-			.pointAt(util.vector().blockSurface(gen, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(gen, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(90);
 
-		scene.world().showSection(util.select().fromTo(2, 1, 0, 2, 1, 1), Direction.SOUTH);
+		scene.world().showSection(util.select().fromTo(2, 1, 4, 2, 1, 3), Direction.NORTH);
 		scene.idle(15);
 		scene.overlay().showText(80)
 			.text("Lava goes in at the middle of its back, by pipe or by the bucket")
-			.pointAt(util.vector().blockSurface(gen, Direction.NORTH))
+			.pointAt(util.vector().blockSurface(gen, Direction.SOUTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(90);
@@ -57,7 +57,7 @@ public final class ElectricScenes {
 		scene.world().modifyBlock(gen, s -> s.setValue(LavaGeneratorBlock.LIT, true), false);
 		scene.overlay().showText(80)
 			.text("It burns 20 mB a second, and its turbine wheel spins behind the glass while it does")
-			.pointAt(util.vector().of(2.5, 1.72, 2.85))
+			.pointAt(util.vector().of(2.5, 1.72, 2.15))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(90);
@@ -102,7 +102,7 @@ public final class ElectricScenes {
 			.attachKeyFrame();
 		scene.idle(90);
 
-		scene.world().showSection(util.select().fromTo(2, 1, 0, 2, 1, 2), Direction.DOWN);
+		scene.world().showSection(util.select().fromTo(2, 1, 4, 2, 1, 2), Direction.DOWN);
 		scene.idle(10);
 		scene.world().modifyBlock(gen, s -> s.setValue(LavaGeneratorBlock.LIT, true), false);
 		scene.world().modifyBlock(motor, s -> s.setValue(ElectricMotorBlock.POWERED, true), false);
@@ -160,11 +160,11 @@ public final class ElectricScenes {
 		scene.idle(5);
 
 		BlockPos core = util.grid().at(3, 2, 3);
-		BlockPos controller = util.grid().at(3, 2, 4);
-		Selection turbine = util.select().fromTo(2, 1, 2, 4, 3, 4);
+		BlockPos controller = util.grid().at(3, 2, 2);
+		Selection turbine = util.select().fromTo(2, 1, 4, 4, 3, 2);
 
 		// Built up a layer at a time, the core first
-		scene.world().showSection(util.select().fromTo(2, 1, 2, 4, 1, 4), Direction.DOWN);
+		scene.world().showSection(util.select().fromTo(2, 1, 4, 4, 1, 2), Direction.DOWN);
 		scene.idle(15);
 		scene.overlay().showText(80)
 			.text("The Geothermal Turbine is a 3x3x3 machine. Start with a layer of Geothermal Casings...")
@@ -182,10 +182,10 @@ public final class ElectricScenes {
 			.attachKeyFrame();
 		scene.idle(80);
 
-		scene.world().showSection(util.select().fromTo(2, 2, 2, 4, 2, 3).add(util.select().position(2, 2, 4))
-			.add(util.select().position(4, 2, 4)), Direction.DOWN);
+		scene.world().showSection(util.select().fromTo(2, 2, 4, 4, 2, 3).add(util.select().position(2, 2, 2))
+			.add(util.select().position(4, 2, 2)), Direction.DOWN);
 		scene.idle(10);
-		scene.world().showSection(util.select().fromTo(2, 3, 2, 4, 3, 4), Direction.DOWN);
+		scene.world().showSection(util.select().fromTo(2, 3, 4, 4, 3, 2), Direction.DOWN);
 		scene.idle(15);
 		scene.overlay().showText(70)
 			.text("...and casings all round it")
@@ -193,11 +193,11 @@ public final class ElectricScenes {
 			.placeNearTarget();
 		scene.idle(80);
 
-		scene.world().showSection(util.select().position(controller), Direction.NORTH);
+		scene.world().showSection(util.select().position(controller), Direction.SOUTH);
 		scene.idle(15);
 		scene.overlay().showText(80)
 			.text("The Controller goes in the middle of the front, facing you")
-			.pointAt(util.vector().blockSurface(controller, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(controller, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(90);
@@ -207,13 +207,13 @@ public final class ElectricScenes {
 		scene.effects().indicateSuccess(controller);
 		scene.overlay().showText(80)
 			.text("Within a second it forms into one big machine")
-			.pointAt(util.vector().blockSurface(controller, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(controller, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(90);
 
 		scene.world().showSection(util.select().fromTo(0, 1, 3, 1, 1, 3), Direction.EAST);
-		scene.world().showSection(util.select().fromTo(3, 1, 0, 3, 1, 1), Direction.SOUTH);
+		scene.world().showSection(util.select().fromTo(3, 1, 6, 3, 1, 5), Direction.NORTH);
 		scene.idle(15);
 		scene.world().modifyBlockEntityNBT(util.select().position(controller), GeothermalControllerBlockEntity.class, nbt -> {
 			nbt.put("Lava", fluid("minecraft:lava", 12000));
@@ -230,7 +230,7 @@ public final class ElectricScenes {
 		ParticleEmitter steam = scene.effects().simpleParticleEmitter(ParticleTypes.CLOUD, new Vec3(0, 0.08, 0));
 		ParticleEmitter flame = scene.effects().simpleParticleEmitter(ParticleTypes.FLAME, new Vec3(-0.01, 0.01, 0));
 		scene.effects().emitParticles(util.vector().of(3.5, 3.97, 3.5), steam, 0.6f, 160);
-		scene.effects().emitParticles(util.vector().of(1.98, 2.35, 3.4), flame, 0.4f, 160);
+		scene.effects().emitParticles(util.vector().of(1.98, 2.35, 3.6), flame, 0.4f, 160);
 		scene.overlay().showText(90)
 			.text("Lava boils the water to steam that turns the turbine: 46,080 FE a tick, ten times as much from each bucket of lava as a Lava Generator")
 			.pointAt(util.vector().topOf(core).add(0, 1, 0))

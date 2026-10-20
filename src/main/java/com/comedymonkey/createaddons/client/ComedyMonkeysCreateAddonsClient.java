@@ -27,6 +27,9 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import com.comedymonkey.createaddons.content.chest.ChestTier;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
@@ -46,6 +49,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		modBus.addListener(this::clientSetup);
 		modBus.addListener(this::registerScreens);
 		modBus.addListener(this::registerModels);
+		modBus.addListener(this::registerClientExtensions);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ChestSortButton::onScreenInit);
 		if (MagmaEngineSimModels.LOADED)
 			modBus.addListener(MagmaEngineSimModels::modifyBakingResult);
@@ -63,6 +67,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.register(ModMenus.LARGE_UPGRADED_CHEST.get(), LargeUpgradedChestScreen::new);
 		event.register(ModMenus.CHEST_UPGRADE.get(), ChestUpgradeScreen::new);
 		event.register(ModMenus.AUTO_HARVESTER.get(), AutoHarvesterScreen::new);
+		event.register(ModMenus.ANIMAL_PEN.get(), AnimalPenScreen::new);
 	}
 
 	private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -71,6 +76,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.PRESSURE_CRUCIBLE.get(), PressureCrucibleRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.COBBLE_GENERATOR.get(), CobbleGeneratorRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.AUTO_HARVESTER.get(), AutoHarvesterRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.ANIMAL_PEN.get(), AnimalPenRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.MAGMA_ENGINE.get(), MagmaEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ELECTRIC_MOTOR.get(), ElectricRenderers.Motor::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);
@@ -98,6 +104,20 @@ public class ComedyMonkeysCreateAddonsClient {
 			MagmaEngineSimModels.registerModels(event);
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerModels(event);
+	}
+
+	/** A Bottled Animal draws its animal inside the jar. */
+	private void registerClientExtensions(RegisterClientExtensionsEvent event) {
+		event.registerItem(new IClientItemExtensions() {
+			private BottledAnimalRenderer renderer;
+
+			@Override
+			public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+				if (renderer == null)
+					renderer = new BottledAnimalRenderer();
+				return renderer;
+			}
+		}, ModItems.BOTTLED_ANIMAL.get());
 	}
 
 	private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {

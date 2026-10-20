@@ -32,6 +32,10 @@ public final class ModAdvancements {
 	public static final String PIPED_ENGINE_FUEL = "piped_engine_fuel";
 	public static final String TURBINE_FORMED = "turbine_formed";
 	public static final String MOTOR_FULL_POWER = "motor_full_power";
+	public static final String HARVESTER_HARVEST = "harvester_harvest";
+	public static final String PEN_CULL = "pen_cull";
+	public static final String PEN_FULL = "pen_full";
+	public static final String BRASS_PEN_FULL = "brass_pen_full";
 
 	/** How close a player has to be to machinery working on its own to earn its advancements. */
 	public static final int NEARBY = 16;

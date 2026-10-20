@@ -1,0 +1,45 @@
+{
+  "parent": "comedymonkeysaddons:harvester_harvest",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:auto_harvester"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.harvester_bountiful"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.harvester_bountiful.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:auto_harvester",
+            "predicates": {
+              "minecraft:enchantments": [
+                {
+                  "enchantments": "comedymonkeysaddons:bountiful",
+                  "levels": {
+                    "min": 3
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

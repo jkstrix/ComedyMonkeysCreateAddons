@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AFA",
+    "FCF",
+    "AHA"
+  ],
+  "key": {
+    "A": {
+      "item": "create:andesite_alloy"
+    },
+    "F": {
+      "tag": "minecraft:wooden_fences"
+    },
+    "C": {
+      "item": "create:andesite_casing"
+    },
+    "H": {
+      "item": "minecraft:hay_block"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:animal_pen"
+  }
+}

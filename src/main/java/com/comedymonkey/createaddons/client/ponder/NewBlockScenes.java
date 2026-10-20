@@ -32,43 +32,43 @@ public final class NewBlockScenes {
 
 		BlockPos basalt = util.grid().at(1, 2, 2);
 		BlockPos blackstone = util.grid().at(3, 2, 2);
-		scene.world().showSection(util.select().fromTo(1, 1, 2, 3, 1, 3), Direction.DOWN);
+		scene.world().showSection(util.select().fromTo(1, 1, 2, 3, 1, 1), Direction.DOWN);
 		scene.idle(5);
 		scene.world().showSection(util.select().position(basalt), Direction.DOWN);
 		scene.idle(15);
 
 		scene.overlay().showText(80)
 			.text("Basalt and Blackstone Generators work just like the Cobblestone ones, only here lava meets a block of blue ice")
-			.pointAt(util.vector().blockSurface(basalt, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(basalt, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(90);
 
-		scene.world().showSection(util.select().position(1, 2, 1), Direction.SOUTH);
+		scene.world().showSection(util.select().position(1, 2, 3), Direction.NORTH);
 		scene.idle(10);
-		scene.world().setKineticSpeed(util.select().fromTo(1, 2, 1, 1, 2, 2), 64);
+		scene.world().setKineticSpeed(util.select().fromTo(1, 2, 3, 1, 2, 2), 64);
 		running(scene, basalt);
 		scene.overlay().showText(90)
 			.text("The Basalt Generator wears ice-blue trim and is crafted with Soul Soil. Basalt is soft, so at full speed it comes twice as fast")
-			.pointAt(util.vector().blockSurface(basalt, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(basalt, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(100);
 
 		scene.world().showSection(util.select().position(blackstone), Direction.DOWN);
 		scene.idle(10);
-		scene.world().showSection(util.select().position(3, 2, 1), Direction.SOUTH);
+		scene.world().showSection(util.select().position(3, 2, 3), Direction.NORTH);
 		scene.idle(10);
-		scene.world().setKineticSpeed(util.select().fromTo(3, 2, 1, 3, 2, 2), 64);
+		scene.world().setKineticSpeed(util.select().fromTo(3, 2, 3, 3, 2, 2), 64);
 		running(scene, blackstone);
 		scene.overlay().showText(90)
 			.text("The Blackstone Generator is all black and gold, and is crafted with a block of Blackstone")
-			.pointAt(util.vector().blockSurface(blackstone, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(blackstone, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(100);
 
-		scene.overlay().showControls(util.vector().blockSurface(util.grid().at(3, 1, 3), Direction.UP), Pointing.DOWN, 50)
+		scene.overlay().showControls(util.vector().blockSurface(util.grid().at(3, 1, 1), Direction.UP), Pointing.DOWN, 50)
 			.withItem(new ItemStack(Items.BLACKSTONE));
 		scene.overlay().showText(80)
 			.text("Power goes in the back and the stone comes out through hoppers, chutes, funnels or pipes. Full or switched off by redstone, they rest")
@@ -93,9 +93,9 @@ public final class NewBlockScenes {
 	}
 
 	private static void swap(CreateSceneBuilder scene, SceneBuildingUtil util, BlockPos gen, Block block) {
-		scene.world().setBlock(gen, block.defaultBlockState().setValue(CobbleGeneratorBlock.FACING, Direction.SOUTH), true);
+		scene.world().setBlock(gen, block.defaultBlockState().setValue(CobbleGeneratorBlock.FACING, Direction.NORTH), true);
 		scene.idle(5);
-		scene.world().setKineticSpeed(util.select().fromTo(gen.north(), gen), 64);
+		scene.world().setKineticSpeed(util.select().fromTo(gen.south(), gen), 64);
 		running(scene, gen);
 		scene.idle(5);
 	}

@@ -5,6 +5,7 @@ import com.comedymonkey.createaddons.content.chest.ChestTier;
 import com.comedymonkey.createaddons.content.chest.ChestUpgradeItem;
 import com.comedymonkey.createaddons.content.chest.UpgradedBarrelItem;
 import com.comedymonkey.createaddons.content.chest.UpgradedChestItem;
+import com.comedymonkey.createaddons.content.pen.BottledAnimalItem;
 import com.comedymonkey.createaddons.content.wellspring.WellspringUpgrade;
 import com.comedymonkey.createaddons.content.wellspring.WellspringUpgradeItem;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
@@ -48,6 +49,13 @@ public final class ModItems {
 	public static final DeferredItem<BlockItem> WIRELESS_ANDESITE_BLACKSTONE_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.WIRELESS_ANDESITE_BLACKSTONE_GENERATOR);
 	public static final DeferredItem<BlockItem> WIRELESS_BRASS_BLACKSTONE_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.WIRELESS_BRASS_BLACKSTONE_GENERATOR);
 	public static final DeferredItem<BlockItem> AUTO_HARVESTER = ITEMS.registerSimpleBlockItem(ModBlocks.AUTO_HARVESTER);
+	public static final DeferredItem<BlockItem> ANIMAL_PEN = ITEMS.registerSimpleBlockItem(ModBlocks.ANIMAL_PEN);
+	public static final DeferredItem<BlockItem> BRASS_ANIMAL_PEN = ITEMS.registerSimpleBlockItem(ModBlocks.BRASS_ANIMAL_PEN);
+	/** Catches an animal for the Animal Pens; given back when the animal is let out. Stacks while empty. */
+	public static final DeferredItem<Item> CAPTURE_BOTTLE = ITEMS.registerSimpleItem("capture_bottle");
+	/** An animal caught in a Capture Bottle, for the Animal Pens. One a stack: each holds its own animal. */
+	public static final DeferredItem<BottledAnimalItem> BOTTLED_ANIMAL = ITEMS.register("bottled_animal",
+		() -> new BottledAnimalItem(new Item.Properties().stacksTo(1)));
 
 	public static final DeferredItem<BlockItem> INCINERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.INCINERATOR);
 	public static final DeferredItem<BlockItem> STRING_TANGLER = ITEMS.registerSimpleBlockItem(ModBlocks.STRING_TANGLER);

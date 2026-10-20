@@ -8,7 +8,8 @@ import com.comedymonkey.createaddons.compat.sable.AeronauticsContent;
 import com.comedymonkey.createaddons.compat.sable.SableCompat;
 import com.comedymonkey.createaddons.content.cobblegen.CobbleGeneratorBlock;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineBlock;
-import com.comedymonkey.createaddons.content.harvester.Bountiful;
+import com.comedymonkey.createaddons.content.MachineEnchantments;
+import com.comedymonkey.createaddons.content.pen.AnimalCapture;
 import com.comedymonkey.createaddons.content.incinerator.IncineratorBlock;
 import com.simibubi.create.api.boiler.BoilerHeater;
 import com.comedymonkey.createaddons.content.chest.ChestEvents;
@@ -77,8 +78,10 @@ public class ComedyMonkeysCreateAddons {
 
 		NeoForge.EVENT_BUS.addListener(ChestEvents::onRightClickBlock);
 		NeoForge.EVENT_BUS.addListener(ChestEvents::onBlockBreak);
-		// Bountiful books from Librarians
-		NeoForge.EVENT_BUS.addListener(Bountiful::addTrades);
+		// Bountiful and Fruitful books from Librarians
+		NeoForge.EVENT_BUS.addListener(MachineEnchantments::addTrades);
+		// Capture Bottles catch animals for the Animal Pens
+		NeoForge.EVENT_BUS.addListener(AnimalCapture::onEntityInteract);
 		if (ModList.get().isLoaded(PipezBlazeBurnerCompat.PIPEZ_ID)) {
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onRightClickBlock);
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onBlockBreak);
@@ -106,6 +109,11 @@ public class ComedyMonkeysCreateAddons {
 		// The harvest out from any side; a seed or sapling in, while it's empty
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.AUTO_HARVESTER.get(),
 			(be, side) -> be.getAutomationHandler());
+		// Food in and drops out from any side; milk out to pipes
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.ANIMAL_PEN.get(),
+			(be, side) -> be.getAutomationHandler());
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.ANIMAL_PEN.get(),
+			(be, side) -> be.getMilkHandler());
 		// Dust in from any side, results out from any side
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.PRESSURE_CRUCIBLE.get(),
 			(be, side) -> be.getAutomationHandler());
@@ -196,6 +204,10 @@ public class ComedyMonkeysCreateAddons {
 			}
 
 			registerCreateTooltip(ModItems.AUTO_HARVESTER.get());
+			registerCreateTooltip(ModItems.ANIMAL_PEN.get());
+			registerCreateTooltip(ModItems.BRASS_ANIMAL_PEN.get());
+			registerCreateTooltip(ModItems.BOTTLED_ANIMAL.get());
+			registerCreateTooltip(ModItems.CAPTURE_BOTTLE.get());
 			registerCreateTooltip(ModItems.INCINERATOR.get());
 			registerCreateTooltip(ModItems.STRING_TANGLER.get());
 			registerCreateTooltip(ModItems.STONE_INFUSER.get());

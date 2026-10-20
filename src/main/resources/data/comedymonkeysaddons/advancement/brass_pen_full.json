@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:brass_animal_pen",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:brass_animal_pen"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.brass_pen_full"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.brass_pen_full.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "brass_pen_full"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

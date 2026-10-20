@@ -2,7 +2,7 @@ package com.comedymonkey.createaddons.content.chest;
 
 import com.comedymonkey.createaddons.registry.ModMenus;
 
-import org.anti_ad.mc.ipn.api.IPNPlayerSideOnly;
+import org.anti_ad.mc.ipn.api.IPNIgnore;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -15,10 +15,11 @@ import net.minecraft.world.item.ItemStack;
 
 /** The 108-slot diamond double chest: 12 columns by 9 rows, with the player inventory centred underneath. */
 /*
- * Inventory Profiles Next sorts by simulating clicks and assumes vanilla stack sizes, which oversized stacks break,
- * so it only manages the player's side here; the chest has its own Sort button (see ChestSorting).
+ * Inventory Profiles Next sorts by simulating clicks and assumes vanilla stack sizes, which oversized stacks break;
+ * the chest has its own Sort button (see ChestSorting). IPN still put its sort buttons on the chest side with
+ * @IPNPlayerSideOnly, so, like the single chest, it's told to ignore this menu outright.
  */
-@IPNPlayerSideOnly
+@IPNIgnore
 public class LargeUpgradedChestMenu extends AbstractContainerMenu implements UpgradedChestView {
 	public static final int COLUMNS = 12;
 	public static final int ROWS = 9;

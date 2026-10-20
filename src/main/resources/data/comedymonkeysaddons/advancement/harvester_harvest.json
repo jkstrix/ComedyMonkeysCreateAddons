@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:auto_harvester",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:auto_harvester"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.harvester_harvest"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.harvester_harvest.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "harvester_harvest"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

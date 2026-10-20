@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Locale;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
+import com.comedymonkey.createaddons.content.FixedStress;
+import com.comedymonkey.createaddons.content.MachineEnchantments;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 
@@ -91,6 +94,20 @@ public class AutoHarvesterBlockEntity extends KineticBlockEntity implements Clea
 		return !plant.isEmpty();
 	}
 
+	/** Ponder only: this planted, grown this far (0 to 1), not harvesting. */
+	public void setPonderPlant(ItemStack stack, float grown) {
+		plant = stack.copyWithCount(1);
+		growTicks = computeGrowTicks();
+		growth = Math.round(grown * growTicks);
+		harvestTick = -1;
+	}
+
+	/** Ponder only: fully grown, and the head starts its sweep now. */
+	public void startPonderHarvest() {
+		growth = growTicks;
+		harvestTick = 0;
+	}
+
 	/** What's planted (one item), or empty. */
 	public ItemStack getPlant() {
 		return plant;
@@ -135,11 +152,12 @@ public class AutoHarvesterBlockEntity extends KineticBlockEntity implements Clea
 		float base = 20 * (loaded ? seconds.get() : seconds.getDefault());
 		if (kind() == PlantKind.CROP)
 			base *= HarvesterPlants.growthFactor(plant);
-		return Math.max(20, Math.round(base / Bountiful.speedMultiplier(getBountifulLevel())));
+		return Math.max(20, Math.round(base / MachineEnchantments.speedMultiplier(getBountifulLevel(),
+			CMConfig.SERVER.harvesterBountifulBonus)));
 	}
 
 	public int getBountifulLevel() {
-		return Bountiful.levelIn(enchantments);
+		return MachineEnchantments.levelIn(enchantments, MachineEnchantments.BOUNTIFUL);
 	}
 
 	// ---------------------------------------------------------------- running
@@ -194,6 +212,7 @@ public class AutoHarvesterBlockEntity extends KineticBlockEntity implements Clea
 			}
 		level.playSound(null, worldPosition, kind() == PlantKind.TREE ? SoundEvents.WOOD_BREAK : SoundEvents.CROP_BREAK,
 			SoundSource.BLOCKS, 0.6f, 0.9f + level.random.nextFloat() * 0.2f);
+		ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.HARVESTER_HARVEST, plant, 0);
 		blocked = !pending.isEmpty();
 		setChanged();
 		sendData();
@@ -245,8 +264,7 @@ public class AutoHarvesterBlockEntity extends KineticBlockEntity implements Clea
 
 	/** Impact per RPM that comes to the configured SU at the current speed; none while idle. */
 	private float wantedImpact() {
-		float speed = Math.abs(getTheoreticalSpeed());
-		return isIdle() || speed == 0 ? 0 : stressSU() / speed;
+		return FixedStress.impact(this, stressSU(), isIdle());
 	}
 
 	private static float stressSU() {
@@ -260,22 +278,10 @@ public class AutoHarvesterBlockEntity extends KineticBlockEntity implements Clea
 			keepStressFixed();
 	}
 
-	/**
-	 * The network works out our stress as the impact it was last given times our current speed, and it isn't always
-	 * given a new impact when the speed changes (Create attaches a block to a network before or after setting its
-	 * speed, depending on how the power came back). So whenever the impact it holds isn't the one for the current
-	 * speed, it's corrected; otherwise a harvester re-powered at a different speed reads as overstressed.
-	 */
+	/** Keeps the network's copy of our impact right for the current speed (see {@link FixedStress#keep}). */
 	private void keepStressFixed() {
-		if (!hasNetwork())
-			return;
-		var network = getOrCreateNetwork();
-		Float held = network.members.get(this);
-		float wanted = wantedImpact();
-		if (held != null && Math.abs(held - wanted) > 1e-6f) {
-			network.updateStressFor(this, calculateStressApplied());
+		if (FixedStress.keep(this, wantedImpact()))
 			sendData();
-		}
 	}
 
 	// ---------------------------------------------------------------- what the renderer shows
@@ -520,6 +526,7 @@ public class AutoHarvesterBlockEntity extends KineticBlockEntity implements Clea
 			growTicks = computeGrowTicks();
 	}
 
+	/** Hands out a copy, so shift-clicking the plant out still goes through {@link #unplant}. */
 	private class PlanterHandler implements IItemHandlerModifiable {
 		@Override
 		public int getSlots() {
@@ -528,7 +535,7 @@ public class AutoHarvesterBlockEntity extends KineticBlockEntity implements Clea
 
 		@Override
 		public ItemStack getStackInSlot(int slot) {
-			return plant;
+			return plant.copy();
 		}
 
 		@Override

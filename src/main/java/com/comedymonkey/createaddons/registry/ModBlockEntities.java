@@ -7,6 +7,7 @@ import com.comedymonkey.createaddons.content.cobblegen.CobbleGeneratorBlockEntit
 import com.comedymonkey.createaddons.content.crucible.PressureCrucibleBlockEntity;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineBlockEntity;
 import com.comedymonkey.createaddons.content.harvester.AutoHarvesterBlockEntity;
+import com.comedymonkey.createaddons.content.pen.AnimalPenBlockEntity;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity;
 import com.comedymonkey.createaddons.content.electric.GeothermalCasingBlockEntity;
 import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlockEntity;
@@ -57,6 +58,12 @@ public final class ModBlockEntities {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AutoHarvesterBlockEntity>> AUTO_HARVESTER =
 		BLOCK_ENTITY_TYPES.register("auto_harvester",
 			() -> BlockEntityType.Builder.of(AutoHarvesterBlockEntity::new, ModBlocks.AUTO_HARVESTER.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AnimalPenBlockEntity>> ANIMAL_PEN =
+		BLOCK_ENTITY_TYPES.register("animal_pen",
+			() -> BlockEntityType.Builder.of(AnimalPenBlockEntity::new, ModBlocks.ANIMAL_PEN.get(),
+				ModBlocks.BRASS_ANIMAL_PEN.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<IncineratorBlockEntity>> INCINERATOR =

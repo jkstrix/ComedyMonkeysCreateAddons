@@ -33,14 +33,14 @@ public final class CobbleGeneratorScenes {
 		scene.idle(5);
 
 		BlockPos gen = util.grid().at(2, 2, 2);
-		BlockPos motor = util.grid().at(2, 2, 1);
+		BlockPos motor = util.grid().at(2, 2, 3);
 		BlockPos hopper = util.grid().at(2, 1, 2);
 		BlockPos lever = util.grid().at(1, 2, 2);
-		BlockPos link = util.grid().at(4, 1, 4);
-		BlockPos linkLever = util.grid().at(3, 1, 4);
-		Selection kinetics = util.select().fromTo(2, 2, 1, 2, 2, 2);
-		Vec3 front = util.vector().blockSurface(gen, Direction.SOUTH);
-		Vec3 back = util.vector().blockSurface(gen, Direction.NORTH);
+		BlockPos link = util.grid().at(4, 1, 0);
+		BlockPos linkLever = util.grid().at(3, 1, 0);
+		Selection kinetics = util.select().fromTo(2, 2, 3, 2, 2, 2);
+		Vec3 front = util.vector().blockSurface(gen, Direction.NORTH);
+		Vec3 back = util.vector().blockSurface(gen, Direction.SOUTH);
 		Vec3 top = util.vector().topOf(gen);
 
 		// Hopper and chest first, so the generator has something to sit on
@@ -58,7 +58,7 @@ public final class CobbleGeneratorScenes {
 		scene.idle(80);
 
 		// text_2: power from the back
-		scene.world().showSection(util.select().position(motor), Direction.SOUTH);
+		scene.world().showSection(util.select().position(motor), Direction.NORTH);
 		scene.idle(10);
 		scene.world().setKineticSpeed(kinetics, 64);
 		scene.overlay().showText(80)
@@ -77,7 +77,7 @@ public final class CobbleGeneratorScenes {
 		scene.idle(100);
 
 		// text_4: needs collecting
-		scene.overlay().showControls(util.vector().blockSurface(hopper, Direction.SOUTH), Pointing.DOWN, 40)
+		scene.overlay().showControls(util.vector().blockSurface(hopper, Direction.NORTH), Pointing.DOWN, 40)
 			.withItem(new ItemStack(Items.COBBLESTONE));
 		scene.overlay().showText(80)
 			.text("It won't just hand it over, though. Hoppers, chutes, funnels or pipes have to come and get it")
@@ -140,7 +140,7 @@ public final class CobbleGeneratorScenes {
 			.attachKeyFrame();
 		scene.idle(100);
 
-		scene.world().showSection(util.select().fromTo(3, 1, 4, 4, 1, 4), Direction.DOWN);
+		scene.world().showSection(util.select().fromTo(3, 1, 0, 4, 1, 0), Direction.DOWN);
 		scene.idle(15);
 		scene.world().modifyBlock(linkLever, s -> s.setValue(LeverBlock.POWERED, true), false);
 		scene.world().modifyBlock(link, s -> s.setValue(CobbleGeneratorBlock.POWERED, true), false);
@@ -161,7 +161,7 @@ public final class CobbleGeneratorScenes {
 	}
 
 	private static void swap(CreateSceneBuilder scene, BlockPos gen, BlockState state) {
-		scene.world().setBlock(gen, state.setValue(CobbleGeneratorBlock.FACING, Direction.SOUTH), true);
+		scene.world().setBlock(gen, state.setValue(CobbleGeneratorBlock.FACING, Direction.NORTH), true);
 		scene.idle(5);
 		state(scene, gen, 12, false);
 	}

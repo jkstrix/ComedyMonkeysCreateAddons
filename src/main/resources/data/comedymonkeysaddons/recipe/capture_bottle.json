@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "N",
+    "B"
+  ],
+  "key": {
+    "N": {
+      "item": "create:copper_nugget"
+    },
+    "B": {
+      "item": "minecraft:glass_bottle"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:capture_bottle"
+  }
+}

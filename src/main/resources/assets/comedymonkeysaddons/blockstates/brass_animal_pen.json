@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/brass_animal_pen"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/brass_animal_pen",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/brass_animal_pen",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/brass_animal_pen",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "parent": "comedymonkeysaddons:animal_pen",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:animal_pen"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.pen_fruitful"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.pen_fruitful.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:animal_pen",
+            "predicates": {
+              "minecraft:enchantments": [
+                {
+                  "enchantments": "comedymonkeysaddons:fruitful",
+                  "levels": {
+                    "min": 3
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

@@ -53,17 +53,17 @@ public final class MachineScenes {
 
 		scene.overlay().showText(70)
 			.text("The String Tangler twists string and slime into cobwebs")
-			.pointAt(util.vector().blockSurface(machine, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(machine, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(80);
 
-		scene.world().showSection(util.select().position(2, 2, 1), Direction.SOUTH);
+		scene.world().showSection(util.select().position(2, 2, 3), Direction.NORTH);
 		scene.idle(10);
-		scene.world().setKineticSpeed(util.select().fromTo(2, 2, 1, 2, 2, 2), 64);
+		scene.world().setKineticSpeed(util.select().fromTo(2, 2, 3, 2, 2, 2), 64);
 		scene.overlay().showText(70)
 			.text("Give it rotation through the shaft hole in its back")
-			.pointAt(util.vector().blockSurface(machine, Direction.NORTH))
+			.pointAt(util.vector().blockSurface(machine, Direction.SOUTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(80);
@@ -83,7 +83,7 @@ public final class MachineScenes {
 			new ItemStack(Items.COBWEB), 400);
 		scene.overlay().showText(90)
 			.text("Watch the strands spin, tangle and knot themselves up into a web")
-			.pointAt(util.vector().blockSurface(machine, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(machine, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(100);
@@ -109,22 +109,22 @@ public final class MachineScenes {
 
 		scene.overlay().showText(80)
 			.text("The Stone Infuser turns cobblestone into Create's ore-bearing stones")
-			.pointAt(util.vector().blockSurface(machine, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(machine, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(90);
 
-		scene.world().showSection(util.select().position(2, 2, 1), Direction.SOUTH);
+		scene.world().showSection(util.select().position(2, 2, 3), Direction.NORTH);
 		scene.world().showSection(util.select().position(2, 3, 2), Direction.DOWN);
 		scene.idle(10);
-		scene.world().setKineticSpeed(util.select().fromTo(2, 2, 1, 2, 2, 2), 64);
+		scene.world().setKineticSpeed(util.select().fromTo(2, 2, 3, 2, 2, 2), 64);
 		ItemStack zinc = new ItemStack(create("zinc_nugget"), 9);
 		scene.overlay().showControls(util.vector().topOf(util.grid().at(2, 3, 2)), Pointing.DOWN, 50).withItem(zinc);
 		state(scene, machine, new ItemStack(Items.COBBLESTONE, 8), zinc.copyWithCount(36), ItemStack.EMPTY,
 			new ItemStack(create("asurine")), 160);
 		scene.overlay().showText(90)
 			.text("Power it through its back and feed it cobblestone and nine nuggets for each stone. Zinc nuggets make asurine...")
-			.pointAt(util.vector().blockSurface(machine, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(machine, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(100);
@@ -133,7 +133,7 @@ public final class MachineScenes {
 			{create("copper_nugget"), create("veridium")}};
 		scene.overlay().showText(110)
 			.text("...iron nuggets make crimsite, gold makes ochrum and copper makes veridium")
-			.pointAt(util.vector().blockSurface(machine, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(machine, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		for (Item[] pair : stones) {
@@ -166,19 +166,19 @@ public final class MachineScenes {
 		scene.idle(5);
 		scene.world().showSection(util.select().position(gen), Direction.DOWN);
 		scene.idle(15);
-		scene.world().showSection(util.select().position(2, 2, 1), Direction.SOUTH);
+		scene.world().showSection(util.select().position(2, 2, 3), Direction.NORTH);
 		scene.idle(10);
-		scene.world().setKineticSpeed(util.select().fromTo(2, 2, 1, 2, 2, 2), 64);
+		scene.world().setKineticSpeed(util.select().fromTo(2, 2, 3, 2, 2, 2), 64);
 		scene.world().modifyBlockEntity(gen, CobbleGeneratorBlockEntity.class, be -> be.setPonderState(12, false));
 
 		scene.overlay().showText(90)
 			.text("The Tuff Generator works just like a Cobblestone Generator, but lava meets water over a bed of gravel, and out comes tuff")
-			.pointAt(util.vector().blockSurface(gen, Direction.SOUTH))
+			.pointAt(util.vector().blockSurface(gen, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(100);
 
-		scene.overlay().showControls(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.SOUTH), Pointing.DOWN, 40)
+		scene.overlay().showControls(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.NORTH), Pointing.DOWN, 40)
 			.withItem(new ItemStack(Items.TUFF));
 		scene.overlay().showText(90)
 			.text("Power it from the back and collect from any side. Full, or switched off by redstone, it rests and uses no stress")
@@ -188,9 +188,9 @@ public final class MachineScenes {
 		scene.idle(100);
 
 		scene.world().setBlock(gen, ModBlocks.WIRELESS_TUFF_GENERATOR.get().defaultBlockState()
-			.setValue(CobbleGeneratorBlock.FACING, Direction.SOUTH).setValue(CobbleGeneratorBlock.POWERED, false), true);
+			.setValue(CobbleGeneratorBlock.FACING, Direction.NORTH).setValue(CobbleGeneratorBlock.POWERED, false), true);
 		scene.idle(5);
-		scene.world().setKineticSpeed(util.select().fromTo(2, 2, 1, 2, 2, 2), 64);
+		scene.world().setKineticSpeed(util.select().fromTo(2, 2, 3, 2, 2, 2), 64);
 		scene.world().modifyBlockEntity(gen, CobbleGeneratorBlockEntity.class, be -> be.setPonderState(12, false));
 		scene.overlay().showText(90)
 			.text("Craft it with a Transmitter to make it Wireless, and switch it off from anywhere on its frequency")

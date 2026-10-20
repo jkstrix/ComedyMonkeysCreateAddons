@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:animal_pen",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:animal_pen"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.pen_cull"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.pen_cull.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "pen_cull"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

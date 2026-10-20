@@ -7,6 +7,7 @@ import com.comedymonkey.createaddons.content.cobblegen.GeneratorProduct;
 import com.comedymonkey.createaddons.content.crucible.PressureCrucibleBlock;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineBlock;
 import com.comedymonkey.createaddons.content.harvester.AutoHarvesterBlock;
+import com.comedymonkey.createaddons.content.pen.AnimalPenBlock;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlock;
 import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlock;
 import com.comedymonkey.createaddons.content.electric.GeothermalPartBlock;
@@ -143,6 +144,13 @@ public final class ModBlocks {
 			.noOcclusion()
 			.isViewBlocking((state, level, pos) -> false)
 			.requiresCorrectToolForDrops()));
+
+	/** Keeps one captured animal and breeds it up, at a fixed stress. */
+	public static final DeferredBlock<AnimalPenBlock> ANIMAL_PEN = BLOCKS.register("animal_pen",
+		() -> new AnimalPenBlock(BlockBehaviour.Properties.ofFullCopy(AUTO_HARVESTER.get()), false));
+	/** Holds four times as many animals. */
+	public static final DeferredBlock<AnimalPenBlock> BRASS_ANIMAL_PEN = BLOCKS.register("brass_animal_pen",
+		() -> new AnimalPenBlock(BlockBehaviour.Properties.ofFullCopy(BRASS_COBBLE_GENERATOR.get()).lightLevel(state -> 0), true));
 
 	/** Tangles string and slime into cobwebs, behind copper-framed glass. */
 	public static final DeferredBlock<TwoInputMachineBlock> STRING_TANGLER = BLOCKS.register("string_tangler",

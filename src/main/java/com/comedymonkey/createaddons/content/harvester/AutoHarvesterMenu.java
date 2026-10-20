@@ -3,6 +3,8 @@ package com.comedymonkey.createaddons.content.harvester;
 import com.comedymonkey.createaddons.registry.ModBlocks;
 import com.comedymonkey.createaddons.registry.ModMenus;
 
+import org.anti_ad.mc.ipn.api.IPNIgnore;
+
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -13,6 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 /** Wrench screen: the planter slot, the nine harvest slots (take only) and the player's inventory. */
+/* Inventory Profiles Next's sorting would shuffle these machine slots (and can't handle the pen's big food stack). */
+@IPNIgnore
 public class AutoHarvesterMenu extends AbstractContainerMenu {
 	public static final int PLANTER_X = 26, PLANTER_Y = 36;
 	public static final int OUTPUT_X = 80, OUTPUT_Y = 18;

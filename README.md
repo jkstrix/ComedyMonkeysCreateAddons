@@ -2,16 +2,19 @@
 
 A NeoForge add-on for **Create** (Minecraft 1.21.1). Mod id: `comedymonkeysaddons`.
 
-- **Fluid Wellspring**: an upgradeable Create-style tank that generates water or lava.
-- **Chest Upgrades**: Copper, Iron, Gold and Diamond upgrades that raise a chest's or barrel's stack size (Diamond adds slots too).
-- **Pressure Crucible**: presses Emerald Dust and Netherite Dust (rare drops from crushing cobblestone and netherrack) into Emeralds and Netherite Scrap.
-- **Cobblestone, Basalt, Blackstone and Tuff Generators**: one-block stone generators, powered by rotation.
-- **Magma Engine**: a lava-burning engine with four Portable Engines' worth of power.
+- **Fluid Wellspring**: an upgradeable Create-style tank that generates water, lava, honey or chocolate.
+- **Chest Upgrades**: Copper, Iron, Gold, Diamond and Netherite upgrades that raise a chest's or barrel's stack size (Diamond and Netherite add slots too), with a sort button.
+- **Pressure Crucible**: presses Emerald, Netherite and Quartz Dust (rare drops from crushing cobblestone, netherrack and blackstone) into Emeralds, Netherite Scrap and Nether Quartz, and makes glass, stone, amethyst, obsidian and diamonds.
+- **Cobblestone, Basalt, Blackstone and Tuff Generators**: one-block stone generators powered by rotation, in Andesite, Brass and Wireless versions.
+- **Auto Harvester**: a Create-style botany pot that grows and harvests any crop or sapling (modded crops too) at a fixed stress, sped up by the new **Bountiful** enchantment from Librarians.
+- **Animal Pen** and **Brass Animal Pen**: catch one animal in a **Capture Bottle** and breed a whole herd of it (128 or 512) in one block, with vanilla breeding and growing-up times, sped up by the new **Fruitful** enchantment.
+- **Magma Engine** and **Supercharged Magma Engine**: lava-burning engines with four and eight Portable Engines' worth of power.
 - **String Tangler** (cobwebs from string and slime) and **Stone Infuser** (Create's ore-bearing stones from cobblestone and metal nuggets).
 - **Incinerator**: destroys any item or fluid, and heats a boiler while it burns.
-- **Compact Gyroscope** and **Torque Rotor** for Create Aeronautics ships: stay level, and turn without strafing.
+- **Electricity**: the **Lava Generator** and the 3x3x3 **Geothermal Turbine** burn lava for Forge Energy, and the **Electric Motor** turns it back into rotation.
+- **Compact Gyroscope**, **Torque Rotor** and **Flight Instruments** for Create Aeronautics ships: stay level, turn without strafing, and read altitude, airspeed, attitude and heading.
 - **Aviator's Goggles in the Curios head slot** (with Create Aeronautics).
-- **Pipez can feed Blaze Burners** (with Pipez).
+- **Pipez**: pipes can feed Blaze Burners and Portable Engines, and **Pipez Covers** hide pipework inside walls and floors.
 
 Everything works on Create contraptions and Create Aeronautics physics objects, and can be carried with Carry On.
 
@@ -24,7 +27,7 @@ Everything works on Create contraptions and Create Aeronautics physics objects, 
 | Create | 6.0.10+mc1.21.1 |
 | Curios API | 9.5.1+1.21.1 |
 
-Optional: Create Aeronautics 1.3.2 (goggles in the Curios slot; Sable for the Compact Gyroscope and Torque Rotor), Create Aeronautics: Gyroscope Stabilizers (optional: converts into the Compact Gyroscope), Pipez (Blaze Burner feeding). Tested alongside Create: Liquid Fuel and Carry On.
+Optional: Create Aeronautics 1.3.2 (goggles in the Curios slot; Sable for the Compact Gyroscope and Torque Rotor), Create Aeronautics: Gyroscope Stabilizers (optional: converts into the Compact Gyroscope), Pipez (Blaze Burner and Portable Engine feeding, Pipez Covers, energy pipes for the generators). Tested alongside Create: Liquid Fuel, Carry On, Inventory Profiles Next and Supplementaries.
 
 ## Upgrade Template
 
@@ -146,6 +149,23 @@ A Create-style botany pot: the Cobblestone Generator's box with a planter behind
 - **Wrench screen**: the planter slot, the harvest, and a growth gauge that shows its status, time per harvest and Bountiful level.
 - Recipe: andesite alloy in the corners, a Mechanical Harvester above, a Mechanical Saw below, dirt either side and Andesite Casing in the middle.
 
+## Animal Pens
+
+A replacement for sprawling mob pens: one block that keeps a herd of one kind of animal, breeding and behaving as a vanilla pen would. Same box as the Auto Harvester, with straw on the floor and a feeding trough at the back, and the real animals wandering about behind the glass.
+
+- **Capture Bottle**: use it on any animal that breeds (modded ones too) to catch it; someone else's tamed pet can't be taken. The bottle shows the animal standing inside it, and keeps its colour, name and variant. Use it on the ground to let the animal out again. Empty bottles stack; a full one holds one animal. Recipe: a copper nugget on a glass bottle.
+- **Starting a herd**: use the Bottled Animal on a pen (one is enough), then put its breeding food in the trough by hand or with a funnel. The empty food slot shows which food it eats.
+- **Breeding**: with a shaft turning in the back, every **five minutes** each adult eats one food and has a baby. Babies grow up in **twenty minutes**, as in vanilla, and then breed too. The **Animal Pen** holds **128**, the **Brass Animal Pen** **512**; the trough holds enough food for half the pen, so a full herd can double at once.
+- **Only adults count**, as with vanilla animals: only they breed, give drops and XP, grow wool, lay eggs or make milk.
+- **Sword**: use a sword on the pen to take **half the adults** (rounded, always leaving one to breed), with their drops as if you killed them, so **Looting** and **Fire Aspect** count, and their XP. The young are left to grow up.
+- **Shears** take every adult sheep's wool (it grows back in a minute); a **bucket** takes milk from cows and goats, and pipes can draw the milk out; a **bowl** takes stew from mooshrooms; chickens lay **eggs** and armadillos shed **scutes** by themselves.
+- **Deployers** can use swords, shears and buckets on it, so a farm can run itself. A comparator reads how full of animals it is.
+- **Power**: it always uses the same stress (**256 SU**, **1,024 SU** for the Brass pen) at any speed, and none while empty. It only breeds, grows and produces while it turns.
+- **Output**: drops, wool and eggs go into a 9-slot buffer (18 on the Brass pen), emptied from any side by hoppers, chutes, funnels or arms, or empty-handed by hand.
+- **Wrench screen**: the animal's bottle (take it out to empty the pen; the other adults are butchered into the output), the food, a breeding gauge with the time until the next litter grows up, a milk gauge, the output, and a count of adults and young.
+- **Fruitful** (I to III): an enchantment for the pens only, put on with an anvil and kept when the pen is broken. Each level breeds and grows the herd 50% faster (2.5x at III). Buy the book from a **Librarian**.
+- Recipes: Animal Pen: andesite alloy corners, wooden fences, Andesite Casing and a hay bale. Brass Animal Pen: Mechanical Crafting around an Animal Pen, with brass sheets, Brass Casing, electron tubes and hay bales.
+
 ## Magma Engine
 
 A heavy brass engine that burns lava: by default **64 RPM and 8,192 SU**, four times a Portable Engine, for **10 mB of lava a second**. The shaft comes out of the middle of its front, which faces you when placed (sneak to place it facing away). It holds 4 buckets; pipes fill it through the back or the bottom only (a Fluid Wellspring with Lava Upgrades runs it forever) or right-click with a lava bucket. With Create Aeronautics installed it takes the shape of Simulated's Portable Engine in a dark steel finish with magma glowing in the firebox: the hatch swings open while it burns, the exhausts glow red-hot and pulse with the shaft, and smoke comes from the outlets. (The geometry is loaded from Aeronautics at runtime; only our texture ships.) Without Aeronautics it has its own model, a dark steel block with a gold cog round the shaft and three cylinders whose heads bob in turn. Either way, with no lava it stops. Speed, capacity and lava use are configurable.
@@ -199,7 +219,7 @@ Anything put into it is gone: items from funnels, chutes, hoppers or pipes, and 
 
 Recipe: Andesite Alloy, a Magma Block, a Furnace and Andesite Casing.
 
-## Compact Gyroscope and Torque Rotor (Create Aeronautics)
+## Compact Gyroscope, Torque Rotor and Flight Instruments (Create Aeronautics)
 
 Only present when Sable (Create Aeronautics) is installed.
 
@@ -244,20 +264,25 @@ Copycat-style covers for Pipez pipes, to hide pipework inside walls and floors. 
 - **Pipez + Blaze Burners**: with Pipez installed, item pipes can feed fuel into Blaze Burners. Works alongside Create: Liquid Fuel.
 - **Pipez + Portable Engines** (Create Aeronautics): item pipes feed coal and other burnable items, and fluid pipes feed lava and other fuel fluids (any fluid whose bucket burns). 1000 mB gives the same burn time as a bucket; engines are topped up to one bucket's worth at a time.
 - **Curios + Aviator's Goggles**: wear them in the head slot (over a helmet if you like); they still count as goggles for Create's overlays.
+- **Modded crops** (Supplementaries, Farmer's Delight and others): any crop built on vanilla's crop or bush blocks grows in the Auto Harvester with its own drops, growth stages and model. Two-block crops like flax show both halves once they're tall enough.
 
-Ponder scenes (hold **W**) cover the Wellspring, the chest and barrel upgrades, the Pressure Crucible, the generators (Basalt and Blackstone get their own scene too), the Magma Engine, the Incinerator, and with Sable the Compact Gyroscope and Torque Rotor.
+Ponder scenes (hold **W**) cover the Wellspring, the chest and barrel upgrades, the Pressure Crucible, the generators (Basalt, Blackstone and Tuff get their own scenes too), both Magma Engines, the Incinerator, the String Tangler, the Stone Infuser, the Lava Generator, the Electric Motor, the Geothermal Turbine, the Auto Harvester and the Animal Pens, and with Sable the Compact Gyroscope, Torque Rotor and Flight Instruments.
+
+An advancement tab follows the mod from the first Upgrade Template to a maxed-out Wellspring, a Netherite chest, a full-power Electric Motor, the Auto Harvester and a Brass Animal Pen of 512.
 
 ## Configuration
 
 Mods → Create → Config → *Access configs of other mods* → ComedyMonkey's Create Addons (server settings can be edited while in a world).
 
-- **Fluid Wellspring**: base tank capacity, capacity per upgrade, max upgrades, water and lava generation rates.
+- **Fluid Wellspring**: base tank capacity, capacity per upgrade, max upgrades, and water, lava, honey and chocolate generation rates.
 - **Chest Upgrades**: Copper, Iron, Gold and Netherite stack multipliers (Diamond uses Gold's).
 - **Pressure Crucible**: stress impact per RPM.
 - **Machines**: String Tangler and Stone Infuser stress impacts.
 - **Cobblestone Generators**: Andesite and Brass stress impacts (also used by the Basalt and Blackstone ones).
 - **Auto Harvester**: stress (SU, at any speed), crop and tree grow times, Bountiful's speed bonus per level, logs per tree and leaf drop rolls.
-- **Magma Engine**: speed, stress capacity per RPM and lava burned per second.
+- **Animal Pens**: stress and max animals for each pen, seconds per breeding and to grow up, Fruitful's speed bonus per level, wool regrowth, egg time and milk per animal.
+- **Magma Engine** and **Supercharged Magma Engine**: each has its own speed, stress capacity per RPM and lava burned per second.
+- **Electricity**: the Electric Motor's maximum stress and FE drawn per SU; the Lava Generator's and Geothermal Turbine's FE per tick and lava (and the turbine's water) per second.
 - **Create Aeronautics**: Compact Gyroscope strength, damping, lean correction, full-strength speed and stress; Torque Rotor thrust per RPM and stress.
 - **Mod Compatibility**: Pipez Blaze Burner feeding, whether only Pipez (not hoppers or funnels) may feed them, and Portable Engine fluid fuel.
 - **Aviator's Goggles** (client): show goggles in the Curios slot and over helmets.
@@ -266,7 +291,8 @@ Mods → Create → Config → *Access configs of other mods* → ComedyMonkey's
 
 ```
 ./gradlew build      # jar in build/libs/
-./gradlew runClient  # dev client with Create, Curios, JEI, Pipez, Create Aeronautics, Liquid Fuel and Carry On
+./gradlew runClient  # dev client with Create, Curios, JEI, Pipez, Create Aeronautics (and Sable), Liquid Fuel, Carry On,
+                     # Inventory Profiles Next and Supplementaries
 ```
 
 Textures are original pixel art in Create's copper, brass and steel palette. The creative tab icon is ComedyMonkey's own skin.

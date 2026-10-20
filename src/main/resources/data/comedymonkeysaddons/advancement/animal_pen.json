@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:bottled_animal",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:animal_pen"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.animal_pen"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.animal_pen.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "got": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:animal_pen"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "got"
+    ]
+  ]
+}

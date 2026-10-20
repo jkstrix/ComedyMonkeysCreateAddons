@@ -68,6 +68,16 @@ public final class CMConfig {
 		public final ModConfigSpec.DoubleValue harvesterBountifulBonus;
 		public final ModConfigSpec.IntValue harvesterTreeLogs;
 		public final ModConfigSpec.IntValue harvesterLeafRolls;
+		public final ModConfigSpec.IntValue penStress;
+		public final ModConfigSpec.IntValue brassPenStress;
+		public final ModConfigSpec.IntValue penCapacity;
+		public final ModConfigSpec.IntValue brassPenCapacity;
+		public final ModConfigSpec.IntValue penBreedSeconds;
+		public final ModConfigSpec.DoubleValue penFruitfulBonus;
+		public final ModConfigSpec.IntValue penGrowSeconds;
+		public final ModConfigSpec.IntValue penWoolSeconds;
+		public final ModConfigSpec.IntValue penEggSeconds;
+		public final ModConfigSpec.IntValue penMilkPerMinute;
 		public final ModConfigSpec.DoubleValue tanglerStressImpact;
 		public final ModConfigSpec.DoubleValue infuserStressImpact;
 
@@ -210,6 +220,53 @@ public final class CMConfig {
 				.comment("Times a felled tree's leaves roll their drops (saplings, sticks, apples), as if broken by hand.")
 				.translation("comedymonkeysaddons.configuration.harvesterLeafRolls")
 				.defineInRange("leafRolls", 8, 0, 64);
+			builder.pop();
+
+			builder.comment("Animal Pens: hold one captured animal and breed it up. They use the same stress at any speed,",
+					"and only breed, regrow wool, lay eggs and make milk while they turn.")
+				.push("animalPen");
+			penStress = builder
+				.comment("Stress the Animal Pen puts on the network, in SU, whatever the speed.")
+				.translation("comedymonkeysaddons.configuration.penStress")
+				.defineInRange("stress", 256, 0, 65536);
+			brassPenStress = builder
+				.comment("Stress the Brass Animal Pen puts on the network, in SU, whatever the speed.")
+				.translation("comedymonkeysaddons.configuration.brassPenStress")
+				.defineInRange("brassStress", 1024, 0, 65536);
+			penCapacity = builder
+				.comment("Animals an Animal Pen holds (its trough holds food for half as many, enough to double them).")
+				.translation("comedymonkeysaddons.configuration.penCapacity")
+				.defineInRange("maxAnimals", 128, 1, 4096);
+			brassPenCapacity = builder
+				.comment("Animals a Brass Animal Pen holds (its trough holds food for half as many).")
+				.translation("comedymonkeysaddons.configuration.brassPenCapacity")
+				.defineInRange("brassMaxAnimals", 512, 1, 16384);
+			penBreedSeconds = builder
+				.comment("Seconds between breedings, as long as a vanilla animal's wait after breeding (300). Each time, every",
+					"animal eats one of its food and has a baby, so the herd doubles: 1, 2, 4, 8, 16...")
+				.translation("comedymonkeysaddons.configuration.penBreedSeconds")
+				.defineInRange("secondsPerBreeding", 300, 1, 36000);
+			penGrowSeconds = builder
+				.comment("Seconds a baby takes to grow up, as in vanilla (1200, twenty minutes). Only adults breed, give drops,",
+					"wool, eggs and milk.")
+				.translation("comedymonkeysaddons.configuration.penGrowSeconds")
+				.defineInRange("secondsToGrowUp", 1200, 1, 72000);
+			penFruitfulBonus = builder
+				.comment("Extra speed per level of Fruitful, for breeding and growing up: 0.5 makes I 1.5x, II 2x, III 2.5x as fast.")
+				.translation("comedymonkeysaddons.configuration.penFruitfulBonus")
+				.defineInRange("fruitfulBonusPerLevel", 0.5, 0.0, 10.0);
+			penWoolSeconds = builder
+				.comment("Seconds for sheared sheep to grow their wool back.")
+				.translation("comedymonkeysaddons.configuration.penWoolSeconds")
+				.defineInRange("woolSeconds", 60, 1, 3600);
+			penEggSeconds = builder
+				.comment("Average seconds between eggs (or armadillo scutes) from each animal; vanilla is 300 to 600.")
+				.translation("comedymonkeysaddons.configuration.penEggSeconds")
+				.defineInRange("eggSeconds", 450, 1, 36000);
+			penMilkPerMinute = builder
+				.comment("Milk each cow or goat gives a minute, in millibuckets.")
+				.translation("comedymonkeysaddons.configuration.penMilkPerMinute")
+				.defineInRange("milkPerMinute", 125, 0, 100000);
 			builder.pop();
 
 			builder.comment("String Tangler and Stone Infuser. Their recipes (ingredients, counts, times) are data-driven:",
@@ -426,7 +483,8 @@ public final class CMConfig {
 			return get(maxCapacityUpgrades);
 		}
 
-		private static int get(ModConfigSpec.IntValue value) {
+		/** An int setting, or its default before the server config has loaded. */
+		public static int get(ModConfigSpec.IntValue value) {
 			return SERVER_SPEC.isLoaded() ? value.get() : value.getDefault();
 		}
 
