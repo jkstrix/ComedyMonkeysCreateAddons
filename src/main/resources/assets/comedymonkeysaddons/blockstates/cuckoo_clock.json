@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/cuckoo_clock"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/cuckoo_clock",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/cuckoo_clock",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/cuckoo_clock",
+      "y": 270
+    }
+  }
+}

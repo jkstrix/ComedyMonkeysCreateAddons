@@ -31,13 +31,21 @@ class ModBlocksTest {
 		}
 	}
 
-	/** Every block but the cover's blank look has an item of its own name (Carry On and pick-block need one). */
+	/**
+	 * Every block but the cover's blank look and the Cuckoo Clock's weights has an item of its own name (Carry On and
+	 * pick-block need one). The weights come and go with the clock: pick-block on them gives the clock, and Carry On
+	 * is kept off them by its blacklist tag.
+	 */
 	@Test
 	void everyBlockHasItsItem() {
 		for (DeferredHolder<Block, ? extends Block> entry : ModBlocks.BLOCKS.getEntries()) {
 			Item item = entry.get().asItem();
 			if (entry.getId().equals(ModBlocks.PIPE_COVER_BLANK.getId())) {
 				assertSame(Items.AIR, item, "the blank cover is not an item");
+				continue;
+			}
+			if (entry.getId().equals(ModBlocks.CUCKOO_CLOCK_WEIGHTS.getId())) {
+				assertSame(Items.AIR, item, "the clock's weights are not an item");
 				continue;
 			}
 			assertTrue(item instanceof BlockItem, entry.getId() + " has no block item");

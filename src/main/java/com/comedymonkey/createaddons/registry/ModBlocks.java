@@ -2,6 +2,8 @@ package com.comedymonkey.createaddons.registry;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.chest.UpgradedBarrelBlock;
+import com.comedymonkey.createaddons.content.clock.CuckooClockBlock;
+import com.comedymonkey.createaddons.content.clock.CuckooClockWeightsBlock;
 import com.comedymonkey.createaddons.content.cobblegen.CobbleGeneratorBlock;
 import com.comedymonkey.createaddons.content.cobblegen.GeneratorProduct;
 import com.comedymonkey.createaddons.content.crucible.PressureCrucibleBlock;
@@ -24,6 +26,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -151,6 +154,21 @@ public final class ModBlocks {
 	/** Holds four times as many animals. */
 	public static final DeferredBlock<AnimalPenBlock> BRASS_ANIMAL_PEN = BLOCKS.register("brass_animal_pen",
 		() -> new AnimalPenBlock(BlockBehaviour.Properties.ofFullCopy(BRASS_COBBLE_GENERATOR.get()).lightLevel(state -> 0), true));
+
+	/** A wall clock two blocks tall that sets nearby villagers' restock times to 8:00 and 12:00, at a fixed stress. */
+	public static final DeferredBlock<CuckooClockBlock> CUCKOO_CLOCK = BLOCKS.register("cuckoo_clock",
+		() -> new CuckooClockBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_BROWN)
+			.strength(2.0f, 3.0f)
+			.sound(SoundType.WOOD)
+			.noOcclusion()
+			.isViewBlocking((state, level, pos) -> false)));
+	/** The clock's bottom block, where the pendulum and weights hang; placed and removed with it. */
+	public static final DeferredBlock<CuckooClockWeightsBlock> CUCKOO_CLOCK_WEIGHTS = BLOCKS.register("cuckoo_clock_weights",
+		() -> new CuckooClockWeightsBlock(BlockBehaviour.Properties.ofFullCopy(CUCKOO_CLOCK.get())
+			.noLootTable()
+			.randomTicks()
+			.pushReaction(PushReaction.BLOCK)));
 
 	/** Tangles string and slime into cobwebs, behind copper-framed glass. */
 	public static final DeferredBlock<TwoInputMachineBlock> STRING_TANGLER = BLOCKS.register("string_tangler",

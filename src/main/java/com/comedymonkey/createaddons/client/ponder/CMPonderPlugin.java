@@ -82,6 +82,8 @@ public class CMPonderPlugin implements PonderPlugin {
 			.addStoryBoard("auto_harvester", FarmScenes::harvester);
 		helper.forComponents(ModBlocks.ANIMAL_PEN.getId(), ModBlocks.BRASS_ANIMAL_PEN.getId(), ModItems.CAPTURE_BOTTLE.getId())
 			.addStoryBoard("animal_pen", FarmScenes::animalPen);
+		helper.forComponents(ModBlocks.CUCKOO_CLOCK.getId())
+			.addStoryBoard("cuckoo_clock", ClockScenes::cuckooClock);
 		if (SableCompat.LOADED)
 			AeronauticsScenes.register(helper);
 	}
@@ -104,7 +106,8 @@ public class CMPonderPlugin implements PonderPlugin {
 			.add(ModBlocks.TUFF_GENERATOR.getId())
 			.add(ModBlocks.AUTO_HARVESTER.getId())
 			.add(ModBlocks.ANIMAL_PEN.getId())
-			.add(ModBlocks.BRASS_ANIMAL_PEN.getId());
+			.add(ModBlocks.BRASS_ANIMAL_PEN.getId())
+			.add(ModBlocks.CUCKOO_CLOCK.getId());
 		helper.addToTag(CREATE_KINETIC_SOURCES_TAG)
 			.add(ModBlocks.MAGMA_ENGINE.getId())
 			.add(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.getId())

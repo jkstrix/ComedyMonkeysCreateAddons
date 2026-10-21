@@ -87,6 +87,22 @@ class MixinConfigTest {
 		assertTrue(names("mixins").containsAll(Set.of("PipeBlockMixin", "PipeTileEntityMixin")));
 	}
 
+	/** The Cuckoo Clock's restock times work on the server, so its villager mixin goes on both sides. */
+	@Test
+	void villagerMixinIsCommon() {
+		assertTrue(names("mixins").contains("VillagerMixin"));
+		assertFalse(names("client").contains("VillagerMixin"));
+	}
+
+	@Test
+	void villagerHasShouldRestockAndTheCountersItKeeps() throws Exception {
+		Class<?> villager = Class.forName("net.minecraft.world.entity.npc.Villager", false, loader());
+		assertEquals(boolean.class, villager.getDeclaredMethod("shouldRestock").getReturnType());
+		// the mixin's @Shadow fields
+		assertEquals(int.class, villager.getDeclaredField("numberOfRestocksToday").getType());
+		assertEquals(long.class, villager.getDeclaredField("lastRestockCheckDayTime").getType());
+	}
+
 	@Test
 	void pipeBlockHasEveryInjectedMethod() throws Exception {
 		Class<?> pipe = pipez("de.maxhenkel.pipez.blocks.PipeBlock");

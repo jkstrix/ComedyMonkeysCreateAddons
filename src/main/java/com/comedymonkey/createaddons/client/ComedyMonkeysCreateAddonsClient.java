@@ -73,6 +73,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.PRESSURE_CRUCIBLE.get(), PressureCrucibleRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.COBBLE_GENERATOR.get(), CobbleGeneratorRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.AUTO_HARVESTER.get(), AutoHarvesterRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.CUCKOO_CLOCK.get(), CuckooClockRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ANIMAL_PEN.get(), AnimalPenRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.MAGMA_ENGINE.get(), MagmaEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ELECTRIC_MOTOR.get(), ElectricRenderers.Motor::new);
@@ -94,6 +95,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.register(PressureCrucibleRenderer.SHAFT);
 		event.register(CobbleGeneratorRenderer.SHAFT);
 		AutoHarvesterRenderer.registerModels(event);
+		CuckooClockRenderer.registerModels(event);
 		event.register(MagmaEngineRenderer.HEAD);
 		event.register(MagmaEngineRenderer.SUPERCHARGED_HEAD);
 		ElectricRenderers.registerModels(event);

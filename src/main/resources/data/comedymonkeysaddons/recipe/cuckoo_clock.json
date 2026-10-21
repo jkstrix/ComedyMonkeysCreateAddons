@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DDD",
+    "BCB",
+    "NMN"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:dark_oak_planks"
+    },
+    "B": {
+      "item": "create:brass_sheet"
+    },
+    "C": {
+      "item": "minecraft:clock"
+    },
+    "N": {
+      "item": "minecraft:chain"
+    },
+    "M": {
+      "item": "create:precision_mechanism"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:cuckoo_clock"
+  }
+}

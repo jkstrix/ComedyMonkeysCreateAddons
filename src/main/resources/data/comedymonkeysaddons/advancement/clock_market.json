@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:clock_restock",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:cuckoo_clock"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.clock_market"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.clock_market.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "clock_market"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

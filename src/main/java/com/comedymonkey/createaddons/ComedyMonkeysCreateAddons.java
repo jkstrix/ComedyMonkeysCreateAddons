@@ -6,6 +6,7 @@ import com.comedymonkey.createaddons.compat.pipez.PipezBlazeBurnerCompat;
 import com.comedymonkey.createaddons.compat.pipez.PipezEngineCompat;
 import com.comedymonkey.createaddons.compat.sable.AeronauticsContent;
 import com.comedymonkey.createaddons.compat.sable.SableCompat;
+import com.comedymonkey.createaddons.content.clock.CuckooClocks;
 import com.comedymonkey.createaddons.content.cobblegen.CobbleGeneratorBlock;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineBlock;
 import com.comedymonkey.createaddons.content.MachineEnchantments;
@@ -14,6 +15,7 @@ import com.comedymonkey.createaddons.content.incinerator.IncineratorBlock;
 import com.simibubi.create.api.boiler.BoilerHeater;
 import com.comedymonkey.createaddons.content.chest.ChestEvents;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.network.ContraptionBlockSyncPayload;
 import com.comedymonkey.createaddons.network.QuickTransferPayload;
@@ -85,6 +87,7 @@ public class ComedyMonkeysCreateAddons {
 		NeoForge.EVENT_BUS.addListener(MachineEnchantments::addTrades);
 		// Capture Bottles catch animals for the Animal Pens
 		NeoForge.EVENT_BUS.addListener(AnimalCapture::onEntityInteract);
+		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> CuckooClocks.clear());
 		if (ModList.get().isLoaded(PipezBlazeBurnerCompat.PIPEZ_ID)) {
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onRightClickBlock);
 			NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, PipeCoverEvents::onBlockBreak);
@@ -212,6 +215,7 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.AUTO_HARVESTER.get());
 			registerCreateTooltip(ModItems.ANIMAL_PEN.get());
 			registerCreateTooltip(ModItems.BRASS_ANIMAL_PEN.get());
+			registerCreateTooltip(ModItems.CUCKOO_CLOCK.get());
 			registerCreateTooltip(ModItems.BOTTLED_ANIMAL.get());
 			registerCreateTooltip(ModItems.CAPTURE_BOTTLE.get());
 			registerCreateTooltip(ModItems.INCINERATOR.get());

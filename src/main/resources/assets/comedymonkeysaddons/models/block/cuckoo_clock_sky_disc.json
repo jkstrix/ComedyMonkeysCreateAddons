@@ -1,0 +1,35 @@
+{
+	"parent": "block/block",
+	"render_type": "minecraft:cutout",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "comedymonkeysaddons:block/cuckoo_clock_wood",
+		"sun_moon": "comedymonkeysaddons:block/cuckoo_clock_sun_moon"
+	},
+	"elements": [
+		{
+			"from": [
+				4.5,
+				3.5,
+				7.8
+			],
+			"to": [
+				11.5,
+				10.5,
+				7.85
+			],
+			"faces": {
+				"north": {
+					"texture": "#sun_moon",
+					"uv": [
+						0,
+						0,
+						14,
+						14
+					]
+				}
+			},
+			"shade": false
+		}
+	]
+}

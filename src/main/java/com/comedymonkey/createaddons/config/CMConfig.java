@@ -68,6 +68,8 @@ public final class CMConfig {
 		public final ModConfigSpec.DoubleValue harvesterBountifulBonus;
 		public final ModConfigSpec.IntValue harvesterTreeLogs;
 		public final ModConfigSpec.IntValue harvesterLeafRolls;
+		public final ModConfigSpec.IntValue clockStress;
+		public final ModConfigSpec.IntValue clockRadius;
 		public final ModConfigSpec.IntValue penStress;
 		public final ModConfigSpec.IntValue brassPenStress;
 		public final ModConfigSpec.IntValue penBreedSeconds;
@@ -257,6 +259,20 @@ public final class CMConfig {
 				.comment("Milk each cow or goat gives a minute, in millibuckets.")
 				.translation("comedymonkeysaddons.configuration.penMilkPerMinute")
 				.defineInRange("milkPerMinute", 125, 0, 100000);
+			builder.pop();
+
+			builder.comment("Cuckoo Clock: while it turns, villagers near it restock at 8:00 and 12:00 (game time), and it chimes",
+					"and calls the hour. It uses the same stress at any speed.")
+				.push("cuckooClock");
+			clockStress = builder
+				.comment("Stress it puts on the network, in SU, whatever the speed. 1024 needs a windmill of about 16 sails.")
+				.translation("comedymonkeysaddons.configuration.clockStress")
+				.defineInRange("stress", 1024, 0, 65536);
+			clockRadius = builder
+				.comment("How far from the clock, in blocks, villagers follow its restock times: measured across the ground, and",
+					"as far again up and down. Big, so a clock on one wall reaches across a whole trading hall.")
+				.translation("comedymonkeysaddons.configuration.clockRadius")
+				.defineInRange("radius", 64, 1, 256);
 			builder.pop();
 
 			builder.comment("String Tangler and Stone Infuser. Their recipes (ingredients, counts, times) are data-driven:",

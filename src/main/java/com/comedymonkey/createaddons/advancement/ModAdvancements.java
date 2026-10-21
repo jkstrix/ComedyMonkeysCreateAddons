@@ -36,6 +36,11 @@ public final class ModAdvancements {
 	public static final String PEN_CULL = "pen_cull";
 	public static final String PEN_FULL = "pen_full";
 	public static final String BRASS_PEN_FULL = "brass_pen_full";
+	public static final String CLOCK_RESTOCK = "clock_restock";
+	public static final String CLOCK_NOON = "clock_noon";
+	public static final String CLOCK_MARKET = "clock_market";
+	/** Villagers one Cuckoo Clock has to keep time for, for its challenge. */
+	public static final int CLOCK_MARKET_VILLAGERS = 20;
 
 	/** How close a player has to be to machinery working on its own to earn its advancements. */
 	public static final int NEARBY = 16;
@@ -53,10 +58,15 @@ public final class ModAdvancements {
 
 	/** For things automation does: everyone within {@link #NEARBY} blocks gets the credit. */
 	public static void awardNearby(Level level, BlockPos pos, String action, ItemStack stack, int value) {
+		awardNearby(level, pos, action, stack, value, NEARBY);
+	}
+
+	/** Everyone within {@code range} blocks of {@code pos} gets the credit. */
+	public static void awardNearby(Level level, BlockPos pos, String action, ItemStack stack, int value, int range) {
 		if (level == null || level.isClientSide)
 			return;
 		for (Player player : level.players())
-			if (player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= NEARBY * NEARBY)
+			if (player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= (double) range * range)
 				award(player, action, stack, value);
 	}
 }

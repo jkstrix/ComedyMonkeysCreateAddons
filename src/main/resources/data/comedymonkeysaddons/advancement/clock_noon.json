@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:cuckoo_clock",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:cuckoo_clock"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.clock_noon"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.clock_noon.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "clock_noon"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

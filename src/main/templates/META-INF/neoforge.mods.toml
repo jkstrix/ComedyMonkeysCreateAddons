@@ -24,7 +24,8 @@ versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
-# Pipez Covers take their pipe's shape through a mixin, only applied when Pipez is installed
+# Pipez Covers take their pipe's shape through mixins, only applied when Pipez is installed; the Cuckoo Clock's
+# restock times go through one on villagers
 [[mixins]]
 config = "${mod_id}.mixins.json"
 

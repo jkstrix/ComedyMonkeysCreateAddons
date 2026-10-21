@@ -8,6 +8,7 @@ A NeoForge add-on for **Create** (Minecraft 1.21.1). Mod id: `comedymonkeysaddon
 - **Cobblestone, Basalt, Blackstone and Tuff Generators**: one-block stone generators powered by rotation, in Andesite, Brass and Wireless versions.
 - **Auto Harvester**: a Create-style botany pot that grows and harvests any crop or sapling (modded crops too) at a fixed stress, sped up by the new **Bountiful** enchantment from Librarians.
 - **Animal Pen** and **Brass Animal Pen**: catch one animal in a **Capture Bottle** and breed a whole herd of it (128 or 512) in one block, with vanilla breeding and growing-up times, sped up by the new **Fruitful** enchantment.
+- **Cuckoo Clock**: a Black Forest wall clock that sets the villagers around it to restock at **8:00 and 12:00**, and chimes the hour with a cuckoo and a carved villager.
 - **Magma Engine** and **Supercharged Magma Engine**: lava-burning engines with four and eight Portable Engines' worth of power.
 - **String Tangler** (cobwebs from string and slime) and **Stone Infuser** (Create's ore-bearing stones from cobblestone and metal nuggets).
 - **Incinerator**: destroys any item or fluid, and heats a boiler while it burns.
@@ -16,7 +17,7 @@ A NeoForge add-on for **Create** (Minecraft 1.21.1). Mod id: `comedymonkeysaddon
 - **Aviator's Goggles in the Curios head slot** (with Create Aeronautics).
 - **Pipez**: pipes can feed Blaze Burners and Portable Engines, and **Pipez Covers** hide pipework inside walls and floors.
 
-Everything works on Create contraptions and Create Aeronautics physics objects, and can be carried with Carry On.
+Everything works on Create contraptions and Create Aeronautics physics objects (except the Cuckoo Clock, which runs only as a placed block), and can be carried with Carry On.
 
 ## Requirements
 
@@ -167,6 +168,17 @@ A replacement for sprawling mob pens: one block that keeps a herd of one kind of
 - **Fruitful** (I to III): an enchantment for the pens only, put on with an anvil and kept when the pen is broken. Each level breeds and grows the herd 50% faster (2.5x at III). Buy the book from a **Librarian**.
 - Recipes: Animal Pen: andesite alloy corners, wooden fences, Andesite Casing and a hay bale. Brass Animal Pen: Mechanical Crafting around an Animal Pen, with brass sheets, Brass Casing, electron tubes and hay bales.
 
+## Cuckoo Clock
+
+A Black Forest cuckoo clock, two blocks tall, in dark walnut and brass: a shingled roof, a dial whose hands keep the game's time, a window above it where a sun and moon disc turns once a day, a brass cog turning behind a porthole on each side, and a pendulum and pine-cone weights hanging into the block below.
+
+- **Placing**: it hangs on the wall you click, facing out from it, and needs the block below free for its weights. The **shaft** goes into the **middle of its back** (usually through the wall). It always uses the same stress, **1,024 SU** by default (a windmill of about 16 sails), at any speed.
+- **Restocks**: while it turns, every villager within **64 blocks** (across the ground, and as far up and down) restocks at **8:00** and at **12:00** game time instead of vanilla's times. As in vanilla they still have to get to their workstation, so each restocks on its first trip there after the hour. Villagers out of reach, or near a clock that has stopped, keep the vanilla rules.
+- **On the hour**: at 8:00 and 12:00 it chimes, the doors at the bottom open and a **carved villager** rolls out onto the balcony with a little **workstation**, picked at random from the workstations within reach (with its profession's work sound), and the **cuckoo** comes out of the gable and calls the hour: eight times, or twelve.
+- **Stopped**, the hands, the sun and moon and the pendulum stop where they are, and there's no show.
+- **Engineer's Goggles** show the time, the next restock and how long until it, and how many traders it reaches (grown villagers with a job).
+- Recipe: dark oak planks over brass sheets either side of a Clock, over chains either side of a Precision Mechanism.
+
 ## Magma Engine
 
 A heavy brass engine that burns lava: by default **64 RPM and 8,192 SU**, four times a Portable Engine, for **10 mB of lava a second**. The shaft comes out of the middle of its front, which faces you when placed (sneak to place it facing away). It holds 4 buckets; pipes fill it through the back or the bottom only (a Fluid Wellspring with Lava Upgrades runs it forever) or right-click with a lava bucket. With Create Aeronautics installed it takes the shape of Simulated's Portable Engine in a dark steel finish with magma glowing in the firebox: the hatch swings open while it burns, the exhausts glow red-hot and pulse with the shaft, and smoke comes from the outlets. (The geometry is loaded from Aeronautics at runtime; only our texture ships.) Without Aeronautics it has its own model, a dark steel block with a gold cog round the shaft and three cylinders whose heads bob in turn. Either way, with no lava it stops. Speed, capacity and lava use are configurable.
@@ -282,6 +294,7 @@ Mods → Create → Config → *Access configs of other mods* → ComedyMonkey's
 - **Cobblestone Generators**: Andesite and Brass stress impacts (also used by the Basalt and Blackstone ones).
 - **Auto Harvester**: stress (SU, at any speed), crop and tree grow times, Bountiful's speed bonus per level, logs per tree and leaf drop rolls.
 - **Animal Pens**: stress and max animals for each pen, seconds per breeding and to grow up, Fruitful's speed bonus per level, wool regrowth, egg time and milk per animal.
+- **Cuckoo Clock**: stress (SU, at any speed) and how far it reaches villagers (blocks).
 - **Magma Engine** and **Supercharged Magma Engine**: each has its own speed, stress capacity per RPM and lava burned per second.
 - **Electricity**: the Electric Motor's maximum stress and FE drawn per SU; the Lava Generator's and Geothermal Turbine's FE per tick and lava (and the turbine's water) per second.
 - **Create Aeronautics**: Compact Gyroscope strength, damping, lean correction, full-strength speed and stress; Torque Rotor thrust per RPM and stress.

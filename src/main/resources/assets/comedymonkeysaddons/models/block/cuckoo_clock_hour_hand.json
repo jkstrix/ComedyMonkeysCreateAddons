@@ -1,0 +1,147 @@
+{
+	"parent": "block/block",
+	"render_type": "minecraft:cutout",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "comedymonkeysaddons:block/cuckoo_clock_wood",
+		"parts": "comedymonkeysaddons:block/cuckoo_clock_parts"
+	},
+	"elements": [
+		{
+			"from": [
+				7.75,
+				3.6,
+				6.5
+			],
+			"to": [
+				8.25,
+				5.3,
+				6.6
+			],
+			"faces": {
+				"north": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				},
+				"south": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				},
+				"east": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				},
+				"west": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				},
+				"up": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				},
+				"down": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				}
+			}
+		},
+		{
+			"from": [
+				7.8,
+				3,
+				6.5
+			],
+			"to": [
+				8.2,
+				3.6,
+				6.6
+			],
+			"faces": {
+				"north": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				},
+				"south": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				},
+				"east": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				},
+				"west": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				},
+				"up": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				},
+				"down": {
+					"texture": "#parts",
+					"uv": [
+						1,
+						12,
+						3,
+						14
+					]
+				}
+			}
+		}
+	]
+}

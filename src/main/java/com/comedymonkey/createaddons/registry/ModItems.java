@@ -51,6 +51,7 @@ public final class ModItems {
 	public static final DeferredItem<BlockItem> AUTO_HARVESTER = ITEMS.registerSimpleBlockItem(ModBlocks.AUTO_HARVESTER);
 	public static final DeferredItem<BlockItem> ANIMAL_PEN = ITEMS.registerSimpleBlockItem(ModBlocks.ANIMAL_PEN);
 	public static final DeferredItem<BlockItem> BRASS_ANIMAL_PEN = ITEMS.registerSimpleBlockItem(ModBlocks.BRASS_ANIMAL_PEN);
+	public static final DeferredItem<BlockItem> CUCKOO_CLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.CUCKOO_CLOCK);
 	/** Catches an animal for the Animal Pens; given back when the animal is let out. Stacks while empty. */
 	public static final DeferredItem<Item> CAPTURE_BOTTLE = ITEMS.registerSimpleItem("capture_bottle");
 	/** An animal caught in a Capture Bottle, for the Animal Pens. One a stack: each holds its own animal. */

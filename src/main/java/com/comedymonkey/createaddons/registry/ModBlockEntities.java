@@ -1,6 +1,7 @@
 package com.comedymonkey.createaddons.registry;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.clock.CuckooClockBlockEntity;
 import com.comedymonkey.createaddons.content.chest.UpgradedBarrelBlockEntity;
 import com.comedymonkey.createaddons.content.chest.UpgradedChestBlockEntity;
 import com.comedymonkey.createaddons.content.cobblegen.CobbleGeneratorBlockEntity;
@@ -58,6 +59,11 @@ public final class ModBlockEntities {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AutoHarvesterBlockEntity>> AUTO_HARVESTER =
 		BLOCK_ENTITY_TYPES.register("auto_harvester",
 			() -> BlockEntityType.Builder.of(AutoHarvesterBlockEntity::new, ModBlocks.AUTO_HARVESTER.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CuckooClockBlockEntity>> CUCKOO_CLOCK =
+		BLOCK_ENTITY_TYPES.register("cuckoo_clock",
+			() -> BlockEntityType.Builder.of(CuckooClockBlockEntity::new, ModBlocks.CUCKOO_CLOCK.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AnimalPenBlockEntity>> ANIMAL_PEN =

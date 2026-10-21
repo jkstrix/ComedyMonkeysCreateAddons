@@ -1,0 +1,80 @@
+{
+	"parent": "block/block",
+	"render_type": "minecraft:cutout",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "comedymonkeysaddons:block/cuckoo_clock_wood",
+		"parts": "comedymonkeysaddons:block/cuckoo_clock_parts",
+		"trim": "comedymonkeysaddons:block/cuckoo_clock_trim"
+	},
+	"elements": [
+		{
+			"from": [
+				8,
+				-3,
+				7
+			],
+			"to": [
+				9.5,
+				0.35,
+				7.2
+			],
+			"faces": {
+				"north": {
+					"texture": "#parts",
+					"uv": [
+						0,
+						9,
+						1.5,
+						12.5
+					]
+				},
+				"south": {
+					"texture": "#parts",
+					"uv": [
+						1.5,
+						9,
+						0,
+						12.5
+					]
+				},
+				"east": {
+					"texture": "#trim",
+					"uv": [
+						8.8,
+						12.65,
+						9,
+						16
+					]
+				},
+				"west": {
+					"texture": "#trim",
+					"uv": [
+						7,
+						12.65,
+						7.2,
+						16
+					]
+				},
+				"up": {
+					"texture": "#trim",
+					"uv": [
+						8,
+						7,
+						9.5,
+						7.2
+					]
+				},
+				"down": {
+					"texture": "#trim",
+					"uv": [
+						8,
+						8.8,
+						9.5,
+						9
+					]
+				}
+			}
+		}
+	]
+}

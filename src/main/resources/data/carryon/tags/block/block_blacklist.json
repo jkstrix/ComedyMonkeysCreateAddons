@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "comedymonkeysaddons:cuckoo_clock_weights",
+      "required": false
+    }
+  ]
+}
