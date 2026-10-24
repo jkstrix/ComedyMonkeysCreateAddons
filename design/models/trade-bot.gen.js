@@ -609,49 +609,7 @@ const blink = (t, t0) => -2 * (seg(t, t0, t0 + 0.07) - seg(t, t0 + 0.09, t0 + 0.
   anim('idle', 3, 'loop', T);
 }
 
-// 2. roll, bank into a turn, brake, wobble settle (the inertia chain)
-{
-  const L = 5;
-  const speed = (t) => 10 * (seg(t, 0.2, 1.1) - seg(t, 3.0, 3.45)); // px/s
-  const yawRate = (t) => 75 * (seg(t, 1.5, 1.9) - seg(t, 2.5, 2.9)); // deg/s, turning left
-  const accRaw = deriv(speed);
-  const accel = (t) => 15 * Math.tanh(accRaw(t) / 15); // saturate so hard braking doesn't throw him flat
-  const integ = (f, dt = 1 / 600) => { const n = Math.ceil(L / dt) + 2; const a = new Float64Array(n); for (let k = 1; k < n; k++) a[k] = a[k - 1] + f(k * dt) * dt; return (t) => a[Math.min(n - 1, Math.max(0, Math.round(t / dt)))]; };
-  const yaw = integ(yawRate);
-  const xPos = integ((t) => -Math.sin((yaw(t) * PI) / 180) * speed(t));
-  const zPos = integ((t) => -Math.cos((yaw(t) * PI) / 180) * speed(t));
-  const dist = integ(speed);
-  // body pitch/roll: spring toward lean targets
-  const bodyP = sim(L, (t, y, v) => 60 * (-0.7 * accel(t) - y) - 7 * v);
-  const bodyR = sim(L, (t, y, v) => 60 * (0.022 * speed(t) * yawRate(t) - y) - 7 * v);
-  const bpA = deriv(deriv(bodyP)), brA = deriv(deriv(bodyR));
-  const headP = sim(L, (t, y, v) => -60 * y - 6 * v - 1.4 * bpA(t) - 8 * accel(t));
-  const headR = sim(L, (t, y, v) => -60 * y - 6 * v - 1.4 * brA(t));
-  const hpA = deriv(deriv(headP)), hrA = deriv(deriv(headR));
-  const eyeR = sim(L, (t, y, v) => -160 * y - 10 * v - 0.6 * (brA(t) + hrA(t)));
-  const aerP = sim(L, (t, y, v) => -45 * y - 2.5 * v - 1.6 * (bpA(t) + hpA(t)) + 14 * accel(t));
-  const aerR = sim(L, (t, y, v) => -45 * y - 2.5 * v - 1.6 * (brA(t) + hrA(t)));
-  const armP = sim(L, (t, y, v) => -40 * y - 3.5 * v - 1.2 * bpA(t) - 14 * accel(t));
-  const armR = sim(L, (t, y, v) => -40 * y - 3.5 * v - 1.2 * brA(t));
-  const foreP = sim(L, (t, y, v) => -80 * y - 5 * v - 1.0 * deriv(deriv(armP))(t));
-  const T = {
-    trade_bot: { position: (t) => V(xPos(t), 0, zPos(t)), rotation: (t) => V(0, yaw(t), 0) },
-    wheel: { rotation: (t) => V((-dist(t) / 4) * (180 / PI), 0, 0) },
-    body: { rotation: (t) => addV(idle.body.rotation(t), V(bodyP(t), 0, bodyR(t))), position: idle.body.position },
-    head: { rotation: (t) => addV(idle.head.rotation(t), V(headP(t) - 0.3 * bodyP(t), 0, headR(t) - 0.45 * bodyR(t))) },
-    eye_left: { rotation: (t) => V(0, 0, eyeR(t)) },
-    eye_right: { rotation: (t) => V(0, 0, eyeR(t)) },
-    aerial: { rotation: (t) => V(aerP(t), 0, aerR(t)) },
-    arm_left: { rotation: (t) => V(armP(t), 0, armR(t) - 0.15 * speed(t) * Math.abs(yawRate(t)) / 75) },
-    arm_right: { rotation: (t) => V(armP(t), 0, armR(t) + 0.15 * speed(t) * Math.abs(yawRate(t)) / 75) },
-    forearm_left: { rotation: (t) => V(foreP(t) + 6 * speed(t) / 10, 0, 0) },
-    forearm_right: { rotation: (t) => V(foreP(t) + 6 * speed(t) / 10, 0, 0) },
-    key: { rotation: (t) => V(0, 0, -60 * t - 20 * dist(t) / 10) },
-    lid_left: { position: (t) => V(0, blink(t, 3.6), 0) },
-    lid_right: { position: (t) => V(0, blink(t, 3.6), 0) },
-  };
-  anim('roll_turn_stop', L, 'once', T);
-}
+// 2. turning: see turn_left / turn_right in the locomotion set (10.), which chain from and back into rolling
 
 // 3. wall bump
 {
@@ -1728,6 +1686,134 @@ anim('rolling', 3, 'loop', cruise);
   T.wheel = { rotation: (t) => V(-(START_WHEEL + ang[Math.min(n - 1, Math.round(t / dt))]), 0, 0) };
   T.key = { rotation: (t) => V(0, 0, -(START_KEY + 60 * t)) };
   anim('stop_rolling', L, 'once', T);
+}
+
+// turn left / turn right: from the cruise loop's first frame he carves a 90° arc and rolls on into the loop again
+// (the last frame matches rolling's first). Head and neck lead into the bend, the body banks in, the aerial and arms
+// swing wide, and on the way out he swings back past upright and wobbles to cruise. 3 s, one cruise period, so the
+// wheel ends 360° and the key 180° on, where the loop starts. The arc is for the preview; in game the entity moves.
+function turnClip(name, dir) {
+  const L = 3, dt = 1 / 600, n = Math.ceil(L / dt) + 2;
+  const integ = (f) => { const a = new Float64Array(n); for (let k = 1; k < n; k++) a[k] = a[k - 1] + f(k * dt) * dt; return (t) => a[Math.min(n - 1, Math.max(0, Math.round(t / dt)))]; };
+  const area = (f) => { let s = 0; for (let k = 0; k < Math.round(L / dt); k++) s += f(k * dt) * dt; return s; };
+  const SPEED = ((ROLL.wheel * PI) / 180) * 4; // px/s that matches the wheel (radius 4 px)
+  // eases off into the bend and powers out of it; the boost is sized so the distance (and the wheel) stays one cruise period
+  const dip = (t) => env(t, 0.35, 0.85, 1.5, 2.0), boost = (t) => env(t, 1.9, 2.25, 2.4, 2.85);
+  const kBoost = (0.18 * area(dip)) / area(boost);
+  const speed = (t) => SPEED * (1 - 0.18 * dip(t) + kBoost * boost(t));
+  const shape = (t) => seg(t, 0.5, 0.9) - seg(t, 1.6, 2.0);
+  const kYaw = 90 / area(shape);
+  const yawRate = (t) => dir * kYaw * shape(t); // deg/s, + is left
+  const yaw = integ(yawRate), dist = integ(speed);
+  const xPos = integ((t) => -Math.sin((yaw(t) * PI) / 180) * speed(t));
+  const zPos = integ((t) => -Math.cos((yaw(t) * PI) / 180) * speed(t));
+  const accRaw = deriv(speed), accel = (t) => 15 * Math.tanh(accRaw(t) / 15);
+  const side = (t) => speed(t) * ((yawRate(t) * PI) / 180); // centripetal, px/s², + toward his left
+  // inertia chain, each relative to the cruise pose: body banks into the bend, the loose parts lag and swing wide
+  const bodyP = sim(L, (t, y, v) => 60 * (-0.7 * accel(t) - y) - 7 * v);
+  const bodyR = sim(L, (t, y, v) => 60 * (1.25 * side(t) - y) - 7 * v);
+  const bpA = deriv(deriv(bodyP)), brA = deriv(deriv(bodyR));
+  const headP = sim(L, (t, y, v) => -60 * y - 6 * v - 1.4 * bpA(t) - 8 * accel(t));
+  const headR = sim(L, (t, y, v) => -60 * y - 6 * v - 1.4 * brA(t));
+  const hrA = deriv(deriv(headR));
+  const eyeR = sim(L, (t, y, v) => -160 * y - 10 * v - 0.6 * (brA(t) + hrA(t)));
+  const aerP = sim(L, (t, y, v) => -45 * y - 2.5 * v - 1.6 * bpA(t) + 14 * accel(t));
+  const aerR = sim(L, (t, y, v) => -45 * y - 2.5 * v - 1.6 * (brA(t) + hrA(t)) - 1.4 * side(t));
+  const armR = sim(L, (t, y, v) => 40 * (1.1 * side(t) - y) - 3.5 * v - 1.2 * brA(t));
+  const armP = sim(L, (t, y, v) => -40 * y - 3.5 * v - 1.2 * bpA(t) - 14 * accel(t));
+  const foreP = sim(L, (t, y, v) => -80 * y - 5 * v - 1.0 * deriv(deriv(armP))(t));
+  // eyes lead: neck and head look into the bend before he turns, and straighten as he comes out of it
+  const neckY = (t) => 0.1 * yawRate(t + 0.4), headY = (t) => 0.16 * yawRate(t + 0.32);
+  const off = {
+    body: { rotation: (t) => V(bodyP(t), 0, bodyR(t)) },
+    neck: { rotation: (t) => V(0, neckY(t), 0) },
+    head: { rotation: (t) => V(headP(t) - 0.3 * bodyP(t), headY(t), headR(t) - 0.45 * bodyR(t)) },
+    eye_left: { rotation: (t) => V(0, 0, eyeR(t)) },
+    eye_right: { rotation: (t) => V(0, 0, eyeR(t)) },
+    aerial: { rotation: (t) => V(aerP(t), 0, aerR(t)) },
+    // the outer arm swings wide; the inner one is pressed a touch away from his chassis
+    arm_left: { rotation: (t) => { const r = armR(t); return V(armP(t), 0, r > 0 ? -0.15 * r : r); } },
+    arm_right: { rotation: (t) => { const r = armR(t); return V(armP(t), 0, r < 0 ? -0.15 * r : r); } },
+    forearm_left: { rotation: (t) => V(foreP(t), 0, 0) },
+    forearm_right: { rotation: (t) => V(foreP(t), 0, 0) },
+  };
+  const T = {};
+  for (const b of new Set([...Object.keys(cruise), ...Object.keys(off)])) for (const ch of new Set([...Object.keys(cruise[b] || {}), ...Object.keys(off[b] || {})])) {
+    const base = cruise[b] && cruise[b][ch] ? cruise[b][ch] : () => V();
+    const o = off[b] && off[b][ch];
+    T[b] = T[b] || {};
+    // the offsets fade out over the last 0.35 s, so the last frame is exactly the loop's first (cruise is 3 s periodic)
+    T[b][ch] = o ? (t) => addV(base(t), o(t).map((x) => x * (1 - seg(t, L - 0.35, L)))) : base;
+  }
+  T.wheel = { rotation: (t) => V(-(START_WHEEL + ((dist(t) / 4) * 180) / PI), 0, 0) };
+  T.trade_bot = { position: (t) => V(xPos(t), 0, zPos(t)), rotation: (t) => V(0, yaw(t), 0) };
+  anim(name, L, 'once', T);
+}
+turnClip('turn_left', 1);
+turnClip('turn_right', -1);
+
+// turn around: from cruise he brakes, crouches, hops and spins 180° in the air (the wheel whirs freely up there),
+// lands with a squash, and powers off the other way into the loop again. 3 s like the turns: the wheel ends 360° on
+// (the free spin in the air makes up what braking lost) and the key 180°, so the last frame is rolling's first.
+{
+  const L = 3, dt = 1 / 600, n = Math.ceil(L / dt) + 2;
+  const integ = (f) => { const a = new Float64Array(n); for (let k = 1; k < n; k++) a[k] = a[k - 1] + f(k * dt) * dt; return (t) => a[Math.min(n - 1, Math.max(0, Math.round(t / dt)))]; };
+  const SPEED = ((ROLL.wheel * PI) / 180) * 4;
+  const ta = 0.78, tl = 1.22; // take-off and landing
+  const speed = (t) => SPEED * (1 - seg(t, 0.05, 0.6) + seg(t, tl + 0.15, 2.3));
+  const yawRate = deriv((t) => 180 * smooth(lin(t, ta + 0.02, tl - 0.04)));
+  const yaw = (t) => 180 * smooth(lin(t, ta + 0.02, tl - 0.04));
+  const dist = integ(speed);
+  const xPos = integ((t) => -Math.sin((yaw(t) * PI) / 180) * speed(t));
+  const zPos = integ((t) => -Math.cos((yaw(t) * PI) / 180) * speed(t));
+  const yPos = (t) => 5 * hopArc(t, ta, tl);
+  const lost = 360 - ((dist(L) / 4) * 180) / PI; // degrees braking cost the wheel, made up in the air
+  const wheelDeg = (t) => ((dist(t) / 4) * 180) / PI + lost * smooth(lin(t, ta, tl));
+  const accRaw = deriv(speed), accel = (t) => 15 * Math.tanh(accRaw(t) / 15);
+  const A = (t) => bumpBefore(t, ta, 0.2); // crouch before the hop
+  const F = (t) => hopArc(t, ta, tl); // airborne
+  const K = (t) => landKickAt(t, tl, 2.2, 5.5); // landing
+  const Kd = (t) => landKickAt(t, tl + 0.06, 2.0, 5);
+  const spin = (t) => yawRate(t) / 400; // 0..~1 while spinning: loose parts fling outward
+  const bodyP = sim(L, (t, y, v) => 60 * (-0.7 * accel(t) - y) - 7 * v);
+  const bpA = deriv(deriv(bodyP));
+  const aerP = sim(L, (t, y, v) => -45 * y - 2.5 * v - 1.6 * bpA(t) + 14 * accel(t));
+  const aerR = sim(L, (t, y, v) => -45 * y - 2.5 * v - 30 * spin(t));
+  const armP = sim(L, (t, y, v) => -40 * y - 3.5 * v - 1.2 * bpA(t) - 14 * accel(t));
+  const off = {
+    body: {
+      position: (t) => V(0, -1.2 * A(t) - 1.4 * Math.max(0, K(t)), 0),
+      rotation: (t) => V(bodyP(t) - 6 * A(t) - 6 * F(t) - 10 * K(t), 0, 0),
+    },
+    neck: { position: (t) => V(0, -0.8 * A(t) + 0.7 * F(t) - 0.8 * Math.max(0, Kd(t)), 0), rotation: (t) => V(0, 25 * env(t, 0.45, 0.7, 0.85, 1.05), 0) },
+    head: {
+      // eyes lead: he looks over his shoulder the way he'll spin before he hops
+      rotation: (t) => V(-6 * A(t) + 10 * F(t) - 12 * Kd(t) - 0.3 * bodyP(t), 30 * env(t, 0.4, 0.65, 0.85, 1.1), 0),
+      scale: (t) => { const q = 0.1 * Math.max(0, K(t)); return V(1 + 0.5 * q, 1 - q, 1 + 0.5 * q); },
+    },
+    lid_left: { position: (t) => V(0, 0.7 * F(t) - 0.4 * A(t), 0) },
+    lid_right: { position: (t) => V(0, 0.7 * F(t) - 0.4 * A(t), 0) },
+    iris_left: { scale: (t) => { const q = 1 + 0.15 * F(t); return V(q, q, 1); } },
+    iris_right: { scale: (t) => { const q = 1 + 0.15 * F(t); return V(q, q, 1); } },
+    aerial: { rotation: (t) => V(aerP(t) + 20 * F(t) - 35 * Kd(t), 0, aerR(t)) },
+    // arms fling out with the spin and swing up on the hop, then drop with the landing
+    arm_left: { rotation: (t) => V(armP(t) - 22 * A(t) + 26 * F(t) + 12 * K(t), 0, -22 * spin(t) - 3 * A(t)) },
+    arm_right: { rotation: (t) => V(armP(t) - 22 * A(t) + 26 * F(t) + 12 * K(t), 0, 22 * spin(t) + 3 * A(t)) },
+    forearm_left: { rotation: (t) => V(16 * F(t) + 10 * Kd(t), 0, 0) },
+    forearm_right: { rotation: (t) => V(16 * F(t) + 10 * Kd(t), 0, 0) },
+  };
+  const T = {};
+  for (const b of new Set([...Object.keys(cruise), ...Object.keys(off)])) for (const ch of new Set([...Object.keys(cruise[b] || {}), ...Object.keys(off[b] || {})])) {
+    const base = cruise[b] && cruise[b][ch] ? cruise[b][ch] : () => (ch === 'scale' ? V(1, 1, 1) : V());
+    const o = off[b] && off[b][ch];
+    T[b] = T[b] || {};
+    const w = (t) => 1 - seg(t, L - 0.35, L);
+    T[b][ch] = !o ? base : ch === 'scale' ? (t) => base(t).map((x, i) => 1 + (o(t)[i] - 1) * w(t)) : (t) => addV(base(t), o(t).map((x) => x * w(t)));
+  }
+  // lids blink on the landing as well as the loop's own blink
+  T.wheel = { rotation: (t) => V(-(START_WHEEL + wheelDeg(t)), 0, 0) };
+  T.trade_bot = { position: (t) => V(xPos(t), yPos(t), zPos(t)), rotation: (t) => V(0, yaw(t), 0) };
+  anim('turn_around', L, 'once', T);
 }
 
 // self-collision: points sampled over his arms, tested against his own head and body boxes (in each box's own

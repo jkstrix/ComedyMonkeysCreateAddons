@@ -2,7 +2,7 @@
 
 Audio identity for Trade Bot and his station. The character comes from [the brief](../briefs/trade-bot.md); the cue times come from the animation clips in [trade-bot.gen.js](../models/trade-bot.gen.js).
 Cue file: [trade-bot.cues.json](trade-bot.cues.json) · Real-sound recipes: [trade-bot.real-recipes.js](trade-bot.real-recipes.js) · Real sounds: [real/](real/) (mono 44.1 kHz OGG, with variants) · Sources and licences: [sources/SOURCES.md](sources/SOURCES.md) (all CC0) · Placeholder sketches: [placeholder/](placeholder/) (approved for timing; never ship them).
-**Status:** real sounds approved (2026-10-24) and added to the Blockbench clips: 288 sound keyframes across 39 clips (the scared routine approved and added the same day), generated from the cue file by [trade-bot.gen.js](../models/trade-bot.gen.js). In Blockbench, play any clip in the Animate tab to hear them.
+**Status:** real sounds approved (2026-10-24) and added to the Blockbench clips: 303 sound keyframes across 41 clips (the scared routine and the turns approved and added the same day), generated from the cue file by [trade-bot.gen.js](../models/trade-bot.gen.js). In Blockbench, play any clip in the Animate tab to hear them.
 Listen: serve this folder with `node ~/.claude/skills/character-sound-designer/scripts/serve.js design/sound 8765` and open http://localhost:8765/trade-bot-soundboard.html. Switch between real and placeholder, try the variants, and use ⚙ to tweak a sound live; **Save tweaks** writes `trade-bot.tweaks.json`, which the next real build applies.
 
 ## Identity
@@ -339,6 +339,27 @@ Common rules: one-shots play from the entity's animation clock at the cue time (
 **Variations** · 2 variants.
 **Implementation Notes** · paired with `merchant_trill`, and a `land_soft` for the hop.
 
+### turn_scrub
+**Purpose** · he's carving a bend, not sliding: the tyre grips and works through the turn.
+**Sound Layers** · movement: the rolling rumble leaning harder on the tyre · material: a soft rubber grip-and-slip under 1.2 kHz.
+**Timing** · 1.3 s: swells in as he banks (0.35 s), a light scrub through the middle of the arc, eases out as he straightens.
+**Variations** · 3 variants, small pitch spread.
+**Implementation Notes** · one-shot at the start of a turn, over the rolling loop; quiet (below `roll_start`). Used by `turn_left` and `turn_right`.
+
+### wheel_freespin
+**Purpose** · his wheel keeps spinning while he's in the air on the turn-around hop.
+**Sound Layers** · mechanical: a hub whir that rises as the load comes off and falls as it spins down · air: a faint whoosh.
+**Timing** · 0.45 s, rise 0.2 s then fall.
+**Variations** · 2 variants.
+**Implementation Notes** · one-shot with the take-off in `turn_around`; sits under `spin_whir`.
+
+### wheee
+**Purpose** · he enjoys the turn-around hop: a quick, happy "wheee".
+**Sound Layers** · personality: a rising-then-falling glide on the soft voice.
+**Timing** · 0.36 s.
+**Variations** · 3 variants.
+**Implementation Notes** · optional voice cue in `turn_around`; skip it if a voice cue played in the last few seconds (voice cooldown), so frequent turn-arounds don't nag.
+
 ### villager_no / villager_yes / villager_trade
 **Purpose** · the villager's side of the haggle.
 **Sound Layers** · placeholders only.
@@ -424,7 +445,6 @@ Seconds into each clip (the same data as `trade-bot.cues.json`):
 | Clip | Cues (time event) |
 |---|---|
 | `idle` | 0.00 `clock_tick` · 0.50 `clock_tick` · 1.00 `clock_tick` · 1.50 `clock_tick` · 2.00 `clock_tick` · 2.20 `blink` · 2.50 `clock_tick` |
-| `roll_turn_stop` | 0.20 `roll_start` · 1.50 `servo_short` · 3.00 `roll_stop` · 3.50 `aerial_boing` · 3.60 `blink` |
 | `wall_bump` | 0.00 `roll_start` · 0.50 `bonk` · 0.80 `land_soft` · 1.00 `dizzy` · 2.05 `head_shake` · 2.40 `grumble` · 2.45 `roll_start` |
 | `count_stock` | 0.15 `drawer_open` · 0.35 `servo_short` · 1.00 `pleased_boop` · 1.40 `focus_click` · 1.90 `blink` · 2.35 `drawer_close` · 2.40 `aerial_boing` |
 | `sees_player` | 0.05 `servo_snap` · 0.10 `curious_chirp` · 0.50 `servo_snap` · 0.68 `double_take` · 1.00 `servo_short` · 1.10 `merchant_trill` · 1.58 `wave_clink` · 1.91 `wave_clink` · 2.24 `wave_clink` · 2.40 `roll_start` · 3.00 `drawer_open` · 3.00 `light_on` · 3.05 `brass_ping` |
@@ -462,3 +482,6 @@ Seconds into each clip (the same data as `trade-bot.cues.json`):
 | `scared_hide` | 0.00 `hard_brake` · 0.10 `aerial_boing` · 0.38 `hide_tuck` · 0.75 `whimper` |
 | `scared_cower` | 0.00 `tremble_loop` · 0.85 `peek_click` · 1.50 `whimper` |
 | `scared_recover` | 0.15 `peek_click` · 0.20 `servo_short` · 0.55 `servo_short` · 0.80 `curious_chirp` · 0.95 `servo_short` · 1.20 `relief_sigh` · 1.70 `shake_off` · 2.20 `pleased_boop` |
+| `turn_left` | 0.00 `roll_loop` · 0.15 `servo_short` · 0.55 `turn_scrub` · 1.70 `blink` · 2.05 `aerial_boing` |
+| `turn_right` | 0.00 `roll_loop` · 0.15 `servo_short` · 0.55 `turn_scrub` · 1.70 `blink` · 2.05 `aerial_boing` |
+| `turn_around` | 0.05 `roll_stop` · 0.45 `servo_short` · 0.62 `hop_launch` · 0.80 `spin_whir` · 0.82 `wheel_freespin` · 0.88 `wheee` · 1.22 `land_soft` · 1.30 `aerial_boing` · 1.45 `roll_start` · 1.70 `blink` |

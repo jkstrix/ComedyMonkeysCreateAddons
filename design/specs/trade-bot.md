@@ -64,6 +64,10 @@ Clarified: **a clockwork robot, powered by FE through his station, who sells you
 | D53 | Chunk loaders | **Works whenever his area is loaded, including by chunk loaders** (any mod's), with no player nearby; he behaves exactly as he would with a player present | user R10 |
 | D54 | Shared villagers | **Two bots, one villager:** first come, first served; the second bot picks another buyer | user R11 |
 | D55 | Unloaded targets | **A target in an unloaded chunk** (inside his range but outside the loaded area): he skips it this trip and retries later | user R11 |
+| D56 | FE Coil | A new crafting component, the **FE Coil**, made from **copper and redstone** (proposed: 4 copper sheets around 1 redstone dust, shaped). It's the FE part of his recipe (D44), and later electric machines can reuse it. Its look gets previewed in Blockbench first | user R12 |
+| D57 | Trade XP | No XP orbs. The XP vanilla would drop for each trade is banked and **delivered to the output as Create Nuggets of Experience** (1 per 3 XP, the remainder kept for next time), together with the emeralds. Villagers still gain their own XP and levels | user R12 |
+| D58 | Comparator | Strengths: **0** no bot, **5** docked and idle, **10** working, **15** out of charge (refines D38) | user R12 |
+| D59 | Lava and void | If he's wound down in lava, or falls into the void, he's **returned to his station, still wound down**, so he's never lost or stuck burning | user R12 |
 
 ## Open Questions
 None for v1.
@@ -85,7 +89,7 @@ States, with their animation clips:
 1. **Docked / charging** (`dock_lights_out`, waiting): the station charges him at 64 FE/t. Every few seconds he checks the leave conditions (D47). With nothing to sell he stays docked and charges (D52).
 2. **Leave** (`action_comes_in`): the flag springs up, his lights come on, he hops out (`start_rolling` → `rolling`).
 3. **Load** (`chest_take`, `barrel_take`, `chest_take_high`, `depot_take`, or the blind routine): from the inputs in turn, he takes items that seated buyers in range want, up to 27 stacks.
-4. **Trade run** (`rolling` between buyers; `trade_villager` / `trade_villager_open` at each): at each seated buyer, one trade per animation while that villager buys anything he holds and his charge allows (D45, D49). Emeralds go to the pouch (D48). His reputation with that villager grows (D42).
+4. **Trade run** (`rolling` between buyers; `trade_villager` / `trade_villager_open` at each): at each seated buyer, one trade per animation while that villager buys anything he holds and his charge allows (D45, D49). Emeralds go to the pouch (D48), and the trade's XP is banked for nuggets (D57). His reputation with that villager grows (D42).
 5. **Deliver** (`chest_put`, `barrel_put`, `chest_put_high`, `depot_place`, `belt_place`): the pouch goes to the output; if it's full he waits beside it and retries (D22).
 6. **Return**: unsold items back to their inputs; home; reverse-hop into the cradle (`stop_rolling`, `dock_lights_out`).
 7. **Interrupts at any time**:
@@ -107,6 +111,7 @@ Movement: he paths around water and lava, hops up to one block, uses doors and g
 - **Reward:** emeralds at real villager prices, limited by villager stock and restocks (D17). With the Cuckoo Clock that's two restocks a day per villager, so income scales with the number of seated villagers, not with time alone. Chunk-loaded bases (D53) earn while you're away, but still only as fast as restocks allow.
 - **Exploits considered:**
   1. **Infinite emeralds:** blocked by real stock and restock limits.
+  1a. **XP farm:** trade XP arrives as nuggets in the output (D57), so it's capped by the same stock and restock limits as the emeralds (about 3–6 XP per trade), never by time alone.
   2. **Discount farming** (zombie curing, Hero of the Village): blocked by his own capped, never-negative reputation (D34, D42).
   3. **Duplication on chunk unload or packing:** saved state, recall before packing, no deleting (D30, D33).
   4. **Griefing:** owner-only control; an unbreakable station; he winds down instead of dying (D23, D24, D51).
@@ -127,7 +132,8 @@ Movement: he paths around water and lava, hops up to one block, uses doors and g
 | Seats (+ contraption seats) | Where his buyers sit | D7, D10; a villager on a contraption counts while it's seated; if the contraption moves away, abort (D46) |
 | Trains, contraptions, elevators | No riding in v1 | D31 |
 | Deployers, mechanical arms | No | D37 |
-| Redstone, comparators | Pause input; 3-level comparator output | D38 |
+| Redstone, comparators | Pause input; comparator 0 / 5 / 10 / 15 | D38, D58 |
+| Nuggets of Experience | His trade XP, delivered to the output | D57 |
 | Engineer's Goggles | Station info | D39 |
 | Ponder | Station, linking, power, trading | D40 |
 | Packages / logistics | Not in v1 (maybe v2) | D41 |
@@ -139,10 +145,10 @@ Movement: he paths around water and lava, hops up to one block, uses doors and g
 - **AI:** a custom brain or goal set: a scheduler (D47), loader, trade runner (nearest-first), deliverer, returner; scared routine (hostile detection, corner search); home rules (night, thunder, pause, idle charging D52). No logic may require a nearby player (D50, D53): no player-distance checks, no client-only state in the decisions.
 - **Chunk loading (D53):** he ticks whenever his chunk is entity-ticking, however it's loaded. Pathing only into loaded chunks; targets in unloaded chunks are skipped this trip.
 - **Pathfinding:** a node evaluator with doors and gates allowed; ladders, bubble columns, water and lava forbidden; step-up to one block via hop.
-- **Trading:** uses `MerchantOffers` directly (`offer.increaseUses()`, villager XP and levels, restock rules) and records the bot's own gossip on the villager. A player trading with the villager blocks him (D46).
-- **Saving:** jobs (input and output positions plus dimension), the 27-slot load, the emerald pouch, charge, per-villager reputation and owner, all with codecs. On unload, the load is persisted with him.
+- **Trading:** uses `MerchantOffers` directly (uses, villager XP and levels, restock rules) through an addition to the existing `VillagerMixin`, not vanilla `notifyTrade` (which drops XP orbs and posts NeoForge's trade event with no player). His reputation lives on him, per villager. A player trading with the villager blocks him (D46).
+- **Saving:** jobs (input and output positions plus dimension), the 27-slot load, the emerald pouch, the banked XP, charge, per-villager reputation and owner, all with codecs. On unload, the load is persisted with him.
 - **Config (`CMConfig`, server):** range (64), bots per player (4), FE per tick charging (64), station buffer (100,000), full charge (100,000), FE per block (4), FE per trade (50), trade-time floor.
-- **Data:** mechanical crafting recipe, lang (with 80 subtitles), sounds.json (80 events with variants), an entity tag for the Carry On blacklist, Ponder scenes.
+- **Data:** mechanical crafting recipe, the FE Coil item and its recipe, lang (with 80 subtitles), sounds.json (80 events with variants), an entity tag for the Carry On blacklist, Ponder scenes.
 
 # ONE MINUTE UNDERSTANDING
 Trade Bot is a cheerful clockwork robot who sells your stuff to villagers. Craft him (on his winding station) with Create mechanical crafters, power the station with FE from below, and link up to four input containers and one output. Seat villagers on Create seats nearby. He charges, rolls out, loads up to a barrel's worth of goods, trades at real villager prices with every seated buyer in range, banks the emeralds, delivers them, and goes home to charge. He keeps working whenever his area is loaded, even by a chunk loader with no one around. Real stock limits keep him fair; his own reputation slowly earns him better prices.
@@ -173,7 +179,7 @@ A mid-late-game automation robot that trades your goods to seated villagers for 
 - Only trades with villagers who are **sitting on a seat**.
 - Real trades: stock, restocks and villager XP all apply.
 - Sells for emeralds only (buying comes with the v2 ledger).
-- Carries 27 stacks (mixed), plus a separate emerald pouch.
+- Carries 27 stacks (mixed), plus a separate emerald pouch; trade XP comes out as Nuggets of Experience.
 - Charge drains per block and per trade; recharges docked.
 - Goes home at night, in thunderstorms, when paused, or when idle.
 - Never climbs ladders or uses bubble columns; avoids water and lava.
@@ -188,7 +194,7 @@ A mid-late-game automation robot that trades your goods to seated villagers for 
 - Kept loaded by a chunk loader with no players: he works normally. A target in an unloaded chunk is skipped and retried next trip.
 - Station packed while he's out: he's recalled first, then it packs.
 - An input or output removed: items go back to their source or his station.
-- Pushed into water: he winds down until he's out and dry.
+- Pushed into water: he winds down until he's out and dry. Wound down in lava, or fallen into the void: returned to his station.
 - Hostile appears: scared routine; monsters never target him.
 - No charge to get home: he never leaves without a round-trip reserve.
 - A villager on a contraption seat moves away: abort (he doesn't ride).
@@ -208,11 +214,14 @@ A mid-late-game automation robot that trades your goods to seated villagers for 
 - [ ] Hostile detection, corner finding, scared state machine (5 stages)
 - [ ] Owner, team access and per-player limit (saved data)
 - [ ] No player-presence dependencies; tested in a chunk-loaded area with no players
-- [ ] Comparator output (3 levels); redstone pause input
+- [ ] Comparator output (0 / 5 / 10 / 15); redstone pause input
+- [ ] Trade XP banked and delivered as Create Nuggets of Experience
+- [ ] Lava and void rescue to the station
 - [ ] Engineer's Goggles tooltip
 - [ ] Save/load with codecs; chunk-unload safety
 - [ ] Config entries in `CMConfig`; lang and subtitles
 - [ ] Sounds: register 80 events, sounds.json with variants, looping sound instances (roll, fast roll, tremble, station hum)
+- [ ] FE Coil item (look previewed in Blockbench first) and its recipe
 - [ ] 5×5 mechanical-crafting recipe
 - [ ] Ponder scenes: station and power, linking, trading
 - [ ] Carry On blacklist tag for the entity
@@ -235,7 +244,7 @@ Gameplay: 95% · World Integration: 92% · Balance: 85% · Progression: 90% · A
 - Gameplay 95%: v1 is complete; the ledger (v2) is deliberately out of scope.
 - World Integration 92%: team-mod detection for owner access is to be confirmed at implementation.
 - Balance 85%: the FE numbers, the 7 s trade pace and the recipe cost need a playtest pass.
-- Progression 90%: the recipe's exact 5×5 grid is still to be laid out.
+- Progression 90%: the recipe's exact 5×5 grid is still to be laid out, and the FE Coil's recipe is a proposal.
 - Automation 92%: packages deferred to v2 by choice.
 - Edge Cases 95%: all decided; villagers on moving contraption seats need testing in game.
 - **Overall 85%** (the lowest area, balance): ready to build, with numbers to tune in playtesting.

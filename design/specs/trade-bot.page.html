@@ -186,6 +186,7 @@ footer code { font-family: var(--mono); font-size: 0.85rem; color: var(--fg); ov
       <li>Crafted on his winding station; power it with FE</li>
       <li>Link 4 inputs and 1 output at the station</li>
       <li>Carries 27 stacks plus an emerald pouch</li>
+      <li>Trade XP arrives as Nuggets of Experience</li>
       <li>Real villager trades: stock and restocks apply</li>
       <li>Goes home to charge: night, storms, idle, low charge</li>
       <li>No ladders or bubble columns; avoids water and lava</li>
@@ -239,6 +240,7 @@ footer code { font-family: var(--mono); font-size: 0.85rem; color: var(--fg); ov
           <li>Trades only with <b>seated</b> villagers and wandering traders</li>
           <li>Uses real trades, stock and restocks</li>
           <li>Earns his own reputation, so prices slowly improve</li>
+          <li>Puts trade XP in the output as Nuggets of Experience</li>
           <li>Uses any container as an input or output</li>
           <li>Opens doors, trapdoors and gates</li>
           <li>Hops stairs, slabs and blocks up to one high</li>
@@ -249,6 +251,7 @@ footer code { font-family: var(--mono); font-size: 0.85rem; color: var(--fg); ov
         <h3>Doesn't</h3>
         <ul>
           <li>Buy things (the v2 Trade Ledger adds that)</li>
+          <li>Drop XP orbs by the villagers</li>
           <li>Climb ladders or use bubble columns</li>
           <li>Go into water or lava</li>
           <li>Die: at 0 HP he winds down until you wind him with a wrench</li>
@@ -292,6 +295,7 @@ footer code { font-family: var(--mono); font-size: 0.85rem; color: var(--fg); ov
       <li><span class="q">You pack the station while he's out?</span><span class="a">He's called home first, then both pack into one item.</span></li>
       <li><span class="q">An input or output gets removed?</span><span class="a">Items go back where they came from, or to his station.</span></li>
       <li><span class="q">He's pushed into water?</span><span class="a">He winds down until he's out and dry (about 5 s).</span></li>
+      <li><span class="q">He winds down in lava, or falls into the void?</span><span class="a">He's sent back to his station, still wound down.</span></li>
       <li><span class="q">A hostile mob turns up?</span><span class="a">He hides in a corner, shaking, until it's safe again.</span></li>
       <li><span class="q">He's running low far from home?</span><span class="a">He never leaves without enough charge to get back.</span></li>
     </ul>
@@ -325,5 +329,5 @@ footer code { font-family: var(--mono); font-size: 0.85rem; color: var(--fg); ov
     </ul>
   </section>
 
-  <footer>Full spec, with all 55 decisions: <code>design/specs/trade-bot.md</code></footer>
+  <footer>Full spec, with all 59 decisions: <code>design/specs/trade-bot.md</code></footer>
 </main>

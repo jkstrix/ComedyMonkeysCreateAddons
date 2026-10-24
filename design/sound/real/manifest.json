@@ -929,5 +929,28 @@
   "synth": [
    "boing"
   ]
+ },
+ "turn_scrub": {
+  "variants": 3,
+  "sources": [],
+  "synth": [
+   "roll",
+   "scrub"
+  ]
+ },
+ "wheel_freespin": {
+  "variants": 2,
+  "sources": [],
+  "synth": [
+   "servo",
+   "whoosh"
+  ]
+ },
+ "wheee": {
+  "variants": 3,
+  "sources": [],
+  "synth": [
+   "voice"
+  ]
  }
 }

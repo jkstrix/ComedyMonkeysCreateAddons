@@ -29,6 +29,8 @@ Model: [design/models/trade-bot.bbmodel](../models/trade-bot.bbmodel) (rebuilt b
 - "write all this into his character brief and add some times and animation descriptions for the sound designer"
 - "he also needs to be able to take things from depots"
 - "we also need start rolling, rolling, stop rolling animations and sounds"
+- "the turn animation needs splitting to turn left and right and then we can transition from and to move with the turn in the middle"
+- "we should also have a turn 180, where he does a little jump to spin around"
 - "an afraid animation for when he sees a hostile mob, in game he will find a corner, and then try and make himself look small and shake until it's safe again. So animate each stage of that separately"
 - Trading with villagers: "the villager must be sat on a seat for him to do it (that's going to be a game rule)"; "the villager maybe path blocked by their workstation and it needs to look like he's interacting even one full block away with an obstacle in between or not"
 
@@ -126,11 +128,13 @@ Moving parts: the eye pods (each rolls and pitches on its own), the lid plates (
 - **Tilt is his main way of moving.** He leans into acceleration (about 10°), rocks back on braking (about 12°), banks into turns (up to ~17°) and rides the swing back out. The head counter-tilts slightly to keep the eyes level.
 - **Weight:** the head is heavy and lags most on pitch, the arms are light and swing freely, and the aerial is loosest and settles last.
 
-**Locomotion clips for the game** (`start_rolling` → `rolling` → `stop_rolling`, played in place; the game moves the entity)
+**Locomotion clips for the game** (`start_rolling` → `rolling` → `stop_rolling`, with `turn_left`, `turn_right` and `turn_around` dropped in between rolling loops; the game moves the entity)
 - **Start rolling** (1.3 s): a small lean-back wind-up and crouch, then he lunges ~12° into the acceleration as the wheel spins up. His head and aerial lag back, his arms swing back and his lids widen eagerly, then everything settles into the cruise pose.
 - **Rolling** (3 s seamless loop): the cruise pose (6° forward lean, head counter-tilted 2°), a 0.3 px bob twice a second, a slow ±1.5° sway, arms swinging gently, the aerial bobbing a beat behind, a blink, and the wheel turning exactly once per loop (120°/s).
 - **Stop rolling** (1.6 s): the wheel brakes to a stop in 0.5 s. He rocks back ~12°, his head and aerial whip forward, his arms swing forward, and it all wobbles to rest.
-- The last frame of each clip equals the first frame of the next (checked: 0.00 difference), so they chain cleanly, and the rolling loop wraps onto itself the same way.
+- **Turn left / turn right** (3 s each, from rolling back into rolling): a 90° arc while he keeps rolling. His neck and head look into the bend first (~0.35 s ahead), then he eases off a little and banks ~15° into the turn. His aerial and outer arm swing wide, and the inner arm tucks slightly away from his chassis. Coming out, he powers back up, swings past upright and wobbles back into the cruise pose.
+- **Turn around** (3 s, from rolling back into rolling): he brakes and glances over his shoulder the way he'll spin, then crouches, hops 5 px and spins 180° in the air with his arms flung out and his wheel whirring freely. He lands with a squash, his head and aerial whip down, then he powers off the other way.
+- The last frame of each clip equals the first frame of the next (checked: 0.00 difference), so they chain cleanly, and the rolling loop wraps onto itself the same way. The turns start and end on the rolling loop's first frame. In game the entity's own movement does the travelling; the arcs in the preview clips are only there to show the motion.
 
 **Locomotion: unicycle balancing**
 - The wheel spins to match ground speed.
@@ -252,7 +256,8 @@ The lights (irises, lamp) are separate lit cubes over dark ones, so the renderer
 | Clip | Length | Loop | What it shows |
 |---|---|---|---|
 | `idle` | 3.0 s | loop | balance sway, key, blink |
-| `roll_turn_stop` | 5.0 s | once | accelerate, bank into a left turn, brake, wobble settle |
+| `turn_left` / `turn_right` | 3.0 s | once | from rolling: look into the bend, bank into a 90° arc, swing back out into rolling |
+| `turn_around` | 3.0 s | once | from rolling: brake, crouch, hop and spin 180° in the air, land, power off into rolling |
 | `scared_spot` / `scared_flee` / `scared_hide` / `scared_cower` / `scared_recover` | 1.1 / 1.5 / 1.3 / 2.0 / 2.6 s | once / loop / once / loop / once | afraid of a hostile mob: spot, flee to a corner, hide small, shake, recover |
 | `start_rolling` / `rolling` / `stop_rolling` | 1.3 / 3.0 / 1.6 s | once / loop / once | the game locomotion set, in place, chaining seamlessly |
 | `wall_bump` | 2.8 s | once | hit, dizzy, head shake, glare, reverse |
@@ -275,7 +280,7 @@ The lights (irises, lamp) are separate lit cubes over dark ones, so the renderer
 
 ## Sound Design Cue Sheet
 
-**Status:** the real sounds are approved and in the Blockbench clips (each clip's Effects track; 288 sound keyframes across 39 clips). The full sound design (signature sounds, layered events, variations and implementation notes) lives in [design/sound/trade-bot.md](../sound/trade-bot.md). The cues are in [trade-bot.cues.json](../sound/trade-bot.cues.json), and you can listen on the [soundboard](../sound/trade-bot-soundboard.html). The sheet below is the original per-clip brief for the sound designer.
+**Status:** the real sounds are approved and in the Blockbench clips (each clip's Effects track; 303 sound keyframes across 41 clips). The full sound design (signature sounds, layered events, variations and implementation notes) lives in [design/sound/trade-bot.md](../sound/trade-bot.md). The cues are in [trade-bot.cues.json](../sound/trade-bot.cues.json), and you can listen on the [soundboard](../sound/trade-bot-soundboard.html). The sheet below is the original per-clip brief for the sound designer.
 
 ### His sound
 - **Voice:** no words. Small, warm, musical **chirps, warbles and boops** with a clockwork-music-box flavour, close to Wall-E or a friendly R2 but quieter and rounder. Rising pitch for questions and curiosity, falling for disappointment, a quick bright trill for joy. Keep it sparse: he's a character, not a radio.
@@ -301,14 +306,24 @@ Times are seconds from the start of each clip. *Voice* cues are optional charact
 | 0.0–3.0 | balance sway; key turning | faint key ticking (about 2/s), very soft gyro hum |
 | 2.2–2.4 | blink | tiny shutter tick (very quiet) |
 
-### roll_turn_stop (5.0 s)
+### turn_left / turn_right (3.0 s, played over the rolling loop's sound)
 | Time | Event | Sound idea |
 |---|---|---|
-| 0.2–1.1 | accelerates, leaning forward | rubber roll rising with speed; small servo creak as he leans |
-| 1.5–2.9 | banks into a left turn | tyre scuff; arms swing (soft whir) |
-| 3.0–3.45 | brakes hard | rubber squeak / skid |
-| 3.45–4.3 | wobble settle, head and aerial lag | aerial boing, spring rattle settling; *voice: small "whoa"* |
-| 3.6 | blink | shutter tick |
+| 0.15–0.5 | neck and head turn into the bend | small servo (head turn) |
+| 0.5–2.0 | banks through the 90° arc | soft rubber scrub as the tyre carves the bend |
+| 1.9–2.5 | powers out, swings back past upright | aerial boing as it whips back |
+| 1.7 | blink | shutter tick |
+
+### turn_around (3.0 s, played over the rolling loop's sound)
+| Time | Event | Sound idea |
+|---|---|---|
+| 0.05–0.6 | brakes | rubber scrub, rumble slowing |
+| 0.45–0.7 | glances over his shoulder | small servo |
+| 0.6–0.78 | crouches, springs off | spring compress, then the hop launch |
+| 0.8–1.2 | spins in the air, wheel whirring | swish of the spin; free-spinning wheel whir; *voice: small "wheee" chirp* |
+| 1.22 | lands | heavy rubbery thump plus a metal settle (lighter than a block hop) |
+| 1.3 | aerial whips down | aerial boing |
+| 1.4–2.3 | powers off the other way | rubber rumble rising (`roll_start`) |
 
 ### wall_bump (2.8 s)
 | Time | Event | Sound idea |

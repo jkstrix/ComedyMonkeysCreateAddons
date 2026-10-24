@@ -102,6 +102,11 @@ const real = {
   poof_out: R([Y('swell', { f: 400, f2: 900, dur: 0.12, gain: 0.3 }), Y('pop', { at: 0.12, f: 900, gain: 0.6 }), P(glass, { at: 0.14, pitch: 1.7, gain: 0.35 })], { level: 0.6 }),
   emerald_catch: R([S('handleCoins2', { gain: 0.45, trim: [0, 0.3], fadeOut: 0.1, lowpass: 6000 }), S('impactBell_heavy_004', { at: 0.02, pitch: 1.7, gain: 0.4 }), P(range('impactGlass_light_', 5), { at: 0.01, pitch: 1.3, gain: 0.4, lowpass: 7000 }), Y('ping', { at: 0.05, f: 2900, dur: 0.3, gain: 0.25 })], { level: 0.75 }),
   spin_whir: R([Y('servo', { f: 120, f2: 320, dur: 0.45, gain: 0.4 }), Y('whoosh', { at: 0.03, f: 280, f2: 1000, dur: 0.45, gain: 0.45 })], { variants: 2, level: 0.5 }),
+  // turns: the tyre carving a bend under the rolling loop (a swell of rumble and a light grip-and-slip, quieter than roll_start),
+  // the wheel whirring free in the air on the turn-around hop, and his happy 'wheee'
+  turn_scrub: R([Y('roll', { f: 360, rate: 6, rate2: 5, dur: 1.3, fadeIn: 0.35, fadeOut: 0.55, depth: 0.3, crunch: 0.3, crunchLevel: 0.25, gain: 0.7 }), Y('scrub', { at: 0.25, f: 520, rate: 40, dur: 0.8, gain: 0.3 })], { level: 0.3, vary: { pitch: 0.04 } }),
+  wheel_freespin: R([Y('servo', { f: 180, f2: 420, dur: 0.22, gain: 0.35 }), Y('servo', { at: 0.2, f: 420, f2: 260, dur: 0.25, gain: 0.25 }), Y('whoosh', { at: 0.02, f: 220, f2: 520, dur: 0.4, gain: 0.15 })], { variants: 2, level: 0.32 }),
+  wheee: R([...voiceOf('wheee', { gain: 0.8 })], { level: 0.5 }),
 
   // villager stand-ins: in game these are vanilla villager sounds; kept as voice sketches for the preview
   villager_no: R([...voiceOf('villager_no', { gain: 0.8, tine: false }), Y('noise', { f: 500, dur: 0.32, gain: 0.08 })], { variants: 1, level: 0.5 }),
@@ -130,7 +135,7 @@ const real = {
 };
 
 // the voice is dense (high RMS), so voice-led events sit ~30% lower in peak than impacts, to sound small and close
-for (const id of ['merchant_trill', 'curious_chirp', 'sad_aww', 'grumble', 'huh', 'pleased_boop', 'hi_boop', 'bye_boop', 'plead_chirp', 'haggle_chatter', 'dizzy', 'snore', 'sleepy_mmm', 'puzzled_hmm', 'villager_no', 'villager_yes', 'villager_trade', 'panic_chatter', 'whimper', 'relief_sigh']) real[id].level *= 0.7;
+for (const id of ['merchant_trill', 'curious_chirp', 'sad_aww', 'grumble', 'huh', 'pleased_boop', 'hi_boop', 'bye_boop', 'plead_chirp', 'haggle_chatter', 'dizzy', 'snore', 'sleepy_mmm', 'puzzled_hmm', 'villager_no', 'villager_yes', 'villager_trade', 'panic_chatter', 'whimper', 'relief_sigh', 'wheee']) real[id].level *= 0.7;
 
 // softer, more elongated robot noises (user: "especially during expressions"; loudness unchanged, set by `level`):
 // voice notes stretched (expression sounds most, quick reactions least), servo whirs rounder and a little longer
@@ -139,7 +144,7 @@ const STRETCH = {
   merchant_trill: 1.6, dizzy: 1.6, found_it: 1.5, haggle_chatter: 1.4, shrug: 1.6,
   startled_chirp: 1.3, double_take: 1.3, hop_launch: 1.2, hop_launch_big: 1.2, drop_whoosh: 1.2, light_on: 1.2, light_off: 1.2,
   villager_no: 1, villager_yes: 1, villager_trade: 1,
-  scared_yelp: 1.0, panic_chatter: 1.0, whimper: 1.4, peek_click: 1.2, relief_sigh: 1.6,
+  scared_yelp: 1.0, panic_chatter: 1.0, whimper: 1.4, peek_click: 1.2, relief_sigh: 1.6, wheee: 1.3,
 };
 for (const [id, r] of Object.entries(real)) {
   const k = STRETCH[id] || 1.5;
