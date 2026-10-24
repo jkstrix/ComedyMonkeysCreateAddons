@@ -172,6 +172,11 @@ Mannerisms 3–6 have no preview clip yet; the expression clips cover their face
 - **Player walks away** (game-side): watches them go, plays `expr_sad` with a small slow wave, then perks back up.
 - **Trade done** (game-side): `expr_happy` bounces plus a 360° spin on the wheel; the drawer closes.
 - **Gets hit** (game-side): flinch with the lids shut, then `expr_cross` and he rolls back a block.
+- **A trade falls through** (`shrug`, 2.2 s): a puzzled head tilt with the eyes tipped in and lids half down; then a shrug, elbows out and claws turned up, with a little lift of the body; then he settles.
+
+**Winding down and being wound up** (D24, D29: at 0 HP or soaked he never dies, he runs down)
+- **Winds down** (`wind_down`, 3.4 s, holds its last frame): the key slows to a stop. Four escapement ticks come further and further apart (0.3, 0.9, 1.7, 2.6 s), and each drops him a bit further into a slump: body forward and to one side, head drooping and tilted, aerial flopped, lids half shut, eyes tipped sad, arms limp. The irises shrink, flicker and go dark. The last tick lands with a small, tired bounce.
+- **Re-wound** (`rewind`, 3.0 s, starts exactly on `wind_down`'s last frame): two cranks of the key, each with a shudder; the eyes flicker back on; he jolts upright and overshoots (lids wide, irises big, neck up, aerial whipping back, a tiny hop); then he settles into his idle and blinks.
 
 **Stairs** (one bounce per 8 px step)
 - **Up** (`stairs_up`): he rolls in and stops short, crouches (body squashes 1 px, arms swing back, head dips), then pops *straight up first* and only moves forward once the wheel clears the step. The wheel spins fast in the air, the arms swing forward and the lids open wide ("hup!"). He lands with a squash, a head nod and an aerial whip, and springs back with one overshoot.
@@ -525,6 +530,17 @@ Times are seconds from the start of each clip. *Voice* cues are optional charact
 | | 1.0–1.5 | puff and huffy head shake | *voice: grumpy buzz*, quick servo shakes |
 | `expr_wave` | 0.2 | arm springs up, lamp on | servo, bwip |
 | | 0.55–2.3 | three waves | clinks; *voice: "hi!" boop* |
+| `shrug` | 0.15 | puzzled tilt | *voice: "hmm?"* (`puzzled_hmm`) |
+| | 0.55 | shrug | shoulder-cog clink, a tiny "mm-mm" (`shrug`) |
+| | 1.3 | settles | servo |
+| `wind_down` | 0.3, 0.9, 1.7, 2.6 | slowing escapement ticks, a sag at each | `clock_tick`, further apart each time |
+| | 1.2 | the body gives | servo |
+| | 2.3–2.5 | eyes flicker and go dark | `flicker`, `light_off` |
+| | 2.8 | the last of the spring | mechanical sigh (`sigh`) |
+| `rewind` | 0.2, 0.65 | two key cranks | `key_rattle` ×2 |
+| | 1.1–1.25 | eyes flicker on | `flicker`, `light_on` |
+| | 1.3 | jolts upright, small hop | `startled_chirp`, `aerial_boing`, `land_soft` at 1.55 |
+| | 2.2 | blink, settled | `blink`, `pleased_boop` at 2.4 |
 | `expr_doze_off` | 0.4 | lids start sinking | slow shutter |
 | | 1.2, 2.0 | two nod-and-catch dips | small servo jerk each |
 | | 2.2–2.36 | eyes flicker off | flicker ticks, click |

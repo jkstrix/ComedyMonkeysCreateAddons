@@ -391,6 +391,40 @@ That last method is **added to the existing `VillagerMixin`**. It does exactly w
 
 **Tests:** corner scoring on a fixture grid, the reaction cooldowns and the cue crossing logic (pure).
 
+**Done (M6).** As built (`content/tradebot/react/`, the brain, the motion, `client/tradebot/TradeBotLoopSounds`). What differs from the plan, or wasn't in it:
+- **New clips,** previewed and approved in Blockbench first:
+  - `shrug`: called-off trades use it now, not `expr_curious`;
+  - `wind_down`: holds its last frame;
+  - `rewind`: starts exactly on `wind_down`'s last frame, which a test checks.
+  
+  They reuse approved sounds. `sees_player` is now a game-root clip: the brain turns him to face the player instead of the clip.
+- **Interruptions:**
+  - Reactions and frights only interrupt travelling and waiting, never a container or a trade clip, so the item bookkeeping stays exact.
+  - Running down interrupts anything. After any interruption he resumes his job, his trip, or goes home.
+  - Nothing interrupts a hop; `halt()` waits for the landing.
+- **Scared:**
+  - Checked every half second while he's out, for monsters within `tradeBotHostileRadius` that he can see.
+  - `CornerFinder` searches spots within 8 steps: two walls or more score 3 blocks of distance per wall; otherwise it's distance from the mob.
+  - Fleeing runs at twice cruise speed, with `scared_flee` instead of the rolling clips and no turn clips.
+  - He recovers 5 s after the last sighting and stays calm for 5 s after that.
+- **Reactions** (`Reactions` cooldowns):
+  - `sees_player` for a player within 6 blocks, in sight, who has been away a minute;
+  - `expr_cross` when a player hits him;
+  - `expr_happy` once at the end of a run that made trades;
+  - `wall_bump` inside the motion, before a stuck replan, at most every 10 s.
+
+  Idle mannerisms aren't in: he's only idle docked, where he sleeps with his lights out.
+- **Running down:**
+  - At 0 HP `die()` winds him down instead (health 1); only `/kill` removes him.
+  - In water: winds down, dries out 5 s after he's out, then winds himself up. He can't drown (`canDrownInFluidType`).
+  - Lava or below the world: put in front of his station, wound down. The owner's wrench winds him up to full health.
+  - Saved across reloads. The station's goggles say "Wound down", and the comparator gives 15 (as out of charge: he needs his owner).
+- **Sounds:**
+  - The voice cooldown is between clips: within a clip every voice cue plays, but a new clip's voice waits 4 s after another clip spoke. In looping clips the voice plays every other time round.
+  - Loops: `roll_loop` (volume and pitch follow his real speed), `roll_fast_loop` while fleeing, `tremble_loop` while cowering. Each fades in and out.
+  - The station's winder clicks `key_rattle` every 0.8 s while charging him.
+- **Courses:** `hidesFromAZombieAndCarriesOn`, `windsDownInWaterAndDriesOut`, `windsDownAtNoHealthAndTheWrenchWindsHimUp`, `comesHomeFromLavaAndTheVoid`.
+
 ## Milestone 7: teaching and release
 
 - **Ponder** (`client/ponder/TradeBotScenes`, three storyboards in `ponder/trade_bot.nbt`):

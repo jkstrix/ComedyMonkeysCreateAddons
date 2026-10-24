@@ -1268,6 +1268,95 @@ function solveArm(side, target, lean, o = {}) {
   });
 }
 
+// 7b. a trade falls through: a puzzled tilt, then a shrug (elbows out, claws turned up), and settle
+{
+  const sh = 0.55;
+  const T = keyedTracks({
+    head: { rotation: [[0, Z], [0.15, V(-6, 0, 12), 4, 5], [sh + 0.15, V(0, 0, 10)], [1.3, Z, 3.5, 5]] },
+    neck: { position: [[0, Z], [sh + 0.15, V(0, -0.6, 0)], [sh + 0.4, V(0, 0.4, 0)], [1.3, Z]] },
+    eye_left: { rotation: [[0, Z], [0.15, V(0, 0, 8)], [1.3, Z]] },
+    eye_right: { rotation: [[0, Z], [0.15, V(0, 0, -8)], [1.3, Z]] },
+    lid_left: { position: [[0, Z], [0.15, V(0, -0.4, 0)], [1.3, Z]] },
+    lid_right: { position: [[0, Z], [0.15, V(0, -0.6, 0)], [1.3, Z]] },
+    aerial: { rotation: [[0, Z], [0.15, V(0, 0, -15), 4, 3], [sh, V(-12, 0, 0), 5, 3], [1.3, Z]] },
+    // elbows out, claws turned up: "what can you do?"
+    arm_left: { rotation: [[0, Z], [sh, V(20, 0, -48)], [1.3, Z, 4, 5]] },
+    arm_right: { rotation: [[0, Z], [sh, V(20, 0, 48)], [1.3, Z, 4, 5]] },
+    forearm_left: { rotation: [[0, Z], [sh, V(95, 0, 40)], [1.3, Z, 4, 5]] },
+    forearm_right: { rotation: [[0, Z], [sh, V(95, 0, -40)], [1.3, Z, 4, 5]] },
+  }, { extra: { body: { position: (t) => V(0, 0.6 * env(t, sh, sh + 0.15, sh + 0.25, sh + 0.45), 0) } } });
+  anim('shrug', 2.2, 'once', T);
+}
+
+// 7c. winding down (D24, D29) and being wound up again: the spring runs out tick by tick into a slump, eyes dark;
+// the wrench cranks him back, the eyes flicker on and he jolts upright. rewind starts on wind_down's last frame.
+const WOUND = {
+  body: { rotation: V(-9, 0, 5) }, neck: { position: V(0, -1.5, 0) }, head: { rotation: V(16, 0, -8) },
+  aerial: { rotation: V(45, 0, 10) }, lid_left: { position: V(0, -1.6, 0) }, lid_right: { position: V(0, -1.6, 0) },
+  eye_left: { rotation: V(0, 0, 10) }, eye_right: { rotation: V(0, 0, -10) },
+  arm_left: { rotation: V(-6, 0, 6) }, arm_right: { rotation: V(-6, 0, -6) },
+  forearm_left: { rotation: V(-10, 0, 0) }, forearm_right: { rotation: V(-10, 0, 0) },
+  iris_left: { scale: V(0.85, 0.85, 1) }, iris_right: { scale: V(0.85, 0.85, 1) },
+};
+const WOUND_KEY = -72; // where the key stops: 60 deg/s slowing to nothing over 2.4 s
+let WOUND_END = null; // wind_down's last frame, exactly, so rewind starts on it
+// the idle sway, weighted by k(t) (not the key: each clip turns it itself)
+const idleWeighted = (k) => {
+  const o = {};
+  for (const b of Object.keys(idle)) if (b !== 'key') {
+    o[b] = {};
+    for (const ch of Object.keys(idle[b])) o[b][ch] = (t) => idle[b][ch](t).map((x) => x * k(t));
+  }
+  return o;
+};
+{
+  const L = 3.4, ticks = [0.3, 0.9, 1.7, 2.6], share = [0.15, 0.4, 0.7, 1];
+  const keys = {};
+  for (const b of Object.keys(WOUND)) for (const ch of Object.keys(WOUND[b])) {
+    const w = WOUND[b][ch], rest = ch === 'scale' ? V(1, 1, 1) : Z;
+    const at = (f) => rest.map((x, i) => x + (w[i] - x) * f);
+    // each tick drops him a little further; the last one lands with a tired bounce
+    (keys[b] = keys[b] || {})[ch] = [[0, rest], ...ticks.map((t, i) => (i === ticks.length - 1 ? [t, at(share[i]), 3.5, 3.5] : [t, at(share[i]), 6, 6]))];
+  }
+  const T = keyedTracks(keys, { noIdle: true, extra: idleWeighted((t) => 1 - seg(t, 0, 1.0)) });
+  T.key = { rotation: (t) => { const u = Math.min(t, 2.4); return V(0, 0, -60 * (u - (u * u) / 4.8)); } };
+  WOUND_END = (b, ch) => T[b][ch](L);
+  anim('wind_down', L, 'hold', T, {
+    iris_glow_left: { scale: [[0, V(1, 1, 1)], [2.3, V(0, 0, 0)], [2.36, V(1, 1, 1)], [2.5, V(0, 0, 0)]] },
+    iris_glow_right: { scale: [[0, V(1, 1, 1)], [2.32, V(0, 0, 0)], [2.42, V(1, 1, 1)], [2.52, V(0, 0, 0)]] },
+  });
+}
+{
+  const L = 3.0, jolt = 1.3;
+  const AWAKE = {
+    body: { rotation: V(4, 0, 0) }, neck: { position: V(0, 1.2, 0) }, head: { rotation: V(-6, 0, 0) },
+    aerial: { rotation: V(-25, 0, 0) }, lid_left: { position: V(0, 1, 0) }, lid_right: { position: V(0, 1, 0) },
+    arm_left: { rotation: V(-20, 0, -20) }, arm_right: { rotation: V(-20, 0, 20) },
+    iris_left: { scale: V(1.2, 1.2, 1) }, iris_right: { scale: V(1.2, 1.2, 1) },
+  };
+  const keys = {};
+  for (const b of Object.keys(WOUND)) for (const ch of Object.keys(WOUND[b])) {
+    const rest = ch === 'scale' ? V(1, 1, 1) : Z, over = (AWAKE[b] || {})[ch];
+    const from = WOUND_END(b, ch);
+    (keys[b] = keys[b] || {})[ch] = over ? [[0, from], [jolt, over, 9, 6], [1.9, rest, 4, 5]] : [[0, from], [jolt, rest, 9, 6]];
+  }
+  const crank = (t) => landKickAt(t, 0.3, 4, 8) + landKickAt(t, 0.75, 4, 8);
+  const extra = idleWeighted((t) => seg(t, 1.8, 2.6));
+  const add = (b, ch, f) => { const was = (extra[b] = extra[b] || {})[ch]; extra[b][ch] = was ? (t) => addV(was(t), f(t)) : f; };
+  add('body', 'rotation', (t) => V(0, 0, 2 * crank(t)));
+  add('head', 'rotation', (t) => V(-2 * crank(t), 0, 0));
+  add('lid_left', 'position', (t) => V(0, blink(t, 2.2), 0));
+  add('lid_right', 'position', (t) => V(0, blink(t, 2.2), 0));
+  const T = keyedTracks(keys, { noIdle: true, extra });
+  T.trade_bot = { position: (t) => V(0, 1.2 * hopArc(t, jolt, 1.55), 0) };
+  // two cranks, then the spring catches and the key spins back up to its idle pace
+  T.key = { rotation: (t) => V(0, 0, WOUND_KEY - 180 * smooth(lin(t, 0.2, 0.35)) - 180 * smooth(lin(t, 0.65, 0.8)) - 60 * Math.max(0, t - 1.1) * seg(t, 1.1, 1.6)) };
+  anim('rewind', L, 'once', T, {
+    iris_glow_left: { scale: [[0, V(0, 0, 0)], [1.1, V(1, 1, 1)], [1.17, V(0, 0, 0)], [1.25, V(1, 1, 1)]] },
+    iris_glow_right: { scale: [[0, V(0, 0, 0)], [1.12, V(1, 1, 1)], [1.2, V(0, 0, 0)], [1.27, V(1, 1, 1)]] },
+  });
+}
+
 // "blind" hand-offs: containers he can't see into or reach (barrels, which just sit there, and chests up high or
 // out of reach). He stands back half a block; the container opens by itself; the package simply pops into his claw
 // (or vanishes from it). Baffled: claw, container, claw, shrug. Then it shuts by itself and he gives it a startled glance.

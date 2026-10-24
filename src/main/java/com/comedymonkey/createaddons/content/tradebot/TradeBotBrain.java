@@ -19,6 +19,8 @@ import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipRoot;
+import com.comedymonkey.createaddons.content.tradebot.react.CornerFinder;
+import com.comedymonkey.createaddons.content.tradebot.react.Reactions;
 import com.comedymonkey.createaddons.content.tradebot.trade.Buyers;
 import com.comedymonkey.createaddons.content.tradebot.trade.TradeDemand;
 import com.comedymonkey.createaddons.content.tradebot.trade.TradeSpot;
@@ -27,12 +29,12 @@ import com.comedymonkey.createaddons.content.tradebot.trade.VillagerClaims;
 import com.comedymonkey.createaddons.content.tradebot.work.BotWork;
 import com.comedymonkey.createaddons.content.tradebot.work.ContainerVisit;
 import com.comedymonkey.createaddons.content.tradebot.work.ContainerWork;
-import com.comedymonkey.createaddons.registry.ModSounds;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
@@ -53,7 +55,22 @@ public class TradeBotBrain {
 	/** Homeward route failures before he's put back in his station anyway (so he can always be packed up). */
 	private static final int MAX_HOME_FAILURES = 3;
 
-	public enum Task { HOME, LEAVING, GOING, WAITING, APPROACHING, WORKING, SHRUGGING, WAITING_OUTPUT, RETURNING, DOCKING, STRANDED }
+	public enum Task {
+		HOME, LEAVING, GOING, WAITING, APPROACHING, WORKING, SHRUGGING, WAITING_OUTPUT, RETURNING, DOCKING, STRANDED,
+		/** A reaction clip (a player turning up, being hit, a good day's trading), then back to what he was doing. */
+		REACTING,
+		/** Afraid of a mob (D8): spots it, flees to a corner, hides, cowers till it's gone a while, recovers. */
+		SCARED_SPOT, SCARED_FLEE, SCARED_HIDE, SCARED_COWER, SCARED_RECOVER,
+		/** Run down (D24, D29) until he's wound up, then carries on. */
+		WOUND_DOWN, WINDING_UP
+	}
+	/** Tasks a reaction or a fright may interrupt: travelling and waiting, never mid-container or mid-trade. */
+	private static final java.util.EnumSet<Task> INTERRUPTIBLE = java.util.EnumSet.of(Task.GOING, Task.WAITING, Task.APPROACHING,
+		Task.WAITING_OUTPUT, Task.RETURNING, Task.REACTING);
+	/** A player within this many blocks is noticed (D9). */
+	private static final double SEES_PLAYER_RANGE = 6;
+	/** How far he flees to hide (blocks), how long the mob must be gone before he recovers, and how long he's calm after. */
+	private static final int HIDE_RADIUS = 8, ALL_CLEAR_TICKS = 100, CALM_TICKS = 100, FLEE_TICKS = 200;
 	/** How long he waits beside a full output before trying again (D22). */
 	private static final int OUTPUT_RETRY_TICKS = 100;
 	/** How often, docked, he checks for a trip worth making (ticks). */
@@ -62,8 +79,8 @@ public class TradeBotBrain {
 	private static final int NO_TRADE_REST_TICKS = 1200;
 	/** How long a villager he couldn't get to is left alone (ticks), so he doesn't set off for it over and over. */
 	private static final int UNREACHABLE_TICKS = 2400;
-	/** A trade called off (D46): he looks puzzled and shrugs. (A shrug clip of his own comes in milestone 6.) */
-	private static final String SHRUG_CLIP = "expr_curious";
+	/** A trade called off (D46): he looks puzzled and shrugs. */
+	private static final String SHRUG_CLIP = "shrug";
 
 	private final TradeBotEntity bot;
 	private Task task = Task.HOME;
@@ -84,6 +101,13 @@ public class TradeBotBrain {
 	private int roundRobin;
 	/** Villagers he couldn't get to, and the game time to try them again. */
 	private final Map<UUID, Long> unreachable = new HashMap<>();
+	private final Reactions reactions = new Reactions();
+	/** What he was doing when a reaction, a fright or running down interrupted him, to carry on with after. */
+	private Task resumeTask = Task.RETURNING;
+	/** The mob he's afraid of: where it was last seen, and when. */
+	@Nullable
+	private Vec3 threat;
+	private long threatSeen, calmUntil;
 
 	private enum Phase { TAKING, TRADING, DELIVERING, RETURNING_ITEMS }
 
@@ -95,6 +119,7 @@ public class TradeBotBrain {
 		Phase phase = Phase.TAKING;
 		int input;
 		int taken, trades, delivered, returned;
+		boolean cheered;
 		/** Buyers he's finished with this trip (sold out, called off, or out of reach). */
 		final Set<UUID> done = new HashSet<>();
 		/** What he took from each input, so unsold items go back where they came from (D62). */
@@ -286,6 +311,12 @@ public class TradeBotBrain {
 			if (visit != null && approach(visit, ContainerWork.Mode.RETURN, ContainerWork.Wanted.all(j.from(input))))
 				return;
 		}
+		if (j.trading && j.trades > 0 && !j.cheered) {
+			j.cheered = true; // a good day's trading (D9)
+			resumeTask = Task.RETURNING;
+			react("expr_happy", null);
+			return;
+		}
 		set(Task.RETURNING);
 	}
 
@@ -414,6 +445,8 @@ public class TradeBotBrain {
 	public void tick() {
 		ticks++;
 		BlockPos station = bot.getStation();
+		if (task == Task.WOUND_DOWN)
+			return;
 		if (station == null || !(bot.level().getBlockState(station).getBlock() instanceof TradeBotStationBlock)) {
 			if (task != Task.STRANDED) {
 				bot.motion.stop();
@@ -421,6 +454,7 @@ public class TradeBotBrain {
 			}
 			return;
 		}
+		watch();
 		if ((task == Task.GOING || task == Task.WAITING || task == Task.APPROACHING || task == Task.WORKING || task == Task.SHRUGGING
 			|| task == Task.WAITING_OUTPUT) && shouldGoHome())
 			goHome();
@@ -544,7 +578,171 @@ public class TradeBotBrain {
 				}
 			}
 			case STRANDED -> set(Task.HOME);
+			case REACTING -> {
+				if (clipOver())
+					resume();
+			}
+			case WINDING_UP -> {
+				if (clipOver())
+					resume();
+			}
+			case WOUND_DOWN -> {}
+			case SCARED_SPOT -> {
+				if (clipOver())
+					flee();
+			}
+			case SCARED_FLEE -> {
+				if (bot.motion.arrived() || bot.motion.failed() || ticks >= FLEE_TICKS) {
+					bot.motion.halt();
+					bot.playClip("scared_hide");
+					set(Task.SCARED_HIDE);
+				}
+			}
+			case SCARED_HIDE -> {
+				if (clipOver()) {
+					bot.playClip("scared_cower");
+					set(Task.SCARED_COWER);
+				}
+			}
+			case SCARED_COWER -> {
+				if (bot.level().getGameTime() - threatSeen >= ALL_CLEAR_TICKS) {
+					bot.playClip("scared_recover");
+					set(Task.SCARED_RECOVER);
+				}
+			}
+			case SCARED_RECOVER -> {
+				if (clipOver()) {
+					bot.motion.setFleeing(false);
+					threat = null;
+					calmUntil = bot.level().getGameTime() + CALM_TICKS;
+					resume();
+				}
+			}
 		}
+	}
+
+	// ---- feeling alive (D8, D9, D24, D26)
+
+	/** Every half second while he's out: mobs he can see (fright first), and players turning up. */
+	private void watch() {
+		long now = bot.level().getGameTime();
+		if (now % 10 != 0 || bot.isDocked())
+			return;
+		Monster mob = hostileInSight();
+		boolean scared = task.name().startsWith("SCARED_");
+		if (mob != null && scared) {
+			threat = mob.position();
+			threatSeen = now;
+		} else if (mob != null && now >= calmUntil && interruptible())
+			scare(mob);
+		if (now % 20 != 0)
+			return;
+		Player arrived = null;
+		for (Player player : bot.level().getEntitiesOfClass(Player.class, bot.getBoundingBox().inflate(SEES_PLAYER_RANGE),
+			player -> !player.isSpectator() && player.distanceTo(bot) <= SEES_PLAYER_RANGE && bot.hasLineOfSight(player)))
+			if (reactions.arrived(player.getUUID(), now) && arrived == null)
+				arrived = player;
+		if (arrived != null && interruptible() && reactions.tryPlay(Reactions.Kind.SEES_PLAYER, now))
+			react("sees_player", arrived);
+	}
+
+	private boolean interruptible() {
+		return INTERRUPTIBLE.contains(task) && bot.motion.canHalt();
+	}
+
+	/** The nearest monster he can see within his fright radius (monsters ignore him, but he doesn't know that, D26). */
+	@Nullable
+	private Monster hostileInSight() {
+		int radius = CMConfig.SERVER.tradeBotHostileRadius();
+		return bot.level().getEntitiesOfClass(Monster.class, bot.getBoundingBox().inflate(radius),
+				mob -> mob.isAlive() && !mob.isInvisible() && mob.distanceTo(bot) <= radius && bot.hasLineOfSight(mob))
+			.stream().min(java.util.Comparator.comparingDouble(mob -> mob.distanceToSqr(bot))).orElse(null);
+	}
+
+	/** He's been hit by a player: a cross look at them (D9). */
+	public void hitBy(Player player) {
+		if (interruptible() && reactions.tryPlay(Reactions.Kind.CROSS, bot.level().getGameTime()))
+			react("expr_cross", player);
+	}
+
+	/** Stops where he is and plays a reaction (facing {@code at}, if given), then carries on with what he was doing. */
+	private void react(String clip, @Nullable net.minecraft.world.entity.Entity at) {
+		if (task != Task.REACTING)
+			resumeTask = task;
+		bot.motion.halt();
+		if (at != null)
+			bot.setYRot(com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion.yawTo(bot.position(), at.position()));
+		bot.playClip(clip);
+		debug("reacts: {}", clip);
+		set(Task.REACTING);
+	}
+
+	/** A mob! He stops dead, stares at it and jumps (the five-stage routine, D8). */
+	private void scare(Monster mob) {
+		resumeTask = task == Task.REACTING ? resumeTask : task;
+		threat = mob.position();
+		threatSeen = bot.level().getGameTime();
+		bot.motion.halt();
+		bot.setYRot(com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion.yawTo(bot.position(), mob.position()));
+		bot.playClip("scared_spot");
+		debug("scared of {} at {}", mob.getName().getString(), mob.blockPosition().toShortString());
+		set(Task.SCARED_SPOT);
+	}
+
+	/** Off to the best corner nearby, as fast as his wheel will go; nowhere to go, he hides where he is. */
+	private void flee() {
+		var level = bot.level();
+		BlockPos corner = threat == null ? null : CornerFinder.find(bot.blockPosition(), threat, HIDE_RADIUS,
+			pos -> level.isLoaded(pos) && WalkNodeEvaluator.getPathTypeStatic(bot, pos) == PathType.WALKABLE,
+			pos -> level.isLoaded(pos) && !level.getBlockState(pos).getCollisionShape(level, pos).isEmpty());
+		bot.motion.setFleeing(true);
+		if (corner != null && bot.motion.moveTo(corner, null, Float.NaN)) {
+			debug("flees to {}", corner.toShortString());
+			set(Task.SCARED_FLEE);
+			return;
+		}
+		bot.playClip("scared_hide");
+		set(Task.SCARED_HIDE);
+	}
+
+	/** Runs down: drops what he was doing (keeping everything he carries) and slumps where he is. */
+	public void windDown() {
+		if (task != Task.WOUND_DOWN && task != Task.WINDING_UP)
+			resumeTask = task == Task.REACTING || task.name().startsWith("SCARED_") ? resumeTask : task;
+		if (work != null) {
+			work.abort();
+			work = null;
+		}
+		VillagerClaims.releaseAll(bot.getUUID());
+		bot.motion.halt();
+		bot.motion.setFleeing(false);
+		threat = null;
+		debug("wound down ({})", bot.rundown());
+		set(Task.WOUND_DOWN);
+	}
+
+	/** Being wound up again: once the clip's done he carries on. */
+	public void windingUp() {
+		set(Task.WINDING_UP);
+	}
+
+	/** Back to what he was doing before the interruption: his job, his trip, or home. */
+	private void resume() {
+		switch (resumeTask) {
+			case APPROACHING, WORKING, SHRUGGING, WAITING_OUTPUT -> {
+				if (job != null)
+					nextJobStep();
+				else
+					set(Task.RETURNING);
+			}
+			case GOING, WAITING -> set(goals.isEmpty() ? Task.RETURNING : Task.GOING);
+			default -> set(Task.RETURNING);
+		}
+	}
+
+	private boolean clipOver() {
+		Clip clip = bot.clip();
+		return clip.finished(bot.clipElapsed(0));
 	}
 
 	/**
@@ -560,7 +758,6 @@ public class TradeBotBrain {
 			if (job != null)
 				job.done.add(villager);
 			bot.playClip(SHRUG_CLIP);
-			bot.level().playSound(null, bot.getX(), bot.getY(), bot.getZ(), ModSounds.tradeBot("shrug"), SoundSource.NEUTRAL, 1, 1);
 			set(Task.SHRUGGING);
 			return;
 		}

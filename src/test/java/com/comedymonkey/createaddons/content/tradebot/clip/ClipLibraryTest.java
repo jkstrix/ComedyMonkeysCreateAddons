@@ -28,12 +28,12 @@ class ClipLibraryTest {
 
 	@Test
 	void everyClipFromTheBriefIsThere() {
-		assertEquals(43, LIB.all().size());
+		assertEquals(46, LIB.all().size());
 		for (String name : List.of("idle", "rolling", "start_rolling", "stop_rolling", "turn_left", "turn_right", "turn_around",
 			"wall_bump", "sees_player", "dock_lights_out", "action_comes_in", "chest_take", "chest_put", "barrel_take", "barrel_put",
 			"chest_take_high", "chest_put_high", "depot_place", "depot_take", "belt_place", "trade_villager", "trade_villager_open",
 			"hop_on_slab", "hop_off_slab", "hop_on_block", "hop_off_block", "stairs_up", "stairs_down", "scared_spot", "scared_flee",
-			"scared_hide", "scared_cower", "scared_recover"))
+			"scared_hide", "scared_cower", "scared_recover", "shrug", "wind_down", "rewind"))
 			assertNotNull(LIB.find(name), name);
 	}
 
@@ -47,11 +47,12 @@ class ClipLibraryTest {
 	void rootModesMatchThePlan() {
 		for (String name : List.of("hop_on_slab", "hop_off_block", "stairs_up", "dock_lights_out", "action_comes_in"))
 			assertEquals(Clip.Root.PHYSICAL, LIB.clip(name).root(), name);
-		for (String name : List.of("rolling", "start_rolling", "stop_rolling", "turn_left", "turn_around"))
+		for (String name : List.of("rolling", "start_rolling", "stop_rolling", "turn_left", "turn_around", "sees_player"))
 			assertEquals(Clip.Root.GAME, LIB.clip(name).root(), name);
 		assertEquals(Clip.Root.VISUAL, LIB.clip("wall_bump").root());
 		assertEquals(Clip.Mode.LOOP, LIB.clip("rolling").mode());
 		assertEquals(Clip.Mode.HOLD, LIB.clip("dock_lights_out").mode());
+		assertEquals(Clip.Mode.HOLD, LIB.clip("wind_down").mode());
 	}
 
 	@Test
@@ -92,6 +93,12 @@ class ClipLibraryTest {
 			assertSameFrame(rolling, false, LIB.clip(name), false);
 		for (String name : List.of("turn_left", "turn_right", "turn_around"))
 			assertSameFrame(LIB.clip(name), true, rolling, false);
+	}
+
+	/** Re-wound from exactly where he ran down: no pop when the wrench cranks him (D24). */
+	@Test
+	void rewindStartsOnWindDownsLastFrame() {
+		assertSameFrame(LIB.clip("wind_down"), true, LIB.clip("rewind"), false);
 	}
 
 	@Test

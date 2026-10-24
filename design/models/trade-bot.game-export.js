@@ -11,7 +11,7 @@ const RES = path.resolve(__dirname, '../../src/main/resources/assets/comedymonke
 
 // how each clip's root (trade_bot bone) is used in game; see design/plans/trade-bot.md, milestone 0
 const PHYSICAL = ['hop_on_slab', 'hop_off_slab', 'hop_on_block', 'hop_off_block', 'stairs_up', 'stairs_down', 'dock_lights_out', 'action_comes_in'];
-const GAME = ['rolling', 'start_rolling', 'stop_rolling', 'turn_left', 'turn_right', 'turn_around'];
+const GAME = ['rolling', 'start_rolling', 'stop_rolling', 'turn_left', 'turn_right', 'turn_around', 'sees_player']; // sees_player: the game turns him to face the player
 const rootMode = (name) => (PHYSICAL.includes(name) ? 'physical' : GAME.includes(name) ? 'game' : 'visual');
 // glowing cubes live under these bones; they're painted into the glow texture too
 const GLOW_BONES = ['iris_glow_left', 'iris_glow_right', 'lamp_glow', 'station_glow'];

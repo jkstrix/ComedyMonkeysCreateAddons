@@ -65,6 +65,7 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 	private int botCharge;
 	private boolean botDocked;
 	private boolean botCharging;
+	private boolean botWoundDown;
 	private int botEntityId = -1;
 	private int lastSignal = -1;
 	private int syncedEnergy = -1;
@@ -259,12 +260,13 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		boolean changed = false;
 		if (tradeBot != null) {
 			changed |= botCharge != tradeBot.getCharge() && level.getGameTime() % 10 == 0;
-			changed |= botEntityId != tradeBot.getId() || botDocked != docked || botCharging != charging;
+			changed |= botEntityId != tradeBot.getId() || botDocked != docked || botCharging != charging || botWoundDown != tradeBot.isWoundDown();
 			if (changed) {
 				botCharge = tradeBot.getCharge();
 				botEntityId = tradeBot.getId();
 				botDocked = docked;
 				botCharging = charging;
+				botWoundDown = tradeBot.isWoundDown();
 			}
 		}
 		BlockState state = getBlockState();
@@ -286,7 +288,8 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 	public int comparatorOutput() {
 		if (bot == null)
 			return SIGNAL_NONE;
-		if (botDocked && botCharge < CMConfig.SERVER.tradeBotFullCharge() * LOW_CHARGE)
+		// out of charge, or run down (he needs his owner either way)
+		if (botWoundDown || botDocked && botCharge < CMConfig.SERVER.tradeBotFullCharge() * LOW_CHARGE)
 			return SIGNAL_OUT_OF_CHARGE;
 		return botDocked ? SIGNAL_DOCKED : SIGNAL_WORKING;
 	}
@@ -384,9 +387,9 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID)
 			.translate("gui.goggles.trade_bot.station", String.format(Locale.ROOT, "%,d / %,d FE", energy.getEnergyStored(), energy.getMaxEnergyStored()))
 			.style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
-		String status = bot == null ? "no_bot" : paused ? "paused" : botDocked ? "docked" : "working";
+		String status = bot == null ? "no_bot" : botWoundDown ? "wound_down" : paused ? "paused" : botDocked ? "docked" : "working";
 		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.trade_bot.status." + status)
-			.style(botDocked || bot == null ? ChatFormatting.GOLD : ChatFormatting.GREEN).forGoggles(tooltip, 1);
+			.style(botWoundDown ? ChatFormatting.RED : botDocked || bot == null ? ChatFormatting.GOLD : ChatFormatting.GREEN).forGoggles(tooltip, 1);
 		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID)
 			.translate("gui.goggles.trade_bot.links", inputs.size(), MAX_INPUTS,
 				Component.translatable(output != null ? "comedymonkeysaddons.gui.goggles.trade_bot.output_set"
@@ -417,6 +420,7 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		tag.putInt("BotCharge", botCharge);
 		tag.putBoolean("BotDocked", botDocked);
 		tag.putBoolean("BotCharging", botCharging);
+		tag.putBoolean("BotWoundDown", botWoundDown);
 		tag.putInt("TradesToday", tradesToday);
 		tag.putLong("TradesDay", tradesDay);
 		if (clientPacket)
@@ -437,6 +441,7 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		botCharge = tag.getInt("BotCharge");
 		botDocked = tag.getBoolean("BotDocked");
 		botCharging = tag.getBoolean("BotCharging");
+		botWoundDown = tag.getBoolean("BotWoundDown");
 		tradesToday = tag.getInt("TradesToday");
 		tradesDay = tag.contains("TradesDay") ? tag.getLong("TradesDay") : -1;
 		if (clientPacket)

@@ -51,8 +51,13 @@ public class TradeBotMotion {
 	private static final float TURN_SPEED = 2, TURN_SLOWDOWN = 0.6f;
 	/** In a turn-around clip: when the hop's landing is done (seconds), for spinning on the spot. */
 	private static final float TURN_AROUND_LANDED = 1.45f;
+	/** Fleeing a mob: the wheel at double cruise speed (D8), with the panicked roll instead of the rolling clips. */
+	private static final double FLEE_FACTOR = 2;
+	private static final String FLEE_CLIP = "scared_flee", BUMP_CLIP = "wall_bump";
+	/** How long after one wall bump the next stuck moment is just a quiet replan (ticks). */
+	private static final int BUMP_COOLDOWN = 200;
 
-	enum Phase { IDLE, FACING, STARTING, ROLLING, TURNING, TURN_AROUND, SPIN, STOPPING, STEPPING }
+	enum Phase { IDLE, FACING, STARTING, ROLLING, TURNING, TURN_AROUND, SPIN, STOPPING, STEPPING, BUMPED }
 
 	public enum Step { SLAB_UP, BLOCK_UP, STAIRS_UP, SLAB_DOWN, BLOCK_DOWN, STAIRS_DOWN }
 
@@ -86,6 +91,8 @@ public class TradeBotMotion {
 	private int windowTicks, blockedWindows, replans;
 	@Nullable
 	private BlockPos target;
+	private boolean fleeing;
+	private long lastBump = Long.MIN_VALUE / 2;
 	/** Logs his phases and route troubles ("/tradebot debug"), for working out what he did. */
 	public static boolean debug;
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -133,6 +140,32 @@ public class TradeBotMotion {
 		return true;
 	}
 
+	/** Fleeing: twice as fast, in a panic, straight for it (no turn clips). */
+	public void setFleeing(boolean fleeing) {
+		this.fleeing = fleeing;
+	}
+
+	/**
+	 * Stops dead where he is, with no clip of its own, so a reaction can play straight away. Not mid-hop: check
+	 * {@link #canHalt()} first.
+	 */
+	public void halt() {
+		path = null;
+		points = List.of();
+		finalPoint = null;
+		failed = false;
+		speed = 0;
+		bot.setDeltaMovement(0, bot.getDeltaMovement().y, 0);
+		log(phase + " -> halted");
+		phase = Phase.IDLE;
+		phaseTicks = 0;
+	}
+
+	/** Not hopping (a physical clip carries him until it lands). */
+	public boolean canHalt() {
+		return phase != Phase.STEPPING && bot.clip().root() != Clip.Root.PHYSICAL;
+	}
+
 	/** Stops wherever he is (braking if he's rolling). */
 	public void stop() {
 		path = null;
@@ -170,17 +203,17 @@ public class TradeBotMotion {
 			case IDLE -> drive(0, null);
 			case FACING -> face();
 			case STARTING -> {
-				speed = CRUISE * Math.min(1, phaseTicks / (double) ACCELERATE_TICKS);
+				speed = cruise() * Math.min(1, phaseTicks / (double) ACCELERATE_TICKS);
 				follow();
 				if (clip.finished(t))
 					setPhase(Phase.ROLLING);
 			}
 			case ROLLING -> {
-				speed = CRUISE;
+				speed = cruise();
 				follow();
 			}
 			case TURNING -> {
-				speed = CRUISE * TURN_SLOWDOWN;
+				speed = cruise() * TURN_SLOWDOWN;
 				follow();
 				if (clip.finished(t))
 					setPhase(Phase.ROLLING);
@@ -189,7 +222,7 @@ public class TradeBotMotion {
 			case SPIN -> turnAround(clip, t, true);
 			case STOPPING -> {
 				Vec3 stopAt = stopPoint();
-				speed = CRUISE * Math.max(0, 1 - phaseTicks / (double) BRAKE_TICKS);
+				speed = cruise() * Math.max(0, 1 - phaseTicks / (double) BRAKE_TICKS);
 				if (stopAt != null) {
 					double dist = horizontal(stopAt.subtract(bot.position()));
 					speed = Math.max(speed, Math.min(dist, 0.04)); // creep the last bit, so he stops right on the spot
@@ -198,8 +231,13 @@ public class TradeBotMotion {
 					drive(speed, stopAt);
 				} else
 					drive(speed, null);
-				if (speed == 0 && clip.finished(t))
+				if (speed == 0 && (fleeing || clip.finished(t)))
 					arriveOrStep();
+			}
+			case BUMPED -> {
+				drive(0, null);
+				if (!clip.name().equals(BUMP_CLIP) || clip.finished(t))
+					replan();
 			}
 			case STEPPING -> {
 				drive(0, null);
@@ -239,7 +277,9 @@ public class TradeBotMotion {
 				return;
 			}
 			float turn = Mth.wrapDegrees(yawTo(pos, points.get(next)) - bot.getYRot());
-			if (Math.abs(turn) >= TURN_AROUND_ANGLE)
+			if (fleeing) {
+				// no time for turn clips: he just swerves
+			} else if (Math.abs(turn) >= TURN_AROUND_ANGLE)
 				setPhase(Phase.TURN_AROUND);
 			else if (Math.abs(turn) >= TURN_CLIP_ANGLE && phase != Phase.TURNING) {
 				bot.playClip(ClipLibrary.get().clip(turn < 0 ? "turn_left" : "turn_right"), TURN_SPEED, 1);
@@ -285,19 +325,19 @@ public class TradeBotMotion {
 		Step step = stepTo(next);
 		float want = yawTo(bot.position(), points.get(next));
 		float diff = Mth.wrapDegrees(want - bot.getYRot());
-		if (step == null && Math.abs(diff) >= TURN_AROUND_ANGLE) {
+		if (step == null && Math.abs(diff) >= TURN_AROUND_ANGLE && !fleeing) {
 			setPhase(Phase.TURN_AROUND);
 			return;
 		}
 		if (Math.abs(diff) > 5) {
-			turnToward(want, 15);
+			turnToward(want, fleeing ? 40 : 15);
 			return;
 		}
 		bot.setYRot(want);
 		if (step != null)
 			startStep(step);
 		else
-			setPhase(Phase.STARTING);
+			setPhase(fleeing ? Phase.ROLLING : Phase.STARTING);
 	}
 
 	/** The hop-and-spin, following the clip's yaw and speed; on the spot it ends once he's landed. */
@@ -315,7 +355,7 @@ public class TradeBotMotion {
 		}
 		// brakes into the hop, powers off after it, like the clip
 		float profile = 1 - smooth(t, 0.05f, 0.6f) + smooth(t, 1.37f, 2.3f);
-		speed = CRUISE * profile;
+		speed = cruise() * profile;
 		// straight through the spin; once he's landed, steer for the route as he powers off (not past it)
 		if (t >= TURN_AROUND_LANDED && next < points.size()) {
 			skipReached();
@@ -518,6 +558,19 @@ public class TradeBotMotion {
 		blockedWindows = blocked ? blockedWindows + 1 : 0;
 		if (blockedWindows < 2)
 			return;
+		// bumped into something: a wall-bump reaction first (now and then), then plan again
+		long now = bot.level().getGameTime();
+		if (!fleeing && now - lastBump >= BUMP_COOLDOWN) {
+			lastBump = now;
+			log("bumped into something at " + bot.blockPosition().toShortString());
+			setPhase(Phase.BUMPED, false);
+			bot.playClip(BUMP_CLIP);
+			return;
+		}
+		replan();
+	}
+
+	private void replan() {
 		log("stuck at " + bot.blockPosition().toShortString() + ", replanning");
 		Vec3 exact = finalPoint;
 		float yaw = finalYaw;
@@ -606,6 +659,10 @@ public class TradeBotMotion {
 		setPhase(phase, true);
 	}
 
+	private double cruise() {
+		return fleeing ? CRUISE * FLEE_FACTOR : CRUISE;
+	}
+
 	private void setPhase(Phase phase, boolean playClip) {
 		if (this.phase != phase)
 			log(this.phase + " -> " + phase + " at " + String.format(java.util.Locale.ROOT, "%.2f %.2f %.2f", bot.getX(), bot.getY(), bot.getZ())
@@ -620,6 +677,11 @@ public class TradeBotMotion {
 			bot.playClip(TradeBotEntity.IDLE);
 		if (!playClip)
 			return;
+		if (fleeing && (phase == Phase.STARTING || phase == Phase.ROLLING || phase == Phase.TURNING || phase == Phase.STOPPING)) {
+			if (!bot.clip().name().equals(FLEE_CLIP))
+				bot.playClip(FLEE_CLIP);
+			return;
+		}
 		switch (phase) {
 			case STARTING -> bot.playClip("start_rolling");
 			case ROLLING -> bot.playClip("rolling");

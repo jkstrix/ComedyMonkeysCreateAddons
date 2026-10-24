@@ -45,6 +45,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
@@ -74,10 +75,16 @@ public class TradeBotEntity extends PathfinderMob {
 	private static final EntityDataAccessor<Float> CLIP_SPEED = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Float> CLIP_SCALE = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Byte> FLAGS = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.BYTE);
-	private static final byte FLAG_CHARGING = 1;
+	private static final byte FLAG_CHARGING = 1, FLAG_WOUND_DOWN = 2;
 
 	public static final String IDLE = "idle";
 	public static final String DOCKED = "dock_lights_out";
+	public static final String WIND_DOWN = "wind_down", REWIND = "rewind";
+	/** Out of water this long (ticks), he's dry and winds himself back up (D29). */
+	private static final int DRY_TICKS = 100;
+
+	/** Why he's wound down (D24, D29): hurt to nothing (his owner's wrench winds him up) or soaked (he dries out). */
+	public enum Rundown { DAMAGE, WATER }
 	public static final int LOAD_SLOTS = 27;
 
 	/** Client only: the cross-fade and sound cues. */
@@ -104,6 +111,9 @@ public class TradeBotEntity extends PathfinderMob {
 	private final ItemStackHandler load = new ItemStackHandler(LOAD_SLOTS);
 	/** Set while he's packed into his item, so his removal isn't taken for him being lost. */
 	private boolean packed;
+	@Nullable
+	private Rundown rundown;
+	private int dryTicks;
 
 	public final TradeBotMotion motion = new TradeBotMotion(this);
 	public final TradeBotBrain brain = new TradeBotBrain(this);
@@ -140,8 +150,123 @@ public class TradeBotEntity extends PathfinderMob {
 	@Override
 	protected void customServerAiStep() {
 		super.customServerAiStep();
+		tickRundown();
 		brain.tick();
 		motion.tick();
+	}
+
+	// ---- winding down and up again (D24, D29, D59)
+
+	/** Wound down: slumped and dark, doing nothing until he's wound up again. */
+	public boolean isWoundDown() {
+		return (entityData.get(FLAGS) & FLAG_WOUND_DOWN) != 0;
+	}
+
+	@Nullable
+	public Rundown rundown() {
+		return rundown;
+	}
+
+	/** Soaked out in the world: he winds down until he's out and dry. In lava or fallen out of the world: home he goes. */
+	private void tickRundown() {
+		if (rundown == null) {
+			if (isInWater() && !docked)
+				windDown(Rundown.WATER);
+			return;
+		}
+		if (isInLava()) {
+			rescue();
+			return;
+		}
+		if (rundown == Rundown.WATER) {
+			dryTicks = isInWater() ? 0 : dryTicks + 1;
+			if (dryTicks >= DRY_TICKS)
+				windUp(false);
+		}
+	}
+
+	/** Runs down where he is (slumps, lights out), dropping whatever he was doing but keeping everything he carries. */
+	public void windDown(Rundown why) {
+		if (rundown == Rundown.DAMAGE && why == Rundown.WATER)
+			return; // already down for good: drying out won't wind him up
+		boolean already = rundown != null;
+		rundown = why;
+		dryTicks = 0;
+		setFlag(FLAG_WOUND_DOWN, true);
+		if (!already) {
+			brain.windDown();
+			playClip(WIND_DOWN);
+		}
+	}
+
+	/** Wound up again: by his owner's wrench (back to full health), or dried out. Then he carries on. */
+	public void windUp(boolean wrench) {
+		if (rundown == null)
+			return;
+		rundown = null;
+		setFlag(FLAG_WOUND_DOWN, false);
+		if (wrench)
+			setHealth(getMaxHealth());
+		playClip(REWIND);
+		brain.windingUp();
+	}
+
+	/** Never dies (D24): at no health he winds down instead. Only the kill command removes him. */
+	@Override
+	public void die(DamageSource source) {
+		if (source.is(DamageTypes.GENERIC_KILL)) {
+			super.die(source);
+			return;
+		}
+		setHealth(1);
+		windDown(Rundown.DAMAGE);
+	}
+
+	@Override
+	public boolean hurt(DamageSource source, float amount) {
+		boolean hurt = super.hurt(source, amount);
+		if (hurt && !level().isClientSide && rundown == null && source.getEntity() instanceof Player player)
+			brain.hitBy(player);
+		return hurt;
+	}
+
+	/** Clockwork doesn't drown: water winds him down instead. */
+	@Override
+	public boolean canDrownInFluidType(net.neoforged.neoforge.fluids.FluidType type) {
+		return false;
+	}
+
+	/** Fallen out of the world: back to his station, wound down (D59). */
+	@Override
+	protected void onBelowWorld() {
+		if (!rescue())
+			super.onBelowWorld();
+	}
+
+	/** Put back in front of his station, wound down, out of harm's way (D59); false if he has no station to go to. */
+	private boolean rescue() {
+		if (station == null || !(level().getBlockState(station).getBlock() instanceof TradeBotStationBlock))
+			return false;
+		Direction facing = level().getBlockState(station).getValue(TradeBotStationBlock.FACING);
+		Vec3 at = TradeBotBrain.dockStart(station, facing);
+		clearFire();
+		fallDistance = 0;
+		setDeltaMovement(Vec3.ZERO);
+		teleportTo(at.x, at.y, at.z);
+		setYRot(facing.toYRot());
+		if (rundown != Rundown.DAMAGE)
+			windDown(Rundown.DAMAGE);
+		playClipAtEnd(ClipLibrary.get().clip(WIND_DOWN));
+		if (TradeBotMotion.debug)
+			LogUtils.getLogger().info("[Trade Bot {}] rescued to his station at {}", getId(), station.toShortString());
+		return true;
+	}
+
+	private void setFlag(byte flag, boolean on) {
+		byte flags = entityData.get(FLAGS);
+		byte now = (byte) (on ? flags | flag : flags & ~flag);
+		if (now != flags)
+			entityData.set(FLAGS, now);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
@@ -262,10 +387,7 @@ public class TradeBotEntity extends PathfinderMob {
 
 	/** The station is putting charge into him: his key and its winder keep turning. */
 	public void setCharging(boolean charging) {
-		byte flags = entityData.get(FLAGS);
-		byte now = (byte) (charging ? flags | FLAG_CHARGING : flags & ~FLAG_CHARGING);
-		if (now != flags)
-			entityData.set(FLAGS, now);
+		setFlag(FLAG_CHARGING, charging);
 	}
 
 	public boolean isCharging() {
@@ -329,6 +451,14 @@ public class TradeBotEntity extends PathfinderMob {
 
 	public void playClip(String name) {
 		playClip(ClipLibrary.get().clip(name));
+	}
+
+	/** A held clip, already played to its end (wound down when he's loaded, or put back at his station). */
+	public void playClipAtEnd(Clip clip) {
+		entityData.set(CLIP, ClipLibrary.get().id(clip));
+		entityData.set(CLIP_START, (int) (level().getGameTime() - Mth.ceil(clip.length() * 20) - 1));
+		entityData.set(CLIP_SPEED, 1f);
+		entityData.set(CLIP_SCALE, 1f);
 	}
 
 	/** Puts him at the end of a held physical clip, as if he'd just played it to {@code end}, facing {@code yaw}. */
@@ -457,6 +587,10 @@ public class TradeBotEntity extends PathfinderMob {
 			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.not_yours"), true);
 			return InteractionResult.CONSUME;
 		}
+		if (rundown != null) {
+			windUp(true);
+			return InteractionResult.CONSUME;
+		}
 		if (!docked) {
 			goHome();
 			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.heading_home"), true);
@@ -472,6 +606,8 @@ public class TradeBotEntity extends PathfinderMob {
 		if (station != null)
 			tag.put("Station", NbtUtils.writeBlockPos(station));
 		tag.putBoolean("Docked", docked);
+		if (rundown != null)
+			tag.putString("Rundown", rundown.name());
 		TradeBotData.CODEC.encodeStart(registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE),
 			toData(List.of(), Optional.empty())).ifSuccess(data -> tag.put("TradeBot", data));
 	}
@@ -485,9 +621,15 @@ public class TradeBotEntity extends PathfinderMob {
 		if (tag.contains("TradeBot"))
 			TradeBotData.CODEC.parse(registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), tag.get("TradeBot"))
 				.ifSuccess(this::applyData);
-		// held clips aren't saved: put him back in his cradle, or let him stand
+		// held clips aren't saved: put him back in his cradle, slumped if he's run down, or let him stand
 		if (docked && station != null && level().getBlockState(station).getBlock() instanceof TradeBotStationBlock)
 			dockAt(station, level().getBlockState(station).getValue(TradeBotStationBlock.FACING));
+		if (tag.contains("Rundown")) {
+			rundown = Rundown.valueOf(tag.getString("Rundown"));
+			setFlag(FLAG_WOUND_DOWN, true);
+			brain.windDown();
+			playClipAtEnd(ClipLibrary.get().clip(WIND_DOWN));
+		}
 	}
 
 	/** Removed for good some other way than packing (a command): his station can then be packed on its own. */

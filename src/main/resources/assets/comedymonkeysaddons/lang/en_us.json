@@ -1051,6 +1051,7 @@
   "comedymonkeysaddons.gui.goggles.trade_bot.status.paused": "Paused by redstone",
   "comedymonkeysaddons.gui.goggles.trade_bot.status.docked": "Docked",
   "comedymonkeysaddons.gui.goggles.trade_bot.status.working": "Out working",
+  "comedymonkeysaddons.gui.goggles.trade_bot.status.wound_down": "Wound down: wind him up with a wrench",
   "comedymonkeysaddons.gui.goggles.trade_bot.links": "Inputs: %s / %s, output %s",
   "comedymonkeysaddons.gui.goggles.trade_bot.output_set": "set",
   "comedymonkeysaddons.gui.goggles.trade_bot.output_unset": "not set",

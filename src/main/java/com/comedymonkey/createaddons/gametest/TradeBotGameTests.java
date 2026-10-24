@@ -45,6 +45,7 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.gametest.GameTestHolder;
@@ -303,6 +304,156 @@ public final class TradeBotGameTests {
 			if (farmer.getOffers().get(0).getUses() != 0)
 				helper.fail("the farmer's stock was used");
 		});
+	}
+
+	// ---- feeling alive (milestone 6)
+
+	/**
+	 * A zombie in the yard (D8): he spots it, flees, hides in a corner (two walls at least), cowers until it's gone,
+	 * recovers, and carries on to his stop and home. (It stands still: monsters ignore him, D26.)
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 3000)
+	public static void hidesFromAZombieAndCarriesOn(GameTestHelper helper) {
+		TradeBotEntity bot = yard(helper);
+		net.minecraft.world.entity.monster.Zombie zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(10, 1, 9));
+		// a helmet keeps it from burning in the sun (the time is shared by every course running at once)
+		zombie.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+		java.util.EnumSet<TradeBotBrain.Task> seen = java.util.EnumSet.noneOf(TradeBotBrain.Task.class);
+		BlockPos[] hid = { null };
+		helper.runAfterDelay(10, () -> bot.brain.goTo(helper.absolutePos(new BlockPos(3, 1, 14))));
+		helper.onEachTick(() -> {
+			seen.add(bot.brain.task());
+			if (bot.brain.task() == TradeBotBrain.Task.SCARED_HIDE && hid[0] == null)
+				hid[0] = bot.blockPosition();
+			if (bot.brain.task() == TradeBotBrain.Task.SCARED_COWER && zombie.isAlive())
+				zombie.discard(); // it wanders off; once it's been gone a while he recovers
+		});
+		helper.succeedWhen(() -> {
+			for (TradeBotBrain.Task stage : List.of(TradeBotBrain.Task.SCARED_SPOT, TradeBotBrain.Task.SCARED_FLEE, TradeBotBrain.Task.SCARED_HIDE,
+				TradeBotBrain.Task.SCARED_COWER, TradeBotBrain.Task.SCARED_RECOVER))
+				if (!seen.contains(stage))
+					helper.fail("never " + stage + " (" + bot.brain.task() + ")");
+			int walls = 0;
+			for (Direction side : Direction.Plane.HORIZONTAL)
+				if (!helper.getLevel().getBlockState(hid[0].relative(side)).getCollisionShape(helper.getLevel(), hid[0].relative(side)).isEmpty())
+					walls++;
+			if (walls < 2)
+				helper.fail("he hid in the open at " + helper.relativePos(hid[0]).toShortString());
+			if (bot.brain.visited().size() != 1 || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail("didn't carry on to his stop and home (" + bot.brain.task() + ")");
+		});
+	}
+
+	/** Pushed into water (D29): he winds down; out of it and dry, he winds himself up and carries on. */
+	@GameTest(template = COURSE, timeoutTicks = 3000)
+	public static void windsDownInWaterAndDriesOut(GameTestHelper helper) {
+		TradeBotEntity bot = yard(helper);
+		BlockPos pool = new BlockPos(8, 1, 8);
+		for (Direction side : Direction.Plane.HORIZONTAL)
+			helper.setBlock(pool.relative(side), WALL);
+		helper.setBlock(pool, Blocks.WATER.defaultBlockState());
+		boolean[] state = { false, false, false }; // pushed in, wound down, wound up
+		helper.runAfterDelay(10, () -> bot.brain.goTo(helper.absolutePos(new BlockPos(3, 1, 14))));
+		helper.onEachTick(() -> {
+			if (!state[0] && bot.brain.task() == TradeBotBrain.Task.GOING && bot.motion.canHalt()) {
+				state[0] = true;
+				Vec3 in = Vec3.atBottomCenterOf(helper.absolutePos(pool));
+				bot.teleportTo(in.x, in.y, in.z);
+			}
+			if (bot.isWoundDown() && !state[1]) {
+				state[1] = true;
+				if (bot.rundown() != TradeBotEntity.Rundown.WATER)
+					helper.fail("wound down by " + bot.rundown() + ", not water");
+				Vec3 out = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(8, 1, 11)));
+				helper.runAfterDelay(20, () -> bot.teleportTo(out.x, out.y, out.z)); // pulled out
+			}
+			state[2] |= state[1] && bot.brain.task() == TradeBotBrain.Task.WINDING_UP;
+		});
+		helper.succeedWhen(() -> {
+			if (!state[1] || !state[2])
+				helper.fail("not wound down and up again yet (" + bot.brain.task() + ")");
+			if (!bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail("didn't carry on home (" + bot.brain.task() + ")");
+		});
+	}
+
+	/**
+	 * Hurt to nothing (D24): he winds down instead of dying and stays down, slumped, until his owner's wrench winds him
+	 * up, back to full health; then he carries on.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 3000)
+	public static void windsDownAtNoHealthAndTheWrenchWindsHimUp(GameTestHelper helper) {
+		TradeBotEntity bot = yard(helper);
+		long[] downAt = { -1 };
+		helper.runAfterDelay(10, () -> bot.brain.goTo(helper.absolutePos(new BlockPos(3, 1, 14))));
+		helper.onEachTick(() -> {
+			if (downAt[0] < 0 && bot.brain.task() == TradeBotBrain.Task.GOING && bot.motion.canHalt()) {
+				bot.hurt(helper.getLevel().damageSources().generic(), 100);
+				if (!bot.isWoundDown() || bot.isRemoved() || bot.getHealth() <= 0)
+					helper.fail("he didn't wind down (health " + bot.getHealth() + ", removed " + bot.isRemoved() + ")");
+				downAt[0] = helper.getTick();
+			}
+			if (downAt[0] >= 0 && helper.getTick() == downAt[0] + 200) {
+				if (!bot.isWoundDown() || bot.brain.task() != TradeBotBrain.Task.WOUND_DOWN)
+					helper.fail("he didn't stay down until wound up");
+				bot.windUp(true); // the owner's wrench
+				if (bot.getHealth() != bot.getMaxHealth())
+					helper.fail("wound up to " + bot.getHealth() + " health");
+			}
+		});
+		helper.succeedWhen(() -> {
+			if (downAt[0] < 0 || bot.isWoundDown() || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail("not wound up and home yet (" + bot.brain.task() + ")");
+		});
+	}
+
+	/** Wound down in lava, or fallen out of the world (D59): put back in front of his station, wound down, not burning. */
+	@GameTest(template = COURSE, timeoutTicks = 2000)
+	public static void comesHomeFromLavaAndTheVoid(GameTestHelper helper) {
+		floor(helper, 0, 0, 0, 23, 23, FLOOR);
+		TradeBotEntity lava = station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
+		TradeBotEntity fallen = station(helper, new BlockPos(15, 1, 2), Direction.SOUTH);
+		BlockPos pit = new BlockPos(8, 1, 12);
+		for (Direction side : Direction.Plane.HORIZONTAL)
+			helper.setBlock(pit.relative(side), WALL);
+		helper.setBlock(pit, Blocks.LAVA.defaultBlockState());
+		helper.runAfterDelay(10, () -> {
+			lava.brain.goTo(helper.absolutePos(new BlockPos(3, 1, 14)));
+			fallen.brain.goTo(helper.absolutePos(new BlockPos(15, 1, 14)));
+		});
+		boolean[] sent = { false, false };
+		helper.onEachTick(() -> {
+			if (!sent[0] && lava.brain.task() == TradeBotBrain.Task.GOING && lava.motion.canHalt()) {
+				sent[0] = true;
+				lava.setHealth(2);
+				Vec3 in = Vec3.atBottomCenterOf(helper.absolutePos(pit));
+				lava.teleportTo(in.x, in.y, in.z);
+			}
+			if (!sent[1] && fallen.brain.task() == TradeBotBrain.Task.GOING && fallen.motion.canHalt()) {
+				sent[1] = true;
+				fallen.teleportTo(fallen.getX(), helper.getLevel().getMinBuildHeight() - 70, fallen.getZ());
+			}
+		});
+		helper.succeedWhen(() -> {
+			for (TradeBotEntity bot : List.of(lava, fallen)) {
+				BlockPos front = bot.getStation().relative(Direction.SOUTH);
+				if (bot.isRemoved() || !bot.isWoundDown() || bot.isOnFire() || bot.isInLava()
+					|| bot.position().distanceTo(Vec3.atBottomCenterOf(front)) > 1.5)
+					helper.fail("not back at his station, wound down (at " + helper.relativePos(bot.blockPosition()).toShortString() + ", wound "
+						+ bot.isWoundDown() + ", removed " + bot.isRemoved() + ")");
+			}
+		});
+	}
+
+	/** An open yard walled all round (x 0-12, z 0-16), with his station at (3, 1, 2) facing south. */
+	private static TradeBotEntity yard(GameTestHelper helper) {
+		floor(helper, 0, 0, 0, 23, 23, FLOOR);
+		solid(helper, 0, 1, 0, 12, 3, 0, WALL);
+		solid(helper, 0, 1, 16, 12, 3, 16, WALL);
+		solid(helper, 0, 1, 0, 0, 3, 16, WALL);
+		solid(helper, 12, 1, 0, 12, 3, 16, WALL);
+		TradeBotMotion.debug = true;
+		return station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
 	}
 
 	/** A sell-to-villager offer: {@code count} goods for an emerald, {@code maxUses} times, 2 villager XP each. */
