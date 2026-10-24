@@ -63,6 +63,12 @@ public class TradeBotMotion {
 	@Nullable
 	private Path path;
 	private List<Vec3> points = List.of();
+	/** The route's blocks (the same length as {@link #points}). */
+	private List<BlockPos> nodes = List.of();
+	/** Every hop taken, from block to block (for checking that they're all square-on). */
+	private final List<Hop> hops = new ArrayList<>();
+
+	public record Hop(BlockPos from, BlockPos to) {}
 	private int next;
 	/** Where to stop exactly at the end, and which way to face there (NaN: whichever way he arrived). */
 	@Nullable
@@ -105,9 +111,13 @@ public class TradeBotMotion {
 			return false;
 		}
 		path = planned;
-		List<Vec3> list = new ArrayList<>();
+		List<BlockPos> route = new ArrayList<>();
 		for (int i = 0; i < planned.getNodeCount(); i++)
-			list.add(floorCentre(bot.level(), planned.getNodePos(i)));
+			route.add(planned.getNodePos(i));
+		nodes = squareSteps(bot.level(), route);
+		List<Vec3> list = new ArrayList<>();
+		for (BlockPos node : nodes)
+			list.add(floorCentre(bot.level(), node));
 		points = list;
 		next = 0;
 		finalPoint = exact != null ? exact : list.get(list.size() - 1);
@@ -368,6 +378,7 @@ public class TradeBotMotion {
 		double want = horizontal(to.subtract(bot.position()));
 		double has = Math.abs(ClipRoot.travel(clip, clip.length(), new Vector3f()).z);
 		bot.playClip(clip, 1, has > 1e-3 ? (float) (want / has) : 1);
+		hops.add(new Hop(nodes.get(next - 1), nodes.get(next)));
 		log(step + " from " + fmt(bot.position()) + " to " + fmt(to) + ": " + String.format(java.util.Locale.ROOT, "%.2f", want) + " of "
 			+ String.format(java.util.Locale.ROOT, "%.2f", has) + " (waypoint " + next + ")");
 		setPhase(Phase.STEPPING, false);
@@ -375,13 +386,57 @@ public class TradeBotMotion {
 
 	// ---- route helpers
 
+	/** Every hop he has taken (newest last). */
+	public List<Hop> hops() {
+		return List.copyOf(hops);
+	}
+
+	/**
+	 * Hops are always square-on: a diagonal step up or down gets a waypoint beside it at the level he's on, so he rolls
+	 * there first and hops straight, clearing the edge the way the clips do. (Vanilla routes may cut corners diagonally.)
+	 */
+	List<BlockPos> squareSteps(Level level, List<BlockPos> route) {
+		List<BlockPos> out = new ArrayList<>();
+		for (int i = 0; i < route.size(); i++) {
+			BlockPos node = route.get(i);
+			if (i > 0) {
+				BlockPos prev = out.get(out.size() - 1);
+				double rise = floorCentre(level, node).y - floorCentre(level, prev).y;
+				if (Math.abs(rise) > ROLL_STEP && prev.getX() != node.getX() && prev.getZ() != node.getZ()) {
+					// roll beside the step on this level, then hop square; or, if there's no room here, hop square onto the
+					// block beside it on the other level and roll the rest
+					BlockPos beside = besideOnLevel(level, prev, node, prev);
+					if (beside == null)
+						beside = besideOnLevel(level, prev, node, node);
+					if (beside != null)
+						out.add(beside);
+				}
+			}
+			out.add(node);
+		}
+		return out;
+	}
+
+	/** A block next to both {@code from} and {@code to} (diagonal neighbours), on {@code onLevelOf}'s level, he can stand on. */
+	@Nullable
+	private BlockPos besideOnLevel(Level level, BlockPos from, BlockPos to, BlockPos onLevelOf) {
+		double floor = floorCentre(level, onLevelOf).y;
+		int y = onLevelOf.getY();
+		for (BlockPos beside : List.of(new BlockPos(to.getX(), y, from.getZ()), new BlockPos(from.getX(), y, to.getZ()))) {
+			if (WalkNodeEvaluator.getPathTypeStatic(bot, beside) == net.minecraft.world.level.pathfinder.PathType.WALKABLE
+				&& Math.abs(floorCentre(level, beside).y - floor) <= ROLL_STEP)
+				return beside;
+		}
+		return null;
+	}
+
 	/** The step from waypoint {@code i - 1} to {@code i}, or null if he can roll it. */
 	@Nullable
 	Step stepTo(int i) {
 		if (i <= 0 || i >= points.size() || path == null)
 			return null;
 		double rise = points.get(i).y - points.get(i - 1).y;
-		return classify(rise, isStairs(path.getNodePos(i)), isStairs(path.getNodePos(i - 1)));
+		return classify(rise, isStairs(nodes.get(i)), isStairs(nodes.get(i - 1)));
 	}
 
 	/** What a change in floor height needs: nothing (roll), a slab hop, a block hop or a stairs bounce. */
@@ -505,7 +560,7 @@ public class TradeBotMotion {
 			return;
 		Level level = bot.level();
 		for (int i = next; i < Math.min(points.size(), next + 3); i++) {
-			BlockPos node = path.getNodePos(i);
+			BlockPos node = nodes.get(i);
 			if (bot.position().distanceTo(Vec3.atBottomCenterOf(node)) > 2.2)
 				continue;
 			for (BlockPos pos : List.of(node, node.above())) {

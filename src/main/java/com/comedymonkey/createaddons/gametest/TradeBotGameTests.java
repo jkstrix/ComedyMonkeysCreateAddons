@@ -78,6 +78,25 @@ public final class TradeBotGameTests {
 		run(helper, bot, List.of(new BlockPos(3, 2, 11)), h -> {});
 	}
 
+	/**
+	 * A raised block with the target diagonally across its corner, on open ground, so the route steps up and down
+	 * diagonally: every hop must still be square-on, clearing the edge (user: "when he jumps diagonally down or up he
+	 * needs to jump further to clear the edge").
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 1600)
+	public static void hopsSquareOnDiagonalSteps(GameTestHelper helper) {
+		floor(helper, 0, 0, 0, 23, 23, FLOOR);
+		floor(helper, 7, 1, 8, 16, 16, FLOOR);
+		TradeBotEntity bot = station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
+		run(helper, bot, List.of(new BlockPos(10, 2, 11)), h -> {
+			if (bot.motion.hops().isEmpty())
+				h.fail("he never hopped");
+			for (TradeBotMotion.Hop hop : bot.motion.hops())
+				if (hop.from().getX() != hop.to().getX() && hop.from().getZ() != hop.to().getZ())
+					h.fail("a diagonal hop from " + h.relativePos(hop.from()).toShortString() + " to " + h.relativePos(hop.to()).toShortString());
+		});
+	}
+
 	/** Up a stair onto a raised floor, and back down it. */
 	@GameTest(template = COURSE, timeoutTicks = 1600)
 	public static void climbsStairs(GameTestHelper helper) {
