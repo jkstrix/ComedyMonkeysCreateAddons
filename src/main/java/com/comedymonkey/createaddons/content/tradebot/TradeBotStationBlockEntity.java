@@ -15,6 +15,7 @@ import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModDataComponents;
 import com.comedymonkey.createaddons.registry.ModItems;
 import com.comedymonkey.createaddons.registry.ModSounds;
+import com.comedymonkey.createaddons.network.TradeBotStationPayload;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -63,6 +64,7 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 	// what the server last saw of the bot, for goggles, comparators and the renderer (he may be unloaded)
 	private int botCharge;
 	private boolean botDocked;
+	private boolean botCharging;
 	private int botEntityId = -1;
 	private int lastSignal = -1;
 	private int syncedEnergy = -1;
@@ -130,6 +132,101 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		return botDocked;
 	}
 
+	/** His charge as last seen (FE). */
+	public int botCharge() {
+		return botCharge;
+	}
+
+	/** Docked and taking charge right now. */
+	public boolean isCharging() {
+		return botCharging;
+	}
+
+	// ---- links (D22, D61), kept relative to the station
+
+	/** The containers he takes from, in the world. */
+	public List<BlockPos> inputPositions() {
+		return inputs.stream().map(worldPosition::offset).toList();
+	}
+
+	/** The container he delivers to, in the world, or null. */
+	@Nullable
+	public BlockPos outputPosition() {
+		return output == null ? null : worldPosition.offset(output);
+	}
+
+	public TradeBotLinks.Role roleOf(BlockPos target) {
+		BlockPos relative = target.subtract(worldPosition);
+		if (inputs.contains(relative))
+			return TradeBotLinks.Role.TAKES;
+		return relative.equals(output) ? TradeBotLinks.Role.DELIVERS : TradeBotLinks.Role.NONE;
+	}
+
+	/** One more click on {@code target} while picking: takes from, then delivers to, then unlinked. Returns the new role. */
+	TradeBotLinks.Role cycleLink(BlockPos target) {
+		boolean beltOnly = level != null && TradeBotLinks.outputOnly(level, target);
+		TradeBotLinks.Role next = TradeBotLinks.nextRole(roleOf(target), beltOnly, inputs.size(), MAX_INPUTS);
+		setRole(target, next);
+		return next;
+	}
+
+	/** A player's action from the station screen or while picking containers (D61). Owner (and team) only. */
+	public void handle(ServerPlayer player, TradeBotStationPayload.Action action, BlockPos target) {
+		if (level == null)
+			return;
+		if (!TradeBotOwnership.canControl(player, owner)) {
+			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.not_yours"), true);
+			return;
+		}
+		switch (action) {
+			case CALL_HOME -> {
+				if (player.distanceToSqr(worldPosition.getCenter()) > 64)
+					return;
+				TradeBotEntity tradeBot = findBot();
+				if (tradeBot != null && !tradeBot.isDocked()) {
+					tradeBot.goHome();
+					player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.heading_home"), true);
+				}
+			}
+			case UNLINK -> {
+				// from the screen (by the station) or left-clicked while picking (by the container)
+				boolean near = player.distanceToSqr(worldPosition.getCenter()) <= 64 || player.distanceToSqr(target.getCenter()) <= 64;
+				if (!near || roleOf(target) == TradeBotLinks.Role.NONE)
+					return;
+				setRole(target, TradeBotLinks.Role.NONE);
+				player.displayClientMessage(TradeBotLinks.describe(level, target, TradeBotLinks.Role.NONE), true);
+			}
+			case CYCLE -> {
+				// picked in the world: within the player's reach, his range from the station, and something that holds items
+				if (player.distanceToSqr(target.getCenter()) > 64)
+					return;
+				if (roleOf(target) == TradeBotLinks.Role.NONE && !TradeBotLinks.canLink(level, target)) {
+					player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.link.not_a_container"), true);
+					return;
+				}
+				if (!TradeBotLinks.inRange(worldPosition, target)) {
+					player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.link.too_far",
+						CMConfig.SERVER.tradeBotRange()), true);
+					return;
+				}
+				player.displayClientMessage(TradeBotLinks.describe(level, target, cycleLink(target)), true);
+			}
+		}
+	}
+
+	void setRole(BlockPos target, TradeBotLinks.Role role) {
+		BlockPos relative = target.subtract(worldPosition);
+		inputs.remove(relative);
+		if (relative.equals(output))
+			output = null;
+		switch (role) {
+			case TAKES -> inputs.add(relative);
+			case DELIVERS -> output = relative; // a new output replaces the old one
+			case NONE -> {}
+		}
+		notifyUpdate();
+	}
+
 	// ---- ticking: charge him, keep the glow, the comparator and clients up to date
 
 	@Override
@@ -147,14 +244,16 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 			}
 			tradeBot.setCharging(give > 0);
 		}
+		boolean charging = docked && tradeBot.isCharging();
 		boolean changed = false;
 		if (tradeBot != null) {
 			changed |= botCharge != tradeBot.getCharge() && level.getGameTime() % 10 == 0;
-			changed |= botEntityId != tradeBot.getId() || botDocked != docked;
+			changed |= botEntityId != tradeBot.getId() || botDocked != docked || botCharging != charging;
 			if (changed) {
 				botCharge = tradeBot.getCharge();
 				botEntityId = tradeBot.getId();
 				botDocked = docked;
+				botCharging = charging;
 			}
 		}
 		BlockState state = getBlockState();
@@ -284,6 +383,7 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		tag.putBoolean("Paused", paused);
 		tag.putInt("BotCharge", botCharge);
 		tag.putBoolean("BotDocked", botDocked);
+		tag.putBoolean("BotCharging", botCharging);
 		if (clientPacket)
 			tag.putInt("BotEntity", botEntityId);
 	}
@@ -301,6 +401,7 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		paused = tag.getBoolean("Paused");
 		botCharge = tag.getInt("BotCharge");
 		botDocked = tag.getBoolean("BotDocked");
+		botCharging = tag.getBoolean("BotCharging");
 		if (clientPacket)
 			botEntityId = tag.getInt("BotEntity");
 	}

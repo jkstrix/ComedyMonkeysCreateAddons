@@ -119,6 +119,21 @@ public class TradeBotStationBlock extends Block implements IBE<TradeBotStationBl
 		return ItemInteractionResult.sidedSuccess(level.isClientSide);
 	}
 
+	/** Right-click: his owner (or team) opens the station screen (D61). */
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+		if (!(level.getBlockEntity(pos) instanceof TradeBotStationBlockEntity station))
+			return InteractionResult.PASS;
+		if (!TradeBotOwnership.canControl(player, station.getOwner())) {
+			if (!level.isClientSide)
+				player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.comedymonkeysaddons.trade_bot.not_yours"), true);
+			return InteractionResult.sidedSuccess(level.isClientSide);
+		}
+		if (level.isClientSide)
+			com.comedymonkey.createaddons.client.tradebot.TradeBotStationScreen.open(pos);
+		return InteractionResult.sidedSuccess(level.isClientSide);
+	}
+
 	@Override
 	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos from, boolean moving) {
 		super.neighborChanged(state, level, pos, block, from, moving);

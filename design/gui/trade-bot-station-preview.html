@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Trade Bot station screen</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+<style>
+  :root { --bg: #23262a; --fg: #d6d8d4; --muted: #8f918b; --cyan: #6fb7c4; --amber: #d99a4a; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, sans-serif; padding: 24px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p { margin: 0 0 16px; max-width: 70ch; color: var(--muted); }
+  .stage { display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap; }
+  .world { position: relative; width: 640px; height: 520px; border-radius: 4px; overflow: hidden;
+    background: linear-gradient(#7aa7d6 0 38%, #5d7f3b 38% 40%, #4f6b33 40%); }
+  .world::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 47px, rgba(0,0,0,.06) 47px 48px); }
+  /* the panel at 3x (GUI scale 3), left edge, vertically centred like it will sit in game */
+  .panel { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: calc(140px * 3); height: calc(159px * 3);
+    background: url(trade_bot_links.png) 0 0 / calc(256px * 3) auto no-repeat; image-rendering: pixelated; z-index: 1; }
+  .t { position: absolute; font-family: VT323, monospace; font-size: 27px; line-height: 1; white-space: nowrap; }
+  .title { color: #2b2724; left: 0; width: 100%; text-align: center; top: 9px; }
+  .label { color: #d6d8d4; }
+  .dim { color: #7d7a72; }
+  .dist { color: #a8aaa4; }
+  .icon { position: absolute; width: 48px; height: 48px; display: grid; place-items: center; font: 600 15px/1 system-ui;
+    color: #222; border-radius: 2px; }
+  .crosshair { position: absolute; left: 50%; top: 50%; width: 18px; height: 18px; margin: -9px; z-index: 1;
+    background: linear-gradient(#fff,#fff) center/2px 18px no-repeat, linear-gradient(#fff,#fff) center/18px 2px no-repeat; opacity: .8; }
+  .box { position: absolute; border: 3px solid; z-index: 1; }
+  .legend { display: grid; gap: 10px; min-width: 260px; }
+  .swatch { display: inline-block; width: 14px; height: 14px; border: 3px solid; margin-right: 8px; vertical-align: -3px; }
+  .real { margin-top: 12px; width: 140px; height: 159px; background: url(trade_bot_links.png) 0 0 no-repeat; image-rendering: pixelated; }
+  small { color: var(--muted); }
+  .station { position: relative; width: calc(212px * 3); height: calc(182px * 3); background: url(trade_bot_station.png) 0 0 / calc(256px * 3) auto no-repeat; image-rendering: pixelated; }
+  .gfill { position: absolute; height: 36px; background: url(trade_bot_station.png) calc(-216px * 3) 0 / calc(256px * 3) auto no-repeat; image-rendering: pixelated; }
+  .x { position: absolute; width: 24px; height: 24px; background: url(trade_bot_station.png) calc(-216px * 3) calc(-16px * 3) / calc(256px * 3) auto no-repeat; image-rendering: pixelated; }
+</style>
+</head>
+<body>
+<h1>Trade Bot station screen (approved)</h1>
+<p>Right-clicking his station (owner only) opens this. <b>Select containers</b> closes it and starts picking containers in the world (right-click to link, left-click to unlink; outlines show the links);
+  <b>Call home</b> sends him back to his station. The ✕ on a row unlinks it. Example content again: docked and charging at 72%.</p>
+<div class="station">
+  <div class="t title" style="top:9px">Trade Bot</div>
+  <div class="t label" style="left:30px;top:63px">Docked, charging</div>
+  <div class="gfill" style="left:447px;top:57px;width:120px"></div>
+  <div class="t label" style="left:24px;top:108px">Takes from</div>
+  <div class="t dist" style="right:24px;top:108px">3 / 4</div>
+  <div class="icon" style="left:27px;top:141px;background:#8a6a3c">Ch</div><div class="t label" style="left:84px;top:153px">Chest</div><div class="t dist" style="right:72px;top:153px">6 m</div><div class="x" style="left:579px;top:153px"></div><div class="icon" style="left:27px;top:198px;background:#7a5a36">Ba</div><div class="t label" style="left:84px;top:210px">Barrel</div><div class="t dist" style="right:72px;top:210px">11 m</div><div class="x" style="left:579px;top:210px"></div><div class="icon" style="left:27px;top:255px;background:#6e7276">Va</div><div class="t label" style="left:84px;top:267px">Item Vault</div><div class="t dist" style="right:72px;top:267px">14 m</div><div class="x" style="left:579px;top:267px"></div>
+  <div class="t dim" style="left:84px;top:324px">empty</div>
+  <div class="t label" style="left:24px;top:378px">Delivers to</div>
+  <div class="icon" style="left:27px;top:411px;background:#7c7f79">De</div>
+  <div class="t label" style="left:84px;top:423px">Depot</div>
+  <div class="t dist" style="right:72px;top:423px">4 m</div>
+  <div class="x" style="left:579px;top:423px"></div>
+  <div class="t label" style="left:18px;width:294px;text-align:center;top:492px">Select containers</div>
+  <div class="t label" style="left:324px;width:294px;text-align:center;top:492px">Call home</div>
+</div>
+</body>
+</html>

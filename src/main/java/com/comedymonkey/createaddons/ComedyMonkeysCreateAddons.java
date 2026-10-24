@@ -51,6 +51,7 @@ import com.comedymonkey.createaddons.compat.pipez.cover.PipeCoverEvents;
 import com.comedymonkey.createaddons.compat.pipez.cover.client.PipeCoverClient;
 import com.comedymonkey.createaddons.network.PipeCoverPayload;
 import com.comedymonkey.createaddons.network.MotorSettingsPayload;
+import com.comedymonkey.createaddons.network.TradeBotStationPayload;
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlock;
 import com.comedymonkey.createaddons.registry.ModAttachments;
 import net.neoforged.fml.common.Mod;
@@ -190,6 +191,7 @@ public class ComedyMonkeysCreateAddons {
 			QuickTransferPayload::handle);
 		// The Electric Motor's settings screen
 		event.registrar("1").playToServer(MotorSettingsPayload.TYPE, MotorSettingsPayload.STREAM_CODEC, MotorSettingsPayload::handle);
+		event.registrar("1").playToServer(TradeBotStationPayload.TYPE, TradeBotStationPayload.STREAM_CODEC, TradeBotStationPayload::handle);
 		// Covers on Pipez pipes
 		event.registrar("1").playToClient(PipeCoverPayload.TYPE, PipeCoverPayload.STREAM_CODEC,
 			(payload, context) -> context.enqueueWork(() -> PipeCoverClient.handle(payload)));

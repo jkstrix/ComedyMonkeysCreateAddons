@@ -69,6 +69,7 @@ Clarified: **a clockwork robot, powered by FE through his station, who sells you
 | D58 | Comparator | Strengths: **0** no bot, **5** docked and idle, **10** working, **15** out of charge (refines D38) | user R12 |
 | D59 | Lava and void | If he's wound down in lava, or falls into the void, he's **returned to his station, still wound down**, so he's never lost or stuck burning | user R12 |
 | D60 | Doors and gates | He **closes the doors and fence gates he opened** once he's through; ones that were already open stay open (refines D28) | user R13 |
+| D61 | Linking (refines D19) | **Right-click the station** for its screen (status, charge, links with an ✕ to unlink; **Select containers**, **Call home**). **Select containers** starts Create Mechanical Arm-style picking in the world: right-click a container to cycle **takes from** (cyan outline) → **delivers to** (amber) → cleared; belts can only be the output. Picking uses any hand (no item needed): **left-click unlinks**; a hint line shows above the hotbar. Sneak-right-click or the station again to finish | user R14 |
 
 ## Open Questions
 None for v1.

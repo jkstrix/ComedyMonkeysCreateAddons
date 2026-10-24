@@ -30,6 +30,7 @@ import com.comedymonkey.createaddons.client.tradebot.TradeBotGeometry;
 import com.comedymonkey.createaddons.client.tradebot.TradeBotRenderer;
 import com.comedymonkey.createaddons.client.tradebot.TradeBotStationRenderer;
 import com.comedymonkey.createaddons.client.tradebot.TradeBotItemRenderer;
+import com.comedymonkey.createaddons.client.tradebot.TradeBotLinkPicking;
 import com.comedymonkey.createaddons.registry.ModEntities;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
@@ -48,6 +49,10 @@ public class ComedyMonkeysCreateAddonsClient {
 		modBus.addListener(this::registerScreens);
 		modBus.addListener(this::registerModels);
 		modBus.addListener(this::registerClientExtensions);
+		// Picking containers for Trade Bot in the world, from his station screen
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(TradeBotLinkPicking::onRightClickBlock);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(TradeBotLinkPicking::onLeftClickBlock);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(TradeBotLinkPicking::onClientTick);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ChestSortButton::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseScrolled);
