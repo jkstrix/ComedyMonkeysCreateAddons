@@ -156,11 +156,12 @@ public final class TradeBotGameTests {
 	}
 
 	/**
-	 * Fetching from four kinds of input (a chest on the floor, a barrel, a chest up on a block, a Create depot) and
-	 * delivering it all to a chest: every item ends up in the output, the inputs end up empty and the barrel shut.
+	 * A whole job without trading yet: he takes from four kinds of input (a chest on the floor, a barrel, a chest up on
+	 * a block, a Create depot), delivers only his earnings to the output chest (emeralds and Nuggets of Experience, as if
+	 * he'd traded), and on the way home returns every unsold item to the input it came from (D48, D57, D62).
 	 */
-	@GameTest(template = COURSE, timeoutTicks = 4800)
-	public static void fetchesAndDelivers(GameTestHelper helper) {
+	@GameTest(template = COURSE, timeoutTicks = 6000)
+	public static void deliversEarningsAndReturnsTheRest(GameTestHelper helper) {
 		floor(helper, 0, 0, 0, 23, 23, FLOOR);
 		TradeBotEntity bot = station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
 		TradeBotStationBlockEntity station = (TradeBotStationBlockEntity) helper.getBlockEntity(new BlockPos(3, 1, 2));
@@ -179,6 +180,7 @@ public final class TradeBotGameTests {
 		for (BlockPos input : List.of(chest, barrel, high, depot))
 			station.setRole(helper.absolutePos(input), TradeBotLinks.Role.TAKES);
 		station.setRole(helper.absolutePos(output), TradeBotLinks.Role.DELIVERS);
+		bot.addEarnings(70, 10); // as if he'd traded: 70 emeralds, and 10 XP (3 nuggets, 1 XP left over)
 		TradeBotMotion.debug = true;
 		helper.runAfterDelay(10, () -> {
 			if (!bot.brain.fetchAndDeliver(stack -> true))
@@ -187,12 +189,19 @@ public final class TradeBotGameTests {
 		helper.succeedWhen(() -> {
 			if (!bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
 				helper.fail("not docked yet (" + bot.brain.task() + ", taken " + bot.brain.taken() + ", delivered " + bot.brain.delivered() + ")");
-			int delivered = count(helper, output);
-			if (delivered != 64)
-				helper.fail(delivered + " of 64 items in the output");
-			for (BlockPos input : List.of(chest, barrel, high, depot))
-				if (count(helper, input) != 0)
-					helper.fail("items left in " + helper.getBlockState(input).getBlock().getName().getString());
+			if (count(helper, output, Items.EMERALD) != 70 || count(helper, output, nugget()) != 3 || count(helper, output) != 73)
+				helper.fail("the output holds " + count(helper, output) + " items, not just 70 emeralds and 3 nuggets");
+			if (bot.getXpBank() != 1)
+				helper.fail(bot.getXpBank() + " XP banked, not 1");
+			int[] expected = { 42, 16, 5, 1 };
+			List<BlockPos> inputs = List.of(chest, barrel, high, depot);
+			for (int i = 0; i < inputs.size(); i++)
+				if (count(helper, inputs.get(i)) != expected[i])
+					helper.fail(helper.getBlockState(inputs.get(i)).getBlock().getName().getString() + " has " + count(helper, inputs.get(i))
+						+ " items back, not " + expected[i]);
+			for (int slot = 0; slot < bot.getLoad().getSlots(); slot++)
+				if (!bot.getLoad().getStackInSlot(slot).isEmpty())
+					helper.fail("he still carries " + bot.getLoad().getStackInSlot(slot));
 			if (helper.getBlockState(barrel).getValue(BarrelBlock.OPEN))
 				helper.fail("the barrel was left open");
 		});
@@ -204,6 +213,20 @@ public final class TradeBotGameTests {
 			helper.fail("no inventory at " + pos.toShortString());
 		for (ItemStack stack : stacks)
 			ItemHandlerHelper.insertItemStacked(handler, stack, false);
+	}
+
+	private static net.minecraft.world.item.Item nugget() {
+		return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("create", "experience_nugget"));
+	}
+
+	private static int count(GameTestHelper helper, BlockPos pos, net.minecraft.world.item.Item item) {
+		IItemHandler handler = helper.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, helper.absolutePos(pos), null);
+		int total = 0;
+		if (handler != null)
+			for (int slot = 0; slot < handler.getSlots(); slot++)
+				if (handler.getStackInSlot(slot).is(item))
+					total += handler.getStackInSlot(slot).getCount();
+		return total;
 	}
 
 	private static int count(GameTestHelper helper, BlockPos pos) {

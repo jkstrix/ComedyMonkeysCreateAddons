@@ -209,6 +209,28 @@ public class TradeBotEntity extends PathfinderMob {
 		docked = false;
 	}
 
+	/** His earnings: the emerald pouch (D48) and the trade XP saved up for Nuggets of Experience (D57). */
+	public long getEmeralds() {
+		return emeralds;
+	}
+
+	public int getXpBank() {
+		return xpBank;
+	}
+
+	public void addEarnings(long emeralds, int xp) {
+		this.emeralds = Math.max(0, this.emeralds + emeralds);
+		this.xpBank = Math.max(0, this.xpBank + xp);
+	}
+
+	/** Something to deliver: emeralds, or XP for at least one nugget. */
+	public boolean hasEarnings() {
+		return emeralds > 0 || xpBank >= XP_PER_NUGGET;
+	}
+
+	/** A Create Nugget of Experience is worth 3 XP. */
+	public static final int XP_PER_NUGGET = 3;
+
 	/** What he's carrying (27 slots, D45). */
 	public ItemStackHandler getLoad() {
 		return load;

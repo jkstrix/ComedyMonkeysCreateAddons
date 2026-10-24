@@ -27,6 +27,8 @@ neoForge {
         // Trade Bot's test courses, headless: builds each course, runs it, exits with the failures
         gameTestServer {
             type = "gameTestServer"
+            // its own folder, so the courses can run while a dev client has run/ open
+            gameDirectory = project.file('run-gametest')
         }
         configureEach {
             // the mod's game tests are available in every run (/test in a dev world)

@@ -22,3 +22,6 @@ repo/
 
 # built jars copied out for release
 release/
+
+# game-test server runs
+run-gametest/

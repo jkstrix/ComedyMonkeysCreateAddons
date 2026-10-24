@@ -1,5 +1,7 @@
 package com.comedymonkey.createaddons.content.tradebot.work;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.jetbrains.annotations.Nullable;
@@ -9,6 +11,10 @@ import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
@@ -22,22 +28,37 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 
 /**
  * One go at a container (server): the clip for its kind, the real lid opening and closing with it, and the items moving
- * on the clip's beat, never at its start (D5, D6). Taking moves the items {@code wanted} into his load until it's full;
- * putting moves his load in until the container's full. If he's interrupted the lid is shut again.
+ * on the clip's beat, never at its start (D5, D6). He takes the items {@code wanted} into his load until it's full,
+ * returns unsold items {@code wanted} from his load, or delivers his earnings: emeralds and Nuggets of Experience, the
+ * only things an output ever gets (D48, D57). If he's interrupted the lid is shut again.
  */
 public class ContainerWork {
 	private final TradeBotEntity bot;
 	private final ContainerVisit visit;
+	public enum Mode { TAKE, RETURN, DELIVER_EARNINGS }
+
+	private final Mode mode;
 	private final boolean taking;
 	private final Predicate<ItemStack> wanted;
 	private boolean opened, moved, closed;
 	private int movedCount;
+	private final List<ItemStack> movedStacks = new ArrayList<>();
 
-	public ContainerWork(TradeBotEntity bot, ContainerVisit visit, boolean taking, Predicate<ItemStack> wanted) {
+	public ContainerWork(TradeBotEntity bot, ContainerVisit visit, Mode mode, Predicate<ItemStack> wanted) {
 		this.bot = bot;
 		this.visit = visit;
-		this.taking = taking;
+		this.mode = mode;
+		this.taking = mode == Mode.TAKE;
 		this.wanted = wanted;
+	}
+
+	public Mode mode() {
+		return mode;
+	}
+
+	/** What moved, one stack per slot moved (counts included). */
+	public List<ItemStack> movedStacks() {
+		return movedStacks;
 	}
 
 	public ContainerVisit visit() {
@@ -58,7 +79,11 @@ public class ContainerWork {
 			opened = true;
 		}
 		if (!moved && t >= kind.transferAt(taking)) {
-			movedCount = taking ? take() : put();
+			movedCount = switch (mode) {
+				case TAKE -> take();
+				case RETURN -> put();
+				case DELIVER_EARNINGS -> deliverEarnings();
+			};
 			moved = true;
 		}
 		if (opened && !closed && t >= kind.closeAt(taking)) {
@@ -92,18 +117,46 @@ public class ContainerWork {
 		IItemHandler from = handler();
 		if (from == null)
 			return 0;
-		return move(from, bot.getLoad(), wanted);
+		return move(from, bot.getLoad(), wanted, movedStacks);
 	}
 
 	private int put() {
 		IItemHandler to = handler();
 		if (to == null)
 			return 0;
-		return move(bot.getLoad(), to, wanted);
+		return move(bot.getLoad(), to, wanted, movedStacks);
+	}
+
+	/** Emeralds from the pouch, in stacks, then a nugget for every 3 XP banked; whatever doesn't fit stays with him. */
+	private int deliverEarnings() {
+		IItemHandler to = handler();
+		if (to == null)
+			return 0;
+		int total = 0;
+		while (bot.getEmeralds() > 0) {
+			int count = (int) Math.min(64, bot.getEmeralds());
+			ItemStack left = ItemHandlerHelper.insertItemStacked(to, new ItemStack(Items.EMERALD, count), false);
+			int put = count - left.getCount();
+			bot.addEarnings(-put, 0);
+			total += put;
+			if (put < count)
+				break;
+		}
+		Item nugget = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("create", "experience_nugget"));
+		while (bot.getXpBank() >= TradeBotEntity.XP_PER_NUGGET) {
+			int count = Math.min(64, bot.getXpBank() / TradeBotEntity.XP_PER_NUGGET);
+			ItemStack left = ItemHandlerHelper.insertItemStacked(to, new ItemStack(nugget, count), false);
+			int put = count - left.getCount();
+			bot.addEarnings(0, -put * TradeBotEntity.XP_PER_NUGGET);
+			total += put;
+			if (put < count)
+				break;
+		}
+		return total;
 	}
 
 	/** Moves whole stacks (or as much of each as fits) from one handler to the other; returns the items moved. */
-	public static int move(IItemHandler from, IItemHandler to, Predicate<ItemStack> wanted) {
+	public static int move(IItemHandler from, IItemHandler to, Predicate<ItemStack> wanted, List<ItemStack> moved) {
 		int total = 0;
 		for (int slot = 0; slot < from.getSlots(); slot++) {
 			ItemStack stack = from.getStackInSlot(slot);
@@ -119,6 +172,7 @@ public class ContainerWork {
 			if (!spill.isEmpty()) // shouldn't happen after the simulation; put it back rather than lose it
 				from.insertItem(slot, spill, false);
 			total += taken.getCount() - spill.getCount();
+			moved.add(taken.copyWithCount(taken.getCount() - spill.getCount()));
 		}
 		return total;
 	}

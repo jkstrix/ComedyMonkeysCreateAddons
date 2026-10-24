@@ -1,6 +1,8 @@
 package com.comedymonkey.createaddons.content.tradebot;
 
 import java.util.ArrayDeque;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
@@ -61,18 +63,31 @@ public class TradeBotBrain {
 	/** Which input goes first next time, so they take turns (D47). */
 	private int roundRobin;
 
+	private enum Phase { TAKING, DELIVERING, RETURNING_ITEMS }
+
 	private static final class Job {
 		final List<BlockPos> inputs;
 		final BlockPos output;
 		final Predicate<ItemStack> wanted;
+		Phase phase = Phase.TAKING;
 		int input;
-		boolean delivering;
-		int taken, delivered;
+		int taken, delivered, returned;
+		/** What he took from each input, so unsold items go back where they came from (D62). */
+		final Map<BlockPos, List<ItemStack>> takenFrom = new LinkedHashMap<>();
+		/** Where unsold items still have to go: their own inputs first, then any input for what's left over. */
+		final Deque<BlockPos> returns = new ArrayDeque<>();
+		boolean leftoversQueued;
 
 		Job(List<BlockPos> inputs, BlockPos output, Predicate<ItemStack> wanted) {
 			this.inputs = inputs;
 			this.output = output;
 			this.wanted = wanted;
+		}
+
+		/** Stacks in his load that came from {@code input} (or, once leftovers are queued, anything). */
+		Predicate<ItemStack> from(BlockPos input) {
+			List<ItemStack> kinds = takenFrom.getOrDefault(input, List.of());
+			return stack -> leftoversQueued || kinds.stream().anyMatch(k -> ItemStack.isSameItemSameComponents(k, stack));
 		}
 	}
 
@@ -111,9 +126,9 @@ public class TradeBotBrain {
 	}
 
 	/**
-	 * A job: from each of his station's inputs in turn, take what's {@code wanted} until he's full, then deliver his load
-	 * to the output, waiting beside it if it's full (D22), then go home. Milestone 5 puts trading between the two, and
-	 * delivers emeralds instead of the load.
+	 * A job: from each of his station's inputs in turn, take what's {@code wanted} until he's full; (milestone 5: trade);
+	 * deliver his earnings, emeralds and Nuggets of Experience, to the output, waiting beside it if it's full (D22, D48,
+	 * D57); then, on the way home, put every unsold item back in the input it came from (D62).
 	 */
 	public boolean fetchAndDeliver(Predicate<ItemStack> wanted) {
 		if (!(bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station) || station.outputPosition() == null)
@@ -140,6 +155,10 @@ public class TradeBotBrain {
 		return job == null ? 0 : job.delivered;
 	}
 
+	public int returned() {
+		return job == null ? 0 : job.returned;
+	}
+
 	/** Home to his station (wrench, redstone pause, packing, night...). */
 	public void goHome() {
 		if (task == Task.RETURNING || task == Task.DOCKING || task == Task.HOME && bot.isDocked())
@@ -152,41 +171,80 @@ public class TradeBotBrain {
 		set(Task.RETURNING);
 	}
 
-	/** The next container to visit: an input with something wanted, then the output; home when done. */
+	/** The next container: inputs with something wanted, then the output (if he has earnings), then returns; then home. */
 	private void nextJobStep() {
 		Job j = job;
 		if (j == null) {
 			set(Task.RETURNING);
 			return;
 		}
-		if (!j.delivering) {
+		if (j.phase == Phase.TAKING) {
 			while (j.input < j.inputs.size() && !ContainerWork.full(bot.getLoad())) {
 				BlockPos input = j.inputs.get(j.input);
 				ContainerVisit visit = hasWanted(input, j.wanted) ? ContainerVisit.plan(bot, input) : null;
-				if (visit != null && approach(visit, true))
+				if (visit != null && approach(visit, ContainerWork.Mode.TAKE, j.wanted))
 					return;
 				j.input++;
 			}
-			j.delivering = true;
+			j.phase = Phase.DELIVERING; // (milestone 5 trades here)
 		}
-		if (isEmpty(bot.getLoad())) {
-			set(Task.RETURNING);
-			return;
+		if (j.phase == Phase.DELIVERING) {
+			if (bot.hasEarnings()) {
+				ContainerVisit visit = ContainerVisit.plan(bot, j.output);
+				if (visit != null && approach(visit, ContainerWork.Mode.DELIVER_EARNINGS, stack -> false))
+					return;
+			}
+			j.phase = Phase.RETURNING_ITEMS;
+			j.returns.addAll(nearestFirst(new ArrayList<>(j.takenFrom.keySet())));
 		}
-		ContainerVisit visit = ContainerVisit.plan(bot, j.output);
-		if (visit == null || !approach(visit, false))
-			set(Task.RETURNING); // can't reach the output: he keeps what he has (milestone 5 returns it to the inputs)
+		while (!isEmpty(bot.getLoad())) {
+			if (j.returns.isEmpty()) {
+				if (j.leftoversQueued)
+					break; // every input is full: he keeps the rest for next time
+				// left over (their own input was full): any input with room
+				j.leftoversQueued = true;
+				j.returns.addAll(nearestFirst(new ArrayList<>(j.inputs)));
+			}
+			BlockPos input = j.returns.poll();
+			if (!carries(j.from(input)))
+				continue;
+			ContainerVisit visit = ContainerVisit.plan(bot, input);
+			if (visit != null && approach(visit, ContainerWork.Mode.RETURN, j.from(input)))
+				return;
+		}
+		set(Task.RETURNING);
 	}
 
-	private boolean approach(ContainerVisit visit, boolean taking) {
+	private boolean approach(ContainerVisit visit, ContainerWork.Mode mode, Predicate<ItemStack> which) {
 		if (!bot.motion.moveTo(visit.standBlock(), visit.stand(), visit.yaw()))
 			return false;
-		work = new ContainerWork(bot, visit, taking, taking && job != null ? job.wanted : stack -> true);
+		work = new ContainerWork(bot, visit, mode, which);
 		if (com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion.debug)
-			com.mojang.logging.LogUtils.getLogger().info("[Trade Bot {}] {} {} at {} from the {} side, standing at {}", bot.getId(), taking ? "take from" : "put into",
+			com.mojang.logging.LogUtils.getLogger().info("[Trade Bot {}] {} {} at {} from the {} side, standing at {}", bot.getId(), mode,
 				visit.kind(), visit.container().toShortString(), visit.side(), visit.standBlock().toShortString());
 		set(Task.APPROACHING);
 		return true;
+	}
+
+	/** Orders containers so each next one is the nearest to the last (from where he is now). */
+	private List<BlockPos> nearestFirst(List<BlockPos> containers) {
+		List<BlockPos> ordered = new ArrayList<>();
+		net.minecraft.world.phys.Vec3 from = bot.position();
+		while (!containers.isEmpty()) {
+			net.minecraft.world.phys.Vec3 at = from;
+			BlockPos nearest = containers.stream().min(java.util.Comparator.comparingDouble(c -> c.getCenter().distanceToSqr(at))).orElseThrow();
+			containers.remove(nearest);
+			ordered.add(nearest);
+			from = nearest.getCenter();
+		}
+		return ordered;
+	}
+
+	private boolean carries(Predicate<ItemStack> which) {
+		for (int slot = 0; slot < bot.getLoad().getSlots(); slot++)
+			if (!bot.getLoad().getStackInSlot(slot).isEmpty() && which.test(bot.getLoad().getStackInSlot(slot)))
+				return true;
+		return false;
 	}
 
 	private boolean hasWanted(BlockPos pos, Predicate<ItemStack> wanted) {
@@ -246,10 +304,10 @@ public class TradeBotBrain {
 					set(Task.WORKING);
 				} else if (bot.motion.failed()) {
 					work = null;
-					if (job != null && !job.delivering)
+					if (job != null && job.phase == Phase.TAKING)
 						job.input++;
-					else if (job != null)
-						job.delivering = true;
+					else if (job != null && job.phase == Phase.DELIVERING)
+						job.phase = Phase.RETURNING_ITEMS; // can't reach the output: keep the earnings, return the items
 					nextJobStep();
 				}
 			}
@@ -258,18 +316,23 @@ public class TradeBotBrain {
 				if (w == null || w.tick()) {
 					work = null;
 					if (job != null && w != null) {
-						if (job.delivering) {
-							job.delivered += w.moved();
-							if (!isEmpty(bot.getLoad())) {
-								bot.playClip("expr_sad");
-								set(Task.WAITING_OUTPUT);
-								return;
+						switch (w.mode()) {
+							case TAKE -> {
+								job.taken += w.moved();
+								for (ItemStack stack : w.movedStacks())
+									job.takenFrom.computeIfAbsent(w.visit().container(), c -> new ArrayList<>()).add(stack.copyWithCount(1));
+								job.input++;
 							}
-							set(Task.RETURNING);
-							return;
+							case DELIVER_EARNINGS -> {
+								job.delivered += w.moved();
+								if (bot.hasEarnings()) { // the output's full: wait beside it, worried, and try again (D22)
+									bot.playClip("expr_sad");
+									set(Task.WAITING_OUTPUT);
+									return;
+								}
+							}
+							case RETURN -> job.returned += w.moved();
 						}
-						job.taken += w.moved();
-						job.input++;
 					}
 					nextJobStep();
 				}
