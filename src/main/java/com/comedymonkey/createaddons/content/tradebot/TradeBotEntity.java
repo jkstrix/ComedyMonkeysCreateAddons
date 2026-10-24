@@ -12,6 +12,8 @@ import org.joml.Vector3f;
 
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.Wrenches;
+import com.comedymonkey.createaddons.content.tradebot.trade.BotPricing;
+import com.comedymonkey.createaddons.content.tradebot.trade.VillagerClaims;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipPlayback;
@@ -226,6 +228,16 @@ public class TradeBotEntity extends PathfinderMob {
 	/** Something to deliver: emeralds, or XP for at least one nugget. */
 	public boolean hasEarnings() {
 		return emeralds > 0 || xpBank >= XP_PER_NUGGET;
+	}
+
+	/** His own reputation with a villager (D34, D42): 0 until they've traded. */
+	public int reputationWith(UUID villager) {
+		return reputation.getOrDefault(villager, 0);
+	}
+
+	/** One more trade with {@code villager}: his reputation with it grows, up to vanilla's cap. */
+	public void tradedWith(UUID villager) {
+		reputation.put(villager, BotPricing.raise(reputationWith(villager)));
 	}
 
 	/** A Create Nugget of Experience is worth 3 XP. */
@@ -484,6 +496,8 @@ public class TradeBotEntity extends PathfinderMob {
 		if (TradeBotMotion.debug && !level().isClientSide)
 			LogUtils.getLogger().info("[Trade Bot {}] removed ({}) at {}, health {}", getId(), reason, blockPosition().toShortString(), getHealth(),
 				new Throwable("removed here"));
+		if (!level().isClientSide)
+			VillagerClaims.releaseAll(getUUID());
 		if (!packed && reason.shouldDestroy() && level() instanceof ServerLevel server)
 			TradeBotRegistry.get(server.getServer()).markGone(getUUID());
 		super.remove(reason);

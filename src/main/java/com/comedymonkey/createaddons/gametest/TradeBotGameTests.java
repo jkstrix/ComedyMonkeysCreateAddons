@@ -25,7 +25,14 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.item.trading.ItemCost;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.item.trading.MerchantOffers;
+import com.simibubi.create.content.contraptions.actors.seat.SeatBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -50,7 +57,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
  * <p>
  * The trading hall is the main course: a yard with his station, a slab step up to the hall, a door, three booths (a
  * workstation counter with a Create seat behind it) along an aisle with a dog-leg, a gate and stairs up to a gallery
- * with a fourth booth. Milestone 5 puts villagers on the seats.
+ * with a fourth booth; the trading courses put villagers on its seats.
  */
 @GameTestHolder(ComedyMonkeysCreateAddons.MOD_ID)
 @PrefixGameTestTemplate(false)
@@ -207,6 +214,115 @@ public final class TradeBotGameTests {
 		});
 	}
 
+	/**
+	 * Trading for real (D7, D17, D35, D45, D57): seated villagers in all four of the hall's booths, each buying one of
+	 * the goods in his input chest. He goes by himself (D47), takes only what they'll buy (D22), trades with each in turn
+	 * across its workstation, one trade per clip, while he can pay its price, delivers the emeralds and nuggets, brings
+	 * back what's left over (D62), and docks. The cobblestone nobody buys never leaves the chest. Then, with not enough
+	 * left for another trade, he stays home. (The goods set the number of trades: villagers at their workstations
+	 * restock, as they do for players.)
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 8000)
+	public static void tradesRoundTheHall(GameTestHelper helper) {
+		Hall hall = tradingHall(helper);
+		helper.getLevel().setDayTime(1000);
+		TradeBotEntity bot = station(helper, hall.station, Direction.SOUTH);
+		BlockPos input = new BlockPos(7, 1, 1), output = new BlockPos(10, 1, 1);
+		links(helper, hall.station, input, output);
+		fill(helper, input, new ItemStack(Items.WHEAT, 40), new ItemStack(Items.PAPER, 30), new ItemStack(Items.COAL, 20),
+			new ItemStack(Items.GLASS_PANE, 16), new ItemStack(Items.COBBLESTONE, 10));
+		List<Villager> villagers = List.of(
+			seated(helper, hall.seats.get(0), VillagerProfession.FARMER, offer(Items.WHEAT, 20, 16), offer(Items.CARROT, 22, 16)),
+			seated(helper, hall.seats.get(1), VillagerProfession.LIBRARIAN, offer(Items.PAPER, 24, 16)),
+			seated(helper, hall.seats.get(2), VillagerProfession.TOOLSMITH, offer(Items.COAL, 15, 16)),
+			seated(helper, hall.seats.get(3), VillagerProfession.CARTOGRAPHER, offer(Items.GLASS_PANE, 11, 16)));
+		int[] trades = { 2, 1, 1, 1 };
+		TradeBotStationBlockEntity station = (TradeBotStationBlockEntity) helper.getBlockEntity(hall.station);
+		TradeBotMotion.debug = true;
+		helper.onEachTick(() -> {
+			if (station.tradesToday() > 5)
+				helper.fail("he made " + station.tradesToday() + " trades, more than his goods pay for");
+		});
+		helper.succeedWhen(() -> {
+			if (station.tradesToday() < 5 || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail(station.tradesToday() + " of 5 trades made (" + bot.brain.task() + ")");
+			if (count(helper, output, Items.EMERALD) != 5)
+				helper.fail("the output holds " + count(helper, output, Items.EMERALD) + " emeralds, not 5");
+			// each trade's XP is vanilla's 3-6, banked and delivered 3 a nugget (D57)
+			int nuggets = count(helper, output, nugget());
+			if (nuggets < 5 || nuggets > 10 || bot.getXpBank() >= TradeBotEntity.XP_PER_NUGGET)
+				helper.fail(nuggets + " nuggets delivered and " + bot.getXpBank() + " XP kept from 5 trades");
+			int[] left = { 0, 6, 5, 5, 10 };
+			net.minecraft.world.item.Item[] goods = { Items.WHEAT, Items.PAPER, Items.COAL, Items.GLASS_PANE, Items.COBBLESTONE };
+			for (int i = 0; i < goods.length; i++)
+				if (count(helper, input, goods[i]) != left[i])
+					helper.fail("the input has " + count(helper, input, goods[i]) + " " + goods[i] + " left, not " + left[i]);
+			for (int i = 0; i < villagers.size(); i++) {
+				Villager villager = villagers.get(i);
+				if (bot.reputationWith(villager.getUUID()) != 2 * trades[i])
+					helper.fail("his reputation with the " + villager.getVillagerData().getProfession() + " is " + bot.reputationWith(villager.getUUID()));
+			}
+			if (villagers.get(0).getVillagerXp() != 1 + 2 * 2)
+				helper.fail("the farmer has " + villagers.get(0).getVillagerXp() + " XP, not 5");
+		});
+	}
+
+	/**
+	 * A villager stands up just as he starts the trade (D46): it's off, he shrugs, keeps everything, and on the way
+	 * home puts the wheat back where it came from. No emerald, no use of the villager's stock.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 4000)
+	public static void shrugsWhenTheVillagerStandsUp(GameTestHelper helper) {
+		Hall hall = tradingHall(helper);
+		helper.getLevel().setDayTime(1000);
+		TradeBotEntity bot = station(helper, hall.station, Direction.SOUTH);
+		BlockPos input = new BlockPos(7, 1, 1), output = new BlockPos(10, 1, 1);
+		links(helper, hall.station, input, output);
+		fill(helper, input, new ItemStack(Items.WHEAT, 64));
+		Villager farmer = seated(helper, hall.seats.get(0), VillagerProfession.FARMER, offer(Items.WHEAT, 20, 3));
+		boolean[] shrugged = { false };
+		TradeBotMotion.debug = true;
+		helper.onEachTick(() -> {
+			if (farmer.isPassenger() && bot.clip().name().startsWith("trade_villager"))
+				farmer.stopRiding();
+			shrugged[0] |= bot.brain.task() == TradeBotBrain.Task.SHRUGGING;
+		});
+		helper.succeedWhen(() -> {
+			if (!shrugged[0] || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail("not home after a shrug yet (" + bot.brain.task() + ", shrugged " + shrugged[0] + ")");
+			if (count(helper, input, Items.WHEAT) != 64 || count(helper, output) != 0 || bot.getEmeralds() != 0)
+				helper.fail("the input has " + count(helper, input, Items.WHEAT) + " wheat back, the output " + count(helper, output) + " items");
+			if (farmer.getOffers().get(0).getUses() != 0)
+				helper.fail("the farmer's stock was used");
+		});
+	}
+
+	/** A sell-to-villager offer: {@code count} goods for an emerald, {@code maxUses} times, 2 villager XP each. */
+	private static MerchantOffer offer(net.minecraft.world.item.Item goods, int count, int maxUses) {
+		return new MerchantOffer(new ItemCost(goods, count), java.util.Optional.empty(), new ItemStack(Items.EMERALD), 0, maxUses, 2, 0.05f, 0);
+	}
+
+	/** A grown villager of {@code profession} with just these offers, sat in the Create seat at {@code seat}. */
+	private static Villager seated(GameTestHelper helper, BlockPos seat, VillagerProfession profession, MerchantOffer... offers) {
+		Villager villager = helper.spawn(EntityType.VILLAGER, seat);
+		villager.setVillagerData(villager.getVillagerData().setProfession(profession).setLevel(1));
+		villager.setVillagerXp(1); // with some XP it keeps its profession away from a job site
+		villager.overrideOffers(new MerchantOffers());
+		for (MerchantOffer offer : offers)
+			villager.getOffers().add(offer);
+		SeatBlock.sitDown(helper.getLevel(), helper.absolutePos(seat), villager);
+		return villager;
+	}
+
+	/** A chest at each of {@code input} and {@code output} in the yard, facing the station's side, linked to it. */
+	private static void links(GameTestHelper helper, BlockPos station, BlockPos input, BlockPos output) {
+		for (BlockPos chest : List.of(input, output))
+			helper.setBlock(chest, Blocks.CHEST.defaultBlockState().setValue(net.minecraft.world.level.block.ChestBlock.FACING, Direction.SOUTH));
+		TradeBotStationBlockEntity be = (TradeBotStationBlockEntity) helper.getBlockEntity(station);
+		be.setRole(helper.absolutePos(input), TradeBotLinks.Role.TAKES);
+		be.setRole(helper.absolutePos(output), TradeBotLinks.Role.DELIVERS);
+	}
+
 	private static void fill(GameTestHelper helper, BlockPos pos, ItemStack... stacks) {
 		IItemHandler handler = helper.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, helper.absolutePos(pos), null);
 		if (handler == null)
@@ -240,7 +356,7 @@ public final class TradeBotGameTests {
 
 	// ---- the trading hall
 
-	record Hall(BlockPos station, List<BlockPos> spots, BlockPos door, BlockPos gate) {}
+	record Hall(BlockPos station, List<BlockPos> spots, List<BlockPos> seats, BlockPos door, BlockPos gate) {}
 
 	/**
 	 * <pre>
@@ -281,7 +397,8 @@ public final class TradeBotGameTests {
 		floor(helper, 20, 2, 9, 21, 15, FLOOR);
 		booth(helper, new BlockPos(21, 3, 14), Blocks.CARTOGRAPHY_TABLE);
 		List<BlockPos> spots = List.of(new BlockPos(6, 2, 13), new BlockPos(11, 2, 13), new BlockPos(15, 2, 13), new BlockPos(21, 3, 13));
-		return new Hall(new BlockPos(3, 1, 2), spots, new BlockPos(3, 2, 8), new BlockPos(17, 2, 11));
+		List<BlockPos> seats = List.of(new BlockPos(6, 2, 15), new BlockPos(11, 2, 15), new BlockPos(15, 2, 15), new BlockPos(21, 3, 15));
+		return new Hall(new BlockPos(3, 1, 2), spots, seats, new BlockPos(3, 2, 8), new BlockPos(17, 2, 11));
 	}
 
 	/** A villager's booth: a workstation counter, and a Create seat behind it for the villager. */

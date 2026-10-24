@@ -1054,6 +1054,7 @@
   "comedymonkeysaddons.gui.goggles.trade_bot.links": "Inputs: %s / %s, output %s",
   "comedymonkeysaddons.gui.goggles.trade_bot.output_set": "set",
   "comedymonkeysaddons.gui.goggles.trade_bot.output_unset": "not set",
+  "comedymonkeysaddons.gui.goggles.trade_bot.trades_today": "Trades today: %s",
   "commands.comedymonkeysaddons.tradebot.goto": "Trade Bot is off to %s",
   "commands.comedymonkeysaddons.tradebot.no_route": "Trade Bot can't find a way there",
   "message.comedymonkeysaddons.trade_bot.link.takes": "Takes from %s",
@@ -1077,5 +1078,7 @@
   "message.comedymonkeysaddons.trade_bot.picking_done": "Done picking containers",
   "message.comedymonkeysaddons.trade_bot.link.full": "He already has four containers to take from and one to deliver to",
   "commands.comedymonkeysaddons.tradebot.fetch": "Trade Bot is fetching from his inputs and delivering to his output",
-  "commands.comedymonkeysaddons.tradebot.no_output": "Trade Bot has no output linked"
+  "commands.comedymonkeysaddons.tradebot.no_output": "Trade Bot has no output linked",
+  "commands.comedymonkeysaddons.tradebot.trade": "Trade Bot is off to trade",
+  "commands.comedymonkeysaddons.tradebot.no_trade": "Trade Bot has nothing to do: no seated villager in range buys what his inputs hold, or his output is full, or he needs charge"
 }

@@ -103,6 +103,16 @@ class MixinConfigTest {
 		assertEquals(long.class, villager.getDeclaredField("lastRestockCheckDayTime").getType());
 	}
 
+	/** Trade Bot's trades do vanilla's bookkeeping through these (D17, D57). */
+	@Test
+	void villagerHasTheTradeXpFieldsTradeBotUses() throws Exception {
+		Class<?> villager = Class.forName("net.minecraft.world.entity.npc.Villager", false, loader());
+		assertEquals(int.class, villager.getDeclaredField("villagerXp").getType());
+		assertEquals(int.class, villager.getDeclaredField("updateMerchantTimer").getType());
+		assertEquals(boolean.class, villager.getDeclaredField("increaseProfessionLevelOnUpdate").getType());
+		assertEquals(boolean.class, villager.getDeclaredMethod("shouldIncreaseLevel").getReturnType());
+	}
+
 	/** Where a seated villager is placed must agree on both sides; only its pose is drawn on the client. */
 	@Test
 	void seatMixinIsCommonAndModelMixinClientOnly() {

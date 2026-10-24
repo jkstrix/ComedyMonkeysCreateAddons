@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
@@ -32,19 +33,32 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * returns unsold items {@code wanted} from his load, or delivers his earnings: emeralds and Nuggets of Experience, the
  * only things an output ever gets (D48, D57). If he's interrupted the lid is shut again.
  */
-public class ContainerWork {
+public class ContainerWork implements BotWork {
+	/** How many of a stack he wants to move (0 for none), told what did move so the next stack can count it. */
+	@FunctionalInterface
+	public interface Wanted {
+		int howMany(ItemStack stack);
+
+		default void moved(ItemStack stack) {}
+
+		/** All of every stack {@code which} accepts. */
+		static Wanted all(Predicate<ItemStack> which) {
+			return stack -> which.test(stack) ? stack.getCount() : 0;
+		}
+	}
+
 	private final TradeBotEntity bot;
 	private final ContainerVisit visit;
 	public enum Mode { TAKE, RETURN, DELIVER_EARNINGS }
 
 	private final Mode mode;
 	private final boolean taking;
-	private final Predicate<ItemStack> wanted;
+	private final Wanted wanted;
 	private boolean opened, moved, closed;
 	private int movedCount;
 	private final List<ItemStack> movedStacks = new ArrayList<>();
 
-	public ContainerWork(TradeBotEntity bot, ContainerVisit visit, Mode mode, Predicate<ItemStack> wanted) {
+	public ContainerWork(TradeBotEntity bot, ContainerVisit visit, Mode mode, Wanted wanted) {
 		this.bot = bot;
 		this.visit = visit;
 		this.mode = mode;
@@ -65,11 +79,28 @@ public class ContainerWork {
 		return visit;
 	}
 
+	@Override
+	public BlockPos standBlock() {
+		return visit.standBlock();
+	}
+
+	@Override
+	public Vec3 stand() {
+		return visit.stand();
+	}
+
+	@Override
+	public float yaw() {
+		return visit.yaw();
+	}
+
+	@Override
 	public void start() {
 		bot.playClip(ClipLibrary.get().clip(visit.kind().clip(taking)));
 	}
 
 	/** Runs the clip's beats; true once the clip is over. */
+	@Override
 	public boolean tick() {
 		Clip clip = bot.clip();
 		float t = bot.clipElapsed(0);
@@ -94,6 +125,7 @@ public class ContainerWork {
 	}
 
 	/** Interrupted (a home rule, damage, his station gone): shut what he opened. */
+	@Override
 	public void abort() {
 		if (opened && !closed) {
 			setOpen(false);
@@ -155,14 +187,15 @@ public class ContainerWork {
 		return total;
 	}
 
-	/** Moves whole stacks (or as much of each as fits) from one handler to the other; returns the items moved. */
-	public static int move(IItemHandler from, IItemHandler to, Predicate<ItemStack> wanted, List<ItemStack> moved) {
+	/** Moves what's wanted of each stack (as much as fits) from one handler to the other; returns the items moved. */
+	public static int move(IItemHandler from, IItemHandler to, Wanted wanted, List<ItemStack> moved) {
 		int total = 0;
 		for (int slot = 0; slot < from.getSlots(); slot++) {
 			ItemStack stack = from.getStackInSlot(slot);
-			if (stack.isEmpty() || !wanted.test(stack))
+			int want = stack.isEmpty() ? 0 : Math.min(stack.getCount(), wanted.howMany(stack));
+			if (want <= 0)
 				continue;
-			ItemStack extracted = from.extractItem(slot, stack.getCount(), true);
+			ItemStack extracted = from.extractItem(slot, want, true);
 			ItemStack left = ItemHandlerHelper.insertItemStacked(to, extracted, true);
 			int count = extracted.getCount() - left.getCount();
 			if (count <= 0)
@@ -173,6 +206,7 @@ public class ContainerWork {
 				from.insertItem(slot, spill, false);
 			total += taken.getCount() - spill.getCount();
 			moved.add(taken.copyWithCount(taken.getCount() - spill.getCount()));
+			wanted.moved(moved.getLast());
 		}
 		return total;
 	}

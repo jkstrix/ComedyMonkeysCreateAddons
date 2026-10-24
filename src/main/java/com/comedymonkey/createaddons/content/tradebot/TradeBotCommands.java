@@ -37,7 +37,19 @@ public final class TradeBotCommands {
 			.then(Commands.literal("goto").then(Commands.argument("pos", BlockPosArgument.blockPos())
 				.executes(TradeBotCommands::goTo)))
 			.then(Commands.literal("home").executes(TradeBotCommands::home))
-			// until trading arrives (milestone 5): fetch everything from his inputs and deliver it to his output
+			// a trading run now, rather than at his next check (he goes by himself when there's one worth making)
+			.then(Commands.literal("trade").executes(context -> {
+				TradeBotEntity bot = nearest(context.getSource());
+				if (bot == null)
+					return 0;
+				if (!bot.brain.trade()) {
+					context.getSource().sendFailure(Component.translatable("commands.comedymonkeysaddons.tradebot.no_trade"));
+					return 0;
+				}
+				context.getSource().sendSuccess(() -> Component.translatable("commands.comedymonkeysaddons.tradebot.trade"), false);
+				return 1;
+			}))
+			// a job without trading: fetch everything from his inputs, deliver his earnings, return the rest
 			.then(Commands.literal("fetch").executes(context -> {
 				TradeBotEntity bot = nearest(context.getSource());
 				if (bot == null)

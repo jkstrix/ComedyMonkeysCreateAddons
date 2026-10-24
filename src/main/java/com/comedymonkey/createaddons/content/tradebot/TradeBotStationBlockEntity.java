@@ -352,6 +352,26 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		TradeBotRegistry.get(server.getServer()).remove(bot);
 	}
 
+	// ---- trades today (D39)
+
+	private int tradesToday;
+	private long tradesDay = -1;
+
+	/** His bot made a trade: counted toward today's, which start again each morning. */
+	public void countTrade() {
+		long day = level.getDayTime() / 24000;
+		if (day != tradesDay) {
+			tradesDay = day;
+			tradesToday = 0;
+		}
+		tradesToday++;
+		sendData();
+	}
+
+	public int tradesToday() {
+		return level != null && level.getDayTime() / 24000 == tradesDay ? tradesToday : 0;
+	}
+
 	// ---- goggles (D39)
 
 	@Override
@@ -371,6 +391,8 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 			.translate("gui.goggles.trade_bot.links", inputs.size(), MAX_INPUTS,
 				Component.translatable(output != null ? "comedymonkeysaddons.gui.goggles.trade_bot.output_set"
 					: "comedymonkeysaddons.gui.goggles.trade_bot.output_unset"))
+			.style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
+		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.trade_bot.trades_today", tradesToday())
 			.style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
 		return true;
 	}
@@ -395,6 +417,8 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		tag.putInt("BotCharge", botCharge);
 		tag.putBoolean("BotDocked", botDocked);
 		tag.putBoolean("BotCharging", botCharging);
+		tag.putInt("TradesToday", tradesToday);
+		tag.putLong("TradesDay", tradesDay);
 		if (clientPacket)
 			tag.putInt("BotEntity", botEntityId);
 	}
@@ -413,6 +437,8 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		botCharge = tag.getInt("BotCharge");
 		botDocked = tag.getBoolean("BotDocked");
 		botCharging = tag.getBoolean("BotCharging");
+		tradesToday = tag.getInt("TradesToday");
+		tradesDay = tag.contains("TradesDay") ? tag.getLong("TradesDay") : -1;
 		if (clientPacket)
 			botEntityId = tag.getInt("BotEntity");
 	}

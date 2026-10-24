@@ -95,6 +95,7 @@ public class ComedyMonkeysCreateAddons {
 		NeoForge.EVENT_BUS.addListener(TradeBotPicking::onLeftClickBlock);
 		NeoForge.EVENT_BUS.addListener(TradeBotPicking::onLogout);
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> TradeBotPicking.clear());
+		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.tradebot.trade.VillagerClaims.clear());
 
 		// Both specs show up in Create's "Access configs of other mods" screen
 		container.registerConfig(ModConfig.Type.SERVER, CMConfig.SERVER_SPEC);
