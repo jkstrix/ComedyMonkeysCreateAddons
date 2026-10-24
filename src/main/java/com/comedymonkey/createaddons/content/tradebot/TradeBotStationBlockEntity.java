@@ -224,7 +224,8 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 			player.displayClientMessage(TradeBotLinks.describe(level, target, after), true);
 	}
 
-	void setRole(BlockPos target, TradeBotLinks.Role role) {
+	/** Links (or unlinks) a container directly, without checks (the picking and the game tests use it). */
+	public void setRole(BlockPos target, TradeBotLinks.Role role) {
 		BlockPos relative = target.subtract(worldPosition);
 		inputs.remove(relative);
 		if (relative.equals(output))

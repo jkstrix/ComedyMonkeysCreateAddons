@@ -1075,5 +1075,7 @@
   "comedymonkeysaddons.gui.trade_bot.status.working": "Out working",
   "message.comedymonkeysaddons.trade_bot.picking": "Picking containers: right-click to link, left-click to unlink, sneak-right-click to finish",
   "message.comedymonkeysaddons.trade_bot.picking_done": "Done picking containers",
-  "message.comedymonkeysaddons.trade_bot.link.full": "He already has four containers to take from and one to deliver to"
+  "message.comedymonkeysaddons.trade_bot.link.full": "He already has four containers to take from and one to deliver to",
+  "commands.comedymonkeysaddons.tradebot.fetch": "Trade Bot is fetching from his inputs and delivering to his output",
+  "commands.comedymonkeysaddons.tradebot.no_output": "Trade Bot has no output linked"
 }

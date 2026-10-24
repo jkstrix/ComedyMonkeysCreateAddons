@@ -209,6 +209,11 @@ public class TradeBotEntity extends PathfinderMob {
 		docked = false;
 	}
 
+	/** What he's carrying (27 slots, D45). */
+	public ItemStackHandler getLoad() {
+		return load;
+	}
+
 	public int getCharge() {
 		return charge;
 	}

@@ -13,7 +13,9 @@ import com.comedymonkey.createaddons.content.tradebot.TradeBotBrain;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotData;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotEntity;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotItem;
+import com.comedymonkey.createaddons.content.tradebot.TradeBotLinks;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotStationBlock;
+import com.comedymonkey.createaddons.content.tradebot.TradeBotStationBlockEntity;
 import com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion;
 import com.comedymonkey.createaddons.registry.ModBlocks;
 
@@ -25,7 +27,13 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.StairBlock;
@@ -145,6 +153,66 @@ public final class TradeBotGameTests {
 			if (h.getBlockState(hall.gate).getValue(FenceGateBlock.OPEN))
 				h.fail("the gallery gate was left open");
 		});
+	}
+
+	/**
+	 * Fetching from four kinds of input (a chest on the floor, a barrel, a chest up on a block, a Create depot) and
+	 * delivering it all to a chest: every item ends up in the output, the inputs end up empty and the barrel shut.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 4800)
+	public static void fetchesAndDelivers(GameTestHelper helper) {
+		floor(helper, 0, 0, 0, 23, 23, FLOOR);
+		TradeBotEntity bot = station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
+		TradeBotStationBlockEntity station = (TradeBotStationBlockEntity) helper.getBlockEntity(new BlockPos(3, 1, 2));
+		BlockPos chest = new BlockPos(9, 1, 7), barrel = new BlockPos(13, 1, 7), high = new BlockPos(9, 2, 12), depot = new BlockPos(13, 1, 12);
+		BlockPos output = new BlockPos(3, 1, 13);
+		helper.setBlock(chest, Blocks.CHEST.defaultBlockState().setValue(net.minecraft.world.level.block.ChestBlock.FACING, Direction.WEST));
+		helper.setBlock(barrel, Blocks.BARREL.defaultBlockState().setValue(BarrelBlock.FACING, Direction.UP));
+		helper.setBlock(high.below(), FLOOR);
+		helper.setBlock(high, Blocks.CHEST.defaultBlockState().setValue(net.minecraft.world.level.block.ChestBlock.FACING, Direction.WEST));
+		helper.setBlock(depot, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("create", "depot")).defaultBlockState());
+		helper.setBlock(output, Blocks.CHEST.defaultBlockState().setValue(net.minecraft.world.level.block.ChestBlock.FACING, Direction.NORTH));
+		fill(helper, chest, new ItemStack(Items.WHEAT, 32), new ItemStack(Items.IRON_INGOT, 10));
+		fill(helper, barrel, new ItemStack(Items.BREAD, 16));
+		fill(helper, high, new ItemStack(Items.EMERALD, 5));
+		fill(helper, depot, new ItemStack(Items.APPLE, 1));
+		for (BlockPos input : List.of(chest, barrel, high, depot))
+			station.setRole(helper.absolutePos(input), TradeBotLinks.Role.TAKES);
+		station.setRole(helper.absolutePos(output), TradeBotLinks.Role.DELIVERS);
+		TradeBotMotion.debug = true;
+		helper.runAfterDelay(10, () -> {
+			if (!bot.brain.fetchAndDeliver(stack -> true))
+				helper.fail("he wouldn't start the job");
+		});
+		helper.succeedWhen(() -> {
+			if (!bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail("not docked yet (" + bot.brain.task() + ", taken " + bot.brain.taken() + ", delivered " + bot.brain.delivered() + ")");
+			int delivered = count(helper, output);
+			if (delivered != 64)
+				helper.fail(delivered + " of 64 items in the output");
+			for (BlockPos input : List.of(chest, barrel, high, depot))
+				if (count(helper, input) != 0)
+					helper.fail("items left in " + helper.getBlockState(input).getBlock().getName().getString());
+			if (helper.getBlockState(barrel).getValue(BarrelBlock.OPEN))
+				helper.fail("the barrel was left open");
+		});
+	}
+
+	private static void fill(GameTestHelper helper, BlockPos pos, ItemStack... stacks) {
+		IItemHandler handler = helper.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, helper.absolutePos(pos), null);
+		if (handler == null)
+			helper.fail("no inventory at " + pos.toShortString());
+		for (ItemStack stack : stacks)
+			ItemHandlerHelper.insertItemStacked(handler, stack, false);
+	}
+
+	private static int count(GameTestHelper helper, BlockPos pos) {
+		IItemHandler handler = helper.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, helper.absolutePos(pos), null);
+		int total = 0;
+		if (handler != null)
+			for (int slot = 0; slot < handler.getSlots(); slot++)
+				total += handler.getStackInSlot(slot).getCount();
+		return total;
 	}
 
 	// ---- the trading hall
