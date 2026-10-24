@@ -1,11 +1,126 @@
 {
-  "parent": "comedymonkeysaddons:block/upgraded_chest_right_lid",
+  "parent": "block/block",
   "textures": {
-    "front": "comedymonkeysaddons:block/upgraded_chest_iron_front_right",
-    "back": "comedymonkeysaddons:block/upgraded_chest_iron_back_right",
-    "side": "comedymonkeysaddons:block/upgraded_chest_iron_side",
-    "top": "comedymonkeysaddons:block/upgraded_chest_iron_top_right",
-    "inner": "comedymonkeysaddons:block/upgraded_chest_inner_right",
-    "bottom": "comedymonkeysaddons:block/upgraded_chest_bottom"
-  }
+    "particle": "comedymonkeysaddons:block/upgraded_chest_iron_side",
+    "iron_front_right": "comedymonkeysaddons:block/upgraded_chest_iron_front_right",
+    "iron_side": "comedymonkeysaddons:block/upgraded_chest_iron_side",
+    "iron_back_right": "comedymonkeysaddons:block/upgraded_chest_iron_back_right",
+    "iron_top_right": "comedymonkeysaddons:block/upgraded_chest_iron_top_right",
+    "lid_inner_right": "comedymonkeysaddons:block/upgraded_chest_lid_inner_right",
+    "iron_lock": "comedymonkeysaddons:block/upgraded_chest_iron_lock",
+    "iron_metal": "comedymonkeysaddons:block/upgraded_chest_iron_metal"
+  },
+  "elements": [
+    {
+      "name": "lid",
+      "from": [
+        0,
+        10,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            2,
+            16,
+            6
+          ],
+          "texture": "#iron_front_right"
+        },
+        "east": {
+          "uv": [
+            1,
+            2,
+            15,
+            6
+          ],
+          "texture": "#iron_side"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            15,
+            6
+          ],
+          "texture": "#iron_back_right"
+        },
+        "up": {
+          "uv": [
+            0,
+            1,
+            15,
+            15
+          ],
+          "texture": "#iron_top_right"
+        },
+        "down": {
+          "uv": [
+            0,
+            1,
+            15,
+            15
+          ],
+          "texture": "#lid_inner_right"
+        }
+      }
+    },
+    {
+      "name": "lock",
+      "from": [
+        0,
+        7,
+        0
+      ],
+      "to": [
+        1,
+        11,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15,
+            5,
+            16,
+            9
+          ],
+          "texture": "#iron_lock"
+        },
+        "east": {
+          "uv": [
+            15,
+            5,
+            16,
+            9
+          ],
+          "texture": "#iron_metal"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "texture": "#iron_metal"
+        },
+        "down": {
+          "uv": [
+            0,
+            15,
+            1,
+            16
+          ],
+          "texture": "#iron_metal"
+        }
+      }
+    }
+  ]
 }

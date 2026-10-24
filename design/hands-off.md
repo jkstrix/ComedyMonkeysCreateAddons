@@ -58,6 +58,12 @@ Shared with future blocks: the Auto Harvester and the pens use `client/TrayItems
 
 Shared with future blocks: `design/sound/sources/generated/` holds the local Stable Audio 3 takes (the crucible's crunch, gears and fires); add new takes beside them, never change these.
 
+## Upgraded Chests and Barrels
+- Blocks: `upgraded_chest`, `upgraded_barrel` (all five tiers; single and double chests).
+- Look only: the models and textures. Assets: `models/block/upgraded_chest_*.json`, `models/block/upgraded_barrel_*.json`, `textures/block/upgraded_chest_*.png`, `textures/block/upgraded_barrel_*.png`, and `client/UpgradedChestRenderer.java` (the lid).
+- Design: `design/briefs/upgraded-chest.md`, `design/briefs/upgraded-barrel.md`, `design/dossiers/upgraded-chest*`, `design/models/upgraded-chest*`.
+- Their storage behaviour (`content/chest/`, menus, screens, the upgrade items) is gameplay, not design, and isn't covered here.
+
 ## Cuckoo Clock
 - Blocks: `cuckoo_clock`, `cuckoo_clock_weights`.
 - Code: `content/clock/`, `client/CuckooClockRenderer.java`.

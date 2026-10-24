@@ -1,11 +1,144 @@
 {
-  "parent": "comedymonkeysaddons:block/upgraded_chest_single_lid",
+  "parent": "block/block",
   "textures": {
-    "front": "comedymonkeysaddons:block/upgraded_chest_copper_front",
-    "back": "comedymonkeysaddons:block/upgraded_chest_copper_side",
-    "side": "comedymonkeysaddons:block/upgraded_chest_copper_side",
-    "top": "comedymonkeysaddons:block/upgraded_chest_copper_top",
-    "inner": "comedymonkeysaddons:block/upgraded_chest_inner",
-    "bottom": "comedymonkeysaddons:block/upgraded_chest_bottom"
-  }
+    "particle": "comedymonkeysaddons:block/upgraded_chest_copper_side",
+    "copper_front": "comedymonkeysaddons:block/upgraded_chest_copper_front",
+    "copper_side": "comedymonkeysaddons:block/upgraded_chest_copper_side",
+    "copper_back": "comedymonkeysaddons:block/upgraded_chest_copper_back",
+    "copper_top": "comedymonkeysaddons:block/upgraded_chest_copper_top",
+    "lid_inner": "comedymonkeysaddons:block/upgraded_chest_lid_inner",
+    "copper_lock": "comedymonkeysaddons:block/upgraded_chest_copper_lock",
+    "copper_metal": "comedymonkeysaddons:block/upgraded_chest_copper_metal"
+  },
+  "elements": [
+    {
+      "name": "lid",
+      "from": [
+        1,
+        10,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            2,
+            15,
+            6
+          ],
+          "texture": "#copper_front"
+        },
+        "east": {
+          "uv": [
+            1,
+            2,
+            15,
+            6
+          ],
+          "texture": "#copper_side"
+        },
+        "south": {
+          "uv": [
+            1,
+            2,
+            15,
+            6
+          ],
+          "texture": "#copper_back"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            15,
+            6
+          ],
+          "texture": "#copper_side"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#copper_top"
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#lid_inner"
+        }
+      }
+    },
+    {
+      "name": "lock",
+      "from": [
+        7,
+        8,
+        0
+      ],
+      "to": [
+        9,
+        11,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            5,
+            9,
+            8
+          ],
+          "texture": "#copper_lock"
+        },
+        "east": {
+          "uv": [
+            15,
+            5,
+            16,
+            8
+          ],
+          "texture": "#copper_metal"
+        },
+        "west": {
+          "uv": [
+            0,
+            5,
+            1,
+            8
+          ],
+          "texture": "#copper_metal"
+        },
+        "up": {
+          "uv": [
+            7,
+            0,
+            9,
+            1
+          ],
+          "texture": "#copper_metal"
+        },
+        "down": {
+          "uv": [
+            7,
+            15,
+            9,
+            16
+          ],
+          "texture": "#copper_metal"
+        }
+      }
+    }
+  ]
 }

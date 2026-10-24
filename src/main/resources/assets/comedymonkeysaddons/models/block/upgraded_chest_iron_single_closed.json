@@ -1,11 +1,215 @@
 {
-  "parent": "comedymonkeysaddons:block/upgraded_chest_single_closed",
+  "parent": "block/block",
   "textures": {
-    "front": "comedymonkeysaddons:block/upgraded_chest_iron_front",
-    "back": "comedymonkeysaddons:block/upgraded_chest_iron_side",
-    "side": "comedymonkeysaddons:block/upgraded_chest_iron_side",
-    "top": "comedymonkeysaddons:block/upgraded_chest_iron_top",
+    "particle": "comedymonkeysaddons:block/upgraded_chest_iron_side",
+    "iron_front": "comedymonkeysaddons:block/upgraded_chest_iron_front",
+    "iron_side": "comedymonkeysaddons:block/upgraded_chest_iron_side",
+    "iron_back": "comedymonkeysaddons:block/upgraded_chest_iron_back",
     "inner": "comedymonkeysaddons:block/upgraded_chest_inner",
-    "bottom": "comedymonkeysaddons:block/upgraded_chest_bottom"
-  }
+    "bottom": "comedymonkeysaddons:block/upgraded_chest_bottom",
+    "iron_top": "comedymonkeysaddons:block/upgraded_chest_iron_top",
+    "lid_inner": "comedymonkeysaddons:block/upgraded_chest_lid_inner",
+    "iron_lock": "comedymonkeysaddons:block/upgraded_chest_iron_lock",
+    "iron_metal": "comedymonkeysaddons:block/upgraded_chest_iron_metal"
+  },
+  "elements": [
+    {
+      "name": "body",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        10,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            6,
+            15,
+            16
+          ],
+          "texture": "#iron_front"
+        },
+        "east": {
+          "uv": [
+            1,
+            6,
+            15,
+            16
+          ],
+          "texture": "#iron_side"
+        },
+        "south": {
+          "uv": [
+            1,
+            6,
+            15,
+            16
+          ],
+          "texture": "#iron_back"
+        },
+        "west": {
+          "uv": [
+            1,
+            6,
+            15,
+            16
+          ],
+          "texture": "#iron_side"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#inner"
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#bottom"
+        }
+      }
+    },
+    {
+      "name": "lid",
+      "from": [
+        1,
+        10,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            2,
+            15,
+            6
+          ],
+          "texture": "#iron_front"
+        },
+        "east": {
+          "uv": [
+            1,
+            2,
+            15,
+            6
+          ],
+          "texture": "#iron_side"
+        },
+        "south": {
+          "uv": [
+            1,
+            2,
+            15,
+            6
+          ],
+          "texture": "#iron_back"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            15,
+            6
+          ],
+          "texture": "#iron_side"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#iron_top"
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#lid_inner"
+        }
+      }
+    },
+    {
+      "name": "lock",
+      "from": [
+        7,
+        7,
+        0
+      ],
+      "to": [
+        9,
+        11,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            5,
+            9,
+            9
+          ],
+          "texture": "#iron_lock"
+        },
+        "east": {
+          "uv": [
+            15,
+            5,
+            16,
+            9
+          ],
+          "texture": "#iron_metal"
+        },
+        "west": {
+          "uv": [
+            0,
+            5,
+            1,
+            9
+          ],
+          "texture": "#iron_metal"
+        },
+        "up": {
+          "uv": [
+            7,
+            0,
+            9,
+            1
+          ],
+          "texture": "#iron_metal"
+        },
+        "down": {
+          "uv": [
+            7,
+            15,
+            9,
+            16
+          ],
+          "texture": "#iron_metal"
+        }
+      }
+    }
+  ]
 }

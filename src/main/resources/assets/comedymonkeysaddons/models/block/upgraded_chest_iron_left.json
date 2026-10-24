@@ -1,11 +1,73 @@
 {
-  "parent": "comedymonkeysaddons:block/upgraded_chest_left_body",
+  "parent": "block/block",
   "textures": {
-    "front": "comedymonkeysaddons:block/upgraded_chest_iron_front_left",
-    "back": "comedymonkeysaddons:block/upgraded_chest_iron_back_left",
-    "side": "comedymonkeysaddons:block/upgraded_chest_iron_side",
-    "top": "comedymonkeysaddons:block/upgraded_chest_iron_top_left",
-    "inner": "comedymonkeysaddons:block/upgraded_chest_inner_left",
+    "particle": "comedymonkeysaddons:block/upgraded_chest_iron_side",
+    "iron_front_left": "comedymonkeysaddons:block/upgraded_chest_iron_front_left",
+    "iron_back_left": "comedymonkeysaddons:block/upgraded_chest_iron_back_left",
+    "iron_side": "comedymonkeysaddons:block/upgraded_chest_iron_side",
+    "inner_left": "comedymonkeysaddons:block/upgraded_chest_inner_left",
     "bottom": "comedymonkeysaddons:block/upgraded_chest_bottom"
-  }
+  },
+  "elements": [
+    {
+      "name": "body",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        16,
+        10,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            6,
+            15,
+            16
+          ],
+          "texture": "#iron_front_left"
+        },
+        "south": {
+          "uv": [
+            1,
+            6,
+            16,
+            16
+          ],
+          "texture": "#iron_back_left"
+        },
+        "west": {
+          "uv": [
+            1,
+            6,
+            15,
+            16
+          ],
+          "texture": "#iron_side"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            16,
+            15
+          ],
+          "texture": "#inner_left"
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            16,
+            15
+          ],
+          "texture": "#bottom"
+        }
+      }
+    }
+  ]
 }

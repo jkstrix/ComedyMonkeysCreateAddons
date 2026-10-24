@@ -1,11 +1,194 @@
 {
-  "parent": "comedymonkeysaddons:block/upgraded_chest_right_body",
+  "parent": "block/block",
   "textures": {
-    "front": "comedymonkeysaddons:block/upgraded_chest_netherite_front_right",
-    "back": "comedymonkeysaddons:block/upgraded_chest_netherite_back_right",
-    "side": "comedymonkeysaddons:block/upgraded_chest_netherite_side",
-    "top": "comedymonkeysaddons:block/upgraded_chest_netherite_top_right",
-    "inner": "comedymonkeysaddons:block/upgraded_chest_inner_right",
-    "bottom": "comedymonkeysaddons:block/upgraded_chest_bottom"
-  }
+    "particle": "comedymonkeysaddons:block/upgraded_chest_netherite_side",
+    "netherite_front_right": "comedymonkeysaddons:block/upgraded_chest_netherite_front_right",
+    "netherite_side": "comedymonkeysaddons:block/upgraded_chest_netherite_side",
+    "netherite_back_right": "comedymonkeysaddons:block/upgraded_chest_netherite_back_right",
+    "inner_right": "comedymonkeysaddons:block/upgraded_chest_inner_right",
+    "bottom": "comedymonkeysaddons:block/upgraded_chest_bottom",
+    "netherite_metal": "comedymonkeysaddons:block/upgraded_chest_netherite_metal"
+  },
+  "elements": [
+    {
+      "name": "body",
+      "from": [
+        0,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        10,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            6,
+            16,
+            16
+          ],
+          "texture": "#netherite_front_right"
+        },
+        "east": {
+          "uv": [
+            1,
+            6,
+            15,
+            16
+          ],
+          "texture": "#netherite_side"
+        },
+        "south": {
+          "uv": [
+            0,
+            6,
+            15,
+            16
+          ],
+          "texture": "#netherite_back_right"
+        },
+        "up": {
+          "uv": [
+            0,
+            1,
+            15,
+            15
+          ],
+          "texture": "#inner_right"
+        },
+        "down": {
+          "uv": [
+            0,
+            1,
+            15,
+            15
+          ],
+          "texture": "#bottom"
+        }
+      }
+    },
+    {
+      "name": "guard_e_n",
+      "from": [
+        13.25,
+        0,
+        0.75
+      ],
+      "to": [
+        15.25,
+        9.75,
+        2.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.75,
+            6.25,
+            2.75,
+            16
+          ],
+          "texture": "#netherite_metal"
+        },
+        "east": {
+          "uv": [
+            13.25,
+            6.25,
+            15.25,
+            16
+          ],
+          "texture": "#netherite_metal"
+        },
+        "south": {
+          "uv": [
+            13.25,
+            6.25,
+            15.25,
+            16
+          ],
+          "texture": "#netherite_metal"
+        },
+        "west": {
+          "uv": [
+            0.75,
+            6.25,
+            2.75,
+            16
+          ],
+          "texture": "#netherite_metal"
+        },
+        "up": {
+          "uv": [
+            13.25,
+            0.75,
+            15.25,
+            2.75
+          ],
+          "texture": "#netherite_metal"
+        }
+      }
+    },
+    {
+      "name": "guard_e_s",
+      "from": [
+        13.25,
+        0,
+        13.25
+      ],
+      "to": [
+        15.25,
+        9.75,
+        15.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.75,
+            6.25,
+            2.75,
+            16
+          ],
+          "texture": "#netherite_metal"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            6.25,
+            2.75,
+            16
+          ],
+          "texture": "#netherite_metal"
+        },
+        "south": {
+          "uv": [
+            13.25,
+            6.25,
+            15.25,
+            16
+          ],
+          "texture": "#netherite_metal"
+        },
+        "west": {
+          "uv": [
+            13.25,
+            6.25,
+            15.25,
+            16
+          ],
+          "texture": "#netherite_metal"
+        },
+        "up": {
+          "uv": [
+            13.25,
+            13.25,
+            15.25,
+            15.25
+          ],
+          "texture": "#netherite_metal"
+        }
+      }
+    }
+  ]
 }
