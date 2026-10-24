@@ -47,10 +47,28 @@ class ModSoundsTest {
 			JsonObject event = entry.getValue().getAsJsonObject();
 			assertTrue(subtitles.has(event.get("subtitle").getAsString()), entry.getKey() + " has no subtitle text");
 			for (JsonElement file : event.getAsJsonArray("sounds")) {
-				String[] id = file.getAsString().split(":");
+				// A sound is a file name, or an object with one (and options like attenuation_distance), or an
+				// object pointing at another sound event (Minecraft's own lava pop)
+				JsonObject entryObject = file.isJsonObject() ? file.getAsJsonObject() : null;
+				String name = entryObject != null ? entryObject.get("name").getAsString() : file.getAsString();
+				if (entryObject != null && entryObject.has("type") && "event".equals(entryObject.get("type").getAsString())) {
+					assertTrue(name.startsWith("minecraft:"), entry.getKey() + " points at a sound event outside Minecraft: " + name);
+					continue;
+				}
+				String[] id = name.split(":");
 				assertEquals(MOD, id[0]);
-				assertNotNull(ModResourceFiles.find("assets", MOD, "sounds", id[1] + ".ogg"), "missing " + file.getAsString());
+				assertNotNull(ModResourceFiles.find("assets", MOD, "sounds", id[1] + ".ogg"), "missing " + name);
 			}
 		}
+	}
+
+	@Test
+	void generatorAndMotorHaveEverySoundOfTheirDesign() {
+		assertEquals(8, ModSounds.GENERATOR.size());
+		assertEquals(5, ModSounds.MOTOR.size());
+		for (String id : new String[] {"whir", "burn", "lava_pop", "ignite", "spin_up", "spin_down", "fire_out", "cool_tick"})
+			assertNotNull(ModSounds.generator(id));
+		for (String id : new String[] {"hum", "spark", "start", "stop", "adjust"})
+			assertNotNull(ModSounds.motor(id));
 	}
 }

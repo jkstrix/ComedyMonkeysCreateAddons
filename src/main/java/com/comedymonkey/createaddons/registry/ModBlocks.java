@@ -231,7 +231,8 @@ public final class ModBlocks {
 	public static final DeferredBlock<ElectricMotorBlock> ELECTRIC_MOTOR = BLOCKS.register("electric_motor",
 		() -> new ElectricMotorBlock(machine().lightLevel(state -> state.getValue(ElectricMotorBlock.POWERED) ? 6 : 0)));
 	public static final DeferredBlock<LavaGeneratorBlock> LAVA_GENERATOR = BLOCKS.register("lava_generator",
-		() -> new LavaGeneratorBlock(machine().lightLevel(state -> state.getValue(LavaGeneratorBlock.LIT) ? 9 : 0)));
+		() -> new LavaGeneratorBlock(machine().lightLevel(state -> state.getValue(LavaGeneratorBlock.LIT) ? 9
+			: state.getValue(LavaGeneratorBlock.FUELLED) ? 4 : 0)));
 	public static final DeferredBlock<GeothermalPartBlock> GEOTHERMAL_CASING = BLOCKS.register("geothermal_casing",
 		() -> new GeothermalPartBlock(machine(), true));
 	public static final DeferredBlock<GeothermalPartBlock> GEOTHERMAL_CORE = BLOCKS.register("geothermal_core",

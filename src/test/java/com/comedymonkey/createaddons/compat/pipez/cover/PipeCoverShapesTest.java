@@ -83,7 +83,9 @@ class PipeCoverShapesTest {
 			assertEquals(Set.of(d), boxes.get(0).hidden(), d.toString());
 			PipeCoverShapes.Box arm = boxes.get(1);
 			assertEquals(arm(d, 0, 4, 4, 12), arm.box(), d.toString());
-			assertEquals(EnumSet.of(d, d.getOpposite()), arm.hidden(), d.toString());
+			// Only its inner end, in the core, is hidden: the outer end is drawn, so it's closed against a neighbour
+			// whose face doesn't cover it (a port in the middle of a machine's side)
+			assertEquals(EnumSet.of(d.getOpposite()), arm.hidden(), d.toString());
 		}
 	}
 
@@ -127,7 +129,7 @@ class PipeCoverShapesTest {
 		assertEquals(px(4, 0, 4, 12, 4, 12), boxes.get(1).box());
 		// EAST: a 10 px collar 2 px deep against the neighbour, then the arm on to the core
 		assertEquals(px(14, 3, 3, 16, 13, 13), boxes.get(2).box());
-		assertEquals(EnumSet.of(Direction.EAST), boxes.get(2).hidden());
+		assertTrue(boxes.get(2).hidden().isEmpty());
 		assertEquals(px(12, 4, 4, 14, 12, 12), boxes.get(3).box());
 		assertEquals(EnumSet.of(Direction.EAST, Direction.WEST), boxes.get(3).hidden());
 	}

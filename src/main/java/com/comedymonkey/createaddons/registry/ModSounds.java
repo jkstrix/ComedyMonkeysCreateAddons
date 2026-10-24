@@ -36,8 +36,28 @@ public final class ModSounds {
 	 * {@code design/sound/geothermal-turbine/export-game.js} writes.
 	 */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> TURBINE = registerPrefixed("geothermal_turbine.");
+	/** The Lava Generator's and the Electric Motor's sounds, which {@code design/sound/export-block.js} writes. */
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> GENERATOR = registerPrefixed("lava_generator.");
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> MOTOR = registerPrefixed("electric_motor.");
 
 	private ModSounds() {}
+
+	/** One of the Lava Generator's sounds; throws for an unknown id. */
+	public static SoundEvent generator(String id) {
+		return get(GENERATOR, id, "Lava Generator");
+	}
+
+	/** One of the Electric Motor's sounds; throws for an unknown id. */
+	public static SoundEvent motor(String id) {
+		return get(MOTOR, id, "Electric Motor");
+	}
+
+	private static SoundEvent get(Map<String, DeferredHolder<SoundEvent, SoundEvent>> sounds, String id, String block) {
+		DeferredHolder<SoundEvent, SoundEvent> holder = sounds.get(id);
+		if (holder == null)
+			throw new IllegalArgumentException("no " + block + " sound " + id);
+		return holder.get();
+	}
 
 	/** One of the Geothermal Turbine's sounds; throws for an unknown id. */
 	public static SoundEvent turbine(String id) {

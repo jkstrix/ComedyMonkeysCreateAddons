@@ -53,6 +53,7 @@ import com.comedymonkey.createaddons.compat.pipez.cover.client.PipeCoverClient;
 import com.comedymonkey.createaddons.network.PipeCoverPayload;
 import com.comedymonkey.createaddons.network.MotorSettingsPayload;
 import com.comedymonkey.createaddons.network.TradeBotStationPayload;
+import com.comedymonkey.createaddons.content.electric.ElectricMotorBlock;
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlock;
 import com.comedymonkey.createaddons.registry.ModAttachments;
 import net.neoforged.fml.common.Mod;
@@ -162,10 +163,10 @@ public class ComedyMonkeysCreateAddons {
 				(be, side) -> side == null || side == Direction.DOWN
 					|| side == be.getBlockState().getValue(MagmaEngineBlock.FACING).getOpposite() ? be.getTank() : null);
 
-		// Electricity: the motor takes FE on any side; the generator takes lava at the back and gives FE at the
-		// sides; the turbine takes lava and water and gives FE through its controller or any of its casings
+		// Electricity: the motor takes FE through its base (opposite the shaft); the generator takes lava at the back and
+		// gives FE at the sides; the turbine takes lava and water and gives FE through its controller or any of its casings
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.ELECTRIC_MOTOR.get(),
-			(be, side) -> be.getEnergy());
+			(be, side) -> side == null || ElectricMotorBlock.isInput(be.getBlockState(), side) ? be.getEnergy() : null);
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),
 			(be, side) -> side == null || side == LavaGeneratorBlock.inlet(be.getBlockState()) ? be.getTank() : null);
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),

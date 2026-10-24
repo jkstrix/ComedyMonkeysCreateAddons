@@ -2,11 +2,13 @@ package com.comedymonkey.createaddons.content.electric;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
+import com.comedymonkey.createaddons.registry.ModSounds;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 
 import net.createmod.catnip.lang.LangBuilder;
@@ -15,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,6 +41,8 @@ public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity {
 	/** Fractions of an FE owed from earlier ticks. */
 	private double owed;
 	private int syncedEnergy = -1;
+	/** Client: run every client tick (the motor's sounds); set by the client setup. */
+	public static Consumer<ElectricMotorBlockEntity> clientTicker = be -> {};
 
 	public ElectricMotorBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.ELECTRIC_MOTOR.get(), pos, state);
@@ -87,13 +92,19 @@ public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity {
 		setChanged();
 		updateGeneratedRotation();
 		sendData();
+		if (level != null)
+			level.playSound(null, worldPosition, ModSounds.motor("adjust"), SoundSource.BLOCKS, 0.6f, 1);
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
-		if (level == null || level.isClientSide)
+		if (level == null)
 			return;
+		if (level.isClientSide) {
+			clientTicker.accept(this);
+			return;
+		}
 		double need = usagePerTick();
 		boolean canRun = energy.getEnergyStored() >= (running ? owed + need : need * 10);
 		if (canRun) {

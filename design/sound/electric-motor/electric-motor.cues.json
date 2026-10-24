@@ -1,0 +1,352 @@
+{
+  "namespace": "electric_motor",
+  "events": {
+    "hum": {
+      "group": "Signature sounds",
+      "subtitle": "Electric Motor hums",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.2,
+          "f": 100,
+          "dur": 1.5
+        },
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.07,
+          "f": 520,
+          "f2": 520,
+          "dur": 1.5
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.0336,
+        "post": {
+          "lowpass": 4000,
+          "echo": 0.2
+        },
+        "layers": [
+          {
+            "type": "hum",
+            "f": 100,
+            "dur": 1.5,
+            "gain": 0.55
+          },
+          {
+            "type": "servo",
+            "soft": true,
+            "f": 520,
+            "f2": 520,
+            "dur": 1.5,
+            "gain": 0.12
+          }
+        ]
+      }
+    },
+    "spark": {
+      "group": "Signature sounds",
+      "subtitle": "Motor sparks",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.14,
+          "dur": 0.03
+        },
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.07,
+          "f": 4500,
+          "dur": 0.04
+        },
+        {
+          "type": "tick",
+          "at": 0.04,
+          "gain": 0.05,
+          "f": 3000,
+          "dur": 0.04
+        }
+      ],
+      "real": {
+        "variants": 4,
+        "level": 0.2,
+        "vary": {
+          "pitch": 0.1,
+          "gain": 0.15
+        },
+        "post": {
+          "lowpass": 7000
+        },
+        "layers": [
+          {
+            "pick": [
+              "click_001",
+              "click_003",
+              "click_005",
+              "switch_002"
+            ],
+            "gain": 0.6,
+            "pitch": 1.2,
+            "trim": [
+              0,
+              0.08
+            ],
+            "fadeOut": 0.03
+          },
+          {
+            "type": "noise",
+            "f": 4500,
+            "dur": 0.04,
+            "gain": 0.15
+          }
+        ]
+      }
+    },
+    "start": {
+      "group": "Running",
+      "subtitle": "Electric Motor starts",
+      "layers": [
+        {
+          "type": "clack",
+          "at": 0,
+          "gain": 0.55,
+          "f": 1100,
+          "dur": 0.07
+        },
+        {
+          "type": "clink",
+          "at": 0.01,
+          "gain": 0.22,
+          "f": 2000,
+          "dur": 0.15
+        },
+        {
+          "type": "servo",
+          "at": 0.05,
+          "gain": 0.32,
+          "f": 120,
+          "f2": 520,
+          "dur": 0.9
+        },
+        {
+          "type": "hum",
+          "at": 0.1,
+          "gain": 0.28,
+          "f": 100,
+          "dur": 0.9
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.7,
+        "vary": {
+          "pitch": 0.04
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "metalLatch",
+              "metalClick"
+            ],
+            "gain": 0.9,
+            "pitch": 0.95,
+            "trim": [
+              0,
+              0.25
+            ],
+            "fadeOut": 0.05
+          },
+          {
+            "type": "clink",
+            "at": 0.01,
+            "f": 2000,
+            "dur": 0.18,
+            "gain": 0.15
+          },
+          {
+            "type": "servo",
+            "soft": true,
+            "at": 0.05,
+            "f": 120,
+            "f2": 520,
+            "dur": 1,
+            "gain": 0.45,
+            "fadeOut": 0.4
+          },
+          {
+            "type": "hum",
+            "at": 0.1,
+            "f": 100,
+            "dur": 1,
+            "gain": 0.35,
+            "fadeOut": 0.4
+          }
+        ]
+      }
+    },
+    "stop": {
+      "group": "Running",
+      "subtitle": "Electric Motor stops",
+      "layers": [
+        {
+          "type": "clack",
+          "at": 0,
+          "gain": 0.45,
+          "f": 900,
+          "dur": 0.07
+        },
+        {
+          "type": "servo",
+          "at": 0.03,
+          "gain": 0.32,
+          "f": 520,
+          "f2": 90,
+          "dur": 1.2
+        },
+        {
+          "type": "thud",
+          "at": 1.15,
+          "gain": 0.28,
+          "f": 90,
+          "dur": 0.15
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.65,
+        "vary": {
+          "pitch": 0.04
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "metalLatch",
+              "metalClick"
+            ],
+            "gain": 0.8,
+            "pitch": 0.85,
+            "trim": [
+              0,
+              0.25
+            ],
+            "fadeOut": 0.05
+          },
+          {
+            "type": "servo",
+            "soft": true,
+            "at": 0.03,
+            "f": 520,
+            "f2": 90,
+            "dur": 1.2,
+            "gain": 0.42
+          },
+          {
+            "pick": [
+              "impactMetal_light_001",
+              "impactMetal_light_003"
+            ],
+            "at": 1.15,
+            "gain": 0.45,
+            "pitch": 0.6,
+            "fadeOut": 0.1
+          }
+        ]
+      }
+    },
+    "adjust": {
+      "group": "Settings",
+      "subtitle": "Motor settings click",
+      "layers": [
+        {
+          "type": "ratchet",
+          "at": 0,
+          "gain": 0.2,
+          "rate": 16,
+          "dur": 0.22
+        },
+        {
+          "type": "clink",
+          "at": 0.24,
+          "gain": 0.2,
+          "f": 1700,
+          "dur": 0.15
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.4,
+        "vary": {
+          "pitch": 0.05
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "type": "ratchet",
+            "rate": 16,
+            "dur": 0.22,
+            "gain": 0.4
+          },
+          {
+            "pick": [
+              "switch12",
+              "switch13"
+            ],
+            "at": 0.24,
+            "gain": 0.6,
+            "pitch": 0.9
+          }
+        ]
+      }
+    }
+  },
+  "clips": {
+    "run": [
+      [
+        2,
+        "start"
+      ],
+      [
+        2.6,
+        "hum"
+      ],
+      [
+        4.1,
+        "hum"
+      ],
+      [
+        5.6,
+        "hum"
+      ],
+      [
+        6.9,
+        "hum"
+      ],
+      [
+        8,
+        "stop"
+      ],
+      [
+        4.6,
+        "spark"
+      ]
+    ],
+    "idle": [
+      [
+        0.4,
+        "adjust"
+      ]
+    ]
+  }
+}

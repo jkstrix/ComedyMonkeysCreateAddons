@@ -701,5 +701,118 @@
     "sounds": [
       "comedymonkeysaddons:geothermal_turbine/unform"
     ]
+  },
+  "lava_generator.whir": {
+    "subtitle": "subtitles.comedymonkeysaddons.lava_generator.whir",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:lava_generator/whir_loop",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "lava_generator.burn": {
+    "subtitle": "subtitles.comedymonkeysaddons.lava_generator.burn",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:lava_generator/burn_loop",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "lava_generator.lava_pop": {
+    "subtitle": "subtitles.comedymonkeysaddons.lava_generator.lava_pop",
+    "sounds": [
+      {
+        "name": "minecraft:block.lava.pop",
+        "type": "event"
+      }
+    ]
+  },
+  "lava_generator.ignite": {
+    "subtitle": "subtitles.comedymonkeysaddons.lava_generator.ignite",
+    "sounds": [
+      "comedymonkeysaddons:lava_generator/ignite_1",
+      "comedymonkeysaddons:lava_generator/ignite_2"
+    ]
+  },
+  "lava_generator.spin_up": {
+    "subtitle": "subtitles.comedymonkeysaddons.lava_generator.spin_up",
+    "sounds": [
+      "comedymonkeysaddons:lava_generator/spin_up"
+    ]
+  },
+  "lava_generator.spin_down": {
+    "subtitle": "subtitles.comedymonkeysaddons.lava_generator.spin_down",
+    "sounds": [
+      "comedymonkeysaddons:lava_generator/spin_down"
+    ]
+  },
+  "lava_generator.fire_out": {
+    "subtitle": "subtitles.comedymonkeysaddons.lava_generator.fire_out",
+    "sounds": [
+      "comedymonkeysaddons:lava_generator/fire_out_1",
+      "comedymonkeysaddons:lava_generator/fire_out_2"
+    ]
+  },
+  "lava_generator.cool_tick": {
+    "subtitle": "subtitles.comedymonkeysaddons.lava_generator.cool_tick",
+    "sounds": [
+      "comedymonkeysaddons:lava_generator/cool_tick_1",
+      "comedymonkeysaddons:lava_generator/cool_tick_2",
+      "comedymonkeysaddons:lava_generator/cool_tick_3",
+      "comedymonkeysaddons:lava_generator/cool_tick_4"
+    ]
+  },
+  "electric_motor.hum": {
+    "subtitle": "subtitles.comedymonkeysaddons.electric_motor.hum",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:electric_motor/hum_loop",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "electric_motor.spark": {
+    "subtitle": "subtitles.comedymonkeysaddons.electric_motor.spark",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:electric_motor/spark_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:electric_motor/spark_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:electric_motor/spark_3",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:electric_motor/spark_4",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "electric_motor.start": {
+    "subtitle": "subtitles.comedymonkeysaddons.electric_motor.start",
+    "sounds": [
+      "comedymonkeysaddons:electric_motor/start_1",
+      "comedymonkeysaddons:electric_motor/start_2"
+    ]
+  },
+  "electric_motor.stop": {
+    "subtitle": "subtitles.comedymonkeysaddons.electric_motor.stop",
+    "sounds": [
+      "comedymonkeysaddons:electric_motor/stop_1",
+      "comedymonkeysaddons:electric_motor/stop_2"
+    ]
+  },
+  "electric_motor.adjust": {
+    "subtitle": "subtitles.comedymonkeysaddons.electric_motor.adjust",
+    "sounds": [
+      "comedymonkeysaddons:electric_motor/adjust_1",
+      "comedymonkeysaddons:electric_motor/adjust_2"
+    ]
   }
 }

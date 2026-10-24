@@ -52,6 +52,7 @@ public final class ElectricScenes {
 
 		scene.world().showSection(util.select().fromTo(2, 1, 4, 2, 1, 3), Direction.NORTH);
 		scene.idle(15);
+		scene.world().modifyBlock(gen, s -> s.setValue(LavaGeneratorBlock.FUELLED, true), false);
 		scene.overlay().showText(80)
 			.text("Lava goes in at the middle of its back, by pipe or by the bucket")
 			.pointAt(util.vector().blockSurface(gen, Direction.SOUTH))
@@ -61,7 +62,7 @@ public final class ElectricScenes {
 
 		scene.world().modifyBlock(gen, s -> s.setValue(LavaGeneratorBlock.LIT, true), false);
 		scene.overlay().showText(80)
-			.text("It burns 20 mB a second, and its turbine wheel spins behind the glass while it does")
+			.text("It burns 20 mB a second, and its turbine wheel spins behind the window: the more power is taken, the faster it turns")
 			.pointAt(util.vector().of(2.5, 1.72, 2.15))
 			.placeNearTarget()
 			.attachKeyFrame();
@@ -109,11 +110,11 @@ public final class ElectricScenes {
 
 		scene.world().showSection(util.select().fromTo(2, 1, 4, 2, 1, 2), Direction.DOWN);
 		scene.idle(10);
-		scene.world().modifyBlock(gen, s -> s.setValue(LavaGeneratorBlock.LIT, true), false);
+		scene.world().modifyBlock(gen, s -> s.setValue(LavaGeneratorBlock.LIT, true).setValue(LavaGeneratorBlock.FUELLED, true), false);
 		scene.world().modifyBlock(motor, s -> s.setValue(ElectricMotorBlock.POWERED, true), false);
 		scene.world().setKineticSpeed(kinetics, 64);
 		scene.overlay().showText(80)
-			.text("Feed it power on any side: here, straight from a Lava Generator")
+			.text("Power goes in through its base, the flange opposite the shaft: here, straight from a Lava Generator")
 			.pointAt(util.vector().blockSurface(motor, Direction.WEST))
 			.placeNearTarget()
 			.attachKeyFrame();
@@ -144,7 +145,8 @@ public final class ElectricScenes {
 			.attachKeyFrame();
 		scene.idle(90);
 
-		scene.world().modifyBlock(gen, s -> s.setValue(LavaGeneratorBlock.LIT, false), false);
+		// the generator has run out of lava
+		scene.world().modifyBlock(gen, s -> s.setValue(LavaGeneratorBlock.LIT, false).setValue(LavaGeneratorBlock.FUELLED, false), false);
 		scene.world().modifyBlock(motor, s -> s.setValue(ElectricMotorBlock.POWERED, false), false);
 		scene.world().setKineticSpeed(kinetics, 0);
 		scene.overlay().showText(80)

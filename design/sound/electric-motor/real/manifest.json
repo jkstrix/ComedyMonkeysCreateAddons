@@ -1,0 +1,56 @@
+{
+ "hum": {
+  "variants": 1,
+  "sources": [],
+  "synth": [
+   "hum",
+   "servo"
+  ]
+ },
+ "spark": {
+  "variants": 4,
+  "sources": [
+   "kenney-interface-sounds/Audio/click_001.ogg",
+   "kenney-interface-sounds/Audio/click_003.ogg",
+   "kenney-interface-sounds/Audio/click_005.ogg",
+   "kenney-interface-sounds/Audio/switch_002.ogg"
+  ],
+  "synth": [
+   "noise"
+  ]
+ },
+ "start": {
+  "variants": 2,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "kenney-rpg-audio/Audio/metalClick.ogg"
+  ],
+  "synth": [
+   "clink",
+   "servo",
+   "hum"
+  ]
+ },
+ "stop": {
+  "variants": 2,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "kenney-rpg-audio/Audio/metalClick.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg"
+  ],
+  "synth": [
+   "servo"
+  ]
+ },
+ "adjust": {
+  "variants": 2,
+  "sources": [
+   "kenney-ui-audio/Audio/switch12.ogg",
+   "kenney-ui-audio/Audio/switch13.ogg"
+  ],
+  "synth": [
+   "ratchet"
+  ]
+ }
+}

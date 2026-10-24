@@ -1,12 +1,14 @@
 package com.comedymonkey.createaddons.content.electric;
 
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
+import com.comedymonkey.createaddons.registry.ModSounds;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
@@ -23,10 +25,11 @@ import org.joml.Vector3f;
 
 /**
  * Electric Motor: turns Forge Energy into rotation. Its speed, stress capacity and direction are set from its screen
- * (right-click with a wrench), and it draws more power the more stress it's set to provide. The shaft comes out of {@code facing}.
+ * (right-click with a wrench), and it draws more power the more stress it's set to provide. The shaft comes out of {@code facing};
+ * power goes in only through its base, the mounting flange opposite the shaft, whichever way it's placed.
  */
 public class ElectricMotorBlock extends DirectionalKineticBlock implements IBE<ElectricMotorBlockEntity> {
-	/** Running: the coil glows. */
+	/** Running: the lamp turns from red to cyan. */
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	private static final DustParticleOptions SPARK = new DustParticleOptions(new Vector3f(0.45f, 0.85f, 0.95f), 0.6f);
 
@@ -50,6 +53,11 @@ public class ElectricMotorBlock extends DirectionalKineticBlock implements IBE<E
 		return state.getValue(FACING).getAxis();
 	}
 
+	/** Power goes in through the base only: the side opposite the shaft. */
+	public static boolean isInput(BlockState state, Direction side) {
+		return side == state.getValue(FACING).getOpposite();
+	}
+
 	/** A wrench opens the motor's settings (instead of turning it); sneaking with one still picks it up. */
 	@Override
 	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
@@ -58,7 +66,7 @@ public class ElectricMotorBlock extends DirectionalKineticBlock implements IBE<E
 		return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
 	}
 
-	/** Now and then a spark off the coil while it runs. */
+	/** Now and then a spark off the coil while it runs, and on about one in ten a faint crackle. */
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 		if (!state.getValue(POWERED) || random.nextInt(5) != 0)
@@ -66,6 +74,9 @@ public class ElectricMotorBlock extends DirectionalKineticBlock implements IBE<E
 		Vec3 at = Vec3.atCenterOf(pos).add((random.nextDouble() - 0.5) * 0.9, (random.nextDouble() - 0.5) * 0.9,
 			(random.nextDouble() - 0.5) * 0.9);
 		level.addParticle(SPARK, at.x, at.y, at.z, 0, 0, 0);
+		if (random.nextInt(10) == 0)
+			level.playLocalSound(at.x, at.y, at.z, ModSounds.motor("spark"), SoundSource.BLOCKS, 0.5f,
+				0.9f + 0.2f * random.nextFloat(), false);
 	}
 
 	@Override

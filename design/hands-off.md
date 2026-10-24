@@ -25,7 +25,21 @@ Finished designs. The redesign skills (`redesign-to-model`, `voxel-redesign-dire
 - Code: `content/electric/Geothermal*`, the `Turbine` renderer in `client/ElectricRenderers.java`, `client/GeothermalTurbineSounds.java`, the turbine's capabilities in `ComedyMonkeysCreateAddons.java` and its scene in `client/ponder/ElectricScenes.java`.
 - Assets: everything with `geothermal` in its path, and the `geothermal_turbine.*` sounds.
 - Design: `design/briefs/geothermal-turbine.md`, `design/dossiers/geothermal-turbine*`, `design/models/geothermal-turbine*`, `design/sound/geothermal-turbine/`.
-- Not the Electric Motor or Lava Generator: they share `ElectricRenderers.java` and the `brass_weathered` / `electric_glow` textures, and stay open to redesign.
+- The turbine uses only its own `geothermal_turbine_*` textures.
+
+## Lava Generator
+- Blocks: `lava_generator`.
+- Code: `content/electric/LavaGenerator*`, the `Generator` renderer in `client/ElectricRenderers.java`, the generator half of `client/ElectricSounds.java`, its capabilities in `ComedyMonkeysCreateAddons.java` and its scene in `client/ponder/ElectricScenes.java`.
+- Assets: everything with `lava_generator` in its path, and the `lava_generator.*` sounds.
+- Design: `design/briefs/lava-generator.md`, `design/dossiers/lava-generator*`, `design/sound/lava-generator/`, and the generator in `design/models/electric*`.
+
+## Electric Motor
+- Blocks: `electric_motor`.
+- Code: `content/electric/ElectricMotor*`, `client/ElectricMotorScreen.java`, `network/MotorSettingsPayload.java`, the `Motor` renderer in `client/ElectricRenderers.java`, the motor half of `client/ElectricSounds.java`, its capability in `ComedyMonkeysCreateAddons.java` and its scene in `client/ponder/ElectricScenes.java`.
+- Assets: everything with `electric_motor` in its path, and the `electric_motor.*` sounds.
+- Design: `design/briefs/electric-motor.md`, `design/dossiers/electric-motor*`, `design/sound/electric-motor/`, and the motor in `design/models/electric*`.
+
+Shared by the electric family: `client/ElectricRenderers.java` (its `face`, `drawModel` and `registerModels` helpers), `EnergyBuffer` and `design/sound/export-block.js`.
 
 Shared with future blocks: the Auto Harvester and the pens use `client/TrayItems.java`, and all three of these use the generator kit `design/models/process-box.lib.js`. Those may grow, but they must keep producing the same output for these blocks: after any change, regenerate their models and compare.
 

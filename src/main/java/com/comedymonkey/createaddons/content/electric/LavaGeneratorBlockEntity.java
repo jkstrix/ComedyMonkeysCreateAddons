@@ -2,6 +2,7 @@ package com.comedymonkey.createaddons.content.electric;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.config.CMConfig;
@@ -52,6 +53,10 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 	private float rotorAngle;
 	private float rotorAngleLast;
 	private float rotorSpeed;
+	/** Degrees a tick flat out; at a light load the wheel turns at a quarter of this. */
+	private static final float FULL_SPEED = 24;
+	/** Client: run every client tick (the generator's sounds); set by the client setup. */
+	public static Consumer<LavaGeneratorBlockEntity> clientTicker = be -> {};
 
 	public LavaGeneratorBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.LAVA_GENERATOR.get(), pos, state);
@@ -85,9 +90,11 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 			return;
 		if (level.isClientSide) {
 			rotorAngleLast = rotorAngle;
-			boolean lit = getBlockState().getValue(LavaGeneratorBlock.LIT);
-			rotorSpeed = Mth.approach(rotorSpeed, lit ? 24 : 0, lit ? 0.6f : 0.3f);
+			// The wheel follows the load: a quarter speed at a light load, full speed flat out
+			float target = isLit() ? FULL_SPEED * (0.25f + 0.75f * load()) : 0;
+			rotorSpeed = Mth.approach(rotorSpeed, target, rotorSpeed < target ? 0.6f : 0.3f);
 			rotorAngle = (rotorAngle + rotorSpeed) % 360;
+			clientTicker.accept(this);
 			return;
 		}
 		// Out of both terminals first, then make up what was taken (up to full output)
@@ -112,11 +119,11 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 		output = output * 0.95f + make * 0.05f;
 		boolean canRun = activeTicks > 0;
 
-		if (canRun != running) {
-			running = canRun;
-			if (state.getValue(LavaGeneratorBlock.LIT) != running)
-				level.setBlock(worldPosition, state.setValue(LavaGeneratorBlock.LIT, running), 3);
-		}
+		running = canRun;
+		// The window shows the lava whenever there's some in the tank, and the fire while it burns
+		boolean fuelled = !tank.isEmpty();
+		if (state.getValue(LavaGeneratorBlock.LIT) != running || state.getValue(LavaGeneratorBlock.FUELLED) != fuelled)
+			level.setBlock(worldPosition, state.setValue(LavaGeneratorBlock.LIT, running).setValue(LavaGeneratorBlock.FUELLED, fuelled), 3);
 		if (level.getGameTime() % 10 == 0
 			&& (syncQueued || running && level.getGameTime() % 40 == 0
 			|| Math.abs(energy.getEnergyStored() - syncedEnergy) > BUFFER / 50)) {
@@ -124,6 +131,20 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 			syncedEnergy = energy.getEnergyStored();
 			sendData();
 		}
+	}
+
+	public boolean isLit() {
+		return getBlockState().getValue(LavaGeneratorBlock.LIT);
+	}
+
+	/** How much of its full output is being taken, 0 to 1 (smoothed; synced to the client). */
+	public float load() {
+		return Mth.clamp(output / CMConfig.SERVER.generatorFePerTick(), 0, 1);
+	}
+
+	/** Client: the wheel's speed, 0 (still) to 1 (flat out). */
+	public float rotorSpeed() {
+		return rotorSpeed / FULL_SPEED;
 	}
 
 	/** Degrees, smoothed between ticks. */

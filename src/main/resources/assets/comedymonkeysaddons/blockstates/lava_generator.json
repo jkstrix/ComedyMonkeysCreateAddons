@@ -1,32 +1,62 @@
 {
   "variants": {
-    "facing=north,lit=false": {
+    "facing=north,fuelled=false,lit=false": {
       "model": "comedymonkeysaddons:block/lava_generator"
     },
-    "facing=north,lit=true": {
+    "facing=north,fuelled=true,lit=false": {
+      "model": "comedymonkeysaddons:block/lava_generator_full"
+    },
+    "facing=north,fuelled=false,lit=true": {
       "model": "comedymonkeysaddons:block/lava_generator_lit"
     },
-    "facing=east,lit=false": {
+    "facing=north,fuelled=true,lit=true": {
+      "model": "comedymonkeysaddons:block/lava_generator_lit"
+    },
+    "facing=east,fuelled=false,lit=false": {
       "model": "comedymonkeysaddons:block/lava_generator",
       "y": 90
     },
-    "facing=east,lit=true": {
+    "facing=east,fuelled=true,lit=false": {
+      "model": "comedymonkeysaddons:block/lava_generator_full",
+      "y": 90
+    },
+    "facing=east,fuelled=false,lit=true": {
       "model": "comedymonkeysaddons:block/lava_generator_lit",
       "y": 90
     },
-    "facing=south,lit=false": {
+    "facing=east,fuelled=true,lit=true": {
+      "model": "comedymonkeysaddons:block/lava_generator_lit",
+      "y": 90
+    },
+    "facing=south,fuelled=false,lit=false": {
       "model": "comedymonkeysaddons:block/lava_generator",
       "y": 180
     },
-    "facing=south,lit=true": {
+    "facing=south,fuelled=true,lit=false": {
+      "model": "comedymonkeysaddons:block/lava_generator_full",
+      "y": 180
+    },
+    "facing=south,fuelled=false,lit=true": {
       "model": "comedymonkeysaddons:block/lava_generator_lit",
       "y": 180
     },
-    "facing=west,lit=false": {
+    "facing=south,fuelled=true,lit=true": {
+      "model": "comedymonkeysaddons:block/lava_generator_lit",
+      "y": 180
+    },
+    "facing=west,fuelled=false,lit=false": {
       "model": "comedymonkeysaddons:block/lava_generator",
       "y": 270
     },
-    "facing=west,lit=true": {
+    "facing=west,fuelled=true,lit=false": {
+      "model": "comedymonkeysaddons:block/lava_generator_full",
+      "y": 270
+    },
+    "facing=west,fuelled=false,lit=true": {
+      "model": "comedymonkeysaddons:block/lava_generator_lit",
+      "y": 270
+    },
+    "facing=west,fuelled=true,lit=true": {
       "model": "comedymonkeysaddons:block/lava_generator_lit",
       "y": 270
     }

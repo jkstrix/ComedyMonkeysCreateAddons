@@ -1,0 +1,9 @@
+{
+  "name": "electric-before",
+  "groups": [
+    { "name": "motor", "parts": [ { "name": "motor", "model": "electric_motor" } ] },
+    { "name": "motor_powered", "parts": [ { "name": "motor_powered", "model": "electric_motor_powered", "offset": [24, 0, 0] } ] },
+    { "name": "generator", "parts": [ { "name": "generator", "model": "lava_generator", "offset": [48, 0, 0] }, { "name": "rotor", "model": "lava_generator_rotor", "offset": [48, 0, 0] } ] },
+    { "name": "generator_lit", "parts": [ { "name": "generator_lit", "model": "lava_generator_lit", "offset": [72, 0, 0] }, { "name": "rotor_lit", "model": "lava_generator_rotor", "offset": [72, 0, 0] } ] }
+  ]
+}

@@ -1,0 +1,510 @@
+{
+  "namespace": "lava_generator",
+  "events": {
+    "whir": {
+      "group": "Signature sounds",
+      "subtitle": "Lava Generator whirs",
+      "layers": [
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.13,
+          "f": 900,
+          "f2": 900,
+          "dur": 1.5
+        },
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.16,
+          "f": 130,
+          "dur": 1.5
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.0176,
+        "post": {
+          "lowpass": 5000,
+          "echo": 0.21
+        },
+        "layers": [
+          {
+            "type": "hum",
+            "f": 130,
+            "dur": 1.5,
+            "gain": 0.5
+          },
+          {
+            "type": "servo",
+            "soft": true,
+            "f": 900,
+            "f2": 900,
+            "dur": 1.5,
+            "gain": 0.3
+          },
+          {
+            "type": "servo",
+            "soft": true,
+            "f": 1350,
+            "f2": 1350,
+            "dur": 1.5,
+            "gain": 0.05
+          }
+        ]
+      }
+    },
+    "burn": {
+      "group": "Signature sounds",
+      "subtitle": "Lava Generator burns",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.18,
+          "f": 60,
+          "dur": 1.5
+        },
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.05,
+          "f": 260,
+          "dur": 1.5
+        },
+        {
+          "type": "rustle",
+          "at": 0,
+          "gain": 0.06,
+          "density": 3,
+          "dur": 1.5
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.14,
+        "post": {
+          "lowpass": 2200
+        },
+        "layers": [
+          {
+            "type": "hum",
+            "f": 60,
+            "dur": 1.5,
+            "gain": 0.5
+          },
+          {
+            "type": "noise",
+            "f": 260,
+            "dur": 1.5,
+            "gain": 0.25
+          },
+          {
+            "type": "rustle",
+            "density": 3,
+            "dur": 1.5,
+            "gain": 0.15,
+            "lowpass": 2000
+          }
+        ]
+      }
+    },
+    "lava_pop": {
+      "group": "Signature sounds",
+      "subtitle": "Lava bubbles",
+      "layers": [
+        {
+          "type": "pop",
+          "at": 0,
+          "gain": 0.26,
+          "f": 170,
+          "dur": 0.12
+        },
+        {
+          "type": "bump",
+          "at": 0.01,
+          "gain": 0.16,
+          "f": 90,
+          "f2": 60,
+          "dur": 0.14
+        },
+        {
+          "type": "noise",
+          "at": 0.06,
+          "gain": 0.03,
+          "f": 2400,
+          "dur": 0.15
+        }
+      ],
+      "vanilla": {
+        "event": "minecraft:block.lava.pop",
+        "note": "Minecraft's own lava pop, referenced from sounds.json (type event), never copied into the mod. real/lava_pop.ogg is a local preview from the game assets, kept out of git."
+      }
+    },
+    "ignite": {
+      "group": "Running",
+      "subtitle": "Lava Generator fires up",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.35,
+          "dur": 0.05
+        },
+        {
+          "type": "whoosh",
+          "at": 0.05,
+          "gain": 0.55,
+          "f": 140,
+          "f2": 380,
+          "dur": 0.5
+        },
+        {
+          "type": "swell",
+          "at": 0.1,
+          "gain": 0.28,
+          "f": 80,
+          "f2": 120,
+          "dur": 0.6
+        },
+        {
+          "type": "rustle",
+          "at": 0.2,
+          "gain": 0.18,
+          "density": 10,
+          "dur": 0.5
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.7,
+        "vary": {
+          "pitch": 0.04
+        },
+        "post": {
+          "lowpass": 8000
+        },
+        "layers": [
+          {
+            "src": "metalClick",
+            "gain": 0.6,
+            "pitch": 0.95
+          },
+          {
+            "type": "whoosh",
+            "at": 0.05,
+            "f": 140,
+            "f2": 380,
+            "dur": 0.55,
+            "gain": 0.8
+          },
+          {
+            "type": "swell",
+            "at": 0.1,
+            "f": 80,
+            "f2": 120,
+            "dur": 0.6,
+            "gain": 0.3
+          },
+          {
+            "type": "rustle",
+            "at": 0.2,
+            "density": 10,
+            "dur": 0.5,
+            "gain": 0.2,
+            "lowpass": 2500
+          }
+        ]
+      }
+    },
+    "spin_up": {
+      "group": "Running",
+      "subtitle": "Lava Generator winds up",
+      "layers": [
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.34,
+          "f": 220,
+          "f2": 900,
+          "dur": 1.8
+        },
+        {
+          "type": "ratchet",
+          "at": 0,
+          "gain": 0.1,
+          "rate": 12,
+          "dur": 0.9
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.5,
+        "post": {
+          "lowpass": 7000
+        },
+        "layers": [
+          {
+            "type": "servo",
+            "soft": true,
+            "f": 220,
+            "f2": 900,
+            "dur": 1.8,
+            "gain": 0.45,
+            "fadeOut": 0.6
+          },
+          {
+            "type": "hum",
+            "at": 0.3,
+            "f": 130,
+            "dur": 1.5,
+            "gain": 0.25,
+            "fadeOut": 0.6
+          },
+          {
+            "src": "metalPot1",
+            "gain": 0.15,
+            "pitch": 0.8,
+            "fadeOut": 0.3
+          }
+        ]
+      }
+    },
+    "spin_down": {
+      "group": "Running",
+      "subtitle": "Lava Generator winds down",
+      "layers": [
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.32,
+          "f": 900,
+          "f2": 180,
+          "dur": 1.8
+        },
+        {
+          "type": "tick",
+          "at": 1.7,
+          "gain": 0.18,
+          "f": 2000,
+          "dur": 0.05
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.48,
+        "post": {
+          "lowpass": 7000
+        },
+        "layers": [
+          {
+            "type": "servo",
+            "soft": true,
+            "f": 900,
+            "f2": 180,
+            "dur": 1.8,
+            "gain": 0.42
+          },
+          {
+            "type": "hum",
+            "f": 130,
+            "dur": 1.2,
+            "gain": 0.2,
+            "fadeOut": 0.6
+          },
+          {
+            "src": "tick_002",
+            "at": 1.7,
+            "gain": 0.3,
+            "pitch": 0.8
+          }
+        ]
+      }
+    },
+    "fire_out": {
+      "group": "States",
+      "subtitle": "Lava Generator goes out",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.3,
+          "dur": 0.05
+        },
+        {
+          "type": "whoosh",
+          "at": 0.03,
+          "gain": 0.4,
+          "f": 3000,
+          "f2": 1400,
+          "dur": 0.8
+        },
+        {
+          "type": "thud",
+          "at": 0.05,
+          "gain": 0.25,
+          "f": 80,
+          "dur": 0.2
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.6,
+        "vary": {
+          "pitch": 0.04
+        },
+        "post": {
+          "lowpass": 8000
+        },
+        "layers": [
+          {
+            "src": "metalClick",
+            "gain": 0.5,
+            "pitch": 0.85
+          },
+          {
+            "type": "whoosh",
+            "at": 0.03,
+            "f": 3000,
+            "f2": 1400,
+            "dur": 0.8,
+            "gain": 0.6
+          },
+          {
+            "pick": [
+              "impactMetal_medium_001",
+              "impactMetal_medium_003"
+            ],
+            "at": 0.05,
+            "gain": 0.35,
+            "pitch": 0.6,
+            "fadeOut": 0.15
+          }
+        ]
+      }
+    },
+    "cool_tick": {
+      "group": "States",
+      "subtitle": "Lava Generator ticks as it cools",
+      "layers": [
+        {
+          "type": "tick",
+          "at": 0,
+          "gain": 0.2,
+          "f": 2100,
+          "dur": 0.05
+        },
+        {
+          "type": "tick",
+          "at": 0.27,
+          "gain": 0.12,
+          "f": 1850,
+          "dur": 0.05
+        }
+      ],
+      "real": {
+        "variants": 4,
+        "level": 0.22,
+        "vary": {
+          "pitch": 0.1,
+          "gain": 0.1
+        },
+        "layers": [
+          {
+            "pick": [
+              "tick_001",
+              "tick_002",
+              "tick_004"
+            ],
+            "gain": 0.8,
+            "pitch": 0.85
+          },
+          {
+            "pick": [
+              "tick_002",
+              "tick_004",
+              "tick_001"
+            ],
+            "at": 0.27,
+            "gain": 0.45,
+            "pitch": 0.8
+          }
+        ]
+      }
+    }
+  },
+  "clips": {
+    "run": [
+      [
+        1,
+        "ignite"
+      ],
+      [
+        1,
+        "spin_up"
+      ],
+      [
+        1.3,
+        "burn"
+      ],
+      [
+        2.8,
+        "burn"
+      ],
+      [
+        4.3,
+        "burn"
+      ],
+      [
+        5.8,
+        "burn"
+      ],
+      [
+        7.3,
+        "burn"
+      ],
+      [
+        8.8,
+        "burn"
+      ],
+      [
+        2.6,
+        "whir"
+      ],
+      [
+        4.1,
+        "whir"
+      ],
+      [
+        5.6,
+        "whir"
+      ],
+      [
+        7.5,
+        "spin_down"
+      ],
+      [
+        9.5,
+        "fire_out"
+      ],
+      [
+        10.2,
+        "cool_tick"
+      ],
+      [
+        4.2,
+        "lava_pop"
+      ],
+      [
+        8.6,
+        "lava_pop"
+      ]
+    ],
+    "idle": [
+      [
+        0.2,
+        "cool_tick"
+      ]
+    ]
+  }
+}

@@ -28,7 +28,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public final class PipeCoverShapes {
 	private PipeCoverShapes() {}
 
-	/** A box, and the sides of it that are never drawn because they're buried against another box or a neighbour. */
+	/**
+	 * A box, and the sides of it that are never drawn because they're buried against another of its boxes. The ends
+	 * against a neighbour are drawn and left to the game to cull: a neighbour's face may not cover them (a port in the
+	 * middle of a machine's side), and then the cover would be open there.
+	 */
 	public record Box(AABB box, Set<Direction> hidden) {}
 
 	@Nullable
@@ -66,10 +70,10 @@ public final class PipeCoverShapes {
 			boolean extracting = be instanceof PipeTileEntity tile && tile.isExtracting(d);
 			if (extracting) {
 				// The collar's cover, against the neighbour, then the arm on to the core
-				boxes.add(new Box(along(d, 0, 2, 3, 13), EnumSet.of(d)));
+				boxes.add(new Box(along(d, 0, 2, 3, 13), EnumSet.noneOf(Direction.class)));
 				boxes.add(new Box(along(d, 2, 4, 4, 12), EnumSet.of(d, d.getOpposite())));
 			} else {
-				boxes.add(new Box(along(d, 0, 4, 4, 12), EnumSet.of(d, d.getOpposite())));
+				boxes.add(new Box(along(d, 0, 4, 4, 12), EnumSet.of(d.getOpposite())));
 			}
 		}
 		return boxes;

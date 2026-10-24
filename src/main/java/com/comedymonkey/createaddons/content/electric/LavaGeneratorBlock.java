@@ -7,8 +7,6 @@ import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -37,15 +35,17 @@ import net.neoforged.neoforge.fluids.FluidUtil;
 public class LavaGeneratorBlock extends Block implements IBE<LavaGeneratorBlockEntity>, IWrenchable {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
+	/** There's lava in the tank: the window shows it, burning or not. */
+	public static final BooleanProperty FUELLED = BooleanProperty.create("fuelled");
 
 	public LavaGeneratorBlock(Properties properties) {
 		super(properties);
-		registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(LIT, false));
+		registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(LIT, false).setValue(FUELLED, false));
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(FACING, LIT);
+		builder.add(FACING, LIT, FUELLED);
 	}
 
 	@Override
@@ -84,22 +84,19 @@ public class LavaGeneratorBlock extends Block implements IBE<LavaGeneratorBlockE
 		return ItemInteractionResult.CONSUME;
 	}
 
-	/** Lava popping at the side vents and a low crackle while it burns. */
+	/**
+	 * While it burns, small flames flicker at the lava window on the front (x 3–13, y 4–6 px in the model, behind
+	 * glass). Its sounds, lava pops among them, are ElectricSounds.
+	 */
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-		if (!state.getValue(LIT))
+		if (!state.getValue(LIT) || random.nextInt(3) != 0)
 			return;
-		Direction side = state.getValue(FACING).getClockWise();
-		if (random.nextBoolean())
-			side = side.getOpposite();
-		Vec3 vent = Vec3.atCenterOf(pos).add(side.getStepX() * 0.47, -0.22, side.getStepZ() * 0.47);
-		if (random.nextInt(8) == 0)
-			level.addParticle(ParticleTypes.LAVA, vent.x, vent.y, vent.z, 0, 0, 0);
-		if (random.nextInt(3) == 0)
-			level.addParticle(ParticleTypes.SMALL_FLAME, vent.x, vent.y, vent.z, side.getStepX() * 0.01, 0.01, side.getStepZ() * 0.01);
-		if (random.nextInt(24) == 0)
-			level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.LAVA_AMBIENT,
-				SoundSource.BLOCKS, 0.3f, 0.8f, false);
+		Direction front = state.getValue(FACING), across = front.getClockWise();
+		double along = (random.nextDouble() - 0.5) * 0.56;
+		Vec3 at = Vec3.atCenterOf(pos).add(front.getStepX() * 0.47 + across.getStepX() * along, -0.19 + random.nextDouble() * 0.08,
+			front.getStepZ() * 0.47 + across.getStepZ() * along);
+		level.addParticle(ParticleTypes.SMALL_FLAME, at.x, at.y, at.z, front.getStepX() * 0.004, 0.006, front.getStepZ() * 0.004);
 	}
 
 	@Override
