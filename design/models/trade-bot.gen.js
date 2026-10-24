@@ -559,7 +559,7 @@ function anim(name, length, loop, tracks, steps = {}) {
     for (const [t, v] of samples) add(bone, ch, { channel: ch, data_points: [{ x: String(r2(v[0])), y: String(r2(v[1])), z: String(r2(v[2])) }], uuid: uuid(), time: r2(t), color: -1, interpolation: interp });
   }
   // clips that don't use the dock park the station beside him, sitting on his ground level
-  if (!['dock_lights_out', 'action_comes_in'].includes(name)) steps = { ...steps, station: { position: [[0, [22, 2, 6]]] }, station_glow: { scale: [[0, [0, 0, 0]]] } };
+  if (!['dock_lights_out', 'action_comes_in', 'packed'].includes(name)) steps = { ...steps, station: { position: [[0, [22, 2, 6]]] }, station_glow: { scale: [[0, [0, 0, 0]]] } };
   // the stair prop only shows in the stairs clips
   steps = { ...steps, stairs_prop: name.startsWith('stairs_') ? { position: [[0, [-STAIR_REST_X, 0, 0]]] } : { scale: [[0, [0, 0, 0]]] } };
   // item props only show in their clips; the claw is empty unless a clip fills it
@@ -1818,6 +1818,28 @@ turnClip('turn_right', -1);
   T.wheel = { rotation: (t) => V(-(START_WHEEL + wheelDeg(t)), 0, 0) };
   T.trade_bot = { position: (t) => V(xPos(t), yPos(t), zPos(t)), rotation: (t) => V(0, yaw(t), 0) };
   anim('turn_around', L, 'once', T);
+}
+
+// packed: the item's look (design/briefs/trade-bot-package.md). Folded up for the journey on his station, lights off:
+// body telescoped down over the wheel, neck in so the head rests on the body, lids shut, forearms across his belly,
+// aerial folded back. One held frame; the item renderer draws it in 3D.
+{
+  const C3 = (x, y, z) => () => V(x, y, z);
+  const PACK = {
+    body: { position: C3(0, -4, 0) },
+    wheel: { scale: C3(1, 0.94, 0.94) }, // just inside the lowered chassis, so its faces don't fight the chassis's
+    // the pods are deeper than they are tall, so tipping them forward stands them up like bricks; instead the head
+    // sinks onto the chassis and droops a little, lids shut
+    neck: { position: C3(0, -1.6, 0) },
+    head: { rotation: C3(-12, 0, 0) },
+    lid_left: { position: C3(0, -2, 0) },
+    lid_right: { position: C3(0, -2, 0) },
+    forearm_left: { rotation: C3(90, -20, 0) },
+    forearm_right: { rotation: C3(90, 20, 0) },
+    aerial: { rotation: C3(80, 0, 0) },
+  };
+  const off = { scale: [[0, [0, 0, 0]]] };
+  anim('packed', 0.5, 'hold', PACK, { iris_glow_left: off, iris_glow_right: off, lamp_glow: off, station_glow: off });
 }
 
 // self-collision: points sampled over his arms, tested against his own head and body boxes (in each box's own

@@ -204,6 +204,8 @@ They are **calibrated against Blockbench's own "Export Java Entity (Mojang mappi
   - It also records bots removed by commands, so a station whose bot is gone for good can still be packed, and nothing can be duplicated.
 - **Carry On:** add `comedymonkeysaddons:trade_bot` to `res/data/carryon/tags/block/block_blacklist.json`. Create `res/data/carryon/tags/entity_type/entity_blacklist.json` with the bot. Carrying either half would split the pair.
 
+**Done (M2):** `TradeBotStationBlock` (block id `trade_bot`) and `TradeBotStationBlockEntity` (FE from below only, charging, links storage, pause, comparator, goggles, packing), `TradeBotItem` (places station + docked bot, per-player limit), `TradeBotData` + `ModDataComponents`, `TradeBotRegistry` (SavedData), `TradeBotOwnership`, the station renderer (whole station from `geometry.json`, posed from the bot's clip, winder turning while charging) and the item renderer. The item looks like the station with him folded up on it, in 3D everywhere (the `packed` clip; design/briefs/trade-bot-package.md, approved). Until milestone 3, "go home" puts him straight back in his cradle.
+
 **Tests:**
 - BE energy (receives only from below; charges the docked bot at 64 FE/t);
 - save/load round trip;

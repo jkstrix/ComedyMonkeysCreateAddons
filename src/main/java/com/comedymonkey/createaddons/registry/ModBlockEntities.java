@@ -22,6 +22,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredBlock;
+import com.comedymonkey.createaddons.content.tradebot.TradeBotStationBlockEntity;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -64,6 +65,11 @@ public final class ModBlockEntities {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CuckooClockBlockEntity>> CUCKOO_CLOCK =
 		BLOCK_ENTITY_TYPES.register("cuckoo_clock",
 			() -> BlockEntityType.Builder.of(CuckooClockBlockEntity::new, ModBlocks.CUCKOO_CLOCK.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TradeBotStationBlockEntity>> TRADE_BOT_STATION =
+		BLOCK_ENTITY_TYPES.register("trade_bot",
+			() -> BlockEntityType.Builder.of(TradeBotStationBlockEntity::new, ModBlocks.TRADE_BOT.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AnimalPenBlockEntity>> ANIMAL_PEN =

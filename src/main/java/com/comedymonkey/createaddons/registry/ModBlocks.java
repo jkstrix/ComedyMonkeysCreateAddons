@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import com.comedymonkey.createaddons.content.tradebot.TradeBotStationBlock;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -237,6 +238,17 @@ public final class ModBlocks {
 		() -> new GeothermalPartBlock(machine(), false));
 	public static final DeferredBlock<GeothermalControllerBlock> GEOTHERMAL_CONTROLLER = BLOCKS.register("geothermal_controller",
 		() -> new GeothermalControllerBlock(machine().lightLevel(state -> state.getValue(GeothermalControllerBlock.LIT) ? 12 : 0)));
+
+	/** Trade Bot's winding station: unbreakable except by its owner's wrench (D51), which packs it up with him. */
+	public static final DeferredBlock<TradeBotStationBlock> TRADE_BOT = BLOCKS.register("trade_bot",
+		() -> new TradeBotStationBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.METAL)
+			.strength(-1.0f, 3600000.0f)
+			.sound(SoundType.NETHERITE_BLOCK)
+			.noOcclusion()
+			.noLootTable()
+			.pushReaction(PushReaction.BLOCK)
+			.lightLevel(state -> state.getValue(TradeBotStationBlock.GLOW) ? 4 : 0)));
 
 	private static BlockBehaviour.Properties machine() {
 		return BlockBehaviour.Properties.of()

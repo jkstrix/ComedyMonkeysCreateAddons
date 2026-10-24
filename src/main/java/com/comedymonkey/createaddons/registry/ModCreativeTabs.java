@@ -53,6 +53,7 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.BRASS_ANIMAL_PEN.get());
 				output.accept(ModItems.CAPTURE_BOTTLE.get());
 				output.accept(ModItems.CUCKOO_CLOCK.get());
+				output.accept(ModItems.TRADE_BOT.get());
 				output.accept(ModItems.STRING_TANGLER.get());
 				output.accept(ModItems.STONE_INFUSER.get());
 				output.accept(ModItems.PRESSURE_CRUCIBLE.get());

@@ -22,7 +22,6 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 
 	private final ModelPart root;
 	private final Map<String, ModelPart> parts;
-	private final Vector3f value = new Vector3f(), from = new Vector3f();
 
 	public TradeBotModel(ModelPart root) {
 		this.root = root;
@@ -37,16 +36,29 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 	@Override
 	public void setupAnim(TradeBotEntity bot, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		root.getAllParts().forEach(ModelPart::resetPose);
-		double now = bot.level().getGameTime() + (ageInTicks - bot.tickCount);
+		float partialTick = ageInTicks - bot.tickCount;
+		pose(parts, bot, bot.level().getGameTime() + partialTick);
+		// docked and charging: the station's winder keeps turning his key
+		ModelPart key = parts.get("key");
+		if (key != null)
+			key.zRot += -bot.windSpin(partialTick) * Mth.DEG_TO_RAD;
+	}
+
+	/** Poses these parts (his, or his station's) as the bot's playback has them at {@code now}, with the fade. */
+	public static void pose(Map<String, ModelPart> parts, TradeBotEntity bot, double now) {
 		ClipPlayback playback = bot.playback;
 		playback.observe(bot.clip(), bot.clipStart(), now);
 		Clip clip = playback.clip();
 		if (clip == null)
 			return;
-		float t = clip.localTime(playback.elapsed(now));
 		Clip old = playback.fadeFrom(now);
-		float w = playback.fade(now);
-		float oldT = old == null ? 0 : old.localTime(playback.fadeFromElapsed(now));
+		pose(parts, clip, clip.localTime(playback.elapsed(now)), old, old == null ? 0 : old.localTime(playback.fadeFromElapsed(now)),
+			playback.fade(now));
+	}
+
+	/** Poses parts from {@code clip} at {@code t}, faded in from {@code old} at {@code oldT} by {@code w} (0..1). */
+	public static void pose(Map<String, ModelPart> parts, Clip clip, float t, @Nullable Clip old, float oldT, float w) {
+		Vector3f value = new Vector3f(), from = new Vector3f();
 		for (Map.Entry<String, ModelPart> entry : parts.entrySet()) {
 			for (String channel : CHANNELS) {
 				boolean any = sample(clip, entry.getKey(), channel, t, value);
@@ -59,6 +71,10 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 				apply(entry.getValue(), channel, value);
 			}
 		}
+	}
+
+	public Map<String, ModelPart> parts() {
+		return parts;
 	}
 
 	/** One channel of a bone at {@code t}, or its rest value if the clip leaves it alone (then returns false). */

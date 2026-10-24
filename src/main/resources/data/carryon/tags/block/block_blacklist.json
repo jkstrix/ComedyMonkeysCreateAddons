@@ -4,6 +4,10 @@
     {
       "id": "comedymonkeysaddons:cuckoo_clock_weights",
       "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:trade_bot",
+      "required": false
     }
   ]
 }

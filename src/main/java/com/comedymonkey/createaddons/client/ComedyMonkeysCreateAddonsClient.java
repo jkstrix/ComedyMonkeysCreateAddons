@@ -28,6 +28,8 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import com.comedymonkey.createaddons.content.chest.ChestTier;
 import com.comedymonkey.createaddons.client.tradebot.TradeBotGeometry;
 import com.comedymonkey.createaddons.client.tradebot.TradeBotRenderer;
+import com.comedymonkey.createaddons.client.tradebot.TradeBotStationRenderer;
+import com.comedymonkey.createaddons.client.tradebot.TradeBotItemRenderer;
 import com.comedymonkey.createaddons.registry.ModEntities;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
@@ -87,6 +89,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerRenderers(event);
 		event.registerEntityRenderer(ModEntities.TRADE_BOT.get(), TradeBotRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.TRADE_BOT_STATION.get(), TradeBotStationRenderer::new);
 	}
 
 	/** The upgraded chest lids and the crucible ram aren't referenced by any blockstate, so they're loaded explicitly. */
@@ -112,6 +115,16 @@ public class ComedyMonkeysCreateAddonsClient {
 	/** A Bottled Animal draws its animal inside the jar. */
 	private void registerClientExtensions(RegisterClientExtensionsEvent event) {
 		event.registerItem(new IClientItemExtensions() {
+			private TradeBotItemRenderer renderer;
+
+			@Override
+			public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
+				if (renderer == null)
+					renderer = new TradeBotItemRenderer();
+				return renderer;
+			}
+		}, ModItems.TRADE_BOT.get());
+		event.registerItem(new IClientItemExtensions() {
 			private BottledAnimalRenderer renderer;
 
 			@Override
@@ -125,6 +138,7 @@ public class ComedyMonkeysCreateAddonsClient {
 
 	private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(TradeBotGeometry.BOT_LAYER, TradeBotGeometry::botLayer);
+		event.registerLayerDefinition(TradeBotGeometry.STATION_LAYER, TradeBotGeometry::stationLayer);
 		// The goggles renderer is a Curios one, so its class can't even be loaded without Curios
 		if (ModList.get().isLoaded(ComedyMonkeysCreateAddons.AERONAUTICS_ID)
 			&& ModList.get().isLoaded(ComedyMonkeysCreateAddons.CURIOS_ID))

@@ -32,6 +32,7 @@ import com.comedymonkey.createaddons.registry.ModMountedStorage;
 import com.comedymonkey.createaddons.registry.ModRecipes;
 import com.comedymonkey.createaddons.registry.ModSounds;
 import com.comedymonkey.createaddons.registry.ModEntities;
+import com.comedymonkey.createaddons.registry.ModDataComponents;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotCommands;
 import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.foundation.item.ItemDescription;
@@ -81,6 +82,7 @@ public class ComedyMonkeysCreateAddons {
 		ModAttachments.ATTACHMENT_TYPES.register(modBus);
 		ModSounds.SOUND_EVENTS.register(modBus);
 		ModEntities.ENTITY_TYPES.register(modBus);
+		ModDataComponents.DATA_COMPONENTS.register(modBus);
 		modBus.addListener(ModEntities::registerAttributes);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
 
@@ -128,6 +130,9 @@ public class ComedyMonkeysCreateAddons {
 			(be, side) -> be.getAutomationHandler());
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.ANIMAL_PEN.get(),
 			(be, side) -> be.getMilkHandler());
+		// Trade Bot's station takes FE from underneath only (D16)
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.TRADE_BOT_STATION.get(),
+			(be, side) -> be.getEnergy(side));
 		// Dust in from any side, results out from any side
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.PRESSURE_CRUCIBLE.get(),
 			(be, side) -> be.getAutomationHandler());
@@ -223,6 +228,7 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.ANIMAL_PEN.get());
 			registerCreateTooltip(ModItems.BRASS_ANIMAL_PEN.get());
 			registerCreateTooltip(ModItems.CUCKOO_CLOCK.get());
+			registerCreateTooltip(ModItems.TRADE_BOT.get());
 			registerCreateTooltip(ModItems.BOTTLED_ANIMAL.get());
 			registerCreateTooltip(ModItems.CAPTURE_BOTTLE.get());
 			registerCreateTooltip(ModItems.INCINERATOR.get());

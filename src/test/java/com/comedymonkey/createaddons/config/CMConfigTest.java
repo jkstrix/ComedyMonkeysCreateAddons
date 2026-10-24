@@ -196,6 +196,12 @@ class CMConfigTest {
 	}
 
 	@Test
+	void tradeBotComments() {
+		// "At the default 4 FE a block that's 25,000 blocks of rolling."
+		assertEquals(25_000, S.tradeBotFullCharge() / S.tradeBotFePerBlock());
+	}
+
+	@Test
 	void animalPenDefaults() {
 		assertTrue(CMConfig.Server.get(S.brassPenStress) > CMConfig.Server.get(S.penStress));
 		// As long as vanilla: 300 s between breedings, 1200 s to grow up; eggs "vanilla is 300 to 600"

@@ -106,6 +106,15 @@ public final class CMConfig {
 
 		public final ModConfigSpec.BooleanValue villagersSitInSeats;
 
+		public final ModConfigSpec.IntValue tradeBotRange;
+		public final ModConfigSpec.IntValue tradeBotsPerPlayer;
+		public final ModConfigSpec.IntValue tradeBotChargeFePerTick;
+		public final ModConfigSpec.IntValue tradeBotStationBuffer;
+		public final ModConfigSpec.IntValue tradeBotFullCharge;
+		public final ModConfigSpec.IntValue tradeBotFePerBlock;
+		public final ModConfigSpec.IntValue tradeBotFePerTrade;
+		public final ModConfigSpec.IntValue tradeBotHostileRadius;
+
 		public final ModConfigSpec.BooleanValue pipezFeedsBlazeBurners;
 		public final ModConfigSpec.BooleanValue blazeBurnerPipezOnly;
 		public final ModConfigSpec.BooleanValue pipezFeedsEngines;
@@ -407,6 +416,41 @@ public final class CMConfig {
 				.define("villagersSitInSeats", true);
 			builder.pop();
 
+			builder.comment("Trade Bot: the clockwork robot who sells your goods to seated villagers").push("tradeBot");
+			tradeBotRange = builder
+				.comment("How far from his station (in blocks) Trade Bot will go for containers and buyers.")
+				.translation("comedymonkeysaddons.configuration.tradeBotRange")
+				.defineInRange("tradeBotRange", 64, 8, 256);
+			tradeBotsPerPlayer = builder
+				.comment("How many Trade Bots each player can have placed at once.")
+				.translation("comedymonkeysaddons.configuration.tradeBotsPerPlayer")
+				.defineInRange("tradeBotsPerPlayer", 4, 1, 64);
+			tradeBotChargeFePerTick = builder
+				.comment("FE a tick his station puts into him while he's docked.")
+				.translation("comedymonkeysaddons.configuration.tradeBotChargeFePerTick")
+				.defineInRange("tradeBotChargeFePerTick", 64, 1, 100000);
+			tradeBotStationBuffer = builder
+				.comment("FE his station can store, fed from underneath.")
+				.translation("comedymonkeysaddons.configuration.tradeBotStationBuffer")
+				.defineInRange("tradeBotStationBuffer", 100000, 1000, 10000000);
+			tradeBotFullCharge = builder
+				.comment("FE he holds when fully charged. At the default 4 FE a block that's 25,000 blocks of rolling.")
+				.translation("comedymonkeysaddons.configuration.tradeBotFullCharge")
+				.defineInRange("tradeBotFullCharge", 100000, 1000, 10000000);
+			tradeBotFePerBlock = builder
+				.comment("FE he uses for every block he rolls.")
+				.translation("comedymonkeysaddons.configuration.tradeBotFePerBlock")
+				.defineInRange("tradeBotFePerBlock", 4, 0, 10000);
+			tradeBotFePerTrade = builder
+				.comment("FE he uses for every trade.")
+				.translation("comedymonkeysaddons.configuration.tradeBotFePerTrade")
+				.defineInRange("tradeBotFePerTrade", 50, 0, 100000);
+			tradeBotHostileRadius = builder
+				.comment("How close (in blocks) a monster he can see has to be before he gets scared and hides.")
+				.translation("comedymonkeysaddons.configuration.tradeBotHostileRadius")
+				.defineInRange("tradeBotHostileRadius", 12, 2, 32);
+			builder.pop();
+
 			builder.comment("Compatibility with other mods").push("modCompatibility");
 
 			pipezFeedsBlazeBurners = builder
@@ -618,6 +662,38 @@ public final class CMConfig {
 
 		public boolean villagersSitInSeats() {
 			return get(villagersSitInSeats);
+		}
+
+		public int tradeBotRange() {
+			return get(tradeBotRange);
+		}
+
+		public int tradeBotsPerPlayer() {
+			return get(tradeBotsPerPlayer);
+		}
+
+		public int tradeBotChargeFePerTick() {
+			return get(tradeBotChargeFePerTick);
+		}
+
+		public int tradeBotStationBuffer() {
+			return get(tradeBotStationBuffer);
+		}
+
+		public int tradeBotFullCharge() {
+			return get(tradeBotFullCharge);
+		}
+
+		public int tradeBotFePerBlock() {
+			return get(tradeBotFePerBlock);
+		}
+
+		public int tradeBotFePerTrade() {
+			return get(tradeBotFePerTrade);
+		}
+
+		public int tradeBotHostileRadius() {
+			return get(tradeBotHostileRadius);
 		}
 
 		public boolean pipezFeedsBlazeBurners() {

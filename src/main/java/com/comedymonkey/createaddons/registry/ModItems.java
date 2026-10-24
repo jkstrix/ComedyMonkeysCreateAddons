@@ -17,6 +17,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import com.comedymonkey.createaddons.compat.pipez.cover.PipeCover;
 import com.comedymonkey.createaddons.compat.pipez.cover.PipeCoverItem;
+import com.comedymonkey.createaddons.content.tradebot.TradeBotItem;
 
 public final class ModItems {
 	public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ComedyMonkeysCreateAddons.MOD_ID);
@@ -52,6 +53,9 @@ public final class ModItems {
 	public static final DeferredItem<BlockItem> ANIMAL_PEN = ITEMS.registerSimpleBlockItem(ModBlocks.ANIMAL_PEN);
 	public static final DeferredItem<BlockItem> BRASS_ANIMAL_PEN = ITEMS.registerSimpleBlockItem(ModBlocks.BRASS_ANIMAL_PEN);
 	public static final DeferredItem<BlockItem> CUCKOO_CLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.CUCKOO_CLOCK);
+	/** Trade Bot on his station, as one item (D27). */
+	public static final DeferredItem<TradeBotItem> TRADE_BOT = ITEMS.register("trade_bot",
+		() -> new TradeBotItem(ModBlocks.TRADE_BOT.get(), new Item.Properties().stacksTo(1)));
 	/** Catches an animal for the Animal Pens; given back when the animal is let out. Stacks while empty. */
 	public static final DeferredItem<Item> CAPTURE_BOTTLE = ITEMS.registerSimpleItem("capture_bottle");
 	/** An animal caught in a Capture Bottle, for the Animal Pens. One a stack: each holds its own animal. */

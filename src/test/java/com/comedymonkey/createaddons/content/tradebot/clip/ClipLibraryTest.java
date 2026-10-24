@@ -28,7 +28,7 @@ class ClipLibraryTest {
 
 	@Test
 	void everyClipFromTheBriefIsThere() {
-		assertEquals(42, LIB.all().size());
+		assertEquals(43, LIB.all().size());
 		for (String name : List.of("idle", "rolling", "start_rolling", "stop_rolling", "turn_left", "turn_right", "turn_around",
 			"wall_bump", "sees_player", "dock_lights_out", "action_comes_in", "chest_take", "chest_put", "barrel_take", "barrel_put",
 			"chest_take_high", "chest_put_high", "depot_place", "depot_take", "belt_place", "trade_villager", "trade_villager_open",

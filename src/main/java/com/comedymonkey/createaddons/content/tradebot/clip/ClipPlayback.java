@@ -14,6 +14,8 @@ public final class ClipPlayback {
 	public static final float FADE = 0.15f;
 	/** Looping sounds are played by their own sound instances, not as cues. */
 	private static final Set<String> LOOPS = Set.of("roll_loop", "roll_fast_loop", "tremble_loop");
+	/** A clip first seen more than this many seconds in started before this client saw it. */
+	private static final float LATE = 0.25f;
 
 	@Nullable
 	private Clip clip;
@@ -78,6 +80,11 @@ public final class ClipPlayback {
 		if (clip.finished(elapsed) && !Float.isNaN(lastCueTime) && lastCueTime >= clip.length())
 			return;
 		float t = clip.localTime(elapsed);
+		// first seen well after it started (joined late, or set up already docked): its earlier cues are history
+		if (Float.isNaN(lastCueTime) && elapsed > LATE) {
+			lastCueTime = clip.finished(elapsed) ? clip.length() : t;
+			return;
+		}
 		float from = Float.isNaN(lastCueTime) ? -1e-4f : lastCueTime;
 		for (Clip.Cue cue : clip.cues()) {
 			if (LOOPS.contains(cue.event()) || cue.event().startsWith("villager_"))

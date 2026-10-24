@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "comedymonkeysaddons:trade_bot",
+      "required": false
+    }
+  ]
+}
