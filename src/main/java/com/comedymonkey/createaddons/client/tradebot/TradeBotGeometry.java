@@ -1,0 +1,160 @@
+package com.comedymonkey.createaddons.client.tradebot;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.Nullable;
+
+import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.util.Mth;
+
+/**
+ * Trade Bot's and his station's models, built from {@code trade_bot/geometry.json} (exported from the Blockbench
+ * preview). This is the one place Blockbench's frame becomes Minecraft's model frame: Blockbench is Y up with him
+ * facing -Z and his right at +X; a model is Y down with its feet at y = 24 and the renderer flips X and Y. Turning
+ * the Blockbench model half a turn about Z lines the two up without mirroring him: (x, y, z) becomes (-x, 24 - y, z),
+ * rotations (rx, ry, rz) become (-rx, -ry, rz), and box-UV faces land where the generator painted them.
+ */
+public final class TradeBotGeometry {
+	public static final String PATH = "/assets/comedymonkeysaddons/trade_bot/geometry.json";
+	public static final ModelLayerLocation BOT_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_bot"), "main");
+	public static final ModelLayerLocation STATION_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_bot"), "station");
+
+	public record Bone(String name, @Nullable String parent, float[] pivot, float[] rotation, List<Cube> cubes) {}
+
+	public record Cube(float[] from, float[] to, int u, int v) {}
+
+	private static volatile TradeBotGeometry instance;
+
+	private final int textureWidth, textureHeight;
+	private final List<Bone> bones;
+
+	private TradeBotGeometry(int textureWidth, int textureHeight, List<Bone> bones) {
+		this.textureWidth = textureWidth;
+		this.textureHeight = textureHeight;
+		this.bones = bones;
+	}
+
+	public static TradeBotGeometry get() {
+		TradeBotGeometry geometry = instance;
+		if (geometry == null) {
+			synchronized (TradeBotGeometry.class) {
+				if (instance == null)
+					instance = load();
+				geometry = instance;
+			}
+		}
+		return geometry;
+	}
+
+	public static LayerDefinition botLayer() {
+		return get().layer("trade_bot");
+	}
+
+	public static LayerDefinition stationLayer() {
+		return get().layer("station");
+	}
+
+	/** A model of one root bone and everything under it. */
+	public LayerDefinition layer(String root) {
+		MeshDefinition mesh = new MeshDefinition();
+		Map<String, PartDefinition> parts = new HashMap<>();
+		Map<String, Bone> byName = new HashMap<>();
+		for (Bone bone : bones)
+			byName.put(bone.name(), bone);
+		for (Bone bone : bones) {
+			if (!bone.name().equals(root) && !isUnder(bone, root, byName))
+				continue;
+			PartDefinition parent = bone.name().equals(root) ? mesh.getRoot() : parts.get(bone.parent());
+			float[] p = bone.pivot();
+			float[] parentPivot = bone.name().equals(root) ? null : byName.get(bone.parent()).pivot();
+			CubeListBuilder cubes = CubeListBuilder.create();
+			for (Cube cube : bone.cubes())
+				cubes.texOffs(cube.u(), cube.v()).addBox(p[0] - cube.to()[0], p[1] - cube.to()[1], cube.from()[2] - p[2],
+					cube.to()[0] - cube.from()[0], cube.to()[1] - cube.from()[1], cube.to()[2] - cube.from()[2]);
+			PartPose pose = PartPose.offsetAndRotation(
+				parentPivot == null ? -p[0] : -(p[0] - parentPivot[0]),
+				parentPivot == null ? 24 - p[1] : -(p[1] - parentPivot[1]),
+				parentPivot == null ? p[2] : p[2] - parentPivot[2],
+				-bone.rotation()[0] * Mth.DEG_TO_RAD, -bone.rotation()[1] * Mth.DEG_TO_RAD, bone.rotation()[2] * Mth.DEG_TO_RAD);
+			parts.put(bone.name(), parent.addOrReplaceChild(bone.name(), cubes, pose));
+		}
+		return LayerDefinition.create(mesh, textureWidth, textureHeight);
+	}
+
+	/** Every bone of a baked layer by name, for posing. */
+	public Map<String, ModelPart> parts(ModelPart bakedRoot, String root) {
+		Map<String, ModelPart> parts = new LinkedHashMap<>();
+		Map<String, Bone> byName = new HashMap<>();
+		for (Bone bone : bones)
+			byName.put(bone.name(), bone);
+		for (Bone bone : bones) {
+			if (bone.name().equals(root))
+				parts.put(root, bakedRoot.getChild(root));
+			else if (isUnder(bone, root, byName))
+				parts.put(bone.name(), parts.get(bone.parent()).getChild(bone.name()));
+		}
+		return parts;
+	}
+
+	private static boolean isUnder(Bone bone, String root, Map<String, Bone> byName) {
+		for (String p = bone.parent(); p != null; p = byName.get(p).parent())
+			if (p.equals(root))
+				return true;
+		return false;
+	}
+
+	private static TradeBotGeometry load() {
+		try (InputStream in = TradeBotGeometry.class.getResourceAsStream(PATH)) {
+			if (in == null)
+				throw new IllegalStateException("missing " + PATH);
+			try (Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+				JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+				JsonArray texture = json.getAsJsonArray("texture");
+				List<Bone> bones = new ArrayList<>();
+				for (JsonElement e : json.getAsJsonArray("bones")) {
+					JsonObject b = e.getAsJsonObject();
+					List<Cube> cubes = new ArrayList<>();
+					for (JsonElement c : b.getAsJsonArray("cubes")) {
+						JsonObject cube = c.getAsJsonObject();
+						JsonArray uv = cube.getAsJsonArray("uv");
+						cubes.add(new Cube(floats(cube.getAsJsonArray("from")), floats(cube.getAsJsonArray("to")), uv.get(0).getAsInt(), uv.get(1).getAsInt()));
+					}
+					bones.add(new Bone(b.get("name").getAsString(), b.get("parent").isJsonNull() ? null : b.get("parent").getAsString(),
+						floats(b.getAsJsonArray("pivot")), floats(b.getAsJsonArray("rotation")), cubes));
+				}
+				return new TradeBotGeometry(texture.get(0).getAsInt(), texture.get(1).getAsInt(), bones);
+			}
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+
+	private static float[] floats(JsonArray array) {
+		float[] out = new float[array.size()];
+		for (int i = 0; i < out.length; i++)
+			out[i] = array.get(i).getAsFloat();
+		return out;
+	}
+}

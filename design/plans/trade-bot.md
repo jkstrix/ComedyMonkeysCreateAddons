@@ -141,8 +141,10 @@ They are **calibrated against Blockbench's own "Export Java Entity (Mojang mappi
   - the package in his claw, drawn by the model's `held_item` bone, as designed.
 - **Dev command `/tradebot clip <name>`** (ops only; registered in `RegisterCommandsEvent`): plays any clip on the nearest bot. It's for comparing with Blockbench.
 
+**Done (M1):** `registry/ModEntities`, `content/tradebot/TradeBotEntity` (synced clip, start tick and physical-clip anchor), `TradeBotCommands`, `clip/ClipRoot` (root travel and turns, shared by server and client), `clip/ClipPlayback` (fade and cues), and `client/tradebot/TradeBotGeometry`, `TradeBotModel`, `TradeBotRenderer` (with the glow layer). No spawn egg: `/summon comedymonkeysaddons:trade_bot` does the job. Checked in game by the user ("he looked awesome"); `ClipRootTest` pins the hop distances and turn directions.
+
 **Acceptance:**
-- Spawn him with a spawn egg (dev only, not in the creative tab).
+- Summon him (`/summon comedymonkeysaddons:trade_bot`).
 - `/tradebot clip` each of the 42 clips.
 - Put three poses side by side with Blockbench screenshots: `turn_left` at 1.3 s, `chest_take` at the reach, `scared_cower`.
 - Launch the client for review (standing rule: build, headless check, `runClient`).

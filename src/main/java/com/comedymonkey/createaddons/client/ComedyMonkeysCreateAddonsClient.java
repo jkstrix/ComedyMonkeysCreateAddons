@@ -26,6 +26,9 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import com.comedymonkey.createaddons.content.chest.ChestTier;
+import com.comedymonkey.createaddons.client.tradebot.TradeBotGeometry;
+import com.comedymonkey.createaddons.client.tradebot.TradeBotRenderer;
+import com.comedymonkey.createaddons.registry.ModEntities;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -83,6 +86,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.STONE_INFUSER.get(), MachineRenderers.Infuser::new);
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerRenderers(event);
+		event.registerEntityRenderer(ModEntities.TRADE_BOT.get(), TradeBotRenderer::new);
 	}
 
 	/** The upgraded chest lids and the crucible ram aren't referenced by any blockstate, so they're loaded explicitly. */
@@ -120,6 +124,7 @@ public class ComedyMonkeysCreateAddonsClient {
 	}
 
 	private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(TradeBotGeometry.BOT_LAYER, TradeBotGeometry::botLayer);
 		// The goggles renderer is a Curios one, so its class can't even be loaded without Curios
 		if (ModList.get().isLoaded(ComedyMonkeysCreateAddons.AERONAUTICS_ID)
 			&& ModList.get().isLoaded(ComedyMonkeysCreateAddons.CURIOS_ID))

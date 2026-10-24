@@ -1018,5 +1018,9 @@
   "subtitles.comedymonkeysaddons.trade_bot.shake_off": "Trade Bot shakes it off",
   "subtitles.comedymonkeysaddons.trade_bot.turn_scrub": "Trade Bot carves a turn",
   "subtitles.comedymonkeysaddons.trade_bot.wheel_freespin": "Trade Bot's wheel whirs",
-  "subtitles.comedymonkeysaddons.trade_bot.wheee": "Trade Bot goes wheee"
+  "subtitles.comedymonkeysaddons.trade_bot.wheee": "Trade Bot goes wheee",
+  "entity.comedymonkeysaddons.trade_bot": "Trade Bot",
+  "commands.comedymonkeysaddons.tradebot.clip": "Playing %s (%s s) on the nearest Trade Bot",
+  "commands.comedymonkeysaddons.tradebot.no_clip": "Trade Bot has no clip by that name",
+  "commands.comedymonkeysaddons.tradebot.no_bot": "No Trade Bot within 32 blocks"
 }

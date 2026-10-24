@@ -31,6 +31,8 @@ import com.comedymonkey.createaddons.registry.ModMenus;
 import com.comedymonkey.createaddons.registry.ModMountedStorage;
 import com.comedymonkey.createaddons.registry.ModRecipes;
 import com.comedymonkey.createaddons.registry.ModSounds;
+import com.comedymonkey.createaddons.registry.ModEntities;
+import com.comedymonkey.createaddons.content.tradebot.TradeBotCommands;
 import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.TooltipModifier;
@@ -78,6 +80,9 @@ public class ComedyMonkeysCreateAddons {
 		ModAdvancements.TRIGGERS.register(modBus);
 		ModAttachments.ATTACHMENT_TYPES.register(modBus);
 		ModSounds.SOUND_EVENTS.register(modBus);
+		ModEntities.ENTITY_TYPES.register(modBus);
+		modBus.addListener(ModEntities::registerAttributes);
+		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
 
 		// Both specs show up in Create's "Access configs of other mods" screen
 		container.registerConfig(ModConfig.Type.SERVER, CMConfig.SERVER_SPEC);
