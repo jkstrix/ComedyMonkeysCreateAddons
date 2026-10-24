@@ -165,7 +165,7 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 	/** One more click on {@code target} while picking: takes from, then delivers to, then unlinked. Returns the new role. */
 	TradeBotLinks.Role cycleLink(BlockPos target) {
 		boolean beltOnly = level != null && TradeBotLinks.outputOnly(level, target);
-		TradeBotLinks.Role next = TradeBotLinks.nextRole(roleOf(target), beltOnly, inputs.size(), MAX_INPUTS);
+		TradeBotLinks.Role next = TradeBotLinks.nextRole(roleOf(target), beltOnly, inputs.size(), MAX_INPUTS, output != null);
 		setRole(target, next);
 		return next;
 	}
@@ -196,22 +196,32 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 				setRole(target, TradeBotLinks.Role.NONE);
 				player.displayClientMessage(TradeBotLinks.describe(level, target, TradeBotLinks.Role.NONE), true);
 			}
-			case CYCLE -> {
-				// picked in the world: within the player's reach, his range from the station, and something that holds items
-				if (player.distanceToSqr(target.getCenter()) > 64)
-					return;
-				if (roleOf(target) == TradeBotLinks.Role.NONE && !TradeBotLinks.canLink(level, target)) {
-					player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.link.not_a_container"), true);
-					return;
-				}
-				if (!TradeBotLinks.inRange(worldPosition, target)) {
-					player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.link.too_far",
-						CMConfig.SERVER.tradeBotRange()), true);
-					return;
-				}
-				player.displayClientMessage(TradeBotLinks.describe(level, target, cycleLink(target)), true);
+			case START_PICKING -> {
+				if (player.distanceToSqr(worldPosition.getCenter()) <= 64)
+					TradeBotPicking.start(player, worldPosition);
 			}
+			case STOP_PICKING -> TradeBotPicking.stop(player);
 		}
+	}
+
+	/** A container clicked while picking (from {@link TradeBotPicking}): cycle its link, if it can be linked. */
+	void pick(ServerPlayer player, BlockPos target) {
+		if (level == null || !TradeBotOwnership.canControl(player, owner))
+			return;
+		if (roleOf(target) == TradeBotLinks.Role.NONE && !TradeBotLinks.canLink(level, target)) {
+			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.link.not_a_container"), true);
+			return;
+		}
+		if (!TradeBotLinks.inRange(worldPosition, target)) {
+			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.link.too_far", CMConfig.SERVER.tradeBotRange()), true);
+			return;
+		}
+		TradeBotLinks.Role before = roleOf(target);
+		TradeBotLinks.Role after = cycleLink(target);
+		if (before == TradeBotLinks.Role.NONE && after == TradeBotLinks.Role.NONE)
+			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.link.full"), true);
+		else
+			player.displayClientMessage(TradeBotLinks.describe(level, target, after), true);
 	}
 
 	void setRole(BlockPos target, TradeBotLinks.Role role) {

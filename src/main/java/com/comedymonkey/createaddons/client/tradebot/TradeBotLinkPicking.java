@@ -20,8 +20,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 /**
  * Picking containers for Trade Bot in the world (D61), started from his station screen's "Select containers": with
  * any hand, right-click a container to cycle it through takes from (cyan) and delivers to (amber) to unlinked, or
- * left-click to unlink it. The server checks and saves every click. Sneak-right-click, or right-click the station, to
- * finish; walking well out of his range or three idle minutes finish it too.
+ * left-click to unlink it. The server takes those clicks over and does the linking (TradeBotPicking); here they're
+ * cancelled too, so nothing opens or breaks even for a moment, and the links are outlined. Sneak-right-click, or
+ * right-click the station, to finish; walking well out of his range or three idle minutes finish it too.
  */
 public final class TradeBotLinkPicking {
 	private static final int TIMEOUT_TICKS = 20 * 60 * 3;
@@ -36,6 +37,7 @@ public final class TradeBotLinkPicking {
 	public static void start(BlockPos pos) {
 		station = pos.immutable();
 		idleTicks = 0;
+		PacketDistributor.sendToServer(new TradeBotStationPayload(station, TradeBotStationPayload.Action.START_PICKING, station));
 		hint();
 	}
 
@@ -54,12 +56,12 @@ public final class TradeBotLinkPicking {
 			return;
 		event.setCanceled(true);
 		event.setCancellationResult(InteractionResult.SUCCESS);
-		idleTicks = 0;
-		if (event.getEntity().isShiftKeyDown() || event.getPos().equals(station)) {
-			finish();
+		if (event.getHand() != net.minecraft.world.InteractionHand.MAIN_HAND)
 			return;
-		}
-		send(TradeBotStationPayload.Action.CYCLE, event.getPos());
+		idleTicks = 0;
+		// the server links it (or finishes, for sneak-right-click and the station); here it just finishes too
+		if (event.getEntity().isShiftKeyDown() || event.getPos().equals(station))
+			finish();
 	}
 
 	/** Left-click unlinks (and never breaks the container by accident while picking). */
@@ -67,11 +69,7 @@ public final class TradeBotLinkPicking {
 		if (station == null || !event.getLevel().isClientSide)
 			return;
 		event.setCanceled(true);
-		if (event.getAction() != PlayerInteractEvent.LeftClickBlock.Action.START)
-			return;
 		idleTicks = 0;
-		if (station() != null && station().roleOf(event.getPos()) != TradeBotLinks.Role.NONE)
-			send(TradeBotStationPayload.Action.UNLINK, event.getPos());
 	}
 
 	public static void onClientTick(ClientTickEvent.Post event) {
@@ -81,6 +79,7 @@ public final class TradeBotLinkPicking {
 		TradeBotStationBlockEntity be = station();
 		int range = CMConfig.SERVER.tradeBotRange() + 16;
 		if (be == null || mc.player == null || mc.player.distanceToSqr(station.getCenter()) > (double) range * range || ++idleTicks > TIMEOUT_TICKS) {
+			PacketDistributor.sendToServer(new TradeBotStationPayload(station, TradeBotStationPayload.Action.STOP_PICKING, station));
 			station = null;
 			return;
 		}
@@ -99,11 +98,6 @@ public final class TradeBotLinkPicking {
 	private static TradeBotStationBlockEntity station() {
 		Minecraft mc = Minecraft.getInstance();
 		return mc.level != null && station != null && mc.level.getBlockEntity(station) instanceof TradeBotStationBlockEntity be ? be : null;
-	}
-
-	private static void send(TradeBotStationPayload.Action action, BlockPos target) {
-		if (station != null)
-			PacketDistributor.sendToServer(new TradeBotStationPayload(station, action, target));
 	}
 
 	private static void hint() {

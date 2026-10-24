@@ -41,11 +41,15 @@ public final class TradeBotLinks {
 		return station.distSqr(target) <= (double) range * range;
 	}
 
-	/** The role after one more click, given the current role and how many inputs are already taken. */
-	public static Role nextRole(Role current, boolean outputOnly, int inputs, int maxInputs) {
+	/**
+	 * The role after one more click: first takes from; a second click makes it the output only if there isn't one yet,
+	 * otherwise unlinks it; a third unlinks the output. Belts go straight to delivers to. With four inputs already, a new
+	 * container can only become the output (if there's none), and stays unlinked otherwise.
+	 */
+	public static Role nextRole(Role current, boolean outputOnly, int inputs, int maxInputs, boolean hasOutput) {
 		return switch (current) {
-			case NONE -> outputOnly || inputs >= maxInputs ? Role.DELIVERS : Role.TAKES;
-			case TAKES -> Role.DELIVERS;
+			case NONE -> outputOnly ? Role.DELIVERS : inputs < maxInputs ? Role.TAKES : hasOutput ? Role.NONE : Role.DELIVERS;
+			case TAKES -> hasOutput ? Role.NONE : Role.DELIVERS;
 			case DELIVERS -> Role.NONE;
 		};
 	}

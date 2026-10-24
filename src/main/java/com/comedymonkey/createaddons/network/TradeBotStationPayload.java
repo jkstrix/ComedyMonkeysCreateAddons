@@ -12,11 +12,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 /**
- * Client to server: something done to Trade Bot's station from its screen or while picking containers (D61): cycle a
- * container's link, unlink it, or call him home. The station checks the owner, the range and the container.
+ * Client to server: something done from Trade Bot's station screen (D61): start or stop picking containers (the
+ * clicks themselves are handled on the server, see TradeBotPicking), unlink a container, or call him home.
  */
 public record TradeBotStationPayload(BlockPos station, Action action, BlockPos target) implements CustomPacketPayload {
-	public enum Action { CYCLE, UNLINK, CALL_HOME }
+	public enum Action { START_PICKING, STOP_PICKING, UNLINK, CALL_HOME }
 
 	public static final Type<TradeBotStationPayload> TYPE = new Type<>(ComedyMonkeysCreateAddons.asResource("trade_bot_station"));
 	public static final StreamCodec<ByteBuf, TradeBotStationPayload> STREAM_CODEC = StreamCodec.composite(

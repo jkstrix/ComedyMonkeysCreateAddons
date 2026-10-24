@@ -26,16 +26,18 @@ class TradeBotLinksTest {
 	}
 
 	@Test
-	void clicksCycleTakesDeliversUnlinked() {
-		assertEquals(Role.TAKES, TradeBotLinks.nextRole(Role.NONE, false, 0, 4));
-		assertEquals(Role.DELIVERS, TradeBotLinks.nextRole(Role.TAKES, false, 1, 4));
-		assertEquals(Role.NONE, TradeBotLinks.nextRole(Role.DELIVERS, false, 0, 4));
+	void secondClickMakesTheOutputOnlyIfThereIsNone() {
+		assertEquals(Role.TAKES, TradeBotLinks.nextRole(Role.NONE, false, 0, 4, false));
+		assertEquals(Role.DELIVERS, TradeBotLinks.nextRole(Role.TAKES, false, 1, 4, false), "no output yet: it becomes the output");
+		assertEquals(Role.NONE, TradeBotLinks.nextRole(Role.TAKES, false, 1, 4, true), "there's an output: it unlinks");
+		assertEquals(Role.NONE, TradeBotLinks.nextRole(Role.DELIVERS, false, 0, 4, true));
 	}
 
 	@Test
-	void beltsAndAFifthContainerGoStraightToDelivers() {
-		assertEquals(Role.DELIVERS, TradeBotLinks.nextRole(Role.NONE, true, 0, 4), "belts only take deliveries");
-		assertEquals(Role.DELIVERS, TradeBotLinks.nextRole(Role.NONE, false, 4, 4), "four inputs already");
+	void beltsGoStraightToDeliversAndAFullStationTakesNoMore() {
+		assertEquals(Role.DELIVERS, TradeBotLinks.nextRole(Role.NONE, true, 0, 4, true), "belts only take deliveries");
+		assertEquals(Role.DELIVERS, TradeBotLinks.nextRole(Role.NONE, false, 4, 4, false), "four inputs, no output");
+		assertEquals(Role.NONE, TradeBotLinks.nextRole(Role.NONE, false, 4, 4, true), "four inputs and an output");
 	}
 
 	@Test

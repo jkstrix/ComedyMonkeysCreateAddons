@@ -34,6 +34,7 @@ import com.comedymonkey.createaddons.registry.ModSounds;
 import com.comedymonkey.createaddons.registry.ModEntities;
 import com.comedymonkey.createaddons.registry.ModDataComponents;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotCommands;
+import com.comedymonkey.createaddons.content.tradebot.TradeBotPicking;
 import com.comedymonkey.createaddons.gametest.TradeBotGameTests;
 import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.foundation.item.ItemDescription;
@@ -89,6 +90,11 @@ public class ComedyMonkeysCreateAddons {
 		// Trade Bot's test courses (run with ./gradlew runGameTestServer, or /test in a dev world)
 		modBus.addListener(TradeBotGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
+		// picking containers for Trade Bot: the server takes over the picker's clicks on blocks
+		NeoForge.EVENT_BUS.addListener(TradeBotPicking::onRightClickBlock);
+		NeoForge.EVENT_BUS.addListener(TradeBotPicking::onLeftClickBlock);
+		NeoForge.EVENT_BUS.addListener(TradeBotPicking::onLogout);
+		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> TradeBotPicking.clear());
 
 		// Both specs show up in Create's "Access configs of other mods" screen
 		container.registerConfig(ModConfig.Type.SERVER, CMConfig.SERVER_SPEC);

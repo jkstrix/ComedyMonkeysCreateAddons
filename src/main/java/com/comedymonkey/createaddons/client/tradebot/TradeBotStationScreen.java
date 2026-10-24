@@ -37,8 +37,8 @@ public class TradeBotStationScreen extends AbstractSimiScreen {
 	private static final int[] ROW_Y = { 46, 65, 84, 103 };
 	private static final int OUTPUT_Y = 136, ROW_X = 6, ROW_W = 200;
 	private static final int BUTTON_Y = 160, BUTTON_W = 98, BUTTON_H = 16, SELECT_X = 6, HOME_X = 108;
-	/** Sprites to the right of the background: the gauge fill, and the unlink cross (normal, hovered). */
-	private static final int GAUGE_U = W + 4, CROSS_U = W + 4, CROSS_HOVER_U = W + 14, CROSS_V = 16;
+	/** Sprites below the background on the sheet: the segmented gauge fill, and the unlink cross (normal, hovered). */
+	private static final int SPRITES_V = H + 4, GAUGE_U = 0, CROSS_U = 60, CROSS_HOVER_U = 70;
 
 	private final BlockPos pos;
 
@@ -80,11 +80,12 @@ public class TradeBotStationScreen extends AbstractSimiScreen {
 		graphics.drawString(font, title, x + (W - font.width(title)) / 2, y + 3, GuiKit.TITLE, false);
 
 		// status and charge
+		// status on the left, his charge as a number on the right of the same line, and the gauge beside it
 		graphics.drawString(font, statusText(station), x + STATUS_X + 4, y + STATUS_Y + 3, GuiKit.TEXT, false);
 		float charge = Mth.clamp((float) station.botCharge() / CMConfig.SERVER.tradeBotFullCharge(), 0, 1);
-		graphics.blit(BACKGROUND, x + GAUGE_X + 1, y + GAUGE_Y + 1, GAUGE_U, 0, Math.round(GAUGE_W * charge), 12);
 		String percent = Math.round(charge * 100) + "%";
-		graphics.drawString(font, percent, x + GAUGE_X + 1 + (GAUGE_W - font.width(percent)) / 2, y + GAUGE_Y + 3, GuiKit.TEXT, true);
+		graphics.drawString(font, percent, x + GAUGE_X - 6 - font.width(percent), y + STATUS_Y + 3, GuiKit.LABEL, false);
+		graphics.blit(BACKGROUND, x + GAUGE_X + 1, y + GAUGE_Y + 1, GAUGE_U, SPRITES_V, Math.round(GAUGE_W * charge), 12);
 
 		// links
 		List<BlockPos> inputs = station.inputPositions();
@@ -117,7 +118,7 @@ public class TradeBotStationScreen extends AbstractSimiScreen {
 		String distance = String.format(Locale.ROOT, "%.0f m", Math.sqrt(target.distSqr(pos)));
 		graphics.drawString(font, distance, x + ROW_W - 20 - font.width(distance), y + 5, GuiKit.LABEL, false);
 		boolean hover = overCross(rowY, mouseX, mouseY);
-		graphics.blit(BACKGROUND, x + ROW_W - 14, y + 5, hover ? CROSS_HOVER_U : CROSS_U, CROSS_V, 8, 8);
+		graphics.blit(BACKGROUND, x + ROW_W - 14, y + 5, hover ? CROSS_HOVER_U : CROSS_U, SPRITES_V, 8, 8);
 		if (hover)
 			graphics.renderTooltip(font, tr("unlink"), mouseX, mouseY);
 	}

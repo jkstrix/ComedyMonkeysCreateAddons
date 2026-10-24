@@ -72,12 +72,18 @@ L.rows.forEach(recess);
 recess(L.output);
 L.buttons.forEach(button);
 
-// the sprites the screen draws on top, to the right of the background: the charge gauge fill (amber, 56 x 12),
-// and the unlink cross (8 x 8, normal and hovered)
-for (let j = 0; j < 12; j++) for (let i = 0; i < 56; i++) set(W + 4 + i, j, j === 0 ? '#e6b062' : j > 9 ? '#a8742c' : pick(['#d0963f', '#d39a43', '#cf943d']));
+// the sprites the screen draws on top, below the screen on the sheet (y = H + 4): the charge gauge fill (56 x 12,
+// segmented muted amber), and the unlink cross (8 x 8, normal and hovered)
+const SY = H + 4;
+const GAUGE_FILL = ['#b88437', '#bc883a', '#b5813a'], GAUGE_TOP = '#d0a15a', GAUGE_BOTTOM = '#8a6229', GAUGE_GAP = '#4a3a22';
+for (let j = 0; j < 12; j++)
+  for (let i = 0; i < 56; i++) {
+    const gap = i % 7 === 6; // eight segments
+    set(i, SY + j, gap ? GAUGE_GAP : j === 0 ? GAUGE_TOP : j === 11 ? GAUGE_BOTTOM : pick(GAUGE_FILL));
+  }
 const cross = (ox, oy, c) => { for (let k = 1; k < 7; k++) { set(ox + k, oy + k, c); set(ox + 7 - k, oy + k, c); } };
-cross(W + 4, 16, '#8a8478');
-cross(W + 14, 16, '#e0705a');
+cross(60, SY, '#8a8478');
+cross(70, SY, '#e0705a');
 
 const out = process.argv[2] || path.join(__dirname, 'trade_bot_station.png');
 const crcT = new Uint32Array(256).map((_, n) => { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; return c >>> 0; });

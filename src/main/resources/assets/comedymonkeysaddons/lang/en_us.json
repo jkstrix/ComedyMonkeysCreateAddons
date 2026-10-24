@@ -1074,5 +1074,6 @@
   "comedymonkeysaddons.gui.trade_bot.status.docked": "Docked",
   "comedymonkeysaddons.gui.trade_bot.status.working": "Out working",
   "message.comedymonkeysaddons.trade_bot.picking": "Picking containers: right-click to link, left-click to unlink, sneak-right-click to finish",
-  "message.comedymonkeysaddons.trade_bot.picking_done": "Done picking containers"
+  "message.comedymonkeysaddons.trade_bot.picking_done": "Done picking containers",
+  "message.comedymonkeysaddons.trade_bot.link.full": "He already has four containers to take from and one to deliver to"
 }
