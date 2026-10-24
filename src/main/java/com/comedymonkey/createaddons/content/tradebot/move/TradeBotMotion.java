@@ -93,8 +93,8 @@ public class TradeBotMotion {
 	private BlockPos target;
 	private boolean fleeing;
 	private long lastBump = Long.MIN_VALUE / 2;
-	/** Logs his phases and route troubles ("/tradebot debug"), for working out what he did. */
-	public static boolean debug;
+	/** Logs his phases and route troubles ("/tradebot debug"), for working out what he did; on by default in dev runs. */
+	public static boolean debug = !net.neoforged.fml.loading.FMLEnvironment.production;
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public TradeBotMotion(TradeBotEntity bot) {

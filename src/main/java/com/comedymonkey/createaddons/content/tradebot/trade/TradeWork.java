@@ -118,8 +118,23 @@ public class TradeWork implements BotWork {
 
 	/** The villager can still trade with him: alive, seated where it was, and no player at its trades (D46). */
 	public boolean stillThere() {
+		return available() && !busy();
+	}
+
+	/** Alive and still seated where he planned to trade with it. */
+	public boolean available() {
 		AbstractVillager villager = spot.villager();
-		return villager.isAlive() && !villager.isRemoved() && VillagerSeats.sitting(villager) && !villager.isTrading() && spot.villagerInPlace();
+		return villager.isAlive() && !villager.isRemoved() && VillagerSeats.sitting(villager) && spot.villagerInPlace();
+	}
+
+	/** A player is at its trades: players always come first (D46). */
+	public boolean busy() {
+		return spot.villager().isTrading();
+	}
+
+	/** Which side of the villager he trades from. */
+	public net.minecraft.core.Direction side() {
+		return spot.side();
 	}
 
 	public boolean inPlace() {
@@ -142,6 +157,10 @@ public class TradeWork implements BotWork {
 			if (offer.getItemCostA().test(load.getStackInSlot(slot)))
 				left -= load.extractItem(slot, left, false).getCount();
 		int xp = villager instanceof TradeBotCustomer customer ? customer.comedymonkeysaddons$botTrade(offer) : wanderingTrade(villager, offer);
+		if (com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion.debug)
+			com.mojang.logging.LogUtils.getLogger().info("[Trade Bot {}] sold {} x{} to {} for {} emeralds, {} XP (uses {}/{})", bot.getId(),
+				offer.getBaseCostA().getHoverName().getString(), price, villager.getName().getString(), offer.getResult().getCount(), xp, offer.getUses(),
+				offer.getMaxUses());
 		bot.addEarnings(offer.getResult().getCount(), xp);
 		bot.tradedWith(villager.getUUID());
 		bot.addCharge(-CMConfig.SERVER.tradeBotFePerTrade());

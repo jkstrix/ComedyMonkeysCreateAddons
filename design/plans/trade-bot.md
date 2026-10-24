@@ -349,8 +349,9 @@ That last method is **added to the existing `VillagerMixin`**. It does exactly w
 
 **Done (M5).** As built, in `content/tradebot/trade/`: `Buyers`, `BotPricing`, `TradeDemand`, `TradeSpot`, `TradeWork`, `VillagerClaims`, `TradeBotCustomer` (the mixin interface). What differs from the plan, or wasn't in it:
 - **The spot** is two blocks out from the seat, 39 px from its centre, where the clip's preview villager sits, so the package lands in its arms. It prefers a side across a workstation, then the nearest.
-- **Loading** takes only what the trip's buyers will take: each offer's price times its trades left, less what he already carries. Items left over after trading go home with the D62 returns.
+- **Loading** takes only what the trip's buyers will take, in **whole lots of what's there**: for each offer, as many lots at its current price as its trades left and the goods in his inputs and load can pay for, less what he already carries. (Restocks raise prices through vanilla's demand: 64 sticks against two lots of 35 is one lot, not 64 with 29 carried back. Course: `takesWholeLotsAfterARestock`.) Items left over after trading go home with the D62 returns.
 - **Leaving by himself:** docked, he checks every 10 s (D47). He goes only if some buyer's price can be paid **in full** from his inputs and load, or he has earnings to deliver. A run that sells nothing rests a minute before the next check, and a villager he couldn't reach is left alone for 2 minutes. This stops him shuttling 4 wheat to a farmer who wants 20.
+- **Trades that open trades:** when his buyers run out, and again before he heads home, he looks at what they want now. A villager that levelled up mid-trip, buying something new his inputs hold, gets another round of fetching and trading on the same trip, at most 3 extra rounds; he doesn't dock and set straight back out. A villager who called a trade off waits for another trip (D46). Course: `sellsWhatALevelUpOpensOnTheSameTrip` (a fletcher's sticks, then its apprentice flint trade).
 - **Grouped trades (D63):** one clip per villager visit. On its trade beat he makes every trade he can pay for, while his charge still covers a trade and the way home. The lobbed package and the emerald now draw in game: the export lifts them out of the preview-only villager prop into a `trade_props` root beside the bot, and they show only in clips that animate them.
 - **Aborts:** before the trade beat (4.0 s) he checks every tick that the villager is alive, seated, in place and not trading with a player. If not, he plays `expr_curious` with the `shrug` sound and moves to the next buyer.
 - **Restocks:** villagers seated at their workstations restock, as they do for players.
@@ -426,6 +427,8 @@ That last method is **added to the existing `VillagerMixin`**. It does exactly w
 - **Courses:** `hidesFromAZombieAndCarriesOn`, `windsDownInWaterAndDriesOut`, `windsDownAtNoHealthAndTheWrenchWindsHimUp`, `comesHomeFromLavaAndTheVoid`.
 
 ## Milestone 7: teaching and release
+
+**Before release:** route logging (`TradeBotMotion.debug`) is on by default in dev runs while we debug in play; set it back to off (it stays available through `/tradebot debug`).
 
 - **Ponder** (`client/ponder/TradeBotScenes`, three storyboards in `ponder/trade_bot.nbt`):
   1. placing him and powering the station from below;

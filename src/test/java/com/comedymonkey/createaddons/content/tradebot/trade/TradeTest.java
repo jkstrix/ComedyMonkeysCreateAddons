@@ -87,6 +87,23 @@ class TradeTest {
 	}
 
 	@Test
+	void heTakesWholeLotsOfWhatThereIs() {
+		TradeDemand demand = new TradeDemand();
+		demand.add(sell(new ItemCost(Items.STICK, 35), 0, 2, 0), 0); // two lots of 35 (a restock raised the price)
+		demand.limit(goods -> 64); // but only 64 sticks
+		assertEquals(35, demand.howMany(new ItemStack(Items.STICK, 64)), "one whole lot, not 64 with 29 to carry back");
+		TradeDemand shared = new TradeDemand();
+		shared.add(sell(new ItemCost(Items.WHEAT, 20), 0, 3, 0), 0);
+		shared.add(sell(new ItemCost(Items.WHEAT, 20), 0, 3, 0), 0); // a second farmer
+		shared.limit(goods -> 50);
+		assertEquals(40, shared.howMany(new ItemStack(Items.WHEAT, 64)), "50 wheat: two lots between them, the first farmer's");
+		TradeDemand none = new TradeDemand();
+		none.add(sell(new ItemCost(Items.COAL, 15), 0, 16, 0), 0);
+		none.limit(goods -> 14);
+		assertTrue(none.isEmpty(), "short of one lot: nothing");
+	}
+
+	@Test
 	void firstComeFirstServedAndClaimsLapse() {
 		UUID villager = UUID.randomUUID(), first = UUID.randomUUID(), second = UUID.randomUUID();
 		assertTrue(VillagerClaims.claim(villager, first, 100));

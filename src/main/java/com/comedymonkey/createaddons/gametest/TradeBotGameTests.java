@@ -31,7 +31,6 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.item.trading.MerchantOffers;
 import com.simibubi.create.content.contraptions.actors.seat.SeatBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BarrelBlock;
@@ -519,6 +518,161 @@ public final class TradeBotGameTests {
 		return station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
 	}
 
+	/**
+	 * His trading opens a new trade: a fletcher one trade from levelling up buys his sticks, levels up and now buys
+	 * flint too (vanilla's apprentice trades). He fetches the flint and sells it on the same trip, then docks and stays
+	 * docked, instead of docking and setting straight back out.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 6000)
+	public static void sellsWhatALevelUpOpensOnTheSameTrip(GameTestHelper helper) {
+		Hall hall = tradingHall(helper);
+		helper.getLevel().setDayTime(1000);
+		TradeBotEntity bot = station(helper, hall.station, Direction.SOUTH);
+		BlockPos input = new BlockPos(7, 1, 1), output = new BlockPos(10, 1, 1);
+		links(helper, hall.station, input, output);
+		fill(helper, input, new ItemStack(Items.STICK, 64), new ItemStack(Items.FLINT, 64));
+		Villager fletcher = seated(helper, hall.seats.get(0), VillagerProfession.FLETCHER, offer(Items.STICK, 32, 1));
+		fletcher.setVillagerXp(9); // one more trade (2 XP) and it's an apprentice
+		TradeBotStationBlockEntity station = (TradeBotStationBlockEntity) helper.getBlockEntity(hall.station);
+		int[] leaves = { 0 };
+		long[] dockedSince = { -1 };
+		TradeBotBrain.Task[] last = { null };
+		TradeBotMotion.debug = true;
+		helper.onEachTick(() -> {
+			TradeBotBrain.Task task = bot.brain.task();
+			if (task == TradeBotBrain.Task.LEAVING && last[0] != TradeBotBrain.Task.LEAVING)
+				leaves[0]++;
+			last[0] = task;
+			if (leaves[0] > 1)
+				helper.fail("he docked and set straight back out");
+			dockedSince[0] = bot.isDocked() && task == TradeBotBrain.Task.HOME && station.tradesToday() > 0
+				? (dockedSince[0] < 0 ? helper.getTick() : dockedSince[0]) : -1;
+		});
+		helper.succeedWhen(() -> {
+			if (fletcher.getVillagerData().getLevel() != 2)
+				helper.fail("the fletcher didn't level up");
+			if (station.tradesToday() != 3 || count(helper, output, Items.EMERALD) != 3)
+				helper.fail(station.tradesToday() + " trades, " + count(helper, output, Items.EMERALD) + " emeralds delivered, not 3 (" + bot.brain.task() + ")");
+			if (count(helper, input, Items.STICK) != 32 || count(helper, input, Items.FLINT) != 12)
+				helper.fail("the input has " + count(helper, input, Items.STICK) + " sticks and " + count(helper, input, Items.FLINT) + " flint left");
+			if (dockedSince[0] < 0 || helper.getTick() - dockedSince[0] < 300)
+				helper.fail("not settled in his station yet (" + bot.brain.task() + ")");
+		});
+	}
+
+	/**
+	 * A villager restocks while he's out (vanilla's demand pricing makes its sold-out sticks dearer: 35 a lot). He only
+	 * takes whole lots of what's in the chest: 35 of its 64 sticks, not all of them with 29 to carry back. Nothing goes
+	 * back at all: every stick and flint he takes, he sells.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 8000)
+	public static void takesWholeLotsAfterARestock(GameTestHelper helper) {
+		Hall hall = tradingHall(helper);
+		helper.getLevel().setDayTime(1000);
+		TradeBotEntity bot = station(helper, hall.station, Direction.SOUTH);
+		BlockPos input = new BlockPos(7, 1, 1), output = new BlockPos(10, 1, 1);
+		links(helper, hall.station, input, output);
+		fill(helper, input, new ItemStack(Items.STICK, 64), new ItemStack(Items.STICK, 64), new ItemStack(Items.FLINT, 64));
+		Villager fletcher = seated(helper, hall.seats.get(0), VillagerProfession.FLETCHER, offer(Items.STICK, 32, 2));
+		fletcher.setVillagerXp(9);
+		TradeBotStationBlockEntity station = (TradeBotStationBlockEntity) helper.getBlockEntity(hall.station);
+		boolean[] restocked = { false };
+		TradeBotMotion.debug = true;
+		helper.onEachTick(() -> {
+			if (!restocked[0] && station.tradesToday() >= 4) { // two lots of sticks, two of flint
+				restocked[0] = true;
+				fletcher.restock();
+			}
+		});
+		helper.succeedWhen(() -> {
+			if (station.tradesToday() != 5 || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail(station.tradesToday() + " trades (" + bot.brain.task() + ")");
+			if (bot.brain.returned() != 0)
+				helper.fail("he carried " + bot.brain.returned() + " items back");
+			if (count(helper, input, Items.STICK) != 128 - 64 - 35 || count(helper, input, Items.FLINT) != 12)
+				helper.fail("the input has " + count(helper, input, Items.STICK) + " sticks and " + count(helper, input, Items.FLINT) + " flint left");
+		});
+	}
+
+	/**
+	 * The villager he's on his way to is killed, and a new one sits down in its seat (D46): he shrugs, then sells to the
+	 * newcomer on the same trip, carrying nothing back.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 8000)
+	public static void tradesWithAVillagersReplacement(GameTestHelper helper) {
+		Hall hall = tradingHall(helper);
+		helper.getLevel().setDayTime(1000);
+		TradeBotEntity bot = station(helper, hall.station, Direction.SOUTH);
+		BlockPos input = new BlockPos(7, 1, 1), output = new BlockPos(10, 1, 1);
+		links(helper, hall.station, input, output);
+		fill(helper, input, new ItemStack(Items.STICK, 64), new ItemStack(Items.STICK, 64));
+		Villager first = seated(helper, hall.seats.get(0), VillagerProfession.FLETCHER, offer(Items.STICK, 32, 4));
+		TradeBotStationBlockEntity station = (TradeBotStationBlockEntity) helper.getBlockEntity(hall.station);
+		Villager[] replacement = { null };
+		long[] killedAt = { -1 };
+		boolean[] shrugged = { false };
+		TradeBotMotion.debug = true;
+		helper.onEachTick(() -> {
+			// on his way to it with the sticks: it's killed
+			if (killedAt[0] < 0 && bot.brain.task() == TradeBotBrain.Task.APPROACHING && bot.brain.taken() > 0
+				&& bot.position().distanceTo(Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(6, 2, 13)))) < 4) {
+				first.kill();
+				killedAt[0] = helper.getTick();
+			}
+			if (killedAt[0] >= 0 && replacement[0] == null && helper.getTick() >= killedAt[0] + 5)
+				replacement[0] = seated(helper, hall.seats.get(0), VillagerProfession.FLETCHER, offer(Items.STICK, 32, 4));
+			shrugged[0] |= bot.brain.task() == TradeBotBrain.Task.SHRUGGING;
+		});
+		helper.succeedWhen(() -> {
+			if (killedAt[0] < 0 || !shrugged[0])
+				helper.fail("the first fletcher wasn't killed on his way, or he didn't shrug (" + bot.brain.task() + ")");
+			if (station.tradesToday() != 4 || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail(station.tradesToday() + " of 4 trades with the newcomer (" + bot.brain.task() + ")");
+			if (bot.brain.returned() != 0 || count(helper, input, Items.STICK) != 0)
+				helper.fail("he carried " + bot.brain.returned() + " back; " + count(helper, input, Items.STICK) + " sticks left");
+			if (bot.reputationWith(replacement[0].getUUID()) != 8)
+				helper.fail("traded with the wrong villager");
+		});
+	}
+
+	/**
+	 * A player is at his villager's trades when he gets there: players come first (D46), so he waits on his spot until
+	 * they're done, then trades.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 6000)
+	public static void waitsHisTurnBehindAPlayer(GameTestHelper helper) {
+		Hall hall = tradingHall(helper);
+		helper.getLevel().setDayTime(1000);
+		TradeBotEntity bot = station(helper, hall.station, Direction.SOUTH);
+		BlockPos input = new BlockPos(7, 1, 1), output = new BlockPos(10, 1, 1);
+		links(helper, hall.station, input, output);
+		fill(helper, input, new ItemStack(Items.STICK, 64));
+		Villager fletcher = seated(helper, hall.seats.get(0), VillagerProfession.FLETCHER, offer(Items.STICK, 32, 4));
+		net.neoforged.neoforge.common.util.FakePlayer customer = new net.neoforged.neoforge.common.util.FakePlayer(helper.getLevel(),
+			new com.mojang.authlib.GameProfile(UUID.randomUUID(), "customer"));
+		TradeBotStationBlockEntity station = (TradeBotStationBlockEntity) helper.getBlockEntity(hall.station);
+		long[] waitingSince = { -1 };
+		TradeBotMotion.debug = true;
+		helper.onEachTick(() -> {
+			// someone's at its trades from the moment he sets off for it
+			if (waitingSince[0] < 0 && bot.brain.taken() > 0 && fletcher.getTradingPlayer() == null && station.tradesToday() == 0)
+				fletcher.setTradingPlayer(customer);
+			if (waitingSince[0] < 0 && bot.brain.task() == TradeBotBrain.Task.WAITING_TURN)
+				waitingSince[0] = helper.getTick();
+			// they finish after a few seconds
+			if (waitingSince[0] >= 0 && helper.getTick() == waitingSince[0] + 100)
+				fletcher.setTradingPlayer(null);
+			if (station.tradesToday() > 0 && waitingSince[0] >= 0 && helper.getTick() < waitingSince[0] + 100)
+				helper.fail("he traded while the player was at its trades");
+		});
+		helper.succeedWhen(() -> {
+			if (waitingSince[0] < 0)
+				helper.fail("he never waited his turn (" + bot.brain.task() + ")");
+			if (station.tradesToday() != 2 || bot.brain.returned() != 0 || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail(station.tradesToday() + " trades, " + bot.brain.returned() + " returned (" + bot.brain.task() + ")");
+		});
+	}
+
 	/** A sell-to-villager offer: {@code count} goods for an emerald, {@code maxUses} times, 2 villager XP each. */
 	private static MerchantOffer offer(net.minecraft.world.item.Item goods, int count, int maxUses) {
 		return new MerchantOffer(new ItemCost(goods, count), java.util.Optional.empty(), new ItemStack(Items.EMERALD), 0, maxUses, 2, 0.05f, 0);
@@ -529,7 +683,7 @@ public final class TradeBotGameTests {
 		Villager villager = helper.spawn(EntityType.VILLAGER, seat);
 		villager.setVillagerData(villager.getVillagerData().setProfession(profession).setLevel(1));
 		villager.setVillagerXp(1); // with some XP it keeps its profession away from a job site
-		villager.overrideOffers(new MerchantOffers());
+		villager.getOffers().clear(); // only these (overrideOffers does nothing on the server)
 		for (MerchantOffer offer : offers)
 			villager.getOffers().add(offer);
 		SeatBlock.sitDown(helper.getLevel(), helper.absolutePos(seat), villager);
