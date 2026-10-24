@@ -121,7 +121,7 @@ public final class NewBlockScenes {
 		scene.world().showSection(util.select().fromTo(0, 1, 2, 1, 1, 2), Direction.EAST);
 		scene.idle(15);
 		scene.overlay().showText(80)
-			.text("Pipe lava into its back or its bottom, or pour it in by the bucket. It holds four buckets")
+			.text("Pipe lava in on any side but the front, where the shaft is, or pour it in by the bucket. It holds four buckets")
 			.pointAt(util.vector().blockSurface(engine, Direction.WEST))
 			.placeNearTarget()
 			.attachKeyFrame();

@@ -1,0 +1,68 @@
+{
+ "chug": {
+  "variants": 4,
+  "sources": [
+   "kenney-impact-sounds/Audio/impactSoft_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactSoft_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactSoft_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactSoft_heavy_003.ogg"
+  ],
+  "synth": [
+   "whoosh"
+  ]
+ },
+ "firebox": {
+  "variants": 1,
+  "sources": [],
+  "synth": [
+   "hum",
+   "noise",
+   "rustle"
+  ]
+ },
+ "blower": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/beer_compressor_1.ogg"
+  ],
+  "synth": []
+ },
+ "start": {
+  "variants": 2,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "kenney-impact-sounds/Audio/impactSoft_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactSoft_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactSoft_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactSoft_heavy_003.ogg"
+  ],
+  "synth": [
+   "whoosh",
+   "swell"
+  ]
+ },
+ "stop": {
+  "variants": 2,
+  "sources": [
+   "kenney-impact-sounds/Audio/impactSoft_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactSoft_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactSoft_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactSoft_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_heavy_003.ogg",
+   "kenney-interface-sounds/Audio/tick_002.ogg"
+  ],
+  "synth": [
+   "whoosh"
+  ]
+ },
+ "cool_tick": {
+  "variants": 4,
+  "sources": [
+   "kenney-interface-sounds/Audio/tick_001.ogg",
+   "kenney-interface-sounds/Audio/tick_002.ogg",
+   "kenney-interface-sounds/Audio/tick_004.ogg"
+  ],
+  "synth": []
+ }
+}

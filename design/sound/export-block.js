@@ -1,5 +1,5 @@
 // Copies a block's approved real sounds into the mod and writes their sounds.json entries and subtitles.
-// Usage: node design/sound/export-block.js <lava-generator|electric-motor>   (run that folder's make-loops.js first)
+// Usage: node design/sound/export-block.js <lava-generator|electric-motor|magma-engine>   (run that folder's make-loops.js first)
 // Every cue-file event becomes comedymonkeysaddons:<namespace>.<id> with all its variants; loops use their seamless
 // _loop files; the running sounds carry only 8 blocks (they run all day); an event marked "vanilla" points at
 // Minecraft's own sound event instead of a file. Only <namespace>.* entries are touched in sounds.json and the lang file.
@@ -10,6 +10,7 @@ const MOD = 'comedymonkeysaddons';
 const BLOCKS = {
   'lava-generator': { loops: ['whir', 'burn'], quiet: ['whir', 'burn'] },
   'electric-motor': { loops: ['hum'], quiet: ['hum', 'spark'] },
+  'magma-engine': { loops: ['firebox', 'blower'], quiet: ['chug', 'firebox', 'blower'] },
 };
 const slug = process.argv[2];
 const conf = BLOCKS[slug];

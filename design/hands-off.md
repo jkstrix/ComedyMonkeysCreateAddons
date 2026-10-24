@@ -43,6 +43,12 @@ Shared by the electric family: `client/ElectricRenderers.java` (its `face`, `dra
 
 Shared with future blocks: the Auto Harvester and the pens use `client/TrayItems.java`, and all three of these use the generator kit `design/models/process-box.lib.js`. Those may grow, but they must keep producing the same output for these blocks: after any change, regenerate their models and compare.
 
+## Magma Engines
+- Blocks: `magma_engine`, `supercharged_magma_engine`.
+- Code: `content/engine/`, `client/MagmaEngineRenderer.java`, `client/MagmaEngineSounds.java`, their capability in `ComedyMonkeysCreateAddons.java` and their scene in `client/ponder/NewBlockScenes.java`.
+- Assets: everything with `magma_engine` in its path (including `supercharged_magma_engine_*`), and the `magma_engine.*` sounds.
+- Design: `design/briefs/magma-engine.md`, `design/briefs/supercharged-magma-engine.md`, `design/dossiers/magma-engine*`, `design/dossiers/supercharged-magma-engine.md`, `design/models/engines*`, `design/sound/magma-engine/`.
+
 ## Cuckoo Clock
 - Blocks: `cuckoo_clock`, `cuckoo_clock_weights`.
 - Code: `content/clock/`, `client/CuckooClockRenderer.java`.

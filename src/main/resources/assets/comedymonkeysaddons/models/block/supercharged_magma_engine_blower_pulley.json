@@ -1,0 +1,34 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/supercharged_magma_engine_pulley",
+    "pulley": "comedymonkeysaddons:block/supercharged_magma_engine_pulley"
+  },
+  "elements": [
+    {
+      "name": "blower_pulley",
+      "from": [
+        6.75,
+        13.35,
+        0.25
+      ],
+      "to": [
+        9.25,
+        15.85,
+        0.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pulley"
+        }
+      }
+    }
+  ]
+}

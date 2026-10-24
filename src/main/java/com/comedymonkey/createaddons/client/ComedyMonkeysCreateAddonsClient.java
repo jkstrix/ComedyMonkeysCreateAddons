@@ -59,14 +59,14 @@ public class ComedyMonkeysCreateAddonsClient {
 		// The Lava Generator's and the Electric Motor's sounds run from their client ticks
 		com.comedymonkey.createaddons.content.electric.LavaGeneratorBlockEntity.clientTicker = ElectricSounds::tickGenerator;
 		com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity.clientTicker = ElectricSounds::tickMotor;
+		// The Magma Engines' sounds and exhaust puffs run from their client ticks
+		com.comedymonkey.createaddons.content.engine.MagmaEngineBlockEntity.clientTicker = MagmaEngineSounds::tick;
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ChestSortButton::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseScrolled);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMousePressed);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseDragged);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseReleased);
-		if (MagmaEngineSimModels.LOADED)
-			modBus.addListener(MagmaEngineSimModels::modifyBakingResult);
 		// Pipez Covers: covered pipes are drawn as their cover, tinted like its block
 		if (net.neoforged.fml.ModList.get().isLoaded("pipez")) {
 			modBus.addListener(com.comedymonkey.createaddons.compat.pipez.cover.client.CoveredPipeModel::wrapPipes);
@@ -115,11 +115,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		AutoHarvesterRenderer.registerModels(event);
 		event.register(AnimalPenRenderer.MILK);
 		CuckooClockRenderer.registerModels(event);
-		event.register(MagmaEngineRenderer.HEAD);
-		event.register(MagmaEngineRenderer.SUPERCHARGED_HEAD);
+		MagmaEngineRenderer.registerModels(event);
 		ElectricRenderers.registerModels(event);
-		if (MagmaEngineSimModels.LOADED)
-			MagmaEngineSimModels.registerModels(event);
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerModels(event);
 	}

@@ -1,0 +1,740 @@
+{
+  "namespace": "magma_engine",
+  "events": {
+    "chug": {
+      "group": "Signature sounds",
+      "subtitle": "Magma Engine chugs",
+      "layers": [
+        {
+          "type": "bump",
+          "at": 0,
+          "gain": 0.2,
+          "f": 85,
+          "f2": 50,
+          "dur": 0.12
+        },
+        {
+          "type": "whoosh",
+          "at": 0.01,
+          "gain": 0.08,
+          "f": 900,
+          "f2": 380,
+          "dur": 0.14
+        },
+        {
+          "type": "tick",
+          "at": 0.005,
+          "gain": 0.05,
+          "f": 1500,
+          "dur": 0.03
+        }
+      ],
+      "real": {
+        "variants": 4,
+        "level": 0.1,
+        "vary": {
+          "pitch": 0.05,
+          "gain": 0.1
+        },
+        "post": {
+          "lowpass": 3500
+        },
+        "layers": [
+          {
+            "pick": [
+              "impactSoft_heavy_000",
+              "impactSoft_heavy_001",
+              "impactSoft_heavy_002",
+              "impactSoft_heavy_003"
+            ],
+            "gain": 0.9,
+            "pitch": 0.55,
+            "trim": [
+              0,
+              0.2
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "type": "whoosh",
+            "at": 0.01,
+            "f": 900,
+            "f2": 380,
+            "dur": 0.14,
+            "gain": 0.25
+          }
+        ]
+      }
+    },
+    "firebox": {
+      "group": "Signature sounds",
+      "subtitle": "Magma Engine burns",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.16,
+          "f": 55,
+          "dur": 1.5
+        },
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.05,
+          "f": 280,
+          "dur": 1.5
+        },
+        {
+          "type": "rustle",
+          "at": 0,
+          "gain": 0.05,
+          "density": 3,
+          "dur": 1.5
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.06,
+        "post": {
+          "lowpass": 2200
+        },
+        "layers": [
+          {
+            "type": "hum",
+            "f": 55,
+            "dur": 1.5,
+            "gain": 0.5
+          },
+          {
+            "type": "noise",
+            "f": 280,
+            "dur": 1.5,
+            "gain": 0.25
+          },
+          {
+            "type": "rustle",
+            "density": 3,
+            "dur": 1.5,
+            "gain": 0.15,
+            "lowpass": 2000
+          }
+        ]
+      }
+    },
+    "blower": {
+      "group": "Signature sounds",
+      "subtitle": "Supercharger whines",
+      "layers": [
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.09,
+          "f": 1150,
+          "f2": 1150,
+          "dur": 1.5
+        },
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.08,
+          "f": 190,
+          "dur": 1.5
+        },
+        {
+          "type": "whoosh",
+          "at": 0,
+          "gain": 0.03,
+          "f": 2400,
+          "f2": 2400,
+          "dur": 1.5
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.024,
+        "post": {
+          "pitch": 1.67,
+          "highpass": 970,
+          "echo": 0.24
+        },
+        "layers": [
+          {
+            "src": "beer_compressor_1",
+            "trim": [
+              4.2,
+              8
+            ],
+            "pitch": 1.1,
+            "gain": 1,
+            "fadeIn": 0.02,
+            "fadeOut": 0.02,
+            "lowpass": 6000,
+            "echo": 0.29
+          }
+        ]
+      }
+    },
+    "lava_pop": {
+      "group": "Signature sounds",
+      "subtitle": "Lava bubbles",
+      "layers": [
+        {
+          "type": "pop",
+          "at": 0,
+          "gain": 0.26,
+          "f": 170,
+          "dur": 0.12
+        },
+        {
+          "type": "bump",
+          "at": 0.01,
+          "gain": 0.16,
+          "f": 90,
+          "f2": 60,
+          "dur": 0.14
+        }
+      ],
+      "vanilla": {
+        "event": "minecraft:block.lava.pop",
+        "note": "Minecraft's own lava pop, referenced from sounds.json (type event), never copied into the mod. real/lava_pop.ogg is a local preview from the game assets, kept out of git."
+      }
+    },
+    "start": {
+      "group": "Running",
+      "subtitle": "Magma Engine starts",
+      "layers": [
+        {
+          "type": "clack",
+          "at": 0,
+          "gain": 0.55,
+          "f": 800,
+          "dur": 0.08
+        },
+        {
+          "type": "whoosh",
+          "at": 0.05,
+          "gain": 0.6,
+          "f": 130,
+          "f2": 400,
+          "dur": 0.5
+        },
+        {
+          "type": "bump",
+          "at": 0.3,
+          "gain": 0.45,
+          "f": 80,
+          "f2": 50,
+          "dur": 0.12
+        },
+        {
+          "type": "bump",
+          "at": 0.55,
+          "gain": 0.5,
+          "f": 85,
+          "f2": 50,
+          "dur": 0.12
+        },
+        {
+          "type": "bump",
+          "at": 0.74,
+          "gain": 0.5,
+          "f": 85,
+          "f2": 50,
+          "dur": 0.12
+        },
+        {
+          "type": "swell",
+          "at": 0.1,
+          "gain": 0.25,
+          "f": 60,
+          "f2": 95,
+          "dur": 0.8
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.35,
+        "vary": {
+          "pitch": 0.04
+        },
+        "post": {
+          "lowpass": 8000
+        },
+        "layers": [
+          {
+            "src": "metalLatch",
+            "gain": 0.8,
+            "pitch": 0.8,
+            "trim": [
+              0,
+              0.25
+            ],
+            "fadeOut": 0.05
+          },
+          {
+            "type": "whoosh",
+            "at": 0.05,
+            "f": 130,
+            "f2": 400,
+            "dur": 0.5,
+            "gain": 0.8
+          },
+          {
+            "pick": [
+              "impactSoft_heavy_000",
+              "impactSoft_heavy_001",
+              "impactSoft_heavy_002",
+              "impactSoft_heavy_003"
+            ],
+            "at": 0.3,
+            "gain": 0.7,
+            "pitch": 0.5,
+            "trim": [
+              0,
+              0.2
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "impactSoft_heavy_001",
+              "impactSoft_heavy_002"
+            ],
+            "at": 0.55,
+            "gain": 0.8,
+            "pitch": 0.55,
+            "trim": [
+              0,
+              0.2
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "impactSoft_heavy_002",
+              "impactSoft_heavy_003"
+            ],
+            "at": 0.74,
+            "gain": 0.8,
+            "pitch": 0.55,
+            "trim": [
+              0,
+              0.2
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "type": "swell",
+            "at": 0.1,
+            "f": 60,
+            "f2": 95,
+            "dur": 0.8,
+            "gain": 0.3
+          }
+        ]
+      }
+    },
+    "stop": {
+      "group": "Running",
+      "subtitle": "Magma Engine sputters out",
+      "layers": [
+        {
+          "type": "bump",
+          "at": 0,
+          "gain": 0.5,
+          "f": 85,
+          "f2": 45,
+          "dur": 0.14
+        },
+        {
+          "type": "whoosh",
+          "at": 0.01,
+          "gain": 0.25,
+          "f": 1100,
+          "f2": 300,
+          "dur": 0.25
+        },
+        {
+          "type": "bump",
+          "at": 0.38,
+          "gain": 0.3,
+          "f": 75,
+          "f2": 40,
+          "dur": 0.16
+        },
+        {
+          "type": "whoosh",
+          "at": 0.39,
+          "gain": 0.12,
+          "f": 800,
+          "f2": 250,
+          "dur": 0.25
+        },
+        {
+          "type": "thud",
+          "at": 0.8,
+          "gain": 0.35,
+          "f": 70,
+          "dur": 0.2
+        },
+        {
+          "type": "tick",
+          "at": 1,
+          "gain": 0.15,
+          "f": 1900,
+          "dur": 0.05
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.325,
+        "vary": {
+          "pitch": 0.04
+        },
+        "post": {
+          "lowpass": 8000
+        },
+        "layers": [
+          {
+            "pick": [
+              "impactSoft_heavy_000",
+              "impactSoft_heavy_001",
+              "impactSoft_heavy_002",
+              "impactSoft_heavy_003"
+            ],
+            "gain": 0.9,
+            "pitch": 0.5,
+            "trim": [
+              0,
+              0.22
+            ],
+            "fadeOut": 0.07
+          },
+          {
+            "type": "whoosh",
+            "at": 0.01,
+            "f": 1100,
+            "f2": 300,
+            "dur": 0.25,
+            "gain": 0.4
+          },
+          {
+            "pick": [
+              "impactSoft_heavy_003",
+              "impactSoft_heavy_000"
+            ],
+            "at": 0.38,
+            "gain": 0.5,
+            "pitch": 0.45,
+            "trim": [
+              0,
+              0.22
+            ],
+            "fadeOut": 0.08
+          },
+          {
+            "type": "whoosh",
+            "at": 0.39,
+            "f": 800,
+            "f2": 250,
+            "dur": 0.25,
+            "gain": 0.2
+          },
+          {
+            "pick": [
+              "impactMetal_heavy_001",
+              "impactMetal_heavy_003"
+            ],
+            "at": 0.8,
+            "gain": 0.6,
+            "pitch": 0.55,
+            "fadeOut": 0.15
+          },
+          {
+            "src": "tick_002",
+            "at": 1,
+            "gain": 0.25,
+            "pitch": 0.8
+          }
+        ]
+      }
+    },
+    "cool_tick": {
+      "group": "States",
+      "subtitle": "Magma Engine ticks as it cools",
+      "layers": [
+        {
+          "type": "tick",
+          "at": 0,
+          "gain": 0.2,
+          "f": 1900,
+          "dur": 0.05
+        },
+        {
+          "type": "tick",
+          "at": 0.3,
+          "gain": 0.12,
+          "f": 1650,
+          "dur": 0.05
+        }
+      ],
+      "real": {
+        "variants": 4,
+        "level": 0.11,
+        "vary": {
+          "pitch": 0.1,
+          "gain": 0.1
+        },
+        "layers": [
+          {
+            "pick": [
+              "tick_001",
+              "tick_002",
+              "tick_004"
+            ],
+            "gain": 0.8,
+            "pitch": 0.8
+          },
+          {
+            "pick": [
+              "tick_002",
+              "tick_004",
+              "tick_001"
+            ],
+            "at": 0.3,
+            "gain": 0.45,
+            "pitch": 0.75
+          }
+        ]
+      }
+    }
+  },
+  "clips": {
+    "run": [
+      [
+        1,
+        "start"
+      ],
+      [
+        1.2,
+        "firebox"
+      ],
+      [
+        2.7,
+        "firebox"
+      ],
+      [
+        4.2,
+        "firebox"
+      ],
+      [
+        5.7,
+        "firebox"
+      ],
+      [
+        1.469,
+        "chug"
+      ],
+      [
+        1.938,
+        "chug"
+      ],
+      [
+        2.406,
+        "chug"
+      ],
+      [
+        2.875,
+        "chug"
+      ],
+      [
+        3.344,
+        "chug"
+      ],
+      [
+        3.813,
+        "chug"
+      ],
+      [
+        4.281,
+        "chug"
+      ],
+      [
+        4.75,
+        "chug"
+      ],
+      [
+        5.219,
+        "chug"
+      ],
+      [
+        5.688,
+        "chug"
+      ],
+      [
+        6.156,
+        "chug"
+      ],
+      [
+        3.6,
+        "lava_pop"
+      ],
+      [
+        6.5,
+        "stop"
+      ],
+      [
+        7.4,
+        "cool_tick"
+      ]
+    ],
+    "run_super": [
+      [
+        1,
+        "start"
+      ],
+      [
+        1.2,
+        "firebox"
+      ],
+      [
+        2.7,
+        "firebox"
+      ],
+      [
+        4.2,
+        "firebox"
+      ],
+      [
+        5.7,
+        "firebox"
+      ],
+      [
+        1.3,
+        "blower"
+      ],
+      [
+        2.8,
+        "blower"
+      ],
+      [
+        4.3,
+        "blower"
+      ],
+      [
+        5.8,
+        "blower"
+      ],
+      [
+        1.234,
+        "chug"
+      ],
+      [
+        1.469,
+        "chug"
+      ],
+      [
+        1.703,
+        "chug"
+      ],
+      [
+        1.938,
+        "chug"
+      ],
+      [
+        2.172,
+        "chug"
+      ],
+      [
+        2.406,
+        "chug"
+      ],
+      [
+        2.641,
+        "chug"
+      ],
+      [
+        2.875,
+        "chug"
+      ],
+      [
+        3.109,
+        "chug"
+      ],
+      [
+        3.344,
+        "chug"
+      ],
+      [
+        3.578,
+        "chug"
+      ],
+      [
+        3.813,
+        "chug"
+      ],
+      [
+        4.047,
+        "chug"
+      ],
+      [
+        4.281,
+        "chug"
+      ],
+      [
+        4.516,
+        "chug"
+      ],
+      [
+        4.75,
+        "chug"
+      ],
+      [
+        4.984,
+        "chug"
+      ],
+      [
+        5.219,
+        "chug"
+      ],
+      [
+        5.453,
+        "chug"
+      ],
+      [
+        5.688,
+        "chug"
+      ],
+      [
+        5.922,
+        "chug"
+      ],
+      [
+        6.156,
+        "chug"
+      ],
+      [
+        6.391,
+        "chug"
+      ],
+      [
+        4.1,
+        "lava_pop"
+      ],
+      [
+        6.5,
+        "stop"
+      ],
+      [
+        7.4,
+        "cool_tick"
+      ]
+    ],
+    "idle": [
+      [
+        0.2,
+        "cool_tick"
+      ]
+    ]
+  }
+}

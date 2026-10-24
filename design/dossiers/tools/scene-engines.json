@@ -1,0 +1,25 @@
+{
+  "name": "engines-before",
+  "groups": [
+    { "name": "engine", "parts": [
+      { "name": "body", "model": "magma_engine" },
+      { "name": "head_0", "model": "magma_engine_head", "offset": [0, 0.5, 0] },
+      { "name": "head_1", "model": "magma_engine_head", "offset": [4.5, 0.93, 0] },
+      { "name": "head_2", "model": "magma_engine_head", "offset": [9, 0.07, 0] } ] },
+    { "name": "engine_lit", "parts": [
+      { "name": "body_lit", "model": "magma_engine_lit", "offset": [24, 0, 0] },
+      { "name": "head_l0", "model": "magma_engine_head", "offset": [24, 0.5, 0] },
+      { "name": "head_l1", "model": "magma_engine_head", "offset": [28.5, 0.93, 0] },
+      { "name": "head_l2", "model": "magma_engine_head", "offset": [33, 0.07, 0] } ] },
+    { "name": "supercharged", "parts": [
+      { "name": "s_body", "model": "supercharged_magma_engine", "offset": [48, 0, 0] },
+      { "name": "s_head_0", "model": "supercharged_magma_engine_head", "offset": [48, 0.5, 0] },
+      { "name": "s_head_1", "model": "supercharged_magma_engine_head", "offset": [52.5, 0.93, 0] },
+      { "name": "s_head_2", "model": "supercharged_magma_engine_head", "offset": [57, 0.07, 0] } ] },
+    { "name": "supercharged_lit", "parts": [
+      { "name": "s_body_lit", "model": "supercharged_magma_engine_lit", "offset": [72, 0, 0] },
+      { "name": "s_head_l0", "model": "supercharged_magma_engine_head", "offset": [72, 0.5, 0] },
+      { "name": "s_head_l1", "model": "supercharged_magma_engine_head", "offset": [76.5, 0.93, 0] },
+      { "name": "s_head_l2", "model": "supercharged_magma_engine_head", "offset": [81, 0.07, 0] } ] }
+  ]
+}

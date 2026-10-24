@@ -2,6 +2,9 @@ package com.comedymonkey.createaddons.content.engine;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
+
+import org.joml.Quaternionf;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
@@ -15,20 +18,15 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 
 import net.createmod.catnip.lang.LangBuilder;
-import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
@@ -41,9 +39,8 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 	private int burnProgress;
 	private boolean running;
 	private boolean syncQueued;
-	/** Client: how far the firebox hatch has swung open, 0 to 1, eased towards open while it burns. */
-	private float hatchOpen;
-	private float hatchOpenLast;
+	/** Client: run every client tick (the engine's sounds and exhaust puffs); set by the client setup. */
+	public static Consumer<MagmaEngineBlockEntity> clientTicker = be -> {};
 
 	public MagmaEngineBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.MAGMA_ENGINE.get(), pos, state);
@@ -84,10 +81,8 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 		return engine().capacityPerRpm();
 	}
 
-	/** The cylinder heads stand above the block. */
-	@Override
-	protected AABB createRenderBoundingBox() {
-		return new AABB(worldPosition).inflate(0.15, 0, 0).expandTowards(0, 0.4, 0);
+	public boolean isSupercharged() {
+		return engine().isSupercharged();
 	}
 
 	@Override
@@ -96,9 +91,7 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 		if (level == null)
 			return;
 		if (level.isClientSide) {
-			hatchOpenLast = hatchOpen;
-			boolean lit = getBlockState().getValue(MagmaEngineBlock.LIT);
-			hatchOpen = Mth.clamp(hatchOpen + (lit ? 0.08f : -0.08f), 0, 1);
+			clientTicker.accept(this);
 			return;
 		}
 
@@ -133,12 +126,6 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 		super.addBehaviours(behaviours);
 	}
 
-	/** 0 closed to 1 open, smoothed between ticks. */
-	public float getHatchOpen(float partialTicks) {
-		float t = Mth.lerp(partialTicks, hatchOpenLast, hatchOpen);
-		return Mth.sin(t * Mth.HALF_PI);
-	}
-
 	@Override
 	public float getGeneratedSpeed() {
 		if (!running)
@@ -148,37 +135,19 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 	}
 
 	/**
-	 * Where the direction setting sits: on top of the body by the hatch, as on Simulated's Portable Engine, when the
-	 * engine has that shape; on the back otherwise.
+	 * Where the direction setting sits: on its seat on top of the drum at the back, clear of every port (modelled with
+	 * the shaft to the north at (8, 13.3, 13), facing up), turned with the engine.
 	 */
 	private static final class DirectionBox extends ValueBoxTransform {
-		private static final boolean SIMULATED_SHAPE = ModList.get().isLoaded("simulated");
-
 		@Override
 		public Vec3 getLocalOffset(LevelAccessor level, BlockPos pos, BlockState state) {
-			Direction facing = state.getValue(MagmaEngineBlock.FACING);
-			// Modelled with the shaft to the north: Simulated's box is a little towards the hatch at the back
-			Vec3 local = SIMULATED_SHAPE ? new Vec3(8, 13.5, 8.6) : new Vec3(8, 8, 16.05);
-			return rotateAboutY(local.scale(1 / 16.0), facing.toYRot() + 180);
+			return MagmaEngineBlock.modelPoint(state.getValue(MagmaEngineBlock.FACING), 8, 13.35, 13);
 		}
 
 		@Override
 		public void rotate(LevelAccessor level, BlockPos pos, BlockState state, PoseStack ms) {
-			Direction facing = state.getValue(MagmaEngineBlock.FACING);
-			if (SIMULATED_SHAPE) {
-				ms.mulPose(Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(facing.getOpposite())));
-				ms.mulPose(Axis.XP.rotationDegrees(90));
-			} else {
-				ms.mulPose(Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(facing.getOpposite()) + 180));
-			}
-		}
-
-		/** Turns a point in the block clockwise (seen from above) about its centre, as a blockstate "y" does. */
-		private static Vec3 rotateAboutY(Vec3 v, float degrees) {
-			double a = Math.toRadians(degrees);
-			double x = v.x - 0.5, z = v.z - 0.5;
-			double cos = Math.cos(a), sin = Math.sin(a);
-			return new Vec3(0.5 + x * cos - z * sin, v.y, 0.5 + x * sin + z * cos);
+			ms.mulPose(new Quaternionf().setFromNormalized(MagmaEngineBlock.modelToWorld(state.getValue(MagmaEngineBlock.FACING))));
+			ms.mulPose(Axis.XP.rotationDegrees(90));
 		}
 	}
 

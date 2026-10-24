@@ -198,17 +198,17 @@ A one-wheeled clockwork shopkeeper with big binocular eyes. He lives docked in h
 
 ## Magma Engine
 
-A heavy brass engine that burns lava: by default **64 RPM and 8,192 SU**, four times a Portable Engine, for **10 mB of lava a second**. The shaft comes out of the middle of its front, which faces you when placed (sneak to place it facing away). It holds 4 buckets; pipes fill it through the back or the bottom only (a Fluid Wellspring with Lava Upgrades runs it forever) or right-click with a lava bucket. With Create Aeronautics installed it takes the shape of Simulated's Portable Engine in a dark steel finish with magma glowing in the firebox: the hatch swings open while it burns, the exhausts glow red-hot and pulse with the shaft, and smoke comes from the outlets. (The geometry is loaded from Aeronautics at runtime; only our texture ships.) Without Aeronautics it has its own model, a dark steel block with a gold cog round the shaft and three cylinders whose heads bob in turn. Either way, with no lava it stops. Speed, capacity and lava use are configurable.
+A lava-burning V-twin: by default **64 RPM and 8,192 SU**, four times a Portable Engine, for **10 mB of lava a second**. The shaft comes out of the middle of its front, which points at you when placed, any way up, sideways, up or down (sneak to point it away). It holds 4 buckets; pipes fill it on **any side but the front** (a Fluid Wellspring with Lava Upgrades runs it forever), or right-click with a lava bucket. While it burns, its two pistons pump in and out of their finned cylinders, the spoked flywheel turns with the shaft, the firebox glows through the spokes, and each exhaust chugs a puff of smoke in time. With no lava it sputters to a stop. Speed, capacity and lava use are configurable.
 
 Display Links can read its **lava level** (millibuckets and percent) and **output** (RPM and stress units, or "Out of lava").
 
-**Rotation direction:** like Simulated's Portable Engine, the value box on top (on the back without Aeronautics) sets the shaft turning clockwise or counter-clockwise.
+**Rotation direction:** like Simulated's Portable Engine, the value box on top of the drum at the back sets the shaft turning clockwise or counter-clockwise.
 
 Recipe: an iron sheet over an Engine Assembly (Create Aeronautics) over a Blaze Burner, like a Portable Engine. Without Aeronautics it's brass sheets, a Steam Engine, 2 Fluid Tanks, Brass Casing and a Blaze Burner instead.
 
 ### Supercharged Magma Engine
 
-Twice a Magma Engine in every way: **128 RPM and 16,384 SU** for **20 mB of lava a second**, with an 8-bucket tank. It looks the same but with brass trim, and works the same way (placement, filling from the back or bottom, Display Links). Speed, capacity and lava use have their own config section.
+Twice a Magma Engine in every way: **128 RPM and 16,384 SU** for **20 mB of lava a second**, with an 8-bucket tank. It's the same engine with brass trim and a belt-driven supercharger whining away on the front, and works the same way (placement, pipes on any side but the front, Display Links). Speed, capacity and lava use have their own config section.
 
 Recipe: a Precision Mechanism over a Magma Engine over Brass Casing.
 

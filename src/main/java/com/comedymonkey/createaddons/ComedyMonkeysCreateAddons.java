@@ -158,10 +158,9 @@ public class ComedyMonkeysCreateAddons {
 				(be, side) -> be.getItemHandler());
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.INCINERATOR.get(),
 				(be, side) -> be.getFluidHandler());
-			// Lava in through the back or the bottom only
+			// Lava in on every side but the front, where the shaft is
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.MAGMA_ENGINE.get(),
-				(be, side) -> side == null || side == Direction.DOWN
-					|| side == be.getBlockState().getValue(MagmaEngineBlock.FACING).getOpposite() ? be.getTank() : null);
+				(be, side) -> side == null || MagmaEngineBlock.isInlet(be.getBlockState(), side) ? be.getTank() : null);
 
 		// Electricity: the motor takes FE through its base (opposite the shaft); the generator takes lava at the back and
 		// gives FE at the sides; the turbine takes lava and water and gives FE through its controller or any of its casings

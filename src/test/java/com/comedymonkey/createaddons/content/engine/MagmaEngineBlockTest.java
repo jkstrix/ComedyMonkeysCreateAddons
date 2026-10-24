@@ -17,8 +17,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
-/** The Magma Engines' numbers from the config, and their shaft. */
+/** The Magma Engines' numbers from the config, their shaft, their pipe sides and how their model turns. */
 class MagmaEngineBlockTest {
 	@BeforeEach
 	void config() {
@@ -83,12 +84,38 @@ class MagmaEngineBlockTest {
 
 	@Test
 	void hasAShaftOnlyOutOfItsFront() {
-		for (Direction facing : Direction.Plane.HORIZONTAL) {
+		for (Direction facing : Direction.values()) {
 			BlockState state = plain().defaultBlockState().setValue(MagmaEngineBlock.FACING, facing);
 			for (Direction face : Direction.values())
 				assertEquals(face == facing, plain().hasShaftTowards(null, BlockPos.ZERO, state, face),
 					"facing " + facing + ", face " + face);
 			assertEquals(facing.getAxis(), plain().getRotationAxis(state));
+		}
+	}
+
+	@Test
+	void pipesConnectOnEverySideButTheFront() {
+		for (Direction facing : Direction.values()) {
+			BlockState state = plain().defaultBlockState().setValue(MagmaEngineBlock.FACING, facing);
+			for (Direction side : Direction.values())
+				assertEquals(side != facing, MagmaEngineBlock.isInlet(state, side), "facing " + facing + ", side " + side);
+			assertFalse(MagmaEngineBlock.isInlet(state, null));
+		}
+	}
+
+	@Test
+	void canFaceAnyWay() {
+		for (Direction facing : Direction.values())
+			assertEquals(facing, plain().defaultBlockState().setValue(MagmaEngineBlock.FACING, facing).getValue(MagmaEngineBlock.FACING));
+	}
+
+	/** The model is built with the shaft to the north; the turn puts its front centre on the facing's face. */
+	@Test
+	void theModelTurnsItsFrontToTheFacing() {
+		for (Direction facing : Direction.values()) {
+			Vec3 front = MagmaEngineBlock.modelPoint(facing, 8, 8, 0);
+			Vec3 expected = new Vec3(0.5 + facing.getStepX() * 0.5, 0.5 + facing.getStepY() * 0.5, 0.5 + facing.getStepZ() * 0.5);
+			assertEquals(0, front.distanceTo(expected), 1e-5, facing.toString());
 		}
 	}
 

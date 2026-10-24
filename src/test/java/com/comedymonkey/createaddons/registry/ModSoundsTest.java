@@ -71,4 +71,11 @@ class ModSoundsTest {
 		for (String id : new String[] {"hum", "spark", "start", "stop", "adjust"})
 			assertNotNull(ModSounds.motor(id));
 	}
+
+	@Test
+	void magmaEnginesHaveEverySoundOfTheirDesign() {
+		assertEquals(7, ModSounds.ENGINE.size());
+		for (String id : new String[] {"chug", "firebox", "blower", "lava_pop", "start", "stop", "cool_tick"})
+			assertNotNull(ModSounds.engine(id));
+	}
 }

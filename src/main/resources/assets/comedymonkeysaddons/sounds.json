@@ -814,5 +814,76 @@
       "comedymonkeysaddons:electric_motor/adjust_1",
       "comedymonkeysaddons:electric_motor/adjust_2"
     ]
+  },
+  "magma_engine.chug": {
+    "subtitle": "subtitles.comedymonkeysaddons.magma_engine.chug",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:magma_engine/chug_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:magma_engine/chug_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:magma_engine/chug_3",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:magma_engine/chug_4",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "magma_engine.firebox": {
+    "subtitle": "subtitles.comedymonkeysaddons.magma_engine.firebox",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:magma_engine/firebox_loop",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "magma_engine.blower": {
+    "subtitle": "subtitles.comedymonkeysaddons.magma_engine.blower",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:magma_engine/blower_loop",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "magma_engine.lava_pop": {
+    "subtitle": "subtitles.comedymonkeysaddons.magma_engine.lava_pop",
+    "sounds": [
+      {
+        "name": "minecraft:block.lava.pop",
+        "type": "event"
+      }
+    ]
+  },
+  "magma_engine.start": {
+    "subtitle": "subtitles.comedymonkeysaddons.magma_engine.start",
+    "sounds": [
+      "comedymonkeysaddons:magma_engine/start_1",
+      "comedymonkeysaddons:magma_engine/start_2"
+    ]
+  },
+  "magma_engine.stop": {
+    "subtitle": "subtitles.comedymonkeysaddons.magma_engine.stop",
+    "sounds": [
+      "comedymonkeysaddons:magma_engine/stop_1",
+      "comedymonkeysaddons:magma_engine/stop_2"
+    ]
+  },
+  "magma_engine.cool_tick": {
+    "subtitle": "subtitles.comedymonkeysaddons.magma_engine.cool_tick",
+    "sounds": [
+      "comedymonkeysaddons:magma_engine/cool_tick_1",
+      "comedymonkeysaddons:magma_engine/cool_tick_2",
+      "comedymonkeysaddons:magma_engine/cool_tick_3",
+      "comedymonkeysaddons:magma_engine/cool_tick_4"
+    ]
   }
 }

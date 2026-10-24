@@ -29,6 +29,22 @@
     "facing=west,lit=true": {
       "model": "comedymonkeysaddons:block/supercharged_magma_engine_lit",
       "y": 270
+    },
+    "facing=up,lit=false": {
+      "model": "comedymonkeysaddons:block/supercharged_magma_engine",
+      "x": 270
+    },
+    "facing=up,lit=true": {
+      "model": "comedymonkeysaddons:block/supercharged_magma_engine_lit",
+      "x": 270
+    },
+    "facing=down,lit=false": {
+      "model": "comedymonkeysaddons:block/supercharged_magma_engine",
+      "x": 90
+    },
+    "facing=down,lit=true": {
+      "model": "comedymonkeysaddons:block/supercharged_magma_engine_lit",
+      "x": 90
     }
   }
 }
