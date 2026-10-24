@@ -247,6 +247,22 @@ A scripted move that's interrupted (chunk unload, damage) snaps him to the neare
 
 **Home rules** (a `HomeRules` predicate, checked every 20 ticks): night (`!level.isDay()`), thunder (`isThundering`), redstone pause, low charge, nothing to sell (D52). He leaves with `action_comes_in` (physical root: hop out forwards) and docks with `dock_lights_out` (reverse in, reverse hop, lights pass to the station).
 
+**Game tests (headless courses):** `gametest/TradeBotGameTests`, run with `./gradlew runGameTestServer` (or `/test runall` in a dev world). Each course is built in code on an empty 24 × 8 × 24 template:
+- a straight run;
+- slab and block hops;
+- stairs;
+- doors and gates (shut again behind him; an already-open door stays open);
+- an L-shaped corridor;
+- **the trading hall**: a yard, a slab step, a door, three booths (workstation counter + Create seat) along an aisle with a dog-leg, a gate and stairs to a gallery booth.
+
+Each passes when he has reached every stop in order and docked again. Milestone 5 adds villagers to the seats. Findings that only the courses caught:
+- a stuck check that always fired;
+- held clips pinning him in place;
+- waypoints behind him at the start;
+- float precision in the synced clip start;
+- a door that flickered shut before he was through;
+- a hitbox too wide for doorways (now 0.6, like a villager).
+
 **Tests:**
 - the node evaluator on a test level: ladders and water rejected, door accepted;
 - the turn classifier (angle → clip);

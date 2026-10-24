@@ -68,6 +68,7 @@ Clarified: **a clockwork robot, powered by FE through his station, who sells you
 | D57 | Trade XP | No XP orbs. The XP vanilla would drop for each trade is banked and **delivered to the output as Create Nuggets of Experience** (1 per 3 XP, the remainder kept for next time), together with the emeralds. Villagers still gain their own XP and levels | user R12 |
 | D58 | Comparator | Strengths: **0** no bot, **5** docked and idle, **10** working, **15** out of charge (refines D38) | user R12 |
 | D59 | Lava and void | If he's wound down in lava, or falls into the void, he's **returned to his station, still wound down**, so he's never lost or stuck burning | user R12 |
+| D60 | Doors and gates | He **closes the doors and fence gates he opened** once he's through; ones that were already open stay open (refines D28) | user R13 |
 
 ## Open Questions
 None for v1.

@@ -1,6 +1,9 @@
 package com.comedymonkey.createaddons.content.tradebot;
 
 import java.util.List;
+import java.util.UUID;
+
+import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.registry.ModDataComponents;
@@ -45,19 +48,26 @@ public class TradeBotItem extends BlockItem {
 		InteractionResult result = super.place(context);
 		if (!result.consumesAction() || !(context.getLevel() instanceof ServerLevel level) || player == null)
 			return result;
+		if (populate(level, pos, player.getUUID(), data, name) != null)
+			level.playSound(null, pos, ModSounds.tradeBot("winder_engage"), SoundSource.BLOCKS, 1, 1);
+		return result;
+	}
+
+	/** Puts a bot, docked, into a just-placed station at {@code pos}, owned by {@code owner}. Also used by the game tests. */
+	@Nullable
+	public static TradeBotEntity populate(ServerLevel level, BlockPos pos, UUID owner, TradeBotData data, @Nullable Component name) {
 		if (!(level.getBlockEntity(pos) instanceof TradeBotStationBlockEntity station))
-			return result;
+			return null;
 		TradeBotEntity bot = ModEntities.TRADE_BOT.get().create(level);
 		if (bot == null)
-			return result;
-		bot.setUp(player.getUUID(), pos, station.facing(), data);
+			return null;
+		bot.setUp(owner, pos, station.facing(), data);
 		if (name != null)
 			bot.setCustomName(name);
 		level.addFreshEntity(bot);
-		station.claim(player.getUUID(), bot.getUUID(), data);
-		TradeBotRegistry.get(level.getServer()).add(player.getUUID(), bot.getUUID(), new TradeBotRegistry.Home(level.dimension(), pos));
-		level.playSound(null, pos, ModSounds.tradeBot("winder_engage"), SoundSource.BLOCKS, 1, 1);
-		return result;
+		station.claim(owner, bot.getUUID(), data);
+		TradeBotRegistry.get(level.getServer()).add(owner, bot.getUUID(), new TradeBotRegistry.Home(level.dimension(), pos));
+		return bot;
 	}
 
 	@Override

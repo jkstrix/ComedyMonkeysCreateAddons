@@ -33,6 +33,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import com.mojang.logging.LogUtils;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.PathType;
+import com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion;
+import com.comedymonkey.createaddons.content.tradebot.move.TradeBotNavigation;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
@@ -58,8 +63,14 @@ import net.minecraft.world.phys.Vec3;
 public class TradeBotEntity extends PathfinderMob {
 	private static final EntityDataAccessor<Integer> CLIP = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> CLIP_START = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.INT);
+	/** Where a physical clip started: a block, plus the offset within it (floats alone are too coarse far from spawn). */
+	private static final EntityDataAccessor<BlockPos> CLIP_ANCHOR_BLOCK = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.BLOCK_POS);
 	private static final EntityDataAccessor<Vector3f> CLIP_ANCHOR = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.VECTOR3);
 	private static final EntityDataAccessor<Float> CLIP_ANCHOR_YAW = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.FLOAT);
+	/** How fast the clip plays (turns play faster at his real rolling speed), and how far a physical clip's travel is
+	 * stretched across the ground (so a hop lands exactly on the next block). */
+	private static final EntityDataAccessor<Float> CLIP_SPEED = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.FLOAT);
+	private static final EntityDataAccessor<Float> CLIP_SCALE = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Byte> FLAGS = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.BYTE);
 	private static final byte FLAG_CHARGING = 1;
 
@@ -71,6 +82,9 @@ public class TradeBotEntity extends PathfinderMob {
 	public final ClipPlayback playback = new ClipPlayback();
 	/** Client only: how far the station's winder has turned his key while charging, in degrees (60 a second). */
 	private float windSpin, windSpinO;
+	/** Client only: his wheel's turn from the ground he has actually covered (radians, 4 px radius). */
+	private float wheelAngle, wheelAngleO;
+	private static final float WHEEL_RADIUS = 4 / 16f;
 	private static final float WIND_DEGREES_PER_TICK = 3;
 
 	@Nullable
@@ -89,8 +103,43 @@ public class TradeBotEntity extends PathfinderMob {
 	/** Set while he's packed into his item, so his removal isn't taken for him being lost. */
 	private boolean packed;
 
+	public final TradeBotMotion motion = new TradeBotMotion(this);
+	public final TradeBotBrain brain = new TradeBotBrain(this);
+
 	public TradeBotEntity(EntityType<? extends TradeBotEntity> type, Level level) {
 		super(type, level);
+		// he keeps out of water and lava, and away from fire (D29)
+		setPathfindingMalus(PathType.WATER, -1);
+		setPathfindingMalus(PathType.WATER_BORDER, 4);
+		setPathfindingMalus(PathType.LAVA, -1);
+		setPathfindingMalus(PathType.DAMAGE_FIRE, -1);
+		setPathfindingMalus(PathType.DANGER_FIRE, 16);
+		setPathfindingMalus(PathType.POWDER_SNOW, -1);
+		setPathfindingMalus(PathType.DANGER_POWDER_SNOW, -1);
+	}
+
+	@Override
+	protected PathNavigation createNavigation(Level level) {
+		return new TradeBotNavigation(this, level);
+	}
+
+	/** He hops off a block at most (D4). */
+	@Override
+	public int getMaxFallDistance() {
+		return 1;
+	}
+
+	/** No ladders, vines or scaffolding (D18). */
+	@Override
+	public boolean onClimbable() {
+		return false;
+	}
+
+	@Override
+	protected void customServerAiStep() {
+		super.customServerAiStep();
+		brain.tick();
+		motion.tick();
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
@@ -99,7 +148,9 @@ public class TradeBotEntity extends PathfinderMob {
 			.add(Attributes.MOVEMENT_SPEED, 0.2)
 			// he rolls over anything 4 px or lower; taller steps are hops (design/specs/trade-bot.md D4)
 			.add(Attributes.STEP_HEIGHT, 0.25)
-			.add(Attributes.KNOCKBACK_RESISTANCE, 0.6);
+			.add(Attributes.KNOCKBACK_RESISTANCE, 0.6)
+			// routes as far as his range from the station (D28), with some to spare
+			.add(Attributes.FOLLOW_RANGE, 96);
 	}
 
 	@Override
@@ -107,8 +158,11 @@ public class TradeBotEntity extends PathfinderMob {
 		super.defineSynchedData(builder);
 		builder.define(CLIP, ClipLibrary.get().id(ClipLibrary.get().clip(IDLE)));
 		builder.define(CLIP_START, 0);
+		builder.define(CLIP_ANCHOR_BLOCK, BlockPos.ZERO);
 		builder.define(CLIP_ANCHOR, new Vector3f());
 		builder.define(CLIP_ANCHOR_YAW, 0f);
+		builder.define(CLIP_SPEED, 1f);
+		builder.define(CLIP_SCALE, 1f);
 		builder.define(FLAGS, (byte) 0);
 	}
 
@@ -145,10 +199,14 @@ public class TradeBotEntity extends PathfinderMob {
 		docked = true;
 	}
 
-	/** Back to his station (D27, D30, D38). Walking home comes with movement (milestone 3); for now he's put back. */
+	/** Back to his station, rolling home and docking (D27, D30, D38). */
 	public void goHome() {
-		if (station != null && level().getBlockState(station).getBlock() instanceof TradeBotStationBlock)
-			dockAt(station, level().getBlockState(station).getValue(TradeBotStationBlock.FACING));
+		brain.goHome();
+	}
+
+	/** He's hopping out of the cradle. */
+	void leaveDock() {
+		docked = false;
 	}
 
 	public int getCharge() {
@@ -178,6 +236,11 @@ public class TradeBotEntity extends PathfinderMob {
 	/** Client: degrees the winder has turned his key since he docked, between ticks. */
 	public float windSpin(float partialTick) {
 		return Mth.lerp(partialTick, windSpinO, windSpin);
+	}
+
+	/** Client: radians his wheel has rolled, between ticks. */
+	public float wheelAngle(float partialTick) {
+		return Mth.lerp(partialTick, wheelAngleO, wheelAngle);
 	}
 
 	/** What goes into his item when he's packed up, with his station's links. */
@@ -210,10 +273,17 @@ public class TradeBotEntity extends PathfinderMob {
 
 	/** Starts a clip now (server). A physical clip remembers where it started, so it can move him from there. */
 	public void playClip(Clip clip) {
+		playClip(clip, 1, 1);
+	}
+
+	/** Starts a clip at {@code speed} times its own pace; a physical one's ground travel is stretched by {@code scale}. */
+	public void playClip(Clip clip, float speed, float scale) {
 		entityData.set(CLIP, ClipLibrary.get().id(clip));
 		entityData.set(CLIP_START, (int) level().getGameTime());
+		entityData.set(CLIP_SPEED, speed);
+		entityData.set(CLIP_SCALE, scale);
 		if (clip.root() == Clip.Root.PHYSICAL) {
-			entityData.set(CLIP_ANCHOR, position().toVector3f());
+			setClipAnchor(position());
 			entityData.set(CLIP_ANCHOR_YAW, getYRot());
 		}
 	}
@@ -228,8 +298,10 @@ public class TradeBotEntity extends PathfinderMob {
 		Vec3 travelled = ClipRoot.place(Vec3.ZERO, startYaw, ClipRoot.travel(clip, clip.length(), new Vector3f()));
 		entityData.set(CLIP, ClipLibrary.get().id(clip));
 		entityData.set(CLIP_START, (int) (level().getGameTime() - Mth.ceil(clip.length() * 20) - 1));
-		entityData.set(CLIP_ANCHOR, end.subtract(travelled).toVector3f());
+		setClipAnchor(end.subtract(travelled));
 		entityData.set(CLIP_ANCHOR_YAW, startYaw);
+		entityData.set(CLIP_SPEED, 1f);
+		entityData.set(CLIP_SCALE, 1f);
 		setYRot(yaw);
 		moveTo(end.x, end.y, end.z, yaw, 0);
 	}
@@ -248,21 +320,41 @@ public class TradeBotEntity extends PathfinderMob {
 
 	/** Seconds the current clip has played, at {@code partialTick} into the current tick. */
 	public float clipElapsed(float partialTick) {
-		return (float) ((level().getGameTime() - clipStart() + partialTick) / 20);
+		return (float) ((level().getGameTime() - clipStart() + partialTick) / 20) * clipSpeed();
+	}
+
+	public float clipSpeed() {
+		return entityData.get(CLIP_SPEED);
 	}
 
 	/** Where a physical clip started, and which way he faced. */
 	public Vec3 clipAnchor() {
-		return new Vec3(entityData.get(CLIP_ANCHOR));
+		BlockPos block = entityData.get(CLIP_ANCHOR_BLOCK);
+		Vector3f offset = entityData.get(CLIP_ANCHOR);
+		// in doubles: an int plus a float is summed as a float, which loses the offset far from spawn
+		return new Vec3(block.getX() + (double) offset.x, block.getY() + (double) offset.y, block.getZ() + (double) offset.z);
+	}
+
+	private void setClipAnchor(Vec3 at) {
+		BlockPos block = BlockPos.containing(at);
+		entityData.set(CLIP_ANCHOR_BLOCK, block);
+		entityData.set(CLIP_ANCHOR, new Vector3f((float) (at.x - block.getX()), (float) (at.y - block.getY()), (float) (at.z - block.getZ())));
 	}
 
 	public float clipAnchorYaw() {
 		return entityData.get(CLIP_ANCHOR_YAW);
 	}
 
+	/** The facing a clip's turn is measured from (a game clip's turn starts from wherever he faced). */
+	public void setClipAnchorYaw(float yaw) {
+		entityData.set(CLIP_ANCHOR_YAW, yaw);
+	}
+
 	/** His place and facing on the current physical clip's path, at {@code seconds} into it. */
 	public Vec3 rootPosition(Clip clip, float seconds) {
-		return ClipRoot.place(clipAnchor(), clipAnchorYaw(), ClipRoot.travel(clip, seconds, new Vector3f()));
+		Vector3f travel = ClipRoot.travel(clip, seconds, new Vector3f());
+		float scale = entityData.get(CLIP_SCALE);
+		return ClipRoot.place(clipAnchor(), clipAnchorYaw(), travel.set(travel.x * scale, travel.y, travel.z * scale));
 	}
 
 	public float rootYaw(Clip clip, float seconds) {
@@ -276,8 +368,12 @@ public class TradeBotEntity extends PathfinderMob {
 		yBodyRot = getYRot();
 		yHeadRot = getYRot();
 		if (level().isClientSide) {
-			playback.observe(clip(), clipStart(), level().getGameTime());
+			playback.observe(clip(), clipStart(), clipSpeed(), level().getGameTime());
 			playback.tickCues(level().getGameTime(), this::playCue);
+			wheelAngleO = wheelAngle;
+			float r = getYRot() * Mth.DEG_TO_RAD;
+			double forward = (getX() - xo) * -Mth.sin(r) + (getZ() - zo) * Mth.cos(r);
+			wheelAngle += (float) (forward / WHEEL_RADIUS);
 			windSpinO = windSpin;
 			if (!clip().name().equals(DOCKED))
 				windSpin = windSpinO = 0;
@@ -299,7 +395,7 @@ public class TradeBotEntity extends PathfinderMob {
 			setPos(at.x, at.y, at.z);
 			setYRot(rootYaw(clip, t));
 		}
-		if (clip.mode() == Clip.Mode.ONCE && clip.finished(elapsed))
+		if (clip.mode() == Clip.Mode.ONCE && clip.finished(elapsed) && !motion.isMoving())
 			playClip(IDLE);
 	}
 
@@ -358,6 +454,9 @@ public class TradeBotEntity extends PathfinderMob {
 	/** Removed for good some other way than packing (a command): his station can then be packed on its own. */
 	@Override
 	public void remove(RemovalReason reason) {
+		if (TradeBotMotion.debug && !level().isClientSide)
+			LogUtils.getLogger().info("[Trade Bot {}] removed ({}) at {}, health {}", getId(), reason, blockPosition().toShortString(), getHealth(),
+				new Throwable("removed here"));
 		if (!packed && reason.shouldDestroy() && level() instanceof ServerLevel server)
 			TradeBotRegistry.get(server.getServer()).markGone(getUUID());
 		super.remove(reason);

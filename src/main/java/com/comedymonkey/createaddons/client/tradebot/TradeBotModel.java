@@ -42,12 +42,16 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 		ModelPart key = parts.get("key");
 		if (key != null)
 			key.zRot += -bot.windSpin(partialTick) * Mth.DEG_TO_RAD;
+		// rolling along: the wheel turns with the ground he covers, not the clip's own pace
+		ModelPart wheel = parts.get("wheel");
+		if (wheel != null && bot.clip().root() == Clip.Root.GAME)
+			wheel.xRot = wheel.getInitialPose().xRot + bot.wheelAngle(partialTick);
 	}
 
 	/** Poses these parts (his, or his station's) as the bot's playback has them at {@code now}, with the fade. */
 	public static void pose(Map<String, ModelPart> parts, TradeBotEntity bot, double now) {
 		ClipPlayback playback = bot.playback;
-		playback.observe(bot.clip(), bot.clipStart(), now);
+		playback.observe(bot.clip(), bot.clipStart(), bot.clipSpeed(), now);
 		Clip clip = playback.clip();
 		if (clip == null)
 			return;

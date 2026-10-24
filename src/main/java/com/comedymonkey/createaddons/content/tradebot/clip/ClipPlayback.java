@@ -20,23 +20,27 @@ public final class ClipPlayback {
 	@Nullable
 	private Clip clip;
 	private long start;
+	private float speed = 1;
 	@Nullable
 	private Clip fadeFrom;
 	private long fadeFromStart;
+	private float fadeFromSpeed = 1;
 	private double fadeStart = Double.NEGATIVE_INFINITY;
 	private float lastCueTime = Float.NaN;
 
 	/** Follows the server's choice; a change starts a cross-fade at {@code now} (game ticks, with the partial tick). */
-	public void observe(@Nullable Clip current, long startTick, double now) {
+	public void observe(@Nullable Clip current, long startTick, float speed, double now) {
 		if (current == clip && startTick == start)
 			return;
 		if (clip != null) {
 			fadeFrom = clip;
 			fadeFromStart = start;
+			fadeFromSpeed = this.speed;
 			fadeStart = now;
 		}
 		clip = current;
 		start = startTick;
+		this.speed = speed;
 		lastCueTime = Float.NaN;
 	}
 
@@ -47,7 +51,7 @@ public final class ClipPlayback {
 
 	/** Seconds the current clip has played at {@code now}. */
 	public float elapsed(double now) {
-		return (float) ((now - start) / 20);
+		return (float) ((now - start) / 20) * speed;
 	}
 
 	/** The clip being faded out of at {@code now}, or null once the fade is done. */
@@ -57,7 +61,7 @@ public final class ClipPlayback {
 	}
 
 	public float fadeFromElapsed(double now) {
-		return (float) ((now - fadeFromStart) / 20);
+		return (float) ((now - fadeFromStart) / 20) * fadeFromSpeed;
 	}
 
 	/** How far the cross-fade has got: 0 just switched, 1 done. */

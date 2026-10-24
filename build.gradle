@@ -24,7 +24,13 @@ neoForge {
             server()
             programArgument '--nogui'
         }
+        // Trade Bot's test courses, headless: builds each course, runs it, exits with the failures
+        gameTestServer {
+            type = "gameTestServer"
+        }
         configureEach {
+            // the mod's game tests are available in every run (/test in a dev world)
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             logLevel = org.slf4j.event.Level.INFO
         }

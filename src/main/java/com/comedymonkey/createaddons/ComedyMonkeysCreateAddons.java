@@ -34,6 +34,7 @@ import com.comedymonkey.createaddons.registry.ModSounds;
 import com.comedymonkey.createaddons.registry.ModEntities;
 import com.comedymonkey.createaddons.registry.ModDataComponents;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotCommands;
+import com.comedymonkey.createaddons.gametest.TradeBotGameTests;
 import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.TooltipModifier;
@@ -84,6 +85,8 @@ public class ComedyMonkeysCreateAddons {
 		ModEntities.ENTITY_TYPES.register(modBus);
 		ModDataComponents.DATA_COMPONENTS.register(modBus);
 		modBus.addListener(ModEntities::registerAttributes);
+		// Trade Bot's test courses (run with ./gradlew runGameTestServer, or /test in a dev world)
+		modBus.addListener(TradeBotGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
 
 		// Both specs show up in Create's "Access configs of other mods" screen
