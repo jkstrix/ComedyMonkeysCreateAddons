@@ -445,6 +445,69 @@ public final class TradeBotGameTests {
 		});
 	}
 
+	/**
+	 * Run down asleep in his cradle and wound up there: he hops out like any morning (no floating on top of his
+	 * station), then carries on, here straight back in, as he has nothing to do.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 2000)
+	public static void windsUpInHisCradleAndHopsOut(GameTestHelper helper) {
+		TradeBotEntity bot = yard(helper);
+		java.util.List<TradeBotBrain.Task> after = new ArrayList<>();
+		long[] downAt = { -1 };
+		helper.onEachTick(() -> {
+			if (downAt[0] < 0 && helper.getTick() == 20) {
+				if (!bot.isDocked())
+					helper.fail("not docked to start with");
+				bot.hurt(helper.getLevel().damageSources().generic(), 100);
+				downAt[0] = helper.getTick();
+			}
+			if (downAt[0] >= 0 && helper.getTick() == downAt[0] + 60)
+				bot.windUp(true);
+			if (downAt[0] >= 0 && (after.isEmpty() || after.get(after.size() - 1) != bot.brain.task()))
+				after.add(bot.brain.task());
+		});
+		helper.succeedWhen(() -> {
+			if (!after.contains(TradeBotBrain.Task.WINDING_UP) || !after.contains(TradeBotBrain.Task.LEAVING))
+				helper.fail("didn't wind up and hop out: " + after);
+			if (after.indexOf(TradeBotBrain.Task.LEAVING) < after.indexOf(TradeBotBrain.Task.WINDING_UP))
+				helper.fail("hopped out before winding up: " + after);
+			if (!bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail("not back in his cradle (" + after + ")");
+		});
+	}
+
+	/**
+	 * Someone standing by his station while he sleeps: he doesn't react asleep, or mid-hop; he greets them once he's
+	 * out on the ground (D9). And only once.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 2400)
+	public static void greetsSomeoneOnceHesOut(GameTestHelper helper) {
+		TradeBotEntity bot = yard(helper);
+		// a stand-in player, added straight to the world (joining one to the server trips other mods' join packets)
+		net.neoforged.neoforge.common.util.FakePlayer visitor = new net.neoforged.neoforge.common.util.FakePlayer(helper.getLevel(),
+			new com.mojang.authlib.GameProfile(UUID.randomUUID(), "visitor"));
+		Vec3 by = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(5, 1, 4)));
+		visitor.moveTo(by.x, by.y, by.z, 0, 0);
+		helper.getLevel().addNewPlayer(visitor);
+		int[] greetings = { 0 };
+		TradeBotBrain.Task[] last = { null };
+		helper.runAfterDelay(60, () -> bot.brain.goTo(helper.absolutePos(new BlockPos(3, 1, 14))));
+		helper.onEachTick(() -> {
+			TradeBotBrain.Task task = bot.brain.task();
+			if (task == TradeBotBrain.Task.REACTING && last[0] != TradeBotBrain.Task.REACTING) {
+				greetings[0]++;
+				if (bot.isDocked() || !bot.onGround() || !bot.clip().name().equals("sees_player"))
+					helper.fail("reacted with " + bot.clip().name() + " docked " + bot.isDocked() + ", on the ground " + bot.onGround());
+			}
+			last[0] = task;
+		});
+		helper.succeedWhen(() -> {
+			if (greetings[0] != 1 || bot.brain.visited().size() != 1 || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail(greetings[0] + " greetings, " + bot.brain.visited().size() + " stops (" + bot.brain.task() + ")");
+			helper.getLevel().removePlayerImmediately(visitor, net.minecraft.world.entity.Entity.RemovalReason.DISCARDED);
+		});
+	}
+
 	/** An open yard walled all round (x 0-12, z 0-16), with his station at (3, 1, 2) facing south. */
 	private static TradeBotEntity yard(GameTestHelper helper) {
 		floor(helper, 0, 0, 0, 23, 23, FLOOR);

@@ -67,8 +67,9 @@ public class TradeBotBrain {
 	/** Tasks a reaction or a fright may interrupt: travelling and waiting, never mid-container or mid-trade. */
 	private static final java.util.EnumSet<Task> INTERRUPTIBLE = java.util.EnumSet.of(Task.GOING, Task.WAITING, Task.APPROACHING,
 		Task.WAITING_OUTPUT, Task.RETURNING, Task.REACTING);
-	/** A player within this many blocks is noticed (D9). */
+	/** A player within this many blocks is noticed (D9), and greeted within this long if he's busy at the time. */
 	private static final double SEES_PLAYER_RANGE = 6;
+	private static final int GREET_WAIT_TICKS = 200;
 	/** How far he flees to hide (blocks), how long the mob must be gone before he recovers, and how long he's calm after. */
 	private static final int HIDE_RADIUS = 8, ALL_CLEAR_TICKS = 100, CALM_TICKS = 100, FLEE_TICKS = 200;
 	/** How long he waits beside a full output before trying again (D22). */
@@ -108,6 +109,10 @@ public class TradeBotBrain {
 	@Nullable
 	private Vec3 threat;
 	private long threatSeen, calmUntil;
+	/** A player who has just turned up, to greet once he's free. */
+	@Nullable
+	private UUID greet;
+	private long greetUntil;
 
 	private enum Phase { TAKING, TRADING, DELIVERING, RETURNING_ITEMS }
 
@@ -169,6 +174,7 @@ public class TradeBotBrain {
 		goals.clear();
 		goals.addAll(stops);
 		visited.clear();
+		job = null; // a trip, not the last job
 		commanded = true;
 		if (bot.isDocked())
 			return leave();
@@ -444,6 +450,7 @@ public class TradeBotBrain {
 
 	public void tick() {
 		ticks++;
+		watch();
 		BlockPos station = bot.getStation();
 		if (task == Task.WOUND_DOWN)
 			return;
@@ -454,7 +461,6 @@ public class TradeBotBrain {
 			}
 			return;
 		}
-		watch();
 		if ((task == Task.GOING || task == Task.WAITING || task == Task.APPROACHING || task == Task.WORKING || task == Task.SHRUGGING
 			|| task == Task.WAITING_OUTPUT) && shouldGoHome())
 			goHome();
@@ -583,7 +589,8 @@ public class TradeBotBrain {
 					resume();
 			}
 			case WINDING_UP -> {
-				if (clipOver())
+				// wound up in his cradle: he hops out first, like any morning, then carries on
+				if (clipOver() && (!onStation(station) || !leave()))
 					resume();
 			}
 			case WOUND_DOWN -> {}
@@ -623,10 +630,15 @@ public class TradeBotBrain {
 
 	// ---- feeling alive (D8, D9, D24, D26)
 
-	/** Every half second while he's out: mobs he can see (fright first), and players turning up. */
+	/**
+	 * Every half second while he's awake (not asleep in his station or run down): mobs he can see (fright first), and
+	 * players turning up. A player who turns up while he can't react (hopping out, at a container) is greeted as soon
+	 * as he's on the ground and free, if they're still about.
+	 */
 	private void watch() {
 		long now = bot.level().getGameTime();
-		if (now % 10 != 0 || bot.isDocked())
+		boolean awake = !bot.isDocked() && task != Task.WOUND_DOWN && task != Task.WINDING_UP;
+		if (now % 10 != 0 || !awake)
 			return;
 		Monster mob = hostileInSight();
 		boolean scared = task.name().startsWith("SCARED_");
@@ -637,13 +649,21 @@ public class TradeBotBrain {
 			scare(mob);
 		if (now % 20 != 0)
 			return;
-		Player arrived = null;
 		for (Player player : bot.level().getEntitiesOfClass(Player.class, bot.getBoundingBox().inflate(SEES_PLAYER_RANGE),
 			player -> !player.isSpectator() && player.distanceTo(bot) <= SEES_PLAYER_RANGE && bot.hasLineOfSight(player)))
-			if (reactions.arrived(player.getUUID(), now) && arrived == null)
-				arrived = player;
-		if (arrived != null && interruptible() && reactions.tryPlay(Reactions.Kind.SEES_PLAYER, now))
-			react("sees_player", arrived);
+			if (reactions.arrived(player.getUUID(), now) && greet == null) {
+				greet = player.getUUID();
+				greetUntil = now + GREET_WAIT_TICKS;
+			}
+		if (greet == null)
+			return;
+		Player player = bot.level().getPlayerByUUID(greet);
+		if (player == null || now > greetUntil || player.distanceTo(bot) > SEES_PLAYER_RANGE + 2)
+			greet = null;
+		else if (interruptible() && reactions.tryPlay(Reactions.Kind.SEES_PLAYER, now)) {
+			greet = null;
+			react("sees_player", player);
+		}
 	}
 
 	private boolean interruptible() {
@@ -738,6 +758,11 @@ public class TradeBotBrain {
 			case GOING, WAITING -> set(goals.isEmpty() ? Task.RETURNING : Task.GOING);
 			default -> set(Task.RETURNING);
 		}
+	}
+
+	/** On his station's cradle (run down there, or put there). */
+	private boolean onStation(BlockPos station) {
+		return bot.position().distanceTo(TradeBotStationBlock.dockPoint(station, facing(station))) < 0.75;
 	}
 
 	private boolean clipOver() {
