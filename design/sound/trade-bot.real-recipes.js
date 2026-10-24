@@ -21,11 +21,13 @@ const tink = (at, gain = 0.1) => P(metalLight, { at, gain, pitch: 2.3, trim: [0,
 
 const real = {
   // signature
-  clock_tick: R([P(['tick_001', 'tick_002', 'tick_004'], { gain: 0.9, highpass: 700 }), S('click_002', { at: 0.004, gain: 0.3 })], { variants: 4, level: 0.35, vary: { pitch: 0.03 } }),
+  // the user's Stable Audio take: four steel ticks from one clock, one per variant (sources/generated/SOURCES.md)
+  clock_tick: R([P(['sa3_tradebot_tick_1', 'sa3_tradebot_tick_2', 'sa3_tradebot_tick_3', 'sa3_tradebot_tick_4'], { gain: 1 })], { variants: 4, level: 0.234, vary: { pitch: 0.03 } }),
   focus_click: R([P(tinyClicks, { pitch: 1.3, gain: 0.8 }), Y('servo', { at: 0.01, f: 900, f2: 1300, dur: 0.08, gain: 0.25 }), S('tick_004', { at: 0.08, gain: 0.5, pitch: 1.2 })], { level: 0.45 }),
   brass_ping: R([S('impactBell_heavy_003', { pitch: 1.6, gain: 0.9, lowpass: 9000 }), S('impactMetal_light_002', { pitch: 1.8, gain: 0.3, at: 0.01 }), Y('ping', { f: 1320, dur: 0.8, gain: 0.3 })], { variants: 2, level: 0.7, vary: { pitch: 0.015 } }),
   // warm, soft winding: ticks pitched down and rolled off above ~3 kHz (the bright version was piercing when repeated)
-  key_rattle: R([...[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6].map((at, i) => S(i % 2 ? 'tick_002' : 'tick_004', { at, gain: 0.8, pitch: 0.6 + (i % 3) * 0.04, lowpass: 2200 })), S('metalLatch', { at: 0.7, gain: 0.3, pitch: 1.0, trim: [0, 0.2], fadeOut: 0.05, lowpass: 3000 })], { level: 0.28, post: { lowpass: 2400, highpass: 120 } }),
+  // the user's Stable Audio take: four bursts of a clockwork key being wound, one per variant (sources/generated/SOURCES.md)
+  key_rattle: R([P(['sa3_tradebot_wind_1', 'sa3_tradebot_wind_2', 'sa3_tradebot_wind_3', 'sa3_tradebot_wind_4'], { gain: 1 })], { variants: 4, level: 0.314, vary: { pitch: 0.02 } }),
   merchant_trill: R([...voiceOf('merchant_trill', { gain: 0.8 }), S('pluck_001', { at: 0.22, pitch: 1.5, gain: 0.3 }), Y('ping', { at: 0.22, f: 2640, dur: 0.4, gain: 0.12 })], { level: 0.6, vary: { pitch: 0.01 } }),
 
   // movement

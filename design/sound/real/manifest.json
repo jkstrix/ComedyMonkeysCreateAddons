@@ -2,10 +2,10 @@
  "clock_tick": {
   "variants": 4,
   "sources": [
-   "kenney-interface-sounds/Audio/tick_001.ogg",
-   "kenney-interface-sounds/Audio/tick_002.ogg",
-   "kenney-interface-sounds/Audio/tick_004.ogg",
-   "kenney-interface-sounds/Audio/click_002.ogg"
+   "generated/sa3_tradebot_tick_1.wav",
+   "generated/sa3_tradebot_tick_2.wav",
+   "generated/sa3_tradebot_tick_3.wav",
+   "generated/sa3_tradebot_tick_4.wav"
   ],
   "synth": []
  },
@@ -32,11 +32,12 @@
   ]
  },
  "key_rattle": {
-  "variants": 3,
+  "variants": 4,
   "sources": [
-   "kenney-interface-sounds/Audio/tick_004.ogg",
-   "kenney-interface-sounds/Audio/tick_002.ogg",
-   "kenney-rpg-audio/Audio/metalLatch.ogg"
+   "generated/sa3_tradebot_wind_1.wav",
+   "generated/sa3_tradebot_wind_2.wav",
+   "generated/sa3_tradebot_wind_3.wav",
+   "generated/sa3_tradebot_wind_4.wav"
   ],
   "synth": []
  },

@@ -28,7 +28,8 @@
     "sounds": [
       "comedymonkeysaddons:trade_bot/key_rattle_1",
       "comedymonkeysaddons:trade_bot/key_rattle_2",
-      "comedymonkeysaddons:trade_bot/key_rattle_3"
+      "comedymonkeysaddons:trade_bot/key_rattle_3",
+      "comedymonkeysaddons:trade_bot/key_rattle_4"
     ]
   },
   "trade_bot.merchant_trill": {

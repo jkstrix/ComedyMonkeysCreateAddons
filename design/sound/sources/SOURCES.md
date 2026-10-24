@@ -1,6 +1,6 @@
 # Sound sources
 
-All recordings used for Trade Bot's real sounds are **CC0 (public domain)**: free to use, modify and ship, no attribution required (credit to Kenney is appreciated, not mandatory).
+The pack recordings used for Trade Bot's real sounds are **CC0 (public domain)**: free to use, modify and ship, no attribution required (credit to Kenney is appreciated, not mandatory). His clock tick and key rattle are local Stable Audio 3 generations (Stability AI Community License; prompt, seed and processing in `generated/SOURCES.md`).
 
 | Pack | By | Licence | URL |
 |---|---|---|---|
@@ -18,10 +18,10 @@ Never add Minecraft's or other mods' sound files here.
 
 | Event | Variants | Recordings | Synth layers |
 |---|---|---|---|
-| `clock_tick` | 4 | interface-sounds: tick_001.ogg, interface-sounds: tick_002.ogg, interface-sounds: tick_004.ogg, interface-sounds: click_002.ogg | — |
+| `clock_tick` | 4 | generated: sa3_tradebot_tick_1.wav to sa3_tradebot_tick_4.wav (Stable Audio 3, see generated/SOURCES.md) | — |
 | `focus_click` | 3 | ui-audio: switch12.ogg, ui-audio: switch13.ogg, ui-audio: switch14.ogg, interface-sounds: tick_004.ogg | servo |
 | `brass_ping` | 2 | impact-sounds: impactBell_heavy_003.ogg, impact-sounds: impactMetal_light_002.ogg | ping |
-| `key_rattle` | 3 | interface-sounds: tick_004.ogg, interface-sounds: tick_002.ogg, rpg-audio: metalLatch.ogg | — |
+| `key_rattle` | 4 | generated: sa3_tradebot_wind_1.wav to sa3_tradebot_wind_4.wav (Stable Audio 3, see generated/SOURCES.md) | — |
 | `merchant_trill` | 3 | interface-sounds: pluck_001.ogg | voice, ping |
 | `roll_start` | 3 | impact-sounds: impactSoft_medium_000.ogg, impact-sounds: impactSoft_medium_001.ogg, impact-sounds: impactSoft_medium_002.ogg, impact-sounds: impactSoft_medium_003.ogg, impact-sounds: impactSoft_medium_004.ogg | roll, servo |
 | `roll_stop` | 3 | impact-sounds: impactSoft_medium_000.ogg, impact-sounds: impactSoft_medium_001.ogg, impact-sounds: impactSoft_medium_002.ogg, impact-sounds: impactSoft_medium_003.ogg, impact-sounds: impactSoft_medium_004.ogg | roll, scrub |
