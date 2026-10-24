@@ -61,6 +61,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity.clientTicker = ElectricSounds::tickMotor;
 		// The Magma Engines' sounds and exhaust puffs run from their client ticks
 		com.comedymonkey.createaddons.content.engine.MagmaEngineBlockEntity.clientTicker = MagmaEngineSounds::tick;
+		// The Pressure Crucible's sounds run from its client tick
+		com.comedymonkey.createaddons.content.crucible.PressureCrucibleBlockEntity.clientTicker = PressureCrucibleSounds::tick;
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ChestSortButton::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseScrolled);
@@ -103,14 +105,12 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.TRADE_BOT_STATION.get(), TradeBotStationRenderer::new);
 	}
 
-	/** The upgraded chest lids and the crucible ram aren't referenced by any blockstate, so they're loaded explicitly. */
+	/** The upgraded chest lids and the crucible's parts aren't referenced by any blockstate, so they're loaded explicitly. */
 	private void registerModels(ModelEvent.RegisterAdditional event) {
 		for (ChestTier tier : ChestTier.values())
 			for (ChestType type : ChestType.values())
 				event.register(UpgradedChestRenderer.lidModel(tier, type));
-		event.register(PressureCrucibleRenderer.RAM);
-		event.register(PressureCrucibleRenderer.ROD);
-		event.register(PressureCrucibleRenderer.SHAFT);
+		PressureCrucibleRenderer.registerModels(event);
 		event.register(CobbleGeneratorRenderer.SHAFT);
 		AutoHarvesterRenderer.registerModels(event);
 		event.register(AnimalPenRenderer.MILK);

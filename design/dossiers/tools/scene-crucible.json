@@ -1,0 +1,14 @@
+{
+  "name": "crucible-before",
+  "groups": [
+    { "name": "idle", "parts": [
+      { "name": "body", "model": "pressure_crucible" },
+      { "name": "shaft", "model": "pressure_crucible_shaft" },
+      { "name": "ram", "model": "pressure_crucible_ram", "offset": [0, 11, 0] } ] },
+    { "name": "pressing", "parts": [
+      { "name": "body_p", "model": "pressure_crucible", "offset": [24, 0, 0] },
+      { "name": "shaft_p", "model": "pressure_crucible_shaft", "offset": [24, 0, 0] },
+      { "name": "ram_p", "model": "pressure_crucible_ram", "offset": [24, 4.5, 0] },
+      { "name": "rod_p", "model": "pressure_crucible_rod", "steps": [{ "scale": { "by": [1, 0.4375, 1] } }, { "translate": [24, 6.5, 0] }] } ] }
+  ]
+}

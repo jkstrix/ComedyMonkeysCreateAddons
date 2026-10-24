@@ -885,5 +885,70 @@
       "comedymonkeysaddons:magma_engine/cool_tick_3",
       "comedymonkeysaddons:magma_engine/cool_tick_4"
     ]
+  },
+  "pressure_crucible.whirr": {
+    "subtitle": "subtitles.comedymonkeysaddons.pressure_crucible.whirr",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:pressure_crucible/whirr_loop",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "pressure_crucible.creak": {
+    "subtitle": "subtitles.comedymonkeysaddons.pressure_crucible.creak",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:pressure_crucible/creak_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:pressure_crucible/creak_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:pressure_crucible/creak_3",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "pressure_crucible.crunch": {
+    "subtitle": "subtitles.comedymonkeysaddons.pressure_crucible.crunch",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:pressure_crucible/crunch_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:pressure_crucible/crunch_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:pressure_crucible/crunch_3",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:pressure_crucible/crunch_4",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "pressure_crucible.fire": {
+    "subtitle": "subtitles.comedymonkeysaddons.pressure_crucible.fire",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:pressure_crucible/fire_loop",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "pressure_crucible.fire_soul": {
+    "subtitle": "subtitles.comedymonkeysaddons.pressure_crucible.fire_soul",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:pressure_crucible/fire_soul_loop",
+        "attenuation_distance": 8
+      }
+    ]
   }
 }

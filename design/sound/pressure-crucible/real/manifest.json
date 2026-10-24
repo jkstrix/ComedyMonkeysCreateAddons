@@ -1,0 +1,40 @@
+{
+ "whirr": {
+  "variants": 1,
+  "sources": [
+   "generated/sa3_crucible_gears_v1_x2.wav"
+  ],
+  "synth": []
+ },
+ "creak": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/manual_roller_shutter_closing_in_1.ogg",
+   "kenney-rpg-audio/Audio/creak1.ogg",
+   "kenney-rpg-audio/Audio/creak2.ogg",
+   "kenney-rpg-audio/Audio/creak3.ogg"
+  ],
+  "synth": []
+ },
+ "crunch": {
+  "variants": 4,
+  "sources": [
+   "generated/sa3_crucible_crunch_v3_clean.wav"
+  ],
+  "synth": []
+ },
+ "fire": {
+  "variants": 1,
+  "sources": [
+   "generated/sa3_crucible_fire_v2_clean.wav"
+  ],
+  "synth": []
+ },
+ "fire_soul": {
+  "variants": 1,
+  "sources": [
+   "generated/sa3_crucible_soul_fire_v3_clean.wav"
+  ],
+  "synth": []
+ }
+}

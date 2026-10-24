@@ -1,74 +1,138 @@
 {
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
-    "particle": "create:block/mechanical_press_head",
-    "head": "create:block/mechanical_press_head"
+    "particle": "comedymonkeysaddons:block/pressure_crucible_plate",
+    "plate": "comedymonkeysaddons:block/pressure_crucible_plate",
+    "trim": "comedymonkeysaddons:block/pressure_crucible_trim"
   },
   "elements": [
     {
+      "name": "platen",
       "from": [
-        4,
+        3.5,
         0,
-        4
+        3.5
       ],
       "to": [
-        12,
-        2,
-        12
+        12.5,
+        1.5,
+        12.5
       ],
       "faces": {
         "north": {
           "uv": [
-            4,
-            14,
-            12,
+            3.5,
+            14.5,
+            12.5,
             16
           ],
-          "texture": "#head"
-        },
-        "south": {
-          "uv": [
-            4,
-            14,
-            12,
-            16
-          ],
-          "texture": "#head"
-        },
-        "west": {
-          "uv": [
-            4,
-            14,
-            12,
-            16
-          ],
-          "texture": "#head"
+          "texture": "#plate"
         },
         "east": {
           "uv": [
-            4,
-            14,
-            12,
+            3.5,
+            14.5,
+            12.5,
             16
           ],
-          "texture": "#head"
+          "texture": "#plate"
+        },
+        "south": {
+          "uv": [
+            3.5,
+            14.5,
+            12.5,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "west": {
+          "uv": [
+            3.5,
+            14.5,
+            12.5,
+            16
+          ],
+          "texture": "#plate"
         },
         "up": {
           "uv": [
-            4,
-            4,
-            12,
-            12
+            3.5,
+            3.5,
+            12.5,
+            12.5
           ],
-          "texture": "#head"
+          "texture": "#plate"
         },
         "down": {
           "uv": [
-            4,
-            4,
-            12,
-            12
+            3.5,
+            3.5,
+            12.5,
+            12.5
           ],
-          "texture": "#head"
+          "texture": "#plate"
+        }
+      }
+    },
+    {
+      "name": "nut",
+      "from": [
+        6,
+        1.5,
+        6
+      ],
+      "to": [
+        10,
+        2,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            14,
+            10,
+            14.5
+          ],
+          "texture": "#trim"
+        },
+        "east": {
+          "uv": [
+            6,
+            14,
+            10,
+            14.5
+          ],
+          "texture": "#trim"
+        },
+        "south": {
+          "uv": [
+            6,
+            14,
+            10,
+            14.5
+          ],
+          "texture": "#trim"
+        },
+        "west": {
+          "uv": [
+            6,
+            14,
+            10,
+            14.5
+          ],
+          "texture": "#trim"
+        },
+        "up": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#trim"
         }
       }
     }

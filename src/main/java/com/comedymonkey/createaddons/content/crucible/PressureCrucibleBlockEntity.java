@@ -1,6 +1,7 @@
 package com.comedymonkey.createaddons.content.crucible;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -8,7 +9,7 @@ import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModRecipes;
-import com.simibubi.create.AllSoundEvents;
+import com.comedymonkey.createaddons.registry.ModSounds;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
@@ -23,6 +24,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
@@ -37,6 +39,8 @@ public class PressureCrucibleBlockEntity extends KineticBlockEntity implements C
 	public static final int INPUT = 0;
 	public static final int OUTPUT = 1;
 	private static final int SYNC_INTERVAL = 4;
+	/** The client's sounds, set by the client setup so this class stays loadable on dedicated servers. */
+	public static Consumer<PressureCrucibleBlockEntity> clientTicker = be -> {};
 
 	private final ItemStackHandler inventory = new ItemStackHandler(2) {
 		@Override
@@ -74,6 +78,7 @@ public class PressureCrucibleBlockEntity extends KineticBlockEntity implements C
 			if (processing && getSpeed() != 0 && timer > 0)
 				timer = Math.max(0, timer - processingSpeed());
 			animatePlate();
+			clientTicker.accept(this);
 			return;
 		}
 
@@ -119,13 +124,17 @@ public class PressureCrucibleBlockEntity extends KineticBlockEntity implements C
 		processing = false;
 		timer = 0;
 
-		AllSoundEvents.MECHANICAL_PRESS_ACTIVATION.playOnServer(level, worldPosition, 0.6f, 0.7f);
+		// The platen crunching the dust (design/sound/pressure-crucible/pressure-crucible.md), a little lower for the
+		// slow superheated presses
+		float pitch = recipe.heat() == HeatCondition.SUPERHEATED ? 0.88f : 1;
+		level.playSound(null, worldPosition, ModSounds.crucible("crunch"), SoundSource.BLOCKS, 1, pitch * (0.95f + 0.1f * level.random.nextFloat()));
 		ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.CRUCIBLE_PRESS, result, result.getCount());
 		if (level instanceof ServerLevel server) {
-			double x = worldPosition.getX() + 0.5, y = worldPosition.getY() + 0.35, z = worldPosition.getZ() + 0.5;
-			server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, result), x, y, z, 12, 0.2, 0.05, 0.2, 0.08);
+			// Out of the bowl, just above its floor
+			double x = worldPosition.getX() + 0.5, y = worldPosition.getY() + 0.28, z = worldPosition.getZ() + 0.5;
+			server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, result), x, y, z, 12, 0.15, 0.02, 0.15, 0.08);
 			server.sendParticles(recipe.heat() == HeatCondition.SUPERHEATED ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.FLAME,
-				x, y, z, 6, 0.25, 0.05, 0.25, 0.01);
+				x, y, z, 6, 0.18, 0.02, 0.18, 0.01);
 			server.sendParticles(ParticleTypes.LARGE_SMOKE, x, y + 0.2, z, 3, 0.2, 0.05, 0.2, 0.01);
 		}
 	}

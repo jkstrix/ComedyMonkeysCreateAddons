@@ -41,6 +41,8 @@ public final class ModSounds {
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> MOTOR = registerPrefixed("electric_motor.");
 	/** Both Magma Engines' sounds (the Supercharged one plays them a little higher, and adds the blower). */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> ENGINE = registerPrefixed("magma_engine.");
+	/** The Pressure Crucible's sounds: the gears, the screw's creak, the crunch and the burner's fire. */
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> CRUCIBLE = registerPrefixed("pressure_crucible.");
 
 	private ModSounds() {}
 
@@ -57,6 +59,11 @@ public final class ModSounds {
 	/** One of the Magma Engines' sounds; throws for an unknown id. */
 	public static SoundEvent engine(String id) {
 		return get(ENGINE, id, "Magma Engine");
+	}
+
+	/** One of the Pressure Crucible's sounds; throws for an unknown id. */
+	public static SoundEvent crucible(String id) {
+		return get(CRUCIBLE, id, "Pressure Crucible");
 	}
 
 	private static SoundEvent get(Map<String, DeferredHolder<SoundEvent, SoundEvent>> sounds, String id, String block) {

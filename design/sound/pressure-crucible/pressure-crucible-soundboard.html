@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pressure Crucible Sounds</title>
+<style>
+:root { --bg:#1c1f24; --panel:#262a31; --edge:#3c424a; --text:#d8d4c8; --dim:#8a8c86; --brass:#b08f45; --amber:#d99a4a; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:14px/1.4 system-ui, sans-serif; padding:24px 16px 64px; }
+main { max-width:1100px; margin:0 auto; }
+h1 { margin:0 0 4px; font-size:22px; } h2 { margin:28px 0 10px; font-size:15px; color:var(--brass); text-transform:uppercase; letter-spacing:.06em; }
+.note { color:var(--dim); margin:0 0 12px; }
+.controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; color:var(--dim); position:sticky; top:0; background:var(--bg); padding:8px 0; z-index:2; }
+button { font:inherit; }
+.sets { display:inline-flex; gap:4px; }
+.btn, .set { background:var(--panel); color:var(--dim); border:1px solid var(--edge); border-radius:4px; padding:4px 10px; cursor:pointer; }
+.set.on, .btn:hover { color:var(--amber); border-color:var(--amber); }
+.grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:8px; }
+.card { display:flex; gap:10px; align-items:flex-start; background:var(--panel); border:1px solid var(--edge); border-radius:6px; padding:10px; }
+.card.on { border-color:var(--amber); } .card.tweaked { box-shadow:inset 3px 0 0 var(--brass); }
+.play, .cplay, .tw { flex:none; width:26px; height:26px; border-radius:50%; background:var(--edge); color:var(--amber); display:grid; place-items:center; font-size:11px; border:0; cursor:pointer; }
+.tw { margin-left:auto; color:var(--dim); } .tw:hover { color:var(--amber); }
+.txt { display:flex; flex-direction:column; gap:2px; min-width:0; } .txt small { opacity:.85; } .txt i { color:var(--dim); font-style:normal; font-size:12px; overflow-wrap:anywhere; }
+.vars { display:flex; flex-wrap:wrap; gap:3px; margin-top:3px; } .vars button { background:none; border:1px solid var(--edge); color:var(--dim); border-radius:3px; font-size:11px; padding:0 5px; cursor:pointer; } .vars button:hover { color:var(--amber); border-color:var(--amber); }
+.clip { display:flex; gap:10px; align-items:flex-start; background:var(--panel); border:1px solid var(--edge); border-radius:6px; padding:10px; margin-bottom:8px; }
+.cinfo { flex:1; min-width:0; } .cinfo small { color:var(--dim); font-size:12px; display:block; overflow-wrap:anywhere; }
+.bar { position:relative; height:14px; margin:6px 0; background:#1a1d22; border-radius:3px; }
+.mark { position:absolute; top:2px; width:3px; height:10px; margin-left:-1px; background:var(--brass); border-radius:1px; }
+.head { position:absolute; top:0; left:0; width:2px; height:14px; background:var(--amber); display:none; }
+#panel { position:fixed; right:16px; bottom:16px; width:min(340px, calc(100vw - 32px)); background:var(--panel); border:1px solid var(--amber); border-radius:8px; padding:14px; display:none; z-index:5; box-shadow:0 8px 30px #0008; }
+#panel h3 { margin:0 0 8px; font-size:15px; } #panel label { display:grid; grid-template-columns:96px 1fr 52px; gap:8px; align-items:center; color:var(--dim); font-size:12px; margin:6px 0; }
+#panel output { color:var(--text); text-align:right; } #panel .row { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+</style></head><body><main>
+<h1>Pressure Crucible sounds</h1>
+<p class="note">Switch sets to compare them. Click ▶ to play, a number to hear that variant, ⚙ to tweak a sound live. Tweaks are saved with the button at the top and applied by the next real-sound build.</p>
+<div class="controls">
+  <label>Volume <input id="vol" type="range" min="0" max="1" step="0.05" value="0.8"></label>
+  <span class="sets"><button class="set on" data-i="0">real</button><button class="set" data-i="1">placeholder</button></span>
+  <button class="btn" id="random">Random variants: on</button>
+  <button class="btn" id="save">Save tweaks (pressure-crucible.tweaks.json)</button>
+  <span id="saved"></span>
+</div>
+<h2>Signature sounds</h2><div class="grid"><div class="card" data-id="whirr">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>whirr</b><small>Pressure Crucible gears turn</small><i>real: sa3_crucible_gears_v1_x2 · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="creak">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>creak</b><small>Pressure Crucible screw winds down</small><i>real: manual_roller_shutter_closing_in_1 ·  · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="crunch">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>crunch</b><small>Pressure Crucible crunches</small><i>real: sa3_crucible_crunch_v3_clean · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Heat</h2><div class="grid"><div class="card" data-id="fire">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>fire</b><small>Pressure Crucible fire crackles</small><i>real: sa3_crucible_fire_v2_clean · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="fire_soul">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>fire_soul</b><small>Pressure Crucible soul fire hisses</small><i>real: sa3_crucible_soul_fire_v3_clean · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Clips</h2>
+<div class="clip" data-clip="heated" data-len="5.6499999999999995"><button class="cplay">▶</button><div class="cinfo"><b>heated</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · whirr"></span><span class="mark" style="left:74.34%" title="4.20 s · whirr"></span><span class="mark" style="left:1.77%" title="0.10 s · fire"></span><span class="mark" style="left:0.88%" title="0.05 s · creak"></span><span class="mark" style="left:44.25%" title="2.50 s · crunch"></span><span class="mark" style="left:45.13%" title="2.55 s · creak"></span><span class="mark" style="left:88.50%" title="5.00 s · crunch"></span><span class="mark" style="left:89.38%" title="5.05 s · creak"></span><span class="head"></span></div><small>0.00 whirr · 4.20 whirr · 0.10 fire · 0.05 creak · 2.50 crunch · 2.55 creak · 5.00 crunch · 5.05 creak</small></div></div>
+<div class="clip" data-clip="superheated" data-len="9"><button class="cplay">▶</button><div class="cinfo"><b>superheated</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · whirr"></span><span class="mark" style="left:46.67%" title="4.20 s · whirr"></span><span class="mark" style="left:93.33%" title="8.40 s · whirr"></span><span class="mark" style="left:1.11%" title="0.10 s · fire_soul"></span><span class="mark" style="left:83.33%" title="7.50 s · fire_soul"></span><span class="mark" style="left:0.56%" title="0.05 s · creak"></span><span class="mark" style="left:55.56%" title="5.00 s · crunch"></span><span class="mark" style="left:56.11%" title="5.05 s · creak"></span><span class="head"></span></div><small>0.00 whirr · 4.20 whirr · 8.40 whirr · 0.10 fire_soul · 7.50 fire_soul · 0.05 creak · 5.00 crunch · 5.05 creak</small></div></div>
+<div class="clip" data-clip="smouldering" data-len="0.6"><button class="cplay">▶</button><div class="cinfo"><b>smouldering</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · fire"></span><span class="head"></span></div><small>0.00 fire</small></div></div>
+<div class="clip" data-clip="cold" data-len="0.5"><button class="cplay">▶</button><div class="cinfo"><b>cold</b><div class="bar"><span class="head"></span></div><small></small></div></div>
+</main>
+<div id="panel"><h3 id="pt"></h3>
+  <label>Pitch <input data-k="pitch" type="range" min="0.5" max="2" step="0.01"><output></output></label>
+  <label>Gain <input data-k="gain" type="range" min="0" max="2" step="0.01"><output></output></label>
+  <label>Low-pass Hz <input data-k="lowpass" type="range" min="200" max="20000" step="10"><output></output></label>
+  <label>High-pass Hz <input data-k="highpass" type="range" min="20" max="4000" step="10"><output></output></label>
+  <label>Echo <input data-k="echo" type="range" min="0" max="0.6" step="0.01"><output></output></label>
+  <label>Echo delay s <input data-k="echoDelay" type="range" min="0.02" max="0.4" step="0.01"><output></output></label>
+  <label>Pitch spread ± <input data-k="vary" type="range" min="0" max="0.2" step="0.005"><output></output></label>
+  <div class="row"><button class="btn" id="pplay">▶ Play</button><button class="btn" id="preset">Reset</button><button class="btn" id="pclose">Close</button></div>
+</div>
+<script>
+const SETS = [{"dir":"real/","ext":"ogg","label":"real","avail":{"whirr":0,"creak":3,"crunch":4,"fire":0,"fire_soul":0}},{"dir":"placeholder/","ext":"wav","label":"placeholder","avail":{"whirr":0,"creak":0,"crunch":0,"fire":0,"fire_soul":0}}];
+const CLIPS = {"heated":[[0,"whirr"],[4.2,"whirr"],[0.1,"fire"],[0.05,"creak"],[2.5,"crunch"],[2.55,"creak"],[5,"crunch"],[5.05,"creak"]],"superheated":[[0,"whirr"],[4.2,"whirr"],[8.4,"whirr"],[0.1,"fire_soul"],[7.5,"fire_soul"],[0.05,"creak"],[5,"crunch"],[5.05,"creak"]],"smouldering":[[0,"fire"]],"cold":[]};
+const DEF = { pitch: 1, gain: 1, lowpass: 20000, highpass: 20, echo: 0, echoDelay: 0.12, vary: 0.04 };
+const TW = {};
+let cur = 0, randomVar = true, open = null;
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const vol = document.getElementById('vol');
+const bufCache = {};
+async function load(url) { if (!bufCache[url]) bufCache[url] = fetch(url).then((r) => { if (!r.ok) throw new Error(url); return r.arrayBuffer(); }).then((a) => ctx.decodeAudioData(a)); return bufCache[url]; }
+// a sound missing from the chosen set plays from the next set that has it (new placeholders among approved real sounds)
+function setFor(id) { for (let k = 0; k < SETS.length; k++) { const s = SETS[(cur + k) % SETS.length]; if (id in s.avail) return s; } return null; }
+function fileFor(id, v) { const s = setFor(id); if (!s) return null; const n = s.avail[id]; if (v === undefined) v = randomVar && n ? 1 + Math.floor(Math.random() * n) : 0; return s.dir + id + (v ? '_' + v : '') + '.' + s.ext; }
+async function play(id, v, when = 0) {
+  const url = fileFor(id, v); if (!url) return;
+  if (ctx.state === 'suspended') await ctx.resume();
+  let buf; try { buf = await load(url); } catch (e) { return; }
+  const t = Object.assign({}, DEF, TW[id] || {});
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  src.playbackRate.value = t.pitch * (v === undefined && randomVar ? 1 + (Math.random() * 2 - 1) * t.vary : 1);
+  const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = t.highpass;
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = t.lowpass;
+  const g = ctx.createGain(); g.gain.value = t.gain * +vol.value;
+  src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(ctx.destination);
+  if (t.echo > 0) { const d = ctx.createDelay(1); d.delayTime.value = t.echoDelay; const fb = ctx.createGain(); fb.gain.value = t.echo; g.connect(d); d.connect(fb); fb.connect(d); fb.connect(ctx.destination); }
+  src.start(ctx.currentTime + when);
+}
+function refreshCards() {
+  const s = SETS[cur];
+  document.querySelectorAll('.card').forEach((c) => {
+    const id = c.dataset.id, n = s.avail[id] || 0, vars = c.querySelector('.vars');
+    vars.innerHTML = n ? Array.from({ length: n }, (_, i) => '<button data-v="' + (i + 1) + '">' + (i + 1) + '</button>').join('') : '';
+    c.style.opacity = id in s.avail ? 1 : 0.45;
+    c.classList.toggle('tweaked', !!TW[id]);
+  });
+}
+document.querySelectorAll('.set').forEach((b) => b.addEventListener('click', () => { cur = +b.dataset.i; document.querySelectorAll('.set').forEach((x) => x.classList.toggle('on', x === b)); refreshCards(); }));
+document.getElementById('random').addEventListener('click', (e) => { randomVar = !randomVar; e.target.textContent = 'Random variants: ' + (randomVar ? 'on' : 'off'); });
+document.querySelectorAll('.card').forEach((c) => {
+  const id = c.dataset.id;
+  c.querySelector('.play').addEventListener('click', () => { c.classList.add('on'); setTimeout(() => c.classList.remove('on'), 300); play(id); });
+  c.querySelector('.vars').addEventListener('click', (e) => { if (e.target.dataset.v) play(id, +e.target.dataset.v); });
+  c.querySelector('.tw').addEventListener('click', () => openPanel(id));
+});
+const panel = document.getElementById('panel');
+function openPanel(id) {
+  open = id; document.getElementById('pt').textContent = id; panel.style.display = 'block';
+  const t = Object.assign({}, DEF, TW[id] || {});
+  panel.querySelectorAll('input').forEach((i) => { i.value = t[i.dataset.k]; i.nextElementSibling.value = (+i.value).toFixed(2); });
+}
+panel.querySelectorAll('input').forEach((i) => i.addEventListener('input', () => {
+  i.nextElementSibling.value = (+i.value).toFixed(2);
+  const t = TW[open] = Object.assign({}, DEF, TW[open] || {}, { [i.dataset.k]: +i.value });
+  for (const k of Object.keys(DEF)) if (t[k] === DEF[k]) delete t[k];
+  if (!Object.keys(t).length) delete TW[open];
+  refreshCards();
+}));
+document.getElementById('pplay').addEventListener('click', () => play(open));
+document.getElementById('preset').addEventListener('click', () => { delete TW[open]; openPanel(open); refreshCards(); });
+document.getElementById('pclose').addEventListener('click', () => (panel.style.display = 'none'));
+document.getElementById('save').addEventListener('click', async () => {
+  const body = JSON.stringify(TW, null, 2), out = document.getElementById('saved');
+  try { // served by serve.js: write straight into the project
+    const r = await fetch('save-tweaks?file=' + encodeURIComponent("pressure-crucible.tweaks.json"), { method: 'POST', body });
+    if (!r.ok) throw new Error(r.status);
+    out.textContent = 'Saved to ' + "pressure-crucible.tweaks.json" + '.';
+  } catch (e) { // opened from disk: download instead
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([body], { type: 'application/json' })); a.download = "pressure-crucible.tweaks.json"; a.click();
+    out.textContent = 'Saved to your Downloads folder.';
+  }
+});
+let timers = [];
+document.querySelectorAll('.clip').forEach((row) => {
+  row.querySelector('.cplay').addEventListener('click', async () => {
+    if (ctx.state === 'suspended') await ctx.resume();
+    timers.forEach(clearTimeout); timers = [];
+    document.querySelectorAll('.head').forEach((h) => (h.style.display = 'none'));
+    const head = row.querySelector('.head'), len = +row.dataset.len, start = performance.now();
+    for (const [t, id] of CLIPS[row.dataset.clip]) timers.push(setTimeout(() => play(id), t * 1000));
+    head.style.display = 'block';
+    (function tick() { const p = (performance.now() - start) / 1000 / len; head.style.left = Math.min(100, p * 100) + '%'; if (p < 1) requestAnimationFrame(tick); else head.style.display = 'none'; })();
+  });
+});
+refreshCards();
+</script></body></html>

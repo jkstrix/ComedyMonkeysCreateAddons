@@ -106,8 +106,8 @@ Two more blocks you can now make with Create's Mechanical Mixer:
 | Gilded Blackstone | Blackstone + 20 gold nuggets, **heated** (crushing it gives 18 nuggets back) |
 | Calcite | Diorite + bone meal (milling it gives 0.75 bone meal back) |
 
-- The Crucible sits on a Blaze Burner and takes rotation through a shaft into its back wall (it faces away from you when placed, or backs onto a shaft next to it). It presses faster at higher speeds (16 RPM is the base speed, 256 RPM is 16x), with a heavy stress impact (12 SU per RPM by default).
-- At 64 RPM an Emerald takes 2.5 seconds, a Netherite Scrap 10 seconds, and glass or stone half a second. The press plate lowers over exactly that time for each item.
+- The Crucible is a square screw press. It sits on a Blaze Burner and takes rotation through a shaft into the gearbox on its back (it faces away from you when placed, or backs onto a shaft next to it), which turns the big gear and the screw on top. It presses faster at higher speeds (16 RPM is the base speed, 256 RPM is 16x), with a heavy stress impact (12 SU per RPM by default).
+- At 64 RPM an Emerald takes 2.5 seconds, a Netherite Scrap 10 seconds, and glass or stone half a second. The platen rides down the screw over exactly that time for each item, while the gauge on the front climbs to the red, and the press crunches as it lands. The bowl glows with the burner's heat: a faint red when smouldering, amber when heated, soul blue when superheated.
 - **Right-click with dust** to load it, **right-click with an empty hand** to take the results out. Funnels, hoppers and pipes insert dust and extract results from any side.
 - Engineer's Goggles show the contents, the heat needed, progress and what's holding it up.
 - Crafting recipe: 4 obsidian, a Mechanical Press, 2 brass sheets, a cogwheel and a Basin.

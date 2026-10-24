@@ -49,6 +49,15 @@ Shared with future blocks: the Auto Harvester and the pens use `client/TrayItems
 - Assets: everything with `magma_engine` in its path (including `supercharged_magma_engine_*`), and the `magma_engine.*` sounds.
 - Design: `design/briefs/magma-engine.md`, `design/briefs/supercharged-magma-engine.md`, `design/dossiers/magma-engine*`, `design/dossiers/supercharged-magma-engine.md`, `design/models/engines*`, `design/sound/magma-engine/`.
 
+## Pressure Crucible
+- Blocks: `pressure_crucible`.
+- Code: `content/crucible/PressureCrucibleBlock.java`, `content/crucible/PressureCrucibleBlockEntity.java`, `client/PressureCrucibleRenderer.java`, `client/PressureCrucibleSounds.java`.
+- Assets: everything with `pressure_crucible` in its path (models, textures, blockstate), and the `pressure_crucible.*` sounds.
+- Design: `design/briefs/pressure-crucible.md`, `design/dossiers/pressure-crucible*`, `design/models/pressure-crucible*`, `design/sound/pressure-crucible/`.
+- Its recipes, JEI category, Ponder scene and advancements are gameplay, not design, and aren't covered here.
+
+Shared with future blocks: `design/sound/sources/generated/` holds the local Stable Audio 3 takes (the crucible's crunch, gears and fires); add new takes beside them, never change these.
+
 ## Cuckoo Clock
 - Blocks: `cuckoo_clock`, `cuckoo_clock_weights`.
 - Code: `content/clock/`, `client/CuckooClockRenderer.java`.

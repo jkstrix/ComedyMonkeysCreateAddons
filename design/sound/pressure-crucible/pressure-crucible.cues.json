@@ -1,0 +1,321 @@
+{
+  "namespace": "pressure_crucible",
+  "events": {
+    "whirr": {
+      "group": "Signature sounds",
+      "subtitle": "Pressure Crucible gears turn",
+      "layers": [
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.06,
+          "f": 300,
+          "f2": 300,
+          "dur": 1.5
+        },
+        {
+          "type": "ratchet",
+          "at": 0,
+          "gain": 0.04,
+          "rate": 22,
+          "dur": 1.5
+        },
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.05,
+          "f": 120,
+          "dur": 1.5
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.09,
+        "post": {
+          "highpass": 60
+        },
+        "layers": [
+          {
+            "src": "sa3_crucible_gears_v1_x2",
+            "trim": [
+              0.1,
+              4.95
+            ],
+            "gain": 1,
+            "fadeIn": 0.02,
+            "fadeOut": 0.02
+          }
+        ]
+      }
+    },
+    "creak": {
+      "group": "Signature sounds",
+      "subtitle": "Pressure Crucible screw winds down",
+      "layers": [
+        {
+          "type": "creak",
+          "at": 0,
+          "gain": 0.22,
+          "f": 140,
+          "dur": 0.7
+        },
+        {
+          "type": "ratchet",
+          "at": 0.05,
+          "gain": 0.07,
+          "rate": 8,
+          "dur": 0.6
+        }
+      ],
+      "real": {
+        "variants": 3,
+        "level": 0.15,
+        "vary": {
+          "pitch": 0.06,
+          "gain": 0.1
+        },
+        "post": {
+          "lowpass": 5000
+        },
+        "layers": [
+          {
+            "src": "manual_roller_shutter_closing_in_1",
+            "trim": [
+              9,
+              9.7
+            ],
+            "pitch": 0.7,
+            "gain": 0.8,
+            "fadeIn": 0.03,
+            "fadeOut": 0.15
+          },
+          {
+            "pick": [
+              "creak1",
+              "creak2",
+              "creak3"
+            ],
+            "gain": 0.35,
+            "pitch": 0.7,
+            "trim": [
+              0,
+              0.7
+            ],
+            "fadeOut": 0.2
+          }
+        ]
+      }
+    },
+    "crunch": {
+      "group": "Signature sounds",
+      "subtitle": "Pressure Crucible crunches",
+      "layers": [
+        {
+          "type": "clack",
+          "at": 0,
+          "gain": 0.17,
+          "f": 500,
+          "dur": 0.06
+        },
+        {
+          "type": "thud",
+          "at": 0.01,
+          "gain": 0.27,
+          "f": 70,
+          "dur": 0.25
+        },
+        {
+          "type": "rustle",
+          "at": 0.02,
+          "gain": 0.12,
+          "density": 30,
+          "dur": 0.25
+        }
+      ],
+      "real": {
+        "variants": 4,
+        "level": 0.594,
+        "vary": {
+          "pitch": 0.06,
+          "gain": 0.1
+        },
+        "layers": [
+          {
+            "src": "sa3_crucible_crunch_v3_clean",
+            "gain": 1,
+            "fadeOut": 0.25,
+            "trim": [
+              0.1,
+              1.5
+            ],
+            "fadeIn": 0.003
+          }
+        ]
+      }
+    },
+    "fire": {
+      "group": "Heat",
+      "subtitle": "Pressure Crucible fire crackles",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.12,
+          "f": 60,
+          "dur": 1.5
+        },
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.05,
+          "f": 300,
+          "dur": 1.5
+        },
+        {
+          "type": "rustle",
+          "at": 0,
+          "gain": 0.06,
+          "density": 4,
+          "dur": 1.5
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.16,
+        "layers": [
+          {
+            "src": "sa3_crucible_fire_v2_clean",
+            "trim": [
+              1,
+              9.5
+            ],
+            "gain": 1,
+            "fadeIn": 0.02,
+            "fadeOut": 0.02
+          }
+        ]
+      }
+    },
+    "fire_soul": {
+      "group": "Heat",
+      "subtitle": "Pressure Crucible soul fire hisses",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.1,
+          "f": 90,
+          "dur": 1.5
+        },
+        {
+          "type": "whoosh",
+          "at": 0,
+          "gain": 0.05,
+          "f": 1800,
+          "f2": 1800,
+          "dur": 1.5
+        },
+        {
+          "type": "rustle",
+          "at": 0,
+          "gain": 0.04,
+          "density": 3,
+          "dur": 1.5
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.1,
+        "layers": [
+          {
+            "src": "sa3_crucible_soul_fire_v3_clean",
+            "trim": [
+              1,
+              9.5
+            ],
+            "gain": 1,
+            "fadeIn": 0.02,
+            "fadeOut": 0.02
+          }
+        ]
+      }
+    }
+  },
+  "clips": {
+    "heated": [
+      [
+        0,
+        "whirr"
+      ],
+      [
+        4.2,
+        "whirr"
+      ],
+      [
+        0.1,
+        "fire"
+      ],
+      [
+        0.05,
+        "creak"
+      ],
+      [
+        2.5,
+        "crunch"
+      ],
+      [
+        2.55,
+        "creak"
+      ],
+      [
+        5,
+        "crunch"
+      ],
+      [
+        5.05,
+        "creak"
+      ]
+    ],
+    "superheated": [
+      [
+        0,
+        "whirr"
+      ],
+      [
+        4.2,
+        "whirr"
+      ],
+      [
+        8.4,
+        "whirr"
+      ],
+      [
+        0.1,
+        "fire_soul"
+      ],
+      [
+        7.5,
+        "fire_soul"
+      ],
+      [
+        0.05,
+        "creak"
+      ],
+      [
+        5,
+        "crunch"
+      ],
+      [
+        5.05,
+        "creak"
+      ]
+    ],
+    "smouldering": [
+      [
+        0,
+        "fire"
+      ]
+    ],
+    "cold": []
+  }
+}

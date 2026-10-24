@@ -1161,5 +1161,10 @@
   "subtitles.comedymonkeysaddons.magma_engine.lava_pop": "Lava bubbles",
   "subtitles.comedymonkeysaddons.magma_engine.start": "Magma Engine starts",
   "subtitles.comedymonkeysaddons.magma_engine.stop": "Magma Engine sputters out",
-  "subtitles.comedymonkeysaddons.magma_engine.cool_tick": "Magma Engine ticks as it cools"
+  "subtitles.comedymonkeysaddons.magma_engine.cool_tick": "Magma Engine ticks as it cools",
+  "subtitles.comedymonkeysaddons.pressure_crucible.whirr": "Pressure Crucible gears turn",
+  "subtitles.comedymonkeysaddons.pressure_crucible.creak": "Pressure Crucible screw winds down",
+  "subtitles.comedymonkeysaddons.pressure_crucible.crunch": "Pressure Crucible crunches",
+  "subtitles.comedymonkeysaddons.pressure_crucible.fire": "Pressure Crucible fire crackles",
+  "subtitles.comedymonkeysaddons.pressure_crucible.fire_soul": "Pressure Crucible soul fire hisses"
 }

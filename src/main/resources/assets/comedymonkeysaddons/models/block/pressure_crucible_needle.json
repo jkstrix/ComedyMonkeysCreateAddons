@@ -1,0 +1,34 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/pressure_crucible_needle",
+    "needle": "comedymonkeysaddons:block/pressure_crucible_needle"
+  },
+  "elements": [
+    {
+      "name": "needle",
+      "from": [
+        4.3,
+        12.35,
+        -0.25
+      ],
+      "to": [
+        4.7,
+        13.95,
+        -0.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.3,
+            2.05,
+            11.7,
+            3.65
+          ],
+          "texture": "#needle"
+        }
+      }
+    }
+  ]
+}
