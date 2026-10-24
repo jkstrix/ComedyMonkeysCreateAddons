@@ -50,6 +50,11 @@ public abstract class VillagerMixin implements TradeBotCustomer {
 		cir.setReturnValue(clock);
 	}
 
+	@Override
+	public boolean comedymonkeysaddons$levellingUp() {
+		return increaseProfessionLevelOnUpdate;
+	}
+
 	/** Vanilla's {@code notifyTrade} and {@code rewardTradeXp} for a trade with Trade Bot, minus the player parts. */
 	@Override
 	public int comedymonkeysaddons$botTrade(MerchantOffer offer) {

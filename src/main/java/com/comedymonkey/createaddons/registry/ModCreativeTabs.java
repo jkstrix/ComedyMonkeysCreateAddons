@@ -61,6 +61,7 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.SUPERCHARGED_MAGMA_ENGINE.get());
 				output.accept(ModItems.LAVA_GENERATOR.get());
 				output.accept(ModItems.ELECTRIC_MOTOR.get());
+				output.accept(ModItems.FE_COIL.get());
 				output.accept(ModItems.GEOTHERMAL_CONTROLLER.get());
 				output.accept(ModItems.GEOTHERMAL_CASING.get());
 				output.accept(ModItems.GEOTHERMAL_CORE.get());

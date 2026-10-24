@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:fe_coil",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:trade_bot"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.trade_bot"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.trade_bot.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:trade_bot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

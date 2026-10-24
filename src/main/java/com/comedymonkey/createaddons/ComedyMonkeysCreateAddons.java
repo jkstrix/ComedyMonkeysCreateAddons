@@ -241,6 +241,7 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.BRASS_ANIMAL_PEN.get());
 			registerCreateTooltip(ModItems.CUCKOO_CLOCK.get());
 			registerCreateTooltip(ModItems.TRADE_BOT.get());
+			registerCreateTooltip(ModItems.FE_COIL.get());
 			registerCreateTooltip(ModItems.BOTTLED_ANIMAL.get());
 			registerCreateTooltip(ModItems.CAPTURE_BOTTLE.get());
 			registerCreateTooltip(ModItems.INCINERATOR.get());

@@ -1,0 +1,32 @@
+{
+  "parent": "comedymonkeysaddons:trade_bot_first_sale",
+  "display": {
+    "icon": {
+      "id": "minecraft:bell"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.trade_bot_day"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.trade_bot_day.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "trade_bot_trade",
+        "min_value": 64
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

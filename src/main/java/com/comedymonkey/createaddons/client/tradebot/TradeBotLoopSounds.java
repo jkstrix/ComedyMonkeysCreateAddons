@@ -75,7 +75,7 @@ public final class TradeBotLoopSounds {
 
 	/** Blocks a tick he's rolling (from where the client has him). */
 	private static double speed(TradeBotEntity bot) {
-		return Math.sqrt(Mth.square(bot.getX() - bot.xo) + Mth.square(bot.getZ() - bot.zo));
+		return Math.sqrt(Mth.square(bot.getX() - bot.xOld) + Mth.square(bot.getZ() - bot.zOld));
 	}
 
 	/** One loop on one bot: follows him, eases toward its level, and stops once it has faded out. */

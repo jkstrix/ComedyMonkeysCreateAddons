@@ -79,6 +79,8 @@ public final class ModItems {
 
 	/** Small chance from crushing cobblestone; nine are pressed into an Emerald. */
 	public static final DeferredItem<Item> EMERALD_DUST = ITEMS.registerSimpleItem("emerald_dust");
+	/** Trade Bot's FE part (D56), for later electric machines too. */
+	public static final DeferredItem<Item> FE_COIL = ITEMS.registerSimpleItem("fe_coil");
 	/** Pipez Covers: copycat-style covers for Pipez pipes (they only do anything with Pipez installed). */
 	public static final DeferredItem<PipeCoverItem> SNUG_PIPEZ_COVER = ITEMS.registerItem("snug_pipez_cover",
 		p -> new PipeCoverItem(p, PipeCover.Kind.SNUG));

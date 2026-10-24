@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:root",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:fe_coil"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.fe_coil"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.fe_coil.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:fe_coil"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

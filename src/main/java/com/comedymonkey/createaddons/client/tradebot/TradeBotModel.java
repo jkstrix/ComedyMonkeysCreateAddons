@@ -37,7 +37,7 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 	public void setupAnim(TradeBotEntity bot, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		root.getAllParts().forEach(ModelPart::resetPose);
 		float partialTick = ageInTicks - bot.tickCount;
-		pose(parts, bot, bot.level().getGameTime() + partialTick);
+		pose(parts, bot, bot.now() + partialTick);
 		// docked and charging: the station's winder keeps turning his key
 		ModelPart key = parts.get("key");
 		if (key != null)

@@ -428,7 +428,7 @@ That last method is **added to the existing `VillagerMixin`**. It does exactly w
 
 ## Milestone 7: teaching and release
 
-**Before release:** route logging (`TradeBotMotion.debug`) is on by default in dev runs while we debug in play; set it back to off (it stays available through `/tradebot debug`).
+**Release:** route logging (`TradeBotMotion.debug`) is off again by default; `/tradebot debug` turns it on.
 
 - **Ponder** (`client/ponder/TradeBotScenes`, three storyboards in `ponder/trade_bot.nbt`):
   1. placing him and powering the station from below;
@@ -447,6 +447,13 @@ That last method is **added to the existing `VillagerMixin`**. It does exactly w
   - Ponder text.
 - **Config** (`CMConfig`, a new `tradeBot` section, server): `tradeBotRange` 64, `tradeBotsPerPlayer` 4, `tradeBotChargeFePerTick` 64, `tradeBotStationBuffer` 100,000, `tradeBotFullCharge` 100,000, `tradeBotFePerBlock` 4, `tradeBotFePerTrade` 50, `tradeBotHostileRadius` 12. `CMConfigTest` covers them automatically; add the comment-promise test (a full charge covers at least 1,000 blocks of travel at defaults).
 - **Creative tab, README section, version bump**, and a release build.
+
+**Done (M7, before release):**
+- **FE Coil:** the icon is drawn by `design/items/fe-coil.gen.js` (a bobbin: copper windings, steel flanges, a redstone core, brass leads), previewed and approved. Shaped recipe: 4 copper sheets around redstone.
+- **Trade Bot's recipe:** a 5x5 mechanical crafting grid, approved: `STPTS / SPEPS / ATBTA / SGFGS / AGPGA`.
+- **Ponder:** three scenes (station and power, linking, trading), structures from `design/ponder/trade-bot.ponder.js`. In them he plays his real clips on his own clock (`setPonder`), because Ponder's world clock stands still; his wheel and rolling sound use `xOld`, which Ponder does keep up to date.
+- **Advancements:** ten, from `trade_bot` (after `fe_coil`). His owner gets the credit wherever they are; the wrench one goes to whoever winds him up.
+- **README section**; version **2.0.0**.
 
 ## Order of work and size
 

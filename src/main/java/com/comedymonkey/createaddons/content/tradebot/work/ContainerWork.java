@@ -56,6 +56,8 @@ public class ContainerWork implements BotWork {
 	private final Wanted wanted;
 	private boolean opened, moved, closed;
 	private int movedCount;
+	/** Of what was delivered, the emeralds. */
+	private int emeraldsDelivered;
 	private final List<ItemStack> movedStacks = new ArrayList<>();
 
 	public ContainerWork(TradeBotEntity bot, ContainerVisit visit, Mode mode, Wanted wanted) {
@@ -133,6 +135,10 @@ public class ContainerWork implements BotWork {
 		}
 	}
 
+	public int emeraldsDelivered() {
+		return emeraldsDelivered;
+	}
+
 	/** How many items moved. */
 	public int moved() {
 		return movedCount;
@@ -171,6 +177,7 @@ public class ContainerWork implements BotWork {
 			int put = count - left.getCount();
 			bot.addEarnings(-put, 0);
 			total += put;
+			emeraldsDelivered += put;
 			if (put < count)
 				break;
 		}
@@ -181,6 +188,8 @@ public class ContainerWork implements BotWork {
 			int put = count - left.getCount();
 			bot.addEarnings(0, -put * TradeBotEntity.XP_PER_NUGGET);
 			total += put;
+			if (put > 0)
+				bot.awardOwner(com.comedymonkey.createaddons.advancement.ModAdvancements.TRADE_BOT_NUGGETS, put);
 			if (put < count)
 				break;
 		}

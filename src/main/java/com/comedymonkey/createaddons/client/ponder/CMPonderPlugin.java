@@ -82,6 +82,10 @@ public class CMPonderPlugin implements PonderPlugin {
 			.addStoryBoard("auto_harvester", FarmScenes::harvester);
 		helper.forComponents(ModBlocks.ANIMAL_PEN.getId(), ModBlocks.BRASS_ANIMAL_PEN.getId(), ModItems.CAPTURE_BOTTLE.getId())
 			.addStoryBoard("animal_pen", FarmScenes::animalPen);
+		helper.forComponents(ModBlocks.TRADE_BOT.getId())
+			.addStoryBoard("trade_bot", TradeBotScenes::station)
+			.addStoryBoard("trade_bot_linking", TradeBotScenes::linking)
+			.addStoryBoard("trade_bot_trading", TradeBotScenes::trading);
 		helper.forComponents(ModBlocks.CUCKOO_CLOCK.getId())
 			.addStoryBoard("cuckoo_clock", ClockScenes::cuckooClock);
 		if (SableCompat.LOADED)

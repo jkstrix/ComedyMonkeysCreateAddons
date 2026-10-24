@@ -10,4 +10,7 @@ import net.minecraft.world.item.trading.MerchantOffer;
 public interface TradeBotCustomer {
 	/** Does the trade's bookkeeping; returns the XP vanilla would have dropped as an orb (0 if the offer gives none). */
 	int comedymonkeysaddons$botTrade(MerchantOffer offer);
+
+	/** Whether it's about to go up a level (from a trade just made). */
+	boolean comedymonkeysaddons$levellingUp();
 }

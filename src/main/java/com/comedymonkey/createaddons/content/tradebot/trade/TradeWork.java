@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.VillagerSeats;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotEntity;
@@ -165,8 +166,14 @@ public class TradeWork implements BotWork {
 		bot.tradedWith(villager.getUUID());
 		bot.addCharge(-CMConfig.SERVER.tradeBotFePerTrade());
 		villager.playSound(villager.getNotifyTradeSound(), 1, villager.getVoicePitch());
-		if (bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station)
+		int today = 0;
+		if (bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station) {
 			station.countTrade();
+			today = station.tradesToday();
+		}
+		bot.awardOwner(ModAdvancements.TRADE_BOT_TRADE, today);
+		if (villager instanceof TradeBotCustomer customer && customer.comedymonkeysaddons$levellingUp())
+			bot.awardOwner(ModAdvancements.TRADE_BOT_LEVEL_UP, 0);
 		return true;
 	}
 

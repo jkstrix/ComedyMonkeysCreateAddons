@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:trade_bot",
+  "display": {
+    "icon": {
+      "id": "minecraft:water_bucket"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.trade_bot_soaked"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.trade_bot_soaked.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "trade_bot_soaked"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

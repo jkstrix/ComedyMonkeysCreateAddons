@@ -9,6 +9,7 @@ A NeoForge add-on for **Create** (Minecraft 1.21.1). Mod id: `comedymonkeysaddon
 - **Auto Harvester**: a Create-style botany pot that grows and harvests any crop or sapling (modded crops too) at a fixed stress, sped up by the new **Bountiful** enchantment from Librarians.
 - **Animal Pen** and **Brass Animal Pen**: catch one animal in a **Capture Bottle** and breed a whole herd of it (128 or 512) in one block, with vanilla breeding and growing-up times, sped up by the new **Fruitful** enchantment.
 - **Cuckoo Clock**: a Black Forest wall clock that sets the villagers around it to restock at **8:00 and 12:00**, and chimes the hour with a cuckoo and a carved villager.
+- **Trade Bot**: a one-wheeled clockwork robot who sells the goods in your chests to **villagers sitting on Create seats**, brings home the emeralds (and the trades' XP as Nuggets of Experience), and lives in a winding station charged with FE.
 - **Magma Engine** and **Supercharged Magma Engine**: lava-burning engines with four and eight Portable Engines' worth of power.
 - **String Tangler** (cobwebs from string and slime) and **Stone Infuser** (Create's ore-bearing stones from cobblestone and metal nuggets).
 - **Incinerator**: destroys any item or fluid, and heats a boiler while it burns.
@@ -179,6 +180,22 @@ A Black Forest cuckoo clock, two blocks tall, in dark walnut and brass: a shingl
 - **Engineer's Goggles** show the time, the next restock and how long until it, and how many traders it reaches (grown villagers with a job).
 - Recipe: dark oak planks over brass sheets either side of a Clock, over chains either side of a Precision Mechanism.
 
+## Trade Bot
+
+A one-wheeled clockwork shopkeeper with big binocular eyes. He lives docked in his **winding station**, and sells your goods to villagers, by himself, for emeralds.
+
+- **Placing**: he comes as one item, docked in his station; place it and he's yours. Only you (and your team) can open his station or change his jobs, and you can have **4** of him. **Sneak-click the station with a Wrench** to pack them both back into the item, jobs and all; nothing else can break it.
+- **Power**: feed **Forge Energy into the station from underneath** (a cable such as a Pipez energy pipe, or a generator that outputs upward). It holds 100,000 FE and winds him up at **64 FE a tick** while he's docked. He uses **4 FE a block** and **50 FE a trade**, so a full charge of 100,000 FE carries him about 25,000 blocks; he heads home with just enough to get back.
+- **Linking**: right-click his station for its screen, then **Select containers** and right-click containers in the world. The first click makes one an **input** he takes goods from (up to 4); a second click makes it his **output** if he hasn't one yet. Left-click unlinks; a belt can only be an output. They must be within **64 blocks** of his station.
+- **Trading**: by day, when a **villager sitting on a Create seat** (or a wandering trader) within 64 blocks buys something in his inputs, he sets off. He takes only **whole lots** of what they'll buy, rolls to each buyer nearest first, and trades from **two blocks away, across its workstation**: in one animation, every trade he can pay for, at the villager's **real prices and stock**. Villagers gain XP and level up as usual, and new trades that opens up he sells on the same trip. His own **reputation** with each villager grows with every trade and earns him a discount, up to vanilla's cap.
+- **Bringing it home**: his output only ever gets his earnings: **emeralds**, and **Nuggets of Experience** for the XP the trades would have dropped (1 per 3 XP). What didn't sell goes back to the input it came from. If the output is full he waits beside it.
+- **Getting around**: he rolls over anything up to 4 pixels high and hops slabs, blocks and stairs, opens doors and fence gates (and shuts the ones he opened), but can't climb ladders. He keeps out of water and lava.
+- **Players first**: if someone is trading with his villager he waits his turn; if the villager stands up or goes, he shrugs and tries someone else.
+- **Feeling alive**: he's scared of monsters (they ignore him, but he doesn't know that): he flees to a corner, hides and recovers. He greets you, glares if you hit him, and bounces after a good day's trading. At **no health** he **winds down** instead of dying; wind him back up with a Wrench. Pushed into water, he winds down until he's dry; wound down in lava or fallen out of the world, he's put back by his station.
+- **Redstone**: a signal on his station keeps him home. A comparator reads **5** while he's docked, **10** while he's out working and **15** when he needs you (low on charge, or wound down).
+- **Engineer's Goggles** on his station show his charge, what he's doing, his containers and today's trades. `/tradebot trade` sends him out now.
+- Recipe: 5x5 Mechanical Crafting: brass sheets, Electron Tubes, Precision Mechanisms, an Emerald Block, Andesite and Brass Casing, Cogwheels and an **FE Coil** (4 copper sheets around redstone dust).
+
 ## Magma Engine
 
 A heavy brass engine that burns lava: by default **64 RPM and 8,192 SU**, four times a Portable Engine, for **10 mB of lava a second**. The shaft comes out of the middle of its front, which faces you when placed (sneak to place it facing away). It holds 4 buckets; pipes fill it through the back or the bottom only (a Fluid Wellspring with Lava Upgrades runs it forever) or right-click with a lava bucket. With Create Aeronautics installed it takes the shape of Simulated's Portable Engine in a dark steel finish with magma glowing in the firebox: the hatch swings open while it burns, the exhausts glow red-hot and pulse with the shaft, and smoke comes from the outlets. (The geometry is loaded from Aeronautics at runtime; only our texture ships.) Without Aeronautics it has its own model, a dark steel block with a gold cog round the shaft and three cylinders whose heads bob in turn. Either way, with no lava it stops. Speed, capacity and lava use are configurable.
@@ -295,6 +312,7 @@ Mods → Create → Config → *Access configs of other mods* → ComedyMonkey's
 - **Auto Harvester**: stress (SU, at any speed), crop and tree grow times, Bountiful's speed bonus per level, logs per tree and leaf drop rolls.
 - **Animal Pens**: stress and max animals for each pen, seconds per breeding and to grow up, Fruitful's speed bonus per level, wool regrowth, egg time and milk per animal.
 - **Cuckoo Clock**: stress (SU, at any speed) and how far it reaches villagers (blocks).
+- **Trade Bot**: his range from the station, bots per player, the station's charge rate and buffer, a full charge, FE per block and per trade, and how near a monster has to be to scare him.
 - **Magma Engine** and **Supercharged Magma Engine**: each has its own speed, stress capacity per RPM and lava burned per second.
 - **Electricity**: the Electric Motor's maximum stress and FE drawn per SU; the Lava Generator's and Geothermal Turbine's FE per tick and lava (and the turbine's water) per second.
 - **Create Aeronautics**: Compact Gyroscope strength, damping, lean correction, full-strength speed and stress; Torque Rotor thrust per RPM and stress.

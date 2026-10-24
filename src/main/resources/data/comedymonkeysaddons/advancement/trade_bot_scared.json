@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:trade_bot",
+  "display": {
+    "icon": {
+      "id": "minecraft:zombie_head"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.trade_bot_scared"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.trade_bot_scared.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "trade_bot_scared"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

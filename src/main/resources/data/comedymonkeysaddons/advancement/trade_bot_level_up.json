@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:trade_bot_first_sale",
+  "display": {
+    "icon": {
+      "id": "minecraft:experience_bottle"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.trade_bot_level_up"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.trade_bot_level_up.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "trade_bot_level_up"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

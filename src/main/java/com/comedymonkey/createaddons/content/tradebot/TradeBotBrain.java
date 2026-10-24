@@ -15,6 +15,7 @@ import java.util.function.Predicate;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
@@ -129,7 +130,7 @@ public class TradeBotBrain {
 		final boolean trading;
 		Phase phase = Phase.TAKING;
 		int input;
-		int taken, trades, delivered, returned;
+		int taken, trades, delivered, returned, emeralds;
 		boolean cheered;
 		/** Buyers he's finished with this round (sold out, or out of reach), and ones who called a trade off: those wait for another trip (D46). */
 		final Set<UUID> done = new HashSet<>(), calledOff = new HashSet<>();
@@ -616,6 +617,7 @@ public class TradeBotBrain {
 							}
 							case DELIVER_EARNINGS -> {
 								job.delivered += c.moved();
+								job.emeralds += c.emeraldsDelivered();
 								if (bot.hasEarnings()) { // the output's full: wait beside it, worried, and try again (D22)
 									bot.playClip("expr_sad");
 									set(Task.WAITING_OUTPUT);
@@ -675,6 +677,8 @@ public class TradeBotBrain {
 					commanded = false;
 					work = null;
 					set(Task.HOME);
+					if (job != null && job.emeralds >= ModAdvancements.TRADE_BOT_STACK_EMERALDS)
+						bot.awardOwner(ModAdvancements.TRADE_BOT_STACK, job.emeralds);
 					if (job != null && job.trading && job.trades == 0)
 						ticks = SCHEDULE_TICKS - NO_TRADE_REST_TICKS; // nothing sold: give it a minute before trying again
 				}
@@ -702,6 +706,8 @@ public class TradeBotBrain {
 				}
 			}
 			case SCARED_HIDE -> {
+				if (ticks == 1)
+					bot.awardOwner(ModAdvancements.TRADE_BOT_SCARED, 0);
 				if (clipOver()) {
 					bot.playClip("scared_cower");
 					set(Task.SCARED_COWER);

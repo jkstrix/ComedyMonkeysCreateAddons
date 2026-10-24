@@ -111,6 +111,8 @@ public class TradeBotEntity extends PathfinderMob {
 	private final ItemStackHandler load = new ItemStackHandler(LOAD_SLOTS);
 	/** Set while he's packed into his item, so his removal isn't taken for him being lost. */
 	private boolean packed;
+	/** In a Ponder scene, whose world clock stands still: his clips run on his own ticks instead. */
+	private boolean ponder;
 	@Nullable
 	private Rundown rundown;
 	private int dryTicks;
@@ -196,6 +198,8 @@ public class TradeBotEntity extends PathfinderMob {
 		if (!already) {
 			brain.windDown();
 			playClip(WIND_DOWN);
+			if (why == Rundown.WATER)
+				awardOwner(com.comedymonkey.createaddons.advancement.ModAdvancements.TRADE_BOT_SOAKED, 0);
 		}
 	}
 
@@ -440,7 +444,7 @@ public class TradeBotEntity extends PathfinderMob {
 	/** Starts a clip at {@code speed} times its own pace; a physical one's ground travel is stretched by {@code scale}. */
 	public void playClip(Clip clip, float speed, float scale) {
 		entityData.set(CLIP, ClipLibrary.get().id(clip));
-		entityData.set(CLIP_START, (int) level().getGameTime());
+		entityData.set(CLIP_START, (int) now());
 		entityData.set(CLIP_SPEED, speed);
 		entityData.set(CLIP_SCALE, scale);
 		if (clip.root() == Clip.Root.PHYSICAL) {
@@ -453,10 +457,29 @@ public class TradeBotEntity extends PathfinderMob {
 		playClip(ClipLibrary.get().clip(name));
 	}
 
+	/** An advancement for his owner, if they're online (what he does earns them credit, wherever they are). */
+	public void awardOwner(String action, int value) {
+		if (owner != null && level() instanceof ServerLevel server) {
+			net.minecraft.server.level.ServerPlayer player = server.getServer().getPlayerList().getPlayer(owner);
+			if (player != null)
+				com.comedymonkey.createaddons.advancement.ModAdvancements.award(player, action, ItemStack.EMPTY, value);
+		}
+	}
+
+	/** The clock his clips run on: the world's, or in Ponder his own ticks. */
+	public long now() {
+		return ponder ? tickCount : level().getGameTime();
+	}
+
+	/** For Ponder scenes: his clips run on his own ticks (call before playing any). */
+	public void setPonder() {
+		ponder = true;
+	}
+
 	/** A held clip, already played to its end (wound down when he's loaded, or put back at his station). */
 	public void playClipAtEnd(Clip clip) {
 		entityData.set(CLIP, ClipLibrary.get().id(clip));
-		entityData.set(CLIP_START, (int) (level().getGameTime() - Mth.ceil(clip.length() * 20) - 1));
+		entityData.set(CLIP_START, (int) (now() - Mth.ceil(clip.length() * 20) - 1));
 		entityData.set(CLIP_SPEED, 1f);
 		entityData.set(CLIP_SCALE, 1f);
 	}
@@ -466,7 +489,7 @@ public class TradeBotEntity extends PathfinderMob {
 		float startYaw = yaw + ClipRoot.turned(clip, clip.length()); // he faces yaw after the clip's own turn
 		Vec3 travelled = ClipRoot.place(Vec3.ZERO, startYaw, ClipRoot.travel(clip, clip.length(), new Vector3f()));
 		entityData.set(CLIP, ClipLibrary.get().id(clip));
-		entityData.set(CLIP_START, (int) (level().getGameTime() - Mth.ceil(clip.length() * 20) - 1));
+		entityData.set(CLIP_START, (int) (now() - Mth.ceil(clip.length() * 20) - 1));
 		setClipAnchor(end.subtract(travelled));
 		entityData.set(CLIP_ANCHOR_YAW, startYaw);
 		entityData.set(CLIP_SPEED, 1f);
@@ -483,13 +506,13 @@ public class TradeBotEntity extends PathfinderMob {
 	/** The game tick the current clip started on. */
 	public long clipStart() {
 		// the tick is synced as an int; rebuild the full value from the current time
-		long now = level().getGameTime();
+		long now = now();
 		return now - (int) (now - entityData.get(CLIP_START));
 	}
 
 	/** Seconds the current clip has played, at {@code partialTick} into the current tick. */
 	public float clipElapsed(float partialTick) {
-		return (float) ((level().getGameTime() - clipStart() + partialTick) / 20) * clipSpeed();
+		return (float) ((now() - clipStart() + partialTick) / 20) * clipSpeed();
 	}
 
 	public float clipSpeed() {
@@ -537,11 +560,12 @@ public class TradeBotEntity extends PathfinderMob {
 		yBodyRot = getYRot();
 		yHeadRot = getYRot();
 		if (level().isClientSide) {
-			playback.observe(clip(), clipStart(), clipSpeed(), level().getGameTime());
-			playback.tickCues(level().getGameTime(), this::playCue);
+			playback.observe(clip(), clipStart(), clipSpeed(), now());
+			playback.tickCues(now(), this::playCue);
 			wheelAngleO = wheelAngle;
 			float r = getYRot() * Mth.DEG_TO_RAD;
-			double forward = (getX() - xo) * -Mth.sin(r) + (getZ() - zo) * Mth.cos(r);
+			// xOld, not xo: Ponder's world only keeps xOld up to date
+			double forward = (getX() - xOld) * -Mth.sin(r) + (getZ() - zOld) * Mth.cos(r);
 			wheelAngle += (float) (forward / WHEEL_RADIUS);
 			windSpinO = windSpin;
 			if (!clip().name().equals(DOCKED))
@@ -589,6 +613,7 @@ public class TradeBotEntity extends PathfinderMob {
 		}
 		if (rundown != null) {
 			windUp(true);
+			com.comedymonkey.createaddons.advancement.ModAdvancements.award(player, com.comedymonkey.createaddons.advancement.ModAdvancements.TRADE_BOT_WOUND_UP);
 			return InteractionResult.CONSUME;
 		}
 		if (!docked) {
