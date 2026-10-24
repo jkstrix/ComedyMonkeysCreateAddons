@@ -264,7 +264,7 @@ Burn lava for Forge Energy (FE), and turn FE back into rotation. All the numbers
 | | Takes | Gives |
 |---|---|---|
 | **Lava Generator** | 20 mB/s lava, in at the middle of the back | **1,024 FE/t**, out of the terminals in the middle of each side |
-| **Geothermal Turbine** (3x3x3) | 90 mB/s lava and 250 mB/s water, through any casing | **46,080 FE/t**, through any casing or into anything touching it |
+| **Geothermal Turbine** (3x3x3) | 90 mB/s lava and 250 mB/s water, through the ports under its base | **46,080 FE/t**, through the ports under its base, into anything under it |
 | **Electric Motor** | 1 FE/t for every 16 SU it's set to give | Up to **294,912 SU** (a full superheated boiler) |
 
 - **Lava Generator**: a small lava-fired turbine; its wheel spins behind the intake glass while it burns. It pushes its power into whatever is on its sides (an Electric Motor, or a Pipez energy pipe). One generator runs a motor at 16,384 SU.

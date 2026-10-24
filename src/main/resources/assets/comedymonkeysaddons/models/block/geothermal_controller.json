@@ -1,84 +1,332 @@
 {
- "parent": "minecraft:block/block",
- "textures": {
-  "all": "comedymonkeysaddons:block/geothermal_casing",
-  "particle": "comedymonkeysaddons:block/geothermal_casing",
-  "front": "comedymonkeysaddons:block/geothermal_controller"
- },
- "elements": [
-  {
-   "from": [
-    0,
-    0,
-    0
-   ],
-   "to": [
-    16,
-    16,
-    16
-   ],
-   "faces": {
-    "north": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#front",
-     "cullface": "north"
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/geothermal_turbine_panel",
+    "plate": "comedymonkeysaddons:block/geothermal_turbine_plate",
+    "panel": "comedymonkeysaddons:block/geothermal_turbine_panel",
+    "lava": "comedymonkeysaddons:block/geothermal_turbine_lava",
+    "brass": "comedymonkeysaddons:block/geothermal_turbine_brass",
+    "water": "comedymonkeysaddons:block/geothermal_turbine_water",
+    "bezel": "comedymonkeysaddons:block/geothermal_turbine_bezel",
+    "dial": "comedymonkeysaddons:block/geothermal_turbine_dial",
+    "lamp_off": "comedymonkeysaddons:block/geothermal_turbine_lamp_off"
+  },
+  "elements": [
+    {
+      "name": "controller",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#panel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#panel"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#panel"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#panel"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#panel"
+        }
+      }
     },
-    "east": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#all",
-     "cullface": "east"
+    {
+      "name": "c_lava",
+      "from": [
+        12.8,
+        5.5,
+        -0.3
+      ],
+      "to": [
+        14.8,
+        10,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            6,
+            16,
+            16
+          ],
+          "texture": "#lava"
+        },
+        "east": {
+          "uv": [
+            0,
+            6,
+            0.3,
+            10.5
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            15.7,
+            6,
+            16,
+            10.5
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            12.8,
+            15.7,
+            14.8,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            12.8,
+            0,
+            14.8,
+            0.3
+          ],
+          "texture": "#brass"
+        }
+      }
     },
-    "south": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#all",
-     "cullface": "south"
+    {
+      "name": "c_water",
+      "from": [
+        10,
+        5.5,
+        -0.3
+      ],
+      "to": [
+        12,
+        10,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            4,
+            16,
+            16
+          ],
+          "texture": "#water"
+        },
+        "east": {
+          "uv": [
+            0,
+            6,
+            0.3,
+            10.5
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            15.7,
+            6,
+            16,
+            10.5
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            10,
+            15.7,
+            12,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            10,
+            0,
+            12,
+            0.3
+          ],
+          "texture": "#brass"
+        }
+      }
     },
-    "west": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#all",
-     "cullface": "west"
+    {
+      "name": "c_dial_bezel",
+      "from": [
+        2,
+        5,
+        -0.2
+      ],
+      "to": [
+        8,
+        11,
+        -0.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bezel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bezel"
+        }
+      }
     },
-    "up": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#all",
-     "cullface": "up"
+    {
+      "name": "c_dial",
+      "from": [
+        2.4,
+        5.4,
+        -0.3
+      ],
+      "to": [
+        7.6,
+        10.6,
+        -0.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dial"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dial"
+        }
+      }
     },
-    "down": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#all",
-     "cullface": "down"
+    {
+      "name": "c_lamp",
+      "from": [
+        2,
+        12.5,
+        -0.3
+      ],
+      "to": [
+        4,
+        14,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            2,
+            14,
+            3.5
+          ],
+          "texture": "#lamp_off"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            0.3,
+            3.5
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            15.7,
+            2,
+            16,
+            3.5
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            15.7,
+            4,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            0,
+            4,
+            0.3
+          ],
+          "texture": "#brass"
+        }
+      }
     }
-   }
-  }
- ]
+  ]
 }

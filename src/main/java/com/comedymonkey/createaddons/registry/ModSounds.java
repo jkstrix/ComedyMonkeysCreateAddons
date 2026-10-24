@@ -31,8 +31,38 @@ public final class ModSounds {
 
 	/** Trade Bot's sounds by event id (the cue file's id, e.g. "roll_loop"). */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> TRADE_BOT = registerTradeBot();
+	/**
+	 * The Geothermal Turbine's sounds by event id, from the {@code geothermal_turbine.*} entries that
+	 * {@code design/sound/geothermal-turbine/export-game.js} writes.
+	 */
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> TURBINE = registerPrefixed("geothermal_turbine.");
 
 	private ModSounds() {}
+
+	/** One of the Geothermal Turbine's sounds; throws for an unknown id. */
+	public static SoundEvent turbine(String id) {
+		DeferredHolder<SoundEvent, SoundEvent> holder = TURBINE.get(id);
+		if (holder == null)
+			throw new IllegalArgumentException("no Geothermal Turbine sound " + id);
+		return holder.get();
+	}
+
+	private static Map<String, DeferredHolder<SoundEvent, SoundEvent>> registerPrefixed(String prefix) {
+		Map<String, DeferredHolder<SoundEvent, SoundEvent>> sounds = new LinkedHashMap<>();
+		try (InputStream in = ModSounds.class.getResourceAsStream(SOUNDS_JSON)) {
+			if (in == null)
+				throw new IllegalStateException("missing " + SOUNDS_JSON);
+			try (Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+				for (String key : JsonParser.parseReader(reader).getAsJsonObject().keySet())
+					if (key.startsWith(prefix))
+						sounds.put(key.substring(prefix.length()), SOUND_EVENTS.register(key,
+							() -> SoundEvent.createVariableRangeEvent(ComedyMonkeysCreateAddons.asResource(key))));
+			}
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+		return Collections.unmodifiableMap(sounds);
+	}
 
 	/** One of Trade Bot's sounds; throws for an unknown id, since ids are fixed by the sound design. */
 	public static SoundEvent tradeBot(String id) {

@@ -32,6 +32,11 @@ public final class ElectricRenderers {
 	public static final ModelResourceLocation TURBINE_GLOW = model("geothermal_turbine_glow");
 	public static final ModelResourceLocation GAUGE_LAVA = model("geothermal_turbine_gauge_lava");
 	public static final ModelResourceLocation GAUGE_WATER = model("geothermal_turbine_gauge_water");
+	public static final ModelResourceLocation TURBINE_ROTOR = model("geothermal_turbine_rotor");
+	public static final ModelResourceLocation NEEDLE_ENERGY = model("geothermal_turbine_needle_energy");
+	public static final ModelResourceLocation NEEDLE_STEAM = model("geothermal_turbine_needle_steam");
+	public static final ModelResourceLocation LAMP_OUTPUT = model("geothermal_turbine_lamp_output");
+	public static final ModelResourceLocation LAMP_STALL = model("geothermal_turbine_lamp_stall");
 
 	private ElectricRenderers() {}
 
@@ -40,7 +45,8 @@ public final class ElectricRenderers {
 	}
 
 	public static void registerModels(ModelEvent.RegisterAdditional event) {
-		for (ModelResourceLocation m : new ModelResourceLocation[] {GENERATOR_ROTOR, TURBINE, TURBINE_GLOW, GAUGE_LAVA, GAUGE_WATER})
+		for (ModelResourceLocation m : new ModelResourceLocation[] {GENERATOR_ROTOR, TURBINE, TURBINE_GLOW, GAUGE_LAVA, GAUGE_WATER,
+			TURBINE_ROTOR, NEEDLE_ENERGY, NEEDLE_STEAM, LAMP_OUTPUT, LAMP_STALL})
 			event.register(m);
 	}
 
@@ -105,8 +111,19 @@ public final class ElectricRenderers {
 		}
 	}
 
-	/** The whole formed turbine, drawn round its middle block, with its gauges showing the tanks. */
+	/**
+	 * The whole formed turbine, drawn round its middle block: the rotor turning behind its window, the firebox glow while
+	 * it runs, the lava and water gauges, the energy and steam dials, and the output and stall lamps. Pivots are in the
+	 * formed model's pixels (design/models/geothermal-turbine.gen.js).
+	 */
 	public static class Turbine extends SafeBlockEntityRenderer<GeothermalControllerBlockEntity> {
+		/** The rotor turns about X through (y 20, z 2). */
+		private static final float ROTOR_Y = 20, ROTOR_Z = 2;
+		/** The energy dial on the panel (turns about Z) and the steam dial on the boiler's west end (turns about X). */
+		private static final float ENERGY_X = 2, ENERGY_Y = 1, ENERGY_Z = -15.75f, STEAM_X = -13.25f, STEAM_Y = 9, STEAM_Z = 18;
+		/** The gauge windows' foot: the fills grow up from here. */
+		private static final float GAUGE_FOOT = -3;
+
 		public Turbine(BlockEntityRendererProvider.Context context) {}
 
 		@Override
@@ -133,21 +150,43 @@ public final class ElectricRenderers {
 			Direction back = facing.getOpposite();
 			ms.translate(back.getStepX(), 0, back.getStepZ());
 			face(ms, facing);
+			boolean lit = state.getValue(GeothermalControllerBlock.LIT);
 			drawModel(ms, vc, state, TURBINE, front);
-			drawModel(ms, vc, state, TURBINE_GLOW, state.getValue(GeothermalControllerBlock.LIT) ? LightTexture.FULL_BRIGHT : front);
+			// The firebox only glows while it burns; off, the grates are dark iron
+			if (lit)
+				drawModel(ms, vc, state, TURBINE_GLOW, LightTexture.FULL_BRIGHT);
+			turned(ms, vc, state, TURBINE_ROTOR, front, Axis.XP, -be.rotorAngle(partialTicks), 0, ROTOR_Y, ROTOR_Z);
+			// Energy dial sweeps clockwise from lower left (empty) to lower right (full); steam follows the load
+			turned(ms, vc, state, NEEDLE_ENERGY, front, Axis.ZP, -135 + 270 * be.energyFill(), ENERGY_X, ENERGY_Y, ENERGY_Z);
+			turned(ms, vc, state, NEEDLE_STEAM, front, Axis.XP, 70 - 140 * be.load() * Math.min(1, be.rotorSpeed() * 4), STEAM_X, STEAM_Y, STEAM_Z);
+			if (lit)
+				drawModel(ms, vc, state, LAMP_OUTPUT, LightTexture.FULL_BRIGHT);
+			if (be.isStalled())
+				drawModel(ms, vc, state, LAMP_STALL, LightTexture.FULL_BRIGHT);
 			gauge(ms, vc, state, GAUGE_LAVA, be.lavaFill());
 			gauge(ms, vc, state, GAUGE_WATER, be.waterFill());
 			ms.popPose();
 		}
 
-		/** A gauge's fill, from the bottom of its window (y -3 in the model) up to its level. */
+		/** A part turned by {@code degrees} about {@code axis} through a pivot given in model pixels. */
+		private static void turned(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation model, int light,
+								   Axis axis, float degrees, float x, float y, float z) {
+			ms.pushPose();
+			ms.translate(x / 16, y / 16, z / 16);
+			ms.mulPose(axis.rotationDegrees(degrees));
+			ms.translate(-x / 16, -y / 16, -z / 16);
+			drawModel(ms, vc, state, model, light);
+			ms.popPose();
+		}
+
+		/** A gauge's fill, from the foot of its window up to its level. */
 		private static void gauge(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation model, float fill) {
 			if (fill <= 0.005f)
 				return;
 			ms.pushPose();
-			ms.translate(0, -3 / 16f, 0);
+			ms.translate(0, GAUGE_FOOT / 16, 0);
 			ms.scale(1, Math.min(1, fill), 1);
-			ms.translate(0, 3 / 16f, 0);
+			ms.translate(0, -GAUGE_FOOT / 16, 0);
 			drawModel(ms, vc, state, model, LightTexture.FULL_BRIGHT);
 			ms.popPose();
 		}

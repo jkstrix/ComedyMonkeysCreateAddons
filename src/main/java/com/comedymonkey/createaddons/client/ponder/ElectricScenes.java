@@ -5,6 +5,9 @@ import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlock;
 import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlockEntity;
 import com.comedymonkey.createaddons.content.electric.GeothermalPartBlock;
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlock;
+import com.comedymonkey.createaddons.registry.ModBlocks;
+import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
+import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
 
 import net.createmod.catnip.math.Pointing;
@@ -19,6 +22,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.PipeBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -212,16 +217,23 @@ public final class ElectricScenes {
 			.attachKeyFrame();
 		scene.idle(90);
 
-		scene.world().showSection(util.select().fromTo(0, 1, 3, 1, 1, 3), Direction.EAST);
-		scene.world().showSection(util.select().fromTo(3, 1, 6, 3, 1, 5), Direction.NORTH);
+		// Everything connects through the port flanges under the base: pipes run in under the turbine from the Wellsprings
+		scene.world().showSection(util.select().position(0, 1, 3).add(util.select().position(3, 1, 6)), Direction.DOWN);
+		scene.idle(10);
+		scene.world().setBlock(util.grid().at(0, 0, 3), pipe(Direction.UP, Direction.EAST), false);
+		scene.world().setBlock(util.grid().at(1, 0, 3), pipe(Direction.WEST, Direction.EAST), false);
+		scene.world().setBlock(util.grid().at(2, 0, 3), pipe(Direction.WEST, Direction.UP), false);
+		scene.world().setBlock(util.grid().at(3, 0, 6), pipe(Direction.UP, Direction.NORTH), false);
+		scene.world().setBlock(util.grid().at(3, 0, 5), pipe(Direction.SOUTH, Direction.NORTH), false);
+		scene.world().setBlock(util.grid().at(3, 0, 4), pipe(Direction.SOUTH, Direction.UP), false);
 		scene.idle(15);
 		scene.world().modifyBlockEntityNBT(util.select().position(controller), GeothermalControllerBlockEntity.class, nbt -> {
 			nbt.put("Lava", fluid("minecraft:lava", 12000));
 			nbt.put("Water", fluid("minecraft:water", 14000));
 		});
 		scene.overlay().showText(90)
-			.text("Pipe lava and water into any casing. The gauges on the front show how much it has of each")
-			.pointAt(util.vector().blockSurface(util.grid().at(2, 1, 3), Direction.WEST))
+			.text("Lava, water and power connect only through the ports under its base: pipe lava and water in from below. The gauges on the front show how much it has of each")
+			.pointAt(util.vector().topOf(util.grid().at(1, 0, 3)))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(100);
@@ -230,7 +242,8 @@ public final class ElectricScenes {
 		ParticleEmitter steam = scene.effects().simpleParticleEmitter(ParticleTypes.CLOUD, new Vec3(0, 0.08, 0));
 		ParticleEmitter flame = scene.effects().simpleParticleEmitter(ParticleTypes.FLAME, new Vec3(-0.01, 0.01, 0));
 		scene.effects().emitParticles(util.vector().of(3.5, 3.97, 3.5), steam, 0.6f, 160);
-		scene.effects().emitParticles(util.vector().of(1.98, 2.35, 3.6), flame, 0.4f, 160);
+		// out of the firebox grates on its west side, low down
+		scene.effects().emitParticles(util.vector().of(2.04, 1.6, 3.6), flame, 0.4f, 160);
 		scene.overlay().showText(90)
 			.text("Lava boils the water to steam that turns the turbine: 46,080 FE a tick, ten times as much from each bucket of lava as a Lava Generator")
 			.pointAt(util.vector().topOf(core).add(0, 1, 0))
@@ -238,14 +251,18 @@ public final class ElectricScenes {
 			.attachKeyFrame();
 		scene.idle(100);
 
-		scene.world().showSection(util.select().fromTo(5, 2, 3, 6, 2, 3), Direction.WEST);
+		// A motor set into the floor under the base, its shaft running out to the east
+		BlockPos motor = util.grid().at(4, 0, 3);
+		scene.world().setBlock(motor, ModBlocks.ELECTRIC_MOTOR.get().defaultBlockState()
+			.setValue(DirectionalKineticBlock.FACING, Direction.EAST).setValue(ElectricMotorBlock.POWERED, true), false);
+		BlockState shaft = create("shaft").setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.X);
+		scene.world().setBlock(util.grid().at(5, 0, 3), shaft, false);
+		scene.world().setBlock(util.grid().at(6, 0, 3), shaft, false);
+		scene.world().setKineticSpeed(util.select().fromTo(4, 0, 3, 6, 0, 3), 128);
 		scene.idle(10);
-		BlockPos motor = util.grid().at(5, 2, 3);
-		scene.world().modifyBlock(motor, s -> s.setValue(ElectricMotorBlock.POWERED, true), false);
-		scene.world().setKineticSpeed(util.select().fromTo(5, 2, 3, 6, 2, 3), 128);
 		scene.overlay().showText(90)
-			.text("It powers anything touching it, or energy pipes on any casing: enough for two and a half Electric Motors flat out")
-			.pointAt(util.vector().blockSurface(motor, Direction.UP))
+			.text("It powers anything under its base, or energy cables at the ports there: enough for two and a half Electric Motors flat out")
+			.pointAt(util.vector().topOf(motor))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(100);
@@ -257,6 +274,21 @@ public final class ElectricScenes {
 			.attachKeyFrame();
 		scene.idle(90);
 		scene.markAsFinished();
+	}
+
+	/** One of Create's blocks by id (through the registry: Create's AllBlocks needs Registrate on the classpath). */
+	private static BlockState create(String id) {
+		return BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("create", id)).defaultBlockState();
+	}
+
+	/** A Create fluid pipe joined on just the given sides. */
+	private static BlockState pipe(Direction... sides) {
+		BlockState state = create("fluid_pipe");
+		for (Direction side : Direction.values())
+			state = state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(side), false);
+		for (Direction side : sides)
+			state = state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(side), true);
+		return state;
 	}
 
 	private static CompoundTag fluid(String id, int amount) {

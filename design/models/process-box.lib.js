@@ -142,6 +142,22 @@ function defaultUv(dir, f, t) {
   }
 }
 const clampUv = (uv) => uv.map((v) => Math.max(0, Math.min(16, v)));
+// The projected UV for a face anywhere in -16..32: worked out in the block cell the face sits in, so it lands inside
+// its 0-16 texture. A face that crosses a cell boundary is slid back inside, and one wider than a block is fitted to it.
+// (Clamping an absolute UV instead squashes faces outside the middle block to a zero-width sliver, which in game
+// samples the neighbouring sprites in the atlas: speckle that looks like z-fighting.)
+function fitUv(dir, f, t) {
+  const lf = [], lt = [];
+  for (let a = 0; a < 3; a++) {
+    const lo = Math.min(f[a], t[a]), hi = Math.max(f[a], t[a]), span = hi - lo;
+    if (span >= 16) { lf.push(0); lt.push(16); continue; }
+    let b = lo - Math.floor(lo / 16) * 16;
+    if (b + span > 16) b = 16 - span;
+    lf.push(b);
+    lt.push(b + span);
+  }
+  return defaultUv(dir, lf, lt).map((v) => Math.round(v * 1000) / 1000);
+}
 const faceTex = (c, dir) => (dir in c.faces ? c.faces[dir] : c.faces.all);
 const AXIS = 'create:block/axis', AXIS_TOP = 'create:block/axis_top';
 // The shared shaft stub (cobble_generator_shaft, frozen), turned to the back as CobbleGeneratorRenderer.renderShaft does; preview only
@@ -174,7 +190,7 @@ function preview(name, sets) {
     for (const dir of DIRS) {
       const t = faceTex(c, dir);
       if (!t) { faces[dir] = { uv: [0, 0, 0, 0], texture: null }; continue; }
-      faces[dir] = { uv: (c.uv && c.uv[dir]) || clampUv(defaultUv(dir, c.from, c.to)), texture: texIdx(t) };
+      faces[dir] = { uv: (c.uv && c.uv[dir]) || fitUv(dir, c.from, c.to), texture: texIdx(t) };
       if (c.frot && c.frot[dir]) faces[dir].rotation = c.frot[dir];
     }
     const rots = !c.rot ? [] : Array.isArray(c.rot[0]) ? c.rot : [c.rot];
@@ -193,8 +209,9 @@ function preview(name, sets) {
   }
   const FPS = 20;
   const r3 = (v) => Math.round(v * 1000) / 1000;
-  // tracks: { bone: { channel: (t) => [x, y, z] } } sampled at 20 fps; steps: { bone: { channel: [[t, [x, y, z]], ...] } } held
-  function clip(cname, length, loop, tracks, steps = {}) {
+  // tracks: { bone: { channel: (t) => [x, y, z] } } sampled at 20 fps; steps: { bone: { channel: [[t, [x, y, z]], ...] } } held;
+  // sounds: [[t, effect, file]] for the clip's Effects track
+  function clip(cname, length, loop, tracks, steps = {}, sounds = []) {
     const animators = {};
     const add = (bone, kf) => {
       const g = groupByName[bone];
@@ -210,6 +227,8 @@ function preview(name, sets) {
     }
     for (const bone of Object.keys(steps)) for (const ch of Object.keys(steps[bone])) for (const [t, v] of steps[bone][ch])
       add(bone, { channel: ch, data_points: [{ x: String(v[0]), y: String(v[1]), z: String(v[2]) }], uuid: uuid(), time: r3(t), color: -1, interpolation: 'step' });
+    if (sounds.length) animators.effects = { name: 'Effects', type: 'effect', keyframes: sounds.map(([t, effect, file]) => ({ channel: 'sound',
+      data_points: [{ effect, locator: '', file }], uuid: uuid(), time: r3(t), color: -1, interpolation: 'linear' })) };
     animations.push({ uuid: uuid(), name: cname, loop, override: false, length, snapping: FPS, selected: false, anim_time_update: '', blend_weight: '', start_delay: '', loop_delay: '', animators });
   }
   function write(out, outliner) {
@@ -233,4 +252,4 @@ const lerp = (a, b, f) => a + (b - a) * f;
 const trayItem = (n, cx, tex) => [C(`item_${n}`, [cx - 1.5, 2.5, 2.2], [cx + 1.5, 5.5, 2.2], { north: tex, south: tex, all: null },
   { uv: { north: [0, 0, 16, 16], south: [0, 0, 16, 16] }, rot: ['x', 60, [cx, 2.5, 2.2]], shade: false })];
 
-module.exports = { REPO, ASSETS, P, SEAM, RIVET, HI, LO, hash, mot, edge, FIELD, png, textureSet, painters, borrowed, DIRS, C, defaultUv, shaftStub, preview, SHOW, HIDE, smooth, lerp, trayItem };
+module.exports = { REPO, ASSETS, P, SEAM, RIVET, HI, LO, hash, mot, edge, FIELD, png, textureSet, painters, borrowed, DIRS, C, defaultUv, fitUv, shaftStub, preview, SHOW, HIDE, smooth, lerp, trayItem };

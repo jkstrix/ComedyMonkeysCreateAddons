@@ -3,11 +3,13 @@ package com.comedymonkey.createaddons.content.electric;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
+import com.comedymonkey.createaddons.registry.ModSounds;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -19,6 +21,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -54,6 +57,12 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 	private float output;
 	private boolean syncQueued;
 	private int syncedEnergy = -1;
+	/** The rotor, client side: its angle (degrees) and its speed (0 still to 1 flat out), easing after the output. */
+	private float rotorAngle, prevRotorAngle, rotorSpeed;
+	/** How far the rotor turns a tick flat out, and the slowest it turns while it's making any power at all. */
+	private static final float SPIN_DEGREES = 30, MIN_RUNNING_SPEED = 0.25f;
+	/** Set by the client: the turbine's sounds, run each client tick. */
+	public static Consumer<GeothermalControllerBlockEntity> clientTicker = be -> {};
 	/** Blocks touching the outside of the turbine, and the side of them that faces it. */
 	private final List<BlockPos> neighbours = new ArrayList<>();
 	private final List<Direction> neighbourSides = new ArrayList<>();
@@ -95,6 +104,35 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 		return (float) water.getFluidAmount() / TANK;
 	}
 
+	public boolean isRunning() {
+		return running;
+	}
+
+	/** Formed with both lava and water, but not running: the power isn't being taken ("Full"). */
+	public boolean isStalled() {
+		return formed && !running && !lava.isEmpty() && !water.isEmpty();
+	}
+
+	/** How hard it's working, 0 to 1, from the smoothed output. */
+	public float load() {
+		return Math.min(1, output / CMConfig.SERVER.turbineFePerTick());
+	}
+
+	public float energyFill() {
+		return (float) energy.getEnergyStored() / BUFFER;
+	}
+
+	public float rotorAngle(float partialTicks) {
+		float delta = rotorAngle - prevRotorAngle;
+		if (delta < 0)
+			delta += 360;
+		return prevRotorAngle + delta * partialTicks;
+	}
+
+	public float rotorSpeed() {
+		return rotorSpeed;
+	}
+
 	public void queueCheck() {
 		checkQueued = true;
 	}
@@ -112,8 +150,13 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 	@Override
 	public void tick() {
 		super.tick();
-		if (level == null || level.isClientSide)
+		if (level == null)
 			return;
+		if (level.isClientSide) {
+			tickRotor();
+			clientTicker.accept(this);
+			return;
+		}
 		if (checkQueued || level.getGameTime() % 20 == 0) {
 			checkQueued = false;
 			setFormed(structureIsWhole());
@@ -159,6 +202,19 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 		}
 	}
 
+	/**
+	 * Winds the rotor towards the speed the output asks for: up over about three seconds from rest, and coasting down
+	 * a little quicker once the power stops (as in the approved run clip, design/models/geothermal-turbine.gen.js).
+	 */
+	private void tickRotor() {
+		float target = formed && running ? MIN_RUNNING_SPEED + (1 - MIN_RUNNING_SPEED) * load() : 0;
+		rotorSpeed += (target - rotorSpeed) * (target > rotorSpeed ? 0.02f : 0.03f);
+		if (rotorSpeed < 0.002f && target == 0)
+			rotorSpeed = 0;
+		prevRotorAngle = rotorAngle;
+		rotorAngle = (rotorAngle + rotorSpeed * SPIN_DEGREES) % 360;
+	}
+
 	/** Every block of the 3x3x3: the core in the middle, this controller in the front, casings everywhere else. */
 	private boolean structureIsWhole() {
 		BlockPos centre = centre();
@@ -191,6 +247,8 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 		// Unchanged, unless it loaded formed and hasn't worked out its neighbours yet
 		if (now == formed && (!now || !neighbours.isEmpty()))
 			return;
+		// Loading formed also lands here (to find its neighbours); only a real change gets a sound
+		boolean changed = now != formed;
 		formed = now;
 		BlockPos centre = centre();
 		neighbours.clear();
@@ -202,18 +260,16 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 				level.setBlock(pos, state.setValue(GeothermalPartBlock.FORMED, now), 3);
 			if (level.getBlockEntity(pos) instanceof GeothermalCasingBlockEntity casing)
 				casing.setController(now ? worldPosition : null);
-			if (now)
-				for (Direction side : Direction.values()) {
-					BlockPos out = pos.relative(side);
-					if (Math.abs(out.getX() - centre.getX()) > 1 || Math.abs(out.getY() - centre.getY()) > 1
-						|| Math.abs(out.getZ() - centre.getZ()) > 1) {
-						neighbours.add(pos);
-						neighbourSides.add(side);
-					}
-				}
+			// Power goes out only through the port flanges under the base: the bottom face of the bottom layer
+			if (now && pos.getY() == centre.getY() - 1) {
+				neighbours.add(pos);
+				neighbourSides.add(Direction.DOWN);
+			}
 		}
 		syncQueued = true;
 		invalidateStructure();
+		if (changed)
+			playAtCentre(now ? "form" : "unform");
 		if (now)
 			ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.TURBINE_FORMED, ItemStack.EMPTY, 0);
 	}
@@ -234,7 +290,14 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 					casing.setController(null);
 			}
 			invalidateStructure();
+			playAtCentre("unform");
 		}
+	}
+
+	private void playAtCentre(String sound) {
+		BlockPos centre = centre();
+		level.playSound(null, centre.getX() + 0.5, centre.getY() + 0.5, centre.getZ() + 0.5, ModSounds.turbine(sound),
+			SoundSource.BLOCKS, 1, 1);
 	}
 
 	@Override

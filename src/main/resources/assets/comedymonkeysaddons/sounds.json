@@ -605,5 +605,101 @@
       "comedymonkeysaddons:trade_bot/wheee_2",
       "comedymonkeysaddons:trade_bot/wheee_3"
     ]
+  },
+  "geothermal_turbine.turbine_whine": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.turbine_whine",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/turbine_whine_loop"
+    ]
+  },
+  "geothermal_turbine.steam_chuff": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.steam_chuff",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/steam_chuff_1",
+      "comedymonkeysaddons:geothermal_turbine/steam_chuff_2",
+      "comedymonkeysaddons:geothermal_turbine/steam_chuff_3",
+      "comedymonkeysaddons:geothermal_turbine/steam_chuff_4"
+    ]
+  },
+  "geothermal_turbine.firebox_roar": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.firebox_roar",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/firebox_roar_loop"
+    ]
+  },
+  "geothermal_turbine.relay_clack": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.relay_clack",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/relay_clack_1",
+      "comedymonkeysaddons:geothermal_turbine/relay_clack_2",
+      "comedymonkeysaddons:geothermal_turbine/relay_clack_3"
+    ]
+  },
+  "geothermal_turbine.boiler_groan": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.boiler_groan",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/boiler_groan_1",
+      "comedymonkeysaddons:geothermal_turbine/boiler_groan_2",
+      "comedymonkeysaddons:geothermal_turbine/boiler_groan_3"
+    ]
+  },
+  "geothermal_turbine.ignite": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.ignite",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/ignite_1",
+      "comedymonkeysaddons:geothermal_turbine/ignite_2"
+    ]
+  },
+  "geothermal_turbine.lamp_on": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.lamp_on",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/lamp_on"
+    ]
+  },
+  "geothermal_turbine.spin_up": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.spin_up",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/spin_up"
+    ]
+  },
+  "geothermal_turbine.spin_down": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.spin_down",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/spin_down"
+    ]
+  },
+  "geothermal_turbine.settle": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.settle",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/settle_1",
+      "comedymonkeysaddons:geothermal_turbine/settle_2"
+    ]
+  },
+  "geothermal_turbine.stall": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.stall",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/stall"
+    ]
+  },
+  "geothermal_turbine.cool_tick": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.cool_tick",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/cool_tick_1",
+      "comedymonkeysaddons:geothermal_turbine/cool_tick_2",
+      "comedymonkeysaddons:geothermal_turbine/cool_tick_3",
+      "comedymonkeysaddons:geothermal_turbine/cool_tick_4"
+    ]
+  },
+  "geothermal_turbine.form": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.form",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/form"
+    ]
+  },
+  "geothermal_turbine.unform": {
+    "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.unform",
+    "sounds": [
+      "comedymonkeysaddons:geothermal_turbine/unform"
+    ]
   }
 }

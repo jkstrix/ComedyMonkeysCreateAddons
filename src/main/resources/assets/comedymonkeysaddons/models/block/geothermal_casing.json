@@ -1,83 +1,176 @@
 {
- "parent": "minecraft:block/block",
- "textures": {
-  "all": "comedymonkeysaddons:block/geothermal_casing",
-  "particle": "comedymonkeysaddons:block/geothermal_casing"
- },
- "elements": [
-  {
-   "from": [
-    0,
-    0,
-    0
-   ],
-   "to": [
-    16,
-    16,
-    16
-   ],
-   "faces": {
-    "north": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#all",
-     "cullface": "north"
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/geothermal_turbine_panel",
+    "panel": "comedymonkeysaddons:block/geothermal_turbine_panel",
+    "port": "comedymonkeysaddons:block/geothermal_turbine_port"
+  },
+  "elements": [
+    {
+      "name": "casing",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#panel"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#panel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#panel"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#panel"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#panel"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#panel"
+        }
+      }
     },
-    "east": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#all",
-     "cullface": "east"
+    {
+      "name": "port_north",
+      "from": [
+        5,
+        5,
+        -0.4
+      ],
+      "to": [
+        11,
+        11,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#port"
+        }
+      }
     },
-    "south": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#all",
-     "cullface": "south"
+    {
+      "name": "port_south",
+      "from": [
+        5,
+        5,
+        16
+      ],
+      "to": [
+        11,
+        11,
+        16.4
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#port"
+        }
+      }
     },
-    "west": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#all",
-     "cullface": "west"
+    {
+      "name": "port_east",
+      "from": [
+        16,
+        5,
+        5
+      ],
+      "to": [
+        16.4,
+        11,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#port"
+        }
+      }
     },
-    "up": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#all",
-     "cullface": "up"
-    },
-    "down": {
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ],
-     "texture": "#all",
-     "cullface": "down"
+    {
+      "name": "port_west",
+      "from": [
+        -0.4,
+        5,
+        5
+      ],
+      "to": [
+        0,
+        11,
+        11
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#port"
+        }
+      }
     }
-   }
-  }
- ]
+  ]
 }

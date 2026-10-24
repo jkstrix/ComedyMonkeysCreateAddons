@@ -1,0 +1,34 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/geothermal_turbine_needle",
+    "needle": "comedymonkeysaddons:block/geothermal_turbine_needle"
+  },
+  "elements": [
+    {
+      "name": "needle_e",
+      "from": [
+        1.75,
+        1,
+        -15.75
+      ],
+      "to": [
+        2.25,
+        4.1,
+        -15.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.75,
+            11.9,
+            14.25,
+            15
+          ],
+          "texture": "#needle"
+        }
+      }
+    }
+  ]
+}

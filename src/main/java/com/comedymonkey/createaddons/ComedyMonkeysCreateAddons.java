@@ -170,14 +170,16 @@ public class ComedyMonkeysCreateAddons {
 			(be, side) -> side == null || side == LavaGeneratorBlock.inlet(be.getBlockState()) ? be.getTank() : null);
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),
 			(be, side) -> side == null || LavaGeneratorBlock.isTerminal(be.getBlockState(), side) ? be.getEnergy().extractOnly() : null);
+		// The turbine connects only through the port flanges under its base (the bottom faces of its bottom casings);
+		// the controller, in the middle of the front, offers nothing to a side
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.GEOTHERMAL_CONTROLLER.get(),
-			(be, side) -> be.isFormed() ? be.getFluids() : null);
+			(be, side) -> be.isFormed() && side == null ? be.getFluids() : null);
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.GEOTHERMAL_CONTROLLER.get(),
-			(be, side) -> be.isFormed() ? be.getEnergyOut() : null);
+			(be, side) -> be.isFormed() && side == null ? be.getEnergyOut() : null);
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.GEOTHERMAL_CASING.get(),
-			(be, side) -> be.controller() != null ? be.controller().getFluids() : null);
+			(be, side) -> be.port(side) != null ? be.port(side).getFluids() : null);
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.GEOTHERMAL_CASING.get(),
-			(be, side) -> be.controller() != null ? be.controller().getEnergyOut() : null);
+			(be, side) -> be.port(side) != null ? be.port(side).getEnergyOut() : null);
 
 		// Optional: without Pipez nothing is registered and Blaze Burners behave exactly as in Create
 		if (ModList.get().isLoaded(PipezBlazeBurnerCompat.PIPEZ_ID)) {

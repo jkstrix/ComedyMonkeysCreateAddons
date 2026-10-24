@@ -1,0 +1,35 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/geothermal_turbine_lamp_red",
+    "lamp_red": "comedymonkeysaddons:block/geothermal_turbine_lamp_red"
+  },
+  "elements": [
+    {
+      "name": "lamp_stall",
+      "from": [
+        5.2,
+        9.2,
+        -15.5
+      ],
+      "to": [
+        7.8,
+        11.8,
+        -15.45
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            8.2,
+            4.2,
+            10.8,
+            6.8
+          ],
+          "texture": "#lamp_red"
+        }
+      }
+    }
+  ]
+}

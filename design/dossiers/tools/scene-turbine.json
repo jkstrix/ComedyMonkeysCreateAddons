@@ -1,0 +1,16 @@
+{
+  "name": "geothermal-turbine-before",
+  "groups": [
+    { "name": "formed", "parts": [
+      { "name": "turbine", "model": "geothermal_turbine" },
+      { "name": "glow", "model": "geothermal_turbine_glow" },
+      { "name": "gauge_lava", "model": "geothermal_turbine_gauge_lava" },
+      { "name": "gauge_water", "model": "geothermal_turbine_gauge_water" }
+    ]},
+    { "name": "unformed", "parts": [
+      { "name": "controller", "model": "geothermal_controller", "offset": [48, -16, -16] },
+      { "name": "core", "model": "geothermal_core", "offset": [68, -16, -16] },
+      { "name": "casing", "model": "geothermal_casing", "offset": [88, -16, -16] }
+    ]}
+  ]
+}

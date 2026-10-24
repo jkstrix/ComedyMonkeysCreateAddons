@@ -1,0 +1,35 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/geothermal_turbine_lamp_cyan",
+    "lamp_cyan": "comedymonkeysaddons:block/geothermal_turbine_lamp_cyan"
+  },
+  "elements": [
+    {
+      "name": "lamp_output",
+      "from": [
+        -3.8,
+        9.2,
+        -15.5
+      ],
+      "to": [
+        -1.2,
+        11.8,
+        -15.45
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            1.2,
+            4.2,
+            3.8,
+            6.8
+          ],
+          "texture": "#lamp_cyan"
+        }
+      }
+    }
+  ]
+}

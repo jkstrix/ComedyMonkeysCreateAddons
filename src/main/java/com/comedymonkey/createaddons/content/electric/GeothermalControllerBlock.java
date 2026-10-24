@@ -10,8 +10,6 @@ import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -92,8 +90,11 @@ public class GeothermalControllerBlock extends Block implements IBE<GeothermalCo
 	}
 
 	/**
-	 * Running: steam rising off the top grille, flames licking at the side vents and now and then a pop of lava, with a
-	 * low rumble and a hiss. Positions are in the formed model's pixels, about the middle block of the turbine.
+	 * Running: steam rising out of the stack on the turbine housing, flames licking out of the firebox grates on both
+	 * sides and now and then a pop of lava (its sounds are GeothermalTurbineSounds). Positions are in the formed model's
+	 * pixels, about the middle block of the turbine: the stack's mouth is 5 px across round (8, 31, 8), and the grates
+	 * are three slots at y -11, -7 and -3, 2 px tall, from z -6 to 22 on the firebox's sides, their glow at x -14.75 and
+	 * 30.75 (the flames start just outside it).
 	 */
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
@@ -102,24 +103,18 @@ public class GeothermalControllerBlock extends Block implements IBE<GeothermalCo
 		Direction facing = state.getValue(FACING);
 		BlockPos centre = pos.relative(facing.getOpposite());
 		for (int i = 0; i < 2; i++) {
-			Vec3 steam = at(centre, facing, 3 + random.nextFloat() * 10, 31.2f, 3 + random.nextFloat() * 10);
+			Vec3 steam = at(centre, facing, 6 + random.nextFloat() * 4, 31.2f, 6 + random.nextFloat() * 4);
 			level.addParticle(random.nextInt(3) == 0 ? ParticleTypes.CLOUD : ParticleTypes.WHITE_SMOKE, steam.x, steam.y, steam.z,
 				(random.nextFloat() - 0.5f) * 0.02f, 0.06 + random.nextFloat() * 0.05, (random.nextFloat() - 0.5f) * 0.02f);
 		}
 		boolean east = random.nextBoolean();
-		float ventY = 2.75f + random.nextInt(3) * 4;
-		Vec3 vent = at(centre, facing, east ? 30.8f : -14.8f, ventY, -6 + random.nextFloat() * 28);
+		float ventY = -10 + random.nextInt(3) * 4;
+		Vec3 vent = at(centre, facing, east ? 31 : -15, ventY, -6 + random.nextFloat() * 28);
 		Vec3 out = at(Vec3.ZERO, facing, east ? 1 : -1, 0, 0);
 		if (random.nextInt(2) == 0)
 			level.addParticle(ParticleTypes.FLAME, vent.x, vent.y, vent.z, out.x * 0.015, 0.015, out.z * 0.015);
 		if (random.nextInt(14) == 0)
 			level.addParticle(ParticleTypes.LAVA, vent.x, vent.y, vent.z, 0, 0, 0);
-		if (random.nextInt(30) == 0)
-			level.playLocalSound(centre.getX() + 0.5, centre.getY() + 0.5, centre.getZ() + 0.5, SoundEvents.LAVA_AMBIENT,
-				SoundSource.BLOCKS, 0.5f, 0.6f, false);
-		if (random.nextInt(60) == 0)
-			level.playLocalSound(centre.getX() + 0.5, centre.getY() + 1.9, centre.getZ() + 0.5, SoundEvents.FIRE_EXTINGUISH,
-				SoundSource.BLOCKS, 0.12f, 0.5f + random.nextFloat() * 0.3f, false);
 	}
 
 	/** A point given in the formed model's pixels (modelled facing north round the middle block) to world space. */

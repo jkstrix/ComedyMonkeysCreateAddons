@@ -1,0 +1,10 @@
+{
+  "steam_chuff": {
+    "pitch": 0.74,
+    "echo": 0.16
+  },
+  "stall": {
+    "pitch": 0.83,
+    "echo": 0.09
+  }
+}

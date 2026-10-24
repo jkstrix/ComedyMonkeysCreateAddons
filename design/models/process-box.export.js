@@ -2,7 +2,7 @@
 // Usage: node design/models/process-box.export.js   (regenerates the previews too, since it loads the generators)
 const fs = require('fs');
 const path = require('path');
-const { ASSETS, C, defaultUv, DIRS } = require('./process-box.lib.js');
+const { ASSETS, C, defaultUv, fitUv, DIRS } = require('./process-box.lib.js');
 const H = require('./auto-harvester.gen.js');
 const PN = require('./animal-pen.gen.js');
 
@@ -22,12 +22,13 @@ function penRef(key) {
 function blockModel(cubes, ref, particle) {
   const vars = new Map();
   const v = (r) => { if (!vars.has(r)) vars.set(r, r.replace(/^.*[/:]/, '').replace(/[^a-z0-9_]/g, '_')); return '#' + vars.get(r); };
-  const elements = cubes.map((c) => {
+  // An element with no faces left (a tile buried inside a box) is invalid to Minecraft, so it's dropped
+  const elements = cubes.filter((c) => DIRS.some((d) => (d in c.faces ? c.faces[d] : c.faces.all))).map((c) => {
     const faces = {};
     for (const dir of DIRS) {
       const t = dir in c.faces ? c.faces[dir] : c.faces.all;
       if (!t) continue;
-      const uv = ((c.uv && c.uv[dir]) || defaultUv(dir, c.from, c.to)).map((n) => Math.round(Math.max(0, Math.min(16, n)) * 1000) / 1000);
+      const uv = ((c.uv && c.uv[dir]) || fitUv(dir, c.from, c.to)).map((n) => Math.round(Math.max(0, Math.min(16, n)) * 1000) / 1000);
       faces[dir] = { uv, texture: v(ref(t)) };
       if (c.frot && c.frot[dir]) faces[dir].rotation = c.frot[dir];
     }

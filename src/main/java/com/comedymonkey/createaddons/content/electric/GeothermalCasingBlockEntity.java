@@ -3,6 +3,7 @@ package com.comedymonkey.createaddons.content.electric;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -34,6 +35,18 @@ public class GeothermalCasingBlockEntity extends BlockEntity {
 		if (controller == null || level == null || !level.isLoaded(controller))
 			return null;
 		return level.getBlockEntity(controller) instanceof GeothermalControllerBlockEntity be && be.isFormed() ? be : null;
+	}
+
+	/**
+	 * The turbine's lava, water and power connect only through the port flanges under its base: the bottom face of the
+	 * bottom layer of casings. {@code null} (no side, e.g. a mod looking inside) is let through as well.
+	 */
+	@Nullable
+	public GeothermalControllerBlockEntity port(@Nullable Direction side) {
+		GeothermalControllerBlockEntity be = controller();
+		if (be == null || side == null)
+			return be;
+		return side == Direction.DOWN && worldPosition.getY() == be.centre().getY() - 1 ? be : null;
 	}
 
 	@Override
