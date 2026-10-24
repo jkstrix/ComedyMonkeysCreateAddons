@@ -821,6 +821,8 @@
   "comedymonkeysaddons.configuration.cuckooClock": "Cuckoo Clock",
   "comedymonkeysaddons.configuration.clockStress": "Stress (SU, at any speed)",
   "comedymonkeysaddons.configuration.clockRadius": "Villager reach (blocks)",
+  "comedymonkeysaddons.configuration.seats": "Create Seats",
+  "comedymonkeysaddons.configuration.villagersSitInSeats": "Villagers Sit in Seats",
   "enchantment.comedymonkeysaddons.bountiful": "Bountiful",
   "enchantment.comedymonkeysaddons.bountiful.desc": "Makes an Auto Harvester's plant grow faster.",
   "advancements.comedymonkeysaddons.auto_harvester": "Green Thumb, Grey Box",

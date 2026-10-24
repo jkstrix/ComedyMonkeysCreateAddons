@@ -103,6 +103,39 @@ class MixinConfigTest {
 		assertEquals(long.class, villager.getDeclaredField("lastRestockCheckDayTime").getType());
 	}
 
+	/** Where a seated villager is placed must agree on both sides; only its pose is drawn on the client. */
+	@Test
+	void seatMixinIsCommonAndModelMixinClientOnly() {
+		assertTrue(names("mixins").contains("SeatEntityMixin"));
+		assertFalse(names("client").contains("SeatEntityMixin"));
+		assertTrue(names("client").contains("VillagerModelMixin"));
+		assertFalse(names("mixins").contains("VillagerModelMixin"));
+	}
+
+	@Test
+	void seatEntityHasGetCustomEntitySeatOffset() throws Exception {
+		Class<?> seat = Class.forName("com.simibubi.create.content.contraptions.actors.seat.SeatEntity", false, loader());
+		Class<?> entity = Class.forName("net.minecraft.world.entity.Entity", false, loader());
+		assertEquals(double.class, seat.getDeclaredMethod("getCustomEntitySeatOffset", entity).getReturnType());
+	}
+
+	@Test
+	void villagerModelHasSetupAnimAndItsLegs() throws Exception {
+		Class<?> model, entity, part;
+		try {
+			model = Class.forName("net.minecraft.client.model.VillagerModel", false, loader());
+			entity = Class.forName("net.minecraft.world.entity.Entity", false, loader());
+			part = Class.forName("net.minecraft.client.model.geom.ModelPart", false, loader());
+		} catch (LinkageError | ClassNotFoundException | RuntimeException e) {
+			Assumptions.abort("client classes aren't available here: " + e);
+			return;
+		}
+		model.getDeclaredMethod("setupAnim", entity, float.class, float.class, float.class, float.class, float.class);
+		// the mixin's @Shadow fields
+		assertEquals(part, model.getDeclaredField("rightLeg").getType());
+		assertEquals(part, model.getDeclaredField("leftLeg").getType());
+	}
+
 	@Test
 	void pipeBlockHasEveryInjectedMethod() throws Exception {
 		Class<?> pipe = pipez("de.maxhenkel.pipez.blocks.PipeBlock");

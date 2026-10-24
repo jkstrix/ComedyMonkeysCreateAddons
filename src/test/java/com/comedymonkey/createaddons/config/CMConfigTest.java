@@ -206,6 +206,14 @@ class CMConfigTest {
 	}
 
 	@Test
+	void villagersSitInSeatsByDefault() {
+		assertTrue(S.villagersSitInSeats.getDefault());
+		assertTrue(S.villagersSitInSeats());
+		TestConfig.set(S.villagersSitInSeats, false);
+		assertFalse(S.villagersSitInSeats());
+	}
+
+	@Test
 	void fruitfulAndBountifulComments() {
 		// "0.5 makes I 1.5x, II 2x, III 2.5x as fast"
 		for (ModConfigSpec.DoubleValue bonus : List.of(S.penFruitfulBonus, S.harvesterBountifulBonus)) {

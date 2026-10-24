@@ -6,10 +6,12 @@
   "mixins": [
     "PipeBlockMixin",
     "PipeTileEntityMixin",
+    "SeatEntityMixin",
     "VillagerMixin"
   ],
   "client": [
-    "PipeRendererMixin"
+    "PipeRendererMixin",
+    "VillagerModelMixin"
   ],
   "injectors": {
     "defaultRequire": 0

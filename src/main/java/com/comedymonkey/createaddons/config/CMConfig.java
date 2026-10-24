@@ -104,6 +104,8 @@ public final class CMConfig {
 		public final ModConfigSpec.DoubleValue torqueRotorThrust;
 		public final ModConfigSpec.DoubleValue torqueRotorStressImpact;
 
+		public final ModConfigSpec.BooleanValue villagersSitInSeats;
+
 		public final ModConfigSpec.BooleanValue pipezFeedsBlazeBurners;
 		public final ModConfigSpec.BooleanValue blazeBurnerPipezOnly;
 		public final ModConfigSpec.BooleanValue pipezFeedsEngines;
@@ -397,6 +399,14 @@ public final class CMConfig {
 			builder.pop();
 			builder.pop();
 
+			builder.comment("Create Seats").push("seats");
+			villagersSitInSeats = builder
+				.comment("Villagers and wandering traders on a Create Seat sit down on it like a player does, legs bent, instead",
+					"of standing on top of the cushion. Also on seats that are part of a moving contraption.")
+				.translation("comedymonkeysaddons.configuration.villagersSitInSeats")
+				.define("villagersSitInSeats", true);
+			builder.pop();
+
 			builder.comment("Compatibility with other mods").push("modCompatibility");
 
 			pipezFeedsBlazeBurners = builder
@@ -604,6 +614,10 @@ public final class CMConfig {
 
 		public double torqueRotorStressImpact() {
 			return get(torqueRotorStressImpact);
+		}
+
+		public boolean villagersSitInSeats() {
+			return get(villagersSitInSeats);
 		}
 
 		public boolean pipezFeedsBlazeBurners() {
