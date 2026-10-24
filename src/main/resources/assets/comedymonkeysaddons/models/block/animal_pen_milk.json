@@ -1,0 +1,61 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/animal_pen_milk",
+    "animal_pen_milk": "comedymonkeysaddons:block/animal_pen_milk"
+  },
+  "elements": [
+    {
+      "name": "milk_west",
+      "from": [
+        0.25,
+        0,
+        7.05
+      ],
+      "to": [
+        0.25,
+        1,
+        8.95
+      ],
+      "shade": false,
+      "faces": {
+        "west": {
+          "uv": [
+            7,
+            3,
+            9,
+            13
+          ],
+          "texture": "#animal_pen_milk"
+        }
+      }
+    },
+    {
+      "name": "milk_east",
+      "from": [
+        15.75,
+        0,
+        7.05
+      ],
+      "to": [
+        15.75,
+        1,
+        8.95
+      ],
+      "shade": false,
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            3,
+            9,
+            13
+          ],
+          "texture": "#animal_pen_milk"
+        }
+      }
+    }
+  ]
+}

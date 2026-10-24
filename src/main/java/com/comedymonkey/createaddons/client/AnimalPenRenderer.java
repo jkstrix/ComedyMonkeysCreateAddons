@@ -1,5 +1,6 @@
 package com.comedymonkey.createaddons.client;
 
+import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.pen.AnimalPenBlock;
 import com.comedymonkey.createaddons.content.pen.AnimalPenBlockEntity;
 import com.comedymonkey.createaddons.content.pen.PenAnimal;
@@ -9,20 +10,33 @@ import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRender
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
 /**
  * Draws the inside of an Animal Pen behind its glass: the captured animal's own model, small, a few of them walking
- * about on the straw (the newest a baby for a while after it's born), and the food lying in the trough. Also turns
- * the shaft end in the back. The pen is modelled with its front facing north; positions are in its model pixels.
+ * about on the straw (the newest a baby for a while after it's born), the food lying in the trough, and what's
+ * waiting to be collected in the tray at the front. Also the milk in the sight glass on each side, and turns the
+ * shaft end in the back. The pen is modelled with its front facing north; positions are in its model pixels.
  */
 public class AnimalPenRenderer extends SafeBlockEntityRenderer<AnimalPenBlockEntity> {
+	/** The milk column: a 1 px tall unit in both side sight glasses, lifted to the glass foot and stretched to the level. */
+	public static final ModelResourceLocation MILK =
+		ModelResourceLocation.standalone(ComedyMonkeysCreateAddons.asResource("block/animal_pen_milk"));
+	/** The sight glass runs from here up, this many pixels. */
+	private static final float MILK_Y = 3, MILK_HEIGHT = 10;
+	/** Floor of the tray in front, which sits on the straw. */
+	private static final float TRAY_Y = 2.6f;
 	/** Top of the straw bedding. */
 	private static final float FLOOR_Y = 2.5f;
 	/** Largest an animal is drawn, and how tall the biggest may stand, in blocks. */
@@ -48,6 +62,21 @@ public class AnimalPenRenderer extends SafeBlockEntityRenderer<AnimalPenBlockEnt
 		ms.translate(-0.5, -0.5, -0.5);
 		renderFood(be, ms, buffer, light, overlay);
 		renderAnimals(be, partialTicks, ms, buffer, light);
+		TrayItems.render(be.getOutput(), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
+		renderMilk(be.getMilk(), state, ms, buffer, light);
+		ms.popPose();
+	}
+
+	private static void renderMilk(FluidTank milk, BlockState state, PoseStack ms, MultiBufferSource buffer, int light) {
+		if (milk.isEmpty())
+			return;
+		float level = Math.min(1, milk.getFluidAmount() / (float) milk.getCapacity());
+		ms.pushPose();
+		ms.translate(0, MILK_Y / 16, 0);
+		ms.scale(1, MILK_HEIGHT * level, 1);
+		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), buffer.getBuffer(RenderType.cutout()),
+			state, Minecraft.getInstance().getModelManager().getModel(MILK), 1, 1, 1, light, OverlayTexture.NO_OVERLAY,
+			ModelData.EMPTY, RenderType.cutout());
 		ms.popPose();
 	}
 

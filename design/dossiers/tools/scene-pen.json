@@ -1,0 +1,19 @@
+{
+  "name": "animal-pen-before",
+  "groups": [
+    {
+      "name": "andesite_pen",
+      "parts": [
+        { "name": "shell", "model": "animal_pen" },
+        { "name": "shaft", "model": "cobble_generator_shaft", "steps": [{ "rotY180": true }] }
+      ]
+    },
+    {
+      "name": "brass_pen",
+      "parts": [
+        { "name": "shell", "model": "brass_animal_pen", "offset": [24, 0, 0] },
+        { "name": "shaft", "model": "cobble_generator_shaft", "steps": [{ "rotY180": true }], "offset": [24, 0, 0] }
+      ]
+    }
+  ]
+}

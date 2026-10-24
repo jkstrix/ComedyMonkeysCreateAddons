@@ -4,143 +4,32 @@
   "ambientocclusion": false,
   "textures": {
     "particle": "comedymonkeysaddons:block/auto_harvester_side",
-    "front": "comedymonkeysaddons:block/andesite_cobble_generator_front",
-    "back": "create:block/gearbox",
-    "side": "comedymonkeysaddons:block/auto_harvester_side",
-    "top": "create:block/andesite_casing",
-    "bottom": "comedymonkeysaddons:block/andesite_cobble_generator_bottom",
-    "chamber": "comedymonkeysaddons:block/cobble_generator_chamber",
-    "floor": "comedymonkeysaddons:block/cobble_generator_floor",
-    "ceiling": "comedymonkeysaddons:block/cobble_generator_ceiling",
-    "glass": "comedymonkeysaddons:block/cobble_generator_glass",
-    "casing": "create:block/andesite_casing",
-    "axis": "create:block/axis",
-    "soil": "minecraft:block/farmland_moist",
-    "harvester": "create:block/harvester",
-    "crop": "comedymonkeysaddons:block/auto_harvester_crop"
+    "auto_harvester_front": "comedymonkeysaddons:block/auto_harvester_front",
+    "auto_harvester_side": "comedymonkeysaddons:block/auto_harvester_side",
+    "auto_harvester_back": "comedymonkeysaddons:block/auto_harvester_back",
+    "andesite_casing": "create:block/andesite_casing",
+    "auto_harvester_ceiling": "comedymonkeysaddons:block/auto_harvester_ceiling",
+    "auto_harvester_floor": "comedymonkeysaddons:block/auto_harvester_floor",
+    "auto_harvester_bottom": "comedymonkeysaddons:block/auto_harvester_bottom",
+    "auto_harvester_chamber": "comedymonkeysaddons:block/auto_harvester_chamber",
+    "auto_harvester_glass": "comedymonkeysaddons:block/auto_harvester_glass",
+    "auto_harvester_walnut": "comedymonkeysaddons:block/auto_harvester_walnut",
+    "auto_harvester_andesite": "comedymonkeysaddons:block/auto_harvester_andesite",
+    "auto_harvester_soil": "comedymonkeysaddons:block/auto_harvester_soil",
+    "auto_harvester_steel": "comedymonkeysaddons:block/auto_harvester_steel",
+    "auto_harvester_steel_light": "comedymonkeysaddons:block/auto_harvester_steel_light",
+    "auto_harvester_housing": "comedymonkeysaddons:block/auto_harvester_housing",
+    "auto_harvester_dark": "comedymonkeysaddons:block/auto_harvester_dark",
+    "auto_harvester_brass": "comedymonkeysaddons:block/auto_harvester_brass",
+    "auto_harvester_crop": "comedymonkeysaddons:block/auto_harvester_crop"
   },
   "elements": [
     {
+      "name": "top",
       "from": [
         0,
         14,
         0
-      ],
-      "to": [
-        16,
-        16,
-        1
-      ],
-      "faces": {
-        "up": {
-          "texture": "#top",
-          "cullface": "up"
-        },
-        "east": {
-          "texture": "#side",
-          "cullface": "east"
-        },
-        "west": {
-          "texture": "#side",
-          "cullface": "west"
-        },
-        "north": {
-          "texture": "#front",
-          "cullface": "north"
-        },
-        "down": {
-          "texture": "#ceiling"
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        0,
-        0
-      ],
-      "to": [
-        16,
-        2,
-        1
-      ],
-      "faces": {
-        "down": {
-          "texture": "#bottom",
-          "cullface": "down"
-        },
-        "east": {
-          "texture": "#side",
-          "cullface": "east"
-        },
-        "west": {
-          "texture": "#side",
-          "cullface": "west"
-        },
-        "north": {
-          "texture": "#front",
-          "cullface": "north"
-        },
-        "up": {
-          "texture": "#floor"
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        2,
-        0
-      ],
-      "to": [
-        2,
-        14,
-        1
-      ],
-      "faces": {
-        "west": {
-          "texture": "#side",
-          "cullface": "west"
-        },
-        "north": {
-          "texture": "#front",
-          "cullface": "north"
-        },
-        "east": {
-          "texture": "#chamber"
-        }
-      }
-    },
-    {
-      "from": [
-        14,
-        2,
-        0
-      ],
-      "to": [
-        16,
-        14,
-        1
-      ],
-      "faces": {
-        "east": {
-          "texture": "#side",
-          "cullface": "east"
-        },
-        "north": {
-          "texture": "#front",
-          "cullface": "north"
-        },
-        "west": {
-          "texture": "#chamber"
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        0,
-        14
       ],
       "to": [
         16,
@@ -148,218 +37,366 @@
         16
       ],
       "faces": {
-        "up": {
-          "texture": "#top",
-          "cullface": "up"
-        },
-        "down": {
-          "texture": "#bottom",
-          "cullface": "down"
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#auto_harvester_front"
         },
         "east": {
-          "texture": "#side",
-          "cullface": "east"
-        },
-        "west": {
-          "texture": "#side",
-          "cullface": "west"
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#auto_harvester_side"
         },
         "south": {
-          "texture": "#back",
-          "cullface": "south"
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#auto_harvester_back"
         },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#auto_harvester_side"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#andesite_casing"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#auto_harvester_ceiling"
+        }
+      }
+    },
+    {
+      "name": "bottom",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
         "north": {
-          "texture": "#chamber"
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        0,
-        1
-      ],
-      "to": [
-        2,
-        16,
-        14
-      ],
-      "faces": {
-        "up": {
-          "texture": "#top",
-          "cullface": "up"
-        },
-        "down": {
-          "texture": "#bottom",
-          "cullface": "down"
-        },
-        "west": {
-          "texture": "#side",
-          "cullface": "west"
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#auto_harvester_front"
         },
         "east": {
-          "texture": "#chamber"
-        }
-      }
-    },
-    {
-      "from": [
-        14,
-        0,
-        1
-      ],
-      "to": [
-        16,
-        16,
-        14
-      ],
-      "faces": {
-        "up": {
-          "texture": "#top",
-          "cullface": "up"
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#auto_harvester_side"
         },
-        "down": {
-          "texture": "#bottom",
-          "cullface": "down"
-        },
-        "east": {
-          "texture": "#side",
-          "cullface": "east"
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#auto_harvester_back"
         },
         "west": {
-          "texture": "#chamber"
-        }
-      }
-    },
-    {
-      "from": [
-        2,
-        14,
-        1
-      ],
-      "to": [
-        14,
-        16,
-        14
-      ],
-      "faces": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#auto_harvester_side"
+        },
         "up": {
-          "texture": "#top",
-          "cullface": "up"
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#auto_harvester_floor"
         },
         "down": {
-          "texture": "#ceiling"
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#auto_harvester_bottom"
         }
       }
     },
     {
+      "name": "wall_west",
       "from": [
-        2,
         0,
-        1
+        2,
+        0
       ],
       "to": [
-        14,
         2,
-        14
+        14,
+        16
       ],
       "faces": {
-        "down": {
-          "texture": "#bottom",
-          "cullface": "down"
+        "north": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#auto_harvester_front"
         },
-        "up": {
-          "texture": "#floor"
+        "east": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#auto_harvester_chamber"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#auto_harvester_back"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#auto_harvester_side"
         }
       }
     },
     {
+      "name": "wall_east",
       "from": [
-        4,
+        14,
+        2,
+        0
+      ],
+      "to": [
+        16,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#auto_harvester_front"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#auto_harvester_side"
+        },
+        "south": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#auto_harvester_back"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#auto_harvester_chamber"
+        }
+      }
+    },
+    {
+      "name": "wall_back",
+      "from": [
+        2,
+        2,
+        14
+      ],
+      "to": [
+        14,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#auto_harvester_chamber"
+        },
+        "south": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#auto_harvester_back"
+        }
+      }
+    },
+    {
+      "name": "glass",
+      "from": [
+        2,
+        2,
+        1.2
+      ],
+      "to": [
+        14,
+        14,
+        1.2
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#auto_harvester_glass"
+        },
+        "south": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#auto_harvester_glass"
+        }
+      }
+    },
+    {
+      "name": "planter_front",
+      "from": [
+        3,
         2,
         4
-      ],
-      "to": [
-        12,
-        3,
-        12
-      ],
-      "faces": {
-        "up": {
-          "texture": "#soil",
-          "uv": [
-            4,
-            4,
-            12,
-            12
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        2,
-        3
       ],
       "to": [
         13,
         3.5,
-        4
+        4.75
       ],
       "faces": {
         "north": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
-        },
-        "south": {
-          "texture": "#casing",
-          "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
+            3,
+            12.5,
+            13,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
         },
         "east": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
+            11.25,
+            12.5,
+            12,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "south": {
+          "uv": [
+            3,
+            12.5,
+            13,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
         },
         "west": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
+            4,
+            12.5,
+            4.75,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
         },
         "up": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1
-          ]
+            3,
+            4,
+            13,
+            4.75
+          ],
+          "texture": "#auto_harvester_andesite"
         }
       }
     },
     {
+      "name": "planter_back",
       "from": [
         3,
         2,
-        12
+        12.25
       ],
       "to": [
         13,
@@ -368,427 +405,3252 @@
       ],
       "faces": {
         "north": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
-        },
-        "south": {
-          "texture": "#casing",
-          "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
+            3,
+            12.5,
+            13,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
         },
         "east": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
+            3,
+            12.5,
+            3.75,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "south": {
+          "uv": [
+            3,
+            12.5,
+            13,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
         },
         "west": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
+            12.25,
+            12.5,
+            13,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
         },
         "up": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1
-          ]
+            3,
+            12.25,
+            13,
+            13
+          ],
+          "texture": "#auto_harvester_andesite"
         }
       }
     },
     {
+      "name": "planter_west",
       "from": [
         3,
         2,
-        4
+        4.75
       ],
       "to": [
-        4,
+        3.75,
         3.5,
-        12
+        12.25
       ],
       "faces": {
         "east": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
+            3.75,
+            12.5,
+            11.25,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
         },
         "west": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
+            4.75,
+            12.5,
+            12.25,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
         },
         "up": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1
-          ]
+            3,
+            4.75,
+            3.75,
+            12.25
+          ],
+          "texture": "#auto_harvester_andesite"
         }
       }
     },
     {
+      "name": "planter_east",
       "from": [
-        12,
+        12.25,
         2,
-        4
+        4.75
       ],
       "to": [
         13,
         3.5,
-        12
+        12.25
       ],
       "faces": {
         "east": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
+            3.75,
+            12.5,
+            11.25,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
         },
         "west": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1.5
-          ]
+            4.75,
+            12.5,
+            12.25,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
         },
         "up": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            1
-          ]
+            12.25,
+            4.75,
+            13,
+            12.25
+          ],
+          "texture": "#auto_harvester_andesite"
         }
       }
     },
     {
+      "name": "soil",
+      "from": [
+        3.75,
+        2,
+        4.75
+      ],
+      "to": [
+        12.25,
+        3,
+        12.25
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            3.75,
+            4.75,
+            12.25,
+            12.25
+          ],
+          "texture": "#auto_harvester_soil"
+        }
+      }
+    },
+    {
+      "name": "tray_front",
+      "from": [
+        3,
+        2,
+        1.4
+      ],
+      "to": [
+        13,
+        2.9,
+        1.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            13.1,
+            13,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "east": {
+          "uv": [
+            14.1,
+            13.1,
+            14.6,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "south": {
+          "uv": [
+            3,
+            13.1,
+            13,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "west": {
+          "uv": [
+            1.4,
+            13.1,
+            1.9,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "up": {
+          "uv": [
+            3,
+            1.4,
+            13,
+            1.9
+          ],
+          "texture": "#auto_harvester_andesite"
+        }
+      }
+    },
+    {
+      "name": "tray_back",
+      "from": [
+        3,
+        2,
+        3.3
+      ],
+      "to": [
+        13,
+        2.9,
+        3.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            13.1,
+            13,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "east": {
+          "uv": [
+            12.2,
+            13.1,
+            12.7,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "south": {
+          "uv": [
+            3,
+            13.1,
+            13,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "west": {
+          "uv": [
+            3.3,
+            13.1,
+            3.8,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "up": {
+          "uv": [
+            3,
+            3.3,
+            13,
+            3.8
+          ],
+          "texture": "#auto_harvester_andesite"
+        }
+      }
+    },
+    {
+      "name": "tray_west",
+      "from": [
+        3,
+        2,
+        1.9
+      ],
+      "to": [
+        3.5,
+        2.9,
+        3.3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            12.7,
+            13.1,
+            14.1,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "west": {
+          "uv": [
+            1.9,
+            13.1,
+            3.3,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "up": {
+          "uv": [
+            3,
+            1.9,
+            3.5,
+            3.3
+          ],
+          "texture": "#auto_harvester_andesite"
+        }
+      }
+    },
+    {
+      "name": "tray_east",
+      "from": [
+        12.5,
+        2,
+        1.9
+      ],
+      "to": [
+        13,
+        2.9,
+        3.3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            12.7,
+            13.1,
+            14.1,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "west": {
+          "uv": [
+            1.9,
+            13.1,
+            3.3,
+            14
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "up": {
+          "uv": [
+            12.5,
+            1.9,
+            13,
+            3.3
+          ],
+          "texture": "#auto_harvester_andesite"
+        }
+      }
+    },
+    {
+      "name": "tray_bed",
+      "from": [
+        3.5,
+        2,
+        1.9
+      ],
+      "to": [
+        12.5,
+        2.5,
+        3.3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            3.5,
+            1.9,
+            12.5,
+            3.3
+          ],
+          "texture": "#auto_harvester_walnut"
+        }
+      }
+    },
+    {
+      "name": "girder_bottom",
       "from": [
         2,
-        10,
-        9.5
+        12,
+        8.5
       ],
       "to": [
         14,
-        12,
+        12.4,
         11.5
       ],
       "faces": {
         "north": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
-            16
+            2,
+            3.6,
+            14,
+            4
           ],
-          "rotation": 90
+          "texture": "#auto_harvester_steel"
         },
         "south": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
-            16
+            2,
+            3.6,
+            14,
+            4
           ],
-          "rotation": 90
+          "texture": "#auto_harvester_steel"
         },
         "up": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
-            16
+            2,
+            8.5,
+            14,
+            11.5
           ],
-          "rotation": 90
+          "texture": "#auto_harvester_steel_light"
         },
         "down": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
-            16
+            2,
+            4.5,
+            14,
+            7.5
           ],
-          "rotation": 90
+          "texture": "#auto_harvester_steel"
         }
       }
     },
     {
+      "name": "girder_web",
       "from": [
         2,
+        12.4,
+        9.75
+      ],
+      "to": [
+        14,
+        13.6,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2.4,
+            14,
+            3.6
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "south": {
+          "uv": [
+            2,
+            2.4,
+            14,
+            3.6
+          ],
+          "texture": "#auto_harvester_steel"
+        }
+      }
+    },
+    {
+      "name": "girder_top",
+      "from": [
+        2,
+        13.6,
+        8.5
+      ],
+      "to": [
+        14,
+        14,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            14,
+            2.4
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "south": {
+          "uv": [
+            2,
+            2,
+            14,
+            2.4
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "down": {
+          "uv": [
+            2,
+            4.5,
+            14,
+            7.5
+          ],
+          "texture": "#auto_harvester_steel"
+        }
+      }
+    },
+    {
+      "name": "housing",
+      "from": [
+        5.5,
+        5.5,
+        12
+      ],
+      "to": [
+        10.5,
+        10.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#auto_harvester_housing"
+        },
+        "east": {
+          "uv": [
+            2,
+            5.5,
+            4,
+            10.5
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "west": {
+          "uv": [
+            12,
+            5.5,
+            14,
+            10.5
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            12,
+            10.5,
+            14
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            2,
+            10.5,
+            4
+          ],
+          "texture": "#auto_harvester_steel"
+        }
+      }
+    },
+    {
+      "name": "housing_45",
+      "from": [
+        5.5,
+        5.5,
+        12.01
+      ],
+      "to": [
+        10.5,
+        10.5,
+        13.99
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          13
+        ],
+        "axis": "z",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#auto_harvester_housing"
+        },
+        "east": {
+          "uv": [
+            2.01,
+            5.5,
+            3.99,
+            10.5
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "west": {
+          "uv": [
+            12.01,
+            5.5,
+            13.99,
+            10.5
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            12.01,
+            10.5,
+            13.99
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            2.01,
+            10.5,
+            3.99
+          ],
+          "texture": "#auto_harvester_steel"
+        }
+      }
+    },
+    {
+      "name": "body",
+      "from": [
+        3,
         9,
         8.5
       ],
       "to": [
         6,
-        12.5,
-        12.5
+        12,
+        11.5
       ],
       "faces": {
         "north": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            14
-          ]
-        },
-        "south": {
-          "texture": "#casing",
-          "uv": [
-            0,
-            0,
-            16,
-            14
-          ]
+            10,
+            4,
+            13,
+            7
+          ],
+          "texture": "#auto_harvester_steel"
         },
         "east": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            14
-          ]
+            4.5,
+            4,
+            7.5,
+            7
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "south": {
+          "uv": [
+            3,
+            4,
+            6,
+            7
+          ],
+          "texture": "#auto_harvester_steel"
         },
         "west": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            14
-          ]
-        },
-        "up": {
-          "texture": "#casing",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
+            8.5,
+            4,
+            11.5,
+            7
+          ],
+          "texture": "#auto_harvester_steel"
         },
         "down": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
+            3,
+            4.5,
+            6,
+            7.5
+          ],
+          "texture": "#auto_harvester_steel"
         }
       }
     },
     {
+      "name": "plate_front",
       "from": [
-        2,
-        8.5,
-        4.5
+        3,
+        9,
+        8.1
       ],
       "to": [
         6,
-        12.5,
-        4.5
+        13.3,
+        8.5
       ],
       "faces": {
         "north": {
-          "texture": "#harvester",
           "uv": [
-            0,
-            0,
-            12,
-            12
+            10,
+            2.7,
+            13,
+            7
           ],
-          "rotation": 0
+          "texture": "#auto_harvester_steel"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            2.7,
+            7.9,
+            7
+          ],
+          "texture": "#auto_harvester_steel_light"
         },
         "south": {
-          "texture": "#harvester",
           "uv": [
-            0,
-            0,
-            12,
-            12
+            3,
+            2.7,
+            6,
+            7
           ],
-          "rotation": 0
-        }
-      }
-    },
-    {
-      "from": [
-        4,
-        8.75,
-        4.5
-      ],
-      "to": [
-        4,
-        12.25,
-        8.25
-      ],
-      "faces": {
-        "east": {
-          "texture": "#harvester",
-          "uv": [
-            0,
-            12,
-            16,
-            14
-          ],
-          "rotation": 90
+          "texture": "#auto_harvester_steel_light"
         },
         "west": {
-          "texture": "#harvester",
           "uv": [
-            0,
-            12,
-            16,
-            14
+            8.1,
+            2.7,
+            8.5,
+            7
           ],
-          "rotation": 90
-        }
-      }
-    },
-    {
-      "from": [
-        2.25,
-        10.5,
-        4.5
-      ],
-      "to": [
-        5.75,
-        10.5,
-        8.25
-      ],
-      "faces": {
+          "texture": "#auto_harvester_steel_light"
+        },
         "up": {
-          "texture": "#harvester",
           "uv": [
-            0,
-            12,
-            16,
-            14
+            3,
+            8.1,
+            6,
+            8.5
           ],
-          "rotation": 90
+          "texture": "#auto_harvester_steel_light"
         },
         "down": {
-          "texture": "#harvester",
           "uv": [
-            0,
-            12,
-            16,
-            14
+            3,
+            7.5,
+            6,
+            7.9
           ],
-          "rotation": 90
+          "texture": "#auto_harvester_steel_light"
         }
       }
     },
     {
+      "name": "plate_back",
       "from": [
-        3.5,
-        10,
-        4
+        3,
+        9,
+        11.5
       ],
       "to": [
-        4.5,
+        6,
+        13.3,
+        11.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            2.7,
+            13,
+            7
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            4.1,
+            2.7,
+            4.5,
+            7
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            3,
+            2.7,
+            6,
+            7
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "west": {
+          "uv": [
+            11.5,
+            2.7,
+            11.9,
+            7
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            3,
+            11.5,
+            6,
+            11.9
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            3,
+            4.1,
+            6,
+            4.5
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "wheel_front",
+      "from": [
+        3.4,
+        12.4,
+        8.6
+      ],
+      "to": [
+        5.6,
+        13.2,
+        9.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.4,
+            2.8,
+            12.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "east": {
+          "uv": [
+            6.4,
+            2.8,
+            7.4,
+            3.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            3.4,
+            2.8,
+            5.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "west": {
+          "uv": [
+            8.6,
+            2.8,
+            9.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            3.4,
+            8.6,
+            5.6,
+            9.6
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "down": {
+          "uv": [
+            3.4,
+            6.4,
+            5.6,
+            7.4
+          ],
+          "texture": "#auto_harvester_dark"
+        }
+      }
+    },
+    {
+      "name": "wheel_back",
+      "from": [
+        3.4,
+        12.4,
+        10.4
+      ],
+      "to": [
+        5.6,
+        13.2,
+        11.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.4,
+            2.8,
+            12.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "east": {
+          "uv": [
+            4.6,
+            2.8,
+            5.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            3.4,
+            2.8,
+            5.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "west": {
+          "uv": [
+            10.4,
+            2.8,
+            11.4,
+            3.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            3.4,
+            10.4,
+            5.6,
+            11.4
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "down": {
+          "uv": [
+            3.4,
+            4.6,
+            5.6,
+            5.6
+          ],
+          "texture": "#auto_harvester_dark"
+        }
+      }
+    },
+    {
+      "name": "cap",
+      "from": [
+        4,
+        10,
+        7.9
+      ],
+      "to": [
+        5,
         11,
-        9.5
+        8.1
       ],
       "faces": {
         "north": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
-            4
-          ]
-        },
-        "south": {
-          "texture": "#axis",
-          "uv": [
-            6,
-            0,
-            10,
-            4
-          ]
+            11,
+            5,
+            12,
+            6
+          ],
+          "texture": "#auto_harvester_brass"
         },
         "east": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
-            4
-          ]
+            7.9,
+            5,
+            8.1,
+            6
+          ],
+          "texture": "#auto_harvester_brass"
         },
         "west": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
-            4
-          ]
+            7.9,
+            5,
+            8.1,
+            6
+          ],
+          "texture": "#auto_harvester_brass"
         },
         "up": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
-            4
-          ]
+            4,
+            7.9,
+            5,
+            8.1
+          ],
+          "texture": "#auto_harvester_brass"
         },
         "down": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
-            4
-          ]
+            4,
+            7.9,
+            5,
+            8.1
+          ],
+          "texture": "#auto_harvester_brass"
         }
       }
     },
     {
+      "name": "axle",
+      "from": [
+        4.1,
+        10.6,
+        2.6
+      ],
+      "to": [
+        4.9,
+        11.4,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.1,
+            4.6,
+            11.9,
+            5.4
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            6,
+            4.6,
+            13.4,
+            5.4
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            4.1,
+            4.6,
+            4.9,
+            5.4
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            2.6,
+            4.6,
+            10,
+            5.4
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            4.1,
+            2.6,
+            4.9,
+            10
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            4.1,
+            6,
+            4.9,
+            13.4
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "spoke_h_front",
+      "from": [
+        2.4000000000000004,
+        10.75,
+        2.8
+      ],
+      "to": [
+        6.6,
+        11.25,
+        3.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.4,
+            4.75,
+            13.6,
+            5.25
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "east": {
+          "uv": [
+            12.7,
+            4.75,
+            13.2,
+            5.25
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "south": {
+          "uv": [
+            2.4,
+            4.75,
+            6.6,
+            5.25
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "west": {
+          "uv": [
+            2.8,
+            4.75,
+            3.3,
+            5.25
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "up": {
+          "uv": [
+            2.4,
+            2.8,
+            6.6,
+            3.3
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "down": {
+          "uv": [
+            2.4,
+            12.7,
+            6.6,
+            13.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        }
+      }
+    },
+    {
+      "name": "spoke_v_front",
+      "from": [
+        4.25,
+        8.9,
+        2.8
+      ],
+      "to": [
+        4.75,
+        13.1,
+        3.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.25,
+            2.9,
+            11.75,
+            7.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "east": {
+          "uv": [
+            12.7,
+            2.9,
+            13.2,
+            7.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "south": {
+          "uv": [
+            4.25,
+            2.9,
+            4.75,
+            7.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "west": {
+          "uv": [
+            2.8,
+            2.9,
+            3.3,
+            7.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "up": {
+          "uv": [
+            4.25,
+            2.8,
+            4.75,
+            3.3
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "down": {
+          "uv": [
+            4.25,
+            12.7,
+            4.75,
+            13.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        }
+      }
+    },
+    {
+      "name": "hub_front",
+      "from": [
+        3.9000000000000004,
+        10.4,
+        2.5999999999999996
+      ],
+      "to": [
+        5.1,
+        11.6,
+        3.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.9,
+            4.4,
+            12.1,
+            5.6
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "east": {
+          "uv": [
+            12.5,
+            4.4,
+            13.4,
+            5.6
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "south": {
+          "uv": [
+            3.9,
+            4.4,
+            5.1,
+            5.6
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "west": {
+          "uv": [
+            2.6,
+            4.4,
+            3.5,
+            5.6
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "up": {
+          "uv": [
+            3.9,
+            2.6,
+            5.1,
+            3.5
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "down": {
+          "uv": [
+            3.9,
+            12.5,
+            5.1,
+            13.4
+          ],
+          "texture": "#auto_harvester_brass"
+        }
+      }
+    },
+    {
+      "name": "rim_ne_front",
+      "from": [
+        4.050000000000001,
+        11.9,
+        2.8
+      ],
+      "to": [
+        7.050000000000001,
+        12.200000000000001,
+        3.3
+      ],
+      "rotation": {
+        "origin": [
+          5.550000000000001,
+          12.05,
+          3.05
+        ],
+        "axis": "z",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8.95,
+            3.8,
+            11.95,
+            4.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "east": {
+          "uv": [
+            12.7,
+            3.8,
+            13.2,
+            4.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "south": {
+          "uv": [
+            4.05,
+            3.8,
+            7.05,
+            4.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "west": {
+          "uv": [
+            2.8,
+            3.8,
+            3.3,
+            4.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "up": {
+          "uv": [
+            4.05,
+            2.8,
+            7.05,
+            3.3
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "down": {
+          "uv": [
+            4.05,
+            12.7,
+            7.05,
+            13.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        }
+      }
+    },
+    {
+      "name": "rim_nw_front",
+      "from": [
+        1.9500000000000002,
+        11.9,
+        2.8
+      ],
+      "to": [
+        4.949999999999999,
+        12.200000000000001,
+        3.3
+      ],
+      "rotation": {
+        "origin": [
+          3.45,
+          12.05,
+          3.05
+        ],
+        "axis": "z",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            11.05,
+            3.8,
+            14.05,
+            4.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "east": {
+          "uv": [
+            12.7,
+            3.8,
+            13.2,
+            4.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "south": {
+          "uv": [
+            1.95,
+            3.8,
+            4.95,
+            4.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "west": {
+          "uv": [
+            2.8,
+            3.8,
+            3.3,
+            4.1
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "up": {
+          "uv": [
+            1.95,
+            2.8,
+            4.95,
+            3.3
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "down": {
+          "uv": [
+            1.95,
+            12.7,
+            4.95,
+            13.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        }
+      }
+    },
+    {
+      "name": "rim_se_front",
+      "from": [
+        4.050000000000001,
+        9.8,
+        2.8
+      ],
+      "to": [
+        7.050000000000001,
+        10.100000000000001,
+        3.3
+      ],
+      "rotation": {
+        "origin": [
+          5.550000000000001,
+          9.95,
+          3.05
+        ],
+        "axis": "z",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8.95,
+            5.9,
+            11.95,
+            6.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "east": {
+          "uv": [
+            12.7,
+            5.9,
+            13.2,
+            6.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "south": {
+          "uv": [
+            4.05,
+            5.9,
+            7.05,
+            6.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "west": {
+          "uv": [
+            2.8,
+            5.9,
+            3.3,
+            6.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "up": {
+          "uv": [
+            4.05,
+            2.8,
+            7.05,
+            3.3
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "down": {
+          "uv": [
+            4.05,
+            12.7,
+            7.05,
+            13.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        }
+      }
+    },
+    {
+      "name": "rim_sw_front",
+      "from": [
+        1.9500000000000002,
+        9.8,
+        2.8
+      ],
+      "to": [
+        4.949999999999999,
+        10.100000000000001,
+        3.3
+      ],
+      "rotation": {
+        "origin": [
+          3.45,
+          9.95,
+          3.05
+        ],
+        "axis": "z",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            11.05,
+            5.9,
+            14.05,
+            6.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "east": {
+          "uv": [
+            12.7,
+            5.9,
+            13.2,
+            6.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "south": {
+          "uv": [
+            1.95,
+            5.9,
+            4.95,
+            6.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "west": {
+          "uv": [
+            2.8,
+            5.9,
+            3.3,
+            6.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "up": {
+          "uv": [
+            1.95,
+            2.8,
+            4.95,
+            3.3
+          ],
+          "texture": "#auto_harvester_andesite"
+        },
+        "down": {
+          "uv": [
+            1.95,
+            12.7,
+            4.95,
+            13.2
+          ],
+          "texture": "#auto_harvester_andesite"
+        }
+      }
+    },
+    {
+      "name": "spoke_h_back",
+      "from": [
+        2.4000000000000004,
+        10.75,
+        7.2
+      ],
+      "to": [
+        6.6,
+        11.25,
+        7.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.4,
+            4.75,
+            13.6,
+            5.25
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "east": {
+          "uv": [
+            8.3,
+            4.75,
+            8.8,
+            5.25
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "south": {
+          "uv": [
+            2.4,
+            4.75,
+            6.6,
+            5.25
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "west": {
+          "uv": [
+            7.2,
+            4.75,
+            7.7,
+            5.25
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "up": {
+          "uv": [
+            2.4,
+            7.2,
+            6.6,
+            7.7
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "down": {
+          "uv": [
+            2.4,
+            8.3,
+            6.6,
+            8.8
+          ],
+          "texture": "#auto_harvester_steel"
+        }
+      }
+    },
+    {
+      "name": "spoke_v_back",
+      "from": [
+        4.25,
+        8.9,
+        7.2
+      ],
+      "to": [
+        4.75,
+        13.1,
+        7.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.25,
+            2.9,
+            11.75,
+            7.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "east": {
+          "uv": [
+            8.3,
+            2.9,
+            8.8,
+            7.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "south": {
+          "uv": [
+            4.25,
+            2.9,
+            4.75,
+            7.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "west": {
+          "uv": [
+            7.2,
+            2.9,
+            7.7,
+            7.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "up": {
+          "uv": [
+            4.25,
+            7.2,
+            4.75,
+            7.7
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "down": {
+          "uv": [
+            4.25,
+            8.3,
+            4.75,
+            8.8
+          ],
+          "texture": "#auto_harvester_steel"
+        }
+      }
+    },
+    {
+      "name": "hub_back",
+      "from": [
+        3.9000000000000004,
+        10.4,
+        7
+      ],
+      "to": [
+        5.1,
+        11.6,
+        7.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.9,
+            4.4,
+            12.1,
+            5.6
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "east": {
+          "uv": [
+            8.1,
+            4.4,
+            9,
+            5.6
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "south": {
+          "uv": [
+            3.9,
+            4.4,
+            5.1,
+            5.6
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "west": {
+          "uv": [
+            7,
+            4.4,
+            7.9,
+            5.6
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "up": {
+          "uv": [
+            3.9,
+            7,
+            5.1,
+            7.9
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "down": {
+          "uv": [
+            3.9,
+            8.1,
+            5.1,
+            9
+          ],
+          "texture": "#auto_harvester_brass"
+        }
+      }
+    },
+    {
+      "name": "rim_ne_back",
+      "from": [
+        4.050000000000001,
+        11.9,
+        7.2
+      ],
+      "to": [
+        7.050000000000001,
+        12.200000000000001,
+        7.7
+      ],
+      "rotation": {
+        "origin": [
+          5.550000000000001,
+          12.05,
+          7.45
+        ],
+        "axis": "z",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8.95,
+            3.8,
+            11.95,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "east": {
+          "uv": [
+            8.3,
+            3.8,
+            8.8,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "south": {
+          "uv": [
+            4.05,
+            3.8,
+            7.05,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "west": {
+          "uv": [
+            7.2,
+            3.8,
+            7.7,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "up": {
+          "uv": [
+            4.05,
+            7.2,
+            7.05,
+            7.7
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "down": {
+          "uv": [
+            4.05,
+            8.3,
+            7.05,
+            8.8
+          ],
+          "texture": "#auto_harvester_steel"
+        }
+      }
+    },
+    {
+      "name": "rim_nw_back",
+      "from": [
+        1.9500000000000002,
+        11.9,
+        7.2
+      ],
+      "to": [
+        4.949999999999999,
+        12.200000000000001,
+        7.7
+      ],
+      "rotation": {
+        "origin": [
+          3.45,
+          12.05,
+          7.45
+        ],
+        "axis": "z",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            11.05,
+            3.8,
+            14.05,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "east": {
+          "uv": [
+            8.3,
+            3.8,
+            8.8,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "south": {
+          "uv": [
+            1.95,
+            3.8,
+            4.95,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "west": {
+          "uv": [
+            7.2,
+            3.8,
+            7.7,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "up": {
+          "uv": [
+            1.95,
+            7.2,
+            4.95,
+            7.7
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "down": {
+          "uv": [
+            1.95,
+            8.3,
+            4.95,
+            8.8
+          ],
+          "texture": "#auto_harvester_steel"
+        }
+      }
+    },
+    {
+      "name": "rim_se_back",
+      "from": [
+        4.050000000000001,
+        9.8,
+        7.2
+      ],
+      "to": [
+        7.050000000000001,
+        10.100000000000001,
+        7.7
+      ],
+      "rotation": {
+        "origin": [
+          5.550000000000001,
+          9.95,
+          7.45
+        ],
+        "axis": "z",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8.95,
+            5.9,
+            11.95,
+            6.2
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "east": {
+          "uv": [
+            8.3,
+            5.9,
+            8.8,
+            6.2
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "south": {
+          "uv": [
+            4.05,
+            5.9,
+            7.05,
+            6.2
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "west": {
+          "uv": [
+            7.2,
+            5.9,
+            7.7,
+            6.2
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "up": {
+          "uv": [
+            4.05,
+            7.2,
+            7.05,
+            7.7
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "down": {
+          "uv": [
+            4.05,
+            8.3,
+            7.05,
+            8.8
+          ],
+          "texture": "#auto_harvester_steel"
+        }
+      }
+    },
+    {
+      "name": "rim_sw_back",
+      "from": [
+        1.9500000000000002,
+        9.8,
+        7.2
+      ],
+      "to": [
+        4.949999999999999,
+        10.100000000000001,
+        7.7
+      ],
+      "rotation": {
+        "origin": [
+          3.45,
+          9.95,
+          7.45
+        ],
+        "axis": "z",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            11.05,
+            5.9,
+            14.05,
+            6.2
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "east": {
+          "uv": [
+            8.3,
+            5.9,
+            8.8,
+            6.2
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "south": {
+          "uv": [
+            1.95,
+            5.9,
+            4.95,
+            6.2
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "west": {
+          "uv": [
+            7.2,
+            5.9,
+            7.7,
+            6.2
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "up": {
+          "uv": [
+            1.95,
+            7.2,
+            4.95,
+            7.7
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "down": {
+          "uv": [
+            1.95,
+            8.3,
+            4.95,
+            8.8
+          ],
+          "texture": "#auto_harvester_steel"
+        }
+      }
+    },
+    {
+      "name": "bat_east",
+      "from": [
+        5.85,
+        10.6,
+        3.3
+      ],
+      "to": [
+        6.449999999999999,
+        11.4,
+        7.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.55,
+            4.6,
+            10.15,
+            5.4
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "east": {
+          "uv": [
+            8.8,
+            4.6,
+            12.7,
+            5.4
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "south": {
+          "uv": [
+            5.85,
+            4.6,
+            6.45,
+            5.4
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "west": {
+          "uv": [
+            3.3,
+            4.6,
+            7.2,
+            5.4
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "up": {
+          "uv": [
+            5.85,
+            3.3,
+            6.45,
+            7.2
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "down": {
+          "uv": [
+            5.85,
+            8.8,
+            6.45,
+            12.7
+          ],
+          "texture": "#auto_harvester_walnut"
+        }
+      }
+    },
+    {
+      "name": "tine_east_0",
+      "from": [
+        6.449999999999999,
+        10.8,
+        3.7
+      ],
+      "to": [
+        6.949999999999999,
+        11.2,
+        4.1000000000000005
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.05,
+            4.8,
+            9.55,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            11.9,
+            4.8,
+            12.3,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            6.45,
+            4.8,
+            6.95,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            3.7,
+            4.8,
+            4.1,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            6.45,
+            3.7,
+            6.95,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            6.45,
+            11.9,
+            6.95,
+            12.3
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "tine_east_1",
+      "from": [
+        6.449999999999999,
+        10.8,
+        5.05
+      ],
+      "to": [
+        6.949999999999999,
+        11.2,
+        5.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.05,
+            4.8,
+            9.55,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            10.55,
+            4.8,
+            10.95,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            6.45,
+            4.8,
+            6.95,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            5.05,
+            4.8,
+            5.45,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            6.45,
+            5.05,
+            6.95,
+            5.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            6.45,
+            10.55,
+            6.95,
+            10.95
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "tine_east_2",
+      "from": [
+        6.449999999999999,
+        10.8,
+        6.4
+      ],
+      "to": [
+        6.949999999999999,
+        11.2,
+        6.800000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.05,
+            4.8,
+            9.55,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            9.2,
+            4.8,
+            9.6,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            6.45,
+            4.8,
+            6.95,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            6.4,
+            4.8,
+            6.8,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            6.45,
+            6.4,
+            6.95,
+            6.8
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            6.45,
+            9.2,
+            6.95,
+            9.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "bat_west",
+      "from": [
+        2.55,
+        10.6,
+        3.3
+      ],
+      "to": [
+        3.1500000000000004,
+        11.4,
+        7.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.85,
+            4.6,
+            13.45,
+            5.4
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "east": {
+          "uv": [
+            8.8,
+            4.6,
+            12.7,
+            5.4
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "south": {
+          "uv": [
+            2.55,
+            4.6,
+            3.15,
+            5.4
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "west": {
+          "uv": [
+            3.3,
+            4.6,
+            7.2,
+            5.4
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "up": {
+          "uv": [
+            2.55,
+            3.3,
+            3.15,
+            7.2
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "down": {
+          "uv": [
+            2.55,
+            8.8,
+            3.15,
+            12.7
+          ],
+          "texture": "#auto_harvester_walnut"
+        }
+      }
+    },
+    {
+      "name": "tine_west_0",
+      "from": [
+        2.05,
+        10.8,
+        3.7
+      ],
+      "to": [
+        2.55,
+        11.2,
+        4.1000000000000005
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.45,
+            4.8,
+            13.95,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            11.9,
+            4.8,
+            12.3,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            2.05,
+            4.8,
+            2.55,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            3.7,
+            4.8,
+            4.1,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            2.05,
+            3.7,
+            2.55,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            2.05,
+            11.9,
+            2.55,
+            12.3
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "tine_west_1",
+      "from": [
+        2.05,
+        10.8,
+        5.05
+      ],
+      "to": [
+        2.55,
+        11.2,
+        5.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.45,
+            4.8,
+            13.95,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            10.55,
+            4.8,
+            10.95,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            2.05,
+            4.8,
+            2.55,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            5.05,
+            4.8,
+            5.45,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            2.05,
+            5.05,
+            2.55,
+            5.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            2.05,
+            10.55,
+            2.55,
+            10.95
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "tine_west_2",
+      "from": [
+        2.05,
+        10.8,
+        6.4
+      ],
+      "to": [
+        2.55,
+        11.2,
+        6.800000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.45,
+            4.8,
+            13.95,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            9.2,
+            4.8,
+            9.6,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            2.05,
+            4.8,
+            2.55,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            6.4,
+            4.8,
+            6.8,
+            5.2
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            2.05,
+            6.4,
+            2.55,
+            6.8
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            2.05,
+            9.2,
+            2.55,
+            9.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "bat_up",
+      "from": [
+        4.1,
+        12.35,
+        3.3
+      ],
+      "to": [
+        4.9,
+        12.95,
+        7.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.1,
+            3.05,
+            11.9,
+            3.65
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "east": {
+          "uv": [
+            8.8,
+            3.05,
+            12.7,
+            3.65
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "south": {
+          "uv": [
+            4.1,
+            3.05,
+            4.9,
+            3.65
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "west": {
+          "uv": [
+            3.3,
+            3.05,
+            7.2,
+            3.65
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "up": {
+          "uv": [
+            4.1,
+            3.3,
+            4.9,
+            7.2
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "down": {
+          "uv": [
+            4.1,
+            8.8,
+            4.9,
+            12.7
+          ],
+          "texture": "#auto_harvester_walnut"
+        }
+      }
+    },
+    {
+      "name": "tine_up_0",
+      "from": [
+        4.3,
+        12.95,
+        3.7
+      ],
+      "to": [
+        4.699999999999999,
+        13.45,
+        4.1000000000000005
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.3,
+            2.55,
+            11.7,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            11.9,
+            2.55,
+            12.3,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            4.3,
+            2.55,
+            4.7,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            3.7,
+            2.55,
+            4.1,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            4.3,
+            3.7,
+            4.7,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            4.3,
+            11.9,
+            4.7,
+            12.3
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "tine_up_1",
+      "from": [
+        4.3,
+        12.95,
+        5.05
+      ],
+      "to": [
+        4.699999999999999,
+        13.45,
+        5.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.3,
+            2.55,
+            11.7,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            10.55,
+            2.55,
+            10.95,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            4.3,
+            2.55,
+            4.7,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            5.05,
+            2.55,
+            5.45,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            4.3,
+            5.05,
+            4.7,
+            5.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            4.3,
+            10.55,
+            4.7,
+            10.95
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "tine_up_2",
+      "from": [
+        4.3,
+        12.95,
+        6.4
+      ],
+      "to": [
+        4.699999999999999,
+        13.45,
+        6.800000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.3,
+            2.55,
+            11.7,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            9.2,
+            2.55,
+            9.6,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            4.3,
+            2.55,
+            4.7,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            6.4,
+            2.55,
+            6.8,
+            3.05
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            4.3,
+            6.4,
+            4.7,
+            6.8
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            4.3,
+            9.2,
+            4.7,
+            9.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "bat_down",
+      "from": [
+        4.1,
+        9.05,
+        3.3
+      ],
+      "to": [
+        4.9,
+        9.65,
+        7.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.1,
+            6.35,
+            11.9,
+            6.95
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "east": {
+          "uv": [
+            8.8,
+            6.35,
+            12.7,
+            6.95
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "south": {
+          "uv": [
+            4.1,
+            6.35,
+            4.9,
+            6.95
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "west": {
+          "uv": [
+            3.3,
+            6.35,
+            7.2,
+            6.95
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "up": {
+          "uv": [
+            4.1,
+            3.3,
+            4.9,
+            7.2
+          ],
+          "texture": "#auto_harvester_walnut"
+        },
+        "down": {
+          "uv": [
+            4.1,
+            8.8,
+            4.9,
+            12.7
+          ],
+          "texture": "#auto_harvester_walnut"
+        }
+      }
+    },
+    {
+      "name": "tine_down_0",
+      "from": [
+        4.3,
+        8.55,
+        3.7
+      ],
+      "to": [
+        4.699999999999999,
+        9.05,
+        4.1000000000000005
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.3,
+            6.95,
+            11.7,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            11.9,
+            6.95,
+            12.3,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            4.3,
+            6.95,
+            4.7,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            3.7,
+            6.95,
+            4.1,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            4.3,
+            3.7,
+            4.7,
+            4.1
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            4.3,
+            11.9,
+            4.7,
+            12.3
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "tine_down_1",
+      "from": [
+        4.3,
+        8.55,
+        5.05
+      ],
+      "to": [
+        4.699999999999999,
+        9.05,
+        5.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.3,
+            6.95,
+            11.7,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            10.55,
+            6.95,
+            10.95,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            4.3,
+            6.95,
+            4.7,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            5.05,
+            6.95,
+            5.45,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            4.3,
+            5.05,
+            4.7,
+            5.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            4.3,
+            10.55,
+            4.7,
+            10.95
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "tine_down_2",
+      "from": [
+        4.3,
+        8.55,
+        6.4
+      ],
+      "to": [
+        4.699999999999999,
+        9.05,
+        6.800000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.3,
+            6.95,
+            11.7,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            9.2,
+            6.95,
+            9.6,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            4.3,
+            6.95,
+            4.7,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            6.4,
+            6.95,
+            6.8,
+            7.45
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            4.3,
+            6.4,
+            4.7,
+            6.8
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            4.3,
+            9.2,
+            4.7,
+            9.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "crop_0",
       "from": [
         6,
         3,
@@ -801,27 +3663,27 @@
       ],
       "faces": {
         "east": {
-          "texture": "#crop",
           "uv": [
             0,
             6,
             16,
             16
-          ]
+          ],
+          "texture": "#auto_harvester_crop"
         },
         "west": {
-          "texture": "#crop",
           "uv": [
             0,
             6,
             16,
             16
-          ]
+          ],
+          "texture": "#auto_harvester_crop"
         }
-      },
-      "shade": false
+      }
     },
     {
+      "name": "crop_1",
       "from": [
         10,
         3,
@@ -834,27 +3696,27 @@
       ],
       "faces": {
         "east": {
-          "texture": "#crop",
           "uv": [
             0,
             6,
             16,
             16
-          ]
+          ],
+          "texture": "#auto_harvester_crop"
         },
         "west": {
-          "texture": "#crop",
           "uv": [
             0,
             6,
             16,
             16
-          ]
+          ],
+          "texture": "#auto_harvester_crop"
         }
-      },
-      "shade": false
+      }
     },
     {
+      "name": "crop_2",
       "from": [
         4,
         3,
@@ -867,27 +3729,27 @@
       ],
       "faces": {
         "north": {
-          "texture": "#crop",
           "uv": [
             0,
             6,
             16,
             16
-          ]
+          ],
+          "texture": "#auto_harvester_crop"
         },
         "south": {
-          "texture": "#crop",
           "uv": [
             0,
             6,
             16,
             16
-          ]
+          ],
+          "texture": "#auto_harvester_crop"
         }
-      },
-      "shade": false
+      }
     },
     {
+      "name": "crop_3",
       "from": [
         4,
         3,
@@ -900,46 +3762,24 @@
       ],
       "faces": {
         "north": {
-          "texture": "#crop",
           "uv": [
             0,
             6,
             16,
             16
-          ]
+          ],
+          "texture": "#auto_harvester_crop"
         },
         "south": {
-          "texture": "#crop",
           "uv": [
             0,
             6,
             16,
             16
-          ]
+          ],
+          "texture": "#auto_harvester_crop"
         }
-      },
-      "shade": false
-    },
-    {
-      "from": [
-        2,
-        2,
-        0.9
-      ],
-      "to": [
-        14,
-        14,
-        0.9
-      ],
-      "faces": {
-        "north": {
-          "texture": "#glass"
-        },
-        "south": {
-          "texture": "#glass"
-        }
-      },
-      "shade": false
+      }
     }
   ]
 }

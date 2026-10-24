@@ -3,75 +3,406 @@
   "render_type": "minecraft:cutout",
   "ambientocclusion": false,
   "textures": {
-    "particle": "create:block/andesite_casing",
-    "casing": "create:block/andesite_casing"
+    "particle": "comedymonkeysaddons:block/auto_harvester_steel",
+    "auto_harvester_steel": "comedymonkeysaddons:block/auto_harvester_steel",
+    "auto_harvester_steel_light": "comedymonkeysaddons:block/auto_harvester_steel_light",
+    "auto_harvester_dark": "comedymonkeysaddons:block/auto_harvester_dark",
+    "auto_harvester_brass": "comedymonkeysaddons:block/auto_harvester_brass"
   },
   "elements": [
     {
+      "name": "body",
       "from": [
-        2,
+        3,
         9,
         8.5
       ],
       "to": [
         6,
-        12.5,
-        12.5
+        12,
+        11.5
       ],
       "faces": {
         "north": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            14
-          ]
-        },
-        "south": {
-          "texture": "#casing",
-          "uv": [
-            0,
-            0,
-            16,
-            14
-          ]
+            10,
+            4,
+            13,
+            7
+          ],
+          "texture": "#auto_harvester_steel"
         },
         "east": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            14
-          ]
+            4.5,
+            4,
+            7.5,
+            7
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "south": {
+          "uv": [
+            3,
+            4,
+            6,
+            7
+          ],
+          "texture": "#auto_harvester_steel"
         },
         "west": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            14
-          ]
-        },
-        "up": {
-          "texture": "#casing",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
+            8.5,
+            4,
+            11.5,
+            7
+          ],
+          "texture": "#auto_harvester_steel"
         },
         "down": {
-          "texture": "#casing",
           "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
+            3,
+            4.5,
+            6,
+            7.5
+          ],
+          "texture": "#auto_harvester_steel"
+        }
+      }
+    },
+    {
+      "name": "plate_front",
+      "from": [
+        3,
+        9,
+        8.1
+      ],
+      "to": [
+        6,
+        13.3,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            2.7,
+            13,
+            7
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            2.7,
+            7.9,
+            7
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            3,
+            2.7,
+            6,
+            7
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "west": {
+          "uv": [
+            8.1,
+            2.7,
+            8.5,
+            7
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            3,
+            8.1,
+            6,
+            8.5
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            3,
+            7.5,
+            6,
+            7.9
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "plate_back",
+      "from": [
+        3,
+        9,
+        11.5
+      ],
+      "to": [
+        6,
+        13.3,
+        11.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            2.7,
+            13,
+            7
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "east": {
+          "uv": [
+            4.1,
+            2.7,
+            4.5,
+            7
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            3,
+            2.7,
+            6,
+            7
+          ],
+          "texture": "#auto_harvester_steel"
+        },
+        "west": {
+          "uv": [
+            11.5,
+            2.7,
+            11.9,
+            7
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            3,
+            11.5,
+            6,
+            11.9
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "down": {
+          "uv": [
+            3,
+            4.1,
+            6,
+            4.5
+          ],
+          "texture": "#auto_harvester_steel_light"
+        }
+      }
+    },
+    {
+      "name": "wheel_front",
+      "from": [
+        3.4,
+        12.4,
+        8.6
+      ],
+      "to": [
+        5.6,
+        13.2,
+        9.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.4,
+            2.8,
+            12.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "east": {
+          "uv": [
+            6.4,
+            2.8,
+            7.4,
+            3.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            3.4,
+            2.8,
+            5.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "west": {
+          "uv": [
+            8.6,
+            2.8,
+            9.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            3.4,
+            8.6,
+            5.6,
+            9.6
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "down": {
+          "uv": [
+            3.4,
+            6.4,
+            5.6,
+            7.4
+          ],
+          "texture": "#auto_harvester_dark"
+        }
+      }
+    },
+    {
+      "name": "wheel_back",
+      "from": [
+        3.4,
+        12.4,
+        10.4
+      ],
+      "to": [
+        5.6,
+        13.2,
+        11.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.4,
+            2.8,
+            12.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "east": {
+          "uv": [
+            4.6,
+            2.8,
+            5.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            3.4,
+            2.8,
+            5.6,
+            3.6
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "west": {
+          "uv": [
+            10.4,
+            2.8,
+            11.4,
+            3.6
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "up": {
+          "uv": [
+            3.4,
+            10.4,
+            5.6,
+            11.4
+          ],
+          "texture": "#auto_harvester_dark"
+        },
+        "down": {
+          "uv": [
+            3.4,
+            4.6,
+            5.6,
+            5.6
+          ],
+          "texture": "#auto_harvester_dark"
+        }
+      }
+    },
+    {
+      "name": "cap",
+      "from": [
+        4,
+        10,
+        7.9
+      ],
+      "to": [
+        5,
+        11,
+        8.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            5,
+            12,
+            6
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "east": {
+          "uv": [
+            7.9,
+            5,
+            8.1,
+            6
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "west": {
+          "uv": [
+            7.9,
+            5,
+            8.1,
+            6
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "up": {
+          "uv": [
+            4,
+            7.9,
+            5,
+            8.1
+          ],
+          "texture": "#auto_harvester_brass"
+        },
+        "down": {
+          "uv": [
+            4,
+            7.9,
+            5,
+            8.1
+          ],
+          "texture": "#auto_harvester_brass"
         }
       }
     }

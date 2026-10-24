@@ -108,6 +108,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.register(PressureCrucibleRenderer.SHAFT);
 		event.register(CobbleGeneratorRenderer.SHAFT);
 		AutoHarvesterRenderer.registerModels(event);
+		event.register(AnimalPenRenderer.MILK);
 		CuckooClockRenderer.registerModels(event);
 		event.register(MagmaEngineRenderer.HEAD);
 		event.register(MagmaEngineRenderer.SUPERCHARGED_HEAD);

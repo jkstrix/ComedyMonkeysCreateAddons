@@ -11,8 +11,11 @@ import net.minecraft.world.entity.LivingEntity;
  * trough: walks to a spot, stands a while, picks another. Positions are in the pen's model pixels, front facing north.
  */
 public class PenAnimal {
-	/** The straw it may walk on: in front of the trough, inside the walls. */
-	private static final float MIN_X = 3.5f, MAX_X = 12.5f, MIN_Z = 2.5f, MAX_Z = 9.5f;
+	/**
+	 * The straw its feet may walk on: behind the tray at the front, and far enough from the hay chute at the back
+	 * that the biggest animal's head stays out of both.
+	 */
+	private static final float MIN_X = 3.5f, MAX_X = 12.5f, MIN_Z = 4.5f, MAX_Z = 8.8f;
 	/** Walking speed in pixels a tick: about a real animal's pace at the size it's drawn. */
 	private static final float SPEED = 0.18f;
 

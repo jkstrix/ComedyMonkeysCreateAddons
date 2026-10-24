@@ -1,0 +1,26 @@
+{
+  "name": "auto-harvester-before",
+  "groups": [
+    {
+      "name": "crop_mid_sweep",
+      "parts": [
+        { "name": "shell", "model": "auto_harvester" },
+        { "name": "shaft", "model": "cobble_generator_shaft", "steps": [{ "rotY180": true }] },
+        { "name": "crop", "model": "auto_harvester_crop" },
+        { "name": "carriage", "model": "auto_harvester_carriage", "steps": [{ "translate": [4, 0, 0] }] },
+        { "name": "pole", "model": "auto_harvester_pole", "steps": [{ "scale": { "by": [1, 3.5, 1] } }, { "translate": [4, 5.5, 0] }] },
+        { "name": "reel", "model": "auto_harvester_reel", "steps": [{ "translate": [0, -2.5, 0] }] }
+      ]
+    },
+    {
+      "name": "tree_parked",
+      "parts": [
+        { "name": "shell", "model": "auto_harvester_dirt", "offset": [24, 0, 0] },
+        { "name": "shaft", "model": "cobble_generator_shaft", "steps": [{ "rotY180": true }], "offset": [24, 0, 0] },
+        { "name": "tree", "model": "auto_harvester_tree", "offset": [24, 0, 0] },
+        { "name": "carriage", "model": "auto_harvester_carriage", "offset": [24, 0, 0] },
+        { "name": "saw", "model": "auto_harvester_saw", "steps": [{ "translate": [-4, 2.5, 0] }], "offset": [24, 0, 0] }
+      ]
+    }
+  ]
+}

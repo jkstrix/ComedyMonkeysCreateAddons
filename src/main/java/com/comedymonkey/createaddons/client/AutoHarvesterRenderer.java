@@ -35,14 +35,19 @@ public class AutoHarvesterRenderer extends SafeBlockEntityRenderer<AutoHarvester
 	public static final ModelResourceLocation CROP = model("auto_harvester_crop");
 	public static final ModelResourceLocation TREE = model("auto_harvester_tree");
 
-	/** Hub of the tool when parked (its carriage at the rail's west end), and the far end of the sweep. */
-	private static final float PARK_X = 4, PARK_Y = 10.5f, SWEEP_END_X = 12;
-	/** Hub height while cutting: the tool just clears the soil. */
-	private static final float CUT_Y = 5.5f;
+	/**
+	 * Hub of the tool when parked (its carriage at the rail's west end), and the far end of the sweep. The tools are
+	 * 5 px across, so these keep them off the side walls and the girder.
+	 */
+	private static final float PARK_X = 4.5f, PARK_Y = 11, SWEEP_END_X = 11.5f;
+	/** Hub height while cutting: the tool just clears the planter's rim. */
+	private static final float CUT_Y = 6;
 	/** Underside of the carriage, where the pole comes out. */
 	private static final float CARRIAGE_BOTTOM = 9;
 	/** Soil level, which the plant grows from. */
 	private static final float SOIL_Y = 3;
+	/** Floor of the tray in front of the planter, where the harvest waits. */
+	private static final float TRAY_Y = 2.5f;
 	private static final float REEL_DEGREES_PER_TICK = 18, SAW_DEGREES_PER_TICK = 45;
 
 	public AutoHarvesterRenderer(BlockEntityRendererProvider.Context context) {}
@@ -77,6 +82,7 @@ public class AutoHarvesterRenderer extends SafeBlockEntityRenderer<AutoHarvester
 				renderPlant(ms, vc, state, kind, growth, light);
 		}
 		renderHead(ms, vc, state, kind, be.getHarvestProgress(partialTicks), light);
+		TrayItems.render(be.getOutput(), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
 		ms.popPose();
 	}
 

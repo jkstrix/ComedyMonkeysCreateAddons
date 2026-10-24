@@ -3,57 +3,58 @@
   "render_type": "minecraft:cutout",
   "ambientocclusion": false,
   "textures": {
-    "particle": "create:block/axis",
-    "axis": "create:block/axis"
+    "particle": "comedymonkeysaddons:block/auto_harvester_steel_light",
+    "auto_harvester_steel_light": "comedymonkeysaddons:block/auto_harvester_steel_light"
   },
   "elements": [
     {
+      "name": "pole",
       "from": [
-        3.5,
+        3.9,
         0,
-        9.5
+        9.4
       ],
       "to": [
-        4.5,
+        5.1,
         1,
-        10.5
+        10.6
       ],
       "faces": {
         "north": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
+            10.9,
+            15,
+            12.1,
             16
-          ]
-        },
-        "south": {
-          "texture": "#axis",
-          "uv": [
-            6,
-            0,
-            10,
-            16
-          ]
+          ],
+          "texture": "#auto_harvester_steel_light"
         },
         "east": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
+            5.4,
+            15,
+            6.6,
             16
-          ]
+          ],
+          "texture": "#auto_harvester_steel_light"
+        },
+        "south": {
+          "uv": [
+            3.9,
+            15,
+            5.1,
+            16
+          ],
+          "texture": "#auto_harvester_steel_light"
         },
         "west": {
-          "texture": "#axis",
           "uv": [
-            6,
-            0,
-            10,
+            9.4,
+            15,
+            10.6,
             16
-          ]
+          ],
+          "texture": "#auto_harvester_steel_light"
         }
       }
     }
