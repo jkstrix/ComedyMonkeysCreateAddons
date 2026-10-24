@@ -2126,4 +2126,6 @@ const bb = {
 };
 fs.writeFileSync(OUT, JSON.stringify(bb));
 console.error('wrote', OUT, elements.length, 'cubes', groups.length, 'groups', animations.length, 'animations');
-if (GAME) require('./trade-bot.game-export.js')({ bot, station, paintCube, png, animations, cues: CUES });
+// the lobbed package and the emerald paid back are drawn in game too (the rest of the villager prop stays preview-only)
+const TRADE_PROPS = propVillager.kids.filter((k) => k.name === 'trade_package' || k.name === 'trade_emerald');
+if (GAME) require('./trade-bot.game-export.js')({ bot, station, props: TRADE_PROPS, propDrop: PROP_DROP, paintCube, png, animations, cues: CUES });

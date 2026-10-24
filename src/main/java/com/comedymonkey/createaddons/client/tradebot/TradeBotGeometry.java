@@ -68,27 +68,33 @@ public final class TradeBotGeometry {
 		return geometry;
 	}
 
+	/** The lobbed package and the emerald paid back in a trade: drawn with him, but only while a clip shows them. */
+	public static final String PROPS = "trade_props";
+	/** His model: the bot, and the trade props beside him (in the same frame, so they fly free of his own moves). */
+	public static final String[] BOT_ROOTS = { "trade_bot", PROPS };
+
 	public static LayerDefinition botLayer() {
-		return get().layer("trade_bot");
+		return get().layer(BOT_ROOTS);
 	}
 
 	public static LayerDefinition stationLayer() {
 		return get().layer("station");
 	}
 
-	/** A model of one root bone and everything under it. */
-	public LayerDefinition layer(String root) {
+	/** A model of these root bones and everything under them. */
+	public LayerDefinition layer(String... roots) {
 		MeshDefinition mesh = new MeshDefinition();
 		Map<String, PartDefinition> parts = new HashMap<>();
 		Map<String, Bone> byName = new HashMap<>();
 		for (Bone bone : bones)
 			byName.put(bone.name(), bone);
 		for (Bone bone : bones) {
-			if (!bone.name().equals(root) && !isUnder(bone, root, byName))
+			boolean isRoot = List.of(roots).contains(bone.name());
+			if (!isRoot && !isUnder(bone, roots, byName))
 				continue;
-			PartDefinition parent = bone.name().equals(root) ? mesh.getRoot() : parts.get(bone.parent());
+			PartDefinition parent = isRoot ? mesh.getRoot() : parts.get(bone.parent());
 			float[] p = bone.pivot();
-			float[] parentPivot = bone.name().equals(root) ? null : byName.get(bone.parent()).pivot();
+			float[] parentPivot = isRoot ? null : byName.get(bone.parent()).pivot();
 			CubeListBuilder cubes = CubeListBuilder.create();
 			for (Cube cube : bone.cubes())
 				cubes.texOffs(cube.u(), cube.v()).addBox(p[0] - cube.to()[0], p[1] - cube.to()[1], cube.from()[2] - p[2],
@@ -104,23 +110,28 @@ public final class TradeBotGeometry {
 	}
 
 	/** Every bone of a baked layer by name, for posing. */
-	public Map<String, ModelPart> parts(ModelPart bakedRoot, String root) {
+	public Map<String, ModelPart> parts(ModelPart bakedRoot, String... roots) {
 		Map<String, ModelPart> parts = new LinkedHashMap<>();
 		Map<String, Bone> byName = new HashMap<>();
 		for (Bone bone : bones)
 			byName.put(bone.name(), bone);
 		for (Bone bone : bones) {
-			if (bone.name().equals(root))
-				parts.put(root, bakedRoot.getChild(root));
-			else if (isUnder(bone, root, byName))
+			if (List.of(roots).contains(bone.name()))
+				parts.put(bone.name(), bakedRoot.getChild(bone.name()));
+			else if (isUnder(bone, roots, byName))
 				parts.put(bone.name(), parts.get(bone.parent()).getChild(bone.name()));
 		}
 		return parts;
 	}
 
-	private static boolean isUnder(Bone bone, String root, Map<String, Bone> byName) {
+	/** The bones directly under {@code root}. */
+	public List<String> children(String root) {
+		return bones.stream().filter(bone -> root.equals(bone.parent())).map(Bone::name).toList();
+	}
+
+	private static boolean isUnder(Bone bone, String[] roots, Map<String, Bone> byName) {
 		for (String p = bone.parent(); p != null; p = byName.get(p).parent())
-			if (p.equals(root))
+			if (List.of(roots).contains(p))
 				return true;
 		return false;
 	}

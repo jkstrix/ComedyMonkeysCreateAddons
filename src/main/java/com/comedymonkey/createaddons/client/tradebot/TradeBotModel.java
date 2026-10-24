@@ -25,7 +25,7 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 
 	public TradeBotModel(ModelPart root) {
 		this.root = root;
-		this.parts = TradeBotGeometry.get().parts(root, ClipRoot.BONE);
+		this.parts = TradeBotGeometry.get().parts(root, TradeBotGeometry.BOT_ROOTS);
 	}
 
 	@Override
@@ -62,6 +62,12 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 
 	/** Poses parts from {@code clip} at {@code t}, faded in from {@code old} at {@code oldT} by {@code w} (0..1). */
 	public static void pose(Map<String, ModelPart> parts, Clip clip, float t, @Nullable Clip old, float oldT, float w) {
+		// the trade props only exist in the clips that use them
+		for (String prop : TradeBotGeometry.get().children(TradeBotGeometry.PROPS)) {
+			ModelPart part = parts.get(prop);
+			if (part != null)
+				part.visible = clip.track(prop, "scale") != null || clip.step(prop, "scale") != null;
+		}
 		Vector3f value = new Vector3f(), from = new Vector3f();
 		for (Map.Entry<String, ModelPart> entry : parts.entrySet()) {
 			for (String channel : CHANNELS) {

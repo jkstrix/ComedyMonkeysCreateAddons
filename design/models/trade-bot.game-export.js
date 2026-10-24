@@ -1,5 +1,5 @@
 // Game export for Trade Bot, called by trade-bot.gen.js with --game. Writes into the mod's resources:
-//   textures/entity/trade_bot.png       bot + station cubes only (no preview props), re-packed
+//   textures/entity/trade_bot.png       bot + station cubes, plus the trade props (lobbed package, emerald), re-packed
 //   textures/entity/trade_bot_glow.png  the same layout with only the glowing cubes, drawn full bright in game
 //   trade_bot/geometry.json             bones (pivot, rotation) and cubes (from, to, uv) in Blockbench units
 //   trade_bot/clips.json                every clip's sampled tracks, step tracks, root mode and sound cues
@@ -16,7 +16,7 @@ const rootMode = (name) => (PHYSICAL.includes(name) ? 'physical' : GAME.includes
 // glowing cubes live under these bones; they're painted into the glow texture too
 const GLOW_BONES = ['iris_glow_left', 'iris_glow_right', 'lamp_glow', 'station_glow'];
 
-module.exports = function exportGame({ bot, station, paintCube, png, animations, cues }) {
+module.exports = function exportGame({ bot, station, props = [], propDrop = 0, paintCube, png, animations, cues }) {
   // bones and cubes of the two in-game roots, parents first
   const bones = [], cubes = [];
   function walk(n, parent, glow) {
@@ -35,6 +35,11 @@ module.exports = function exportGame({ bot, station, paintCube, png, animations,
   }
   walk(bot, null, false);
   walk(station, null, false); // the station root is kept in the geometry, so its sub-bones keep their pivots
+  // the trade props (lobbed package, emerald), lifted back from where the preview parks props, under a root of their own
+  const up = (v) => v && [v[0], v[1] + propDrop, v[2]];
+  const lift = (n) => (n.kind === 'g' ? { ...n, origin: up(n.origin), kids: n.kids.map(lift) } : { ...n, from: up(n.from), to: up(n.to), origin: up(n.origin) });
+  bones.push({ name: 'trade_props', parent: null, pivot: [0, 0, 0], rotation: [0, 0, 0], cubes: [] });
+  for (const p of props) walk(lift(p), 'trade_props', false);
 
   // pack: same shelf packer as the preview, on the smallest square texture that fits
   const size = [64, 128, 256].find((S) => {

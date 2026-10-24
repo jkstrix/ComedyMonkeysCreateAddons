@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
-import com.comedymonkey.createaddons.content.tradebot.clip.ClipRoot;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.Minecraft;
@@ -39,7 +38,7 @@ public class TradeBotItemRenderer extends BlockEntityWithoutLevelRenderer {
 		station.getAllParts().forEach(ModelPart::resetPose);
 		bot.getAllParts().forEach(ModelPart::resetPose);
 		Map<String, ModelPart> stationParts = TradeBotGeometry.get().parts(station, "station");
-		Map<String, ModelPart> botParts = TradeBotGeometry.get().parts(bot, ClipRoot.BONE);
+		Map<String, ModelPart> botParts = TradeBotGeometry.get().parts(bot, TradeBotGeometry.BOT_ROOTS);
 		TradeBotModel.pose(stationParts, packed, packed.length(), null, 0, 1);
 		TradeBotModel.pose(botParts, packed, packed.length(), null, 0, 1);
 		TradeBotStationRenderer.render(ms, buffers, light, overlay, Direction.NORTH, station);

@@ -254,7 +254,7 @@ public class TradeBotBrain {
 			// re-planned after each buyer, nearest first (D49)
 			for (TradeSpot spot = nextBuyer(j); spot != null; spot = nextBuyer(j)) {
 				UUID villager = spot.villager().getUUID();
-				if (VillagerClaims.claim(villager, bot.getUUID(), bot.level().getGameTime()) && approach(new TradeWork(bot, spot)))
+				if (VillagerClaims.claim(villager, bot.getUUID(), bot.level().getGameTime()) && approach(new TradeWork(bot, spot, this::canAffordTrade)))
 					return;
 				VillagerClaims.release(villager, bot.getUUID());
 				unreachable.put(villager, bot.level().getGameTime() + UNREACHABLE_TICKS);
@@ -548,9 +548,9 @@ public class TradeBotBrain {
 	}
 
 	/**
-	 * A trade clip is over. If it went through and the villager still buys something he carries, he trades again from
-	 * where he is (one trade per clip, D35); otherwise he's done with this villager. If it was called off, he shrugs
-	 * and carries on with the next buyer, keeping everything (D46).
+	 * A trade clip is over, with every trade he could make in it (D63). If the villager would still buy (it can't
+	 * normally: the clip stops only when it won't, or his charge is short), he goes again; otherwise he's done with this
+	 * villager. If it was called off, he shrugs and carries on with the next buyer, keeping everything (D46).
 	 */
 	private void tradeDone(TradeWork trade) {
 		UUID villager = trade.villager().getUUID();
@@ -564,9 +564,9 @@ public class TradeBotBrain {
 			set(Task.SHRUGGING);
 			return;
 		}
-		if (job != null && trade.traded())
-			job.trades++;
-		debug("trade clip over with {}: traded {}, clip {} at {}", trade.villager().getName().getString(), trade.traded(), bot.clip().name(), bot.clipElapsed(0));
+		if (job != null)
+			job.trades += trade.trades();
+		debug("{} trades with {} in one clip", trade.trades(), trade.villager().getName().getString());
 		if (trade.traded() && trade.stillThere() && canAffordTrade() && !shouldGoHome() && TradeWork.offerFor(bot, trade.villager()) != null) {
 			work = trade;
 			trade.start();

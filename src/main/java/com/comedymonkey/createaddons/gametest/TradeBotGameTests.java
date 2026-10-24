@@ -215,9 +215,9 @@ public final class TradeBotGameTests {
 	}
 
 	/**
-	 * Trading for real (D7, D17, D35, D45, D57): seated villagers in all four of the hall's booths, each buying one of
+	 * Trading for real (D7, D17, D45, D57, D63): seated villagers in all four of the hall's booths, each buying one of
 	 * the goods in his input chest. He goes by himself (D47), takes only what they'll buy (D22), trades with each in turn
-	 * across its workstation, one trade per clip, while he can pay its price, delivers the emeralds and nuggets, brings
+	 * across its workstation, every trade he can pay for in one clip, delivers the emeralds and nuggets, brings
 	 * back what's left over (D62), and docks. The cobblestone nobody buys never leaves the chest. Then, with not enough
 	 * left for another trade, he stays home. (The goods set the number of trades: villagers at their workstations
 	 * restock, as they do for players.)
@@ -239,9 +239,15 @@ public final class TradeBotGameTests {
 		int[] trades = { 2, 1, 1, 1 };
 		TradeBotStationBlockEntity station = (TradeBotStationBlockEntity) helper.getBlockEntity(hall.station);
 		TradeBotMotion.debug = true;
+		long[] clipStart = { -1 };
+		int[] clips = { 0 };
 		helper.onEachTick(() -> {
 			if (station.tradesToday() > 5)
 				helper.fail("he made " + station.tradesToday() + " trades, more than his goods pay for");
+			if (bot.clip().name().startsWith("trade_villager") && bot.clipStart() != clipStart[0]) {
+				clipStart[0] = bot.clipStart();
+				clips[0]++;
+			}
 		});
 		helper.succeedWhen(() -> {
 			if (station.tradesToday() < 5 || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
@@ -262,6 +268,8 @@ public final class TradeBotGameTests {
 				if (bot.reputationWith(villager.getUUID()) != 2 * trades[i])
 					helper.fail("his reputation with the " + villager.getVillagerData().getProfession() + " is " + bot.reputationWith(villager.getUUID()));
 			}
+			if (clips[0] != villagers.size())
+				helper.fail(clips[0] + " trade clips for " + villagers.size() + " villagers: each visit's trades should be one clip");
 			if (villagers.get(0).getVillagerXp() != 1 + 2 * 2)
 				helper.fail("the farmer has " + villagers.get(0).getVillagerXp() + " XP, not 5");
 		});

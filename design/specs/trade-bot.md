@@ -71,6 +71,7 @@ Clarified: **a clockwork robot, powered by FE through his station, who sells you
 | D60 | Doors and gates | He **closes the doors and fence gates he opened** once he's through; ones that were already open stay open (refines D28) | user R13 |
 | D61 | Linking (refines D19) | **Right-click the station** for its screen (status, charge, links with an ✕ to unlink; **Select containers**, **Call home**). **Select containers** starts Create Mechanical Arm-style picking in the world: right-click a container: the first click makes it **takes from** (cyan outline); a second makes it **delivers to** (amber) if there's no output yet, or unlinks it if there is; a click on the output unlinks it. Belts can only be the output. Chests never open while picking (the server takes the clicks over). Picking uses any hand (no item needed): **left-click unlinks**; a hint line shows above the hotbar. Sneak-right-click or the station again to finish | user R14 |
 | D62 | Output and returns (refines D22, D48) | The output **only ever gets emeralds and Nuggets of Experience**. Unsold items are **returned to the input they came from on his way back to the station**, nearest first; anything whose input is full goes to any input with room, and if they're all full he keeps it for next time | user R15 |
+| D63 | Grouped trades (refines D35) | **One trade animation per villager visit** (~7 s): on its trade beat he makes **every trade he can pay for** with that villager, one after another, then moves on. The lobbed package and the emerald paid back are shown in game | user R16 |
 
 ## Open Questions
 None for v1.
@@ -92,7 +93,7 @@ States, with their animation clips:
 1. **Docked / charging** (`dock_lights_out`, waiting): the station charges him at 64 FE/t. Every few seconds he checks the leave conditions (D47). With nothing to sell he stays docked and charges (D52).
 2. **Leave** (`action_comes_in`): the flag springs up, his lights come on, he hops out (`start_rolling` → `rolling`).
 3. **Load** (`chest_take`, `barrel_take`, `chest_take_high`, `depot_take`, or the blind routine): from the inputs in turn, he takes items that seated buyers in range want, up to 27 stacks.
-4. **Trade run** (`rolling` between buyers; `trade_villager` / `trade_villager_open` at each): at each seated buyer, one trade per animation while that villager buys anything he holds and his charge allows (D45, D49). Emeralds go to the pouch (D48), and the trade's XP is banked for nuggets (D57). His reputation with that villager grows (D42).
+4. **Trade run** (`rolling` between buyers; `trade_villager` / `trade_villager_open` at each): at each seated buyer, one animation per visit in which he makes every trade that villager will take and his charge allows (D45, D49, D63). Emeralds go to the pouch (D48), and the trade's XP is banked for nuggets (D57). His reputation with that villager grows (D42).
 5. **Deliver** (`chest_put`, `barrel_put`, `chest_put_high`, `depot_place`, `belt_place`): the pouch goes to the output; if it's full he waits beside it and retries (D22).
 6. **Return**: unsold items back to their inputs; home; reverse-hop into the cradle (`stop_rolling`, `dock_lights_out`).
 7. **Interrupts at any time**:
@@ -246,7 +247,7 @@ A mid-late-game automation robot that trades your goods to seated villagers for 
 Gameplay: 95% · World Integration: 92% · Balance: 85% · Progression: 90% · Automation: 92% · Edge Cases: 95% · **Overall Design Readiness: 85%**
 - Gameplay 95%: v1 is complete; the ledger (v2) is deliberately out of scope.
 - World Integration 92%: team-mod detection for owner access is to be confirmed at implementation.
-- Balance 85%: the FE numbers, the 7 s trade pace and the recipe cost need a playtest pass.
+- Balance 85%: the FE numbers, the ~7 s per-visit trade pace and the recipe cost need a playtest pass.
 - Progression 90%: the recipe's exact 5×5 grid is still to be laid out, and the FE Coil's recipe is a proposal.
 - Automation 92%: packages deferred to v2 by choice.
 - Edge Cases 95%: all decided; villagers on moving contraption seats need testing in game.

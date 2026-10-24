@@ -351,12 +351,12 @@ That last method is **added to the existing `VillagerMixin`**. It does exactly w
 - **The spot** is two blocks out from the seat, 39 px from its centre, where the clip's preview villager sits, so the package lands in its arms. It prefers a side across a workstation, then the nearest.
 - **Loading** takes only what the trip's buyers will take: each offer's price times its trades left, less what he already carries. Items left over after trading go home with the D62 returns.
 - **Leaving by himself:** docked, he checks every 10 s (D47). He goes only if some buyer's price can be paid **in full** from his inputs and load, or he has earnings to deliver. A run that sells nothing rests a minute before the next check, and a villager he couldn't reach is left alone for 2 minutes. This stops him shuttling 4 wheat to a farmer who wants 20.
-- **Repeat trades:** after each clip he trades again from the same spot while the villager still buys something he can pay for, he has charge for a trade and the way home, and no home rule applies.
+- **Grouped trades (D63):** one clip per villager visit. On its trade beat he makes every trade he can pay for, while his charge still covers a trade and the way home. The lobbed package and the emerald now draw in game: the export lifts them out of the preview-only villager prop into a `trade_props` root beside the bot, and they show only in clips that animate them.
 - **Aborts:** before the trade beat (4.0 s) he checks every tick that the villager is alive, seated, in place and not trading with a player. If not, he plays `expr_curious` with the `shrug` sound and moves to the next buyer.
 - **Restocks:** villagers seated at their workstations restock, as they do for players.
 - **Goggles** show trades today, counted by the station and reset each morning. `/tradebot trade` starts a run now.
 - **Courses:**
-  - `tradesRoundTheHall`: four seated villagers, five trades. Only the goods he can sell leave the chest, and the leftovers come back.
+  - `tradesRoundTheHall`: four seated villagers, five trades in four clips. Only the goods he can sell leave the chest, and the leftovers come back.
   - `shrugsWhenTheVillagerStandsUp`: everything comes back and no stock is used.
 
 ## Milestone 6: feeling alive

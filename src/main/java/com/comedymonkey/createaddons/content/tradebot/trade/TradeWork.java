@@ -1,5 +1,7 @@
 package com.comedymonkey.createaddons.content.tradebot.trade;
 
+import java.util.function.BooleanSupplier;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.config.CMConfig;
@@ -17,10 +19,12 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 /**
- * One trade with a seated villager, one per clip (D35): he grips the goods from his drawer, lobs them over, and on the
- * clip's trade beat the trade happens at the villager's real price and stock (D17), paid into his emerald pouch (D48),
- * with the XP vanilla would have dropped banked for Nuggets of Experience (D57). Until that beat he checks the villager
- * is still seated, still there and not trading with a player; if not, the trade is off and he keeps everything (D46).
+ * A visit's trades with a seated villager, all in one clip (D63, refining D35): he grips the goods from his drawer,
+ * lobs them over, and on the clip's trade beat makes every trade he can pay for, one after another, at the villager's
+ * real prices and stock (D17), paid into his emerald pouch (D48), with the XP vanilla would have dropped banked for
+ * Nuggets of Experience (D57). He stops when the villager buys nothing more he carries, or his charge only covers a
+ * trade and the way home. Until that beat he checks the villager is still seated, still there and not trading with a
+ * player; if not, the visit is off and he keeps everything (D46).
  */
 public class TradeWork implements BotWork {
 	public static final String CLIP = "trade_villager", CLIP_OPEN = "trade_villager_open";
@@ -29,11 +33,15 @@ public class TradeWork implements BotWork {
 
 	private final TradeBotEntity bot;
 	private final TradeSpot spot;
-	private boolean traded, failed;
+	/** Whether his charge allows one more trade (and still the way home). */
+	private final BooleanSupplier affordable;
+	private int trades;
+	private boolean done, failed;
 
-	public TradeWork(TradeBotEntity bot, TradeSpot spot) {
+	public TradeWork(TradeBotEntity bot, TradeSpot spot, BooleanSupplier affordable) {
 		this.bot = bot;
 		this.spot = spot;
+		this.affordable = affordable;
 	}
 
 	public AbstractVillager villager() {
@@ -57,7 +65,8 @@ public class TradeWork implements BotWork {
 
 	@Override
 	public void start() {
-		traded = failed = false;
+		trades = 0;
+		done = failed = false;
 		bot.playClip(clipName());
 	}
 
@@ -68,17 +77,19 @@ public class TradeWork implements BotWork {
 		if (villager.isAlive())
 			villager.getLookControl().setLookAt(bot, 30, 30);
 		float t = bot.clipElapsed(0);
-		if (!traded) {
+		if (!done) {
 			if (!stillThere()) {
 				failed = true;
 				return true;
 			}
 			if (t >= TRADE_AT) {
-				if (!trade()) {
+				while (affordable.getAsBoolean() && trade())
+					trades++;
+				done = true;
+				if (trades == 0) {
 					failed = true;
 					return true;
 				}
-				traded = true;
 			}
 		}
 		Clip clip = bot.clip();
@@ -90,9 +101,14 @@ public class TradeWork implements BotWork {
 		VillagerClaims.release(spot.villager().getUUID(), bot.getUUID());
 	}
 
-	/** The trade went through on this clip. */
+	/** The visit's trades went through on this clip. */
 	public boolean traded() {
-		return traded;
+		return trades > 0;
+	}
+
+	/** How many trades this clip made. */
+	public int trades() {
+		return trades;
 	}
 
 	/** The trade was called off (the villager stood up, left, or a player started trading with it). */
