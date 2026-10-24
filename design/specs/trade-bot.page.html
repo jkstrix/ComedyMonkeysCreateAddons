@@ -1,0 +1,329 @@
+<title>Trade Bot</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow column of stacked andesite panels, each a single idea, brass for structure, amber only for "his light" */
+:root {
+  --bg: #e4e3df;
+  --panel: #f2f1ed;
+  --panel-2: #d9d7d1;
+  --line: #c3c0b8;
+  --fg: #23241f;
+  --muted: #5c5d57;
+  --brass: #8a6a33;
+  --amber: #a8741c;
+  --good: #4f7a4a;
+  --warn: #9a6a1e;
+  --no: #8c4a3c;
+  --display: "Chakra Petch", "Bahnschrift", "Arial Narrow", sans-serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1c1e; --panel: #242528; --panel-2: #2d2e32; --line: #3a3b40;
+    --fg: #dcd7cc; --muted: #9a968d; --brass: #b8955a; --amber: #d9a441;
+    --good: #86a77e; --warn: #d0a050; --no: #c47e6c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b1c1e; --panel: #242528; --panel-2: #2d2e32; --line: #3a3b40;
+  --fg: #dcd7cc; --muted: #9a968d; --brass: #b8955a; --amber: #d9a441;
+  --good: #86a77e; --warn: #d0a050; --no: #c47e6c;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 1.0625rem/1.5 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 48px;
+}
+main { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+h1, h2 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: 0.01em; }
+h1 { font-size: clamp(2.6rem, 9vw, 4rem); line-height: 1; }
+h2 { font-size: 1.35rem; line-height: 1.2; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+
+.eyebrow {
+  font: 700 0.75rem/1 var(--mono);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--brass);
+}
+
+/* hero */
+.hero { display: flex; flex-direction: column; gap: 14px; padding-block: 8px 4px; }
+.pitch { font-size: 1.35rem; line-height: 1.35; max-width: 32ch; }
+.pitch b { color: var(--amber); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font: 700 0.8rem/1 var(--mono);
+  padding: 7px 10px; border-radius: 4px;
+  border: 1px solid var(--line); background: var(--panel); color: var(--muted);
+}
+.chip.ready { border-color: var(--good); color: var(--good); }
+
+/* panels */
+section.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.panel-head { display: flex; flex-direction: column; gap: 6px; }
+
+/* ten-second version */
+.tldr { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.tldr li {
+  background: var(--panel-2); border-radius: 4px;
+  padding: 10px 12px; font-weight: 700; line-height: 1.3;
+  min-width: 0;
+}
+
+/* loop */
+.loop { display: flex; flex-direction: column; gap: 0; counter-reset: step; }
+.loop li {
+  counter-increment: step;
+  display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start;
+  padding-block: 10px;
+  border-top: 1px dashed var(--line);
+}
+.loop li:first-child { border-top: 0; padding-top: 0; }
+.loop li::before {
+  content: counter(step);
+  width: 32px; height: 32px; border-radius: 50%;
+  display: grid; place-items: center;
+  font: 700 0.95rem/1 var(--mono);
+  border: 2px solid var(--brass); color: var(--brass);
+}
+.loop b { display: block; }
+.loop span { color: var(--muted); }
+.repeat { font: 700 0.85rem/1.3 var(--mono); color: var(--brass); }
+
+/* numbers */
+.nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.num { background: var(--panel-2); border-radius: 4px; padding: 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.num strong { font: 700 1.5rem/1.1 var(--mono); font-variant-numeric: tabular-nums; color: var(--fg); }
+.num span { color: var(--muted); font-size: 0.92rem; line-height: 1.3; }
+
+/* does / doesn't */
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.col { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.col h3 { margin: 0; font: 700 0.8rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; }
+.col.yes h3 { color: var(--good); }
+.col.no h3 { color: var(--no); }
+.col li { padding-left: 22px; position: relative; line-height: 1.35; }
+.col li::before { position: absolute; left: 0; top: 0; font: 700 1rem/1.35 var(--mono); }
+.col.yes li::before { content: "+"; color: var(--good); }
+.col.no li::before { content: "×"; color: var(--no); }
+
+/* home chips */
+.home { display: flex; flex-wrap: wrap; gap: 8px; }
+.home li { background: var(--panel-2); border-radius: 999px; padding: 6px 14px; font-weight: 700; }
+
+/* what if */
+.qa { display: flex; flex-direction: column; }
+.qa li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 12px; padding-block: 10px; border-top: 1px dashed var(--line); }
+.qa li:first-child { border-top: 0; padding-top: 0; }
+.qa .q { font-weight: 700; }
+.qa .a { color: var(--muted); }
+@media (max-width: 560px) { .qa li { grid-template-columns: 1fr; gap: 2px; } }
+
+/* readiness */
+.bars { display: flex; flex-direction: column; gap: 12px; }
+.bar { display: grid; grid-template-columns: 9.5rem 1fr 3rem; gap: 10px; align-items: center; }
+.bar .label { font-weight: 700; }
+.bar .track { height: 10px; background: var(--panel-2); border-radius: 5px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--brass); border-radius: 5px; }
+.bar.low .fill { background: var(--amber); }
+.bar .pct { font: 700 0.95rem/1 var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.bar .why { grid-column: 1 / -1; color: var(--muted); font-size: 0.92rem; margin-top: -6px; }
+.overall { border-top: 1px solid var(--line); padding-top: 12px; }
+.overall .label, .overall .pct { color: var(--amber); }
+@media (max-width: 480px) { .bar { grid-template-columns: 1fr 3rem; } .bar .track { grid-column: 1 / -1; grid-row: 2; } .bar .why { margin-top: 0; } }
+
+/* open + later */
+.flag li { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-left: 3px solid var(--warn); background: var(--panel-2); border-radius: 0 4px 4px 0; }
+.flag { display: flex; flex-direction: column; gap: 8px; }
+.flag b { color: var(--fg); }
+.flag span { color: var(--muted); }
+.later { display: flex; flex-wrap: wrap; gap: 8px; }
+.later li { border: 1px dashed var(--line); border-radius: 4px; padding: 6px 12px; color: var(--muted); }
+.later li b { color: var(--fg); }
+
+footer { color: var(--muted); font-size: 0.9rem; text-align: center; padding-top: 8px; }
+footer code { font-family: var(--mono); font-size: 0.85rem; color: var(--fg); overflow-wrap: anywhere; }
+</style>
+
+<main>
+  <header class="hero">
+    <span class="eyebrow">Systems spec · quick read</span>
+    <h1>Trade Bot</h1>
+    <p class="pitch">A clockwork robot who <b>sells your stuff to seated villagers</b> for emeralds.</p>
+    <div class="chips">
+      <span class="chip ready">Ready to build · v1</span>
+      <span class="chip">Mid-late game</span>
+      <span class="chip">Runs on FE</span>
+    </div>
+  </header>
+
+  <section class="panel" aria-labelledby="tldr">
+    <div class="panel-head">
+      <span class="eyebrow">If you read nothing else</span>
+      <h2 id="tldr">The 10-second version</h2>
+    </div>
+    <ul class="tldr">
+      <li>Sells your stuff to villagers for emeralds</li>
+      <li>Villagers must be sitting on seats</li>
+      <li>Crafted on his winding station; power it with FE</li>
+      <li>Link 4 inputs and 1 output at the station</li>
+      <li>Carries 27 stacks plus an emerald pouch</li>
+      <li>Real villager trades: stock and restocks apply</li>
+      <li>Goes home to charge: night, storms, idle, low charge</li>
+      <li>No ladders or bubble columns; avoids water and lava</li>
+      <li>Owner only; can't be killed; a wrench packs him</li>
+      <li>Works unattended in chunk-loaded areas</li>
+    </ul>
+  </section>
+
+  <section class="panel" aria-labelledby="loop">
+    <div class="panel-head">
+      <span class="eyebrow">How it works</span>
+      <h2 id="loop">One trip, start to finish</h2>
+    </div>
+    <ol class="loop">
+      <li><div><b>Charges at his station</b><span>FE goes in from underneath the station, 64 FE per tick.</span></div></li>
+      <li><div><b>Hops out when there's work</b><span>It's daytime, he has charge, and a seated villager wants something in his inputs.</span></div></li>
+      <li><div><b>Loads up</b><span>Takes what buyers want from your input containers, up to 27 stacks.</span></div></li>
+      <li><div><b>Trades</b><span>Rolls to each seated buyer, nearest first, and trades from up to a block away.</span></div></li>
+      <li><div><b>Delivers the emeralds</b><span>They go to your output (a belt, chest, barrel or depot), and unsold items go back to the inputs.</span></div></li>
+      <li><div><b>Goes home</b><span>Reverse-hops into his station; his lights go out and the station glows.</span></div></li>
+    </ol>
+    <p class="repeat">↻ Repeats whenever villagers restock.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="nums">
+    <div class="panel-head">
+      <span class="eyebrow">Key numbers</span>
+      <h2 id="nums">The numbers that matter</h2>
+    </div>
+    <div class="nums">
+      <div class="num"><strong>27</strong><span>stacks per trip, mixed</span></div>
+      <div class="num"><strong>4 + 1</strong><span>inputs and output</span></div>
+      <div class="num"><strong>64</strong><span>block range from his station</span></div>
+      <div class="num"><strong>1</strong><span>block max from a villager to trade</span></div>
+      <div class="num"><strong>~7 s</strong><span>per trade</span></div>
+      <div class="num"><strong>4</strong><span>bots per player</span></div>
+      <div class="num"><strong>20</strong><span>HP, then he winds down</span></div>
+      <div class="num"><strong>100k</strong><span>FE full charge</span></div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="rules">
+    <div class="panel-head">
+      <span class="eyebrow">Rules</span>
+      <h2 id="rules">What he does and doesn't do</h2>
+    </div>
+    <div class="pair">
+      <div class="col yes">
+        <h3>Does</h3>
+        <ul>
+          <li>Trades only with <b>seated</b> villagers and wandering traders</li>
+          <li>Uses real trades, stock and restocks</li>
+          <li>Earns his own reputation, so prices slowly improve</li>
+          <li>Uses any container as an input or output</li>
+          <li>Opens doors, trapdoors and gates</li>
+          <li>Hops stairs, slabs and blocks up to one high</li>
+          <li>Keeps working when you're offline, if his area is loaded</li>
+        </ul>
+      </div>
+      <div class="col no">
+        <h3>Doesn't</h3>
+        <ul>
+          <li>Buy things (the v2 Trade Ledger adds that)</li>
+          <li>Climb ladders or use bubble columns</li>
+          <li>Go into water or lava</li>
+          <li>Die: at 0 HP he winds down until you wind him with a wrench</li>
+          <li>Get attacked by monsters, though they still scare him</li>
+          <li>Let anyone but his owner change his jobs</li>
+          <li>Ride trains, carts or seats yet</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="home">
+    <div class="panel-head">
+      <span class="eyebrow">Going home</span>
+      <h2 id="home">He goes back to his station when…</h2>
+    </div>
+    <ul class="home">
+      <li>it's night</li>
+      <li>there's a thunderstorm</li>
+      <li>he's low on charge</li>
+      <li>there's nothing to sell</li>
+      <li>nobody seated is buying</li>
+      <li>a redstone signal pauses him</li>
+      <li>you hit him with a wrench</li>
+    </ul>
+  </section>
+
+  <section class="panel" aria-labelledby="whatif">
+    <div class="panel-head">
+      <span class="eyebrow">Edge cases</span>
+      <h2 id="whatif">What if…?</h2>
+    </div>
+    <ul class="qa">
+      <li><span class="q">The villager stands up mid-trade?</span><span class="a">He shrugs, keeps everything and tries again later.</span></li>
+      <li><span class="q">A player is trading with that villager?</span><span class="a">The player always goes first.</span></li>
+      <li><span class="q">Two bots want the same villager?</span><span class="a">First come, first served. The other finds a different buyer.</span></li>
+      <li><span class="q">The output is full?</span><span class="a">He waits beside it, looking worried, and retries.</span></li>
+      <li><span class="q">His chunk unloads mid-trip?</span><span class="a">Everything is saved. He picks up where he left off.</span></li>
+      <li><span class="q">Only a chunk loader is keeping him loaded?</span><span class="a">He works exactly as normal.</span></li>
+      <li><span class="q">A container or villager is in an unloaded chunk?</span><span class="a">He skips it this trip and tries again later.</span></li>
+      <li><span class="q">You pack the station while he's out?</span><span class="a">He's called home first, then both pack into one item.</span></li>
+      <li><span class="q">An input or output gets removed?</span><span class="a">Items go back where they came from, or to his station.</span></li>
+      <li><span class="q">He's pushed into water?</span><span class="a">He winds down until he's out and dry (about 5 s).</span></li>
+      <li><span class="q">A hostile mob turns up?</span><span class="a">He hides in a corner, shaking, until it's safe again.</span></li>
+      <li><span class="q">He's running low far from home?</span><span class="a">He never leaves without enough charge to get back.</span></li>
+    </ul>
+  </section>
+
+  <section class="panel" aria-labelledby="ready">
+    <div class="panel-head">
+      <span class="eyebrow">Readiness</span>
+      <h2 id="ready">How finished is the design?</h2>
+    </div>
+    <div class="bars">
+      <div class="bar"><span class="label">Gameplay</span><div class="track"><div class="fill" style="width:95%"></div></div><span class="pct">95%</span><span class="why">v1 is complete; the Trade Ledger waits for v2.</span></div>
+      <div class="bar"><span class="label">World</span><div class="track"><div class="fill" style="width:92%"></div></div><span class="pct">92%</span><span class="why">Owner access for team mods to be confirmed when it's built.</span></div>
+      <div class="bar low"><span class="label">Balance</span><div class="track"><div class="fill" style="width:85%"></div></div><span class="pct">85%</span><span class="why">FE costs, trade speed and recipe cost need playtesting.</span></div>
+      <div class="bar"><span class="label">Progression</span><div class="track"><div class="fill" style="width:90%"></div></div><span class="pct">90%</span><span class="why">The exact 5×5 recipe layout isn't drawn yet.</span></div>
+      <div class="bar"><span class="label">Automation</span><div class="track"><div class="fill" style="width:92%"></div></div><span class="pct">92%</span><span class="why">Create packages left for v2, by choice.</span></div>
+      <div class="bar"><span class="label">Edge cases</span><div class="track"><div class="fill" style="width:95%"></div></div><span class="pct">95%</span><span class="why">All decided; villagers on moving contraption seats need testing in game.</span></div>
+      <div class="bar low overall"><span class="label">Overall</span><div class="track"><div class="fill" style="width:85%"></div></div><span class="pct">85%</span><span class="why">The lowest score sets this. Ready to build; tune the numbers in play.</span></div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="later">
+    <div class="panel-head">
+      <span class="eyebrow">Not in v1</span>
+      <h2 id="later">Coming later</h2>
+    </div>
+    <ul class="later">
+      <li><b>v2:</b> Trade Ledger upgrade (buying, set trades, routes)</li>
+      <li><b>Maybe v2:</b> Create packages</li>
+      <li><b>Later:</b> riding trains and seats</li>
+    </ul>
+  </section>
+
+  <footer>Full spec, with all 55 decisions: <code>design/specs/trade-bot.md</code></footer>
+</main>

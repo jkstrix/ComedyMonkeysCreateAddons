@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trade Bot Sounds</title>
+<style>
+:root { --bg:#1c1f24; --panel:#262a31; --edge:#3c424a; --text:#d8d4c8; --dim:#8a8c86; --brass:#b08f45; --amber:#d99a4a; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:14px/1.4 system-ui, sans-serif; padding:24px 16px 64px; }
+main { max-width:1100px; margin:0 auto; }
+h1 { margin:0 0 4px; font-size:22px; } h2 { margin:28px 0 10px; font-size:15px; color:var(--brass); text-transform:uppercase; letter-spacing:.06em; }
+.note { color:var(--dim); margin:0 0 12px; }
+.controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; color:var(--dim); position:sticky; top:0; background:var(--bg); padding:8px 0; z-index:2; }
+button { font:inherit; }
+.sets { display:inline-flex; gap:4px; }
+.btn, .set { background:var(--panel); color:var(--dim); border:1px solid var(--edge); border-radius:4px; padding:4px 10px; cursor:pointer; }
+.set.on, .btn:hover { color:var(--amber); border-color:var(--amber); }
+.grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:8px; }
+.card { display:flex; gap:10px; align-items:flex-start; background:var(--panel); border:1px solid var(--edge); border-radius:6px; padding:10px; }
+.card.on { border-color:var(--amber); } .card.tweaked { box-shadow:inset 3px 0 0 var(--brass); }
+.play, .cplay, .tw { flex:none; width:26px; height:26px; border-radius:50%; background:var(--edge); color:var(--amber); display:grid; place-items:center; font-size:11px; border:0; cursor:pointer; }
+.tw { margin-left:auto; color:var(--dim); } .tw:hover { color:var(--amber); }
+.txt { display:flex; flex-direction:column; gap:2px; min-width:0; } .txt small { opacity:.85; } .txt i { color:var(--dim); font-style:normal; font-size:12px; overflow-wrap:anywhere; }
+.vars { display:flex; flex-wrap:wrap; gap:3px; margin-top:3px; } .vars button { background:none; border:1px solid var(--edge); color:var(--dim); border-radius:3px; font-size:11px; padding:0 5px; cursor:pointer; } .vars button:hover { color:var(--amber); border-color:var(--amber); }
+.clip { display:flex; gap:10px; align-items:flex-start; background:var(--panel); border:1px solid var(--edge); border-radius:6px; padding:10px; margin-bottom:8px; }
+.cinfo { flex:1; min-width:0; } .cinfo small { color:var(--dim); font-size:12px; display:block; overflow-wrap:anywhere; }
+.bar { position:relative; height:14px; margin:6px 0; background:#1a1d22; border-radius:3px; }
+.mark { position:absolute; top:2px; width:3px; height:10px; margin-left:-1px; background:var(--brass); border-radius:1px; }
+.head { position:absolute; top:0; left:0; width:2px; height:14px; background:var(--amber); display:none; }
+#panel { position:fixed; right:16px; bottom:16px; width:min(340px, calc(100vw - 32px)); background:var(--panel); border:1px solid var(--amber); border-radius:8px; padding:14px; display:none; z-index:5; box-shadow:0 8px 30px #0008; }
+#panel h3 { margin:0 0 8px; font-size:15px; } #panel label { display:grid; grid-template-columns:96px 1fr 52px; gap:8px; align-items:center; color:var(--dim); font-size:12px; margin:6px 0; }
+#panel output { color:var(--text); text-align:right; } #panel .row { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+</style></head><body><main>
+<h1>Trade Bot sounds</h1>
+<p class="note">Switch sets to compare them. Click ▶ to play, a number to hear that variant, ⚙ to tweak a sound live. Tweaks are saved with the button at the top and applied by the next real-sound build.</p>
+<div class="controls">
+  <label>Volume <input id="vol" type="range" min="0" max="1" step="0.05" value="0.8"></label>
+  <span class="sets"><button class="set on" data-i="0">real</button><button class="set" data-i="1">placeholder</button></span>
+  <button class="btn" id="random">Random variants: on</button>
+  <button class="btn" id="save">Save tweaks (trade-bot.tweaks.json)</button>
+  <span id="saved"></span>
+</div>
+<h2>Signature sounds</h2><div class="grid"><div class="card" data-id="clock_tick">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>clock_tick</b><small>Trade Bot ticks</small><i>real:  · click_002 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="focus_click">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>focus_click</b><small>Trade Bot focuses</small><i>real:  · servo · tick_004 · in 6 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="brass_ping">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>brass_ping</b><small>Trade Bot pings</small><i>real: impactBell_heavy_003 · impactMetal_light_002 · ping · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="key_rattle">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>key_rattle</b><small>Trade Bot is wound</small><i>real: tick_004 · tick_002 · metalLatch · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="merchant_trill">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>merchant_trill</b><small>Trade Bot trills</small><i>real: voice · pluck_001 · ping · in 5 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Movement</h2><div class="grid"><div class="card" data-id="roll_start">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>roll_start</b><small>Trade Bot rolls</small><i>real: roll · servo ·  · in 14 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="roll_stop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>roll_stop</b><small>Trade Bot brakes</small><i>real: roll · scrub ·  · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="servo_short">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>servo_short</b><small>Trade Bot whirs</small><i>real: servo ·  · in 19 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="servo_snap">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>servo_snap</b><small>Trade Bot whirs</small><i>real: servo ·  · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="hop_launch">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>hop_launch</b><small>Trade Bot hops</small><i>real:  · thud · servo · boing · voice · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="hop_launch_big">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>hop_launch_big</b><small>Trade Bot leaps</small><i>real:  · thud · servo · voice · boing · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="land_soft">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>land_soft</b><small>Trade Bot lands</small><i>real:  · thud · boing · in 9 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="land_heavy">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>land_heavy</b><small>Trade Bot lands heavily</small><i>real:  · thud · boing · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="drop_whoosh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>drop_whoosh</b><small>Trade Bot drops</small><i>real: whoosh · voice · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="aerial_boing">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>aerial_boing</b><small>Trade Bot's aerial wobbles</small><i>real: boing ·  · in 9 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="blink">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>blink</b><small>Trade Bot blinks</small><i>real:  · toggle_004 · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="hop_small">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>hop_small</b><small>Trade Bot bounces</small><i>real: boing ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="spin_whir">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>spin_whir</b><small>Trade Bot spins</small><i>real: servo · whoosh · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="roll_loop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>roll_loop</b><small>Trade Bot rolls along</small><i>real: roll · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Voice and reactions</h2><div class="grid"><div class="card" data-id="bonk">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>bonk</b><small>Trade Bot bonks</small><i>real: impactBell_heavy_002 ·  · boing · impactPunch_medium_000 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="dizzy">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>dizzy</b><small>Trade Bot is dizzy</small><i>real: voice · scroll_002 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="head_shake">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>head_shake</b><small>Trade Bot shakes his head</small><i>real: servo · switch12 · switch13 · switch14 · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="grumble">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>grumble</b><small>Trade Bot grumbles</small><i>real: voice ·  · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="double_take">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>double_take</b><small>Trade Bot does a double-take</small><i>real: switch14 · metalLatch · boing · voice · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="wave_clink">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>wave_clink</b><small>Trade Bot waves</small><i>real:  · ping · servo · in 8 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="curious_chirp">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>curious_chirp</b><small>Trade Bot wonders</small><i>real: voice · tick_004 · in 6 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="sad_aww">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>sad_aww</b><small>Trade Bot droops</small><i>real: voice · creak3 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="sigh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>sigh</b><small>Trade Bot sighs</small><i>real: servo · cloth3 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="snore">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>snore</b><small>Trade Bot snores</small><i>real: voice · cloth4 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="startled_chirp">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>startled_chirp</b><small>Trade Bot startles</small><i>real: voice · boing · switch14 · in 7 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="puzzled_hmm">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>puzzled_hmm</b><small>Trade Bot is puzzled</small><i>real: tick_004 · voice · in 5 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="huh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>huh</b><small>Trade Bot is baffled</small><i>real: voice · in 5 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="shrug">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>shrug</b><small>Trade Bot shrugs</small><i>real:  · voice · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="pleased_boop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>pleased_boop</b><small>Trade Bot boops</small><i>real: voice ·  · in 8 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="hi_boop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>hi_boop</b><small>Trade Bot says hi</small><i>real: voice · pluck_002 · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="bye_boop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>bye_boop</b><small>Trade Bot says bye</small><i>real: voice · pluck_001 · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="found_it">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>found_it</b><small>Trade Bot finds it</small><i>real: voice · impactBell_heavy_004 ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="sleepy_mmm">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>sleepy_mmm</b><small>Trade Bot gets sleepy</small><i>real: voice · cloth4 · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="haggle_chatter">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>haggle_chatter</b><small>Trade Bot haggles</small><i>real: voice · tick_004 · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="plead_chirp">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>plead_chirp</b><small>Trade Bot pleads</small><i>real: voice · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Lights and station</h2><div class="grid"><div class="card" data-id="light_off">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>light_off</b><small>Trade Bot's light clicks off</small><i>real:  · voice · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="light_on">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>light_on</b><small>Trade Bot's light comes on</small><i>real:  · voice · in 6 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="flicker">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>flicker</b><small>Trade Bot's eyes flicker</small><i>real: switch12 · switch13 · switch14 · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="glow_on">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>glow_on</b><small>Station glows</small><i>real: swell · hum · glass_004 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="glow_off">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>glow_off</b><small>Station dims</small><i>real: swell · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="winder_engage">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>winder_engage</b><small>Station winder engages</small><i>real: metalLatch · metalClick ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="winder_release">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>winder_release</b><small>Station winder releases</small><i>real: metalClick ·  · servo · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="flag_ding">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>flag_ding</b><small>Station flag dings</small><i>real: impactBell_heavy_003 · boing · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Items and containers</h2><div class="grid"><div class="card" data-id="drawer_open">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>drawer_open</b><small>Trade Bot opens his drawer</small><i>real: servo · handleCoins2 ·  · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="drawer_close">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>drawer_close</b><small>Trade Bot shuts his drawer</small><i>real:  · handleCoins2 · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="chest_open">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>chest_open</b><small>Chest opens</small><i>real: doorOpen_1 ·  · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="chest_close">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>chest_close</b><small>Chest closes</small><i>real:  · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="barrel_open">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>barrel_open</b><small>Barrel opens</small><i>real:  · creak3 · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="barrel_close">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>barrel_close</b><small>Barrel closes</small><i>real:  · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="rummage">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>rummage</b><small>Trade Bot rummages</small><i>real: cloth1 · cloth2 · cloth3 · handleCoins · bookFlip1 ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="toss_whoosh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>toss_whoosh</b><small>Something flies</small><i>real: whoosh · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="cobble_clack">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>cobble_clack</b><small>Cobblestone clatters</small><i>real:  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="set_on_metal">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>set_on_metal</b><small>Trade Bot sets it down</small><i>real:  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="set_soft">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>set_soft</b><small>Trade Bot sets it down</small><i>real:  · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="pat">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>pat</b><small>Trade Bot pats it</small><i>real:  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="dust_off">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>dust_off</b><small>Trade Bot dusts off his claws</small><i>real: cloth2 ·  · cloth3 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="push_scrape">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>push_scrape</b><small>Package scrapes</small><i>real: scrape ·  · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="grip">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>grip</b><small>Trade Bot grabs it</small><i>real:  · ping · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="claw_fidget">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>claw_fidget</b><small>Trade Bot fidgets</small><i>real: switch12 · switch13 · switch14 · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="poof_in">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>poof_in</b><small>Something appears</small><i>real: pop ·  · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="poof_out">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>poof_out</b><small>Something vanishes</small><i>real: swell · pop ·  · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="emerald_catch">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>emerald_catch</b><small>Emerald lands in the drawer</small><i>real: handleCoins2 · impactBell_heavy_004 ·  · ping · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Villager (use vanilla in game)</h2><div class="grid"><div class="card" data-id="villager_no">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>villager_no</b><small>Villager disagrees</small><i>real: voice · noise · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="villager_yes">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>villager_yes</b><small>Villager agrees</small><i>real: voice · noise · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="villager_trade">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>villager_trade</b><small>Villager trades</small><i>real: voice · noise · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Scared</h2><div class="grid"><div class="card" data-id="scared_yelp">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>scared_yelp</b><small>Trade Bot yelps</small><i>real: voice · boing · switch14 · metalLatch · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="panic_chatter">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>panic_chatter</b><small>Trade Bot panics</small><i>real: voice · tick_004 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="roll_fast_loop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>roll_fast_loop</b><small>Trade Bot flees</small><i>real: roll · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="hard_brake">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>hard_brake</b><small>Trade Bot skids to a stop</small><i>real: roll · scrub ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="hide_tuck">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>hide_tuck</b><small>Trade Bot hides</small><i>real: servo ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="tremble_loop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>tremble_loop</b><small>Trade Bot trembles</small><i>real: impactPlate_light_000 · impactMetal_light_003 · impactTin_medium_003 · impactMetal_light_004 · impactTin_medium_000 · impactPlate_light_004 · impactPlate_light_001 · impactTin_medium_001 · impactTin_medium_004 · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactPlate_light_002 · scrub · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="whimper">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>whimper</b><small>Trade Bot whimpers</small><i>real: voice · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="peek_click">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>peek_click</b><small>Trade Bot peeks</small><i>real: tick_004 · voice · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="relief_sigh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>relief_sigh</b><small>Trade Bot sighs with relief</small><i>real: servo · cloth3 · voice · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="shake_off">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>shake_off</b><small>Trade Bot shakes it off</small><i>real:  · boing · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Clips</h2>
+<div class="clip" data-clip="idle" data-len="3.1"><button class="cplay">▶</button><div class="cinfo"><b>idle</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · clock_tick"></span><span class="mark" style="left:16.13%" title="0.50 s · clock_tick"></span><span class="mark" style="left:32.26%" title="1.00 s · clock_tick"></span><span class="mark" style="left:48.39%" title="1.50 s · clock_tick"></span><span class="mark" style="left:64.52%" title="2.00 s · clock_tick"></span><span class="mark" style="left:70.97%" title="2.20 s · blink"></span><span class="mark" style="left:80.65%" title="2.50 s · clock_tick"></span><span class="head"></span></div><small>0.00 clock_tick · 0.50 clock_tick · 1.00 clock_tick · 1.50 clock_tick · 2.00 clock_tick · 2.20 blink · 2.50 clock_tick</small></div></div>
+<div class="clip" data-clip="roll_turn_stop" data-len="4.2"><button class="cplay">▶</button><div class="cinfo"><b>roll_turn_stop</b><div class="bar"><span class="mark" style="left:4.76%" title="0.20 s · roll_start"></span><span class="mark" style="left:35.71%" title="1.50 s · servo_short"></span><span class="mark" style="left:71.43%" title="3.00 s · roll_stop"></span><span class="mark" style="left:83.33%" title="3.50 s · aerial_boing"></span><span class="mark" style="left:85.71%" title="3.60 s · blink"></span><span class="head"></span></div><small>0.20 roll_start · 1.50 servo_short · 3.00 roll_stop · 3.50 aerial_boing · 3.60 blink</small></div></div>
+<div class="clip" data-clip="wall_bump" data-len="3.0500000000000003"><button class="cplay">▶</button><div class="cinfo"><b>wall_bump</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · roll_start"></span><span class="mark" style="left:16.39%" title="0.50 s · bonk"></span><span class="mark" style="left:26.23%" title="0.80 s · land_soft"></span><span class="mark" style="left:32.79%" title="1.00 s · dizzy"></span><span class="mark" style="left:67.21%" title="2.05 s · head_shake"></span><span class="mark" style="left:78.69%" title="2.40 s · grumble"></span><span class="mark" style="left:80.33%" title="2.45 s · roll_start"></span><span class="head"></span></div><small>0.00 roll_start · 0.50 bonk · 0.80 land_soft · 1.00 dizzy · 2.05 head_shake · 2.40 grumble · 2.45 roll_start</small></div></div>
+<div class="clip" data-clip="count_stock" data-len="3"><button class="cplay">▶</button><div class="cinfo"><b>count_stock</b><div class="bar"><span class="mark" style="left:5.00%" title="0.15 s · drawer_open"></span><span class="mark" style="left:11.67%" title="0.35 s · servo_short"></span><span class="mark" style="left:33.33%" title="1.00 s · pleased_boop"></span><span class="mark" style="left:46.67%" title="1.40 s · focus_click"></span><span class="mark" style="left:63.33%" title="1.90 s · blink"></span><span class="mark" style="left:78.33%" title="2.35 s · drawer_close"></span><span class="mark" style="left:80.00%" title="2.40 s · aerial_boing"></span><span class="head"></span></div><small>0.15 drawer_open · 0.35 servo_short · 1.00 pleased_boop · 1.40 focus_click · 1.90 blink · 2.35 drawer_close · 2.40 aerial_boing</small></div></div>
+<div class="clip" data-clip="sees_player" data-len="3.65"><button class="cplay">▶</button><div class="cinfo"><b>sees_player</b><div class="bar"><span class="mark" style="left:1.37%" title="0.05 s · servo_snap"></span><span class="mark" style="left:2.74%" title="0.10 s · curious_chirp"></span><span class="mark" style="left:13.70%" title="0.50 s · servo_snap"></span><span class="mark" style="left:18.63%" title="0.68 s · double_take"></span><span class="mark" style="left:27.40%" title="1.00 s · servo_short"></span><span class="mark" style="left:30.14%" title="1.10 s · merchant_trill"></span><span class="mark" style="left:43.29%" title="1.58 s · wave_clink"></span><span class="mark" style="left:52.33%" title="1.91 s · wave_clink"></span><span class="mark" style="left:61.37%" title="2.24 s · wave_clink"></span><span class="mark" style="left:65.75%" title="2.40 s · roll_start"></span><span class="mark" style="left:82.19%" title="3.00 s · drawer_open"></span><span class="mark" style="left:82.19%" title="3.00 s · light_on"></span><span class="mark" style="left:83.56%" title="3.05 s · brass_ping"></span><span class="head"></span></div><small>0.05 servo_snap · 0.10 curious_chirp · 0.50 servo_snap · 0.68 double_take · 1.00 servo_short · 1.10 merchant_trill · 1.58 wave_clink · 1.91 wave_clink · 2.24 wave_clink · 2.40 roll_start · 3.00 drawer_open · 3.00 light_on · 3.05 brass_ping</small></div></div>
+<div class="clip" data-clip="dock_lights_out" data-len="6.1"><button class="cplay">▶</button><div class="cinfo"><b>dock_lights_out</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · roll_start"></span><span class="mark" style="left:0.82%" title="0.05 s · servo_short"></span><span class="mark" style="left:22.95%" title="1.40 s · roll_stop"></span><span class="mark" style="left:23.77%" title="1.45 s · servo_short"></span><span class="mark" style="left:27.21%" title="1.66 s · hop_launch"></span><span class="mark" style="left:36.07%" title="2.20 s · land_heavy"></span><span class="mark" style="left:40.98%" title="2.50 s · servo_short"></span><span class="mark" style="left:41.80%" title="2.55 s · light_off"></span><span class="mark" style="left:45.08%" title="2.75 s · flicker"></span><span class="mark" style="left:47.54%" title="2.90 s · glow_on"></span><span class="mark" style="left:48.36%" title="2.95 s · flicker"></span><span class="mark" style="left:50.00%" title="3.05 s · sleepy_mmm"></span><span class="mark" style="left:59.02%" title="3.60 s · winder_engage"></span><span class="mark" style="left:63.93%" title="3.90 s · key_rattle"></span><span class="mark" style="left:77.05%" title="4.70 s · key_rattle"></span><span class="mark" style="left:90.16%" title="5.50 s · key_rattle"></span><span class="head"></span></div><small>0.00 roll_start · 0.05 servo_short · 1.40 roll_stop · 1.45 servo_short · 1.66 hop_launch · 2.20 land_heavy · 2.50 servo_short · 2.55 light_off · 2.75 flicker · 2.90 glow_on · 2.95 flicker · 3.05 sleepy_mmm · 3.60 winder_engage · 3.90 key_rattle · 4.70 key_rattle · 5.50 key_rattle</small></div></div>
+<div class="clip" data-clip="action_comes_in" data-len="2.2"><button class="cplay">▶</button><div class="cinfo"><b>action_comes_in</b><div class="bar"><span class="mark" style="left:2.27%" title="0.05 s · flag_ding"></span><span class="mark" style="left:18.18%" title="0.40 s · glow_off"></span><span class="mark" style="left:19.09%" title="0.42 s · light_on"></span><span class="mark" style="left:20.45%" title="0.45 s · startled_chirp"></span><span class="mark" style="left:25.00%" title="0.55 s · light_on"></span><span class="mark" style="left:27.27%" title="0.60 s · winder_release"></span><span class="mark" style="left:46.82%" title="1.03 s · hop_launch"></span><span class="mark" style="left:70.45%" title="1.55 s · land_soft"></span><span class="mark" style="left:72.73%" title="1.60 s · roll_start"></span><span class="head"></span></div><small>0.05 flag_ding · 0.40 glow_off · 0.42 light_on · 0.45 startled_chirp · 0.55 light_on · 0.60 winder_release · 1.03 hop_launch · 1.55 land_soft · 1.60 roll_start</small></div></div>
+<div class="clip" data-clip="stairs_up" data-len="2.3"><button class="cplay">▶</button><div class="cinfo"><b>stairs_up</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · roll_start"></span><span class="mark" style="left:20.87%" title="0.48 s · hop_launch"></span><span class="mark" style="left:40.87%" title="0.94 s · land_soft"></span><span class="mark" style="left:49.57%" title="1.14 s · hop_launch"></span><span class="mark" style="left:69.57%" title="1.60 s · land_soft"></span><span class="mark" style="left:73.91%" title="1.70 s · aerial_boing"></span><span class="head"></span></div><small>0.00 roll_start · 0.48 hop_launch · 0.94 land_soft · 1.14 hop_launch · 1.60 land_soft · 1.70 aerial_boing</small></div></div>
+<div class="clip" data-clip="stairs_down" data-len="1.9500000000000002"><button class="cplay">▶</button><div class="cinfo"><b>stairs_down</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · roll_start"></span><span class="mark" style="left:27.69%" title="0.54 s · drop_whoosh"></span><span class="mark" style="left:37.95%" title="0.74 s · land_soft"></span><span class="mark" style="left:58.97%" title="1.15 s · drop_whoosh"></span><span class="mark" style="left:69.23%" title="1.35 s · land_soft"></span><span class="head"></span></div><small>0.00 roll_start · 0.54 drop_whoosh · 0.74 land_soft · 1.15 drop_whoosh · 1.35 land_soft</small></div></div>
+<div class="clip" data-clip="hop_on_slab" data-len="2.05"><button class="cplay">▶</button><div class="cinfo"><b>hop_on_slab</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · roll_start"></span><span class="mark" style="left:24.39%" title="0.50 s · hop_launch"></span><span class="mark" style="left:47.80%" title="0.98 s · land_soft"></span><span class="mark" style="left:70.73%" title="1.45 s · pleased_boop"></span><span class="head"></span></div><small>0.00 roll_start · 0.50 hop_launch · 0.98 land_soft · 1.45 pleased_boop</small></div></div>
+<div class="clip" data-clip="hop_on_block" data-len="2.35"><button class="cplay">▶</button><div class="cinfo"><b>hop_on_block</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · roll_start"></span><span class="mark" style="left:23.83%" title="0.56 s · hop_launch_big"></span><span class="mark" style="left:54.47%" title="1.28 s · land_heavy"></span><span class="mark" style="left:74.47%" title="1.75 s · merchant_trill"></span><span class="head"></span></div><small>0.00 roll_start · 0.56 hop_launch_big · 1.28 land_heavy · 1.75 merchant_trill</small></div></div>
+<div class="clip" data-clip="hop_off_slab" data-len="2.03"><button class="cplay">▶</button><div class="cinfo"><b>hop_off_slab</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · roll_start"></span><span class="mark" style="left:27.09%" title="0.55 s · drop_whoosh"></span><span class="mark" style="left:45.81%" title="0.93 s · land_soft"></span><span class="mark" style="left:70.44%" title="1.43 s · roll_start"></span><span class="head"></span></div><small>0.00 roll_start · 0.55 drop_whoosh · 0.93 land_soft · 1.43 roll_start</small></div></div>
+<div class="clip" data-clip="hop_off_block" data-len="2.2"><button class="cplay">▶</button><div class="cinfo"><b>hop_off_block</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · roll_start"></span><span class="mark" style="left:25.00%" title="0.55 s · drop_whoosh"></span><span class="mark" style="left:47.73%" title="1.05 s · land_heavy"></span><span class="mark" style="left:61.36%" title="1.35 s · blink"></span><span class="mark" style="left:72.73%" title="1.60 s · blink"></span><span class="mark" style="left:70.45%" title="1.55 s · roll_start"></span><span class="head"></span></div><small>0.00 roll_start · 0.55 drop_whoosh · 1.05 land_heavy · 1.35 blink · 1.60 blink · 1.55 roll_start</small></div></div>
+<div class="clip" data-clip="chest_take" data-len="5.3"><button class="cplay">▶</button><div class="cinfo"><b>chest_take</b><div class="bar"><span class="mark" style="left:6.60%" title="0.35 s · wave_clink"></span><span class="mark" style="left:9.43%" title="0.50 s · chest_open"></span><span class="mark" style="left:24.53%" title="1.30 s · curious_chirp"></span><span class="mark" style="left:29.25%" title="1.55 s · rummage"></span><span class="mark" style="left:45.28%" title="2.40 s · toss_whoosh"></span><span class="mark" style="left:58.49%" title="3.10 s · cobble_clack"></span><span class="mark" style="left:65.09%" title="3.45 s · found_it"></span><span class="mark" style="left:80.19%" title="4.25 s · servo_short"></span><span class="mark" style="left:83.96%" title="4.45 s · chest_close"></span><span class="mark" style="left:88.68%" title="4.70 s · servo_short"></span><span class="head"></span></div><small>0.35 wave_clink · 0.50 chest_open · 1.30 curious_chirp · 1.55 rummage · 2.40 toss_whoosh · 3.10 cobble_clack · 3.45 found_it · 4.25 servo_short · 4.45 chest_close · 4.70 servo_short</small></div></div>
+<div class="clip" data-clip="chest_put" data-len="5.1"><button class="cplay">▶</button><div class="cinfo"><b>chest_put</b><div class="bar"><span class="mark" style="left:6.86%" title="0.35 s · wave_clink"></span><span class="mark" style="left:9.80%" title="0.50 s · chest_open"></span><span class="mark" style="left:25.49%" title="1.30 s · servo_short"></span><span class="mark" style="left:39.22%" title="2.00 s · set_soft"></span><span class="mark" style="left:43.14%" title="2.20 s · pat"></span><span class="mark" style="left:61.76%" title="3.15 s · chest_close"></span><span class="mark" style="left:78.43%" title="4.00 s · dust_off"></span><span class="mark" style="left:88.24%" title="4.50 s · pleased_boop"></span><span class="head"></span></div><small>0.35 wave_clink · 0.50 chest_open · 1.30 servo_short · 2.00 set_soft · 2.20 pat · 3.15 chest_close · 4.00 dust_off · 4.50 pleased_boop</small></div></div>
+<div class="clip" data-clip="barrel_take" data-len="4.32"><button class="cplay">▶</button><div class="cinfo"><b>barrel_take</b><div class="bar"><span class="mark" style="left:11.57%" title="0.50 s · barrel_open"></span><span class="mark" style="left:12.73%" title="0.55 s · curious_chirp"></span><span class="mark" style="left:30.09%" title="1.30 s · poof_in"></span><span class="mark" style="left:30.56%" title="1.32 s · startled_chirp"></span><span class="mark" style="left:38.19%" title="1.65 s · servo_short"></span><span class="mark" style="left:53.24%" title="2.30 s · puzzled_hmm"></span><span class="mark" style="left:61.34%" title="2.65 s · huh"></span><span class="mark" style="left:65.97%" title="2.85 s · shrug"></span><span class="mark" style="left:85.65%" title="3.70 s · barrel_close"></span><span class="mark" style="left:86.11%" title="3.72 s · startled_chirp"></span><span class="head"></span></div><small>0.50 barrel_open · 0.55 curious_chirp · 1.30 poof_in · 1.32 startled_chirp · 1.65 servo_short · 2.30 puzzled_hmm · 2.65 huh · 2.85 shrug · 3.70 barrel_close · 3.72 startled_chirp</small></div></div>
+<div class="clip" data-clip="barrel_put" data-len="4.32"><button class="cplay">▶</button><div class="cinfo"><b>barrel_put</b><div class="bar"><span class="mark" style="left:11.57%" title="0.50 s · barrel_open"></span><span class="mark" style="left:16.20%" title="0.70 s · servo_short"></span><span class="mark" style="left:27.31%" title="1.18 s · poof_out"></span><span class="mark" style="left:34.72%" title="1.50 s · claw_fidget"></span><span class="mark" style="left:53.24%" title="2.30 s · puzzled_hmm"></span><span class="mark" style="left:61.34%" title="2.65 s · huh"></span><span class="mark" style="left:65.97%" title="2.85 s · shrug"></span><span class="mark" style="left:85.65%" title="3.70 s · barrel_close"></span><span class="mark" style="left:86.11%" title="3.72 s · startled_chirp"></span><span class="head"></span></div><small>0.50 barrel_open · 0.70 servo_short · 1.18 poof_out · 1.50 claw_fidget · 2.30 puzzled_hmm · 2.65 huh · 2.85 shrug · 3.70 barrel_close · 3.72 startled_chirp</small></div></div>
+<div class="clip" data-clip="chest_take_high" data-len="4.32"><button class="cplay">▶</button><div class="cinfo"><b>chest_take_high</b><div class="bar"><span class="mark" style="left:11.57%" title="0.50 s · chest_open"></span><span class="mark" style="left:12.73%" title="0.55 s · curious_chirp"></span><span class="mark" style="left:30.09%" title="1.30 s · poof_in"></span><span class="mark" style="left:30.56%" title="1.32 s · startled_chirp"></span><span class="mark" style="left:38.19%" title="1.65 s · servo_short"></span><span class="mark" style="left:53.24%" title="2.30 s · puzzled_hmm"></span><span class="mark" style="left:61.34%" title="2.65 s · huh"></span><span class="mark" style="left:65.97%" title="2.85 s · shrug"></span><span class="mark" style="left:85.65%" title="3.70 s · chest_close"></span><span class="mark" style="left:86.11%" title="3.72 s · startled_chirp"></span><span class="head"></span></div><small>0.50 chest_open · 0.55 curious_chirp · 1.30 poof_in · 1.32 startled_chirp · 1.65 servo_short · 2.30 puzzled_hmm · 2.65 huh · 2.85 shrug · 3.70 chest_close · 3.72 startled_chirp</small></div></div>
+<div class="clip" data-clip="chest_put_high" data-len="4.32"><button class="cplay">▶</button><div class="cinfo"><b>chest_put_high</b><div class="bar"><span class="mark" style="left:11.57%" title="0.50 s · chest_open"></span><span class="mark" style="left:16.20%" title="0.70 s · servo_short"></span><span class="mark" style="left:27.31%" title="1.18 s · poof_out"></span><span class="mark" style="left:34.72%" title="1.50 s · claw_fidget"></span><span class="mark" style="left:53.24%" title="2.30 s · puzzled_hmm"></span><span class="mark" style="left:61.34%" title="2.65 s · huh"></span><span class="mark" style="left:65.97%" title="2.85 s · shrug"></span><span class="mark" style="left:85.65%" title="3.70 s · chest_close"></span><span class="mark" style="left:86.11%" title="3.72 s · startled_chirp"></span><span class="head"></span></div><small>0.50 chest_open · 0.70 servo_short · 1.18 poof_out · 1.50 claw_fidget · 2.30 puzzled_hmm · 2.65 huh · 2.85 shrug · 3.70 chest_close · 3.72 startled_chirp</small></div></div>
+<div class="clip" data-clip="depot_place" data-len="4.1"><button class="cplay">▶</button><div class="cinfo"><b>depot_place</b><div class="bar"><span class="mark" style="left:7.32%" title="0.30 s · servo_short"></span><span class="mark" style="left:25.61%" title="1.05 s · set_on_metal"></span><span class="mark" style="left:32.93%" title="1.35 s · puzzled_hmm"></span><span class="mark" style="left:58.54%" title="2.40 s · push_scrape"></span><span class="mark" style="left:85.37%" title="3.50 s · pleased_boop"></span><span class="head"></span></div><small>0.30 servo_short · 1.05 set_on_metal · 1.35 puzzled_hmm · 2.40 push_scrape · 3.50 pleased_boop</small></div></div>
+<div class="clip" data-clip="depot_take" data-len="3"><button class="cplay">▶</button><div class="cinfo"><b>depot_take</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · roll_start"></span><span class="mark" style="left:10.00%" title="0.30 s · servo_short"></span><span class="mark" style="left:25.00%" title="0.75 s · wave_clink"></span><span class="mark" style="left:31.67%" title="0.95 s · push_scrape"></span><span class="mark" style="left:68.33%" title="2.05 s · grip"></span><span class="mark" style="left:73.33%" title="2.20 s · servo_short"></span><span class="mark" style="left:78.33%" title="2.35 s · pleased_boop"></span><span class="mark" style="left:80.00%" title="2.40 s · roll_start"></span><span class="head"></span></div><small>0.00 roll_start · 0.30 servo_short · 0.75 wave_clink · 0.95 push_scrape · 2.05 grip · 2.20 servo_short · 2.35 pleased_boop · 2.40 roll_start</small></div></div>
+<div class="clip" data-clip="belt_place" data-len="4.6499999999999995"><button class="cplay">▶</button><div class="cinfo"><b>belt_place</b><div class="bar"><span class="mark" style="left:9.68%" title="0.45 s · servo_short"></span><span class="mark" style="left:21.51%" title="1.00 s · set_soft"></span><span class="mark" style="left:25.81%" title="1.20 s · servo_short"></span><span class="mark" style="left:69.89%" title="3.25 s · wave_clink"></span><span class="mark" style="left:70.97%" title="3.30 s · bye_boop"></span><span class="mark" style="left:78.49%" title="3.65 s · wave_clink"></span><span class="mark" style="left:87.10%" title="4.05 s · wave_clink"></span><span class="head"></span></div><small>0.45 servo_short · 1.00 set_soft · 1.20 servo_short · 3.25 wave_clink · 3.30 bye_boop · 3.65 wave_clink · 4.05 wave_clink</small></div></div>
+<div class="clip" data-clip="expr_happy" data-len="1.6"><button class="cplay">▶</button><div class="cinfo"><b>expr_happy</b><div class="bar"><span class="mark" style="left:12.50%" title="0.20 s · merchant_trill"></span><span class="mark" style="left:25.00%" title="0.40 s · hop_small"></span><span class="mark" style="left:42.50%" title="0.68 s · hop_small"></span><span class="mark" style="left:62.50%" title="1.00 s · aerial_boing"></span><span class="head"></span></div><small>0.20 merchant_trill · 0.40 hop_small · 0.68 hop_small · 1.00 aerial_boing</small></div></div>
+<div class="clip" data-clip="expr_curious" data-len="2.7"><button class="cplay">▶</button><div class="cinfo"><b>expr_curious</b><div class="bar"><span class="mark" style="left:9.26%" title="0.25 s · curious_chirp"></span><span class="mark" style="left:33.33%" title="0.90 s · focus_click"></span><span class="mark" style="left:55.56%" title="1.50 s · focus_click"></span><span class="mark" style="left:77.78%" title="2.10 s · focus_click"></span><span class="head"></span></div><small>0.25 curious_chirp · 0.90 focus_click · 1.50 focus_click · 2.10 focus_click</small></div></div>
+<div class="clip" data-clip="expr_startled" data-len="0.8"><button class="cplay">▶</button><div class="cinfo"><b>expr_startled</b><div class="bar"><span class="mark" style="left:18.75%" title="0.15 s · startled_chirp"></span><span class="mark" style="left:25.00%" title="0.20 s · aerial_boing"></span><span class="head"></span></div><small>0.15 startled_chirp · 0.20 aerial_boing</small></div></div>
+<div class="clip" data-clip="expr_sad" data-len="1.7000000000000002"><button class="cplay">▶</button><div class="cinfo"><b>expr_sad</b><div class="bar"><span class="mark" style="left:17.65%" title="0.30 s · sad_aww"></span><span class="mark" style="left:64.71%" title="1.10 s · sigh"></span><span class="head"></span></div><small>0.30 sad_aww · 1.10 sigh</small></div></div>
+<div class="clip" data-clip="expr_cross" data-len="1.7000000000000002"><button class="cplay">▶</button><div class="cinfo"><b>expr_cross</b><div class="bar"><span class="mark" style="left:11.76%" title="0.20 s · focus_click"></span><span class="mark" style="left:58.82%" title="1.00 s · grumble"></span><span class="mark" style="left:64.71%" title="1.10 s · head_shake"></span><span class="head"></span></div><small>0.20 focus_click · 1.00 grumble · 1.10 head_shake</small></div></div>
+<div class="clip" data-clip="expr_wave" data-len="2.02"><button class="cplay">▶</button><div class="cinfo"><b>expr_wave</b><div class="bar"><span class="mark" style="left:9.90%" title="0.20 s · servo_short"></span><span class="mark" style="left:19.80%" title="0.40 s · light_on"></span><span class="mark" style="left:24.75%" title="0.50 s · hi_boop"></span><span class="mark" style="left:32.18%" title="0.65 s · wave_clink"></span><span class="mark" style="left:51.49%" title="1.04 s · wave_clink"></span><span class="mark" style="left:70.30%" title="1.42 s · wave_clink"></span><span class="head"></span></div><small>0.20 servo_short · 0.40 light_on · 0.50 hi_boop · 0.65 wave_clink · 1.04 wave_clink · 1.42 wave_clink</small></div></div>
+<div class="clip" data-clip="expr_doze_off" data-len="6.699999999999999"><button class="cplay">▶</button><div class="cinfo"><b>expr_doze_off</b><div class="bar"><span class="mark" style="left:5.97%" title="0.40 s · sleepy_mmm"></span><span class="mark" style="left:17.91%" title="1.20 s · servo_short"></span><span class="mark" style="left:29.85%" title="2.00 s · servo_short"></span><span class="mark" style="left:32.84%" title="2.20 s · flicker"></span><span class="mark" style="left:35.22%" title="2.36 s · light_off"></span><span class="mark" style="left:38.81%" title="2.60 s · snore"></span><span class="mark" style="left:53.73%" title="3.60 s · snore"></span><span class="mark" style="left:67.16%" title="4.50 s · startled_chirp"></span><span class="mark" style="left:67.16%" title="4.50 s · aerial_boing"></span><span class="mark" style="left:67.46%" title="4.52 s · light_on"></span><span class="mark" style="left:73.13%" title="4.90 s · servo_snap"></span><span class="mark" style="left:83.58%" title="5.60 s · servo_snap"></span><span class="mark" style="left:91.04%" title="6.10 s · huh"></span><span class="head"></span></div><small>0.40 sleepy_mmm · 1.20 servo_short · 2.00 servo_short · 2.20 flicker · 2.36 light_off · 2.60 snore · 3.60 snore · 4.50 startled_chirp · 4.50 aerial_boing · 4.52 light_on · 4.90 servo_snap · 5.60 servo_snap · 6.10 huh</small></div></div>
+<div class="clip" data-clip="trade_villager" data-len="7.5"><button class="cplay">▶</button><div class="cinfo"><b>trade_villager</b><div class="bar"><span class="mark" style="left:0.67%" title="0.05 s · focus_click"></span><span class="mark" style="left:4.00%" title="0.30 s · light_on"></span><span class="mark" style="left:5.33%" title="0.40 s · hi_boop"></span><span class="mark" style="left:8.00%" title="0.60 s · wave_clink"></span><span class="mark" style="left:12.67%" title="0.95 s · drawer_open"></span><span class="mark" style="left:15.33%" title="1.15 s · servo_short"></span><span class="mark" style="left:19.33%" title="1.45 s · grip"></span><span class="mark" style="left:21.33%" title="1.60 s · servo_short"></span><span class="mark" style="left:23.33%" title="1.75 s · brass_ping"></span><span class="mark" style="left:26.00%" title="1.95 s · haggle_chatter"></span><span class="mark" style="left:29.33%" title="2.20 s · villager_no"></span><span class="mark" style="left:32.67%" title="2.45 s · plead_chirp"></span><span class="mark" style="left:37.33%" title="2.80 s · villager_yes"></span><span class="mark" style="left:38.67%" title="2.90 s · pleased_boop"></span><span class="mark" style="left:40.00%" title="3.00 s · servo_short"></span><span class="mark" style="left:45.07%" title="3.38 s · toss_whoosh"></span><span class="mark" style="left:52.93%" title="3.97 s · set_soft"></span><span class="mark" style="left:53.33%" title="4.00 s · villager_trade"></span><span class="mark" style="left:59.33%" title="4.45 s · toss_whoosh"></span><span class="mark" style="left:66.67%" title="5.00 s · emerald_catch"></span><span class="mark" style="left:68.67%" title="5.15 s · drawer_close"></span><span class="mark" style="left:70.67%" title="5.30 s · spin_whir"></span><span class="mark" style="left:71.33%" title="5.35 s · merchant_trill"></span><span class="mark" style="left:77.33%" title="5.80 s · land_soft"></span><span class="mark" style="left:85.33%" title="6.40 s · light_off"></span><span class="mark" style="left:86.00%" title="6.45 s · bye_boop"></span><span class="mark" style="left:87.33%" title="6.55 s · wave_clink"></span><span class="mark" style="left:92.00%" title="6.90 s · wave_clink"></span><span class="head"></span></div><small>0.05 focus_click · 0.30 light_on · 0.40 hi_boop · 0.60 wave_clink · 0.95 drawer_open · 1.15 servo_short · 1.45 grip · 1.60 servo_short · 1.75 brass_ping · 1.95 haggle_chatter · 2.20 villager_no · 2.45 plead_chirp · 2.80 villager_yes · 2.90 pleased_boop · 3.00 servo_short · 3.38 toss_whoosh · 3.97 set_soft · 4.00 villager_trade · 4.45 toss_whoosh · 5.00 emerald_catch · 5.15 drawer_close · 5.30 spin_whir · 5.35 merchant_trill · 5.80 land_soft · 6.40 light_off · 6.45 bye_boop · 6.55 wave_clink · 6.90 wave_clink</small></div></div>
+<div class="clip" data-clip="trade_villager_open" data-len="7.5"><button class="cplay">▶</button><div class="cinfo"><b>trade_villager_open</b><div class="bar"><span class="mark" style="left:0.67%" title="0.05 s · focus_click"></span><span class="mark" style="left:4.00%" title="0.30 s · light_on"></span><span class="mark" style="left:5.33%" title="0.40 s · hi_boop"></span><span class="mark" style="left:8.00%" title="0.60 s · wave_clink"></span><span class="mark" style="left:12.67%" title="0.95 s · drawer_open"></span><span class="mark" style="left:15.33%" title="1.15 s · servo_short"></span><span class="mark" style="left:19.33%" title="1.45 s · grip"></span><span class="mark" style="left:21.33%" title="1.60 s · servo_short"></span><span class="mark" style="left:23.33%" title="1.75 s · brass_ping"></span><span class="mark" style="left:26.00%" title="1.95 s · haggle_chatter"></span><span class="mark" style="left:29.33%" title="2.20 s · villager_no"></span><span class="mark" style="left:32.67%" title="2.45 s · plead_chirp"></span><span class="mark" style="left:37.33%" title="2.80 s · villager_yes"></span><span class="mark" style="left:38.67%" title="2.90 s · pleased_boop"></span><span class="mark" style="left:40.00%" title="3.00 s · servo_short"></span><span class="mark" style="left:45.07%" title="3.38 s · toss_whoosh"></span><span class="mark" style="left:52.93%" title="3.97 s · set_soft"></span><span class="mark" style="left:53.33%" title="4.00 s · villager_trade"></span><span class="mark" style="left:59.33%" title="4.45 s · toss_whoosh"></span><span class="mark" style="left:66.67%" title="5.00 s · emerald_catch"></span><span class="mark" style="left:68.67%" title="5.15 s · drawer_close"></span><span class="mark" style="left:70.67%" title="5.30 s · spin_whir"></span><span class="mark" style="left:71.33%" title="5.35 s · merchant_trill"></span><span class="mark" style="left:77.33%" title="5.80 s · land_soft"></span><span class="mark" style="left:85.33%" title="6.40 s · light_off"></span><span class="mark" style="left:86.00%" title="6.45 s · bye_boop"></span><span class="mark" style="left:87.33%" title="6.55 s · wave_clink"></span><span class="mark" style="left:92.00%" title="6.90 s · wave_clink"></span><span class="head"></span></div><small>0.05 focus_click · 0.30 light_on · 0.40 hi_boop · 0.60 wave_clink · 0.95 drawer_open · 1.15 servo_short · 1.45 grip · 1.60 servo_short · 1.75 brass_ping · 1.95 haggle_chatter · 2.20 villager_no · 2.45 plead_chirp · 2.80 villager_yes · 2.90 pleased_boop · 3.00 servo_short · 3.38 toss_whoosh · 3.97 set_soft · 4.00 villager_trade · 4.45 toss_whoosh · 5.00 emerald_catch · 5.15 drawer_close · 5.30 spin_whir · 5.35 merchant_trill · 5.80 land_soft · 6.40 light_off · 6.45 bye_boop · 6.55 wave_clink · 6.90 wave_clink</small></div></div>
+<div class="clip" data-clip="start_rolling" data-len="0.8999999999999999"><button class="cplay">▶</button><div class="cinfo"><b>start_rolling</b><div class="bar"><span class="mark" style="left:11.11%" title="0.10 s · roll_start"></span><span class="mark" style="left:33.33%" title="0.30 s · aerial_boing"></span><span class="head"></span></div><small>0.10 roll_start · 0.30 aerial_boing</small></div></div>
+<div class="clip" data-clip="rolling" data-len="0.6"><button class="cplay">▶</button><div class="cinfo"><b>rolling</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · roll_loop"></span><span class="head"></span></div><small>0.00 roll_loop</small></div></div>
+<div class="clip" data-clip="stop_rolling" data-len="0.75"><button class="cplay">▶</button><div class="cinfo"><b>stop_rolling</b><div class="bar"><span class="mark" style="left:2.67%" title="0.02 s · roll_stop"></span><span class="mark" style="left:20.00%" title="0.15 s · aerial_boing"></span><span class="head"></span></div><small>0.02 roll_stop · 0.15 aerial_boing</small></div></div>
+<div class="clip" data-clip="scared_spot" data-len="1.35"><button class="cplay">▶</button><div class="cinfo"><b>scared_spot</b><div class="bar"><span class="mark" style="left:3.70%" title="0.05 s · focus_click"></span><span class="mark" style="left:16.30%" title="0.22 s · servo_snap"></span><span class="mark" style="left:20.74%" title="0.28 s · scared_yelp"></span><span class="mark" style="left:37.04%" title="0.50 s · land_soft"></span><span class="mark" style="left:51.85%" title="0.70 s · servo_short"></span><span class="mark" style="left:55.56%" title="0.75 s · roll_start"></span><span class="head"></span></div><small>0.05 focus_click · 0.22 servo_snap · 0.28 scared_yelp · 0.50 land_soft · 0.70 servo_short · 0.75 roll_start</small></div></div>
+<div class="clip" data-clip="scared_flee" data-len="1.25"><button class="cplay">▶</button><div class="cinfo"><b>scared_flee</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · roll_fast_loop"></span><span class="mark" style="left:8.00%" title="0.10 s · panic_chatter"></span><span class="mark" style="left:52.00%" title="0.65 s · servo_snap"></span><span class="head"></span></div><small>0.00 roll_fast_loop · 0.10 panic_chatter · 0.65 servo_snap</small></div></div>
+<div class="clip" data-clip="scared_hide" data-len="1.35"><button class="cplay">▶</button><div class="cinfo"><b>scared_hide</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · hard_brake"></span><span class="mark" style="left:7.41%" title="0.10 s · aerial_boing"></span><span class="mark" style="left:28.15%" title="0.38 s · hide_tuck"></span><span class="mark" style="left:55.56%" title="0.75 s · whimper"></span><span class="head"></span></div><small>0.00 hard_brake · 0.10 aerial_boing · 0.38 hide_tuck · 0.75 whimper</small></div></div>
+<div class="clip" data-clip="scared_cower" data-len="2.1"><button class="cplay">▶</button><div class="cinfo"><b>scared_cower</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · tremble_loop"></span><span class="mark" style="left:40.48%" title="0.85 s · peek_click"></span><span class="mark" style="left:71.43%" title="1.50 s · whimper"></span><span class="head"></span></div><small>0.00 tremble_loop · 0.85 peek_click · 1.50 whimper</small></div></div>
+<div class="clip" data-clip="scared_recover" data-len="2.8000000000000003"><button class="cplay">▶</button><div class="cinfo"><b>scared_recover</b><div class="bar"><span class="mark" style="left:5.36%" title="0.15 s · peek_click"></span><span class="mark" style="left:7.14%" title="0.20 s · servo_short"></span><span class="mark" style="left:19.64%" title="0.55 s · servo_short"></span><span class="mark" style="left:28.57%" title="0.80 s · curious_chirp"></span><span class="mark" style="left:33.93%" title="0.95 s · servo_short"></span><span class="mark" style="left:42.86%" title="1.20 s · relief_sigh"></span><span class="mark" style="left:60.71%" title="1.70 s · shake_off"></span><span class="mark" style="left:78.57%" title="2.20 s · pleased_boop"></span><span class="head"></span></div><small>0.15 peek_click · 0.20 servo_short · 0.55 servo_short · 0.80 curious_chirp · 0.95 servo_short · 1.20 relief_sigh · 1.70 shake_off · 2.20 pleased_boop</small></div></div>
+</main>
+<div id="panel"><h3 id="pt"></h3>
+  <label>Pitch <input data-k="pitch" type="range" min="0.5" max="2" step="0.01"><output></output></label>
+  <label>Gain <input data-k="gain" type="range" min="0" max="2" step="0.01"><output></output></label>
+  <label>Low-pass Hz <input data-k="lowpass" type="range" min="200" max="20000" step="10"><output></output></label>
+  <label>High-pass Hz <input data-k="highpass" type="range" min="20" max="4000" step="10"><output></output></label>
+  <label>Echo <input data-k="echo" type="range" min="0" max="0.6" step="0.01"><output></output></label>
+  <label>Echo delay s <input data-k="echoDelay" type="range" min="0.02" max="0.4" step="0.01"><output></output></label>
+  <label>Pitch spread ± <input data-k="vary" type="range" min="0" max="0.2" step="0.005"><output></output></label>
+  <div class="row"><button class="btn" id="pplay">▶ Play</button><button class="btn" id="preset">Reset</button><button class="btn" id="pclose">Close</button></div>
+</div>
+<script>
+const SETS = [{"dir":"real/","ext":"ogg","label":"real","avail":{"clock_tick":4,"focus_click":3,"brass_ping":2,"key_rattle":3,"merchant_trill":3,"roll_start":3,"roll_stop":3,"servo_short":4,"servo_snap":3,"hop_launch":3,"hop_launch_big":3,"land_soft":4,"land_heavy":3,"drop_whoosh":3,"aerial_boing":3,"blink":2,"bonk":2,"dizzy":2,"head_shake":2,"grumble":3,"double_take":2,"wave_clink":4,"curious_chirp":3,"sad_aww":2,"sigh":2,"snore":3,"startled_chirp":3,"puzzled_hmm":3,"huh":3,"shrug":2,"pleased_boop":3,"hi_boop":3,"bye_boop":3,"found_it":2,"hop_small":3,"light_off":2,"light_on":2,"flicker":2,"sleepy_mmm":3,"glow_on":0,"glow_off":0,"winder_engage":2,"winder_release":2,"flag_ding":0,"drawer_open":3,"drawer_close":3,"chest_open":2,"chest_close":2,"barrel_open":2,"barrel_close":2,"rummage":2,"toss_whoosh":3,"cobble_clack":2,"set_on_metal":3,"set_soft":3,"pat":3,"dust_off":2,"push_scrape":3,"grip":3,"claw_fidget":2,"poof_in":3,"poof_out":3,"haggle_chatter":3,"plead_chirp":2,"emerald_catch":3,"spin_whir":2,"villager_no":0,"villager_yes":0,"villager_trade":0,"roll_loop":2,"scared_yelp":3,"panic_chatter":4,"roll_fast_loop":2,"hard_brake":3,"hide_tuck":2,"tremble_loop":2,"whimper":3,"peek_click":2,"relief_sigh":2,"shake_off":3}},{"dir":"placeholder/","ext":"wav","label":"placeholder","avail":{"clock_tick":0,"focus_click":0,"brass_ping":0,"key_rattle":0,"merchant_trill":0,"roll_start":0,"roll_stop":0,"servo_short":0,"servo_snap":0,"hop_launch":0,"hop_launch_big":0,"land_soft":0,"land_heavy":0,"drop_whoosh":0,"aerial_boing":0,"blink":0,"bonk":0,"dizzy":0,"head_shake":0,"grumble":0,"double_take":0,"wave_clink":0,"curious_chirp":0,"sad_aww":0,"sigh":0,"snore":0,"startled_chirp":0,"puzzled_hmm":0,"huh":0,"shrug":0,"pleased_boop":0,"hi_boop":0,"bye_boop":0,"found_it":0,"hop_small":0,"light_off":0,"light_on":0,"flicker":0,"sleepy_mmm":0,"glow_on":0,"glow_off":0,"winder_engage":0,"winder_release":0,"flag_ding":0,"drawer_open":0,"drawer_close":0,"chest_open":0,"chest_close":0,"barrel_open":0,"barrel_close":0,"rummage":0,"toss_whoosh":0,"cobble_clack":0,"set_on_metal":0,"set_soft":0,"pat":0,"dust_off":0,"push_scrape":0,"grip":0,"claw_fidget":0,"poof_in":0,"poof_out":0,"haggle_chatter":0,"plead_chirp":0,"emerald_catch":0,"spin_whir":0,"villager_no":0,"villager_yes":0,"villager_trade":0,"roll_loop":0,"scared_yelp":0,"panic_chatter":0,"roll_fast_loop":0,"hard_brake":0,"hide_tuck":0,"tremble_loop":0,"whimper":0,"peek_click":0,"relief_sigh":0,"shake_off":0}}];
+const CLIPS = {"idle":[[0,"clock_tick"],[0.5,"clock_tick"],[1,"clock_tick"],[1.5,"clock_tick"],[2,"clock_tick"],[2.2,"blink"],[2.5,"clock_tick"]],"roll_turn_stop":[[0.2,"roll_start"],[1.5,"servo_short"],[3,"roll_stop"],[3.5,"aerial_boing"],[3.6,"blink"]],"wall_bump":[[0,"roll_start"],[0.5,"bonk"],[0.8,"land_soft"],[1,"dizzy"],[2.05,"head_shake"],[2.4,"grumble"],[2.45,"roll_start"]],"count_stock":[[0.15,"drawer_open"],[0.35,"servo_short"],[1,"pleased_boop"],[1.4,"focus_click"],[1.9,"blink"],[2.35,"drawer_close"],[2.4,"aerial_boing"]],"sees_player":[[0.05,"servo_snap"],[0.1,"curious_chirp"],[0.5,"servo_snap"],[0.68,"double_take"],[1,"servo_short"],[1.1,"merchant_trill"],[1.58,"wave_clink"],[1.91,"wave_clink"],[2.24,"wave_clink"],[2.4,"roll_start"],[3,"drawer_open"],[3,"light_on"],[3.05,"brass_ping"]],"dock_lights_out":[[0,"roll_start"],[0.05,"servo_short"],[1.4,"roll_stop"],[1.45,"servo_short"],[1.66,"hop_launch"],[2.2,"land_heavy"],[2.5,"servo_short"],[2.55,"light_off"],[2.75,"flicker"],[2.9,"glow_on"],[2.95,"flicker"],[3.05,"sleepy_mmm"],[3.6,"winder_engage"],[3.9,"key_rattle"],[4.7,"key_rattle"],[5.5,"key_rattle"]],"action_comes_in":[[0.05,"flag_ding"],[0.4,"glow_off"],[0.42,"light_on"],[0.45,"startled_chirp"],[0.55,"light_on"],[0.6,"winder_release"],[1.03,"hop_launch"],[1.55,"land_soft"],[1.6,"roll_start"]],"stairs_up":[[0,"roll_start"],[0.48,"hop_launch"],[0.94,"land_soft"],[1.14,"hop_launch"],[1.6,"land_soft"],[1.7,"aerial_boing"]],"stairs_down":[[0,"roll_start"],[0.54,"drop_whoosh"],[0.74,"land_soft"],[1.15,"drop_whoosh"],[1.35,"land_soft"]],"hop_on_slab":[[0,"roll_start"],[0.5,"hop_launch"],[0.98,"land_soft"],[1.45,"pleased_boop"]],"hop_on_block":[[0,"roll_start"],[0.56,"hop_launch_big"],[1.28,"land_heavy"],[1.75,"merchant_trill"]],"hop_off_slab":[[0,"roll_start"],[0.55,"drop_whoosh"],[0.93,"land_soft"],[1.43,"roll_start"]],"hop_off_block":[[0,"roll_start"],[0.55,"drop_whoosh"],[1.05,"land_heavy"],[1.35,"blink"],[1.6,"blink"],[1.55,"roll_start"]],"chest_take":[[0.35,"wave_clink"],[0.5,"chest_open"],[1.3,"curious_chirp"],[1.55,"rummage"],[2.4,"toss_whoosh"],[3.1,"cobble_clack"],[3.45,"found_it"],[4.25,"servo_short"],[4.45,"chest_close"],[4.7,"servo_short"]],"chest_put":[[0.35,"wave_clink"],[0.5,"chest_open"],[1.3,"servo_short"],[2,"set_soft"],[2.2,"pat"],[3.15,"chest_close"],[4,"dust_off"],[4.5,"pleased_boop"]],"barrel_take":[[0.5,"barrel_open"],[0.55,"curious_chirp"],[1.3,"poof_in"],[1.32,"startled_chirp"],[1.65,"servo_short"],[2.3,"puzzled_hmm"],[2.65,"huh"],[2.85,"shrug"],[3.7,"barrel_close"],[3.72,"startled_chirp"]],"barrel_put":[[0.5,"barrel_open"],[0.7,"servo_short"],[1.18,"poof_out"],[1.5,"claw_fidget"],[2.3,"puzzled_hmm"],[2.65,"huh"],[2.85,"shrug"],[3.7,"barrel_close"],[3.72,"startled_chirp"]],"chest_take_high":[[0.5,"chest_open"],[0.55,"curious_chirp"],[1.3,"poof_in"],[1.32,"startled_chirp"],[1.65,"servo_short"],[2.3,"puzzled_hmm"],[2.65,"huh"],[2.85,"shrug"],[3.7,"chest_close"],[3.72,"startled_chirp"]],"chest_put_high":[[0.5,"chest_open"],[0.7,"servo_short"],[1.18,"poof_out"],[1.5,"claw_fidget"],[2.3,"puzzled_hmm"],[2.65,"huh"],[2.85,"shrug"],[3.7,"chest_close"],[3.72,"startled_chirp"]],"depot_place":[[0.3,"servo_short"],[1.05,"set_on_metal"],[1.35,"puzzled_hmm"],[2.4,"push_scrape"],[3.5,"pleased_boop"]],"depot_take":[[0,"roll_start"],[0.3,"servo_short"],[0.75,"wave_clink"],[0.95,"push_scrape"],[2.05,"grip"],[2.2,"servo_short"],[2.35,"pleased_boop"],[2.4,"roll_start"]],"belt_place":[[0.45,"servo_short"],[1,"set_soft"],[1.2,"servo_short"],[3.25,"wave_clink"],[3.3,"bye_boop"],[3.65,"wave_clink"],[4.05,"wave_clink"]],"expr_happy":[[0.2,"merchant_trill"],[0.4,"hop_small"],[0.68,"hop_small"],[1,"aerial_boing"]],"expr_curious":[[0.25,"curious_chirp"],[0.9,"focus_click"],[1.5,"focus_click"],[2.1,"focus_click"]],"expr_startled":[[0.15,"startled_chirp"],[0.2,"aerial_boing"]],"expr_sad":[[0.3,"sad_aww"],[1.1,"sigh"]],"expr_cross":[[0.2,"focus_click"],[1,"grumble"],[1.1,"head_shake"]],"expr_wave":[[0.2,"servo_short"],[0.4,"light_on"],[0.5,"hi_boop"],[0.65,"wave_clink"],[1.04,"wave_clink"],[1.42,"wave_clink"]],"expr_doze_off":[[0.4,"sleepy_mmm"],[1.2,"servo_short"],[2,"servo_short"],[2.2,"flicker"],[2.36,"light_off"],[2.6,"snore"],[3.6,"snore"],[4.5,"startled_chirp"],[4.5,"aerial_boing"],[4.52,"light_on"],[4.9,"servo_snap"],[5.6,"servo_snap"],[6.1,"huh"]],"trade_villager":[[0.05,"focus_click"],[0.3,"light_on"],[0.4,"hi_boop"],[0.6,"wave_clink"],[0.95,"drawer_open"],[1.15,"servo_short"],[1.45,"grip"],[1.6,"servo_short"],[1.75,"brass_ping"],[1.95,"haggle_chatter"],[2.2,"villager_no"],[2.45,"plead_chirp"],[2.8,"villager_yes"],[2.9,"pleased_boop"],[3,"servo_short"],[3.38,"toss_whoosh"],[3.97,"set_soft"],[4,"villager_trade"],[4.45,"toss_whoosh"],[5,"emerald_catch"],[5.15,"drawer_close"],[5.3,"spin_whir"],[5.35,"merchant_trill"],[5.8,"land_soft"],[6.4,"light_off"],[6.45,"bye_boop"],[6.55,"wave_clink"],[6.9,"wave_clink"]],"trade_villager_open":[[0.05,"focus_click"],[0.3,"light_on"],[0.4,"hi_boop"],[0.6,"wave_clink"],[0.95,"drawer_open"],[1.15,"servo_short"],[1.45,"grip"],[1.6,"servo_short"],[1.75,"brass_ping"],[1.95,"haggle_chatter"],[2.2,"villager_no"],[2.45,"plead_chirp"],[2.8,"villager_yes"],[2.9,"pleased_boop"],[3,"servo_short"],[3.38,"toss_whoosh"],[3.97,"set_soft"],[4,"villager_trade"],[4.45,"toss_whoosh"],[5,"emerald_catch"],[5.15,"drawer_close"],[5.3,"spin_whir"],[5.35,"merchant_trill"],[5.8,"land_soft"],[6.4,"light_off"],[6.45,"bye_boop"],[6.55,"wave_clink"],[6.9,"wave_clink"]],"start_rolling":[[0.1,"roll_start"],[0.3,"aerial_boing"]],"rolling":[[0,"roll_loop"]],"stop_rolling":[[0.02,"roll_stop"],[0.15,"aerial_boing"]],"scared_spot":[[0.05,"focus_click"],[0.22,"servo_snap"],[0.28,"scared_yelp"],[0.5,"land_soft"],[0.7,"servo_short"],[0.75,"roll_start"]],"scared_flee":[[0,"roll_fast_loop"],[0.1,"panic_chatter"],[0.65,"servo_snap"]],"scared_hide":[[0,"hard_brake"],[0.1,"aerial_boing"],[0.38,"hide_tuck"],[0.75,"whimper"]],"scared_cower":[[0,"tremble_loop"],[0.85,"peek_click"],[1.5,"whimper"]],"scared_recover":[[0.15,"peek_click"],[0.2,"servo_short"],[0.55,"servo_short"],[0.8,"curious_chirp"],[0.95,"servo_short"],[1.2,"relief_sigh"],[1.7,"shake_off"],[2.2,"pleased_boop"]]};
+const DEF = { pitch: 1, gain: 1, lowpass: 20000, highpass: 20, echo: 0, echoDelay: 0.12, vary: 0.04 };
+const TW = {};
+let cur = 0, randomVar = true, open = null;
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const vol = document.getElementById('vol');
+const bufCache = {};
+async function load(url) { if (!bufCache[url]) bufCache[url] = fetch(url).then((r) => { if (!r.ok) throw new Error(url); return r.arrayBuffer(); }).then((a) => ctx.decodeAudioData(a)); return bufCache[url]; }
+function fileFor(id, v) { const s = SETS[cur]; if (!(id in s.avail)) return null; const n = s.avail[id]; if (v === undefined) v = randomVar && n ? 1 + Math.floor(Math.random() * n) : 0; return s.dir + id + (v ? '_' + v : '') + '.' + s.ext; }
+async function play(id, v, when = 0) {
+  const url = fileFor(id, v); if (!url) return;
+  if (ctx.state === 'suspended') await ctx.resume();
+  let buf; try { buf = await load(url); } catch (e) { return; }
+  const t = Object.assign({}, DEF, TW[id] || {});
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  src.playbackRate.value = t.pitch * (v === undefined && randomVar ? 1 + (Math.random() * 2 - 1) * t.vary : 1);
+  const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = t.highpass;
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = t.lowpass;
+  const g = ctx.createGain(); g.gain.value = t.gain * +vol.value;
+  src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(ctx.destination);
+  if (t.echo > 0) { const d = ctx.createDelay(1); d.delayTime.value = t.echoDelay; const fb = ctx.createGain(); fb.gain.value = t.echo; g.connect(d); d.connect(fb); fb.connect(d); fb.connect(ctx.destination); }
+  src.start(ctx.currentTime + when);
+}
+function refreshCards() {
+  const s = SETS[cur];
+  document.querySelectorAll('.card').forEach((c) => {
+    const id = c.dataset.id, n = s.avail[id] || 0, vars = c.querySelector('.vars');
+    vars.innerHTML = n ? Array.from({ length: n }, (_, i) => '<button data-v="' + (i + 1) + '">' + (i + 1) + '</button>').join('') : '';
+    c.style.opacity = id in s.avail ? 1 : 0.45;
+    c.classList.toggle('tweaked', !!TW[id]);
+  });
+}
+document.querySelectorAll('.set').forEach((b) => b.addEventListener('click', () => { cur = +b.dataset.i; document.querySelectorAll('.set').forEach((x) => x.classList.toggle('on', x === b)); refreshCards(); }));
+document.getElementById('random').addEventListener('click', (e) => { randomVar = !randomVar; e.target.textContent = 'Random variants: ' + (randomVar ? 'on' : 'off'); });
+document.querySelectorAll('.card').forEach((c) => {
+  const id = c.dataset.id;
+  c.querySelector('.play').addEventListener('click', () => { c.classList.add('on'); setTimeout(() => c.classList.remove('on'), 300); play(id); });
+  c.querySelector('.vars').addEventListener('click', (e) => { if (e.target.dataset.v) play(id, +e.target.dataset.v); });
+  c.querySelector('.tw').addEventListener('click', () => openPanel(id));
+});
+const panel = document.getElementById('panel');
+function openPanel(id) {
+  open = id; document.getElementById('pt').textContent = id; panel.style.display = 'block';
+  const t = Object.assign({}, DEF, TW[id] || {});
+  panel.querySelectorAll('input').forEach((i) => { i.value = t[i.dataset.k]; i.nextElementSibling.value = (+i.value).toFixed(2); });
+}
+panel.querySelectorAll('input').forEach((i) => i.addEventListener('input', () => {
+  i.nextElementSibling.value = (+i.value).toFixed(2);
+  const t = TW[open] = Object.assign({}, DEF, TW[open] || {}, { [i.dataset.k]: +i.value });
+  for (const k of Object.keys(DEF)) if (t[k] === DEF[k]) delete t[k];
+  if (!Object.keys(t).length) delete TW[open];
+  refreshCards();
+}));
+document.getElementById('pplay').addEventListener('click', () => play(open));
+document.getElementById('preset').addEventListener('click', () => { delete TW[open]; openPanel(open); refreshCards(); });
+document.getElementById('pclose').addEventListener('click', () => (panel.style.display = 'none'));
+document.getElementById('save').addEventListener('click', async () => {
+  const body = JSON.stringify(TW, null, 2), out = document.getElementById('saved');
+  try { // served by serve.js: write straight into the project
+    const r = await fetch('save-tweaks?file=' + encodeURIComponent("trade-bot.tweaks.json"), { method: 'POST', body });
+    if (!r.ok) throw new Error(r.status);
+    out.textContent = 'Saved to ' + "trade-bot.tweaks.json" + '.';
+  } catch (e) { // opened from disk: download instead
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([body], { type: 'application/json' })); a.download = "trade-bot.tweaks.json"; a.click();
+    out.textContent = 'Saved to your Downloads folder.';
+  }
+});
+let timers = [];
+document.querySelectorAll('.clip').forEach((row) => {
+  row.querySelector('.cplay').addEventListener('click', async () => {
+    if (ctx.state === 'suspended') await ctx.resume();
+    timers.forEach(clearTimeout); timers = [];
+    document.querySelectorAll('.head').forEach((h) => (h.style.display = 'none'));
+    const head = row.querySelector('.head'), len = +row.dataset.len, start = performance.now();
+    for (const [t, id] of CLIPS[row.dataset.clip]) timers.push(setTimeout(() => play(id), t * 1000));
+    head.style.display = 'block';
+    (function tick() { const p = (performance.now() - start) / 1000 / len; head.style.left = Math.min(100, p * 100) + '%'; if (p < 1) requestAnimationFrame(tick); else head.style.display = 'none'; })();
+  });
+});
+refreshCards();
+</script></body></html>
