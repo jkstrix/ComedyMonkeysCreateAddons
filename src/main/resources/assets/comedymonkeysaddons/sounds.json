@@ -609,22 +609,40 @@
   "geothermal_turbine.turbine_whine": {
     "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.turbine_whine",
     "sounds": [
-      "comedymonkeysaddons:geothermal_turbine/turbine_whine_loop"
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/turbine_whine_loop",
+        "attenuation_distance": 12
+      }
     ]
   },
   "geothermal_turbine.steam_chuff": {
     "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.steam_chuff",
     "sounds": [
-      "comedymonkeysaddons:geothermal_turbine/steam_chuff_1",
-      "comedymonkeysaddons:geothermal_turbine/steam_chuff_2",
-      "comedymonkeysaddons:geothermal_turbine/steam_chuff_3",
-      "comedymonkeysaddons:geothermal_turbine/steam_chuff_4"
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/steam_chuff_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/steam_chuff_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/steam_chuff_3",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/steam_chuff_4",
+        "attenuation_distance": 12
+      }
     ]
   },
   "geothermal_turbine.firebox_roar": {
     "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.firebox_roar",
     "sounds": [
-      "comedymonkeysaddons:geothermal_turbine/firebox_roar_loop"
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/firebox_roar_loop",
+        "attenuation_distance": 12
+      }
     ]
   },
   "geothermal_turbine.relay_clack": {
@@ -638,9 +656,18 @@
   "geothermal_turbine.boiler_groan": {
     "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.boiler_groan",
     "sounds": [
-      "comedymonkeysaddons:geothermal_turbine/boiler_groan_1",
-      "comedymonkeysaddons:geothermal_turbine/boiler_groan_2",
-      "comedymonkeysaddons:geothermal_turbine/boiler_groan_3"
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/boiler_groan_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/boiler_groan_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/boiler_groan_3",
+        "attenuation_distance": 12
+      }
     ]
   },
   "geothermal_turbine.ignite": {
@@ -684,10 +711,22 @@
   "geothermal_turbine.cool_tick": {
     "subtitle": "subtitles.comedymonkeysaddons.geothermal_turbine.cool_tick",
     "sounds": [
-      "comedymonkeysaddons:geothermal_turbine/cool_tick_1",
-      "comedymonkeysaddons:geothermal_turbine/cool_tick_2",
-      "comedymonkeysaddons:geothermal_turbine/cool_tick_3",
-      "comedymonkeysaddons:geothermal_turbine/cool_tick_4"
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/cool_tick_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/cool_tick_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/cool_tick_3",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "comedymonkeysaddons:geothermal_turbine/cool_tick_4",
+        "attenuation_distance": 12
+      }
     ]
   },
   "geothermal_turbine.form": {
@@ -758,10 +797,22 @@
   "lava_generator.cool_tick": {
     "subtitle": "subtitles.comedymonkeysaddons.lava_generator.cool_tick",
     "sounds": [
-      "comedymonkeysaddons:lava_generator/cool_tick_1",
-      "comedymonkeysaddons:lava_generator/cool_tick_2",
-      "comedymonkeysaddons:lava_generator/cool_tick_3",
-      "comedymonkeysaddons:lava_generator/cool_tick_4"
+      {
+        "name": "comedymonkeysaddons:lava_generator/cool_tick_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:lava_generator/cool_tick_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:lava_generator/cool_tick_3",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:lava_generator/cool_tick_4",
+        "attenuation_distance": 8
+      }
     ]
   },
   "electric_motor.hum": {
@@ -880,10 +931,22 @@
   "magma_engine.cool_tick": {
     "subtitle": "subtitles.comedymonkeysaddons.magma_engine.cool_tick",
     "sounds": [
-      "comedymonkeysaddons:magma_engine/cool_tick_1",
-      "comedymonkeysaddons:magma_engine/cool_tick_2",
-      "comedymonkeysaddons:magma_engine/cool_tick_3",
-      "comedymonkeysaddons:magma_engine/cool_tick_4"
+      {
+        "name": "comedymonkeysaddons:magma_engine/cool_tick_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:magma_engine/cool_tick_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:magma_engine/cool_tick_3",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:magma_engine/cool_tick_4",
+        "attenuation_distance": 8
+      }
     ]
   },
   "pressure_crucible.whirr": {

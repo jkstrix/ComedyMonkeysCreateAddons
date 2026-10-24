@@ -23,33 +23,15 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.0176,
-        "post": {
-          "lowpass": 5000,
-          "echo": 0.21
-        },
+        "level": 0.109,
         "layers": [
           {
-            "type": "hum",
-            "f": 130,
-            "dur": 1.5,
-            "gain": 0.5
-          },
-          {
-            "type": "servo",
-            "soft": true,
-            "f": 900,
-            "f2": 900,
-            "dur": 1.5,
-            "gain": 0.3
-          },
-          {
-            "type": "servo",
-            "soft": true,
-            "f": 1350,
-            "f2": 1350,
-            "dur": 1.5,
-            "gain": 0.05
+            "src": "sa3_lava_generator_start_v2",
+            "trim": [
+              2.4,
+              4.55
+            ],
+            "gain": 1
           }
         ]
       }
@@ -82,7 +64,7 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.14,
+        "level": 0.0344,
         "post": {
           "lowpass": 2200
         },
@@ -177,7 +159,7 @@
       ],
       "real": {
         "variants": 2,
-        "level": 0.7,
+        "level": 0.19,
         "vary": {
           "pitch": 0.04
         },
@@ -239,33 +221,17 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.5,
-        "post": {
-          "lowpass": 7000
-        },
+        "level": 0.67,
         "layers": [
           {
-            "type": "servo",
-            "soft": true,
-            "f": 220,
-            "f2": 900,
-            "dur": 1.8,
-            "gain": 0.45,
-            "fadeOut": 0.6
-          },
-          {
-            "type": "hum",
-            "at": 0.3,
-            "f": 130,
-            "dur": 1.5,
-            "gain": 0.25,
-            "fadeOut": 0.6
-          },
-          {
-            "src": "metalPot1",
-            "gain": 0.15,
-            "pitch": 0.8,
-            "fadeOut": 0.3
+            "src": "sa3_lava_generator_start_v2",
+            "trim": [
+              0,
+              4.72
+            ],
+            "gain": 1,
+            "fadeIn": 0.005,
+            "fadeOut": 1.2
           }
         ]
       }
@@ -292,31 +258,17 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.48,
-        "post": {
-          "lowpass": 7000
-        },
+        "level": 0.558,
         "layers": [
           {
-            "type": "servo",
-            "soft": true,
-            "f": 900,
-            "f2": 180,
-            "dur": 1.8,
-            "gain": 0.42
-          },
-          {
-            "type": "hum",
-            "f": 130,
-            "dur": 1.2,
-            "gain": 0.2,
-            "fadeOut": 0.6
-          },
-          {
-            "src": "tick_002",
-            "at": 1.7,
-            "gain": 0.3,
-            "pitch": 0.8
+            "src": "sa3_generator_stop_v1",
+            "trim": [
+              0,
+              4.95
+            ],
+            "gain": 1,
+            "fadeIn": 0.005,
+            "fadeOut": 1.6
           }
         ]
       }
@@ -349,7 +301,7 @@
       ],
       "real": {
         "variants": 2,
-        "level": 0.6,
+        "level": 0.1197,
         "vary": {
           "pitch": 0.04
         },
@@ -404,7 +356,7 @@
       ],
       "real": {
         "variants": 4,
-        "level": 0.22,
+        "level": 0.1168,
         "vary": {
           "pitch": 0.1,
           "gain": 0.1

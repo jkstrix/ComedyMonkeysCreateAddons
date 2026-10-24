@@ -30,7 +30,7 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.09,
+        "level": 0.0749,
         "post": {
           "highpass": 60
         },
@@ -69,7 +69,7 @@
       ],
       "real": {
         "variants": 3,
-        "level": 0.15,
+        "level": 0.0968,
         "vary": {
           "pitch": 0.06,
           "gain": 0.1
@@ -134,7 +134,7 @@
       ],
       "real": {
         "variants": 4,
-        "level": 0.594,
+        "level": 0.2207,
         "vary": {
           "pitch": 0.06,
           "gain": 0.1
@@ -181,7 +181,7 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.16,
+        "level": 0.0723,
         "layers": [
           {
             "src": "sa3_crucible_fire_v2_clean",
@@ -225,7 +225,7 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.1,
+        "level": 0.0813,
         "layers": [
           {
             "src": "sa3_crucible_soul_fire_v3_clean",

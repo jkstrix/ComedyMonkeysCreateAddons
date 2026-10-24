@@ -23,7 +23,7 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.0336,
+        "level": 0.0404,
         "post": {
           "lowpass": 4000,
           "echo": 0.2
@@ -142,7 +142,7 @@
       ],
       "real": {
         "variants": 2,
-        "level": 0.7,
+        "level": 0.3428,
         "vary": {
           "pitch": 0.04
         },
@@ -220,7 +220,7 @@
       ],
       "real": {
         "variants": 2,
-        "level": 0.65,
+        "level": 0.3295,
         "vary": {
           "pitch": 0.04
         },

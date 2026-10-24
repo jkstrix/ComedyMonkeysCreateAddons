@@ -10,6 +10,9 @@ const here = __dirname;
 const assets = path.resolve(here, '../../../src/main/resources/assets', MOD);
 const cues = JSON.parse(fs.readFileSync(path.join(here, 'geothermal-turbine.cues.json'), 'utf8'));
 const LOOPS = new Set(['turbine_whine', 'firebox_roar']);
+// the sounds it makes all the time it runs (and as it cools) carry 12 blocks: further than a one-block machine's 8, since
+// it's a 3x3x3 heard from its centre, but well short of the 16 its starting and stopping carry
+const RUNNING = new Set(['turbine_whine', 'firebox_roar', 'steam_chuff', 'boiler_groan', 'cool_tick']);
 
 const outDir = path.join(assets, 'sounds/geothermal_turbine');
 fs.rmSync(outDir, { recursive: true, force: true });
@@ -33,7 +36,7 @@ for (const [id, ev] of Object.entries(cues.events)) {
     files++;
   }
   const subtitle = `subtitles.${MOD}.geothermal_turbine.${id}`;
-  sounds['geothermal_turbine.' + id] = { subtitle, sounds: takes.map((t) => `${MOD}:geothermal_turbine/${t}`) };
+  sounds['geothermal_turbine.' + id] = { subtitle, sounds: takes.map((t) => (RUNNING.has(id) ? { name: `${MOD}:geothermal_turbine/${t}`, attenuation_distance: 12 } : `${MOD}:geothermal_turbine/${t}`)) };
   lang[subtitle] = ev.subtitle;
 }
 fs.writeFileSync(soundsPath, JSON.stringify(sounds, null, 2) + '\n');

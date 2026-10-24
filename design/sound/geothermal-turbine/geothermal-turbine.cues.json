@@ -30,39 +30,15 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.3,
-        "post": {
-          "lowpass": 7000
-        },
+        "level": 0.41,
         "layers": [
           {
-            "type": "hum",
-            "f": 95,
-            "dur": 1.5,
-            "gain": 0.5
-          },
-          {
-            "type": "servo",
-            "soft": true,
-            "f": 880,
-            "f2": 880,
-            "dur": 1.5,
-            "gain": 0.32
-          },
-          {
-            "type": "servo",
-            "soft": true,
-            "f": 1320,
-            "f2": 1320,
-            "dur": 1.5,
-            "gain": 0.08
-          },
-          {
-            "type": "whoosh",
-            "f": 2600,
-            "f2": 2600,
-            "dur": 1.5,
-            "gain": 0.08
+            "src": "sa3_lava_generator_start_v2",
+            "trim": [
+              2.4,
+              4.55
+            ],
+            "gain": 1
           }
         ]
       }
@@ -90,7 +66,7 @@
       ],
       "real": {
         "variants": 4,
-        "level": 0.5,
+        "level": 0.1493,
         "vary": {
           "pitch": 0.06,
           "gain": 0.1
@@ -152,7 +128,7 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.26,
+        "level": 0.1799,
         "post": {
           "lowpass": 3000
         },
@@ -200,7 +176,7 @@
       ],
       "real": {
         "variants": 3,
-        "level": 0.55,
+        "level": 0.4735,
         "vary": {
           "pitch": 0.04
         },
@@ -253,7 +229,7 @@
       ],
       "real": {
         "variants": 3,
-        "level": 0.45,
+        "level": 0.2939,
         "vary": {
           "pitch": 0.08
         },
@@ -321,7 +297,7 @@
       ],
       "real": {
         "variants": 2,
-        "level": 0.7,
+        "level": 0.168,
         "vary": {
           "pitch": 0.04
         },
@@ -431,31 +407,17 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.5,
-        "post": {
-          "lowpass": 7000
-        },
+        "level": 0.845,
         "layers": [
           {
-            "type": "servo",
-            "soft": true,
-            "f": 160,
-            "f2": 880,
-            "dur": 2.6,
-            "gain": 0.45
-          },
-          {
-            "type": "hum",
-            "at": 0.4,
-            "f": 70,
-            "dur": 2.2,
-            "gain": 0.3
-          },
-          {
-            "src": "metalPot1",
-            "gain": 0.18,
-            "pitch": 0.6,
-            "fadeOut": 0.3
+            "src": "sa3_lava_generator_start_v2",
+            "trim": [
+              0,
+              4.72
+            ],
+            "gain": 1,
+            "fadeIn": 0.005,
+            "fadeOut": 1.2
           }
         ]
       }
@@ -482,25 +444,17 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.48,
-        "post": {
-          "lowpass": 7000
-        },
+        "level": 0.695,
         "layers": [
           {
-            "type": "servo",
-            "soft": true,
-            "f": 880,
-            "f2": 120,
-            "dur": 2.2,
-            "gain": 0.42
-          },
-          {
-            "type": "hum",
-            "f": 90,
-            "dur": 1.4,
-            "gain": 0.25,
-            "fadeOut": 0.6
+            "src": "sa3_generator_stop_v1",
+            "trim": [
+              0,
+              4.95
+            ],
+            "gain": 1,
+            "fadeIn": 0.005,
+            "fadeOut": 1.6
           }
         ]
       }
@@ -578,7 +532,7 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.6,
+        "level": 0.4711,
         "post": {
           "lowpass": 9000
         },
@@ -632,7 +586,7 @@
       ],
       "real": {
         "variants": 4,
-        "level": 0.25,
+        "level": 0.3076,
         "vary": {
           "pitch": 0.1,
           "gain": 0.1
@@ -703,7 +657,7 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.75,
+        "level": 0.6167,
         "post": {
           "lowpass": 9000
         },
@@ -772,7 +726,7 @@
       ],
       "real": {
         "variants": 1,
-        "level": 0.65,
+        "level": 0.7905,
         "post": {
           "lowpass": 9000
         },

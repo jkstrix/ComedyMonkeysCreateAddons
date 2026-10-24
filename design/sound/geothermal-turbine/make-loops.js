@@ -5,7 +5,7 @@ const { execFileSync } = require('child_process');
 const path = require('path');
 
 const RATE = 44100;
-const LOOPS = { turbine_whine: { from: 0.25, len: 1.0, fade: 0.25 }, firebox_roar: { from: 0.25, len: 1.0, fade: 0.25 } };
+const LOOPS = { turbine_whine: { from: 0.05, len: 2.0, fade: 0.4 }, firebox_roar: { from: 0.25, len: 1.0, fade: 0.25 } };
 const real = path.join(__dirname, 'real');
 
 for (const [id, o] of Object.entries(LOOPS)) {

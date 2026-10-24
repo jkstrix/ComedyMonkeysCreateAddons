@@ -1,11 +1,10 @@
 {
  "whir": {
   "variants": 1,
-  "sources": [],
-  "synth": [
-   "hum",
-   "servo"
-  ]
+  "sources": [
+   "generated/sa3_lava_generator_start_v2.wav"
+  ],
+  "synth": []
  },
  "burn": {
   "variants": 1,
@@ -30,22 +29,16 @@
  "spin_up": {
   "variants": 1,
   "sources": [
-   "kenney-rpg-audio/Audio/metalPot1.ogg"
+   "generated/sa3_lava_generator_start_v2.wav"
   ],
-  "synth": [
-   "servo",
-   "hum"
-  ]
+  "synth": []
  },
  "spin_down": {
   "variants": 1,
   "sources": [
-   "kenney-interface-sounds/Audio/tick_002.ogg"
+   "generated/sa3_generator_stop_v1.wav"
   ],
-  "synth": [
-   "servo",
-   "hum"
-  ]
+  "synth": []
  },
  "fire_out": {
   "variants": 2,

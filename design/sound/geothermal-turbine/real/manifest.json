@@ -1,12 +1,10 @@
 {
  "turbine_whine": {
   "variants": 1,
-  "sources": [],
-  "synth": [
-   "hum",
-   "servo",
-   "whoosh"
-  ]
+  "sources": [
+   "generated/sa3_lava_generator_start_v2.wav"
+  ],
+  "synth": []
  },
  "steam_chuff": {
   "variants": 4,
@@ -74,20 +72,16 @@
  "spin_up": {
   "variants": 1,
   "sources": [
-   "kenney-rpg-audio/Audio/metalPot1.ogg"
+   "generated/sa3_lava_generator_start_v2.wav"
   ],
-  "synth": [
-   "servo",
-   "hum"
-  ]
+  "synth": []
  },
  "spin_down": {
   "variants": 1,
-  "sources": [],
-  "synth": [
-   "servo",
-   "hum"
-  ]
+  "sources": [
+   "generated/sa3_generator_stop_v1.wav"
+  ],
+  "synth": []
  },
  "settle": {
   "variants": 2,

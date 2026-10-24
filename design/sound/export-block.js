@@ -8,9 +8,9 @@ const path = require('path');
 
 const MOD = 'comedymonkeysaddons';
 const BLOCKS = {
-  'lava-generator': { loops: ['whir', 'burn'], quiet: ['whir', 'burn'] },
+  'lava-generator': { loops: ['whir', 'burn'], quiet: ['whir', 'burn', 'cool_tick'] },
   'electric-motor': { loops: ['hum'], quiet: ['hum', 'spark'] },
-  'magma-engine': { loops: ['firebox', 'blower'], quiet: ['chug', 'firebox', 'blower'] },
+  'magma-engine': { loops: ['firebox', 'blower'], quiet: ['chug', 'firebox', 'blower', 'cool_tick'] },
   // every press creaks and crunches, all day, so those carry only 8 blocks too
   'pressure-crucible': { loops: ['whirr', 'fire', 'fire_soul'], quiet: ['whirr', 'creak', 'crunch', 'fire', 'fire_soul'] },
 };
