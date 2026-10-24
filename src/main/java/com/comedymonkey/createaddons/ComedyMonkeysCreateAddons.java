@@ -30,6 +30,7 @@ import com.comedymonkey.createaddons.registry.ModItems;
 import com.comedymonkey.createaddons.registry.ModMenus;
 import com.comedymonkey.createaddons.registry.ModMountedStorage;
 import com.comedymonkey.createaddons.registry.ModRecipes;
+import com.comedymonkey.createaddons.registry.ModSounds;
 import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.TooltipModifier;
@@ -76,6 +77,7 @@ public class ComedyMonkeysCreateAddons {
 		ModDisplaySources.SOURCES.register(modBus);
 		ModAdvancements.TRIGGERS.register(modBus);
 		ModAttachments.ATTACHMENT_TYPES.register(modBus);
+		ModSounds.SOUND_EVENTS.register(modBus);
 
 		// Both specs show up in Create's "Access configs of other mods" screen
 		container.registerConfig(ModConfig.Type.SERVER, CMConfig.SERVER_SPEC);

@@ -1,0 +1,63 @@
+package com.comedymonkey.createaddons.registry;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.google.gson.JsonParser;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.sounds.SoundEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+/**
+ * The mod's own sounds. Trade Bot's are registered from the {@code trade_bot.*} entries of our sounds.json, which
+ * {@code design/sound/export-game.js} writes from the approved sound design, so the two can never drift apart.
+ */
+public final class ModSounds {
+	public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
+		DeferredRegister.create(Registries.SOUND_EVENT, ComedyMonkeysCreateAddons.MOD_ID);
+
+	private static final String SOUNDS_JSON = "/assets/" + ComedyMonkeysCreateAddons.MOD_ID + "/sounds.json";
+	private static final String TRADE_BOT_PREFIX = "trade_bot.";
+
+	/** Trade Bot's sounds by event id (the cue file's id, e.g. "roll_loop"). */
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> TRADE_BOT = registerTradeBot();
+
+	private ModSounds() {}
+
+	/** One of Trade Bot's sounds; throws for an unknown id, since ids are fixed by the sound design. */
+	public static SoundEvent tradeBot(String id) {
+		DeferredHolder<SoundEvent, SoundEvent> holder = TRADE_BOT.get(id);
+		if (holder == null)
+			throw new IllegalArgumentException("no Trade Bot sound " + id);
+		return holder.get();
+	}
+
+	private static Map<String, DeferredHolder<SoundEvent, SoundEvent>> registerTradeBot() {
+		Map<String, DeferredHolder<SoundEvent, SoundEvent>> sounds = new LinkedHashMap<>();
+		try (InputStream in = ModSounds.class.getResourceAsStream(SOUNDS_JSON)) {
+			if (in == null)
+				throw new IllegalStateException("missing " + SOUNDS_JSON);
+			try (Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+				for (String key : JsonParser.parseReader(reader).getAsJsonObject().keySet()) {
+					if (!key.startsWith(TRADE_BOT_PREFIX))
+						continue;
+					sounds.put(key.substring(TRADE_BOT_PREFIX.length()), SOUND_EVENTS.register(key,
+						() -> SoundEvent.createVariableRangeEvent(ComedyMonkeysCreateAddons.asResource(key))));
+				}
+			}
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+		return Collections.unmodifiableMap(sounds);
+	}
+}

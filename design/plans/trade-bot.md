@@ -59,9 +59,9 @@ The server only chooses *which clip and when*. All posing happens on the client 
 The 42 clips hold about 58,000 baked keyframes, far too many to hand-write or compile into Java. The generator gets a game export mode that writes data files the client loads at startup.
 
 **`node design/models/trade-bot.gen.js --game`** writes:
-1. **`res/assets/comedymonkeysaddons/trade_bot/geometry.json`**: the bot's bone tree only (no props, no station). It includes each bone's pivot, its rotation and its cubes (from, size, uv offset, inflate), all in Blockbench units.
-2. **`res/assets/comedymonkeysaddons/trade_bot/station_geometry.json`**: the station's moving bones (`post_cog`, `winder_arm`, `winder_head`, `signal_flag`, `station_glow`).
-3. **`res/assets/comedymonkeysaddons/models/block/trade_bot_station.json`**: the station's static parts (`station_base`) as an ordinary block model. Moving parts are drawn by the block-entity renderer.
+1. **`res/assets/comedymonkeysaddons/trade_bot/geometry.json`**: two bone trees, the bot (`trade_bot`) and the station (`station`), without the preview props. Each bone has its pivot, rotation and cubes (from, to, uv), all in Blockbench units. Cubes with their own rotation become small bones of their own, since `ModelPart` cubes can't rotate.
+2. *(dropped)* The station is drawn entirely by its block-entity renderer from the same geometry file, rather than as a block model plus moving parts. It then shares the bot's model conversion, with no second set of UV rules for block-model faces. Its block model only names the particle texture.
+3. *(dropped, see 2)*
 4. **`res/assets/comedymonkeysaddons/trade_bot/clips.json`**: every clip, with:
    - `length`;
    - `mode` (`loop` / `once` / `hold`);
@@ -72,7 +72,9 @@ The 42 clips hold about 58,000 baked keyframes, far too many to hand-write or co
    - `cues`: `[time, event]`.
    
    Prop bones are left out, and so are props' visibility steps.
-5. **Textures** `res/assets/comedymonkeysaddons/textures/entity/trade_bot.png`, `trade_bot_glow.png` (emissive pixels only) and `textures/block/trade_bot_station*.png`. The generator's comment says the in-game texture is "generated without props", but that code doesn't exist yet. This milestone adds it: re-pack the UVs for the bot only, aiming for 128×128.
+5. **Textures** `res/assets/comedymonkeysaddons/textures/entity/trade_bot.png` and `trade_bot_glow.png` (glowing pixels only, drawn full bright): the bot and the station re-packed together into one 128×128 texture, without the props.
+
+**Done (M0):** `node design/models/trade-bot.gen.js --game` (35 bones, 69 cubes, 42 clips in 651 KB) and `node design/sound/export-game.js` (80 events, 207 files). In code: `content/tradebot/clip/` (`ClipLibrary`, `Clip`, `Track`, `StepTrack`, read from the jar by both sides) and `registry/ModSounds` (registered from our sounds.json). Tests: `ClipLibraryTest` (every clip, root modes, bones exist, loops wrap, locomotion seams) and `ModSoundsTest` (every cue has a sound, every sound has its files and a subtitle). The seam test found a 0.03 px eyelid step at the end of `start_rolling`; fixed in the generator.
 
 **Root modes** (per clip, set in the generator):
 
@@ -184,7 +186,7 @@ They are **calibrated against Blockbench's own "Export Java Entity (Mojang mappi
   - links (4/4 inputs, output set);
   - trades today.
 
-**Renderer:** `client/tradebot/TradeBotStationRenderer` (`SafeBlockEntityRenderer`) bakes `station_geometry` the same way as the bot.
+**Renderer:** `client/tradebot/TradeBotStationRenderer` (`SafeBlockEntityRenderer`) bakes the `station` tree of `geometry.json` the same way as the bot.
 - While the bot is docking or leaving, it samples the station bones from **the bot's current clip** (`dock_lights_out`, `action_comes_in`), so the winder and flag stay in step.
 - While he's docked and charging, the winder head turns procedurally, and the glow ring is drawn `FULL_BRIGHT`, matching the muted amber of his irises.
 

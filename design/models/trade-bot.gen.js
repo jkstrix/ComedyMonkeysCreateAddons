@@ -5,7 +5,9 @@ const zlib = require('zlib');
 const crypto = require('crypto');
 const path = require('path');
 
-const OUT = process.argv[2] || path.resolve(__dirname, 'trade-bot.bbmodel');
+const ARGS = process.argv.slice(2);
+const OUT = ARGS.find((a) => !a.startsWith('--')) || path.resolve(__dirname, 'trade-bot.bbmodel');
+const GAME = ARGS.includes('--game'); // also write the in-game assets (trade-bot.game-export.js)
 // approved sounds: each clip's cues become sound keyframes on its Effects track, pointing at the real OGG files
 const SOUND_DIR = path.resolve(__dirname, '../sound');
 const CUES = fs.existsSync(path.join(SOUND_DIR, 'trade-bot.cues.json')) ? JSON.parse(fs.readFileSync(path.join(SOUND_DIR, 'trade-bot.cues.json'), 'utf8')) : null;
@@ -458,8 +460,9 @@ function faceRects(c) {
     down: [u + d + w, v, w, d],
   };
 }
-for (const c of cubes) {
-  const R = faceRects(c);
+// paints one cube's box-UV net at uv into an RGBA buffer of the given size (the preview and the game export share it)
+function paintCube(c, uv, buf, size) {
+  const R = faceRects({ size: c.size, uv });
   for (const f of Object.keys(R)) {
     const [fx, fy, fw, fh] = R[f];
     const x0 = Math.floor(fx), y0 = Math.floor(fy);
@@ -469,13 +472,14 @@ for (const c of cubes) {
         const x = x0 + i, y = y0 + j;
         let col = c.paint ? c.paint(f, i, j, W, H, x, y) : null;
         if (col === null || col === undefined) col = mot(c.mat, x, y);
-        const o = (y * TEX + x) * 4;
-        if (col === 'clear') { tex[o + 3] = 0; continue; }
+        const o = (y * size + x) * 4;
+        if (col === 'clear') { buf[o + 3] = 0; continue; }
         const [r, g, b, a] = rgb(col);
-        tex[o] = r; tex[o + 1] = g; tex[o + 2] = b; tex[o + 3] = a;
+        buf[o] = r; buf[o + 1] = g; buf[o + 2] = b; buf[o + 3] = a;
       }
   }
 }
+for (const c of cubes) paintCube(c, c.uv, tex, TEX);
 
 function png(w, h, data) {
   const crcT = new Uint32Array(256).map((_, n) => { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; return c >>> 0; });
@@ -1655,7 +1659,7 @@ anim('rolling', 3, 'loop', cruise);
   T.key = { rotation: (t) => V(0, 0, -60 * t) };
   // blend the last 0.25 s exactly onto the loop's first frame, so the hand-over is seamless whatever the springs did
   for (const b of Object.keys(cruise)) {
-    if (b === 'wheel' || b === 'key' || b.startsWith('lid_')) continue;
+    if (b === 'wheel' || b === 'key') continue;
     for (const ch of Object.keys(cruise[b])) {
       const own = T[b] && T[b][ch] ? T[b][ch] : () => V();
       T[b] = T[b] || {};
@@ -2100,3 +2104,4 @@ const bb = {
 };
 fs.writeFileSync(OUT, JSON.stringify(bb));
 console.error('wrote', OUT, elements.length, 'cubes', groups.length, 'groups', animations.length, 'animations');
+if (GAME) require('./trade-bot.game-export.js')({ bot, station, paintCube, png, animations, cues: CUES });
