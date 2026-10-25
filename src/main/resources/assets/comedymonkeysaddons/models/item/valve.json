@@ -1,0 +1,2231 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:translucent",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/steel",
+    "copper_ring": "comedymonkeysaddons:block/fluid_line/copper_ring",
+    "copper": "comedymonkeysaddons:block/fluid_line/copper",
+    "slot_idle": "comedymonkeysaddons:block/fluid_line/slot_idle",
+    "glass": "comedymonkeysaddons:block/fluid_line/glass",
+    "steel": "comedymonkeysaddons:block/fluid_line/steel",
+    "steel_dark": "comedymonkeysaddons:block/fluid_line/steel_dark",
+    "red": "comedymonkeysaddons:block/fluid_line/red"
+  },
+  "elements": [
+    {
+      "name": "copper_west_ring_a",
+      "from": [
+        0,
+        5.5,
+        6.5
+      ],
+      "to": [
+        0.25,
+        10.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.75,
+            5.5,
+            16,
+            10.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            5.5,
+            9.5,
+            10.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "south": {
+          "uv": [
+            0,
+            5.5,
+            0.25,
+            10.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "up": {
+          "uv": [
+            0,
+            6.5,
+            0.25,
+            9.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "down": {
+          "uv": [
+            0,
+            6.5,
+            0.25,
+            9.5
+          ],
+          "texture": "#copper_ring"
+        }
+      }
+    },
+    {
+      "name": "copper_west_ring_b",
+      "from": [
+        0,
+        6.5,
+        5.5
+      ],
+      "to": [
+        0.25,
+        9.5,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.75,
+            6.5,
+            16,
+            9.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "east": {
+          "uv": [
+            5.5,
+            6.5,
+            10.5,
+            9.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "south": {
+          "uv": [
+            0,
+            6.5,
+            0.25,
+            9.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "up": {
+          "uv": [
+            0,
+            5.5,
+            0.25,
+            10.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "down": {
+          "uv": [
+            0,
+            5.5,
+            0.25,
+            10.5
+          ],
+          "texture": "#copper_ring"
+        }
+      }
+    },
+    {
+      "name": "copper_west_ring_c",
+      "from": [
+        0,
+        6,
+        6
+      ],
+      "to": [
+        0.25,
+        10,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.75,
+            6,
+            16,
+            10
+          ],
+          "texture": "#copper_ring"
+        },
+        "east": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#copper_ring"
+        },
+        "south": {
+          "uv": [
+            0,
+            6,
+            0.25,
+            10
+          ],
+          "texture": "#copper_ring"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            0.25,
+            10
+          ],
+          "texture": "#copper_ring"
+        },
+        "down": {
+          "uv": [
+            0,
+            6,
+            0.25,
+            10
+          ],
+          "texture": "#copper_ring"
+        }
+      }
+    },
+    {
+      "name": "copper_west_a",
+      "from": [
+        0.25,
+        7,
+        6
+      ],
+      "to": [
+        5.5,
+        9,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.5,
+            7,
+            15.75,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            0.25,
+            7,
+            5.5,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            0.25,
+            6,
+            5.5,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            0.25,
+            6,
+            5.5,
+            10
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "copper_west_c",
+      "from": [
+        0.25,
+        6.5,
+        6.5
+      ],
+      "to": [
+        5.5,
+        9.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.5,
+            6.5,
+            15.75,
+            9.5
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            0.25,
+            6.5,
+            5.5,
+            9.5
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            0.25,
+            6.5,
+            5.5,
+            9.5
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            0.25,
+            6.5,
+            5.5,
+            9.5
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "copper_west_b0",
+      "from": [
+        0.25,
+        6,
+        7
+      ],
+      "to": [
+        1.75,
+        10,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.25,
+            6,
+            15.75,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            0.25,
+            6,
+            1.75,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            0.25,
+            7,
+            1.75,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            0.25,
+            7,
+            1.75,
+            9
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "copper_west_b1",
+      "from": [
+        4,
+        6,
+        7
+      ],
+      "to": [
+        5.5,
+        10,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.5,
+            6,
+            12,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            4,
+            6,
+            5.5,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            4,
+            7,
+            5.5,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            4,
+            7,
+            5.5,
+            9
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "copper_west_bm",
+      "from": [
+        1.75,
+        6,
+        7
+      ],
+      "to": [
+        4,
+        9.25,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            6.75,
+            14.25,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            1.75,
+            6.75,
+            4,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            1.75,
+            7,
+            4,
+            9
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "copper_west_fluid",
+      "from": [
+        1.75,
+        9.25,
+        7.25
+      ],
+      "to": [
+        4,
+        9.75,
+        8.75
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            7,
+            16,
+            8.5
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    },
+    {
+      "name": "copper_west_edge_a",
+      "from": [
+        1.75,
+        9.5,
+        7
+      ],
+      "to": [
+        4,
+        10,
+        7.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            6,
+            14.25,
+            6.5
+          ],
+          "texture": "#slot_idle"
+        },
+        "south": {
+          "uv": [
+            1.75,
+            6,
+            4,
+            6.5
+          ],
+          "texture": "#slot_idle"
+        },
+        "up": {
+          "uv": [
+            1.75,
+            7,
+            4,
+            7.25
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    },
+    {
+      "name": "copper_west_edge_b",
+      "from": [
+        1.75,
+        9.5,
+        8.75
+      ],
+      "to": [
+        4,
+        10,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            6,
+            14.25,
+            6.5
+          ],
+          "texture": "#slot_idle"
+        },
+        "south": {
+          "uv": [
+            1.75,
+            6,
+            4,
+            6.5
+          ],
+          "texture": "#slot_idle"
+        },
+        "up": {
+          "uv": [
+            1.75,
+            8.75,
+            4,
+            9
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    },
+    {
+      "name": "copper_west_glass",
+      "from": [
+        1.75,
+        9.5,
+        7
+      ],
+      "to": [
+        4,
+        10.25,
+        9
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            5.75,
+            9,
+            6.5
+          ],
+          "texture": "#glass"
+        },
+        "west": {
+          "uv": [
+            7,
+            5.75,
+            9,
+            6.5
+          ],
+          "texture": "#glass"
+        },
+        "up": {
+          "uv": [
+            1.75,
+            7,
+            4,
+            9
+          ],
+          "texture": "#glass"
+        }
+      }
+    },
+    {
+      "name": "copper_east_ring_a",
+      "from": [
+        15.75,
+        5.5,
+        6.5
+      ],
+      "to": [
+        16,
+        10.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            5.5,
+            0.25,
+            10.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "south": {
+          "uv": [
+            15.75,
+            5.5,
+            16,
+            10.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            5.5,
+            9.5,
+            10.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "up": {
+          "uv": [
+            15.75,
+            6.5,
+            16,
+            9.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "down": {
+          "uv": [
+            15.75,
+            6.5,
+            16,
+            9.5
+          ],
+          "texture": "#copper_ring"
+        }
+      }
+    },
+    {
+      "name": "copper_east_ring_b",
+      "from": [
+        15.75,
+        6.5,
+        5.5
+      ],
+      "to": [
+        16,
+        9.5,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            6.5,
+            0.25,
+            9.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "south": {
+          "uv": [
+            15.75,
+            6.5,
+            16,
+            9.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            6.5,
+            10.5,
+            9.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "up": {
+          "uv": [
+            15.75,
+            5.5,
+            16,
+            10.5
+          ],
+          "texture": "#copper_ring"
+        },
+        "down": {
+          "uv": [
+            15.75,
+            5.5,
+            16,
+            10.5
+          ],
+          "texture": "#copper_ring"
+        }
+      }
+    },
+    {
+      "name": "copper_east_ring_c",
+      "from": [
+        15.75,
+        6,
+        6
+      ],
+      "to": [
+        16,
+        10,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            6,
+            0.25,
+            10
+          ],
+          "texture": "#copper_ring"
+        },
+        "south": {
+          "uv": [
+            15.75,
+            6,
+            16,
+            10
+          ],
+          "texture": "#copper_ring"
+        },
+        "west": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#copper_ring"
+        },
+        "up": {
+          "uv": [
+            15.75,
+            6,
+            16,
+            10
+          ],
+          "texture": "#copper_ring"
+        },
+        "down": {
+          "uv": [
+            15.75,
+            6,
+            16,
+            10
+          ],
+          "texture": "#copper_ring"
+        }
+      }
+    },
+    {
+      "name": "copper_east_a",
+      "from": [
+        10.5,
+        7,
+        6
+      ],
+      "to": [
+        15.75,
+        9,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.25,
+            7,
+            5.5,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            10.5,
+            7,
+            15.75,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            10.5,
+            6,
+            15.75,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            10.5,
+            6,
+            15.75,
+            10
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "copper_east_c",
+      "from": [
+        10.5,
+        6.5,
+        6.5
+      ],
+      "to": [
+        15.75,
+        9.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.25,
+            6.5,
+            5.5,
+            9.5
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            10.5,
+            6.5,
+            15.75,
+            9.5
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            10.5,
+            6.5,
+            15.75,
+            9.5
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            10.5,
+            6.5,
+            15.75,
+            9.5
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "copper_east_b0",
+      "from": [
+        10.5,
+        6,
+        7
+      ],
+      "to": [
+        12,
+        10,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            6,
+            5.5,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            10.5,
+            6,
+            12,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            10.5,
+            7,
+            12,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            10.5,
+            7,
+            12,
+            9
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "copper_east_b1",
+      "from": [
+        14.25,
+        6,
+        7
+      ],
+      "to": [
+        15.75,
+        10,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.25,
+            6,
+            1.75,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            14.25,
+            6,
+            15.75,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            14.25,
+            7,
+            15.75,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            14.25,
+            7,
+            15.75,
+            9
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "copper_east_bm",
+      "from": [
+        12,
+        6,
+        7
+      ],
+      "to": [
+        14.25,
+        9.25,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.75,
+            6.75,
+            4,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            12,
+            6.75,
+            14.25,
+            10
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            12,
+            7,
+            14.25,
+            9
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "copper_east_fluid",
+      "from": [
+        12,
+        9.25,
+        7.25
+      ],
+      "to": [
+        14.25,
+        9.75,
+        8.75
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            7,
+            16,
+            8.5
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    },
+    {
+      "name": "copper_east_edge_a",
+      "from": [
+        12,
+        9.5,
+        7
+      ],
+      "to": [
+        14.25,
+        10,
+        7.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.75,
+            6,
+            4,
+            6.5
+          ],
+          "texture": "#slot_idle"
+        },
+        "south": {
+          "uv": [
+            12,
+            6,
+            14.25,
+            6.5
+          ],
+          "texture": "#slot_idle"
+        },
+        "up": {
+          "uv": [
+            12,
+            7,
+            14.25,
+            7.25
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    },
+    {
+      "name": "copper_east_edge_b",
+      "from": [
+        12,
+        9.5,
+        8.75
+      ],
+      "to": [
+        14.25,
+        10,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.75,
+            6,
+            4,
+            6.5
+          ],
+          "texture": "#slot_idle"
+        },
+        "south": {
+          "uv": [
+            12,
+            6,
+            14.25,
+            6.5
+          ],
+          "texture": "#slot_idle"
+        },
+        "up": {
+          "uv": [
+            12,
+            8.75,
+            14.25,
+            9
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    },
+    {
+      "name": "copper_east_glass",
+      "from": [
+        12,
+        9.5,
+        7
+      ],
+      "to": [
+        14.25,
+        10.25,
+        9
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            5.75,
+            9,
+            6.5
+          ],
+          "texture": "#glass"
+        },
+        "west": {
+          "uv": [
+            7,
+            5.75,
+            9,
+            6.5
+          ],
+          "texture": "#glass"
+        },
+        "up": {
+          "uv": [
+            12,
+            7,
+            14.25,
+            9
+          ],
+          "texture": "#glass"
+        }
+      }
+    },
+    {
+      "name": "valve_body_a",
+      "from": [
+        5.5,
+        5,
+        6
+      ],
+      "to": [
+        10.5,
+        11,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            5,
+            10.5,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            5,
+            10.5,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            6,
+            10.5,
+            10
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            6,
+            10.5,
+            10
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "valve_body_b",
+      "from": [
+        5.5,
+        6,
+        5
+      ],
+      "to": [
+        10.5,
+        10,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            6,
+            10.5,
+            10
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            5,
+            6,
+            11,
+            10
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            6,
+            10.5,
+            10
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            5,
+            6,
+            11,
+            10
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            5,
+            10.5,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            5,
+            10.5,
+            11
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "valve_body_c",
+      "from": [
+        5.5,
+        5.5,
+        5.5
+      ],
+      "to": [
+        10.5,
+        10.5,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "valve_stem",
+      "from": [
+        7.5,
+        11,
+        7.5
+      ],
+      "to": [
+        8.5,
+        14,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            5
+          ],
+          "texture": "#steel_dark"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            5
+          ],
+          "texture": "#steel_dark"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            5
+          ],
+          "texture": "#steel_dark"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            5
+          ],
+          "texture": "#steel_dark"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            7.5,
+            8.5,
+            8.5
+          ],
+          "texture": "#steel_dark"
+        }
+      }
+    },
+    {
+      "name": "wheel_hub",
+      "from": [
+        7.25,
+        14,
+        7.25
+      ],
+      "to": [
+        8.75,
+        15,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.25,
+            1,
+            8.75,
+            2
+          ],
+          "texture": "#steel_dark"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            1,
+            8.75,
+            2
+          ],
+          "texture": "#steel_dark"
+        },
+        "south": {
+          "uv": [
+            7.25,
+            1,
+            8.75,
+            2
+          ],
+          "texture": "#steel_dark"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            1,
+            8.75,
+            2
+          ],
+          "texture": "#steel_dark"
+        },
+        "up": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#steel_dark"
+        },
+        "down": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#steel_dark"
+        }
+      }
+    },
+    {
+      "name": "wheel_rim_0",
+      "from": [
+        10.784,
+        14,
+        6.611
+      ],
+      "to": [
+        11.684,
+        15,
+        9.389
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.316,
+            1,
+            5.216,
+            2
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            6.611,
+            1,
+            9.389,
+            2
+          ],
+          "texture": "#red"
+        },
+        "south": {
+          "uv": [
+            10.784,
+            1,
+            11.684,
+            2
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            6.611,
+            1,
+            9.389,
+            2
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            10.784,
+            6.611,
+            11.684,
+            9.389
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            10.784,
+            6.611,
+            11.684,
+            9.389
+          ],
+          "texture": "#red"
+        }
+      }
+    },
+    {
+      "name": "wheel_rim_1",
+      "from": [
+        8.897,
+        14,
+        9.836
+      ],
+      "to": [
+        11.676,
+        15,
+        10.736
+      ],
+      "rotation": {
+        "origin": [
+          10.286,
+          14.5,
+          10.286
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4.324,
+            1,
+            7.103,
+            2
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            5.264,
+            1,
+            6.164,
+            2
+          ],
+          "texture": "#red"
+        },
+        "south": {
+          "uv": [
+            8.897,
+            1,
+            11.676,
+            2
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            9.836,
+            1,
+            10.736,
+            2
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            8.897,
+            9.836,
+            11.676,
+            10.736
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            8.897,
+            5.264,
+            11.676,
+            6.164
+          ],
+          "texture": "#red"
+        }
+      }
+    },
+    {
+      "name": "wheel_rim_2",
+      "from": [
+        6.611,
+        14,
+        10.784
+      ],
+      "to": [
+        9.389,
+        15,
+        11.684
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.611,
+            1,
+            9.389,
+            2
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            4.316,
+            1,
+            5.216,
+            2
+          ],
+          "texture": "#red"
+        },
+        "south": {
+          "uv": [
+            6.611,
+            1,
+            9.389,
+            2
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            10.784,
+            1,
+            11.684,
+            2
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            6.611,
+            10.784,
+            9.389,
+            11.684
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            6.611,
+            4.316,
+            9.389,
+            5.216
+          ],
+          "texture": "#red"
+        }
+      }
+    },
+    {
+      "name": "wheel_rim_3",
+      "from": [
+        4.324,
+        14,
+        9.836
+      ],
+      "to": [
+        7.103,
+        15,
+        10.736
+      ],
+      "rotation": {
+        "origin": [
+          5.714,
+          14.5,
+          10.286
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8.897,
+            1,
+            11.676,
+            2
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            5.264,
+            1,
+            6.164,
+            2
+          ],
+          "texture": "#red"
+        },
+        "south": {
+          "uv": [
+            4.324,
+            1,
+            7.103,
+            2
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            9.836,
+            1,
+            10.736,
+            2
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            4.324,
+            9.836,
+            7.103,
+            10.736
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            4.324,
+            5.264,
+            7.103,
+            6.164
+          ],
+          "texture": "#red"
+        }
+      }
+    },
+    {
+      "name": "wheel_rim_4",
+      "from": [
+        4.316,
+        14,
+        6.611
+      ],
+      "to": [
+        5.216,
+        15,
+        9.389
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.784,
+            1,
+            11.684,
+            2
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            6.611,
+            1,
+            9.389,
+            2
+          ],
+          "texture": "#red"
+        },
+        "south": {
+          "uv": [
+            4.316,
+            1,
+            5.216,
+            2
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            6.611,
+            1,
+            9.389,
+            2
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            4.316,
+            6.611,
+            5.216,
+            9.389
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            4.316,
+            6.611,
+            5.216,
+            9.389
+          ],
+          "texture": "#red"
+        }
+      }
+    },
+    {
+      "name": "wheel_rim_5",
+      "from": [
+        4.324,
+        14,
+        5.264
+      ],
+      "to": [
+        7.103,
+        15,
+        6.164
+      ],
+      "rotation": {
+        "origin": [
+          5.714,
+          14.5,
+          5.714
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8.897,
+            1,
+            11.676,
+            2
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            9.836,
+            1,
+            10.736,
+            2
+          ],
+          "texture": "#red"
+        },
+        "south": {
+          "uv": [
+            4.324,
+            1,
+            7.103,
+            2
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            5.264,
+            1,
+            6.164,
+            2
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            4.324,
+            5.264,
+            7.103,
+            6.164
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            4.324,
+            9.836,
+            7.103,
+            10.736
+          ],
+          "texture": "#red"
+        }
+      }
+    },
+    {
+      "name": "wheel_rim_6",
+      "from": [
+        6.611,
+        14,
+        4.316
+      ],
+      "to": [
+        9.389,
+        15,
+        5.216
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.611,
+            1,
+            9.389,
+            2
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            10.784,
+            1,
+            11.684,
+            2
+          ],
+          "texture": "#red"
+        },
+        "south": {
+          "uv": [
+            6.611,
+            1,
+            9.389,
+            2
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            4.316,
+            1,
+            5.216,
+            2
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            6.611,
+            4.316,
+            9.389,
+            5.216
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            6.611,
+            10.784,
+            9.389,
+            11.684
+          ],
+          "texture": "#red"
+        }
+      }
+    },
+    {
+      "name": "wheel_rim_7",
+      "from": [
+        8.897,
+        14,
+        5.264
+      ],
+      "to": [
+        11.676,
+        15,
+        6.164
+      ],
+      "rotation": {
+        "origin": [
+          10.286,
+          14.5,
+          5.714
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4.324,
+            1,
+            7.103,
+            2
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            9.836,
+            1,
+            10.736,
+            2
+          ],
+          "texture": "#red"
+        },
+        "south": {
+          "uv": [
+            8.897,
+            1,
+            11.676,
+            2
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            5.264,
+            1,
+            6.164,
+            2
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            8.897,
+            5.264,
+            11.676,
+            6.164
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            8.897,
+            9.836,
+            11.676,
+            10.736
+          ],
+          "texture": "#red"
+        }
+      }
+    },
+    {
+      "name": "wheel_spoke_x",
+      "from": [
+        5,
+        14.2,
+        7.6
+      ],
+      "to": [
+        11,
+        14.8,
+        8.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            1.2,
+            11,
+            1.8
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            7.6,
+            1.2,
+            8.4,
+            1.8
+          ],
+          "texture": "#red"
+        },
+        "south": {
+          "uv": [
+            5,
+            1.2,
+            11,
+            1.8
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            7.6,
+            1.2,
+            8.4,
+            1.8
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            5,
+            7.6,
+            11,
+            8.4
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            5,
+            7.6,
+            11,
+            8.4
+          ],
+          "texture": "#red"
+        }
+      }
+    },
+    {
+      "name": "wheel_spoke_z",
+      "from": [
+        7.6,
+        14.2,
+        5
+      ],
+      "to": [
+        8.4,
+        14.8,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.6,
+            1.2,
+            8.4,
+            1.8
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            5,
+            1.2,
+            11,
+            1.8
+          ],
+          "texture": "#red"
+        },
+        "south": {
+          "uv": [
+            7.6,
+            1.2,
+            8.4,
+            1.8
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            5,
+            1.2,
+            11,
+            1.8
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            7.6,
+            5,
+            8.4,
+            11
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            7.6,
+            5,
+            8.4,
+            11
+          ],
+          "texture": "#red"
+        }
+      }
+    }
+  ]
+}

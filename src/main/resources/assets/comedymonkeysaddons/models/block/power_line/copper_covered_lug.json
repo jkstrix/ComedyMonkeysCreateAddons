@@ -1,0 +1,62 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/copper",
+    "copper_ring": "comedymonkeysaddons:block/fluid_line/copper_ring"
+  },
+  "elements": [
+    {
+      "name": "lug",
+      "from": [
+        6.5,
+        0,
+        0
+      ],
+      "to": [
+        9.5,
+        3,
+        1
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            15,
+            13,
+            16,
+            16
+          ],
+          "texture": "#copper_ring"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            13,
+            9.5,
+            16
+          ],
+          "texture": "#copper_ring"
+        },
+        "west": {
+          "uv": [
+            0,
+            13,
+            1,
+            16
+          ],
+          "texture": "#copper_ring"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            1
+          ],
+          "texture": "#copper_ring"
+        }
+      }
+    }
+  ]
+}

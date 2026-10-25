@@ -1,0 +1,72 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/steel",
+    "steel": "comedymonkeysaddons:block/fluid_line/steel",
+    "dial_even": "comedymonkeysaddons:block/fluid_line/dial_even"
+  },
+  "elements": [
+    {
+      "name": "wdial",
+      "from": [
+        6.5,
+        1.75,
+        6.5
+      ],
+      "to": [
+        9.5,
+        2.25,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            13.75,
+            9.5,
+            14.25
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            13.75,
+            9.5,
+            14.25
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            13.75,
+            9.5,
+            14.25
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            13.75,
+            9.5,
+            14.25
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#dial_even"
+        }
+      }
+    }
+  ]
+}

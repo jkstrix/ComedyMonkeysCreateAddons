@@ -94,6 +94,12 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue turbineFePerTick;
 		public final ModConfigSpec.IntValue turbineLavaPerSecond;
 		public final ModConfigSpec.IntValue turbineWaterPerSecond;
+		public final ModConfigSpec.IntValue fluidLineCopperMbPerTick;
+		public final ModConfigSpec.IntValue fluidLineBrassMbPerTick;
+		public final ModConfigSpec.IntValue powerLineCopperFePerTick;
+		public final ModConfigSpec.IntValue powerLineBrassFePerTick;
+		public final ModConfigSpec.IntValue spanReachCopper;
+		public final ModConfigSpec.IntValue spanReachBrass;
 
 		public final ModConfigSpec.DoubleValue gyroStrength;
 		public final ModConfigSpec.DoubleValue gyroDamping;
@@ -364,6 +370,36 @@ public final class CMConfig {
 				.defineInRange("turbineWaterPerSecond", 250, 0, 10000);
 			builder.pop();
 
+			builder.comment("Fluid Lines: pump-free pipes. Fluid only moves from an Intake, shared by every Intake on a line.").push("fluidLines");
+			fluidLineCopperMbPerTick = builder
+				.comment("Fluid a Copper Fluid Line moves, in millibuckets per tick.")
+				.translation("comedymonkeysaddons.configuration.fluidLineCopperMbPerTick")
+				.defineInRange("copperMbPerTick", 100, 1, 100000);
+			fluidLineBrassMbPerTick = builder
+				.comment("Fluid a Brass Fluid Line moves, in millibuckets per tick.")
+				.translation("comedymonkeysaddons.configuration.fluidLineBrassMbPerTick")
+				.defineInRange("brassMbPerTick", 1000, 1, 100000);
+			builder.pop();
+
+			builder.comment("Power Lines: wires and hanging spans for FE. Power flows from anything that gives it to anything that takes it.").push("powerLines");
+			powerLineCopperFePerTick = builder
+				.comment("FE a Copper Power Line moves per tick.")
+				.translation("comedymonkeysaddons.configuration.powerLineCopperFePerTick")
+				.defineInRange("copperFePerTick", 4096, 1, 10000000);
+			powerLineBrassFePerTick = builder
+				.comment("FE a Brass Power Line moves per tick.")
+				.translation("comedymonkeysaddons.configuration.powerLineBrassFePerTick")
+				.defineInRange("brassFePerTick", 65536, 1, 10000000);
+			spanReachCopper = builder
+				.comment("The longest span of Copper Power Line between two Line Posts, in blocks.")
+				.translation("comedymonkeysaddons.configuration.spanReachCopper")
+				.defineInRange("spanReachCopper", 16, 2, 64);
+			spanReachBrass = builder
+				.comment("The longest span of Brass Power Line between two Line Posts, in blocks.")
+				.translation("comedymonkeysaddons.configuration.spanReachBrass")
+				.defineInRange("spanReachBrass", 32, 2, 64);
+			builder.pop();
+
 			builder.comment("Create Aeronautics blocks (only present when Sable is installed)").push("aeronautics");
 			builder.comment("Compact Gyroscope: holds a ship level, like the Gyroscope Stabilizers' Gyroscope, whose",
 					"defaults these match. Effectiveness grows with speed up to the reference RPM.")
@@ -626,6 +662,30 @@ public final class CMConfig {
 
 		public int turbineWaterPerSecond() {
 			return get(turbineWaterPerSecond);
+		}
+
+		public int fluidLineCopperMbPerTick() {
+			return get(fluidLineCopperMbPerTick);
+		}
+
+		public int fluidLineBrassMbPerTick() {
+			return get(fluidLineBrassMbPerTick);
+		}
+
+		public int powerLineCopperFePerTick() {
+			return get(powerLineCopperFePerTick);
+		}
+
+		public int powerLineBrassFePerTick() {
+			return get(powerLineBrassFePerTick);
+		}
+
+		public int spanReachCopper() {
+			return get(spanReachCopper);
+		}
+
+		public int spanReachBrass() {
+			return get(spanReachBrass);
 		}
 
 		public double gyroStrength() {

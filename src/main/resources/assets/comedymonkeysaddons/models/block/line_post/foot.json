@@ -1,0 +1,183 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/wood",
+    "steel_dark": "comedymonkeysaddons:block/fluid_line/steel_dark",
+    "wood": "comedymonkeysaddons:block/fluid_line/wood"
+  },
+  "elements": [
+    {
+      "name": "foot_a",
+      "from": [
+        5,
+        0,
+        6
+      ],
+      "to": [
+        11,
+        1.5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            14.5,
+            11,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "east": {
+          "uv": [
+            6,
+            14.5,
+            10,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "south": {
+          "uv": [
+            5,
+            14.5,
+            11,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "west": {
+          "uv": [
+            6,
+            14.5,
+            10,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "up": {
+          "uv": [
+            5,
+            6,
+            11,
+            10
+          ],
+          "texture": "#steel_dark"
+        }
+      }
+    },
+    {
+      "name": "foot_b",
+      "from": [
+        6,
+        0,
+        5
+      ],
+      "to": [
+        10,
+        1.5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            14.5,
+            10,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "east": {
+          "uv": [
+            5,
+            14.5,
+            11,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "south": {
+          "uv": [
+            6,
+            14.5,
+            10,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "west": {
+          "uv": [
+            5,
+            14.5,
+            11,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "up": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#steel_dark"
+        }
+      }
+    },
+    {
+      "name": "pole",
+      "from": [
+        6.5,
+        1.5,
+        6.5
+      ],
+      "to": [
+        9.5,
+        16,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            14.5
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            14.5
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            14.5
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            14.5
+          ],
+          "texture": "#wood"
+        }
+      }
+    }
+  ]
+}

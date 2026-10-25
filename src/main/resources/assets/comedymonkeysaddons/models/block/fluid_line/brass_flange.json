@@ -1,0 +1,191 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/brass",
+    "brass_ring": "comedymonkeysaddons:block/fluid_line/brass_ring"
+  },
+  "elements": [
+    {
+      "name": "flange_north_a",
+      "from": [
+        4,
+        5.5,
+        0
+      ],
+      "to": [
+        12,
+        10.5,
+        1
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            15,
+            5.5,
+            16,
+            10.5
+          ],
+          "texture": "#brass_ring"
+        },
+        "south": {
+          "uv": [
+            4,
+            5.5,
+            12,
+            10.5
+          ],
+          "texture": "#brass_ring"
+        },
+        "west": {
+          "uv": [
+            0,
+            5.5,
+            1,
+            10.5
+          ],
+          "texture": "#brass_ring"
+        },
+        "up": {
+          "uv": [
+            4,
+            0,
+            12,
+            1
+          ],
+          "texture": "#brass_ring"
+        },
+        "down": {
+          "uv": [
+            4,
+            15,
+            12,
+            16
+          ],
+          "texture": "#brass_ring"
+        }
+      }
+    },
+    {
+      "name": "flange_north_b",
+      "from": [
+        5.5,
+        4,
+        0
+      ],
+      "to": [
+        10.5,
+        12,
+        1
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            15,
+            4,
+            16,
+            12
+          ],
+          "texture": "#brass_ring"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            4,
+            10.5,
+            12
+          ],
+          "texture": "#brass_ring"
+        },
+        "west": {
+          "uv": [
+            0,
+            4,
+            1,
+            12
+          ],
+          "texture": "#brass_ring"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            1
+          ],
+          "texture": "#brass_ring"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            15,
+            10.5,
+            16
+          ],
+          "texture": "#brass_ring"
+        }
+      }
+    },
+    {
+      "name": "flange_north_c",
+      "from": [
+        4.75,
+        4.75,
+        0
+      ],
+      "to": [
+        11.25,
+        11.25,
+        1
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            15,
+            4.75,
+            16,
+            11.25
+          ],
+          "texture": "#brass_ring"
+        },
+        "south": {
+          "uv": [
+            4.75,
+            4.75,
+            11.25,
+            11.25
+          ],
+          "texture": "#brass_ring"
+        },
+        "west": {
+          "uv": [
+            0,
+            4.75,
+            1,
+            11.25
+          ],
+          "texture": "#brass_ring"
+        },
+        "up": {
+          "uv": [
+            4.75,
+            0,
+            11.25,
+            1
+          ],
+          "texture": "#brass_ring"
+        },
+        "down": {
+          "uv": [
+            4.75,
+            15,
+            11.25,
+            16
+          ],
+          "texture": "#brass_ring"
+        }
+      }
+    }
+  ]
+}

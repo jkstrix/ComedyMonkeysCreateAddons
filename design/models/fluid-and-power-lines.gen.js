@@ -47,6 +47,9 @@ const darker = (hex, k) => '#' + [1, 3, 5].map((i) => Math.round(parseInt(hex.sl
 const T = textureSet(); T.file = 'line_';
 const flat = (a, b, seed, p = 0.12) => (x, y) => (hash(x, y, seed) > 1 - p ? b : a);
 T.paint('copper', flat(CU.field, CU.mid, 1));
+// the game's line body: near-white, tinted in game with the tier's colour or the dye (copper's field shows as #b26247)
+T.paint('body', flat('#ffffff', '#eeeeee', 1));
+T.paint('body_twin', (x, y) => ((x + y) % 4 === 0 ? '#e0e0e0' : '#ffffff'));
 T.paint('copper_ring', flat(CU.ring, CU.ringLo, 2, 0.2));
 T.paint('brass', flat(BR.field, BR.lo, 3));
 T.paint('brass_ring', flat(BR.ring, BR.ringLo, 4, 0.2));
@@ -58,6 +61,11 @@ T.paint('wood_end', (x, y) => (Math.hypot(x - 7.5, y - 7.5) % 3 < 1 ? '#4e3626' 
 T.paint('ceramic', (x, y) => (y % 3 === 0 ? CERAMIC[2] : hash(x, y, 7) > 0.85 ? CERAMIC[0] : CERAMIC[1]));
 T.paint('red', flat(RED, darker(RED, 0.85), 8));
 T.paint('slot_idle', () => '#1f2226');
+// Glass over the fluid (drawn translucent in game): a faint cool tint with soft diagonal glints, never bright
+T.paint('glass', (x, y) => {
+  const d = (x + y) % 8;
+  return d === 0 ? '#d2dde2a0' : d === 1 ? '#c2cfd570' : '#a9bac238';
+});
 // the brass twin flex: two strands with a twist mark every 4 px
 T.paint('brass_twin', (x, y) => ((x + y) % 4 === 0 ? BR.lo : BR.field));
 for (const [k, v] of Object.entries(DYES)) T.paint('dye_' + k, flat(v, darker(v, 0.88), 9 + k.length));
@@ -83,6 +91,8 @@ const MARK = {
 for (const [k, m] of Object.entries(MARK)) T.paint('dial_' + k, (x, y) => (x >= 6 && x < 10 && y >= 6 && y < 10 && m[y - 6][x - 6] === 'x' ? STEEL[0] : '#5f656e'));
 // Filter mesh windows, tinted with the filter's fluid
 const FLUID = { lava: ['#c76a2a', '#d98a3e', '#a9501f'], water: ['#3f6b8f', '#5582a6', '#335a7a'] };
+// the game's Intake window: a cutout mesh over the filter fluid the renderer draws beneath it
+T.paint('mesh', (x, y) => (x % 2 === 0 || y % 2 === 0 ? STEEL[0] : null));
 for (const [k, f] of Object.entries(FLUID)) T.paint('mesh_' + k, (x, y) => (x % 2 === 0 || y % 2 === 0 ? STEEL[0] : f[0]));
 
 // The fluid in the sight slot: an animated strip (4 frames, each slid 4 px along the pipe), lit like the pipe
@@ -132,7 +142,8 @@ function hub(name, w, tex) {
 const AX = { east: ['x', 1], west: ['x', -1], up: ['y', 1], down: ['y', -1], south: ['z', 1], north: ['z', -1] };
 // One arm of a pipe, from the middle of the block (or the hub's edge) out to the face, with its half coupling ring
 // at the face. A slot only on horizontal arms: a recessed groove along the top with the fluid strip in it.
-function pipeArm(dir, tier, { from = 8, fluid = null, slot = true, ring = true } = {}) {
+// openInner: the slot runs right into the middle of the block (two such arms make one straight piece with a single slot)
+function pipeArm(dir, tier, { from = 8, fluid = null, slot = true, ring = true, openInner = false } = {}) {
   const [axis, s] = AX[dir];
   const body = tier, ringT = tier + '_ring';
   const span = s > 0 ? [from, 16] : [0, 16 - from];
@@ -155,13 +166,28 @@ function pipeArm(dir, tier, { from = 8, fluid = null, slot = true, ring = true }
     return out;
   }
   // the slot: 1.5 px of full-height pipe at each end, a groove in between with the fluid strip 0.25 px below the rim
-  const g0 = b0 + 1.5, g1 = b1 - 1.5;
-  out.push(C(name + '_b0', ...reorder(axis, b0, g0, 6, 10, 7, 9), { all: body, [END[axis][0]]: null, [END[axis][1]]: null }));
-  out.push(C(name + '_b1', ...reorder(axis, g1, b1, 6, 10, 7, 9), { all: body, [END[axis][0]]: null, [END[axis][1]]: null }));
+  const g0 = openInner && s > 0 ? b0 : b0 + 1.5, g1 = openInner && s < 0 ? b1 : b1 - 1.5;
+  if (g0 > b0) out.push(C(name + '_b0', ...reorder(axis, b0, g0, 6, 10, 7, 9), { all: body, [END[axis][0]]: null, [END[axis][1]]: null }));
+  if (g1 < b1) out.push(C(name + '_b1', ...reorder(axis, g1, b1, 6, 10, 7, 9), { all: body, [END[axis][0]]: null, [END[axis][1]]: null }));
   out.push(C(name + '_bm', ...reorder(axis, g0, g1, 6, 9.25, 7, 9), { all: body, up: null, [END[axis][0]]: null, [END[axis][1]]: null }));
   out.push(C(name + '_fluid', ...reorder(axis, g0, g1, 9.25, 9.75, 7.25, 8.75),
-    { up: fluid ? 'flow_' + fluid : 'slot_idle', all: null }, { uv: { up: axis === 'x' ? [0, 7, 16, 8.5] : [7, 0, 8.5, 16] } }));
+    { up: 'slot_idle', all: null }, { uv: { up: axis === 'x' ? [0, 7, 16, 8.5] : [7, 0, 8.5, 16] } }));
+  // a thin dark edge either side of the fluid, so any colour of fluid reads as sitting in a groove
+  for (const [n, c0, c1] of [['_edge_a', 7, 7.25], ['_edge_b', 8.75, 9]])
+    out.push(C(name + n, ...reorder(axis, g0, g1, 9.5, 10, c0, c1), { all: 'slot_idle', down: null, [END[axis][0]]: null, [END[axis][1]]: null }));
+  // the fluid the game's renderer slides along the slot, at the rim (y 10)
+  if (fluid) out.push(C(name + '_flow', ...reorder(axis, g0, g1, 10, 10, 7.25, 8.75),
+    { up: 'flow_' + fluid, all: null }, { uv: { up: axis === 'x' ? [0, 7, 16, 8.5] : [7, 0, 8.5, 16] } }));
+  // the glass over it: 2 px wide, from the top of the pipe to a quarter pixel above its ends; no end where the slot runs on
+  // (no long sides: the slot edges' outer faces are there)
+  out.push(glass(C(name + '_glass', ...reorder(axis, g0, g1, 9.5, 10.25, 7, 9),
+    { up: 'glass', all: null, [END[axis][0]]: g0 > b0 ? 'glass' : null, [END[axis][1]]: g1 < b1 ? 'glass' : null })));
   return out;
+}
+// Marks a cube as glass: the game puts these in their own translucent part
+function glass(c) {
+  c.glass = true;
+  return c;
 }
 // The tall box of a horizontal pipe: 2 across, from y lo to hi (the cross axis is z for x pipes, x for z pipes)
 function reorder(axis, a0, a1, y0, y1, c0, c1) {
@@ -194,7 +220,10 @@ function flange(dir, tex) {
 function intake(tier, filterFluid, fluid) {
   const out = [...flange('west', 'brass')];
   out.push(...rod('intake_collar', 'x', 1, 5, 6, 'steel', { capHi: true }));
-  out.push(C('intake_window', [1.75, 11.25, 7], [4.25, 11.25, 9], { up: 'mesh_' + filterFluid, all: null }, { uv: { up: [0, 0, 2.5, 2] } }));
+  // the window: the filter fluid (or what it's drawing) under a glass cover on the collar
+  const shown = fluid || filterFluid;
+  if (shown) out.push(C('intake_fluid', [1.75, 11.25, 7], [4.25, 11.25, 9], { up: 'flow_' + shown, all: null }, { uv: { up: [0, 7, 2.5, 9] } }));
+  out.push(glass(C('intake_window', [1.75, 11, 7], [4.25, 11.5, 9], { all: 'glass', down: null })));
   out.push(...pipeArm('east', tier, { from: 5, fluid }));
   return out;
 }
@@ -222,23 +251,36 @@ function pipeArmPair(tier, a0, a1, fluid) {
 }
 function filter(tier, filterFluid, fluid) {
   return [...pipeArmPair(tier, 5, 11, fluid), ...rod('filter_can', 'x', 5, 11, 6, 'steel', { capLo: true, capHi: true }),
-    C('filter_band_top', [6, 11.25, 7], [10, 11.25, 9], { up: 'mesh_' + filterFluid, all: null }, { uv: { up: [0, 0, 4, 2] } }),
-    C('filter_band_side', [6, 7, 11.25], [10, 9, 11.25], { south: 'mesh_' + filterFluid, all: null }, { uv: { south: [0, 0, 4, 2] } })];
+    ...(filterFluid ? [C('filter_fluid_top', [6, 11.25, 7], [10, 11.25, 9], { up: 'flow_' + filterFluid, all: null }, { uv: { up: [0, 7, 4, 9] } }),
+      C('filter_fluid_side', [6, 7, 11.25], [10, 9, 11.25], { south: 'flow_' + filterFluid, all: null }, { uv: { south: [0, 7, 4, 9] } })] : []),
+    glass(C('filter_glass_top', [6, 11, 7], [10, 11.5, 9], { all: 'glass', down: null })),
+    glass(C('filter_glass_side', [6, 7, 11], [10, 9, 11.5], { all: 'glass', north: null, up: null }))];
+}
+// The signal flag on a Valve's or Filter's north face (both are 6 px canisters along x): a muted red arm on a pin at
+// (8, 9, 4.75). It hangs down while fluid can pass and swings up level, pointing along the line, while the fitting holds
+// fluid back. The game draws it hanging and turns it about z.
+function flag(raised) {
+  const pin = C('flag_pin', [7.5, 8.5, 4.25], [8.5, 9.5, 4.5], { all: 'steel_dark', south: null });
+  const arm = raised ? C('flag_arm', [7.5, 8.5, 4.5], [11.5, 9.5, 5], { all: 'red', south: null })
+    : C('flag_arm', [7.5, 5.5, 4.5], [8.5, 9.5, 5], { all: 'red', south: null });
+  return [pin, arm];
 }
 // The Meter on a pipe: a ring housing, a stem and a round gauge facing south, its needle a group pivoting at the centre
 function meterPipe(tier, fluid) {
-  const parts = [...pipeArmPair(tier, 6.5, 9.5, fluid), ...rod('meter_ring', 'x', 6.5, 9.5, 5, 'steel', { capLo: true, capHi: true }),
-    C('meter_stem', [7.25, 10.5, 7.25], [8.75, 11.5, 8.75], { all: 'steel_dark', down: null }),
+  const parts = [...pipeArmPair(tier, 6.5, 9.5, fluid), ...rod('meter_ring', 'x', 6.5, 9.5, 6, 'steel', { capLo: true, capHi: true }),
     C('gauge_a', [5, 12, 7.25], [11, 16, 8.75], { all: 'brass', south: 'gauge' }, { uv: { south: [5, 1, 11, 5] } }),
-    C('gauge_b', [6, 11, 7.25], [10, 17, 8.75], { all: 'brass', south: 'gauge' }, { uv: { south: [6, 0, 10, 6] } })];
+    C('gauge_b', [6, 16, 7.25], [10, 17, 8.75], { all: 'brass', south: 'gauge', down: null }, { uv: { south: [6, 0, 10, 1] } }),
+    C('gauge_c', [6, 11, 7.25], [10, 12, 8.75], { all: 'brass', south: 'gauge', up: null, down: null }, { uv: { south: [6, 5, 10, 6] } })];
   const needle = [C('needle', [7.75, 14, 9], [8.25, 16.2, 9], { south: 'red', all: null }, { uv: { south: [0, 0, 1, 2] } })];
   return { parts, needle, pivot: [8, 14, 9] };
 }
 // The Splitter on a pipe: a round hub with a mode dial on top (its own group)
 function splitterPipe(tier, fluid, mode) {
-  const parts = [...pipeArmPair(tier, 5, 11, fluid), ...hub('splitter_hub', 6, 'steel')];
-  const dial = [C('dial_a', [6, 11, 7], [10, 11.75, 9], { all: 'steel', up: 'dial_' + mode, down: null }),
-    C('dial_b', [7, 11, 6], [9, 11.75, 10], { all: 'steel', up: 'dial_' + mode, down: null })];
+  // (7 across, so none of its faces lies on the pipe's, its slot edges' or its glass's)
+  const parts = [...pipeArmPair(tier, 5, 11, fluid), ...hub('splitter_hub', 7, 'steel')];
+  const dial = [C('dial_a', [6, 11.5, 7], [10, 12.25, 9], { all: 'steel', up: 'dial_' + mode, down: null }),
+    C('dial_b', [7, 11.5, 6], [9, 12.25, 7], { all: 'steel', up: 'dial_' + mode, down: null }),
+    C('dial_c', [7, 11.5, 9], [9, 12.25, 10], { all: 'steel', up: 'dial_' + mode, down: null })];
   return { parts, dial };
 }
 
@@ -253,6 +295,37 @@ function floorRun(axis, a0, a1, ws, name = 'wire') {
   const h = ws.w / 2;
   const from = axis === 'x' ? [a0, 0, 8 - h] : [8 - h, 0, a0], to = axis === 'x' ? [a1, ws.h, 8 + h] : [8 + h, ws.h, a1];
   return C(name, from, to, { all: ws.tex, down: null, [END[axis][0]]: a0 <= 0 ? null : ws.tex, [END[axis][1]]: a1 >= 16 ? null : ws.tex });
+}
+// The rubber grommet where a floor wire along x goes into the wall at its east end (x 16): a dark ring round the cable
+function grommet(ws, name = 'grommet') {
+  const i = ws.w / 2 + 0.25, o = ws.w / 2 + 1, top = ws.h + 0.25, x0 = 15.25, f = { all: 'steel_dark', east: null };
+  return [
+    C(name + '_n', [x0, 0, 8 - o], [16, top + 0.75, 8 - i], { ...f, down: null }),
+    C(name + '_s', [x0, 0, 8 + i], [16, top + 0.75, 8 + o], { ...f, down: null }),
+    C(name + '_t', [x0, top, 8 - i], [16, top + 0.75, 8 + i], f),
+    C(name + '_hole', [15.75, 0, 8 - i], [16, top, 8 + i], { west: 'slot_idle', all: null }),
+  ];
+}
+// the same surround on the far side of the wall (at x 0, facing back west)
+function grommetBack(ws, name = 'grommet_back') {
+  return grommet(ws, name).map((c) => ({ ...c, from: [16 - c.to[0], c.from[1], c.from[2]], to: [16 - c.from[0], c.to[1], c.to[2]],
+    faces: Object.fromEntries(Object.entries(c.faces).map(([k, v]) => [k === 'east' ? 'west' : k === 'west' ? 'east' : k, v])) }));
+}
+// The flat grommet where a cable lying on a wall (its block's east or west face) goes straight into it, at the middle
+// open: the sides with no bar (where the cable runs off along the wall: 'up', 'down', 'north', 'south').
+// y0: the hole's middle (8, or a cable's half-width up from the floor for a hole at the foot of the wall)
+function flatGrommet(side, ws, open = [], name = 'grommet_flat', y0 = 8) {
+  const i = ws.w / 2 + 0.25, o = ws.w / 2 + 1, t = ws.h + 0.5;
+  const [x0, x1] = side === 'east' ? [16 - t, 16] : [0, t], [h0, h1] = side === 'east' ? [16 - 0.25, 16] : [0, 0.25];
+  const f = { all: 'steel_dark', [side]: null }, out = side === 'east' ? 'west' : 'east', lo = Math.max(0, y0 - i);
+  const bars = {
+    down: C(name + '_d', [x0, y0 - o, 8 - o], [x1, y0 - i, 8 + o], f),
+    up: C(name + '_u', [x0, y0 + i, 8 - o], [x1, y0 + o, 8 + o], f),
+    north: C(name + '_n', [x0, lo, 8 - o], [x1, y0 + i, 8 - i], { ...f, down: lo === 0 ? null : f.all }),
+    south: C(name + '_s', [x0, lo, 8 + i], [x1, y0 + i, 8 + o], { ...f, down: lo === 0 ? null : f.all }),
+  };
+  return [...Object.entries(bars).filter(([k]) => !open.includes(k)).map(([, c]) => c),
+    C(name + '_hole', [h0, lo, 8 - i], [h1, y0 + i, 8 + i], { [out]: 'slot_idle', all: null })];
 }
 // A wall wire on a block's north face (z 0), along y or x
 function wallRun(axis, a0, a1, ws, name = 'wire_wall', at = 8) {
@@ -371,8 +444,10 @@ function fluidRow(tier, fluid, row, label) {
   kids.push(blockOf(label + '_meter', m.parts, 3, 0, 0, row, [nd]));
   const v = valve(tier, fluid);
   const wh = mover(label + '_valve_wheel', v.wheel, [8, 14.5, 8], 4, 0, 0, row); MOVERS.wheels.push(label + '_valve_wheel');
-  kids.push(blockOf(label + '_valve', v.parts, 4, 0, 0, row, [wh]));
-  kids.push(blockOf(label + '_filter', filter(tier, fluid, fluid), 5, 0, 0, row));
+  kids.push(blockOf(label + '_valve', [...v.parts, ...flag(false)], 4, 0, 0, row, [wh]));
+  // copper: the Filter set and holding fluid back (its flag up); brass: an empty Filter, letting anything past (flag down)
+  const setFilter = tier === 'copper';
+  kids.push(blockOf(label + '_filter', [...filter(tier, setFilter ? fluid : null, fluid), ...flag(setFilter)], 5, 0, 0, row));
   const sp = splitterPipe(tier, fluid, 'even');
   const dl = mover(label + '_splitter_dial', sp.dial, [8, 11, 8], 6, 0, 0, row); MOVERS.dials.push(label + '_splitter_dial');
   kids.push(blockOf(label + '_splitter', sp.parts, 6, 0, 0, row, [dl]));
@@ -418,6 +493,36 @@ const dyeKids = [];
 dyeKids.push(blockOf('encase_in', straight('x', 'copper', { fluid: 'lava' }), 14, 0, 0, DROW));
 for (let k = 0; k < 3; k++) dyeKids.push(stand('encased_' + k, 'minecraft:block/stone_bricks', 15 + k, 0, 0, DROW));
 dyeKids.push(blockOf('encase_out', straight('x', 'copper', { fluid: 'lava' }), 18, 0, 0, DROW));
+// through a wall: a floor wire runs into a stone-brick wall and out the far side, as if threaded through a drilled hole
+// (bare copper in front, a red covered cable behind)
+for (const [dz, ws] of [[0, wireSpec('copper', null)], [2, wireSpec('copper', 'red')]]) {
+  for (let x = 20; x <= 24; x++) dyeKids.push(blockOf(`through_floor_${x}_${dz}`, [C('floor', [0, -2, 0], [16, 0, 16], { all: 'minecraft:block/smooth_stone' })], x, 0, dz, DROW));
+  dyeKids.push(blockOf('through_in_' + dz, [floorRun('x', 0, 16, ws, 'wire_in'), ...grommet(ws)], 21, 0, dz, DROW));
+  dyeKids.push(blockOf('through_lead_' + dz, [floorRun('x', 0, 16, ws, 'wire_lead')], 20, 0, dz, DROW));
+  for (let y = 0; y < 2; y++) dyeKids.push(stand(`through_wall_${y}_${dz}`, 'minecraft:block/stone_bricks', 22, y, dz, DROW));
+  // the far side: the same surround, facing back west
+  dyeKids.push(blockOf('through_out_' + dz, [floorRun('x', 0, 16, ws, 'wire_out'), ...grommetBack(ws)], 23, 0, dz, DROW));
+  dyeKids.push(blockOf('through_tail_' + dz, [floorRun('x', 0, 16, ws, 'wire_tail')], 24, 0, dz, DROW));
+}
+// the user's other two cases (bare copper): 1) a cable down the wall's west face joins a floor cable on the east side,
+// through the bottom block; 3) a floor cable turns up the wall's east face and goes through the upper block to a stub
+{
+  const ws = wireSpec('copper', null), P = (name, list, x, y, z) => dyeKids.push(blockOf(name, list, x, y, z, DROW));
+  for (const dz of [4, 6]) {
+    for (let x = 20; x <= 24; x++) P(`through_floor_${x}_${dz}`, [C('floor', [0, -2, 0], [16, 0, 16], { all: 'minecraft:block/smooth_stone' })], x, 0, dz);
+    for (let y = 0; y < 2; y++) dyeKids.push(stand(`through_wall_${y}_${dz}`, 'minecraft:block/stone_bricks', 22, y, dz, DROW));
+  }
+  // case 1: up the wall from where it comes out of the hole
+  P('case1_wall_low', [sideRun('east', 0, 16, ws, 'wire_down'), ...flatGrommet('east', ws, ['up', 'down'], 'grommet_flat', ws.w / 2)], 21, 0, 4);
+  P('case1_wall_high', [sideRun('east', 0, 12, ws, 'wire_up')], 21, 1, 4);
+  P('case1_floor', [floorRun('x', 0, 16, ws, 'wire_out'), ...grommetBack(ws)], 23, 0, 4);
+  P('case1_floor2', [floorRun('x', 0, 16, ws, 'wire_tail')], 24, 0, 4);
+  // case 3
+  P('case3_floor2', [floorRun('x', 0, 16, ws, 'wire_lead')], 24, 0, 6);
+  P('case3_corner', [floorRun('x', ws.h, 16, ws, 'wire_in'), sideRun('west', 0, 16, ws, 'wire_up')], 23, 0, 6);
+  P('case3_up', [sideRun('west', 0, 8 + ws.w / 2, ws, 'wire_up'), ...flatGrommet('west', ws, ['down'])], 23, 1, 6);
+  P('case3_stub', [C('tail', [16 - ws.h, 3, 8 - ws.w / 2], [16, 8 + ws.w / 2, 8 + ws.w / 2], { all: ws.tex, east: null }), ...flatGrommet('east', ws, ['down'])], 21, 1, 6);
+}
 outliner.push(group('dyes_and_encasing', [8, 0, 8], DROW, dyeKids));
 
 // Wire scene (copper, undyed): a machine, along the floor, up and along a wall, down, a junction, a Breaker, a 3-high pole
@@ -595,3 +700,6 @@ const bb = JSON.parse(fs.readFileSync(OUT, 'utf8'));
 for (const t of bb.textures) if (ANIMATED[t.name]) { t.height = 64; t.uv_height = 16; t.frame_time = 3; }
 fs.writeFileSync(OUT, JSON.stringify(bb));
 console.error('dyes:', JSON.stringify(DYES));
+
+module.exports = { T, DYES, C, glass, flag, grommet, grommetBack, flatGrommet, rod, hub, pipeArm, straight, junction, flange, intake, valve, filter, meterPipe, splitterPipe, wireSpec, floorRun, wallRun, sideRun,
+  floorClip, wallClip, splice, breaker, meterWire, splitterWire, postBlock, insulator, branch, headTie, branchTie, coil, ICONS, CLIP };

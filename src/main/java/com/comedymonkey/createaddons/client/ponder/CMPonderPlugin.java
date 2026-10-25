@@ -33,6 +33,15 @@ public class CMPonderPlugin implements PonderPlugin {
 		helper.forComponents(ModBlocks.WELLSPRING.getId())
 			.addStoryBoard("wellspring", WellspringScenes::wellspring);
 
+		// The Fluid and Power Lines: the lines themselves, then the fittings
+		helper.forComponents(ModItems.COPPER_FLUID_LINE.getId(), ModItems.BRASS_FLUID_LINE.getId(), ModItems.INTAKE.getId())
+			.addStoryBoard("fluid_lines", LineScenes::fluidLines)
+			.addStoryBoard("line_fittings", LineScenes::fittings);
+		helper.forComponents(ModItems.VALVE.getId(), ModItems.FILTER.getId(), ModItems.METER.getId(), ModItems.SPLITTER.getId())
+			.addStoryBoard("line_fittings", LineScenes::fittings);
+		helper.forComponents(ModItems.COPPER_POWER_LINE.getId(), ModItems.BRASS_POWER_LINE.getId(), ModItems.LINE_POST.getId(), ModItems.BREAKER.getId())
+			.addStoryBoard("power_lines", LineScenes::powerLines);
+
 		// One scene shared by the template and every tier
 		helper.forComponents(
 				ModItems.CHEST_UPGRADE_TEMPLATE.getId(),
@@ -95,7 +104,9 @@ public class CMPonderPlugin implements PonderPlugin {
 	@Override
 	public void registerTags(PonderTagRegistrationHelper<ResourceLocation> helper) {
 		helper.addToTag(CREATE_FLUIDS_TAG)
-			.add(ModBlocks.WELLSPRING.getId());
+			.add(ModBlocks.WELLSPRING.getId())
+			.add(ModBlocks.COPPER_FLUID_LINE.getId())
+			.add(ModBlocks.BRASS_FLUID_LINE.getId());
 		helper.addToTag(CREATE_KINETIC_APPLIANCES_TAG)
 			.add(ModBlocks.PRESSURE_CRUCIBLE.getId())
 			.add(ModBlocks.ANDESITE_COBBLE_GENERATOR.getId())
@@ -115,7 +126,9 @@ public class CMPonderPlugin implements PonderPlugin {
 		helper.addToTag(CREATE_KINETIC_SOURCES_TAG)
 			.add(ModBlocks.MAGMA_ENGINE.getId())
 			.add(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.getId())
-			.add(ModBlocks.ELECTRIC_MOTOR.getId());
+			.add(ModBlocks.ELECTRIC_MOTOR.getId())
+			.add(ModBlocks.COPPER_POWER_LINE.getId())
+			.add(ModBlocks.BRASS_POWER_LINE.getId());
 		if (SableCompat.LOADED)
 			helper.addToTag(CREATE_KINETIC_APPLIANCES_TAG)
 				.add(AeronauticsContent.COMPACT_GYROSCOPE.getId())

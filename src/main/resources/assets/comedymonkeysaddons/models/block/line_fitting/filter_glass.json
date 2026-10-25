@@ -1,0 +1,122 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:translucent",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/steel",
+    "glass": "comedymonkeysaddons:block/fluid_line/glass"
+  },
+  "elements": [
+    {
+      "name": "filter_glass_top",
+      "from": [
+        6,
+        11,
+        7
+      ],
+      "to": [
+        10,
+        11.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            4.5,
+            10,
+            5
+          ],
+          "texture": "#glass"
+        },
+        "east": {
+          "uv": [
+            7,
+            4.5,
+            9,
+            5
+          ],
+          "texture": "#glass"
+        },
+        "south": {
+          "uv": [
+            6,
+            4.5,
+            10,
+            5
+          ],
+          "texture": "#glass"
+        },
+        "west": {
+          "uv": [
+            7,
+            4.5,
+            9,
+            5
+          ],
+          "texture": "#glass"
+        },
+        "up": {
+          "uv": [
+            6,
+            7,
+            10,
+            9
+          ],
+          "texture": "#glass"
+        }
+      }
+    },
+    {
+      "name": "filter_glass_side",
+      "from": [
+        6,
+        7,
+        11
+      ],
+      "to": [
+        10,
+        9,
+        11.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4.5,
+            7,
+            5,
+            9
+          ],
+          "texture": "#glass"
+        },
+        "south": {
+          "uv": [
+            6,
+            7,
+            10,
+            9
+          ],
+          "texture": "#glass"
+        },
+        "west": {
+          "uv": [
+            11,
+            7,
+            11.5,
+            9
+          ],
+          "texture": "#glass"
+        },
+        "down": {
+          "uv": [
+            6,
+            4.5,
+            10,
+            5
+          ],
+          "texture": "#glass"
+        }
+      }
+    }
+  ]
+}

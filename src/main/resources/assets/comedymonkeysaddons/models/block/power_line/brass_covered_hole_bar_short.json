@@ -1,0 +1,71 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/brass",
+    "steel_dark": "comedymonkeysaddons:block/fluid_line/steel_dark"
+  },
+  "elements": [
+    {
+      "name": "hole_bar",
+      "from": [
+        6.625,
+        0,
+        5.875
+      ],
+      "to": [
+        9.375,
+        2.25,
+        6.625
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.625,
+            13.75,
+            9.375,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "east": {
+          "uv": [
+            9.375,
+            13.75,
+            10.125,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "south": {
+          "uv": [
+            6.625,
+            13.75,
+            9.375,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "west": {
+          "uv": [
+            5.875,
+            13.75,
+            6.625,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "up": {
+          "uv": [
+            6.625,
+            5.875,
+            9.375,
+            6.625
+          ],
+          "texture": "#steel_dark"
+        }
+      }
+    }
+  ]
+}

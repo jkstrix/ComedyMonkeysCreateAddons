@@ -1,0 +1,138 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/copper",
+    "steel_dark": "comedymonkeysaddons:block/fluid_line/steel_dark",
+    "slot_idle": "comedymonkeysaddons:block/fluid_line/slot_idle"
+  },
+  "elements": [
+    {
+      "name": "hole_edge_w",
+      "from": [
+        6.5,
+        0,
+        0
+      ],
+      "to": [
+        7.25,
+        1.5,
+        1.25
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            14.75,
+            14.5,
+            16,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            14.5,
+            7.25,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            14.5,
+            1.25,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            0,
+            7.25,
+            1.25
+          ],
+          "texture": "#steel_dark"
+        }
+      }
+    },
+    {
+      "name": "hole_edge_e",
+      "from": [
+        8.75,
+        0,
+        0
+      ],
+      "to": [
+        9.5,
+        1.5,
+        1.25
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            14.75,
+            14.5,
+            16,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "south": {
+          "uv": [
+            8.75,
+            14.5,
+            9.5,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            14.5,
+            1.25,
+            16
+          ],
+          "texture": "#steel_dark"
+        },
+        "up": {
+          "uv": [
+            8.75,
+            0,
+            9.5,
+            1.25
+          ],
+          "texture": "#steel_dark"
+        }
+      }
+    },
+    {
+      "name": "hole_edge_hole",
+      "from": [
+        7.25,
+        0,
+        0
+      ],
+      "to": [
+        8.75,
+        0.25,
+        1.25
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            7.25,
+            0,
+            8.75,
+            1.25
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    }
+  ]
+}

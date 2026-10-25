@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:fluid_line",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:intake"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.intake_fitted"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.intake_fitted.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "intake_fitted"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

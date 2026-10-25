@@ -41,7 +41,8 @@ function mot(mat, x, y, seed = 0) {
   const r = hash(x, y, seed + mat.length * 31 + mat.charCodeAt(0));
   return r < 0.2 ? p[0] : r < 0.82 ? p[1] : p[2];
 }
-const rgba = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16), 255];
+// #rrggbb, or #rrggbbaa for a part-clear pixel (glass)
+const rgba = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16), h.length > 7 ? parseInt(h.slice(7, 9), 16) : 255];
 const edge = (x, y) => Math.min(x, y, 15 - x, 15 - y);
 // A near-flat steel field with a faint second shade: big panels stay crisp instead of muddy
 const FIELD = (x, y, s) => (hash(x, y, s) > 0.86 ? '#40464e' : '#3c424a');

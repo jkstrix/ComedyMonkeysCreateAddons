@@ -122,12 +122,25 @@ Place a line from a source to the machines that need it → clip an Intake on th
 - **Encasing:** a block state on the line's block entity (like the Pipez cover attachment, which this replaces); the model swaps to the encasing block, outline and collision to a full block.
 - **Networks:** a server-side graph per line kind and tier per level, cached, invalidated on change; spans are graph edges between posts. Saved: fittings, settings, encasing, span list on posts (endpoints and tier). Networks themselves aren't saved, they're rebuilt on load.
 - **Sync:** line connections in block state; fittings, encasing and flow rate (rounded, for the window animation and Meter dial) in block entity updates, sent only on change and throttled.
-- **Rendering:** thin, round models (D28): pipes built from stepped rings so they read as round at 3–4 px, wires as thin cables with clips (placed wires follow the surface; their model is not a pipe with a different texture). Flow slots, Meter needle, Valve wheel, Breaker lever and spans as Flywheel instances (PartsVisual); spans drawn as sagging segmented quads.
+- **Rendering:** thin, round models (D28): pipes built from stepped rings so they read as round at 3–4 px, wires as thin cables with clips (placed wires follow the surface; their model is not a pipe with a different texture). The fluid runs along a sight slot under a glass cover (its own translucent part); the Intake and Filter windows are glass too. A piece stands full of whatever fluid an Intake with something to draw can reach it with, even into a full tank (a pipe never shows air with fluid available); the fluid only slides along where it actually moved in the last half second. Past a shut Valve or a Filter set to another fluid, the slots show empty. A line **fills and drains gradually**, not instantly like Pipez: the fluid's front creeps out from the Intake (copper 8 ticks a block, brass 3), a tank only receives once the fluid reaches it, and when the supply runs dry, a Valve shuts or a Filter changes, it drains from the Intake's end outwards the same way. Pieces already full stay full when the network is worked out again, and the fill is saved with the block. (Display only: the line still stores nothing.) The fittings' parts (Valve wheel, Meter needle, Splitter dial, Breaker lever) are Flywheel instances (PartsVisual) with a renderer fallback; the flowing fluid and the spans are drawn by renderers (spans as sagging tubes).
 - **Config:** `fluidLineCopperMbPerTick` (100), `fluidLineBrassMbPerTick` (1000), `powerLineCopperFePerTick` (4096), `powerLineBrassFePerTick` (65536), `spanReachCopper` (16), `spanReachBrass` (32), `spansPerPost` (4), `hiddenLineOutlineRange` (16).
 - **Pipez:** remove the cover recipes and hide the items from JEI and the tab; keep their loading code. Keep `PipezBlazeBurnerCompat` and `PipezEngineCompat`.
 - **Data:** recipes, loot tables (fittings and the encasing block drop with the line), tags (`c:` fluid and energy aren't needed; capabilities do it), lang keys with subtitles, advancements (optional: "Out of Sight", encase a line).
-- **Test later (user, 2026-10-25):** how lines carry fluid and FE **across unloaded chunks from an unloaded generator**. Today's rule (D19) skips unloaded parts and an unloaded generator doesn't run, so nothing arrives; test it in game and decide whether that's what we want.
-- **Tests:** network rules (unit), game tests for Intake to tank, filter split, valve throttle, power line to Electric Motor, span across 16 blocks, assembly onto a Sable physics object.
+- **Power Lines through a wall (user, 2026-10-25):** run a cable to a solid block on each side, then wrench one end on the side facing the block: it's drilled and the cable threaded through (wrench again to pull it out; breaking the block fills the hole). One solid block, never a machine or a line; same tier, any colour; it joins two cable ends only (neither piece may branch at the hole, though each can run on left, right, up or down). One straight hole, the same spot both sides: at the floor edge if either side's cable comes along the floor (or another face), else in the middle of the wall. A dark surround rings the hole on the cable's free sides only: three where it goes straight in, two where it turns at the floor.
+- **Unloaded chunks (tested 2026-10-25, `design/tests/line-chunk-test.js`):** a dedicated server over RCON, no player, a 128-block copper Fluid Line (Wellspring to a Create tank) beside a 128-block copper Power Line (Lava Generator to an Electric Motor), each case force-loading only some chunks. A network notes the chunks it runs through and the unloaded ones at its edges, and is worked out again when one of them goes or comes back (a chunk can stop being accessible without being unloaded from memory, so unload events alone missed it).
+
+  | Case | Fluid into the tank | Power into the motor | Generator's lava |
+  |---|---|---|---|
+  | Everything loaded | +2,500 mB in 5 s | +92,160 FE | −100 mB |
+  | Source unloaded | 0 | 0 | 0 |
+  | Middle unloaded | 0 | 0 | 0 |
+  | Target unloaded | 0 | 0 | 0 |
+  | Everything loaded again (after 30 s to refill) | +8,000 mB (the Wellspring's backlog, to the tank's limit) | +92,160 FE | −100 mB |
+
+  Nothing crosses an unloaded chunk, nothing is lost, and a generator with nowhere to send its power stops burning lava. A part of a line that lost its supply drains, and refills from where the fluid stands once it's back (a block every 8 ticks on copper), so the far tank waits for it.
+- **Tests:** network sharing rules (unit, `SharingTest`); 28 game tests in `LineGameTests` (Intake to tank, brass rate, tiers apart, Intake filter, no self-feed, even sharing, cut joint, Valve on redstone and throttled, Filter, empty Filter, slots past a shut Valve, full but still into a full tank (and a replaced piece fills again), filling and draining gradually, signal flags, through a drilled wall (floor to floor, the middle of a wall, not before drilling, never a branching end), Meter, Splitter nearest first, colours, encasing, wire to motor, Breaker, wire tiers apart, wire up a wall, span, posts into a pole); the unloaded-chunk server test above; Display Link sources read on a sign (25 mB/t, 25%).
+- **Performance (RTX 5090, dev client):** 1,024 flowing copper Fluid Lines in view take the frame from 0.45 ms to 1.06 ms; 1,024 Power Lines add about 0.2 ms.
+- **Known limits:** a line with a loop uses the shortest way only; a block's wires on opposite faces join electrically; encased lines don't block light; span offsets don't turn with a contraption; assembly onto a Sable physics object hasn't had a game test yet.
 
 # ONE MINUTE UNDERSTANDING
 Fluid Lines and Power Lines replace Pipez in this mod. They need no pump and no power. They come in copper and brass, each with a fixed throughput you can see: fluid moves through a window along each pipe. Fluid needs an **Intake** fitting at the source; power flows by itself. You upgrade a line by clipping visible fittings onto it: Valve, Breaker, Filter, Meter, Splitter. Power lines can also hang in spans between posts. Both disappear into any block you encase them in, and goggles show where they run.
@@ -179,25 +192,25 @@ Pump-free, power-free fluid and FE lines in two tiers. Their upgrades are physic
 - **Fitting on an encased line?** Still works; wrench it with goggles on.
 
 # DEVELOPMENT CHECKLIST
-- [ ] Blocks: 2 fluid lines (connection states, waterlogging, voxel shapes), 2 face-attached power lines (per-face wires, corner joins), 2 Line Posts
-- [ ] Line block entity: fitting, face, settings, encasing, flow rate for rendering
-- [ ] Network graph per kind/tier: build, cache, invalidate, span edges, unloaded-chunk skipping
-- [ ] Fluid transfer: Intakes, Filters, Valves, Splitter modes, self-feed guard, one fluid per line
-- [ ] Power transfer: sources and receivers, Breakers, Splitter modes, no pull-and-push to the same end
-- [ ] Dyeing: 16 colours on all four lines, same-colour joining, wrenched joins between colours (saved per joint), washing
-- [ ] Fittings: 6 items, clip-on and wrench removal, scroll value boxes for Valve and Splitter
-- [ ] Meter: dial, comparator output, Display Link source
-- [ ] Poles: one wooden, tierless block; stacking (foot, pole and head states), 1-4 branches on the head, insulators as separate connections with tier-coloured caps
-- [ ] Spans: hanging, line-of-sight check, reach, 4 per post, wire cost and refund, shears and wrench removal, drop when ends separate
-- [ ] Encasing: any full block, model swap, wrench returns the block, goggles outline of hidden lines
-- [ ] Rendering: models, flow windows, needles, wheels, levers and spans as Flywheel instances; BER fallback
-- [ ] Contraptions and Sable: inert while moving, re-join on assembly and on load
-- [ ] Pipez: remove cover recipes, hide cover items, keep feeding compat
-- [ ] Config keys (Technical Notes)
-- [ ] Recipes, loot tables, lang (with subtitles), tooltips, advancements
-- [ ] Sounds: quiet trickle and hum, clip-on click, span hang and drop
-- [ ] Goggle readouts; Ponder: fluid lines, power lines, fittings; JEI info
-- [ ] Unit tests (network rules) and game tests (Intake to tank, filter, valve, power to motor, span, Sable)
+- [x] Blocks: 2 fluid lines (connection states, waterlogging, voxel shapes), 2 face-attached power lines (per-face wires, corner joins), 2 Line Posts
+- [x] Line block entity: fitting, face, settings, encasing, flow rate for rendering
+- [x] Network graph per kind/tier: build, cache, invalidate, span edges, unloaded-chunk skipping
+- [x] Fluid transfer: Intakes, Filters, Valves, Splitter modes, self-feed guard, one fluid per line
+- [x] Power transfer: sources and receivers, Breakers, Splitter modes, no pull-and-push to the same end
+- [x] Dyeing: 16 colours on all four lines, same-colour joining, wrenched joins between colours (saved per joint), washing
+- [x] Fittings: 6 items, clip-on and wrench removal; Valve and Splitter set by right-click (sneak to open the Valve) instead of scroll value boxes
+- [x] Meter: dial, comparator output, Display Link sources (Meter Flow, Meter Load, Meter Load Bar)
+- [x] Poles: one wooden, tierless block; stacking (foot, pole and head states), 1-4 branches on the head, insulators as separate connections with tier-coloured caps
+- [x] Spans: hanging, line-of-sight check, reach, 4 per post, wire cost and refund, shears and wrench removal, drop when ends separate
+- [x] Encasing: any full block, model swap, wrench returns the block, goggles outline of hidden lines
+- [x] Rendering: models, glass-covered flow slots, fittings' moving parts as Flywheel instances with a BER fallback (flowing fluid and spans stay with renderers)
+- [ ] Contraptions and Sable: turn and mirror with structures; re-join on load. Still to test: assembly onto a Sable physics object
+- [x] Pipez: remove cover recipes, hide cover items, keep feeding compat
+- [x] Config keys (Technical Notes)
+- [x] Recipes, loot tables, lang, tooltips, advancements (Look, No Pump · Drinking Straw · Out of Sight · Live Wire · Strung Up · Long Distance Call)
+- [ ] Sounds: clip-on, valve, lever, splitter, span hang and take-down use vanilla events; the quiet trickle and hum wait for the sound pass (placeholder board first)
+- [x] Goggle readouts; Ponder: fluid lines, power lines, fittings; JEI info pages
+- [x] Unit tests (network rules) and game tests (Intake to tank, filter, valve, power to motor, span); Sable still to do
 
 # "IDIOT TEST"
 - Pipes for fluid, lines for power. No items.

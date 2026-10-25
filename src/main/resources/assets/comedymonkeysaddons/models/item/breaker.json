@@ -1,0 +1,323 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/steel",
+    "copper": "comedymonkeysaddons:block/fluid_line/copper",
+    "steel": "comedymonkeysaddons:block/fluid_line/steel",
+    "steel_dark": "comedymonkeysaddons:block/fluid_line/steel_dark",
+    "red": "comedymonkeysaddons:block/fluid_line/red"
+  },
+  "elements": [
+    {
+      "name": "wire",
+      "from": [
+        1,
+        0,
+        7.25
+      ],
+      "to": [
+        15,
+        1.5,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            14.5,
+            15,
+            16
+          ],
+          "texture": "#copper"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            14.5,
+            8.75,
+            16
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            1,
+            14.5,
+            15,
+            16
+          ],
+          "texture": "#copper"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            14.5,
+            8.75,
+            16
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            1,
+            7.25,
+            15,
+            8.75
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "breaker_a",
+      "from": [
+        5.5,
+        0,
+        6.5
+      ],
+      "to": [
+        10.5,
+        3,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            13,
+            10.5,
+            16
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            13,
+            9.5,
+            16
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            13,
+            10.5,
+            16
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            13,
+            9.5,
+            16
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            6.5,
+            10.5,
+            9.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "breaker_b",
+      "from": [
+        6.5,
+        0,
+        5.5
+      ],
+      "to": [
+        9.5,
+        3,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            13,
+            9.5,
+            16
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            5.5,
+            13,
+            10.5,
+            16
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            13,
+            9.5,
+            16
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            13,
+            10.5,
+            16
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            5.5,
+            9.5,
+            10.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "lever",
+      "from": [
+        7.5,
+        3,
+        7.5
+      ],
+      "to": [
+        8.5,
+        6.5,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            9.5,
+            8.5,
+            13
+          ],
+          "texture": "#steel_dark"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            9.5,
+            8.5,
+            13
+          ],
+          "texture": "#steel_dark"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            9.5,
+            8.5,
+            13
+          ],
+          "texture": "#steel_dark"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            9.5,
+            8.5,
+            13
+          ],
+          "texture": "#steel_dark"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            7.5,
+            8.5,
+            8.5
+          ],
+          "texture": "#steel_dark"
+        }
+      }
+    },
+    {
+      "name": "knob",
+      "from": [
+        7.25,
+        6.5,
+        7.25
+      ],
+      "to": [
+        8.75,
+        8,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.25,
+            8,
+            8.75,
+            9.5
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            8,
+            8.75,
+            9.5
+          ],
+          "texture": "#red"
+        },
+        "south": {
+          "uv": [
+            7.25,
+            8,
+            8.75,
+            9.5
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            8,
+            8.75,
+            9.5
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#red"
+        }
+      }
+    }
+  ]
+}

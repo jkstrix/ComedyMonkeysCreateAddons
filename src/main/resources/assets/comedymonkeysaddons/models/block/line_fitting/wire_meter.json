@@ -1,0 +1,132 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/steel",
+    "brass": "comedymonkeysaddons:block/fluid_line/brass",
+    "gauge_top": "comedymonkeysaddons:block/fluid_line/gauge_top"
+  },
+  "elements": [
+    {
+      "name": "wmeter_a",
+      "from": [
+        5,
+        0,
+        6
+      ],
+      "to": [
+        11,
+        1.5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            14.5,
+            11,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            6,
+            14.5,
+            10,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            5,
+            14.5,
+            11,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            6,
+            14.5,
+            10,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            5,
+            6,
+            11,
+            10
+          ],
+          "texture": "#gauge_top"
+        }
+      }
+    },
+    {
+      "name": "wmeter_b",
+      "from": [
+        6,
+        0,
+        5
+      ],
+      "to": [
+        10,
+        1.5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            14.5,
+            10,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            5,
+            14.5,
+            11,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            6,
+            14.5,
+            10,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            5,
+            14.5,
+            11,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#gauge_top"
+        }
+      }
+    }
+  ]
+}

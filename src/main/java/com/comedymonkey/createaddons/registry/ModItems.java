@@ -5,6 +5,11 @@ import com.comedymonkey.createaddons.content.chest.ChestTier;
 import com.comedymonkey.createaddons.content.chest.ChestUpgradeItem;
 import com.comedymonkey.createaddons.content.chest.UpgradedBarrelItem;
 import com.comedymonkey.createaddons.content.chest.UpgradedChestItem;
+import com.comedymonkey.createaddons.content.line.Fitting;
+import com.comedymonkey.createaddons.content.line.FittingItem;
+import com.comedymonkey.createaddons.content.line.IntakeItem;
+import com.comedymonkey.createaddons.content.line.LineTier;
+import com.comedymonkey.createaddons.content.line.PowerLineItem;
 import com.comedymonkey.createaddons.content.pen.BottledAnimalItem;
 import com.comedymonkey.createaddons.content.wellspring.WellspringUpgrade;
 import com.comedymonkey.createaddons.content.wellspring.WellspringUpgradeItem;
@@ -63,6 +68,22 @@ public final class ModItems {
 		() -> new BottledAnimalItem(new Item.Properties().stacksTo(1)));
 
 	public static final DeferredItem<BlockItem> INCINERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.INCINERATOR);
+	public static final DeferredItem<BlockItem> COPPER_FLUID_LINE = ITEMS.registerSimpleBlockItem(ModBlocks.COPPER_FLUID_LINE);
+	public static final DeferredItem<BlockItem> BRASS_FLUID_LINE = ITEMS.registerSimpleBlockItem(ModBlocks.BRASS_FLUID_LINE);
+	/** Clipped onto a Fluid Line's side facing a tank, it draws the tank's fluid into the line. */
+	public static final DeferredItem<IntakeItem> INTAKE = ITEMS.register("intake", () -> new IntakeItem(new Item.Properties()));
+	/** Placed, a wire on the face; on a Line Post's insulators, a hanging span. */
+	public static final DeferredItem<PowerLineItem> COPPER_POWER_LINE = ITEMS.register("copper_power_line",
+		() -> new PowerLineItem(ModBlocks.COPPER_POWER_LINE.get(), LineTier.COPPER, new Item.Properties()));
+	public static final DeferredItem<PowerLineItem> BRASS_POWER_LINE = ITEMS.register("brass_power_line",
+		() -> new PowerLineItem(ModBlocks.BRASS_POWER_LINE.get(), LineTier.BRASS, new Item.Properties()));
+	public static final DeferredItem<BlockItem> LINE_POST = ITEMS.registerSimpleBlockItem(ModBlocks.LINE_POST);
+	// the fittings that clip round a straight piece of line
+	public static final DeferredItem<FittingItem> VALVE = ITEMS.register("valve", () -> new FittingItem(Fitting.VALVE, new Item.Properties()));
+	public static final DeferredItem<FittingItem> FILTER = ITEMS.register("filter", () -> new FittingItem(Fitting.FILTER, new Item.Properties()));
+	public static final DeferredItem<FittingItem> METER = ITEMS.register("meter", () -> new FittingItem(Fitting.METER, new Item.Properties()));
+	public static final DeferredItem<FittingItem> SPLITTER = ITEMS.register("splitter", () -> new FittingItem(Fitting.SPLITTER, new Item.Properties()));
+	public static final DeferredItem<FittingItem> BREAKER = ITEMS.register("breaker", () -> new FittingItem(Fitting.BREAKER, new Item.Properties()));
 	public static final DeferredItem<BlockItem> STRING_TANGLER = ITEMS.registerSimpleBlockItem(ModBlocks.STRING_TANGLER);
 	public static final DeferredItem<BlockItem> STONE_INFUSER = ITEMS.registerSimpleBlockItem(ModBlocks.STONE_INFUSER);
 	public static final DeferredItem<BlockItem> TUFF_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.TUFF_GENERATOR);

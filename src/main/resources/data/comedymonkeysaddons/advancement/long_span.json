@@ -1,0 +1,32 @@
+{
+  "parent": "comedymonkeysaddons:span_hung",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:brass_power_line"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.long_span"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.long_span.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "span_hung",
+        "min_value": 30
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

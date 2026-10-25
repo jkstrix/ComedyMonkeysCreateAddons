@@ -1,0 +1,46 @@
+{
+  "parent": "comedymonkeysaddons:wellspring",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:copper_fluid_line"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.fluid_line"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.fluid_line.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crafted_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:copper_fluid_line"
+          }
+        ]
+      }
+    },
+    "crafted_1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:brass_fluid_line"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafted_0",
+      "crafted_1"
+    ]
+  ]
+}

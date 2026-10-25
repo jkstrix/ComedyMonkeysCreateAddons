@@ -1,0 +1,400 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/steel",
+    "steel": "comedymonkeysaddons:block/fluid_line/steel",
+    "brass": "comedymonkeysaddons:block/fluid_line/brass",
+    "gauge": "comedymonkeysaddons:block/fluid_line/gauge"
+  },
+  "elements": [
+    {
+      "name": "meter_ring_a",
+      "from": [
+        6.5,
+        5,
+        6
+      ],
+      "to": [
+        9.5,
+        11,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            5,
+            9.5,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            5,
+            9.5,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            6,
+            9.5,
+            10
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            6,
+            9.5,
+            10
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "meter_ring_b",
+      "from": [
+        6.5,
+        6,
+        5
+      ],
+      "to": [
+        9.5,
+        10,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            6,
+            9.5,
+            10
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            5,
+            6,
+            11,
+            10
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            6,
+            9.5,
+            10
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            5,
+            6,
+            11,
+            10
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            5,
+            9.5,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            5,
+            9.5,
+            11
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "meter_ring_c",
+      "from": [
+        6.5,
+        5.5,
+        5.5
+      ],
+      "to": [
+        9.5,
+        10.5,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            5.5,
+            9.5,
+            10.5
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            5.5,
+            9.5,
+            10.5
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            5.5,
+            9.5,
+            10.5
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            5.5,
+            9.5,
+            10.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "gauge_a",
+      "from": [
+        5,
+        12,
+        7.25
+      ],
+      "to": [
+        11,
+        16,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            0,
+            11,
+            4
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            0,
+            8.75,
+            4
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            5,
+            1,
+            11,
+            5
+          ],
+          "texture": "#gauge"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            0,
+            8.75,
+            4
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            5,
+            7.25,
+            11,
+            8.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            5,
+            7.25,
+            11,
+            8.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "gauge_b",
+      "from": [
+        6,
+        16,
+        7.25
+      ],
+      "to": [
+        10,
+        17,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            15,
+            10,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            15,
+            8.75,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            6,
+            0,
+            10,
+            1
+          ],
+          "texture": "#gauge"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            15,
+            8.75,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            6,
+            7.25,
+            10,
+            8.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "gauge_c",
+      "from": [
+        6,
+        11,
+        7.25
+      ],
+      "to": [
+        10,
+        12,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            4,
+            10,
+            5
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            4,
+            8.75,
+            5
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            6,
+            5,
+            10,
+            6
+          ],
+          "texture": "#gauge"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            4,
+            8.75,
+            5
+          ],
+          "texture": "#brass"
+        }
+      }
+    }
+  ]
+}

@@ -7,11 +7,14 @@ import com.comedymonkey.createaddons.client.AutoHarvesterRenderer;
 import com.comedymonkey.createaddons.client.CobbleGeneratorRenderer;
 import com.comedymonkey.createaddons.client.CuckooClockRenderer;
 import com.comedymonkey.createaddons.client.ElectricRenderers;
+import com.comedymonkey.createaddons.client.FluidLineRenderer;
 import com.comedymonkey.createaddons.client.MachineRenderers;
 import com.comedymonkey.createaddons.client.MagmaEngineRenderer;
 import com.comedymonkey.createaddons.client.PressureCrucibleRenderer;
 import com.comedymonkey.createaddons.client.WellspringRenderer;
+import com.comedymonkey.createaddons.client.line.PowerLineRenderer;
 import com.comedymonkey.createaddons.compat.sable.SableCompat;
+import com.comedymonkey.createaddons.content.line.Fitting;
 import com.comedymonkey.createaddons.compat.sable.client.AeronauticsRenderers;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 
@@ -41,6 +44,10 @@ public final class MachineVisuals {
 		visual(ModBlockEntities.WELLSPRING, WellspringRenderer::parts, false);
 		visual(ModBlockEntities.ANIMAL_PEN, AnimalPenRenderer::parts, false);
 		visual(ModBlockEntities.CUCKOO_CLOCK, CuckooClockRenderer::parts, false);
+		// the lines' fittings; a Fluid Line's fluid stays with its renderer, a Power Line has nothing else
+		// (most pieces carry no fitting: their visuals do nothing a frame)
+		visual(ModBlockEntities.FLUID_LINE, FluidLineRenderer::parts, false, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
+		visual(ModBlockEntities.POWER_LINE, PowerLineRenderer::parts, true, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
 		// the Compact Gyroscope and Torque Rotor only exist with Sable
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerVisuals();
@@ -49,8 +56,14 @@ public final class MachineVisuals {
 	/** {@code partsOnly}: the renderer draws nothing else, so it needn't run while the visual draws. */
 	public static <T extends BlockEntity> void visual(Supplier<BlockEntityType<T>> type, PartsVisual.Parts<T> parts,
 													   boolean partsOnly) {
+		visual(type, parts, partsOnly, be -> true);
+	}
+
+	/** {@code active}: whether it has parts to show now (checked every frame before anything else). */
+	public static <T extends BlockEntity> void visual(Supplier<BlockEntityType<T>> type, PartsVisual.Parts<T> parts,
+													   boolean partsOnly, java.util.function.Predicate<T> active) {
 		SimpleBlockEntityVisualizer.builder(type.get())
-			.factory((context, be, partialTick) -> new PartsVisual<>(context, be, partialTick, parts))
+			.factory((context, be, partialTick) -> new PartsVisual<>(context, be, partialTick, parts, active))
 			.skipVanillaRender(be -> partsOnly)
 			.apply();
 	}

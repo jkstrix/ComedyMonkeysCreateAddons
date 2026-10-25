@@ -1,0 +1,365 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_hub"
+      }
+    },
+    {
+      "when": {
+        "north": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_arm"
+      }
+    },
+    {
+      "when": {
+        "north": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_arm_short"
+      }
+    },
+    {
+      "when": {
+        "north": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass"
+      }
+    },
+    {
+      "when": {
+        "north": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass_short"
+      }
+    },
+    {
+      "when": {
+        "north": "tank"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_flange"
+      }
+    },
+    {
+      "when": {
+        "north": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake"
+      }
+    },
+    {
+      "when": {
+        "north": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake_glass"
+      }
+    },
+    {
+      "when": {
+        "east": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_arm",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_arm_short",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass_short",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "tank"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_flange",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake_glass",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_arm",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_arm_short",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass_short",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "tank"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_flange",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake_glass",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_arm",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_arm_short",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass_short",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "tank"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_flange",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake_glass",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_riser"
+      }
+    },
+    {
+      "when": {
+        "up": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_riser_short"
+      }
+    },
+    {
+      "when": {
+        "up": "tank"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_flange",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "up": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "up": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake_glass",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_riser",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "down": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_riser_short",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "down": "tank"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/brass_flange",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "down": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "down": "intake"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/intake_glass",
+        "x": 90
+      }
+    }
+  ]
+}

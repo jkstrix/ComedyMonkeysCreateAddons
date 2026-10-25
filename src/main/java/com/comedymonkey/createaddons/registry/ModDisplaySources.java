@@ -2,6 +2,7 @@ package com.comedymonkey.createaddons.registry;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineDisplaySources;
+import com.comedymonkey.createaddons.content.line.LineDisplaySources;
 import com.comedymonkey.createaddons.content.wellspring.WellspringDisplaySources;
 import com.simibubi.create.api.behaviour.display.DisplaySource;
 import com.simibubi.create.api.registry.CreateRegistries;
@@ -26,6 +27,12 @@ public final class ModDisplaySources {
 		SOURCES.register("wellspring_fill_bar", WellspringDisplaySources.FillBar::new);
 	public static final DeferredHolder<DisplaySource, WellspringDisplaySources.Generation> WELLSPRING_GENERATION =
 		SOURCES.register("wellspring_generation", WellspringDisplaySources.Generation::new);
+	public static final DeferredHolder<DisplaySource, LineDisplaySources.Flow> LINE_METER_FLOW =
+		SOURCES.register("line_meter_flow", LineDisplaySources.Flow::new);
+	public static final DeferredHolder<DisplaySource, LineDisplaySources.Load> LINE_METER_LOAD =
+		SOURCES.register("line_meter_load", LineDisplaySources.Load::new);
+	public static final DeferredHolder<DisplaySource, LineDisplaySources.LoadBar> LINE_METER_LOAD_BAR =
+		SOURCES.register("line_meter_load_bar", LineDisplaySources.LoadBar::new);
 
 	/** From common setup: which blocks offer which sources. */
 	public static void bindBlocks() {
@@ -37,6 +44,12 @@ public final class ModDisplaySources {
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_FILL.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_FILL_BAR.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_GENERATION.get());
+		// a line with a Meter on it
+		for (var line : java.util.List.of(ModBlocks.COPPER_FLUID_LINE, ModBlocks.BRASS_FLUID_LINE, ModBlocks.COPPER_POWER_LINE, ModBlocks.BRASS_POWER_LINE)) {
+			DisplaySource.BY_BLOCK.add(line.get(), LINE_METER_FLOW.get());
+			DisplaySource.BY_BLOCK.add(line.get(), LINE_METER_LOAD.get());
+			DisplaySource.BY_BLOCK.add(line.get(), LINE_METER_LOAD_BAR.get());
+		}
 	}
 
 	private ModDisplaySources() {}

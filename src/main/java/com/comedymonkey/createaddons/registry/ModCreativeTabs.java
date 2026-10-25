@@ -65,11 +65,19 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.GEOTHERMAL_CONTROLLER.get());
 				output.accept(ModItems.GEOTHERMAL_CASING.get());
 				output.accept(ModItems.GEOTHERMAL_CORE.get());
-				if (net.neoforged.fml.ModList.get().isLoaded("pipez")) {
-					output.accept(ModItems.SNUG_PIPEZ_COVER.get());
-					output.accept(ModItems.FULL_PIPEZ_COVER.get());
-				}
+				// the Pipez Covers are retired (Fluid and Power Lines replace them): placed ones keep working, no new ones
 				output.accept(ModItems.INCINERATOR.get());
+				output.accept(ModItems.COPPER_FLUID_LINE.get());
+				output.accept(ModItems.BRASS_FLUID_LINE.get());
+				output.accept(ModItems.COPPER_POWER_LINE.get());
+				output.accept(ModItems.BRASS_POWER_LINE.get());
+				output.accept(ModItems.LINE_POST.get());
+				output.accept(ModItems.INTAKE.get());
+				output.accept(ModItems.VALVE.get());
+				output.accept(ModItems.FILTER.get());
+				output.accept(ModItems.METER.get());
+				output.accept(ModItems.SPLITTER.get());
+				output.accept(ModItems.BREAKER.get());
 				if (SableCompat.LOADED)
 					AeronauticsContent.addToTab(output);
 				output.accept(ModItems.EMERALD_DUST.get());

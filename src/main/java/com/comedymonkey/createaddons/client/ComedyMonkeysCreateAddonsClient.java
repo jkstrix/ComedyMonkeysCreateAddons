@@ -49,6 +49,11 @@ public class ComedyMonkeysCreateAddonsClient {
 		modBus.addListener(this::registerScreens);
 		modBus.addListener(this::registerModels);
 		modBus.addListener(this::registerClientExtensions);
+		// Fluid and Power Lines: tier and dye colours, encased lines drawn as their block, hidden lines through goggles
+		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::registerBlockColors);
+		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::registerItemColors);
+		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::wrapModels);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.line.LineClient::drawHiddenLines);
 		// Cached sprites are looked up again once the block atlas is restitched, and what was read from models once
 		// they're baked again
 		modBus.addListener(BlockSprite::onStitched);
@@ -104,6 +109,7 @@ public class ComedyMonkeysCreateAddonsClient {
 	private static void forgetModelReads(ModelEvent.BakingCompleted event) {
 		RealPlants.forget();
 		com.comedymonkey.createaddons.client.parts.PartModels.forget();
+		com.comedymonkey.createaddons.client.line.PowerLineModel.forget();
 	}
 
 	/**
@@ -132,6 +138,9 @@ public class ComedyMonkeysCreateAddonsClient {
 
 	private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
 		event.registerBlockEntityRenderer(ModBlockEntities.WELLSPRING.get(), WellspringRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.FLUID_LINE.get(), FluidLineRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.POWER_LINE.get(), com.comedymonkey.createaddons.client.line.PowerLineRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.LINE_POST.get(), com.comedymonkey.createaddons.client.line.LinePostRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.UPGRADED_CHEST.get(), UpgradedChestRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.PRESSURE_CRUCIBLE.get(), PressureCrucibleRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.COBBLE_GENERATOR.get(), CobbleGeneratorRenderer::new);
@@ -156,6 +165,9 @@ public class ComedyMonkeysCreateAddonsClient {
 			for (ChestType type : ChestType.values())
 				event.register(UpgradedChestRenderer.lidModel(tier, type));
 		WellspringRenderer.registerModels(event);
+		FluidLineRenderer.registerModels(event);
+		com.comedymonkey.createaddons.client.line.PowerLineModel.registerModels(event);
+		com.comedymonkey.createaddons.client.line.PowerLineRenderer.registerModels(event);
 		PressureCrucibleRenderer.registerModels(event);
 		CobbleGeneratorRenderer.registerModels(event);
 		MachineRenderers.registerModels(event);

@@ -1,0 +1,132 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/red",
+    "steel_dark": "comedymonkeysaddons:block/fluid_line/steel_dark",
+    "red": "comedymonkeysaddons:block/fluid_line/red"
+  },
+  "elements": [
+    {
+      "name": "flag_pin",
+      "from": [
+        7.5,
+        8.5,
+        4.25
+      ],
+      "to": [
+        8.5,
+        9.5,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            6.5,
+            8.5,
+            7.5
+          ],
+          "texture": "#steel_dark"
+        },
+        "east": {
+          "uv": [
+            11.5,
+            6.5,
+            11.75,
+            7.5
+          ],
+          "texture": "#steel_dark"
+        },
+        "west": {
+          "uv": [
+            4.25,
+            6.5,
+            4.5,
+            7.5
+          ],
+          "texture": "#steel_dark"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            4.25,
+            8.5,
+            4.5
+          ],
+          "texture": "#steel_dark"
+        },
+        "down": {
+          "uv": [
+            7.5,
+            11.5,
+            8.5,
+            11.75
+          ],
+          "texture": "#steel_dark"
+        }
+      }
+    },
+    {
+      "name": "flag_arm",
+      "from": [
+        7.5,
+        5.5,
+        4.5
+      ],
+      "to": [
+        8.5,
+        9.5,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            6.5,
+            8.5,
+            10.5
+          ],
+          "texture": "#red"
+        },
+        "east": {
+          "uv": [
+            11,
+            6.5,
+            11.5,
+            10.5
+          ],
+          "texture": "#red"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            6.5,
+            5,
+            10.5
+          ],
+          "texture": "#red"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            4.5,
+            8.5,
+            5
+          ],
+          "texture": "#red"
+        },
+        "down": {
+          "uv": [
+            7.5,
+            11,
+            8.5,
+            11.5
+          ],
+          "texture": "#red"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:power_line",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:line_post"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.span_hung"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.span_hung.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "span_hung"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

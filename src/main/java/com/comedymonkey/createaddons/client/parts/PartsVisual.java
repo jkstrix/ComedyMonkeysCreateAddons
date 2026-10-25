@@ -42,6 +42,8 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 	}
 
 	private final Parts<T> parts;
+	/** Whether it has parts to show at all now (a line with no fitting has none): checked first, every frame. */
+	private final java.util.function.Predicate<T> active;
 	/**
 	 * On a Sable ship or a contraption the visual sits in an embedding: its position is relative to that, so the world
 	 * frustum and the camera distance say nothing about it, and the ship moves it anyway. It's updated every frame.
@@ -60,8 +62,13 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 	private int next;
 
 	public PartsVisual(VisualizationContext context, T be, float partialTick, Parts<T> parts) {
+		this(context, be, partialTick, parts, b -> true);
+	}
+
+	public PartsVisual(VisualizationContext context, T be, float partialTick, Parts<T> parts, java.util.function.Predicate<T> active) {
 		super(context, be, partialTick);
 		this.parts = parts;
+		this.active = active;
 		embedded = context instanceof VisualEmbedding;
 		BlockEntityRenderer<T> renderer = Minecraft.getInstance().getBlockEntityRenderDispatcher().getRenderer(be);
 		int distance = renderer != null ? renderer.getViewDistance() : 64;
@@ -82,6 +89,10 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 
 	@Override
 	public void beginFrame(DynamicVisual.Context context) {
+		if (!active.test(blockEntity)) {
+			hideAll();
+			return;
+		}
 		if (!embedded) {
 			if (context.camera().getPosition().distanceToSqr(Vec3.atCenterOf(pos)) > viewDistanceSqr) {
 				hideAll();

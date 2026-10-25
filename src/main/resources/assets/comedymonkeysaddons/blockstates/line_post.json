@@ -1,0 +1,516 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "up",
+        "role": "single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/single"
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "role": "foot"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/foot"
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "role": "pole"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/pole"
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "role": "head"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/head"
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "north": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_north"
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "east": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_east"
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "south": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_south"
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "west": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_west"
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "role": "single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/single",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "role": "foot"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/foot",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "role": "pole"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/pole",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "role": "head"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/head",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "north": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_north",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "east": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_east",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "south": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_south",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "west": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_west",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "role": "single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/single",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "role": "foot"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/foot",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "role": "pole"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/pole",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "role": "head"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/head",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "north": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_north",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "east": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_east",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "south": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_south",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "west": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_west",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "role": "single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/single",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "role": "foot"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/foot",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "role": "pole"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/pole",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "role": "head"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/head",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "north": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_north",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "east": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_east",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "south": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_south",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "west": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_west",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "role": "single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/single",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "role": "foot"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/foot",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "role": "pole"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/pole",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "role": "head"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/head",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "north": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_north",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "east": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_east",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "south": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_south",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "west": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_west",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "role": "single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/single",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "role": "foot"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/foot",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "role": "pole"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/pole",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "role": "head"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/head",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "north": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_north",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "east": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_east",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "south": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_south",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "west": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/line_post/branch_west",
+        "x": 90,
+        "y": 270
+      }
+    }
+  ]
+}

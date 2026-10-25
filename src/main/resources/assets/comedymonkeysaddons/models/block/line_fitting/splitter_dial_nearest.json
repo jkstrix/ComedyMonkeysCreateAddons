@@ -1,0 +1,192 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/steel",
+    "steel": "comedymonkeysaddons:block/fluid_line/steel",
+    "dial_nearest": "comedymonkeysaddons:block/fluid_line/dial_nearest"
+  },
+  "elements": [
+    {
+      "name": "dial_a",
+      "from": [
+        6,
+        11.5,
+        7
+      ],
+      "to": [
+        10,
+        12.25,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            3.75,
+            10,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            7,
+            3.75,
+            9,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            6,
+            3.75,
+            10,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            7,
+            3.75,
+            9,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            6,
+            7,
+            10,
+            9
+          ],
+          "texture": "#dial_nearest"
+        }
+      }
+    },
+    {
+      "name": "dial_b",
+      "from": [
+        7,
+        11.5,
+        6
+      ],
+      "to": [
+        9,
+        12.25,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            3.75,
+            9,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            9,
+            3.75,
+            10,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            7,
+            3.75,
+            9,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            6,
+            3.75,
+            7,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            7,
+            6,
+            9,
+            7
+          ],
+          "texture": "#dial_nearest"
+        }
+      }
+    },
+    {
+      "name": "dial_c",
+      "from": [
+        7,
+        11.5,
+        9
+      ],
+      "to": [
+        9,
+        12.25,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            3.75,
+            9,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            6,
+            3.75,
+            7,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            7,
+            3.75,
+            9,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            9,
+            3.75,
+            10,
+            4.5
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            7,
+            9,
+            9,
+            10
+          ],
+          "texture": "#dial_nearest"
+        }
+      }
+    }
+  ]
+}

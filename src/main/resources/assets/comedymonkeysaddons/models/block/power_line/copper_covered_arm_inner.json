@@ -1,0 +1,66 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/copper",
+    "body": "comedymonkeysaddons:block/fluid_line/body"
+  },
+  "elements": [
+    {
+      "name": "arm",
+      "from": [
+        7.125,
+        0,
+        1.75
+      ],
+      "to": [
+        8.875,
+        1.75,
+        7.125
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.125,
+            14.25,
+            8.875,
+            16
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            8.875,
+            14.25,
+            14.25,
+            16
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            1.75,
+            14.25,
+            7.125,
+            16
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            7.125,
+            1.75,
+            8.875,
+            7.125
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

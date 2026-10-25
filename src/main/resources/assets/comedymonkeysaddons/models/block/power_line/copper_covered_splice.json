@@ -1,0 +1,131 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/copper",
+    "copper_ring": "comedymonkeysaddons:block/fluid_line/copper_ring"
+  },
+  "elements": [
+    {
+      "name": "splice_a",
+      "from": [
+        6.125,
+        0,
+        6.625
+      ],
+      "to": [
+        9.875,
+        2.5,
+        9.375
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.125,
+            13.5,
+            9.875,
+            16
+          ],
+          "texture": "#copper_ring"
+        },
+        "east": {
+          "uv": [
+            6.625,
+            13.5,
+            9.375,
+            16
+          ],
+          "texture": "#copper_ring"
+        },
+        "south": {
+          "uv": [
+            6.125,
+            13.5,
+            9.875,
+            16
+          ],
+          "texture": "#copper_ring"
+        },
+        "west": {
+          "uv": [
+            6.625,
+            13.5,
+            9.375,
+            16
+          ],
+          "texture": "#copper_ring"
+        },
+        "up": {
+          "uv": [
+            6.125,
+            6.625,
+            9.875,
+            9.375
+          ],
+          "texture": "#copper_ring"
+        }
+      }
+    },
+    {
+      "name": "splice_b",
+      "from": [
+        6.625,
+        0,
+        6.125
+      ],
+      "to": [
+        9.375,
+        2.5,
+        9.875
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.625,
+            13.5,
+            9.375,
+            16
+          ],
+          "texture": "#copper_ring"
+        },
+        "east": {
+          "uv": [
+            6.125,
+            13.5,
+            9.875,
+            16
+          ],
+          "texture": "#copper_ring"
+        },
+        "south": {
+          "uv": [
+            6.625,
+            13.5,
+            9.375,
+            16
+          ],
+          "texture": "#copper_ring"
+        },
+        "west": {
+          "uv": [
+            6.125,
+            13.5,
+            9.875,
+            16
+          ],
+          "texture": "#copper_ring"
+        },
+        "up": {
+          "uv": [
+            6.625,
+            6.125,
+            9.375,
+            9.875
+          ],
+          "texture": "#copper_ring"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,2073 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/brass",
+    "body_twin": "comedymonkeysaddons:block/fluid_line/body_twin",
+    "brass_ring": "comedymonkeysaddons:block/fluid_line/brass_ring"
+  },
+  "elements": [
+    {
+      "name": "coil_0_0",
+      "from": [
+        11.103,
+        4.2,
+        6.433
+      ],
+      "to": [
+        12.103,
+        5.2,
+        9.567
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.897,
+            10.8,
+            4.897,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            6.433,
+            10.8,
+            9.567,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            11.103,
+            10.8,
+            12.103,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            6.433,
+            10.8,
+            9.567,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            11.103,
+            6.433,
+            12.103,
+            9.567
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            11.103,
+            6.433,
+            12.103,
+            9.567
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_0_1",
+      "from": [
+        8.98,
+        4.2,
+        10.048
+      ],
+      "to": [
+        12.115,
+        5.2,
+        11.048
+      ],
+      "rotation": {
+        "origin": [
+          10.548,
+          4.7,
+          10.548
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3.885,
+            10.8,
+            7.02,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            4.952,
+            10.8,
+            5.952,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            8.98,
+            10.8,
+            12.115,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            10.048,
+            10.8,
+            11.048,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            8.98,
+            10.048,
+            12.115,
+            11.048
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            8.98,
+            4.952,
+            12.115,
+            5.952
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_0_2",
+      "from": [
+        6.433,
+        4.2,
+        11.103
+      ],
+      "to": [
+        9.567,
+        5.2,
+        12.103
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.433,
+            10.8,
+            9.567,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            3.897,
+            10.8,
+            4.897,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            6.433,
+            10.8,
+            9.567,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            11.103,
+            10.8,
+            12.103,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            6.433,
+            11.103,
+            9.567,
+            12.103
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            6.433,
+            3.897,
+            9.567,
+            4.897
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_0_3",
+      "from": [
+        3.885,
+        4.2,
+        10.048
+      ],
+      "to": [
+        7.02,
+        5.2,
+        11.048
+      ],
+      "rotation": {
+        "origin": [
+          5.452,
+          4.7,
+          10.548
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8.98,
+            10.8,
+            12.115,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            4.952,
+            10.8,
+            5.952,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            3.885,
+            10.8,
+            7.02,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            10.048,
+            10.8,
+            11.048,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            3.885,
+            10.048,
+            7.02,
+            11.048
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            3.885,
+            4.952,
+            7.02,
+            5.952
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_0_4",
+      "from": [
+        3.897,
+        4.2,
+        6.433
+      ],
+      "to": [
+        4.897,
+        5.2,
+        9.567
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.103,
+            10.8,
+            12.103,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            6.433,
+            10.8,
+            9.567,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            3.897,
+            10.8,
+            4.897,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            6.433,
+            10.8,
+            9.567,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            3.897,
+            6.433,
+            4.897,
+            9.567
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            3.897,
+            6.433,
+            4.897,
+            9.567
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_0_5",
+      "from": [
+        3.885,
+        4.2,
+        4.952
+      ],
+      "to": [
+        7.02,
+        5.2,
+        5.952
+      ],
+      "rotation": {
+        "origin": [
+          5.452,
+          4.7,
+          5.452
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8.98,
+            10.8,
+            12.115,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            10.048,
+            10.8,
+            11.048,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            3.885,
+            10.8,
+            7.02,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            4.952,
+            10.8,
+            5.952,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            3.885,
+            4.952,
+            7.02,
+            5.952
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            3.885,
+            10.048,
+            7.02,
+            11.048
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_0_6",
+      "from": [
+        6.433,
+        4.2,
+        3.897
+      ],
+      "to": [
+        9.567,
+        5.2,
+        4.897
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.433,
+            10.8,
+            9.567,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            11.103,
+            10.8,
+            12.103,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            6.433,
+            10.8,
+            9.567,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            3.897,
+            10.8,
+            4.897,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            6.433,
+            3.897,
+            9.567,
+            4.897
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            6.433,
+            11.103,
+            9.567,
+            12.103
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_0_7",
+      "from": [
+        8.98,
+        4.2,
+        4.952
+      ],
+      "to": [
+        12.115,
+        5.2,
+        5.952
+      ],
+      "rotation": {
+        "origin": [
+          10.548,
+          4.7,
+          5.452
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3.885,
+            10.8,
+            7.02,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            10.048,
+            10.8,
+            11.048,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            8.98,
+            10.8,
+            12.115,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            4.952,
+            10.8,
+            5.952,
+            11.8
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            8.98,
+            4.952,
+            12.115,
+            5.952
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            8.98,
+            10.048,
+            12.115,
+            11.048
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_1_0",
+      "from": [
+        12.027,
+        5.9,
+        6.05
+      ],
+      "to": [
+        13.027,
+        6.9,
+        9.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.973,
+            9.1,
+            3.973,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            6.05,
+            9.1,
+            9.95,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            12.027,
+            9.1,
+            13.027,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            6.05,
+            9.1,
+            9.95,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            12.027,
+            6.05,
+            13.027,
+            9.95
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            12.027,
+            6.05,
+            13.027,
+            9.95
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_1_1",
+      "from": [
+        9.251,
+        5.9,
+        10.701
+      ],
+      "to": [
+        13.151,
+        6.9,
+        11.701
+      ],
+      "rotation": {
+        "origin": [
+          11.201,
+          6.4,
+          11.201
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2.849,
+            9.1,
+            6.749,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            4.299,
+            9.1,
+            5.299,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            9.251,
+            9.1,
+            13.151,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            10.701,
+            9.1,
+            11.701,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            9.251,
+            10.701,
+            13.151,
+            11.701
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            9.251,
+            4.299,
+            13.151,
+            5.299
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_1_2",
+      "from": [
+        6.05,
+        5.9,
+        12.027
+      ],
+      "to": [
+        9.95,
+        6.9,
+        13.027
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.05,
+            9.1,
+            9.95,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            2.973,
+            9.1,
+            3.973,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            6.05,
+            9.1,
+            9.95,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            12.027,
+            9.1,
+            13.027,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            6.05,
+            12.027,
+            9.95,
+            13.027
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            6.05,
+            2.973,
+            9.95,
+            3.973
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_1_3",
+      "from": [
+        2.849,
+        5.9,
+        10.701
+      ],
+      "to": [
+        6.749,
+        6.9,
+        11.701
+      ],
+      "rotation": {
+        "origin": [
+          4.799,
+          6.4,
+          11.201
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            9.251,
+            9.1,
+            13.151,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            4.299,
+            9.1,
+            5.299,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            2.849,
+            9.1,
+            6.749,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            10.701,
+            9.1,
+            11.701,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            2.849,
+            10.701,
+            6.749,
+            11.701
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            2.849,
+            4.299,
+            6.749,
+            5.299
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_1_4",
+      "from": [
+        2.973,
+        5.9,
+        6.05
+      ],
+      "to": [
+        3.973,
+        6.9,
+        9.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.027,
+            9.1,
+            13.027,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            6.05,
+            9.1,
+            9.95,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            2.973,
+            9.1,
+            3.973,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            6.05,
+            9.1,
+            9.95,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            2.973,
+            6.05,
+            3.973,
+            9.95
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            2.973,
+            6.05,
+            3.973,
+            9.95
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_1_5",
+      "from": [
+        2.849,
+        5.9,
+        4.299
+      ],
+      "to": [
+        6.749,
+        6.9,
+        5.299
+      ],
+      "rotation": {
+        "origin": [
+          4.799,
+          6.4,
+          4.799
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            9.251,
+            9.1,
+            13.151,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            10.701,
+            9.1,
+            11.701,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            2.849,
+            9.1,
+            6.749,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            4.299,
+            9.1,
+            5.299,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            2.849,
+            4.299,
+            6.749,
+            5.299
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            2.849,
+            10.701,
+            6.749,
+            11.701
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_1_6",
+      "from": [
+        6.05,
+        5.9,
+        2.973
+      ],
+      "to": [
+        9.95,
+        6.9,
+        3.973
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.05,
+            9.1,
+            9.95,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            12.027,
+            9.1,
+            13.027,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            6.05,
+            9.1,
+            9.95,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            2.973,
+            9.1,
+            3.973,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            6.05,
+            2.973,
+            9.95,
+            3.973
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            6.05,
+            12.027,
+            9.95,
+            13.027
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_1_7",
+      "from": [
+        9.251,
+        5.9,
+        4.299
+      ],
+      "to": [
+        13.151,
+        6.9,
+        5.299
+      ],
+      "rotation": {
+        "origin": [
+          11.201,
+          6.4,
+          4.799
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2.849,
+            9.1,
+            6.749,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            10.701,
+            9.1,
+            11.701,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            9.251,
+            9.1,
+            13.151,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            4.299,
+            9.1,
+            5.299,
+            10.1
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            9.251,
+            4.299,
+            13.151,
+            5.299
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            9.251,
+            10.701,
+            13.151,
+            11.701
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_2_0",
+      "from": [
+        11.38,
+        7.6,
+        6.318
+      ],
+      "to": [
+        12.38,
+        8.6,
+        9.682
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.62,
+            7.4,
+            4.62,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            6.318,
+            7.4,
+            9.682,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            11.38,
+            7.4,
+            12.38,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            6.318,
+            7.4,
+            9.682,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            11.38,
+            6.318,
+            12.38,
+            9.682
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            11.38,
+            6.318,
+            12.38,
+            9.682
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_2_1",
+      "from": [
+        9.062,
+        7.6,
+        10.244
+      ],
+      "to": [
+        12.426,
+        8.6,
+        11.244
+      ],
+      "rotation": {
+        "origin": [
+          10.744,
+          8.1,
+          10.744
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3.574,
+            7.4,
+            6.938,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            4.756,
+            7.4,
+            5.756,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            9.062,
+            7.4,
+            12.426,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            10.244,
+            7.4,
+            11.244,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            9.062,
+            10.244,
+            12.426,
+            11.244
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            9.062,
+            4.756,
+            12.426,
+            5.756
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_2_2",
+      "from": [
+        6.318,
+        7.6,
+        11.38
+      ],
+      "to": [
+        9.682,
+        8.6,
+        12.38
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.318,
+            7.4,
+            9.682,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            3.62,
+            7.4,
+            4.62,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            6.318,
+            7.4,
+            9.682,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            11.38,
+            7.4,
+            12.38,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            6.318,
+            11.38,
+            9.682,
+            12.38
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            6.318,
+            3.62,
+            9.682,
+            4.62
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_2_3",
+      "from": [
+        3.574,
+        7.6,
+        10.244
+      ],
+      "to": [
+        6.938,
+        8.6,
+        11.244
+      ],
+      "rotation": {
+        "origin": [
+          5.256,
+          8.1,
+          10.744
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            9.062,
+            7.4,
+            12.426,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            4.756,
+            7.4,
+            5.756,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            3.574,
+            7.4,
+            6.938,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            10.244,
+            7.4,
+            11.244,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            3.574,
+            10.244,
+            6.938,
+            11.244
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            3.574,
+            4.756,
+            6.938,
+            5.756
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_2_4",
+      "from": [
+        3.62,
+        7.6,
+        6.318
+      ],
+      "to": [
+        4.62,
+        8.6,
+        9.682
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.38,
+            7.4,
+            12.38,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            6.318,
+            7.4,
+            9.682,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            3.62,
+            7.4,
+            4.62,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            6.318,
+            7.4,
+            9.682,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            3.62,
+            6.318,
+            4.62,
+            9.682
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            3.62,
+            6.318,
+            4.62,
+            9.682
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_2_5",
+      "from": [
+        3.574,
+        7.6,
+        4.756
+      ],
+      "to": [
+        6.938,
+        8.6,
+        5.756
+      ],
+      "rotation": {
+        "origin": [
+          5.256,
+          8.1,
+          5.256
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            9.062,
+            7.4,
+            12.426,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            10.244,
+            7.4,
+            11.244,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            3.574,
+            7.4,
+            6.938,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            4.756,
+            7.4,
+            5.756,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            3.574,
+            4.756,
+            6.938,
+            5.756
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            3.574,
+            10.244,
+            6.938,
+            11.244
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_2_6",
+      "from": [
+        6.318,
+        7.6,
+        3.62
+      ],
+      "to": [
+        9.682,
+        8.6,
+        4.62
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.318,
+            7.4,
+            9.682,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            11.38,
+            7.4,
+            12.38,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            6.318,
+            7.4,
+            9.682,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            3.62,
+            7.4,
+            4.62,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            6.318,
+            3.62,
+            9.682,
+            4.62
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            6.318,
+            11.38,
+            9.682,
+            12.38
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_2_7",
+      "from": [
+        9.062,
+        7.6,
+        4.756
+      ],
+      "to": [
+        12.426,
+        8.6,
+        5.756
+      ],
+      "rotation": {
+        "origin": [
+          10.744,
+          8.1,
+          5.256
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3.574,
+            7.4,
+            6.938,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            10.244,
+            7.4,
+            11.244,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            9.062,
+            7.4,
+            12.426,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            4.756,
+            7.4,
+            5.756,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            9.062,
+            4.756,
+            12.426,
+            5.756
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            9.062,
+            10.244,
+            12.426,
+            11.244
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "coil_tie",
+      "from": [
+        11.4,
+        3.8,
+        7.25
+      ],
+      "to": [
+        13.4,
+        9,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.6,
+            7,
+            4.6,
+            12.2
+          ],
+          "texture": "#brass_ring"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            7,
+            8.75,
+            12.2
+          ],
+          "texture": "#brass_ring"
+        },
+        "south": {
+          "uv": [
+            11.4,
+            7,
+            13.4,
+            12.2
+          ],
+          "texture": "#brass_ring"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            7,
+            8.75,
+            12.2
+          ],
+          "texture": "#brass_ring"
+        },
+        "up": {
+          "uv": [
+            11.4,
+            7.25,
+            13.4,
+            8.75
+          ],
+          "texture": "#brass_ring"
+        },
+        "down": {
+          "uv": [
+            11.4,
+            7.25,
+            13.4,
+            8.75
+          ],
+          "texture": "#brass_ring"
+        }
+      }
+    },
+    {
+      "name": "coil_end",
+      "from": [
+        12.2,
+        7.6,
+        9.4
+      ],
+      "to": [
+        15.6,
+        8.6,
+        10.4
+      ],
+      "rotation": {
+        "origin": [
+          12.2,
+          8.1,
+          9.9
+        ],
+        "axis": "y",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0.4,
+            7.4,
+            3.8,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            5.6,
+            7.4,
+            6.6,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            12.2,
+            7.4,
+            15.6,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            9.4,
+            7.4,
+            10.4,
+            8.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            12.2,
+            9.4,
+            15.6,
+            10.4
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            12.2,
+            5.6,
+            15.6,
+            6.6
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

@@ -93,6 +93,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(TradeBotGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.StorageGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.MachineGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.LineGameTests::register);
 		if (SableCompat.LOADED)
 			modBus.addListener(com.comedymonkey.createaddons.gametest.SableGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
@@ -114,6 +115,11 @@ public class ComedyMonkeysCreateAddons {
 		// Capture Bottles catch animals for the Animal Pens
 		NeoForge.EVENT_BUS.addListener(AnimalCapture::onEntityInteract);
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> CuckooClocks.clear());
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.FluidLines::onLevelTick);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.PowerLines::onLevelTick);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.FluidLines::onChunkUnload);
+		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.line.PowerLines.clear());
+		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.line.FluidLines.clear());
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> ChestUpgrades.clearJustPlaced());
 		if (ModList.get().isLoaded(PipezBlazeBurnerCompat.PIPEZ_ID)) {
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onRightClickBlock);
@@ -216,6 +222,17 @@ public class ComedyMonkeysCreateAddons {
 		event.enqueueWork(() -> {
 			// Create-style "Hold [Shift] for Summary" tooltips, read from the lang file
 			registerCreateTooltip(ModBlocks.WELLSPRING.asItem());
+			registerCreateTooltip(ModItems.COPPER_FLUID_LINE.get());
+			registerCreateTooltip(ModItems.BRASS_FLUID_LINE.get());
+			registerCreateTooltip(ModItems.INTAKE.get());
+			registerCreateTooltip(ModItems.COPPER_POWER_LINE.get());
+			registerCreateTooltip(ModItems.BRASS_POWER_LINE.get());
+			registerCreateTooltip(ModItems.LINE_POST.get());
+			registerCreateTooltip(ModItems.VALVE.get());
+			registerCreateTooltip(ModItems.FILTER.get());
+			registerCreateTooltip(ModItems.METER.get());
+			registerCreateTooltip(ModItems.SPLITTER.get());
+			registerCreateTooltip(ModItems.BREAKER.get());
 			registerCreateTooltip(ModItems.UPGRADE_TEMPLATE.get());
 			registerCreateTooltip(ModItems.DRIP_TEMPLATE.get());
 			registerCreateTooltip(ModItems.WATER_UPGRADE.get());

@@ -23,6 +23,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotStationBlockEntity;
+import com.comedymonkey.createaddons.content.line.FluidLineBlockEntity;
+import com.comedymonkey.createaddons.content.line.LinePostBlockEntity;
+import com.comedymonkey.createaddons.content.line.PowerLineBlockEntity;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -81,6 +84,23 @@ public final class ModBlockEntities {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<IncineratorBlockEntity>> INCINERATOR =
 		BLOCK_ENTITY_TYPES.register("incinerator",
 			() -> BlockEntityType.Builder.of(IncineratorBlockEntity::new, ModBlocks.INCINERATOR.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FluidLineBlockEntity>> FLUID_LINE =
+		BLOCK_ENTITY_TYPES.register("fluid_line",
+			() -> BlockEntityType.Builder.of(FluidLineBlockEntity::new, ModBlocks.COPPER_FLUID_LINE.get(),
+				ModBlocks.BRASS_FLUID_LINE.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PowerLineBlockEntity>> POWER_LINE =
+		BLOCK_ENTITY_TYPES.register("power_line",
+			() -> BlockEntityType.Builder.of(PowerLineBlockEntity::new, ModBlocks.COPPER_POWER_LINE.get(),
+				ModBlocks.BRASS_POWER_LINE.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LinePostBlockEntity>> LINE_POST =
+		BLOCK_ENTITY_TYPES.register("line_post",
+			() -> BlockEntityType.Builder.of(LinePostBlockEntity::new, ModBlocks.LINE_POST.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MagmaEngineBlockEntity>> MAGMA_ENGINE =

@@ -1,0 +1,35 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/copper",
+    "slot_idle": "comedymonkeysaddons:block/fluid_line/slot_idle"
+  },
+  "elements": [
+    {
+      "name": "hole",
+      "from": [
+        6.875,
+        0,
+        6.875
+      ],
+      "to": [
+        9.125,
+        0.25,
+        9.125
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            6.875,
+            6.875,
+            9.125,
+            9.125
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    }
+  ]
+}

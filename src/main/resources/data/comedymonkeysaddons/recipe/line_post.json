@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TNT",
+    " L ",
+    " L "
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:terracotta"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    },
+    "L": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:line_post",
+    "count": 4
+  }
+}

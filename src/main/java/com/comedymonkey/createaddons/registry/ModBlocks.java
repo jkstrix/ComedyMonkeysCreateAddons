@@ -15,6 +15,10 @@ import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlock;
 import com.comedymonkey.createaddons.content.electric.GeothermalPartBlock;
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlock;
 import com.comedymonkey.createaddons.content.incinerator.IncineratorBlock;
+import com.comedymonkey.createaddons.content.line.FluidLineBlock;
+import com.comedymonkey.createaddons.content.line.LinePostBlock;
+import com.comedymonkey.createaddons.content.line.PowerLineBlock;
+import com.comedymonkey.createaddons.content.line.LineTier;
 import com.comedymonkey.createaddons.content.machine.TwoInputMachineBlock;
 import com.comedymonkey.createaddons.content.chest.UpgradedChestBlock;
 import com.comedymonkey.createaddons.content.wellspring.WellspringBlock;
@@ -219,6 +223,50 @@ public final class ModBlocks {
 			// Its body sits a little inside the block, so it mustn't hide its neighbours' faces
 			.noOcclusion()
 			.lightLevel(state -> state.getValue(MagmaEngineBlock.LIT) ? 10 : 0);
+	}
+
+	// ---- Fluid Lines: slim pump-free pipes in two tiers that never join each other
+	public static final DeferredBlock<FluidLineBlock> COPPER_FLUID_LINE = BLOCKS.register("copper_fluid_line",
+		() -> new FluidLineBlock(LineTier.COPPER, lineProperties(MapColor.COLOR_ORANGE)));
+	public static final DeferredBlock<FluidLineBlock> BRASS_FLUID_LINE = BLOCKS.register("brass_fluid_line",
+		() -> new FluidLineBlock(LineTier.BRASS, lineProperties(MapColor.TERRACOTTA_YELLOW)));
+
+	// ---- Power Lines: thin cable on any face, and wooden Line Posts to hang it between
+	public static final DeferredBlock<PowerLineBlock> COPPER_POWER_LINE = BLOCKS.register("copper_power_line",
+		() -> new PowerLineBlock(LineTier.COPPER, wireProperties(MapColor.COLOR_ORANGE)));
+	public static final DeferredBlock<PowerLineBlock> BRASS_POWER_LINE = BLOCKS.register("brass_power_line",
+		() -> new PowerLineBlock(LineTier.BRASS, wireProperties(MapColor.TERRACOTTA_YELLOW)));
+	public static final DeferredBlock<LinePostBlock> LINE_POST = BLOCKS.register("line_post",
+		() -> new LinePostBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.strength(1.5f, 3.0f)
+			.sound(SoundType.WOOD)
+			.noOcclusion()
+			.isSuffocating((state, level, pos) -> false)
+			.isViewBlocking((state, level, pos) -> false)));
+
+	private static BlockBehaviour.Properties wireProperties(MapColor color) {
+		return BlockBehaviour.Properties.of()
+			.mapColor(color)
+			.strength(0.3f)
+			.sound(SoundType.WOOL)
+			.noOcclusion()
+			.noCollission()
+			.isRedstoneConductor((state, level, pos) -> false)
+			.isSuffocating((state, level, pos) -> false)
+			.isViewBlocking((state, level, pos) -> false);
+	}
+
+	private static BlockBehaviour.Properties lineProperties(MapColor color) {
+		return BlockBehaviour.Properties.of()
+			.mapColor(color)
+			.strength(1.0f, 3.0f)
+			.sound(SoundType.COPPER)
+			// a thin pipe through the block: its neighbours' faces show round it
+			.noOcclusion()
+			.isRedstoneConductor((state, level, pos) -> false)
+			.isSuffocating((state, level, pos) -> false)
+			.isViewBlocking((state, level, pos) -> false);
 	}
 
 	/** Not an item: just the look of a Pipez Cover with no block on it yet. */

@@ -46,6 +46,10 @@ public final class ModAdvancements {
 	public static final String TRADE_BOT_SCARED = "trade_bot_scared";
 	public static final String TRADE_BOT_WOUND_UP = "trade_bot_wound_up";
 	public static final String TRADE_BOT_SOAKED = "trade_bot_soaked";
+	public static final String INTAKE_FITTED = "intake_fitted";
+	public static final String LINE_ENCASED = "line_encased";
+	/** Value: the span's length in blocks. */
+	public static final String SPAN_HUNG = "span_hung";
 	/** Trades one Trade Bot makes in a day for his challenge, and emeralds one trip earns for his goal. */
 	public static final int TRADE_BOT_DAY_TRADES = 64, TRADE_BOT_STACK_EMERALDS = 64;
 	/** Villagers one Cuckoo Clock has to keep time for, for its challenge. */

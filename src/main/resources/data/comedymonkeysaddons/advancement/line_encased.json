@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:fluid_line",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:copper_fluid_line"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.line_encased"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.line_encased.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "line_encased"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}
