@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -34,6 +35,12 @@ public final class ElectricSounds {
 	private static final Map<ElectricMotorBlockEntity, Motor> MOTORS = new WeakHashMap<>();
 
 	private ElectricSounds() {}
+
+	/** Forgets every generator and motor when the client's world goes: their block entities, and their loops, hold that world. */
+	public static void forget() {
+		GENERATORS.clear();
+		MOTORS.clear();
+	}
 
 	private static final class Generator {
 		boolean lit;
@@ -57,6 +64,8 @@ public final class ElectricSounds {
 			// Already running when it came into view: pick up the loops without replaying its start
 			s = new Generator();
 			s.lit = lit;
+			// the loops hold their block entity, so a weak key alone never lets go: drop the ones unloaded or broken
+			GENERATORS.keySet().removeIf(BlockEntity::isRemoved);
 			GENERATORS.put(be, s);
 		}
 		RandomSource random = be.getLevel().random;
@@ -101,6 +110,7 @@ public final class ElectricSounds {
 		if (s == null) {
 			s = new Motor();
 			s.powered = powered;
+			MOTORS.keySet().removeIf(BlockEntity::isRemoved);
 			MOTORS.put(be, s);
 		}
 		BlockPos pos = be.getBlockPos();

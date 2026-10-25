@@ -90,6 +90,8 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(ModEntities::registerAttributes);
 		// Trade Bot's test courses (run with ./gradlew runGameTestServer, or /test in a dev world)
 		modBus.addListener(TradeBotGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.StorageGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.MachineGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
 		// picking containers for Trade Bot: the server takes over the picker's clicks on blocks
 		NeoForge.EVENT_BUS.addListener(TradeBotPicking::onRightClickBlock);
@@ -126,9 +128,9 @@ public class ComedyMonkeysCreateAddons {
 	private void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.WELLSPRING.get(),
 			(be, side) -> be.getTank());
-		// Automation (hoppers, funnels, Pipez...) fills upgraded chests past 64 per slot
+		// Automation (hoppers, funnels, Pipez...) fills upgraded chests past 64 per slot, and a double chest as one
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.UPGRADED_CHEST.get(),
-			(be, side) -> be.getItemHandler());
+			(be, side) -> be.getAutomationHandler());
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.UPGRADED_BARREL.get(),
 			(be, side) -> be.getItemHandler());
 		// Cobblestone out of the generators, from any side

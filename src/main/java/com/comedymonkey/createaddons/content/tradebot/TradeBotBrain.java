@@ -85,6 +85,8 @@ public class TradeBotBrain {
 	private static final int NO_TRADE_REST_TICKS = 1200;
 	/** Extra fetch-and-trade rounds a trip may take for trades his trading opened up. */
 	private static final int MAX_ROUNDS = 3;
+	/** After a trip to put his load back that put nothing back, how long he leaves it unless his links or load change (ticks). */
+	private static final int RETURN_BLOCKED_TICKS = 12000;
 	/** How long a villager he couldn't get to is left alone (ticks), so he doesn't set off for it over and over. */
 	private static final int UNREACHABLE_TICKS = 2400;
 	/** A trade called off (D46): he looks puzzled and shrugs. */
@@ -107,6 +109,9 @@ public class TradeBotBrain {
 	private BotWork work;
 	/** Which input goes first next time, so they take turns (D47). */
 	private int roundRobin;
+	/** A trip to put his load back that put nothing back: not again until this time, unless his links or load change. */
+	private long returnBlockedUntil;
+	private int returnBlockedFor;
 	/** Villagers he couldn't get to, and the game time to try them again. */
 	private final Map<UUID, Long> unreachable = new HashMap<>();
 	private final Reactions reactions = new Reactions();
@@ -125,9 +130,15 @@ public class TradeBotBrain {
 
 	private static final class Job {
 		final List<BlockPos> inputs;
+		/** Null only on a trip just to put his load back, with no output linked. */
+		@Nullable
 		final BlockPos output;
 		ContainerWork.Wanted wanted;
 		final boolean trading;
+		/** A trip just to put back what he still carries in his inputs: no taking, no delivering. */
+		final boolean returnOnly;
+		/** Buyers claimed when the trip was planned (D54), so another bot planning at the same time doesn't count them. */
+		final Set<UUID> planned = new HashSet<>();
 		Phase phase = Phase.TAKING;
 		int input;
 		int taken, trades, delivered, returned, emeralds;
@@ -144,11 +155,12 @@ public class TradeBotBrain {
 		/** Extra rounds of fetching and trading this trip, for trades his own trading opened up. */
 		int rounds;
 
-		Job(List<BlockPos> inputs, BlockPos output, ContainerWork.Wanted wanted, boolean trading) {
+		Job(List<BlockPos> inputs, @Nullable BlockPos output, ContainerWork.Wanted wanted, boolean trading, boolean returnOnly) {
 			this.inputs = inputs;
 			this.output = output;
 			this.wanted = wanted;
 			this.trading = trading;
+			this.returnOnly = returnOnly;
 		}
 
 		/** Stacks in his load that came from {@code input} (or, once leftovers are queued, anything). */
@@ -203,16 +215,64 @@ public class TradeBotBrain {
 		if (!(bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station) || station.outputPosition() == null
 			|| station.isPaused() || !bot.level().isDay() || bot.level().isThundering())
 			return false;
-		List<AbstractVillager> buyers = reachableBuyers();
+		List<AbstractVillager> buyers = sellingTo(reachableBuyers(), station.inputPositions());
 		TradeDemand demand = demandFrom(buyers, station.inputPositions());
-		boolean goods = sellable(buyers, station.inputPositions());
+		boolean goods = !buyers.isEmpty();
 		if (!goods && !bot.hasEarnings() || !hasRoom(station.outputPosition()))
 			return false;
 		double far = goods ? buyers.stream().mapToDouble(bot::distanceTo).min().orElse(0)
 			: bot.position().distanceTo(Vec3.atCenterOf(station.outputPosition()));
 		if (bot.getCharge() < (far * 3 + 4) * CMConfig.SERVER.tradeBotFePerBlock() + CMConfig.SERVER.tradeBotFePerTrade())
 			return false; // he stays home and charges
-		return startJob(demand, goods, false);
+		if (!startJob(demand, goods, false, false))
+			return false;
+		claimPlanned(job, buyers);
+		return true;
+	}
+
+	/** Of {@code buyers}, the ones he can sell to: an offer paid in full from his inputs and load. */
+	private List<AbstractVillager> sellingTo(List<AbstractVillager> buyers, List<BlockPos> inputs) {
+		List<AbstractVillager> selling = new ArrayList<>(buyers);
+		selling.removeIf(villager -> !sellable(List.of(villager), inputs));
+		return selling;
+	}
+
+	/**
+	 * Claims the buyers a trip is planned around (D54), so another bot planning at the same time neither counts them
+	 * nor takes goods for them.
+	 */
+	private void claimPlanned(@Nullable Job j, List<AbstractVillager> buyers) {
+		if (j == null)
+			return;
+		long now = bot.level().getGameTime();
+		for (AbstractVillager villager : buyers)
+			if (VillagerClaims.claim(villager.getUUID(), bot.getUUID(), now))
+				j.planned.add(villager.getUUID());
+	}
+
+	/**
+	 * Keeps the planned buyers claimed while he fetches and trades; lets go of the ones he's done with, and of all of
+	 * them once the trading's over or he's on his way home.
+	 */
+	private void renewPlanned() {
+		Job j = job;
+		if (j == null || j.planned.isEmpty())
+			return;
+		boolean over = j.phase != Phase.TAKING && j.phase != Phase.TRADING
+			|| task == Task.RETURNING || task == Task.DOCKING || task == Task.HOME || task == Task.STRANDED;
+		if (!over && bot.level().getGameTime() % 20 != 0)
+			return;
+		long now = bot.level().getGameTime();
+		UUID current = work instanceof TradeWork trade ? trade.villager().getUUID() : null;
+		j.planned.removeIf(villager -> {
+			if (villager.equals(current) && !over)
+				return false;
+			if (over || j.done.contains(villager) || j.calledOff.contains(villager)) {
+				VillagerClaims.release(villager, bot.getUUID());
+				return true;
+			}
+			return !VillagerClaims.claim(villager, bot.getUUID(), now);
+		});
 	}
 
 	/**
@@ -221,16 +281,47 @@ public class TradeBotBrain {
 	 * D57); then, on the way home, put every unsold item back in the input it came from (D62).
 	 */
 	public boolean fetchAndDeliver(Predicate<ItemStack> wanted) {
-		return startJob(ContainerWork.Wanted.all(wanted), false, true);
+		return startJob(ContainerWork.Wanted.all(wanted), false, true, false);
 	}
 
-	private boolean startJob(ContainerWork.Wanted wanted, boolean trading, boolean command) {
-		if (!(bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station) || station.outputPosition() == null)
+	/**
+	 * Home with something still in his load (a trip cut short, or every input was full last time): a trip just to put
+	 * it back in his inputs (never the output: that only ever gets earnings, D48, D57). Only by day, unpaused, when an
+	 * input he can use takes some of it and his charge covers the trip; otherwise he keeps it and looks again later. A
+	 * trip that put nothing back isn't tried again for a long while, unless his links or his load change.
+	 */
+	public boolean returnLoad() {
+		if (isEmpty(bot.getLoad()) || !(bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station)
+			|| station.isPaused() || !bot.level().isDay() || bot.level().isThundering())
+			return false;
+		if (bot.level().getGameTime() < returnBlockedUntil && returnBlockedFor == returnKey(station))
+			return false;
+		double far = -1;
+		for (BlockPos input : station.inputPositions())
+			if (takesSomeOfLoad(input))
+				far = Math.max(far, bot.position().distanceTo(Vec3.atCenterOf(input)));
+		if (far < 0 || bot.getCharge() < (far * 3 + 4) * CMConfig.SERVER.tradeBotFePerBlock())
+			return false;
+		return startJob(stack -> 0, false, false, true);
+	}
+
+	/** His links and what he carries, to tell when a blocked return trip is worth trying again. */
+	private int returnKey(TradeBotStationBlockEntity station) {
+		int key = station.inputPositions().hashCode();
+		for (int slot = 0; slot < bot.getLoad().getSlots(); slot++) {
+			ItemStack stack = bot.getLoad().getStackInSlot(slot);
+			key = key * 31 + (stack.isEmpty() ? 0 : ItemStack.hashItemAndComponents(stack) * 31 + stack.getCount());
+		}
+		return key;
+	}
+
+	private boolean startJob(ContainerWork.Wanted wanted, boolean trading, boolean command, boolean returnOnly) {
+		if (!(bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station) || station.outputPosition() == null && !returnOnly)
 			return false;
 		List<BlockPos> inputs = new ArrayList<>(station.inputPositions());
 		if (!inputs.isEmpty())
 			java.util.Collections.rotate(inputs, -(roundRobin++ % inputs.size()));
-		job = new Job(inputs, station.outputPosition(), wanted, trading);
+		job = new Job(inputs, station.outputPosition(), wanted, trading, returnOnly);
 		debug("new job ({}trading), docked {}", trading ? "" : "not ", bot.isDocked());
 		goals.clear();
 		visited.clear();
@@ -258,17 +349,36 @@ public class TradeBotBrain {
 		return job == null ? 0 : job.returned;
 	}
 
-	/** Home to his station (wrench, redstone pause, packing, night...). */
-	public void goHome() {
+	/**
+	 * Home to his station (wrench, redstone pause, packing, night...). Not while he's run down or being wound up: he
+	 * has to be wound up first (false then). A fright is over: he rolls home at his usual pace.
+	 */
+	public boolean goHome() {
+		if (task == Task.WOUND_DOWN || task == Task.WINDING_UP || bot.rundown() != null)
+			return false;
 		if (task == Task.RETURNING || task == Task.DOCKING || task == Task.HOME && bot.isDocked())
-			return;
+			return true;
+		abortWork();
+		VillagerClaims.releaseAll(bot.getUUID());
+		bot.motion.setFleeing(false);
+		threat = null;
+		bot.motion.stop();
+		set(Task.RETURNING);
+		return true;
+	}
+
+	/** The container he has open right now (mid-visit), or null. */
+	@Nullable
+	public BlockPos openContainer() {
+		return work instanceof ContainerWork c && c.isOpen() ? c.visit().container() : null;
+	}
+
+	/** Drops the container visit or trade he's in the middle of, shutting what he opened (he's going home, or gone). */
+	public void abortWork() {
 		if (work != null) {
 			work.abort();
 			work = null;
 		}
-		VillagerClaims.releaseAll(bot.getUUID());
-		bot.motion.stop();
-		set(Task.RETURNING);
 	}
 
 	/** The next stop: inputs with something wanted, then buyers, then the output (if he has earnings), then returns; then home. */
@@ -305,7 +415,7 @@ public class TradeBotBrain {
 			j.phase = Phase.DELIVERING;
 		}
 		if (j.phase == Phase.DELIVERING) {
-			if (bot.hasEarnings()) {
+			if (bot.hasEarnings() && !j.returnOnly && j.output != null) {
 				ContainerVisit visit = ContainerVisit.plan(bot, j.output);
 				if (visit != null && approach(visit, ContainerWork.Mode.DELIVER_EARNINGS, stack -> 0))
 					return;
@@ -320,9 +430,10 @@ public class TradeBotBrain {
 				// left over (their own input was full): any input with room
 				j.leftoversQueued = true;
 				j.returns.addAll(nearestFirst(new ArrayList<>(j.inputs)));
+				continue;
 			}
 			BlockPos input = j.returns.poll();
-			if (!carries(j.from(input)))
+			if (!carries(j.from(input)) || j.returnOnly && !takesSomeOfLoad(input))
 				continue;
 			ContainerVisit visit = ContainerVisit.plan(bot, input);
 			if (visit != null && approach(visit, ContainerWork.Mode.RETURN, ContainerWork.Wanted.all(j.from(input))))
@@ -408,10 +519,12 @@ public class TradeBotBrain {
 			return false;
 		List<AbstractVillager> buyers = reachableBuyers();
 		buyers.removeIf(villager -> j.calledOff.contains(villager.getUUID()));
-		if (!sellable(buyers, j.inputs))
+		buyers = sellingTo(buyers, j.inputs);
+		if (buyers.isEmpty())
 			return false;
 		j.rounds++;
 		j.wanted = demandFrom(buyers, j.inputs);
+		claimPlanned(j, buyers);
 		j.input = 0;
 		j.done.clear();
 		j.leftoversQueued = false;
@@ -443,6 +556,25 @@ public class TradeBotBrain {
 	private boolean canAffordTrade() {
 		double home = bot.position().distanceTo(Vec3.atCenterOf(bot.getStation()));
 		return bot.getCharge() - CMConfig.SERVER.tradeBotFePerTrade() > (home * 1.5 + 4) * CMConfig.SERVER.tradeBotFePerBlock();
+	}
+
+	/**
+	 * An input he can stand at, whose inventory on the side he'd use takes at least some of what he carries (as the
+	 * container visit would put it).
+	 */
+	private boolean takesSomeOfLoad(BlockPos pos) {
+		ContainerVisit visit = ContainerVisit.plan(bot, pos);
+		if (visit == null)
+			return false;
+		var handler = bot.level().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos, visit.side());
+		if (handler == null)
+			return false;
+		for (int slot = 0; slot < bot.getLoad().getSlots(); slot++) {
+			ItemStack stack = bot.getLoad().getStackInSlot(slot);
+			if (!stack.isEmpty() && net.neoforged.neoforge.items.ItemHandlerHelper.insertItemStacked(handler, stack, true).getCount() < stack.getCount())
+				return true;
+		}
+		return false;
 	}
 
 	private boolean hasRoom(BlockPos output) {
@@ -531,6 +663,7 @@ public class TradeBotBrain {
 			}
 			return;
 		}
+		renewPlanned();
 		if ((task == Task.GOING || task == Task.WAITING || task == Task.APPROACHING || task == Task.WORKING || task == Task.SHRUGGING
 			|| task == Task.WAITING_OUTPUT || task == Task.WAITING_TURN) && shouldGoHome())
 			goHome();
@@ -540,7 +673,8 @@ public class TradeBotBrain {
 					set(Task.RETURNING);
 				else if (bot.isDocked() && ticks >= SCHEDULE_TICKS) {
 					ticks = 0;
-					trade();
+					if (!trade())
+						returnLoad(); // nothing to sell: put back anything left in his load
 				}
 			}
 			case LEAVING -> {
@@ -679,8 +813,15 @@ public class TradeBotBrain {
 					set(Task.HOME);
 					if (job != null && job.emeralds >= ModAdvancements.TRADE_BOT_STACK_EMERALDS)
 						bot.awardOwner(ModAdvancements.TRADE_BOT_STACK, job.emeralds);
-					if (job != null && job.trading && job.trades == 0)
-						ticks = SCHEDULE_TICKS - NO_TRADE_REST_TICKS; // nothing sold: give it a minute before trying again
+					// nothing sold, or a trip to put things back that couldn't put it all: give it a minute before trying again
+					if (job != null && (job.trading && job.trades == 0 || job.returnOnly && !isEmpty(bot.getLoad())))
+						ticks = SCHEDULE_TICKS - NO_TRADE_REST_TICKS;
+					// a trip to put things back that put nothing back: not that again for a long while
+					if (job != null && job.returnOnly && job.returned == 0 && !isEmpty(bot.getLoad())
+						&& bot.level().getBlockEntity(station) instanceof TradeBotStationBlockEntity home) {
+						returnBlockedUntil = bot.level().getGameTime() + RETURN_BLOCKED_TICKS;
+						returnBlockedFor = returnKey(home);
+					}
 				}
 			}
 			case STRANDED -> set(Task.HOME);
@@ -831,10 +972,7 @@ public class TradeBotBrain {
 	public void windDown() {
 		if (task != Task.WOUND_DOWN && task != Task.WINDING_UP)
 			resumeTask = task == Task.REACTING || task.name().startsWith("SCARED_") ? resumeTask : task;
-		if (work != null) {
-			work.abort();
-			work = null;
-		}
+		abortWork();
 		VillagerClaims.releaseAll(bot.getUUID());
 		bot.motion.halt();
 		bot.motion.setFleeing(false);

@@ -76,6 +76,10 @@ public final class TradeBotLinkPicking {
 		if (station == null)
 			return;
 		Minecraft mc = Minecraft.getInstance();
+		if (mc.getConnection() == null || mc.level == null) {
+			station = null; // disconnected: there's no server to tell
+			return;
+		}
 		TradeBotStationBlockEntity be = station();
 		int range = CMConfig.SERVER.tradeBotRange() + 16;
 		if (be == null || mc.player == null || mc.player.distanceToSqr(station.getCenter()) > (double) range * range || ++idleTicks > TIMEOUT_TICKS) {

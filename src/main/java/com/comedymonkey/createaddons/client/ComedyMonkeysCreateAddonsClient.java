@@ -55,6 +55,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(TradeBotLinkPicking::onClientTick);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.tradebot.TradeBotLoopSounds::onClientTick);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ComedyMonkeysCreateAddonsClient::tickClipClock);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ComedyMonkeysCreateAddonsClient::forgetMachineSounds);
 		// The Geothermal Turbine's sounds run from its controller's client tick
 		com.comedymonkey.createaddons.content.electric.GeothermalControllerBlockEntity.clientTicker = GeothermalTurbineSounds::tick;
 		// The Lava Generator's and the Electric Motor's sounds run from their client ticks
@@ -82,6 +83,16 @@ public class ComedyMonkeysCreateAddonsClient {
 		net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
 		if (mc.level != null && !mc.isPaused() && mc.level.tickRateManager().runsNormally())
 			com.comedymonkey.createaddons.content.tradebot.clip.ClipClock.tick(mc.level, mc.level.getGameTime());
+	}
+
+	/** The machines' sound states hold their block entities, and so the world: let them go with it. */
+	private static void forgetMachineSounds(net.neoforged.neoforge.event.level.LevelEvent.Unload event) {
+		if (!event.getLevel().isClientSide())
+			return;
+		GeothermalTurbineSounds.forget();
+		ElectricSounds.forget();
+		MagmaEngineSounds.forget();
+		PressureCrucibleSounds.forget();
 	}
 
 	private void registerScreens(RegisterMenuScreensEvent event) {

@@ -22,14 +22,26 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 
-/** Accepts every item and fluid offered and destroys it, keeping the fire lit for a few seconds after each. */
+/**
+ * Accepts every item and fluid offered and destroys it, water included. The fire ramps up and down: each item (or each
+ * tenth of a bucket) adds a point of heat, and it loses a point a second. It lights, and heats a boiler above it, at
+ * full heat (ten things), and stays lit until it has cooled right down, so it never flickers: keep feeding it at least
+ * a thing a second and it stays hot; stop, and it's cold within ten seconds.
+ */
 public class IncineratorBlockEntity extends BlockEntity implements IHaveGoggleInformation {
-	/** How long the fire stays lit after the last thing burned, in ticks. */
-	private static final int BURN_TICKS = 100;
+	/** Full heat, in things burned: it lights here. */
+	public static final int FULL_HEAT = 10;
+	/** Millibuckets of fluid that count as one thing. */
+	private static final int MB_PER_THING = 100;
+	/** Ticks between losing a point of heat. */
+	private static final int COOL_TICKS = 20;
 
 	private final IItemHandler items = new ItemSink();
 	private final IFluidHandler fluids = new FluidSink();
-	private int burnTicks;
+	private int heat;
+	private int coolIn = COOL_TICKS;
+	/** Millibuckets burned toward the next thing. */
+	private int fluidToward;
 	private long itemsBurned;
 	private long fluidBurned;
 	private boolean syncQueued;
@@ -47,19 +59,30 @@ public class IncineratorBlockEntity extends BlockEntity implements IHaveGoggleIn
 	}
 
 	void serverTick() {
-		if (burnTicks > 0 && --burnTicks == 0)
+		if (heat > 0 && --coolIn <= 0) {
+			heat--;
+			coolIn = COOL_TICKS;
+			syncQueued = true;
+			setChanged();
+		}
+		// lit at full heat, out once it's cooled right down: nothing in between switches it
+		if (heat >= FULL_HEAT)
+			setLit(true);
+		else if (heat == 0)
 			setLit(false);
-		// The goggles read the totals on the client: send them now and then while they change
-		if (syncQueued && level.getGameTime() % 20 == 0) {
+		// The goggles read the heat and totals on the client: send them now and then while they change
+		if (syncQueued && level != null && level.getGameTime() % 20 == 0) {
 			syncQueued = false;
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 		}
 	}
 
-	private void burned() {
-		if (burnTicks == 0)
-			setLit(true);
-		burnTicks = BURN_TICKS;
+	private void burned(long things) {
+		if (things <= 0)
+			return;
+		if (heat == 0)
+			coolIn = COOL_TICKS; // a cold fire starts its first second fresh
+		heat = (int) Math.min(FULL_HEAT, heat + things);
 		syncQueued = true;
 		setChanged();
 	}
@@ -77,9 +100,12 @@ public class IncineratorBlockEntity extends BlockEntity implements IHaveGoggleIn
 		LangBuilder lang = new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID);
 		lang.translate("gui.goggles.incinerator").forGoggles(tooltip);
 		boolean lit = getBlockState().getValue(IncineratorBlock.LIT);
-		lang.translate(lit ? "gui.goggles.incinerator.burning" : "gui.goggles.incinerator.cold")
-			.style(lit ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY)
-			.forGoggles(tooltip, 1);
+		if (lit)
+			lang.translate("gui.goggles.incinerator.burning").style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
+		else if (heat > 0)
+			lang.translate("gui.goggles.incinerator.warming", heat, FULL_HEAT).style(ChatFormatting.YELLOW).forGoggles(tooltip, 1);
+		else
+			lang.translate("gui.goggles.incinerator.cold").style(ChatFormatting.DARK_GRAY).forGoggles(tooltip, 1);
 		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.incinerator.items", itemsBurned)
 			.style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
 		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.incinerator.fluid", fluidBurned)
@@ -90,7 +116,9 @@ public class IncineratorBlockEntity extends BlockEntity implements IHaveGoggleIn
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
-		tag.putInt("BurnTicks", burnTicks);
+		tag.putInt("Heat", heat);
+		tag.putInt("CoolIn", coolIn);
+		tag.putInt("FluidToward", fluidToward);
 		tag.putLong("ItemsBurned", itemsBurned);
 		tag.putLong("FluidBurned", fluidBurned);
 	}
@@ -98,7 +126,9 @@ public class IncineratorBlockEntity extends BlockEntity implements IHaveGoggleIn
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
-		burnTicks = tag.getInt("BurnTicks");
+		heat = tag.getInt("Heat");
+		coolIn = tag.contains("CoolIn") ? tag.getInt("CoolIn") : COOL_TICKS;
+		fluidToward = tag.getInt("FluidToward");
 		itemsBurned = tag.getLong("ItemsBurned");
 		fluidBurned = tag.getLong("FluidBurned");
 	}
@@ -131,7 +161,7 @@ public class IncineratorBlockEntity extends BlockEntity implements IHaveGoggleIn
 				return stack;
 			if (!simulate) {
 				itemsBurned += stack.getCount();
-				burned();
+				burned(stack.getCount());
 			}
 			return ItemStack.EMPTY;
 		}
@@ -180,7 +210,9 @@ public class IncineratorBlockEntity extends BlockEntity implements IHaveGoggleIn
 				return 0;
 			if (action.execute()) {
 				fluidBurned += resource.getAmount();
-				burned();
+				long toward = (long) fluidToward + resource.getAmount();
+				fluidToward = (int) (toward % MB_PER_THING);
+				burned(toward / MB_PER_THING);
 			}
 			return resource.getAmount();
 		}

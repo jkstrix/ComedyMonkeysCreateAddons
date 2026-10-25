@@ -37,6 +37,15 @@ import net.neoforged.neoforge.fluids.FluidUtil;
  * Turbine Core. Formed, it draws the whole machine; running, the machine steams and its vents flicker with flame.
  */
 public class GeothermalControllerBlock extends Block implements IBE<GeothermalControllerBlockEntity>, IWrenchable {
+	/**
+	 * Turned by a wrench, it faces a different 3x3x3: it comes out unformed and unlit (onRemove frees the old casings),
+	 * and forms again if the new cube is a turbine.
+	 */
+	@Override
+	public BlockState getRotatedBlockState(BlockState originalState, Direction targetedFace) {
+		return IWrenchable.super.getRotatedBlockState(originalState, targetedFace).setValue(FORMED, false).setValue(LIT, false);
+	}
+
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty FORMED = GeothermalPartBlock.FORMED;
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -77,14 +86,20 @@ public class GeothermalControllerBlock extends Block implements IBE<GeothermalCo
 											  InteractionHand hand, BlockHitResult hit) {
 		if (FluidUtil.getFluidHandler(stack).isEmpty())
 			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-		if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hit.getDirection()))
+		// the controller offers its tanks to no side (pipes go through the ports below), so ask it without one
+		if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, null))
 			return ItemInteractionResult.sidedSuccess(level.isClientSide);
 		return ItemInteractionResult.CONSUME;
 	}
 
+	/**
+	 * Broken, or turned by a wrench (it then faces a different 3x3x3): free the casings of the turbine it was part of.
+	 * The block entity still has the old facing here, so it frees the right ones.
+	 */
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-		if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof GeothermalControllerBlockEntity be)
+		boolean turned = state.is(newState.getBlock()) && state.getValue(FACING) != newState.getValue(FACING);
+		if ((!state.is(newState.getBlock()) || turned) && level.getBlockEntity(pos) instanceof GeothermalControllerBlockEntity be)
 			be.unform();
 		super.onRemove(state, level, pos, newState, movedByPiston);
 	}

@@ -26,6 +26,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -328,6 +329,15 @@ public class AutoHarvesterBlockEntity extends KineticBlockEntity implements Clea
 	@Override
 	public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
 		return new AutoHarvesterMenu(containerId, inventory, this);
+	}
+
+	/**
+	 * The screen finds this block by its position, sent with every opening however it's opened (a spectator's
+	 * right-click or another mod calling openMenu sends nothing else).
+	 */
+	@Override
+	public void writeClientSideData(AbstractContainerMenu menu, RegistryFriendlyByteBuf buffer) {
+		buffer.writeBlockPos(worldPosition);
 	}
 
 	/** The planter as one slot for the screen: take the plant out, or put one in while it's empty. */

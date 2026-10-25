@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 
@@ -28,6 +29,11 @@ public final class GeothermalTurbineSounds {
 	private static final Map<GeothermalControllerBlockEntity, State> STATES = new WeakHashMap<>();
 
 	private GeothermalTurbineSounds() {}
+
+	/** Forgets every turbine when the client's world goes: their block entities, and their loops, hold that world. */
+	public static void forget() {
+		STATES.clear();
+	}
 
 	private static final class State {
 		boolean running, stalled, spinning;
@@ -49,6 +55,8 @@ public final class GeothermalTurbineSounds {
 			s.stalled = stalled;
 			s.spinning = speed > 0.01f;
 			s.groan = 160 + be.getLevel().random.nextInt(140);
+			// the loops hold their block entity, so a weak key alone never lets go: drop the ones unloaded or broken
+			STATES.keySet().removeIf(BlockEntity::isRemoved);
 			STATES.put(be, s);
 		}
 		RandomSource random = be.getLevel().random;

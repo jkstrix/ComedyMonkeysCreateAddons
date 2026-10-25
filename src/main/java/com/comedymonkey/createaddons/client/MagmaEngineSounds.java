@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
@@ -42,6 +43,11 @@ public final class MagmaEngineSounds {
 
 	private MagmaEngineSounds() {}
 
+	/** Forgets every engine when the client's world goes: their block entities, and their loops, hold that world. */
+	public static void forget() {
+		STATES.clear();
+	}
+
 	private static final class State {
 		boolean lit;
 		/** Which half of the turn the crank was in last tick: a change is a piston at the top of its stroke. */
@@ -63,6 +69,8 @@ public final class MagmaEngineSounds {
 			// Already running when it came into view: pick up the loops without replaying its start
 			s = new State();
 			s.lit = lit;
+			// the loops hold their block entity, so a weak key alone never lets go: drop the ones unloaded or broken
+			STATES.keySet().removeIf(BlockEntity::isRemoved);
 			STATES.put(be, s);
 		}
 		RandomSource random = level.random;

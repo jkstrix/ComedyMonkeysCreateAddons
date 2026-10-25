@@ -86,7 +86,10 @@ public final class TradeBotCommands {
 		TradeBotEntity bot = nearest(context.getSource());
 		if (bot == null)
 			return 0;
-		bot.goHome();
+		if (!bot.goHome()) {
+			context.getSource().sendFailure(Component.translatable("message.comedymonkeysaddons.trade_bot.wind_up_first"));
+			return 0;
+		}
 		context.getSource().sendSuccess(() -> Component.translatable("message.comedymonkeysaddons.trade_bot.heading_home"), false);
 		return 1;
 	}

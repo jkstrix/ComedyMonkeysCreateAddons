@@ -116,4 +116,19 @@ class TradeTest {
 		VillagerClaims.releaseAll(first);
 		assertTrue(VillagerClaims.claim(villager, second, 160));
 	}
+
+	@Test
+	void lapsedClaimsAreClearedOut() {
+		UUID bot = UUID.randomUUID(), other = UUID.randomUUID();
+		for (int i = 0; i < 10; i++)
+			assertTrue(VillagerClaims.claim(UUID.randomUUID(), bot, 100));
+		assertEquals(10, VillagerClaims.size());
+		UUID held = UUID.randomUUID();
+		assertTrue(VillagerClaims.claim(held, bot, 250));
+		long later = 250 + VillagerClaims.HOLD_TICKS - 1;
+		assertTrue(VillagerClaims.claim(UUID.randomUUID(), other, later));
+		assertEquals(2, VillagerClaims.size(), "only the claims still held are kept");
+		assertTrue(VillagerClaims.claimedByOther(held, other, later), "a claim still held isn't cleared out");
+		assertFalse(VillagerClaims.claim(held, other, later));
+	}
 }

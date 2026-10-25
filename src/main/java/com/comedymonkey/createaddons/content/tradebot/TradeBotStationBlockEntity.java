@@ -184,18 +184,24 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 				if (player.distanceToSqr(worldPosition.getCenter()) > 64)
 					return;
 				TradeBotEntity tradeBot = findBot();
-				if (tradeBot != null && !tradeBot.isDocked()) {
-					tradeBot.goHome();
-					player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.heading_home"), true);
-				}
+				if (tradeBot != null && !tradeBot.isDocked())
+					player.displayClientMessage(Component.translatable(tradeBot.goHome() ? "message.comedymonkeysaddons.trade_bot.heading_home"
+						: "message.comedymonkeysaddons.trade_bot.wind_up_first"), true);
 			}
 			case UNLINK -> {
 				// from the screen (by the station) or left-clicked while picking (by the container)
 				boolean near = player.distanceToSqr(worldPosition.getCenter()) <= 64 || player.distanceToSqr(target.getCenter()) <= 64;
-				if (!near || roleOf(target) == TradeBotLinks.Role.NONE)
+				if (!near)
 					return;
-				setRole(target, TradeBotLinks.Role.NONE);
-				player.displayClientMessage(TradeBotLinks.describe(level, target, TradeBotLinks.Role.NONE), true);
+				// a linked block unlinks straight off, even out in an unloaded chunk; only a loaded one is looked at, for
+				// the other half of a linked double chest and for its name
+				boolean loaded = level.isLoaded(target);
+				BlockPos linked = roleOf(target) != TradeBotLinks.Role.NONE || !loaded ? target : linkedHalf(target);
+				if (roleOf(linked) == TradeBotLinks.Role.NONE)
+					return;
+				setRole(linked, TradeBotLinks.Role.NONE);
+				if (level.isLoaded(linked))
+					player.displayClientMessage(TradeBotLinks.describe(level, linked, TradeBotLinks.Role.NONE), true);
 			}
 			case START_PICKING -> {
 				if (player.distanceToSqr(worldPosition.getCenter()) <= 64)
@@ -205,10 +211,26 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		}
 	}
 
+	/**
+	 * The block a click on {@code clicked} means: a double chest is one container, so clicking the other half of a linked
+	 * one acts on the half that's linked.
+	 */
+	public BlockPos linkedHalf(BlockPos clicked) {
+		if (level == null || roleOf(clicked) != TradeBotLinks.Role.NONE)
+			return clicked;
+		if (!level.isLoaded(clicked))
+			return clicked;
+		for (BlockPos half : com.comedymonkey.createaddons.content.tradebot.work.ContainerWork.loadedHalves(level, clicked, level.getBlockState(clicked)))
+			if (roleOf(half) != TradeBotLinks.Role.NONE)
+				return half;
+		return clicked;
+	}
+
 	/** A container clicked while picking (from {@link TradeBotPicking}): cycle its link, if it can be linked. */
-	void pick(ServerPlayer player, BlockPos target) {
+	void pick(ServerPlayer player, BlockPos clicked) {
 		if (level == null || !TradeBotOwnership.canControl(player, owner))
 			return;
+		BlockPos target = linkedHalf(clicked);
 		if (roleOf(target) == TradeBotLinks.Role.NONE && !TradeBotLinks.canLink(level, target)) {
 			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.link.not_a_container"), true);
 			return;
@@ -325,8 +347,9 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 			return;
 		}
 		if (tradeBot != null && !tradeBot.isDocked()) {
-			tradeBot.goHome();
-			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.heading_home"), true);
+			// run down out there, he has to be wound up before he can come home
+			player.displayClientMessage(Component.translatable(tradeBot.goHome() ? "message.comedymonkeysaddons.trade_bot.heading_home"
+				: "message.comedymonkeysaddons.trade_bot.wind_up_first"), true);
 			return;
 		}
 		TradeBotData data = tradeBot != null ? tradeBot.toData(inputs, Optional.ofNullable(output)) : TradeBotData.EMPTY;
@@ -345,13 +368,18 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 			player.drop(stack, false);
 	}
 
-	/** The block went some other way than packing: his bot goes too, and stops counting toward the limit. */
+	/**
+	 * The block went some other way than packing: his bot goes too, dropping what he carries (packing keeps it in the
+	 * item instead), and stops counting toward the limit.
+	 */
 	void removed() {
 		if (packing || bot == null || !(level instanceof ServerLevel server))
 			return;
 		TradeBotEntity tradeBot = findBot();
-		if (tradeBot != null)
+		if (tradeBot != null) {
+			tradeBot.dropCarried();
 			tradeBot.packUp();
+		}
 		TradeBotRegistry.get(server.getServer()).remove(bot);
 	}
 

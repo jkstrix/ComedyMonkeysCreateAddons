@@ -34,6 +34,8 @@ import net.minecraft.world.level.block.entity.ChestLidController;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
 /**
  * One half (or all) of an upgraded chest. Slot count and stack limit come from the tier in the block state; items are
@@ -110,6 +112,21 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 		return getTier().multiplier();
 	}
 
+	/**
+	 * What automation (hoppers, funnels, pipes, Trade Bot) sees: both halves of a double chest as one, in the menu's
+	 * order (the RIGHT half first), like a vanilla double chest; a single chest is just its own slots.
+	 */
+	public IItemHandler getAutomationHandler() {
+		if (level == null)
+			return itemHandler;
+		List<BlockPos> parts = ChestUpgrades.halves(level, worldPosition, getBlockState());
+		if (parts.size() == 2 && level.getBlockEntity(parts.get(1)) instanceof UpgradedChestBlockEntity other) {
+			boolean selfFirst = getBlockState().getValue(UpgradedChestBlock.TYPE) == ChestType.RIGHT;
+			return selfFirst ? new CombinedInvWrapper(itemHandler, other.itemHandler) : new CombinedInvWrapper(other.itemHandler, itemHandler);
+		}
+		return itemHandler;
+	}
+
 	public UpgradedChestItemHandler getItemHandler() {
 		return itemHandler;
 	}
@@ -123,13 +140,23 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 		setChanged();
 	}
 
-	/** Diamond doubles the slots, so the inventory grows or (compacting, already checked to fit) shrinks with the tier. */
+	/**
+	 * Diamond doubles the slots, so the inventory grows or (compacting, already checked to fit) shrinks with the tier.
+	 * Joining or splitting a double chest, turning it, or a new tier (a new number of slots), changes what automation sees, so its
+	 * cached item handlers are dropped: a combined handler works out its slot ranges once, when it's made.
+	 */
 	@Override
 	public void setBlockState(BlockState state) {
+		BlockState old = getBlockState();
+		boolean repaired = old.getValue(UpgradedChestBlock.TYPE) != state.getValue(UpgradedChestBlock.TYPE)
+			|| old.getValue(UpgradedChestBlock.TIER) != state.getValue(UpgradedChestBlock.TIER)
+			|| old.getValue(UpgradedChestBlock.FACING) != state.getValue(UpgradedChestBlock.FACING);
 		super.setBlockState(state);
 		int slots = tierOf(state).slots();
 		if (items.size() != slots)
 			items = ChestStacks.resize(items, slots);
+		if (repaired && level != null)
+			level.invalidateCapabilities(worldPosition);
 	}
 
 	// ---------------------------------------------------------------- lid
@@ -150,6 +177,21 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 			return true;
 		}
 		return super.triggerEvent(id, type);
+	}
+
+	/**
+	 * Opens or closes the lid for something that isn't a player (Trade Bot rummaging): the animated lid swings, and once
+	 * shut the static lid comes back. A player looking in keeps it open.
+	 */
+	public void swingLid(boolean open) {
+		if (level == null || remove || (!open && openersCounter.getOpenerCount() > 0))
+			return;
+		BlockState state = getBlockState();
+		if (open)
+			setOpenState(level, worldPosition, true);
+		else
+			level.scheduleTick(worldPosition, state.getBlock(), LID_CLOSE_TICKS);
+		level.blockEvent(worldPosition, state.getBlock(), LID_EVENT, open ? 1 : 0);
 	}
 
 	/** Scheduled tick: drop viewers that walked away, and restore the static lid once nobody is looking. */

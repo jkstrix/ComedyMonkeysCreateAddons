@@ -33,7 +33,8 @@ public final class QuickTransfer {
 	private QuickTransfer() {}
 
 	public static void handle(Player player, AbstractContainerMenu menu, Action action, int slot) {
-		if (!(menu instanceof QuickTransferMenu quick) || !menu.stillValid(player))
+		// Spectators can look but not touch, as vanilla ignores their clicks
+		if (player.isSpectator() || !(menu instanceof QuickTransferMenu quick) || !menu.stillValid(player))
 			return;
 		int first = quick.firstPlayerSlot();
 		int size = menu.slots.size();

@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -265,6 +266,15 @@ public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInf
 	@Override
 	public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
 		return new WellspringMenu(containerId, inventory, this);
+	}
+
+	/**
+	 * The screen finds this block by its position, sent with every opening however it's opened (a spectator's
+	 * right-click or another mod calling openMenu sends nothing else).
+	 */
+	@Override
+	public void writeClientSideData(AbstractContainerMenu menu, RegistryFriendlyByteBuf buffer) {
+		buffer.writeBlockPos(worldPosition);
 	}
 
 	// ---------------------------------------------------------------- fluid

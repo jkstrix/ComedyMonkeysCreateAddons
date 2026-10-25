@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.comedymonkey.createaddons.content.chest.ChestUpgrades;
+import com.comedymonkey.createaddons.content.chest.UpgradedChestBlock;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotEntity;
 
 import net.minecraft.core.BlockPos;
@@ -13,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
@@ -29,7 +32,7 @@ public record ContainerVisit(BlockPos container, ContainerKind kind, Direction s
 	public static ContainerVisit plan(TradeBotEntity bot, BlockPos container) {
 		Level level = bot.level();
 		BlockState state = level.getBlockState(container);
-		Direction front = state.getBlock() instanceof ChestBlock ? state.getValue(ChestBlock.FACING) : null;
+		Direction front = isChest(state) ? state.getValue(BlockStateProperties.HORIZONTAL_FACING) : null;
 		List<ContainerVisit> options = new ArrayList<>();
 		for (Direction side : Direction.Plane.HORIZONTAL)
 			for (int below = 0; below <= 1; below++) {
@@ -42,13 +45,18 @@ public record ContainerVisit(BlockPos container, ContainerKind kind, Direction s
 			.orElse(null);
 	}
 
+	private static boolean isChest(BlockState state) {
+		return state.getBlock() instanceof ChestBlock || state.getBlock() instanceof UpgradedChestBlock;
+	}
+
 	@Nullable
 	private static ContainerVisit at(TradeBotEntity bot, Level level, BlockPos container, BlockState state, Direction side, boolean high) {
 		ContainerKind kind = ContainerKind.of(state, high);
 		if (high && (kind == ContainerKind.DEPOT || kind == ContainerKind.BELT))
 			kind = ContainerKind.BLIND; // a raised depot or belt: he can't reach its top, so it's the blind routine
-		if (kind == ContainerKind.CHEST && ChestBlock.isChestBlockedAt(level, container))
-			kind = ContainerKind.CHEST_HIGH; // something on the lid: it can't open for him to look in
+		// something on the lid (on either half of a double chest): it can't open for him to look in
+		if (kind == ContainerKind.CHEST && ChestUpgrades.halves(level, container, state).stream().anyMatch(half -> ChestBlock.isChestBlockedAt(level, half)))
+			kind = ContainerKind.CHEST_HIGH;
 		int dy = high ? -1 : 0;
 		Vec3 face = Vec3.atBottomCenterOf(container).add(side.getStepX() * 0.5, 0, side.getStepZ() * 0.5);
 		Vec3 point = face.add(side.getStepX() * kind.standoff / 16.0, 0, side.getStepZ() * kind.standoff / 16.0);

@@ -1,5 +1,7 @@
 package com.comedymonkey.createaddons.content.tradebot.work;
 
+import com.comedymonkey.createaddons.content.chest.UpgradedBarrelBlock;
+import com.comedymonkey.createaddons.content.chest.UpgradedChestBlock;
 import com.simibubi.create.content.kinetics.belt.BeltBlock;
 import com.simibubi.create.content.logistics.depot.DepotBlock;
 
@@ -52,9 +54,10 @@ public enum ContainerKind {
 			return BELT;
 		if (state.getBlock() instanceof DepotBlock)
 			return DEPOT;
-		if (state.getBlock() instanceof ChestBlock)
+		// upgraded chests and barrels open like the vanilla ones
+		if (state.getBlock() instanceof ChestBlock || state.getBlock() instanceof UpgradedChestBlock)
 			return high ? CHEST_HIGH : CHEST;
-		if (state.getBlock() instanceof BarrelBlock)
+		if (state.getBlock() instanceof BarrelBlock || state.getBlock() instanceof UpgradedBarrelBlock)
 			return BARREL;
 		return BLIND;
 	}

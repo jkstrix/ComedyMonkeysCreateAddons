@@ -15,6 +15,7 @@ import com.simibubi.create.api.contraption.storage.item.MountedItemStorage;
 import com.simibubi.create.api.contraption.storage.item.menu.StorageInteractionWrapper;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.Contraption;
+import com.simibubi.create.content.contraptions.actors.psi.PortableStorageInterfaceBlockEntity;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -34,6 +35,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
@@ -52,6 +54,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * entry for this block replaced, and read back (which rebuilds it just as loading a world would).
  */
 public class ContraptionUpgradeInteraction extends MovingInteractionBehaviour {
+	/** Where a moving Portable Storage Interface keeps the position of the one it's docked with (Create's key). */
+	private static final String PSI_WORKING_POS = "WorkingPos";
+
 	@Override
 	public boolean handlePlayerInteraction(Player player, InteractionHand hand, BlockPos localPos,
 										   AbstractContraptionEntity entity) {
@@ -157,6 +162,7 @@ public class ContraptionUpgradeInteraction extends MovingInteractionBehaviour {
 		}
 		storageTag.put("items", storages);
 		contraption.getStorage().read(storageTag, player.registryAccess(), false, contraption);
+		reconnectInterfaces(entity);
 
 		// Pay for it, exactly as on the ground
 		held.consume(1, player);
@@ -184,6 +190,23 @@ public class ContraptionUpgradeInteraction extends MovingInteractionBehaviour {
 				&& menu.slots.stream().anyMatch(slot -> shows(slot.container, storages)))
 				player.closeContainer();
 		}
+	}
+
+	/**
+	 * Reading the storage back builds a new inventory for the whole contraption, but a Portable Storage Interface it's
+	 * docked with keeps the one it was handed on connecting: whatever was pulled through it would come out of the old
+	 * copies while the new ones still held it. Hands each interface this contraption is docked with the new inventory.
+	 */
+	private static void reconnectInterfaces(AbstractContraptionEntity entity) {
+		Contraption contraption = entity.getContraption();
+		Level level = entity.level();
+		for (var actor : contraption.getActors())
+			NbtUtils.readBlockPos(actor.getRight().data, PSI_WORKING_POS).ifPresent(pos -> {
+				// Connecting or connected to this contraption: Create only fetches the inventory again when it's
+				// told to start transferring, and with the same contraption that's all it does
+				if (level.getBlockEntity(pos) instanceof PortableStorageInterfaceBlockEntity psi && psi.isTransferring())
+					psi.startTransferringTo(contraption, 2);
+			});
 	}
 
 	private static boolean shows(Container container, Collection<MountedItemStorage> storages) {

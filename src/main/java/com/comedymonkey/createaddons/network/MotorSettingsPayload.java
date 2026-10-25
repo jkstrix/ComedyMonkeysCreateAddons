@@ -29,8 +29,10 @@ public record MotorSettingsPayload(BlockPos pos, int speed, int stress, boolean 
 	public static void handle(MotorSettingsPayload payload, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			Player player = context.player();
-			// Close by, and allowed to change things (not a spectator or in adventure mode)
-			if (player.distanceToSqr(payload.pos().getCenter()) > 64 || !player.mayBuild())
+			// Close by, and allowed to change things (not a spectator or in adventure mode, nor in someone's claim or
+			// spawn protection). The screen is client-only, so there is no open menu to check against.
+			if (player.distanceToSqr(payload.pos().getCenter()) > 64 || !player.mayBuild()
+				|| !player.level().mayInteract(player, payload.pos()))
 				return;
 			if (player.level().getBlockEntity(payload.pos()) instanceof ElectricMotorBlockEntity motor)
 				motor.applySettings(payload.speed(), payload.stress(), payload.reversed());

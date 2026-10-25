@@ -116,7 +116,7 @@ public class WellspringBlock extends BaseEntityBlock implements IWrenchable {
 
 	private static InteractionResult openGui(Level level, BlockPos pos, Player player, WellspringBlockEntity be) {
 		if (!level.isClientSide && player instanceof ServerPlayer serverPlayer)
-			serverPlayer.openMenu(be, buf -> buf.writeBlockPos(pos));
+			serverPlayer.openMenu(be);
 		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 

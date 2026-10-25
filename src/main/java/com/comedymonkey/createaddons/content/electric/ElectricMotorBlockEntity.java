@@ -25,9 +25,13 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 
 /**
  * Draws {@code stress / 16} FE a tick (configurable) and, while it has the power, turns at its set speed with its set
- * stress capacity. Short of power it stops, and starts again once it has half a second's worth stored.
+ * stress capacity. Short of power it stops, and starts again once it has a reserve stored: 30 seconds' worth, or a
+ * quarter of its buffer if that's less (a few seconds at high stress). Each start and stop jolts the whole kinetic
+ * network, so a weak supply makes it pause now and then rather than stutter.
  */
 public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity {
+	/** Ticks of running it waits to have stored before it starts again after running short. */
+	private static final int RESTART_TICKS = 600;
 	public static final int MIN_SPEED = 1;
 	public static final int MAX_SPEED = 256;
 	/** Stress is set in steps of this. */
@@ -106,7 +110,7 @@ public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity {
 			return;
 		}
 		double need = usagePerTick();
-		boolean canRun = energy.getEnergyStored() >= (running ? owed + need : need * 10);
+		boolean canRun = energy.getEnergyStored() >= (running ? owed + need : Math.max(need * 10, Math.min(energy.getMaxEnergyStored() / 4.0, need * RESTART_TICKS)));
 		if (canRun) {
 			owed += need;
 			int take = (int) owed;

@@ -41,6 +41,12 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 
 	private final IItemHandler output = new OutputHandler();
 	private int stored;
+	/**
+	 * Filled up, and waiting for a quarter of its store to be taken before it starts again: an extractor taking a little
+	 * at a time would otherwise flip it between idle and working every cycle, putting its load on the network and
+	 * taking it off again.
+	 */
+	private boolean filled;
 	private int destroyProgress;
 	private int ticksUntilNextProgress;
 	private boolean syncQueued;
@@ -111,6 +117,12 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 			return;
 		}
 
+		if (stored >= capacity())
+			filled = true;
+		else if (filled && stored <= capacity() - Math.max(perCycle(), capacity() / 4)) {
+			filled = false;
+			syncQueued = true;
+		}
 		if (getSpeed() != 0 && !isOverStressed() && !isIdle())
 			work();
 		// Full or switched off by redstone: stop loading the network, and pick the load back up when that ends
@@ -194,7 +206,7 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 
 	/** Full or switched off: makes nothing and puts no load on the network. */
 	public boolean isIdle() {
-		return powered || stored >= capacity();
+		return powered || filled || stored >= capacity();
 	}
 
 	public boolean isPowered() {
@@ -277,12 +289,13 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 	}
 
 	public boolean isFull() {
-		return stored >= capacity();
+		return filled || stored >= capacity();
 	}
 
 	/** Ponder only: how much it holds and whether redstone has switched it off. */
 	public void setPonderState(int stored, boolean powered) {
 		this.stored = stored;
+		this.filled = stored >= capacity();
 		this.powered = powered;
 	}
 
@@ -364,7 +377,7 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 		int ticks = ticksPerCycle();
 		if (powered)
 			lang().translate("gui.goggles.cobble_generator.off").style(ChatFormatting.RED).forGoggles(tooltip, 1);
-		else if (stored >= capacity())
+		else if (isFull())
 			lang().translate("gui.goggles.cobble_generator.full").style(ChatFormatting.RED).forGoggles(tooltip, 1);
 		else if (ticks == 0 || isOverStressed())
 			lang().translate("gui.goggles.cobble_generator.idle").style(ChatFormatting.RED).forGoggles(tooltip, 1);
@@ -386,6 +399,7 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 	protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.write(tag, registries, clientPacket);
 		tag.putInt("Stored", stored);
+		tag.putBoolean("Filled", filled);
 		tag.putInt("Progress", destroyProgress);
 		tag.putBoolean("Powered", powered);
 	}
@@ -394,6 +408,7 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.read(tag, registries, clientPacket);
 		stored = tag.getInt("Stored");
+		filled = tag.getBoolean("Filled");
 		destroyProgress = tag.getInt("Progress");
 		powered = tag.getBoolean("Powered");
 	}

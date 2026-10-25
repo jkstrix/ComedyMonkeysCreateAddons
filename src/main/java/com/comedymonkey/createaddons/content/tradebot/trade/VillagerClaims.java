@@ -16,11 +16,14 @@ public final class VillagerClaims {
 	private record Claim(UUID bot, long until) {}
 
 	private static final Map<UUID, Claim> CLAIMS = new HashMap<>();
+	/** When lapsed claims were last cleared out. */
+	private static long lastPrune = Long.MIN_VALUE / 2;
 
 	private VillagerClaims() {}
 
 	/** Claims or renews {@code villager} for {@code bot}; false if another bot holds it. */
 	public static boolean claim(UUID villager, UUID bot, long now) {
+		prune(now);
 		if (claimedByOther(villager, bot, now))
 			return false;
 		CLAIMS.put(villager, new Claim(bot, now + HOLD_TICKS));
@@ -46,5 +49,19 @@ public final class VillagerClaims {
 	/** Forgets every claim, when the server stops. */
 	public static void clear() {
 		CLAIMS.clear();
+		lastPrune = Long.MIN_VALUE / 2;
+	}
+
+	/** Clears out lapsed claims (they count for nothing anyway), at most once every {@link #HOLD_TICKS}. */
+	private static void prune(long now) {
+		if (now >= lastPrune && now - lastPrune < HOLD_TICKS)
+			return;
+		lastPrune = now;
+		CLAIMS.values().removeIf(claim -> claim.until <= now);
+	}
+
+	/** Claims held, lapsed or not (for tests). */
+	static int size() {
+		return CLAIMS.size();
 	}
 }

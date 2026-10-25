@@ -6,6 +6,10 @@ import java.util.function.Predicate;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.comedymonkey.createaddons.content.chest.ChestUpgrades;
+import com.comedymonkey.createaddons.content.chest.UpgradedBarrelBlock;
+import com.comedymonkey.createaddons.content.chest.UpgradedChestBlock;
+import com.comedymonkey.createaddons.content.chest.UpgradedChestBlockEntity;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotEntity;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
@@ -126,7 +130,7 @@ public class ContainerWork implements BotWork {
 		return !clip.name().equals(kind.clip(taking)) || clip.finished(t);
 	}
 
-	/** Interrupted (a home rule, damage, his station gone): shut what he opened. */
+	/** Interrupted (a home rule, damage, his station gone, packed, killed or unloaded): shut what he opened. */
 	@Override
 	public void abort() {
 		if (opened && !closed) {
@@ -223,17 +227,55 @@ public class ContainerWork implements BotWork {
 	// ---- the real block opening (D6: "barrels don't actually open or close" was the bug this fixes)
 
 	private void setOpen(boolean open) {
-		Level level = bot.level();
-		BlockPos pos = visit.container();
+		setOpen(bot.level(), visit.container(), open);
+	}
+
+	/** He has the lid open (or the barrel) right now. */
+	public boolean isOpen() {
+		return opened && !closed;
+	}
+
+	/**
+	 * Shuts a container he left open (saved when he was unloaded mid-visit, closed once he's back); false if it isn't
+	 * loaded, to try again later.
+	 */
+	public static boolean shut(Level level, BlockPos pos) {
+		if (!level.isLoaded(pos))
+			return false;
+		setOpen(level, pos, false);
+		return true;
+	}
+
+	/**
+	 * Opens or shuts the real block, and the other half of a double chest. Only blocks that are loaded: he may be being
+	 * unloaded with them, and nothing must be loaded back up for it.
+	 */
+	private static void setOpen(Level level, BlockPos pos, boolean open) {
+		if (!level.isLoaded(pos))
+			return;
 		BlockState state = level.getBlockState(pos);
 		if (state.getBlock() instanceof ChestBlock) {
 			level.blockEvent(pos, state.getBlock(), 1, open ? 1 : 0);
 			if (state.getValue(ChestBlock.TYPE) != ChestType.SINGLE) {
 				BlockPos other = pos.relative(ChestBlock.getConnectedDirection(state));
-				level.blockEvent(other, level.getBlockState(other).getBlock(), 1, open ? 1 : 0);
+				if (level.isLoaded(other))
+					level.blockEvent(other, level.getBlockState(other).getBlock(), 1, open ? 1 : 0);
 			}
-		} else if (state.getBlock() instanceof BarrelBlock && state.getValue(BarrelBlock.OPEN) != open)
+		} else if (state.getBlock() instanceof UpgradedChestBlock) {
+			for (BlockPos half : loadedHalves(level, pos, state))
+				if (level.getBlockEntity(half) instanceof UpgradedChestBlockEntity chest)
+					chest.swingLid(open);
+		} else if ((state.getBlock() instanceof BarrelBlock || state.getBlock() instanceof UpgradedBarrelBlock)
+			&& state.hasProperty(BarrelBlock.OPEN) && state.getValue(BarrelBlock.OPEN) != open)
 			level.setBlock(pos, state.setValue(BarrelBlock.OPEN, open), 3);
+	}
+
+	/** Both halves of a double chest, or just this one when the other half's chunk isn't loaded (it's not loaded for this). */
+	public static List<BlockPos> loadedHalves(Level level, BlockPos pos, BlockState state) {
+		if (state.hasProperty(ChestBlock.TYPE) && state.getValue(ChestBlock.TYPE) != ChestType.SINGLE
+			&& state.hasProperty(ChestBlock.FACING) && !level.isLoaded(pos.relative(ChestBlock.getConnectedDirection(state))))
+			return List.of(pos);
+		return ChestUpgrades.halves(level, pos, state);
 	}
 
 	/** Load handler type, for callers that hold one. */

@@ -108,7 +108,7 @@ public class AnimalPenBlock extends KineticBlock implements IBE<AnimalPenBlockEn
 		if (!(level.getBlockEntity(pos) instanceof AnimalPenBlockEntity be))
 			return InteractionResult.PASS;
 		if (context.getPlayer() instanceof ServerPlayer player)
-			player.openMenu(be, buf -> buf.writeBlockPos(pos));
+			player.openMenu(be);
 		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 

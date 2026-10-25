@@ -80,8 +80,9 @@ public final class TradeBotPicking {
 		if (event.getAction() != PlayerInteractEvent.LeftClickBlock.Action.START)
 			return;
 		touch(player, picker);
+		// either half of a linked double chest, as for right-clicks
 		if (player.level().getBlockEntity(picker.station()) instanceof TradeBotStationBlockEntity station
-			&& station.roleOf(event.getPos()) != TradeBotLinks.Role.NONE)
+			&& station.roleOf(station.linkedHalf(event.getPos())) != TradeBotLinks.Role.NONE)
 			station.handle(player, com.comedymonkey.createaddons.network.TradeBotStationPayload.Action.UNLINK, event.getPos());
 	}
 

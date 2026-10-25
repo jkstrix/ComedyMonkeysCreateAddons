@@ -69,7 +69,8 @@ public final class BarrelUpgrades {
 		BlockState state = level.getBlockState(pos);
 		if (!(state.getBlock() instanceof UpgradedBarrelBlock) || state.getValue(UpgradedBarrelBlock.TIER) == tier)
 			return;
-		if (tier.slots() < state.getValue(UpgradedBarrelBlock.TIER).slots()
+		// Fewer slots would crash an open screen, and more would never show up in it
+		if (tier.slots() != state.getValue(UpgradedBarrelBlock.TIER).slots()
 			&& level.getBlockEntity(pos) instanceof UpgradedBarrelBlockEntity barrel)
 			UpgradedStorage.closeScreens(level, barrel);
 		level.setBlock(pos, state.setValue(UpgradedBarrelBlock.TIER, tier), 3);

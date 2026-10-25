@@ -41,6 +41,8 @@ public final class TradeBotLoopSounds {
 
 	/** The station's winder clicks this often (ticks) while it charges him. */
 	private static final int RATCHET_TICKS = 16;
+	/** How long a newly queued loop has to start playing before it counts as dropped (ticks). */
+	private static final int START_GRACE_TICKS = 20;
 	private static final Map<Integer, Map<Loop, LoopSound>> PLAYING = new HashMap<>();
 
 	private TradeBotLoopSounds() {}
@@ -52,7 +54,10 @@ public final class TradeBotLoopSounds {
 				PLAYING.clear();
 			return;
 		}
-		PLAYING.values().forEach(loops -> loops.values().removeIf(LoopSound::isStopped));
+		// also dropped: ones the sound engine let go of without stopping them (F3+T, /stopsound, too many channels), once
+		// they've had a moment to start, so that bot's loop starts again
+		PLAYING.values().forEach(loops -> loops.values().removeIf(sound -> sound.isStopped()
+			|| ++sound.age > START_GRACE_TICKS && !mc.getSoundManager().isActive(sound)));
 		PLAYING.values().removeIf(Map::isEmpty);
 		for (Entity entity : mc.level.entitiesForRendering()) {
 			if (!(entity instanceof TradeBotEntity bot) || bot.isRemoved())
@@ -83,6 +88,8 @@ public final class TradeBotLoopSounds {
 		private final TradeBotEntity bot;
 		private final Loop loop;
 		private float level;
+		/** Client ticks since it was queued. */
+		private int age;
 
 		LoopSound(TradeBotEntity bot, Loop loop) {
 			super(ModSounds.tradeBot(loop.event), SoundSource.NEUTRAL, SoundInstance.createUnseededRandom());

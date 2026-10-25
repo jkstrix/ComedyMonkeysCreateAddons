@@ -38,8 +38,8 @@ class IncineratorBlockEntityTest {
 		return (Long) ReflectionAccess.get(be, "fluidBurned");
 	}
 
-	private static int burnTicks(IncineratorBlockEntity be) {
-		return (Integer) ReflectionAccess.get(be, "burnTicks");
+	private static int heat(IncineratorBlockEntity be) {
+		return (Integer) ReflectionAccess.get(be, "heat");
 	}
 
 	@Test
@@ -55,7 +55,7 @@ class IncineratorBlockEntityTest {
 		IncineratorBlockEntity be = incinerator();
 		assertTrue(be.getItemHandler().insertItem(0, new ItemStack(Items.COBBLESTONE, 64), true).isEmpty());
 		assertEquals(0, itemsBurned(be));
-		assertEquals(0, burnTicks(be), "not lit by a simulation");
+		assertEquals(0, heat(be), "not warmed by a simulation");
 		assertEquals(1000, be.getFluidHandler().fill(new FluidStack(Fluids.LAVA, 1000), FluidAction.SIMULATE));
 		assertEquals(0, fluidBurned(be));
 	}
@@ -77,7 +77,7 @@ class IncineratorBlockEntityTest {
 		IncineratorBlockEntity be = incinerator();
 		assertSame(ItemStack.EMPTY, be.getItemHandler().insertItem(0, ItemStack.EMPTY, false));
 		assertEquals(0, be.getFluidHandler().fill(FluidStack.EMPTY, FluidAction.EXECUTE));
-		assertEquals(0, burnTicks(be));
+		assertEquals(0, heat(be));
 	}
 
 	@Test
@@ -91,31 +91,46 @@ class IncineratorBlockEntityTest {
 	}
 
 	@Test
-	void burningLightsTheFireForFiveSeconds() {
+	void eachThingAddsAPointOfHeatUpToTen() {
 		IncineratorBlockEntity be = incinerator();
-		be.getItemHandler().insertItem(0, new ItemStack(Items.STICK), false);
-		assertEquals(100, burnTicks(be));
-		// The tick would sync the totals, which needs a level
-		ReflectionAccess.set(be, "syncQueued", false);
-		for (int i = 0; i < 99; i++)
-			be.serverTick();
-		assertEquals(1, burnTicks(be));
-		be.serverTick();
-		assertEquals(0, burnTicks(be));
-		be.serverTick();
-		assertEquals(0, burnTicks(be), "stays out");
+		be.getItemHandler().insertItem(0, new ItemStack(Items.STICK, 3), false);
+		assertEquals(3, heat(be));
+		be.getItemHandler().insertItem(0, new ItemStack(Items.COBBLESTONE, 7), false);
+		assertEquals(IncineratorBlockEntity.FULL_HEAT, heat(be));
+		be.getItemHandler().insertItem(0, new ItemStack(Items.DIRT, 1000), false);
+		assertEquals(IncineratorBlockEntity.FULL_HEAT, heat(be), "no hotter than full");
 	}
 
 	@Test
-	void eachBurnRestartsTheTimer() {
+	void aTenthOfABucketIsOneThingWaterToo() {
 		IncineratorBlockEntity be = incinerator();
-		be.getFluidHandler().fill(new FluidStack(Fluids.LAVA, 10), FluidAction.EXECUTE);
+		be.getFluidHandler().fill(new FluidStack(Fluids.WATER, 1000), FluidAction.EXECUTE);
+		assertEquals(IncineratorBlockEntity.FULL_HEAT, heat(be));
+		// a little at a time adds up too: 60 + 60 mB is one thing, with 20 mB toward the next
+		IncineratorBlockEntity drip = incinerator();
+		drip.getFluidHandler().fill(new FluidStack(Fluids.LAVA, 60), FluidAction.EXECUTE);
+		assertEquals(0, heat(drip));
+		drip.getFluidHandler().fill(new FluidStack(Fluids.LAVA, 60), FluidAction.EXECUTE);
+		assertEquals(1, heat(drip));
+		assertEquals(20, (Integer) ReflectionAccess.get(drip, "fluidToward"));
+	}
+
+	@Test
+	void losesAPointASecondUntilCold() {
+		IncineratorBlockEntity be = incinerator();
+		be.getItemHandler().insertItem(0, new ItemStack(Items.COBBLESTONE, 10), false);
+		// The tick would sync the heat, which needs a level
 		ReflectionAccess.set(be, "syncQueued", false);
-		for (int i = 0; i < 60; i++)
+		for (int i = 0; i < 19; i++)
 			be.serverTick();
-		assertEquals(40, burnTicks(be));
-		be.getFluidHandler().fill(new FluidStack(Fluids.LAVA, 10), FluidAction.EXECUTE);
-		assertEquals(100, burnTicks(be));
+		assertEquals(10, heat(be));
+		be.serverTick();
+		assertEquals(9, heat(be), "a point a second");
+		for (int i = 0; i < 180; i++)
+			be.serverTick();
+		assertEquals(0, heat(be), "cold ten seconds after the last thing");
+		be.serverTick();
+		assertEquals(0, heat(be), "stays cold");
 	}
 
 	@Test
@@ -129,7 +144,7 @@ class IncineratorBlockEntityTest {
 		loaded.loadWithComponents(tag, REGISTRIES);
 		assertEquals(64, itemsBurned(loaded));
 		assertEquals(5_000_000_000L, fluidBurned(loaded));
-		assertEquals(100, burnTicks(loaded));
+		assertEquals(IncineratorBlockEntity.FULL_HEAT, heat(loaded));
 	}
 
 	@Test

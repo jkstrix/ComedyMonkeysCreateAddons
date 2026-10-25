@@ -23,7 +23,9 @@ public record SortChestPayload() implements CustomPacketPayload {
 	public static void handle(SortChestPayload payload, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			Player player = context.player();
-			if (player.containerMenu instanceof UpgradedChestView view && player.containerMenu.stillValid(player)) {
+			// Not for spectators: vanilla ignores their clicks in a container too
+			if (!player.isSpectator() && player.containerMenu instanceof UpgradedChestView view
+				&& player.containerMenu.stillValid(player)) {
 				ChestSorting.sort(view.getChestContainer());
 				player.containerMenu.broadcastChanges();
 			}

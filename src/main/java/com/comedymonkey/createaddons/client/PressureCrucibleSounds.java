@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -30,6 +31,11 @@ public final class PressureCrucibleSounds {
 
 	private PressureCrucibleSounds() {}
 
+	/** Forgets every crucible when the client's world goes: their block entities, and their loops, hold that world. */
+	public static void forget() {
+		STATES.clear();
+	}
+
 	private static final class State {
 		boolean processing;
 		float progress;
@@ -42,6 +48,9 @@ public final class PressureCrucibleSounds {
 		Level level = be.getLevel();
 		if (mc.level == null || level != mc.level)
 			return;
+		// the loops hold their block entity, so a weak key alone never lets go: drop the ones unloaded or broken
+		if (!STATES.containsKey(be))
+			STATES.keySet().removeIf(BlockEntity::isRemoved);
 		State s = STATES.computeIfAbsent(be, b -> {
 			// Already pressing when it came into view: don't creak for a press that started out of sight
 			State fresh = new State();

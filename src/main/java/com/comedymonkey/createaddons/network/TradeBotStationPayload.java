@@ -1,6 +1,8 @@
 package com.comedymonkey.createaddons.network;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.config.CMConfig;
+import com.comedymonkey.createaddons.content.tradebot.TradeBotPicking;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotStationBlockEntity;
 
 import io.netty.buffer.ByteBuf;
@@ -34,7 +36,17 @@ public record TradeBotStationPayload(BlockPos station, Action action, BlockPos t
 		context.enqueueWork(() -> {
 			if (!(context.player() instanceof ServerPlayer player) || !player.mayBuild())
 				return;
-			if (player.level().getBlockEntity(payload.station()) instanceof TradeBotStationBlockEntity station)
+			if (payload.action() == Action.STOP_PICKING) {
+				TradeBotPicking.stop(player); // needs no station: often sent from out of range
+				return;
+			}
+			// only a station that's loaded and near enough to act on (picking reaches as far as TradeBotPicking allows),
+			// checked before looking, so a client can't make the server load chunks anywhere
+			BlockPos pos = payload.station();
+			int range = CMConfig.SERVER.tradeBotRange() + 16;
+			if (!player.level().isLoaded(pos) || player.distanceToSqr(pos.getCenter()) > (double) range * range)
+				return;
+			if (player.level().getBlockEntity(pos) instanceof TradeBotStationBlockEntity station)
 				station.handle(player, payload.action(), payload.target());
 		});
 	}

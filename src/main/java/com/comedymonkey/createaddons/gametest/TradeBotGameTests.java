@@ -58,6 +58,9 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
  * The trading hall is the main course: a yard with his station, a slab step up to the hall, a door, three booths (a
  * workstation counter with a Create seat behind it) along an aisle with a dog-leg, a gate and stairs up to a gallery
  * with a fourth booth; the trading courses put villagers on its seats.
+ * <p>
+ * Each course with villagers (or goods a villager would buy him out of) runs in a batch of its own: the courses sit
+ * well inside his range of each other, and a bot would count, claim and set off for another course's villagers.
  */
 @GameTestHolder(ComedyMonkeysCreateAddons.MOD_ID)
 @PrefixGameTestTemplate(false)
@@ -215,6 +218,93 @@ public final class TradeBotGameTests {
 	}
 
 	/**
+	 * Double chests are one container: he's linked to one half of each, but the goods are all in the other half of the
+	 * input, and the output's linked half is full, so his earnings have to go in its other half. Clicking the other half
+	 * of a linked chest means the linked one.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 4000)
+	public static void usesBothHalvesOfDoubleChests(GameTestHelper helper) {
+		doubleChestRun(helper, null);
+	}
+
+	/** The same with upgraded (iron) double chests: and he opens their lids like a vanilla chest's, and shuts them. */
+	@GameTest(template = COURSE, timeoutTicks = 4000)
+	public static void usesBothHalvesOfUpgradedDoubleChests(GameTestHelper helper) {
+		doubleChestRun(helper, com.comedymonkey.createaddons.content.chest.ChestTier.IRON);
+	}
+
+	private static void doubleChestRun(GameTestHelper helper, @org.jetbrains.annotations.Nullable com.comedymonkey.createaddons.content.chest.ChestTier tier) {
+		floor(helper, 0, 0, 0, 23, 23, FLOOR);
+		TradeBotEntity bot = station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
+		TradeBotStationBlockEntity station = (TradeBotStationBlockEntity) helper.getBlockEntity(new BlockPos(3, 1, 2));
+		// the input faces west, its linked LEFT half south of its RIGHT half; the output faces north, LEFT half linked
+		BlockPos input = new BlockPos(9, 1, 8), inputOther = new BlockPos(9, 1, 7);
+		BlockPos output = new BlockPos(3, 1, 13), outputOther = new BlockPos(4, 1, 13);
+		doubleChest(helper, tier, input, inputOther, Direction.WEST);
+		doubleChest(helper, tier, output, outputOther, Direction.NORTH);
+		net.minecraft.world.Container goods = (net.minecraft.world.Container) helper.getBlockEntity(inputOther);
+		goods.setItem(4, new ItemStack(Items.WHEAT, 32));
+		net.minecraft.world.Container full = (net.minecraft.world.Container) helper.getBlockEntity(output);
+		for (int slot = 0; slot < full.getContainerSize(); slot++)
+			full.setItem(slot, new ItemStack(Items.COBBLESTONE, full.getMaxStackSize(new ItemStack(Items.COBBLESTONE))));
+		station.setRole(helper.absolutePos(input), TradeBotLinks.Role.TAKES);
+		station.setRole(helper.absolutePos(output), TradeBotLinks.Role.DELIVERS);
+		if (!station.linkedHalf(helper.absolutePos(inputOther)).equals(helper.absolutePos(input)))
+			helper.fail("clicking the input's other half doesn't mean the linked half");
+		bot.addEarnings(70, 0);
+		TradeBotMotion.debug = true;
+		boolean[] carried = { false }, rummaged = { false }, lidOpened = { false };
+		helper.runAfterDelay(10, () -> {
+			if (!bot.brain.fetchAndDeliver(stack -> true))
+				helper.fail("he wouldn't start the job");
+		});
+		helper.onEachTick(() -> {
+			for (int slot = 0; slot < bot.getLoad().getSlots(); slot++)
+				carried[0] |= bot.getLoad().getStackInSlot(slot).is(Items.WHEAT);
+			rummaged[0] |= bot.clip().name().equals("chest_take");
+			if (tier != null)
+				lidOpened[0] |= helper.getBlockState(input).getValue(com.comedymonkey.createaddons.content.chest.UpgradedChestBlock.OPEN);
+		});
+		helper.succeedWhen(() -> {
+			if (!bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail("not docked yet (" + bot.brain.task() + ")");
+			if (!carried[0])
+				helper.fail("he never took the wheat from the input's other half");
+			if (!rummaged[0])
+				helper.fail("he didn't use the chest routine on the input");
+			int delivered = 0;
+			net.minecraft.world.Container rest = (net.minecraft.world.Container) helper.getBlockEntity(outputOther);
+			for (int slot = 0; slot < rest.getContainerSize(); slot++)
+				if (rest.getItem(slot).is(Items.EMERALD))
+					delivered += rest.getItem(slot).getCount();
+			if (delivered != 70)
+				helper.fail(delivered + " emeralds in the output's other half, not 70");
+			if (count(helper, input, Items.WHEAT) != 32)
+				helper.fail(count(helper, input, Items.WHEAT) + " wheat back in the input, not 32");
+			if (tier != null) {
+				if (!lidOpened[0])
+					helper.fail("the upgraded chest's lid never opened");
+				for (BlockPos half : List.of(input, inputOther, output, outputOther))
+					if (helper.getBlockState(half).getValue(com.comedymonkey.createaddons.content.chest.UpgradedChestBlock.OPEN))
+						helper.fail("an upgraded chest was left open");
+			}
+		});
+	}
+
+	/** A double chest, vanilla or upgraded: its LEFT half at {@code left}, its RIGHT half at {@code right}. */
+	private static void doubleChest(GameTestHelper helper, @org.jetbrains.annotations.Nullable com.comedymonkey.createaddons.content.chest.ChestTier tier,
+		BlockPos left, BlockPos right, Direction facing) {
+		BlockState chest = tier == null
+			? Blocks.CHEST.defaultBlockState().setValue(net.minecraft.world.level.block.ChestBlock.FACING, facing)
+			: ModBlocks.UPGRADED_CHEST.get().defaultBlockState().setValue(com.comedymonkey.createaddons.content.chest.UpgradedChestBlock.FACING, facing)
+				.setValue(com.comedymonkey.createaddons.content.chest.UpgradedChestBlock.TIER, tier);
+		helper.setBlock(left, chest.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.CHEST_TYPE,
+			net.minecraft.world.level.block.state.properties.ChestType.LEFT));
+		helper.setBlock(right, chest.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.CHEST_TYPE,
+			net.minecraft.world.level.block.state.properties.ChestType.RIGHT));
+	}
+
+	/**
 	 * Trading for real (D7, D17, D45, D57, D63): seated villagers in all four of the hall's booths, each buying one of
 	 * the goods in his input chest. He goes by himself (D47), takes only what they'll buy (D22), trades with each in turn
 	 * across its workstation, every trade he can pay for in one clip, delivers the emeralds and nuggets, brings
@@ -222,7 +312,7 @@ public final class TradeBotGameTests {
 	 * left for another trade, he stays home. (The goods set the number of trades: villagers at their workstations
 	 * restock, as they do for players.)
 	 */
-	@GameTest(template = COURSE, timeoutTicks = 8000)
+	@GameTest(template = COURSE, timeoutTicks = 8000, batch = "trade_bot_trades_round_the_hall")
 	public static void tradesRoundTheHall(GameTestHelper helper) {
 		Hall hall = tradingHall(helper);
 		helper.getLevel().setDayTime(1000);
@@ -279,7 +369,7 @@ public final class TradeBotGameTests {
 	 * A villager stands up just as he starts the trade (D46): it's off, he shrugs, keeps everything, and on the way
 	 * home puts the wheat back where it came from. No emerald, no use of the villager's stock.
 	 */
-	@GameTest(template = COURSE, timeoutTicks = 4000)
+	@GameTest(template = COURSE, timeoutTicks = 4000, batch = "trade_bot_shrugs_when_the_villager_stands_up")
 	public static void shrugsWhenTheVillagerStandsUp(GameTestHelper helper) {
 		Hall hall = tradingHall(helper);
 		helper.getLevel().setDayTime(1000);
@@ -390,6 +480,9 @@ public final class TradeBotGameTests {
 				bot.hurt(helper.getLevel().damageSources().generic(), 100);
 				if (!bot.isWoundDown() || bot.isRemoved() || bot.getHealth() <= 0)
 					helper.fail("he didn't wind down (health " + bot.getHealth() + ", removed " + bot.isRemoved() + ")");
+				// calling him home (the station's button, a redstone pause) doesn't wind him up
+				if (bot.goHome() || bot.brain.task() != TradeBotBrain.Task.WOUND_DOWN || bot.rundown() != TradeBotEntity.Rundown.DAMAGE)
+					helper.fail("called home, he got up (" + bot.brain.task() + ", " + bot.rundown() + ")");
 				downAt[0] = helper.getTick();
 			}
 			if (downAt[0] >= 0 && helper.getTick() == downAt[0] + 200) {
@@ -507,6 +600,186 @@ public final class TradeBotGameTests {
 		});
 	}
 
+	/**
+	 * Killed by command, or his station broken some way other than packing up: what he carries is dropped where he is,
+	 * his load as it is, his emeralds, and his XP as Nuggets of Experience (with the odd point left over as an orb).
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 400)
+	public static void dropsWhatHeCarriesWhenRemoved(GameTestHelper helper) {
+		floor(helper, 0, 0, 0, 23, 23, FLOOR);
+		BlockPos brokenStation = new BlockPos(15, 1, 2);
+		TradeBotEntity killed = station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
+		TradeBotEntity homeless = station(helper, brokenStation, Direction.SOUTH);
+		for (TradeBotEntity bot : List.of(killed, homeless)) {
+			bot.getLoad().setStackInSlot(0, new ItemStack(Items.WHEAT, 32));
+			bot.getLoad().setStackInSlot(5, new ItemStack(Items.IRON_INGOT, 10));
+			bot.addEarnings(70, 10); // 70 emeralds, 3 nuggets and 1 XP
+		}
+		net.minecraft.world.phys.AABB[] around = new net.minecraft.world.phys.AABB[2];
+		helper.runAfterDelay(20, () -> {
+			around[0] = killed.getBoundingBox().inflate(3);
+			around[1] = homeless.getBoundingBox().inflate(3);
+			killed.kill();
+			helper.setBlock(brokenStation, Blocks.AIR);
+		});
+		helper.succeedWhen(() -> {
+			if (around[0] == null)
+				helper.fail("not removed yet");
+			for (int i = 0; i < 2; i++) {
+				TradeBotEntity bot = i == 0 ? killed : homeless;
+				String how = i == 0 ? "killed" : "with his station broken";
+				if (!bot.isRemoved() && i == 1)
+					helper.fail("he wasn't removed " + how);
+				List<net.minecraft.world.entity.item.ItemEntity> drops = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, around[i]);
+				int wheat = 0, iron = 0, emeralds = 0, nuggets = 0;
+				for (net.minecraft.world.entity.item.ItemEntity drop : drops) {
+					ItemStack stack = drop.getItem();
+					wheat += stack.is(Items.WHEAT) ? stack.getCount() : 0;
+					iron += stack.is(Items.IRON_INGOT) ? stack.getCount() : 0;
+					emeralds += stack.is(Items.EMERALD) ? stack.getCount() : 0;
+					nuggets += stack.is(nugget()) ? stack.getCount() : 0;
+				}
+				int xp = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.ExperienceOrb.class, around[i]).stream()
+					.mapToInt(net.minecraft.world.entity.ExperienceOrb::getValue).sum();
+				if (wheat != 32 || iron != 10 || emeralds != 70 || nuggets != 3 || xp != 1)
+					helper.fail(how + ", he dropped " + wheat + " wheat, " + iron + " iron, " + emeralds + " emeralds, " + nuggets + " nuggets and " + xp + " XP");
+				if (bot.getEmeralds() != 0 || bot.getXpBank() != 0 || !bot.getLoad().getStackInSlot(0).isEmpty())
+					helper.fail(how + ", he still holds what he dropped");
+			}
+		});
+	}
+
+	/**
+	 * Home with goods still in his load (a trip cut short): with nothing to sell, he goes out just to put them back, as
+	 * much as his input has room for. The rest he keeps: never into the output, which only ever gets his earnings (D48),
+	 * and no setting out again and again with an input that's full. (A batch of its own: other courses' villagers would
+	 * buy his wheat.)
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 4000, batch = "trade_bot_returns")
+	public static void putsBackWhatHeCameHomeWith(GameTestHelper helper) {
+		TradeBotEntity bot = yard(helper);
+		helper.getLevel().setDayTime(1000);
+		BlockPos input = new BlockPos(6, 1, 9), output = new BlockPos(9, 1, 9);
+		links(helper, new BlockPos(3, 1, 2), input, output);
+		ItemStack[] cobble = new ItemStack[26]; // room for one stack more
+		for (int i = 0; i < cobble.length; i++)
+			cobble[i] = new ItemStack(Items.COBBLESTONE, 64);
+		fill(helper, input, cobble);
+		bot.getLoad().setStackInSlot(0, new ItemStack(Items.WHEAT, 64));
+		bot.getLoad().setStackInSlot(1, new ItemStack(Items.WHEAT, 16));
+		int[] trips = { 0 };
+		long[] homeAt = { -1 };
+		boolean[] docked = { true };
+		helper.onEachTick(() -> {
+			if (docked[0] && !bot.isDocked())
+				trips[0]++;
+			docked[0] = bot.isDocked();
+			if (homeAt[0] < 0 && trips[0] > 0 && bot.isDocked() && bot.brain.task() == TradeBotBrain.Task.HOME)
+				homeAt[0] = helper.getTick();
+		});
+		helper.succeedWhen(() -> {
+			if (homeAt[0] < 0)
+				helper.fail("not out and home again yet (" + bot.brain.task() + ")");
+			if (count(helper, input, Items.WHEAT) != 64 || count(helper, output) != 0)
+				helper.fail(count(helper, input, Items.WHEAT) + " wheat back in the input and " + count(helper, output)
+					+ " items in the output, not 64 and none");
+			int carried = 0;
+			for (int slot = 0; slot < bot.getLoad().getSlots(); slot++)
+				carried += bot.getLoad().getStackInSlot(slot).is(Items.WHEAT) ? bot.getLoad().getStackInSlot(slot).getCount() : 0;
+			if (carried != 16)
+				helper.fail("he carries " + carried + " wheat, not the 16 that didn't fit");
+			if (trips[0] != 1)
+				helper.fail(trips[0] + " trips out, not 1");
+			// two schedule checks and the minute's rest after it: he stays put
+			if (helper.getTick() < homeAt[0] + 1600)
+				helper.fail("waiting to see he stays home");
+		});
+	}
+
+	/**
+	 * Two bots by the same farmer, both planning their trip on the same tick: the first claims the farmer when he plans
+	 * (D54), so the second doesn't count it and takes no wheat for it. Between them they never carry more than the
+	 * farmer buys.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 6000, batch = "trade_bot_two_bots")
+	public static void twoBotsPlanningTogetherSplitTheBuyers(GameTestHelper helper) {
+		Hall hall = tradingHall(helper);
+		helper.getLevel().setDayTime(1000);
+		TradeBotEntity first = station(helper, hall.station, Direction.SOUTH);
+		BlockPos secondStation = new BlockPos(16, 1, 2);
+		TradeBotEntity second = station(helper, secondStation, Direction.SOUTH);
+		BlockPos input = new BlockPos(7, 1, 1), output = new BlockPos(10, 1, 1);
+		BlockPos secondInput = new BlockPos(13, 1, 1), secondOutput = new BlockPos(19, 1, 1);
+		links(helper, hall.station, input, output);
+		links(helper, secondStation, secondInput, secondOutput);
+		fill(helper, input, new ItemStack(Items.WHEAT, 64));
+		fill(helper, secondInput, new ItemStack(Items.WHEAT, 64));
+		seated(helper, hall.seats.get(0), VillagerProfession.FARMER, offer(Items.WHEAT, 20, 2));
+		TradeBotStationBlockEntity a = (TradeBotStationBlockEntity) helper.getBlockEntity(hall.station);
+		TradeBotStationBlockEntity b = (TradeBotStationBlockEntity) helper.getBlockEntity(secondStation);
+		boolean[] out = { false };
+		helper.onEachTick(() -> {
+			int carried = 0;
+			for (TradeBotEntity bot : List.of(first, second))
+				for (int slot = 0; slot < bot.getLoad().getSlots(); slot++)
+					carried += bot.getLoad().getStackInSlot(slot).is(Items.WHEAT) ? bot.getLoad().getStackInSlot(slot).getCount() : 0;
+			if (carried > 40)
+				helper.fail("between them they carry " + carried + " wheat for a farmer who buys 40");
+			out[0] |= !first.isDocked() || !second.isDocked();
+		});
+		helper.succeedWhen(() -> {
+			if (!out[0] || a.tradesToday() + b.tradesToday() < 2)
+				helper.fail(a.tradesToday() + b.tradesToday() + " of 2 trades made");
+			for (TradeBotEntity bot : List.of(first, second))
+				if (!bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+					helper.fail("not both home yet (" + first.brain.task() + ", " + second.brain.task() + ")");
+			if (count(helper, input, Items.WHEAT) + count(helper, secondInput, Items.WHEAT) != 128 - 40)
+				helper.fail((count(helper, input, Items.WHEAT) + count(helper, secondInput, Items.WHEAT)) + " wheat left in the inputs, not 88");
+		});
+	}
+
+	/**
+	 * Saved mid-visit with a barrel open (as when his chunk unloads, too late to change his own chunk): the barrel is
+	 * saved with him, and once he's loaded again he shuts it.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 2000)
+	public static void shutsTheBarrelHeLeftOpenOnceHesBack(GameTestHelper helper) {
+		TradeBotEntity bot = yard(helper);
+		TradeBotStationBlockEntity station = (TradeBotStationBlockEntity) helper.getBlockEntity(new BlockPos(3, 1, 2));
+		BlockPos barrel = new BlockPos(8, 1, 8), output = new BlockPos(4, 1, 12);
+		helper.setBlock(barrel, Blocks.BARREL.defaultBlockState().setValue(BarrelBlock.FACING, Direction.UP));
+		helper.setBlock(output, Blocks.CHEST.defaultBlockState().setValue(net.minecraft.world.level.block.ChestBlock.FACING, Direction.NORTH));
+		fill(helper, barrel, new ItemStack(Items.WHEAT, 10));
+		station.setRole(helper.absolutePos(barrel), TradeBotLinks.Role.TAKES);
+		station.setRole(helper.absolutePos(output), TradeBotLinks.Role.DELIVERS);
+		helper.runAfterDelay(10, () -> {
+			if (!bot.brain.fetchAndDeliver(stack -> true))
+				helper.fail("he wouldn't start the job");
+		});
+		TradeBotEntity[] back = { null };
+		helper.onEachTick(() -> {
+			if (back[0] != null || !helper.getBlockState(barrel).getValue(BarrelBlock.OPEN))
+				return;
+			net.minecraft.nbt.CompoundTag saved = bot.saveWithoutId(new net.minecraft.nbt.CompoundTag());
+			if (!saved.contains("LeftOpen"))
+				helper.fail("the open barrel wasn't saved with him");
+			bot.discard();
+			// as it was when his chunk unloaded: still open
+			helper.setBlock(barrel, helper.getBlockState(barrel).setValue(BarrelBlock.OPEN, true));
+			TradeBotEntity again = com.comedymonkey.createaddons.registry.ModEntities.TRADE_BOT.get().create(helper.getLevel());
+			again.load(saved);
+			again.setUUID(UUID.randomUUID());
+			helper.getLevel().addFreshEntity(again);
+			back[0] = again;
+		});
+		helper.succeedWhen(() -> {
+			if (back[0] == null)
+				helper.fail("never opened the barrel");
+			if (helper.getBlockState(barrel).getValue(BarrelBlock.OPEN))
+				helper.fail("the barrel's still open");
+		});
+	}
+
 	/** An open yard walled all round (x 0-12, z 0-16), with his station at (3, 1, 2) facing south. */
 	private static TradeBotEntity yard(GameTestHelper helper) {
 		floor(helper, 0, 0, 0, 23, 23, FLOOR);
@@ -523,7 +796,7 @@ public final class TradeBotGameTests {
 	 * flint too (vanilla's apprentice trades). He fetches the flint and sells it on the same trip, then docks and stays
 	 * docked, instead of docking and setting straight back out.
 	 */
-	@GameTest(template = COURSE, timeoutTicks = 6000)
+	@GameTest(template = COURSE, timeoutTicks = 6000, batch = "trade_bot_sells_what_a_level_up_opens_on_the_same_trip")
 	public static void sellsWhatALevelUpOpensOnTheSameTrip(GameTestHelper helper) {
 		Hall hall = tradingHall(helper);
 		helper.getLevel().setDayTime(1000);
@@ -565,7 +838,7 @@ public final class TradeBotGameTests {
 	 * takes whole lots of what's in the chest: 35 of its 64 sticks, not all of them with 29 to carry back. Nothing goes
 	 * back at all: every stick and flint he takes, he sells.
 	 */
-	@GameTest(template = COURSE, timeoutTicks = 8000)
+	@GameTest(template = COURSE, timeoutTicks = 8000, batch = "trade_bot_takes_whole_lots_after_a_restock")
 	public static void takesWholeLotsAfterARestock(GameTestHelper helper) {
 		Hall hall = tradingHall(helper);
 		helper.getLevel().setDayTime(1000);
@@ -598,7 +871,7 @@ public final class TradeBotGameTests {
 	 * The villager he's on his way to is killed, and a new one sits down in its seat (D46): he shrugs, then sells to the
 	 * newcomer on the same trip, carrying nothing back.
 	 */
-	@GameTest(template = COURSE, timeoutTicks = 8000)
+	@GameTest(template = COURSE, timeoutTicks = 8000, batch = "trade_bot_trades_with_a_villagers_replacement")
 	public static void tradesWithAVillagersReplacement(GameTestHelper helper) {
 		Hall hall = tradingHall(helper);
 		helper.getLevel().setDayTime(1000);
@@ -639,7 +912,7 @@ public final class TradeBotGameTests {
 	 * A player is at his villager's trades when he gets there: players come first (D46), so he waits on his spot until
 	 * they're done, then trades.
 	 */
-	@GameTest(template = COURSE, timeoutTicks = 6000)
+	@GameTest(template = COURSE, timeoutTicks = 6000, batch = "trade_bot_waits_his_turn_behind_a_player")
 	public static void waitsHisTurnBehindAPlayer(GameTestHelper helper) {
 		Hall hall = tradingHall(helper);
 		helper.getLevel().setDayTime(1000);

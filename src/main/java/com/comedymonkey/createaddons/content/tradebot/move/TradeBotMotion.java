@@ -70,8 +70,9 @@ public class TradeBotMotion {
 	private List<Vec3> points = List.of();
 	/** The route's blocks (the same length as {@link #points}). */
 	private List<BlockPos> nodes = List.of();
-	/** Every hop taken, from block to block (for checking that they're all square-on). */
+	/** The last hops taken, from block to block (for checking that they're all square-on). */
 	private final List<Hop> hops = new ArrayList<>();
+	private static final int MAX_HOPS = 64;
 
 	public record Hop(BlockPos from, BlockPos to) {}
 	private int next;
@@ -159,6 +160,9 @@ public class TradeBotMotion {
 		log(phase + " -> halted");
 		phase = Phase.IDLE;
 		phaseTicks = 0;
+		// no route now to be past them on: shut the doors he opened ahead, unless he's in the way, and those once he's clear
+		openedDoors.entrySet().removeIf(entry -> !inTheWay(entry.getKey()) && shut(entry.getKey()));
+		openedDoors.replaceAll((pos, i) -> -1);
 	}
 
 	/** Not hopping (a physical clip carries him until it lands). */
@@ -418,6 +422,8 @@ public class TradeBotMotion {
 		double want = horizontal(to.subtract(bot.position()));
 		double has = Math.abs(ClipRoot.travel(clip, clip.length(), new Vector3f()).z);
 		bot.playClip(clip, 1, has > 1e-3 ? (float) (want / has) : 1);
+		if (hops.size() >= MAX_HOPS)
+			hops.remove(0);
 		hops.add(new Hop(nodes.get(next - 1), nodes.get(next)));
 		log(step + " from " + fmt(bot.position()) + " to " + fmt(to) + ": " + String.format(java.util.Locale.ROOT, "%.2f", want) + " of "
 			+ String.format(java.util.Locale.ROOT, "%.2f", has) + " (waypoint " + next + ")");
@@ -426,7 +432,7 @@ public class TradeBotMotion {
 
 	// ---- route helpers
 
-	/** Every hop he has taken (newest last). */
+	/** The hops he has taken lately (newest last). */
 	public List<Hop> hops() {
 		return List.copyOf(hops);
 	}
@@ -594,6 +600,11 @@ public class TradeBotMotion {
 			LOGGER.info("[Trade Bot {}] {}", bot.getId(), message);
 	}
 
+	/** He was moved there, not rolled (put back at his station, docked): nothing to pay for the jump. */
+	public void resetTravel() {
+		lastPos = null;
+	}
+
 	private void payForTravel() {
 		Vec3 pos = bot.position();
 		if (lastPos != null)
@@ -633,24 +644,65 @@ public class TradeBotMotion {
 	}
 
 	private void closeDoorsBehind() {
-		Level level = bot.level();
 		openedDoors.entrySet().removeIf(entry -> {
 			BlockPos pos = entry.getKey();
 			int at = entry.getValue();
 			// through it: past the waypoint after it on this route (or well clear of it), and not touching it
 			boolean past = at >= 0 ? next > at + 1 : bot.position().distanceTo(Vec3.atCenterOf(pos)) > 2.5;
-			if (!past || bot.getBoundingBox().inflate(0.4).intersects(new net.minecraft.world.phys.AABB(pos))
-				|| bot.position().distanceTo(Vec3.atCenterOf(pos)) < 1.5)
+			if (!past || inTheWay(pos))
 				return false;
-			BlockState state = level.getBlockState(pos);
-			if (state.getBlock() instanceof DoorBlock door && door.isOpen(state))
-				door.setOpen(bot, level, state, pos, false);
-			else if (state.getBlock() instanceof FenceGateBlock && state.getValue(FenceGateBlock.OPEN)) {
-				level.setBlock(pos, state.setValue(FenceGateBlock.OPEN, false), 10);
-				level.playSound(null, pos, SoundEvents.FENCE_GATE_CLOSE, SoundSource.BLOCKS, 1, 1);
-			}
-			return true;
+			return shut(pos);
 		});
+	}
+
+	/**
+	 * Gone from the world: shuts the doors and gates he opened, as nothing else will, except any he's standing in. Returns
+	 * the ones left open (to save, and shut once he's back and clear of them), and forgets them all.
+	 */
+	public List<BlockPos> closeOpenedDoors() {
+		List<BlockPos> left = new ArrayList<>();
+		for (BlockPos pos : openedDoors.keySet())
+			if (inTheWay(pos) || !bot.level().isLoaded(pos))
+				left.add(pos);
+			else
+				shut(pos);
+		openedDoors.clear();
+		return left;
+	}
+
+	/** The doors and gates he has open right now. */
+	public List<BlockPos> openedDoors() {
+		return List.copyOf(openedDoors.keySet());
+	}
+
+	/** A door or gate he opened before he was unloaded: shut once he's clear of it, like any other. */
+	public void adoptOpenedDoor(BlockPos pos) {
+		openedDoors.putIfAbsent(pos.immutable(), -1);
+	}
+
+	/** A door or fence gate (something he opens as he goes). */
+	public static boolean isDoor(BlockState state) {
+		return state.getBlock() instanceof DoorBlock || state.getBlock() instanceof FenceGateBlock;
+	}
+
+	/** Touching it, or too close to swing it shut. */
+	private boolean inTheWay(BlockPos pos) {
+		return bot.getBoundingBox().inflate(0.4).intersects(new net.minecraft.world.phys.AABB(pos)) || bot.position().distanceTo(Vec3.atCenterOf(pos)) < 1.5;
+	}
+
+	/** Shuts a door or gate he opened, if it's still open (and loaded); true, as it's done with either way. */
+	private boolean shut(BlockPos pos) {
+		Level level = bot.level();
+		if (!level.isLoaded(pos))
+			return true;
+		BlockState state = level.getBlockState(pos);
+		if (state.getBlock() instanceof DoorBlock door && door.isOpen(state))
+			door.setOpen(bot, level, state, pos, false);
+		else if (state.getBlock() instanceof FenceGateBlock && state.getValue(FenceGateBlock.OPEN)) {
+			level.setBlock(pos, state.setValue(FenceGateBlock.OPEN, false), 10);
+			level.playSound(null, pos, SoundEvents.FENCE_GATE_CLOSE, SoundSource.BLOCKS, 1, 1);
+		}
+		return true;
 	}
 
 	// ---- phases and clips

@@ -31,6 +31,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -678,6 +679,15 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 		return new AnimalPenMenu(containerId, inventory, this);
 	}
 
+	/**
+	 * The screen finds this block by its position, sent with every opening however it's opened (a spectator's
+	 * right-click or another mod calling openMenu sends nothing else).
+	 */
+	@Override
+	public void writeClientSideData(AbstractContainerMenu menu, RegistryFriendlyByteBuf buffer) {
+		buffer.writeBlockPos(worldPosition);
+	}
+
 	public IItemHandlerModifiable getCaptiveSlot() {
 		return captiveSlot;
 	}
@@ -1013,6 +1023,10 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 
 		@Override
 		public void setStackInSlot(int slot, ItemStack stack) {
+			// The same bottle put back: clicking the slot with an identical bottle sets it again even though nothing
+			// fits (vanilla's Slot.safeInsert), which mustn't butcher the herd and catch the animal again
+			if (!stack.isEmpty() && hasAnimal() && ItemStack.isSameItemSameComponents(stack, captive))
+				return;
 			if (level == null || level.isClientSide) {
 				// The client's guess until the server's state arrives
 				captive = stack.copyWithCount(Math.min(1, stack.getCount()));

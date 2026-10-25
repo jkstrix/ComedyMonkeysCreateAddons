@@ -115,7 +115,7 @@ public class AutoHarvesterBlock extends KineticBlock implements IBE<AutoHarveste
 		if (!(level.getBlockEntity(pos) instanceof AutoHarvesterBlockEntity be))
 			return InteractionResult.PASS;
 		if (context.getPlayer() instanceof ServerPlayer player)
-			player.openMenu(be, buf -> buf.writeBlockPos(pos));
+			player.openMenu(be);
 		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 

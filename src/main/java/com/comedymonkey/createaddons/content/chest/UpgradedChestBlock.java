@@ -245,6 +245,8 @@ public class UpgradedChestBlock extends BaseEntityBlock implements IWrenchable, 
 
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+		if (!level.isClientSide && !state.is(newState.getBlock()))
+			ChestUpgrades.forgetJustPlaced(level, pos);
 		// Moved blocks (Create contraptions, Sable physics objects) keep their contents in their block entity data
 		if (!movedByPiston && !state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof UpgradedChestBlockEntity be) {
 			Containers.dropContents(level, pos, be);

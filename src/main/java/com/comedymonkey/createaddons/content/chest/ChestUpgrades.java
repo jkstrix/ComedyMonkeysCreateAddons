@@ -30,6 +30,8 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import net.neoforged.neoforge.common.util.BlockSnapshot;
+import net.neoforged.neoforge.event.EventHooks;
 
 /**
  * Turning chests into upgraded chests and back, single or double. A chest - single or double - holds exactly one
@@ -114,7 +116,8 @@ public final class ChestUpgrades {
 			BlockState partState = level.getBlockState(part);
 			if (!(partState.getBlock() instanceof UpgradedChestBlock) || partState.getValue(UpgradedChestBlock.TIER) == tier)
 				continue;
-			if (tier.slots() < partState.getValue(UpgradedChestBlock.TIER).slots()
+			// Fewer slots would crash an open screen, and more would shift a double chest's second half
+			if (tier.slots() != partState.getValue(UpgradedChestBlock.TIER).slots()
 				&& level.getBlockEntity(part) instanceof UpgradedChestBlockEntity chest)
 				UpgradedStorage.closeScreens(level, chest);
 			level.setBlock(part, partState.setValue(UpgradedChestBlock.TIER, tier), PAIR_FLAGS);
@@ -179,6 +182,14 @@ public final class ChestUpgrades {
 
 	static void markJustPlaced(Level level, BlockPos pos) {
 		JUST_PLACED.add(GlobalPos.of(level.dimension(), pos.immutable()));
+	}
+
+	/**
+	 * The chest is gone before its check ran (vanilla skips a scheduled tick once the block has changed), so forget
+	 * it: a chest that arrives there later mustn't be taken for a freshly placed one and join its neighbour.
+	 */
+	static void forgetJustPlaced(Level level, BlockPos pos) {
+		JUST_PLACED.remove(GlobalPos.of(level.dimension(), pos));
 	}
 
 	/**
@@ -312,10 +323,16 @@ public final class ChestUpgrades {
 
 		// LEFT halves pair clockwise of their facing (same rule as vanilla chests)
 		ChestType existingType = face == facing.getClockWise() ? ChestType.LEFT : ChestType.RIGHT;
+		BlockSnapshot before = BlockSnapshot.create(level.dimension(), level, newPos);
 		level.setBlock(newPos, state.setValue(UpgradedChestBlock.TYPE, existingType.getOpposite())
 			.setValue(UpgradedChestBlock.OPEN, false), PAIR_FLAGS);
 		if (level.getBlockEntity(newPos) instanceof UpgradedChestBlockEntity added)
 			added.setHoldsUpgrade(false);
+		// A placement like any other, so claim and protection mods can refuse it: then put back what was there
+		if (EventHooks.onBlockPlace(player, before, face)) {
+			before.restore(PAIR_FLAGS);
+			return true;
+		}
 		level.setBlock(pos, state.setValue(UpgradedChestBlock.TYPE, existingType), PAIR_FLAGS);
 
 		if (!player.getAbilities().instabuild)

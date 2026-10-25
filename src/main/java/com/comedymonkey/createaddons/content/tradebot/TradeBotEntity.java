@@ -120,6 +120,8 @@ public class TradeBotEntity extends PathfinderMob {
 	@Nullable
 	private Rundown rundown;
 	private int dryTicks;
+	/** Containers, doors and gates he had open when he was unloaded (saved): shut once he's back. */
+	private final List<BlockPos> leftOpen = new ArrayList<>();
 
 	public final TradeBotMotion motion = new TradeBotMotion(this);
 	public final TradeBotBrain brain = new TradeBotBrain(this);
@@ -156,6 +158,7 @@ public class TradeBotEntity extends PathfinderMob {
 	@Override
 	protected void customServerAiStep() {
 		super.customServerAiStep();
+		shutWhatHeLeftOpen();
 		tickRundown();
 		brain.tick();
 		motion.tick();
@@ -219,10 +222,12 @@ public class TradeBotEntity extends PathfinderMob {
 		brain.windingUp();
 	}
 
-	/** Never dies (D24): at no health he winds down instead. Only the kill command removes him. */
+	/** Never dies (D24): at no health he winds down instead. Only the kill command removes him, dropping what he carries. */
 	@Override
 	public void die(DamageSource source) {
 		if (source.is(DamageTypes.GENERIC_KILL)) {
+			if (!isRemoved() && !dead)
+				dropCarried();
 			super.die(source);
 			return;
 		}
@@ -261,6 +266,7 @@ public class TradeBotEntity extends PathfinderMob {
 		fallDistance = 0;
 		setDeltaMovement(Vec3.ZERO);
 		teleportTo(at.x, at.y, at.z);
+		motion.resetTravel(); // put back, not rolled: the jump costs nothing
 		setYRot(facing.toYRot());
 		if (rundown != Rundown.DAMAGE)
 			windDown(Rundown.DAMAGE);
@@ -331,12 +337,13 @@ public class TradeBotEntity extends PathfinderMob {
 		Vec3 end = TradeBotStationBlock.dockPoint(station, facing);
 		float yaw = facing.toYRot();
 		holdClipEnd(dock, end, yaw);
+		motion.resetTravel(); // set in his cradle, not rolled there
 		docked = true;
 	}
 
-	/** Back to his station, rolling home and docking (D27, D30, D38). */
-	public void goHome() {
-		brain.goHome();
+	/** Back to his station, rolling home and docking (D27, D30, D38); false if he's run down and must be wound up first. */
+	public boolean goHome() {
+		return brain.goHome();
 	}
 
 	/** He's hopping out of the cradle. */
@@ -430,6 +437,31 @@ public class TradeBotEntity extends PathfinderMob {
 		data.load().copyInto(stacks);
 		for (int i = 0; i < LOAD_SLOTS; i++)
 			load.setStackInSlot(i, stacks.get(i));
+	}
+
+	/**
+	 * Drops everything he carries where he is (removed some other way than packing): his load, his emeralds, and his
+	 * banked XP as Nuggets of Experience, 3 XP each as he'd deliver them, with any XP left over as an orb.
+	 */
+	public void dropCarried() {
+		if (!(level() instanceof ServerLevel server))
+			return;
+		for (int slot = 0; slot < load.getSlots(); slot++) {
+			ItemStack stack = load.getStackInSlot(slot);
+			if (!stack.isEmpty())
+				spawnAtLocation(stack.copy());
+			load.setStackInSlot(slot, ItemStack.EMPTY);
+		}
+		for (long left = emeralds; left > 0; left -= 64)
+			spawnAtLocation(new ItemStack(net.minecraft.world.item.Items.EMERALD, (int) Math.min(64, left)));
+		net.minecraft.world.item.Item nugget = net.minecraft.core.registries.BuiltInRegistries.ITEM
+			.get(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create", "experience_nugget"));
+		for (int left = xpBank / XP_PER_NUGGET; left > 0; left -= 64)
+			spawnAtLocation(new ItemStack(nugget, Math.min(64, left)));
+		if (xpBank % XP_PER_NUGGET > 0)
+			net.minecraft.world.entity.ExperienceOrb.award(server, position(), xpBank % XP_PER_NUGGET);
+		emeralds = 0;
+		xpBank = 0;
 	}
 
 	/** Removed because he was packed into his item. */
@@ -651,8 +683,7 @@ public class TradeBotEntity extends PathfinderMob {
 			com.comedymonkey.createaddons.advancement.ModAdvancements.award(player, com.comedymonkey.createaddons.advancement.ModAdvancements.TRADE_BOT_WOUND_UP);
 			return InteractionResult.CONSUME;
 		}
-		if (!docked) {
-			goHome();
+		if (!docked && goHome()) {
 			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.heading_home"), true);
 		}
 		return InteractionResult.CONSUME;
@@ -670,6 +701,19 @@ public class TradeBotEntity extends PathfinderMob {
 			tag.putString("Rundown", rundown.name());
 		TradeBotData.CODEC.encodeStart(registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE),
 			toData(List.of(), Optional.empty())).ifSuccess(data -> tag.put("TradeBot", data));
+		// what he has open: his errand isn't saved, so it's shut when he's next loaded
+		List<BlockPos> open = new ArrayList<>(leftOpen);
+		BlockPos container = brain.openContainer();
+		if (container != null && !open.contains(container))
+			open.add(container);
+		for (BlockPos door : motion.openedDoors())
+			if (!open.contains(door))
+				open.add(door);
+		net.minecraft.nbt.ListTag list = new net.minecraft.nbt.ListTag();
+		for (BlockPos pos : open)
+			list.add(NbtUtils.writeBlockPos(pos));
+		if (!list.isEmpty())
+			tag.put("LeftOpen", list);
 	}
 
 	@Override
@@ -677,6 +721,12 @@ public class TradeBotEntity extends PathfinderMob {
 		super.readAdditionalSaveData(tag);
 		owner = tag.hasUUID("Owner") ? tag.getUUID("Owner") : null;
 		station = NbtUtils.readBlockPos(tag, "Station").orElse(null);
+		leftOpen.clear();
+		for (net.minecraft.nbt.Tag pos : tag.getList("LeftOpen", net.minecraft.nbt.Tag.TAG_INT_ARRAY)) {
+			CompoundTag wrapped = new CompoundTag();
+			wrapped.put("Pos", pos);
+			NbtUtils.readBlockPos(wrapped, "Pos").ifPresent(leftOpen::add);
+		}
 		docked = tag.getBoolean("Docked");
 		if (tag.contains("TradeBot"))
 			TradeBotData.CODEC.parse(registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), tag.get("TradeBot"))
@@ -703,6 +753,53 @@ public class TradeBotEntity extends PathfinderMob {
 		if (!packed && reason.shouldDestroy() && level() instanceof ServerLevel server)
 			TradeBotRegistry.get(server.getServer()).markGone(getUUID());
 		super.remove(reason);
+	}
+
+	/**
+	 * Gone from the world for any reason (packed, killed, unloaded): he shuts the container and the doors he opened,
+	 * as nothing he was doing is saved to finish it later.
+	 */
+	@Override
+	public void onRemovedFromLevel() {
+		if (!level().isClientSide) {
+			// unloading (no removal reason yet): his own chunk is already past changing, so what can't be shut now is
+			// saved with him and shut when he's back
+			boolean gone = getRemovalReason() != null && getRemovalReason().shouldDestroy();
+			BlockPos open = brain.openContainer();
+			brain.abortWork();
+			if (open != null && !gone && !level().isLoaded(open))
+				remember(open);
+			List<BlockPos> doors = motion.closeOpenedDoors();
+			if (!gone)
+				doors.forEach(this::remember);
+		}
+		super.onRemovedFromLevel();
+	}
+
+	private void remember(BlockPos pos) {
+		if (!leftOpen.contains(pos))
+			leftOpen.add(pos.immutable());
+	}
+
+	/** Back after being unloaded: shut the container he had open, and hand the doors back to be shut once he's clear. */
+	private void shutWhatHeLeftOpen() {
+		if (leftOpen.isEmpty())
+			return;
+		leftOpen.removeIf(pos -> {
+			if (!level().isLoaded(pos))
+				return false;
+			if (TradeBotMotion.isDoor(level().getBlockState(pos)))
+				motion.adoptOpenedDoor(pos);
+			else
+				com.comedymonkey.createaddons.content.tradebot.work.ContainerWork.shut(level(), pos);
+			return true;
+		});
+	}
+
+	/** He stays in his station's world: through a portal he'd never find his way home. */
+	@Override
+	public boolean canChangeDimensions(Level from, Level to) {
+		return false;
 	}
 
 	// ---- life
