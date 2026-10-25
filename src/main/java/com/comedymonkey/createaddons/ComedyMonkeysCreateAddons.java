@@ -93,6 +93,8 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(TradeBotGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.StorageGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.MachineGameTests::register);
+		if (SableCompat.LOADED)
+			modBus.addListener(com.comedymonkey.createaddons.gametest.SableGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
 		// picking containers for Trade Bot: the server takes over the picker's clicks on blocks
 		NeoForge.EVENT_BUS.addListener(TradeBotPicking::onRightClickBlock);

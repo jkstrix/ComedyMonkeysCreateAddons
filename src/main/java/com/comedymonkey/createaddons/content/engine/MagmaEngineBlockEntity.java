@@ -91,6 +91,21 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 		return engine().isSupercharged();
 	}
 
+	/**
+	 * Picks its turning up again on its first tick, like Create's Creative Motor. Being moved (made into a Sable physics
+	 * object, or put down by a contraption) wipes a kinetic block's speed, but leaves this one running, so nothing else
+	 * would set it turning again.
+	 */
+	@Override
+	public void initialize() {
+		super.initialize();
+		// Restart when its speed isn't what it should make (a move wiped it), or a slower source drives it; a plain
+		// reload already has its speed back, so it doesn't recompute the whole network for nothing
+		float generated = getGeneratedSpeed(), theoretical = getTheoreticalSpeed();
+		if (hasSource() ? Math.abs(generated) > Math.abs(theoretical) : generated != theoretical)
+			updateGeneratedRotation();
+	}
+
 	@Override
 	public void tick() {
 		super.tick();
