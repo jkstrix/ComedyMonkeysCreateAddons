@@ -1,0 +1,646 @@
+<title>Fluid &amp; Power Lines</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single column of short blocks, like a Create manual page: material band header, dark-ink body, mock scenes as the centrepiece */
+:root {
+  --bg: #e6e6e1; --surface: #f2f2ee; --fg: #22231f; --muted: #5f6058; --line: #c9c8c0;
+  --accent: #8a6626; --accent-soft: #e9dcc0; --goggle: #2b7a80; --ground: #d9d8d1; --ground-line: #c4c3bb;
+  --edge: rgba(20,20,15,.42); --ok: #4c7a46; --warn: #a3712a;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --goggle: #6cbfc3; --ground: #272723; --ground-line: #34332e;
+  --edge: rgba(0,0,0,.6); --ok: #84b07c; --warn: #d4a35a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --goggle: #6cbfc3; --ground: #272723; --ground-line: #34332e;
+  --edge: rgba(0,0,0,.6); --ok: #84b07c; --warn: #d4a35a; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.2rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+
+/* header band: the material strip from the mod's GUI kit */
+header { display: grid; gap: 14px; }
+.band { height: 10px; border-radius: 2px;
+  background: linear-gradient(90deg, #9c5f3a 0 48%, var(--bg) 48% 52%, #b58a45 52% 100%); }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { padding: 8px 0 8px 14px; border-left: 3px solid var(--accent); font-weight: 500 }
+
+/* mock scenes */
+.mock { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; display: grid; gap: 0; overflow: hidden }
+.mock-bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--line) }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center }
+.looks { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 20px; font-size: .92rem }
+.looks li { padding: 10px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.seg button { font: 500 .8rem/1 var(--mono); padding: 8px 12px; border: 0; background: transparent; color: var(--fg); cursor: pointer }
+.seg button + button { border-left: 1px solid var(--line) }
+.seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent) }
+.seg button:focus-visible { outline: 2px solid var(--goggle); outline-offset: -2px }
+.scene { overflow-x: auto; padding: 8px 4px }
+.scene svg { display: block; width: 100%; min-width: 560px; height: auto }
+.caption { padding: 10px 16px 14px; color: var(--muted); font-size: .88rem; border-top: 1px solid var(--line) }
+.edge { stroke: var(--edge); stroke-width: .8; stroke-linejoin: round }
+.lbl { font: 500 11px var(--mono); fill: var(--fg) }
+.lbl.dim { fill: var(--muted) }
+.lead { stroke: var(--muted); stroke-width: .8 }
+.goggle { stroke: var(--goggle); fill: none; stroke-width: 1.6; stroke-dasharray: 5 4 }
+.goggle-txt { font: 600 11px var(--mono); fill: var(--goggle) }
+.ground { fill: var(--ground); stroke: var(--ground-line); stroke-width: 1 }
+.flow { fill: none; stroke-linecap: round; animation: flow var(--speed, 1.4s) linear infinite }
+@keyframes flow { to { stroke-dashoffset: -32 } }
+.glow { fill: none; stroke: #e2b665; stroke-linecap: round; animation: glow 2.6s ease-in-out infinite }
+@keyframes glow { 0%, 100% { opacity: .15 } 50% { opacity: .55 } }
+@media (prefers-reduced-motion: reduce) { .flow, .glow { animation: none } .glow { opacity: .35 } }
+
+/* fittings */
+.fittings { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px }
+.fit { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 12px 14px 14px; display: grid; grid-template-columns: 96px 1fr; gap: 12px; align-items: center }
+.fit svg { width: 96px; height: 76px }
+.fit h3 { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap }
+.fit .on { font: 500 .7rem/1 var(--mono); color: var(--muted); letter-spacing: .06em; text-transform: uppercase }
+.fit p { font-size: .9rem; color: var(--muted); margin-top: 4px }
+
+/* loop */
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; counter-reset: step }
+.loop li { counter-increment: step; padding: 12px; border-top: 3px solid var(--line); display: grid; gap: 4px }
+.loop li::before { content: counter(step); font: 600 1.4rem/1 var(--display); color: var(--accent) }
+
+/* does / doesn't */
+.pairs { display: grid; gap: 8px }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.pair > div { padding: 10px 12px; border-radius: 3px; background: var(--surface); border: 1px solid var(--line); font-size: .92rem; min-width: 0 }
+.pair .yes { border-left: 3px solid var(--ok) }
+.pair .no { border-left: 3px solid var(--warn); color: var(--muted) }
+.pair-head { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+
+/* numbers */
+.nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 4px; overflow: hidden }
+.num { background: var(--surface); padding: 14px; display: grid; gap: 2px }
+.num b { font: 600 1.6rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.num span { font-size: .8rem; color: var(--muted) }
+
+/* what if */
+.whatif { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 24px }
+.whatif div { display: grid; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--line) }
+.whatif b { font-weight: 600 }
+.whatif span { color: var(--muted); font-size: .92rem }
+
+/* scores */
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center }
+.bar { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden }
+.bar i { display: block; height: 100%; background: var(--accent) }
+.score .pct { font: 500 .85rem var(--mono); text-align: right; font-variant-numeric: tabular-nums }
+.score .why { grid-column: 2 / 4; font-size: .82rem; color: var(--muted); margin-top: -6px }
+.score.overall .bar i { background: var(--ok) }
+
+.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px }
+.open ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: .92rem }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px; display: grid; gap: 10px }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 16px }
+code { font: .85em var(--mono) }
+
+@media (max-width: 520px) {
+  .fit { grid-template-columns: 72px 1fr } .fit svg { width: 72px; height: 58px }
+  .score { grid-template-columns: 110px 1fr 40px }
+  .pair, .pair-head { grid-template-columns: 1fr }
+  .pair-head div:last-child { display: none }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="band" aria-hidden="true"></div>
+    <span class="eyebrow">ComedyMonkey's Create Addons · Systems spec v1</span>
+    <h1>Fluid Lines &amp; Power Lines</h1>
+    <p class="pitch">Pump-free pipes for fluid and lines for power. They come in copper and brass, you can see their limits, you upgrade them by clipping on parts you can see, and they hide inside any block.</p>
+    <div class="chips">
+      <span class="chip ready">Design ready · 85%</span>
+      <span class="chip">Replaces Pipez in this mod</span>
+      <span class="chip">No items · no pump · no power</span>
+    </div>
+  </header>
+
+  <section aria-labelledby="h-gist">
+    <h2 id="h-gist">The whole idea in 10 lines</h2>
+    <ul class="idiot">
+      <li>Fluid Lines for fluid, Power Lines for FE. No items.</li>
+      <li>No pump. No power. Just place it.</li>
+      <li>Fluid needs an Intake at the source.</li>
+      <li>Power flows by itself.</li>
+      <li>Copper is slow, brass is fast.</li>
+      <li>Copper and brass never join. Different colours join only if wrenched.</li>
+      <li>Upgrades are parts you clip on.</li>
+      <li>Power Lines clip flat to floors and walls, or hang between poles.</li>
+      <li>Wooden posts stack for height, with 1 to 4 branches on top.</li>
+      <li>Encase a line in any block to hide it.</li>
+      <li>Goggles show where it's hidden.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="h-mock">
+    <span class="eyebrow">Mock-up · not the final art</span>
+    <h2 id="h-mock">What it might look like</h2>
+    <p class="sub">Rough sketches of the idea. The real models come from the art brief and get previewed in Blockbench first, in the mod's dark, muted style.</p>
+    <ul class="looks">
+      <li><b>Thin and round.</b> Fluid Lines are slim pipes, about 3–4 px across, with ring couplings. No square collars.</li>
+      <li><b>Wires look like wires.</b> Power Lines are thin cable, even when placed: bare in their material, or a slightly thicker covered cable when dyed. They lie flat on the floor, wall or ceiling they were placed on, held down by clips.</li>
+      <li><b>Dye them.</b> A line is just its colour: dyed all over, or its material when undyed. Nothing glows. Same colours join by themselves; different colours, undyed included, only join if you wrench them together.</li>
+    </ul>
+
+    <div class="mock">
+      <div class="mock-bar">
+        <h3>A fluid line, tank to basin</h3>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Tier">
+            <button type="button" id="tier-copper" data-tier="copper" aria-pressed="false">Copper</button>
+            <button type="button" id="tier-brass" data-tier="brass" aria-pressed="true">Brass</button>
+          </div>
+          <div class="seg" role="group" aria-label="Fluid">
+            <button type="button" id="fluid-lava" data-fluid="lava" aria-pressed="true">Lava</button>
+            <button type="button" id="fluid-water" data-fluid="water" aria-pressed="false">Water</button>
+          </div>
+          <div class="seg" role="group" aria-label="Goggles">
+            <button type="button" id="goggles-off" data-goggles="off" aria-pressed="false">Goggles off</button>
+            <button type="button" id="goggles-on" data-goggles="on" aria-pressed="true">Goggles on</button>
+          </div>
+        </div>
+      </div>
+      <div class="scene"><svg id="scene-fluid" role="img" aria-label="A tank with an Intake, a fluid line with flow windows, a Meter and a Valve, running into a brick wall that hides it and out into a basin"></svg></div>
+      <p class="caption" id="cap-fluid"></p>
+    </div>
+
+    <div class="mock">
+      <div class="mock-bar">
+        <h3>A power line, generator to motor</h3>
+        <div class="controls"><span class="eyebrow" id="tier-note">Brass · 65,536 FE/t</span>
+          <div class="seg" role="group" aria-label="Dye colour">
+            <button type="button" id="dye-none" data-dye="none" aria-pressed="true">Undyed</button>
+            <button type="button" id="dye-red" data-dye="red" aria-pressed="false">Red</button>
+            <button type="button" id="dye-blue" data-dye="blue" aria-pressed="false">Blue</button>
+            <button type="button" id="dye-green" data-dye="green" aria-pressed="false">Green</button>
+            <button type="button" id="dye-yellow" data-dye="yellow" aria-pressed="false">Yellow</button>
+          </div></div>
+      </div>
+      <div class="scene"><svg id="scene-power" role="img" aria-label="A generator feeding a power line on the floor, up a Line Post, across a sagging span to a second post, through a Breaker and into an Electric Motor"></svg></div>
+      <p class="caption" id="cap-power"></p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-fit">
+    <h2 id="h-fit">The fittings</h2>
+    <p class="sub">The upgrades. Each one clips onto a straight piece of line, one per block, and the wrench takes it off again. No menus or upgrade slots. Every one costs a real Create part.</p>
+    <div class="fittings" id="fittings"></div>
+  </section>
+
+  <section aria-labelledby="h-loop">
+    <h2 id="h-loop">How you use it</h2>
+    <ol class="loop">
+      <li><b>Lay the line</b><span class="sub">From a tank or generator to the machines.</span></li>
+      <li><b>Clip an Intake</b><span class="sub">On the source side. Fluid only: power needs none.</span></li>
+      <li><b>Watch it flow</b><span class="sub">Fluid moves past the window along the pipe. Read a Meter for power.</span></li>
+      <li><b>Add control</b><span class="sub">Valve, Filter, Meter or Splitter where you need it.</span></li>
+      <li><b>Hide it</b><span class="sub">Encase it in your walls. Goggles find it again.</span></li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="h-rules">
+    <h2 id="h-rules">Does and doesn't</h2>
+    <div class="pairs">
+      <div class="pair-head"><span class="eyebrow">Does</span><span class="eyebrow">Doesn't</span></div>
+      <div class="pair"><div class="yes">Moves fluid and FE with no pump and no power</div><div class="no">Move items. There are no item lines</div></div>
+      <div class="pair"><div class="yes">Runs any distance with no loss</div><div class="no">Go faster than its tier: copper and brass have hard caps</div></div>
+      <div class="pair"><div class="yes">Draws fluid from tanks, basins, the Wellspring and other mods' tanks</div><div class="no">Draw water or lava from the world. That's still the pump's job</div></div>
+      <div class="pair"><div class="yes">Connects to anything that holds fluid or FE</div><div class="no">Join Create's own Fluid Pipes</div></div>
+      <div class="pair"><div class="yes">Works on Aeronautics ships</div><div class="no">Work while a Create contraption is moving</div></div>
+      <div class="pair"><div class="yes">Wires lie flat on floors, walls and ceilings, clipped down</div><div class="no">Look like pipes. Wires are thin cable, never boxes</div></div>
+      <div class="pair"><div class="yes">Hides inside any full block and keeps working</div><div class="no">Hurt anyone. Spans have no collision and never shock you</div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-nums">
+    <h2 id="h-nums">The numbers</h2>
+    <div class="nums">
+      <div class="num"><b>100 mB/t</b><span>Copper Fluid Line</span></div>
+      <div class="num"><b>1,000 mB/t</b><span>Brass Fluid Line</span></div>
+      <div class="num"><b>4,096 FE/t</b><span>Copper Power Line · four Lava Generators</span></div>
+      <div class="num"><b>65,536 FE/t</b><span>Brass Power Line · more than a Geothermal Turbine</span></div>
+      <div class="num"><b>16 / 32</b><span>Span reach in blocks, copper / brass</span></div>
+      <div class="num"><b>8 per craft</b><span>Lines are cheap; fittings cost Create parts</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-if">
+    <h2 id="h-if">What if…?</h2>
+    <div class="whatif">
+      <div><b>A chunk unloads mid-line?</b><span>Those parts are skipped. Nothing is lost.</span></div>
+      <div><b>I break a line while it's flowing?</b><span>Nothing spills. Lines store nothing.</span></div>
+      <div><b>The Intake's tank is also fed by the line?</b><span>It never feeds itself.</span></div>
+      <div><b>A ship flies off with one end of a span?</b><span>The span comes down and drops its wire.</span></div>
+      <div><b>Both span ends are on the ship?</b><span>It stays up and keeps working.</span></div>
+      <div><b>Two fluids could flow?</b><span>Set each Intake's filter; Filters split the line.</span></div>
+      <div><b>Someone builds through a span?</b><span>The span stays. Blocks only matter when you hang it.</span></div>
+      <div><b>I still have Pipez covers?</b><span>They keep working, but they're no longer craftable.</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-score">
+    <h2 id="h-score">How ready is the design?</h2>
+    <div class="scores" id="scores"></div>
+  </section>
+
+  <section aria-labelledby="h-open">
+    <h2 id="h-open">Still open</h2>
+    <div class="open">
+      <div class="box">
+        <h3>Proposed defaults: need your OK</h3>
+        <ul>
+          <li>Intakes only draw from containers, never from world water or lava.</li>
+          <li>Hanging a span costs 1 Power Line per 4 blocks, refunded when it comes down.</li>
+          <li>Posts have no tier. Each insulator is its own connection, set by the first cable tied to it, up to 2 spans.</li>
+          <li>Add a branch by using a Line Post on the side of a head; the wrench takes it off.</li>
+          <li>Copper lines don't oxidise.</li>
+          <li>With no Splitter, a line shares evenly between its ends.</li>
+          <li>Set a Filter or an Intake with a bucket; an empty hand clears it.</li>
+                    <li>The encasing block is kept and the wrench gives it back.</li>
+          <li>Goggles show hidden lines within 16 blocks.</li>
+          <li>Recipes as listed in the spec (8 lines per craft).</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>Parked for later</h3>
+        <ul>
+          <li>Item lines (left out of v1 on purpose).</li>
+          <li>Bare (uninsulated) span looks.</li>
+          <li>An adapter into Create's Fluid Pipes.</li>
+          <li>Spans that stretch between a moving ship and the ground.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>Full spec: <code>design/specs/fluid-and-power-lines.md</code>. This page summarises it, and the spec wins where they differ. Next comes the art brief, then a Blockbench preview.</footer>
+</div>
+
+<script>
+(function () {
+  const C = Math.cos(Math.PI / 6), H = 0.5, K = 1.2247; // K: a circle of radius r spans K*r*S either side on screen
+  const MAT = {
+    andesite: '#8f8d84', wood: '#634532', brass: '#b58a45', copper: '#a86c4a', brick: '#7c5747', stone: '#6e6c65', ceramic: '#b8b0a1',
+    casing: '#6f6c63', dark: '#3e3c37', glass: '#9fb3b8', lava: '#d0682e', water: '#4f84a6', iron: '#9a9c9e', valve: '#8a3b33'
+  };
+  const WIRE = {
+    copper: { sheath: '#9c5f3a', shine: '#b87a4e', clip: '#5e3a24' },
+    brass: { sheath: '#8f7638', shine: '#b08f45', clip: '#6b5828' }
+  };
+  const DYE = { none: null, red: '#8a4a42', blue: '#4b6687', green: '#5a7248', yellow: '#a38c4c' };
+  const state = { tier: 'brass', fluid: 'lava', goggles: 'on', dye: 'none' };
+  try { const s = JSON.parse(localStorage.getItem('lines-mock') || '{}'); Object.assign(state, s); } catch (e) {}
+  if (!WIRE[state.tier]) state.tier = 'brass';
+  if (!(state.dye in DYE)) state.dye = 'none';
+
+  function shade(hex, k) {
+    const n = parseInt(hex.slice(1), 16);
+    const c = [n >> 16, (n >> 8) & 255, n & 255].map(v => Math.max(0, Math.min(255, Math.round(v * k))));
+    return '#' + c.map(v => v.toString(16).padStart(2, '0')).join('');
+  }
+  const f1 = v => v.toFixed(1);
+
+  // An isometric canvas: blocks are S px; x runs right-down, z left-down, y up
+  function Iso(S) {
+    const out = [], xs = [], ys = [];
+    const P = (x, y, z) => { const p = [(x - z) * C * S, (x + z) * H * S - y * S]; xs.push(p[0]); ys.push(p[1]); return p; };
+    const pts = a => a.map(p => f1(p[0]) + ',' + f1(p[1])).join(' ');
+    const api = {
+      S, P, pts,
+      raw(s) { out.push(s); },
+      box(x, y, z, w, h, d, col) {
+        const top = [P(x, y + h, z), P(x + w, y + h, z), P(x + w, y + h, z + d), P(x, y + h, z + d)];
+        const right = [P(x + w, y, z), P(x + w, y, z + d), P(x + w, y + h, z + d), P(x + w, y + h, z)];
+        const left = [P(x, y, z + d), P(x + w, y, z + d), P(x + w, y + h, z + d), P(x, y + h, z + d)];
+        out.push(`<g><polygon class="edge" points="${pts(left)}" fill="${shade(col, 0.92)}"/><polygon class="edge" points="${pts(right)}" fill="${shade(col, 0.74)}"/><polygon class="edge" points="${pts(top)}" fill="${shade(col, 1.12)}"/></g>`);
+      },
+      // drawn in a face's own plane: 'z' (u=x, v=y), 'x' (u=z, v=y), 'y' (u=x, v=z); units are blocks
+      face(kind, x, y, z, inner) {
+        const o = P(x, y, z);
+        const m = kind === 'z' ? [C * S, H * S, 0, -S] : kind === 'x' ? [-C * S, H * S, 0, -S] : [C * S, H * S, -C * S, H * S];
+        out.push(`<g transform="matrix(${m.map(v => v.toFixed(3)).join(' ')} ${f1(o[0])} ${f1(o[1])})">${inner}</g>`);
+      },
+      line(a, b, style, cls) { out.push(`<line x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}" class="${cls || ''}" style="${style || ''}"/>`); },
+      label(at, dx, dy, text, cls) {
+        const e = [at[0] + dx, at[1] + dy];
+        xs.push(e[0] - 4, e[0] + text.length * 6.8 + 4); ys.push(e[1] - 14, e[1] + 6);
+        out.push(`<line class="lead" x1="${f1(at[0])}" y1="${f1(at[1])}" x2="${f1(e[0])}" y2="${f1(e[1] + 4)}"/><text class="lbl ${cls || ''}" x="${f1(e[0])}" y="${f1(e[1])}">${text}</text>`);
+      },
+      ground(x0, z0, x1, z1) { out.unshift(`<polygon class="ground" points="${pts([P(x0, 0, z0), P(x1, 0, z0), P(x1, 0, z1), P(x0, 0, z1)])}"/>`); },
+      svg(el, pad) {
+        pad = pad || 14;
+        const minX = Math.min(...xs) - pad, maxX = Math.max(...xs) + pad, minY = Math.min(...ys) - pad, maxY = Math.max(...ys) + pad;
+        el.setAttribute('viewBox', `${minX.toFixed(0)} ${minY.toFixed(0)} ${(maxX - minX).toFixed(0)} ${(maxY - minY).toFixed(0)}`);
+        el.innerHTML = out.join('');
+      }
+    };
+    return api;
+  }
+
+  // A round tube along an axis, shaded as a cylinder; the far end gets a round cap when asked
+  function tube(iso, axis, x, y, z, len, r, col, cap) {
+    const e = axis === 'x' ? [x + len, y, z] : axis === 'y' ? [x, y + len, z] : [x, y, z + len];
+    const a = iso.P(x, y, z), b = iso.P(...e);
+    const w = 2 * K * r * iso.S;
+    let dx = b[0] - a[0], dy = b[1] - a[1]; const l = Math.hypot(dx, dy) || 1; dx /= l; dy /= l;
+    let n = [-dy, dx]; if (n[1] > 0 || (n[1] === 0 && n[0] > 0)) n = [-n[0], -n[1]]; // n points up the screen
+    const off = (p, k) => [p[0] + n[0] * k, p[1] + n[1] * k];
+    iso.line(a, b, `stroke:var(--edge);stroke-width:${f1(w + 1.6)}`);
+    iso.line(a, b, `stroke:${shade(col, 0.86)};stroke-width:${f1(w)}`);
+    iso.line(off(a, -w * 0.27), off(b, -w * 0.27), `stroke:${shade(col, 0.64)};stroke-width:${f1(w * 0.3)}`);
+    iso.line(off(a, w * 0.2), off(b, w * 0.2), `stroke:${shade(col, 1.25)};stroke-width:${f1(w * 0.24)}`);
+    if (cap) iso.face(axis, ...e, `<circle r="${r}" fill="${shade(col, 0.95)}" stroke="var(--edge)" stroke-width="${(0.8 / iso.S).toFixed(3)}"/><circle r="${(r * 0.55).toFixed(3)}" fill="${shade(col, 0.7)}"/>`);
+    return { a, b, w, n, off };
+  }
+  // A fluid line: slim pipe, a slot along the top where the fluid shows moving, couplings at the block joints
+  function pipe(iso, x0, x1, tier, fluidCol, speed) {
+    const t = tube(iso, 'x', x0, 0.5, 0.5, x1 - x0, 0.1, DYE[state.dye] || MAT[tier]);
+    const s0 = t.off(iso.P(x0 + 0.06, 0.5, 0.5), t.w * 0.12), s1 = t.off(iso.P(x1 - 0.06, 0.5, 0.5), t.w * 0.12);
+    iso.line(s0, s1, `stroke:${MAT.dark};stroke-width:3.2;stroke-linecap:round`);
+    iso.line(s0, s1, `stroke:${fluidCol};stroke-width:2;stroke-dasharray:8 5;--speed:${speed}`, 'flow');
+    const dye = DYE[state.dye];
+    for (let x = Math.ceil(x0 + 0.05); x < x1 - 0.05; x++) tube(iso, 'x', x - 0.04, 0.5, 0.5, 0.08, 0.13, shade(MAT[tier], 0.72), true);
+    return t;
+  }
+  // A placed wire: thin insulated cable through 3D points, lying on the surfaces
+  function wire(iso, pts3, tier, glow) {
+    const W = WIRE[tier], dyed = !!DYE[state.dye], sheath = DYE[state.dye] || W.sheath;
+    const sw = dyed ? (tier === 'brass' ? 3.2 : 2.8) : (tier === 'brass' ? 2.2 : 1.8); // a dyed wire is a thicker covered cable
+    const d = pts3.map(p => iso.P(...p)).map((p, i) => (i ? 'L' : 'M') + f1(p[0]) + ',' + f1(p[1])).join(' ');
+    iso.raw(`<path d="${d}" fill="none" stroke="var(--edge)" stroke-width="${f1(sw + 1.4)}" stroke-linejoin="round" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${sheath}" stroke-width="${f1(sw)}" stroke-linejoin="round" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${dyed ? shade(sheath, 1.3) : W.shine}" stroke-width="0.9" stroke-linejoin="round" stroke-linecap="round" transform="translate(0,-0.7)" opacity="0.6"/>`);
+  }
+  // A clip holding a wire to a surface: a short strap across it
+  function clip(iso, p, across, tier) {
+    const a = iso.P(p[0] - across[0] * 0.07, p[1] - across[1] * 0.07, p[2] - across[2] * 0.07);
+    const b = iso.P(p[0] + across[0] * 0.07, p[1] + across[1] * 0.07, p[2] + across[2] * 0.07);
+    iso.line(a, b, `stroke:var(--edge);stroke-width:4.4;stroke-linecap:round`);
+    iso.line(a, b, `stroke:${WIRE[tier].clip};stroke-width:2.8;stroke-linecap:round`);
+  }
+  // An upright cylinder (switch bodies, post feet, insulator discs)
+  function cylV(iso, x, y, z, r, h, col) {
+    const b = iso.P(x, y, z), t = iso.P(x, y + h, z), rx = K * r * iso.S, ry = 0.7071 * r * iso.S;
+    iso.raw(`<path d="M${f1(b[0] - rx)},${f1(b[1])} A${f1(rx)},${f1(ry)} 0 0 0 ${f1(b[0] + rx)},${f1(b[1])} L${f1(t[0] + rx)},${f1(t[1])} L${f1(t[0] - rx)},${f1(t[1])} Z" fill="${shade(col, 0.82)}" stroke="var(--edge)" stroke-width="0.8"/>`);
+    iso.raw(`<ellipse cx="${f1(t[0])}" cy="${f1(t[1])}" rx="${f1(rx)}" ry="${f1(ry)}" fill="${shade(col, 1.12)}" stroke="var(--edge)" stroke-width="0.8"/>`);
+  }
+  // A pole of stacked Line Posts: foot, pole (a collar at each block joint) and a head with its top insulator
+  // and its branches (crossarms along z, each with its own insulator); returns the tie points
+  function insulator(iso, x, y, z, big) {
+    const k = big ? 1 : 0.8;
+    cylV(iso, x, y, z, 0.09 * k, 0.08, MAT.ceramic);
+    cylV(iso, x, y + 0.12 * k, z, 0.12 * k, 0.05, MAT.ceramic);
+    cylV(iso, x, y + 0.21 * k, z, 0.09 * k, 0.08, MAT.ceramic);
+    cylV(iso, x, y + 0.33 * k, z, 0.12 * k, 0.05, MAT.ceramic);
+    return iso.P(x, y + 0.38 * k, z);
+  }
+  function post(iso, x, z, tier, height, branches) {
+    const top = height - 0.5, arm = height - 0.44, reach = 0.44, ties = {};
+    cylV(iso, x, 0, z, 0.13, 0.06, MAT.dark);
+    if (branches) { ties.back = insulator(iso, x, arm + 0.06, z - reach, false); tube(iso, 'z', x, arm, z - reach, reach, 0.04, MAT.wood); }
+    tube(iso, 'y', x, 0.06, z, top - 0.06, 0.06, MAT.wood);
+    if (branches) tube(iso, 'z', x, arm, z, reach, 0.04, MAT.wood, true);
+    ties.top = insulator(iso, x, top, z, true);
+    if (branches) ties.front = insulator(iso, x, arm + 0.06, z + reach, false);
+    return ties;
+  }
+  function dial(iso, x, y, z, r, needleAngle) {
+    const ticks = [-60, -30, 0, 30, 60].map(a => {
+      const rad = (a - 90) * Math.PI / 180;
+      return `<line x1="${(Math.cos(rad) * r * 0.72).toFixed(3)}" y1="${(-Math.sin(rad) * r * 0.72).toFixed(3)}" x2="${(Math.cos(rad) * r * 0.9).toFixed(3)}" y2="${(-Math.sin(rad) * r * 0.9).toFixed(3)}" stroke="${MAT.dark}" stroke-width="0.02"/>`;
+    }).join('');
+    const n = (needleAngle - 90) * Math.PI / 180;
+    iso.face('z', x, y, z, `<circle r="${r}" fill="#d9d4c4" stroke="${MAT.brass}" stroke-width="0.05"/>${ticks}<line x1="0" y1="0" x2="${(Math.cos(n) * r * 0.78).toFixed(3)}" y2="${(-Math.sin(n) * r * 0.78).toFixed(3)}" stroke="${MAT.valve}" stroke-width="0.035" stroke-linecap="round"/><circle r="0.03" fill="${MAT.dark}"/>`);
+  }
+  function wheel(iso, x, y, z, r) {
+    const spokes = [0, 60, 120].map(a => { const c = Math.cos(a * Math.PI / 180) * r, s = Math.sin(a * Math.PI / 180) * r;
+      return `<line x1="${c.toFixed(3)}" y1="${s.toFixed(3)}" x2="${(-c).toFixed(3)}" y2="${(-s).toFixed(3)}" stroke="${shade(MAT.valve, 0.8)}" stroke-width="0.04"/>`; }).join('');
+    iso.face('y', x, y, z, `<circle r="${r}" fill="none" stroke="${MAT.valve}" stroke-width="0.07"/>${spokes}<circle r="0.05" fill="${MAT.dark}"/>`);
+  }
+  // The Intake: a flange on the tank, a short collar with its filter window, then the line
+  function intake(iso, x, tier, filterCol) {
+    tube(iso, 'x', x, 0.5, 0.5, 0.06, 0.24, MAT.brass, true);
+    tube(iso, 'x', x + 0.06, 0.5, 0.5, 0.26, 0.17, '#4a5059', true);
+    iso.face('y', x + 0.1, 0.5 + 0.17, 0.5, `<rect x="0" y="-0.07" width="0.18" height="0.14" rx="0.02" fill="${filterCol}" stroke="${MAT.dark}" stroke-width="0.02"/>` +
+      [0.06, 0.12].map(u => `<line x1="${u}" y1="-0.07" x2="${u}" y2="0.07" stroke="${MAT.dark}" stroke-width="0.015"/>`).join('') +
+      `<line x1="0" y1="0" x2="0.18" y2="0" stroke="${MAT.dark}" stroke-width="0.015"/>`);
+    return iso.P(x + 0.19, 0.33, 0.5);
+  }
+
+  function fluidScene() {
+    const el = document.getElementById('scene-fluid');
+    const iso = Iso(46);
+    const tier = state.tier, fl = MAT[state.fluid];
+    const speed = tier === 'brass' ? '0.55s' : '1.8s';
+    iso.ground(-0.5, -0.6, 10.5, 1.6);
+    // source tank
+    iso.box(0, 0, 0, 1, 1.8, 1, MAT.casing);
+    iso.box(0.12, 0.25, 0.999, 0.76, 1.3, 0.02, MAT.glass);
+    iso.box(0.16, 0.28, 1.01, 0.68, 0.9, 0.01, fl);
+    iso.box(-0.05, 1.8, -0.05, 1.1, 0.12, 1.1, MAT.andesite);
+    const tankTop = iso.P(0.5, 1.92, 0.5);
+    const intakeAt = intake(iso, 1, tier, fl);
+    pipe(iso, 1.32, 2.62, tier, fl, speed);
+    // Meter: a round housing on the line, a gauge on a short stem
+    tube(iso, 'x', 2.62, 0.5, 0.5, 0.3, 0.15, shade(MAT[tier], 0.92), true);
+    tube(iso, 'y', 2.77, 0.6, 0.5, 0.2, 0.035, MAT.dark);
+    cylV(iso, 2.77, 0.78, 0.5, 0.08, 0.04, MAT[tier]);
+    dial(iso, 2.77, 1.02, 0.56, 0.2, tier === 'brass' ? 45 : -20);
+    const meterAt = iso.P(2.77, 1.24, 0.5);
+    pipe(iso, 2.92, 4.7, tier, fl, speed);
+    // Valve: a round body, a stem and a hand wheel
+    tube(iso, 'x', 4.7, 0.5, 0.5, 0.3, 0.16, shade(MAT[tier], 0.9), true);
+    tube(iso, 'y', 4.85, 0.62, 0.5, 0.26, 0.03, MAT.iron);
+    wheel(iso, 4.85, 0.9, 0.5, 0.2);
+    const valveAt = iso.P(4.85, 1.0, 0.5);
+    pipe(iso, 5.0, 6, tier, fl, speed);
+    // encased stretch: a brick wall of three blocks
+    for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) iso.box(6 + i, j, 0, 1, 1, 1, i % 2 === j % 2 ? MAT.brick : shade(MAT.brick, 0.94));
+    for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) for (const v of [0.25, 0.5, 0.75])
+      iso.line(iso.P(6 + i, j + v, 1), iso.P(7 + i, j + v, 1), 'stroke:rgba(0,0,0,.22);stroke-width:.7');
+    const wallAt = iso.P(7.5, 2, 0.5);
+    if (state.goggles === 'on') {
+      const a = iso.P(6, 0.5, 0.5), b = iso.P(9, 0.5, 0.5), w = 2 * K * 0.1 * iso.S;
+      let dx = b[0] - a[0], dy = b[1] - a[1]; const l = Math.hypot(dx, dy); const n = [dy / l, -dx / l];
+      for (const k of [w / 2, -w / 2]) iso.line([a[0] + n[0] * k, a[1] + n[1] * k], [b[0] + n[0] * k, b[1] + n[1] * k], '', 'goggle');
+    }
+    pipe(iso, 9, 9.4, tier, fl, speed);
+    // basin
+    iso.box(9.4, 0, 0, 1, 0.75, 1, MAT.andesite);
+    iso.box(9.52, 0.75, 0.12, 0.76, 0.001, 0.76, fl);
+    const basinAt = iso.P(9.9, 0.8, 0.5);
+    iso.label(tankTop, -10, -26, 'Tank (any fluid holder)', 'dim');
+    iso.label(intakeAt, -6, 58, 'Intake + filter: draws only ' + state.fluid);
+    iso.label(meterAt, 8, -34, 'Meter: live mB/t');
+    iso.label(valveAt, 8, -36, 'Valve: redstone + throttle');
+    if (state.goggles === 'on') iso.label(wallAt, 8, -34, 'Hidden line (goggles)', 'goggle-txt');
+    else iso.label(wallAt, 8, -34, 'Just a brick wall', 'dim');
+    iso.label(basinAt, 10, -22, 'Basin: an end', 'dim');
+    iso.svg(el);
+    const rate = tier === 'brass' ? '1,000 mB/t' : '100 mB/t';
+    document.getElementById('cap-fluid').textContent =
+      `${tier === 'brass' ? 'Brass' : 'Copper'} Fluid Line${state.dye === 'none' ? '' : ', dyed ' + state.dye}, carrying ${state.fluid}, up to ${rate}: a slim round pipe with ring couplings, the fluid showing through the slot along its top. The Intake is the only part that draws fluid in, and its filter is set to ${state.fluid}. ` +
+      (state.goggles === 'on' ? 'With goggles on, the line hidden in the wall shows as an outline.' : 'With goggles off, the wall hides the line completely.');
+  }
+
+  function powerScene() {
+    const el = document.getElementById('scene-power');
+    const iso = Iso(40);
+    const tier = state.tier;
+    iso.ground(-0.5, -1.4, 12.5, 1.6);
+    // a back wall the wire climbs
+    for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) iso.box(1.2 + i, j, -1, 1, 1, 1, i % 2 === j % 2 ? MAT.stone : shade(MAT.stone, 0.95));
+    // generator
+    iso.box(0, 0, 0, 1, 1, 1, MAT.casing);
+    iso.box(0.15, 1, 0.15, 0.7, 0.18, 0.7, MAT.copper);
+    iso.box(0.3, 0.3, 0.999, 0.4, 0.3, 0.02, MAT.lava);
+    const genAt = iso.P(0.5, 1.2, 0.5);
+    // out of the generator, down to the floor, back to the wall, up it, along it, down, out to the post
+    const f = 0.03, wz = 0.03;
+    const path = [[1, 0.35, 0.5], [1.06, 0.3, 0.5], [1.1, f, 0.5], [1.45, f, 0.5], [1.45, f, wz], [1.45, 1.4, wz],
+      [2.95, 1.4, wz], [2.95, f, wz], [2.95, f, 0.5], [5.15, f, 0.5], [5.2, 0.06, 0.5]];
+    wire(iso, path, tier, true);
+    clip(iso, [1.3, f, 0.5], [0, 0, 1], tier);
+    clip(iso, [1.45, f, 0.25], [1, 0, 0], tier);
+    clip(iso, [1.45, 0.7, wz], [1, 0, 0], tier);
+    clip(iso, [2.2, 1.4, wz], [0, 1, 0], tier);
+    clip(iso, [2.95, 0.7, wz], [1, 0, 0], tier);
+    clip(iso, [3.6, f, 0.5], [0, 0, 1], tier);
+    clip(iso, [4.5, f, 0.5], [0, 0, 1], tier);
+    const wallAt = iso.P(2.2, 1.4, wz);
+    const A = post(iso, 5.2, 0.5, tier, 3, true);
+    const B = post(iso, 8.5, 0.5, tier, 2, true);
+    // two spans, one from each branch: the same cable, sagging gently
+    const W = WIRE[tier];
+    const hang = (p, q) => {
+      const mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2 + 30;
+      iso.raw(`<path d="M${f1(p[0])},${f1(p[1])} Q${f1(mx)},${f1(my)} ${f1(q[0])},${f1(q[1])}" fill="none" stroke="${DYE[state.dye] || W.sheath}" stroke-width="${DYE[state.dye] ? 1.6 : 1.1}" stroke-linecap="round"/>`);
+      return [mx, (p[1] + q[1]) / 2 + 15];
+    };
+    hang(A.back, B.back);
+    const sag = hang(A.front, B.front);
+    const a = A.top;
+    wire(iso, [[8.5, 0.06, 0.5], [8.56, f, 0.5], [9.62, f, 0.5]], tier, true);
+    clip(iso, [9.1, f, 0.5], [0, 0, 1], tier);
+    // Breaker: a small round switch with a lever, clipped on the wire
+    cylV(iso, 9.8, 0, 0.5, 0.17, 0.16, MAT[tier]);
+    iso.line(iso.P(9.8, 0.16, 0.5), iso.P(9.9, 0.42, 0.62), `stroke:${MAT.dark};stroke-width:2.6;stroke-linecap:round`);
+    const knob = iso.P(9.9, 0.42, 0.62);
+    iso.raw(`<circle cx="${f1(knob[0])}" cy="${f1(knob[1])}" r="3" fill="${MAT.valve}" stroke="var(--edge)" stroke-width="0.8"/>`);
+    const brkAt = iso.P(9.8, 0.5, 0.5);
+    wire(iso, [[9.98, f, 0.5], [10.9, f, 0.5], [10.96, 0.08, 0.5], [11, 0.3, 0.5]], tier, true);
+    clip(iso, [10.45, f, 0.5], [0, 0, 1], tier);
+    // Electric Motor
+    iso.box(11, 0, 0.05, 1, 0.9, 0.9, MAT.casing);
+    iso.box(11.2, 0.9, 0.25, 0.6, 0.1, 0.5, MAT.copper);
+    tube(iso, 'x', 12, 0.45, 0.5, 0.35, 0.09, MAT.andesite, true);
+    const motorAt = iso.P(11.5, 1, 0.5);
+    iso.label(genAt, -40, -30, 'Generator', 'dim');
+    iso.label(wallAt, -30, -74, 'Wire clipped flat to the wall');
+    iso.label(iso.P(1.3, f, 0.5), -110, 44, 'and along the floor');
+    iso.label(a, 22, -8, 'Wooden Line Posts: stacked 3 high, 2 branches');
+    iso.label(B.top, 22, -8, '2 high', 'dim');
+    iso.label(sag, -40, 40, tier === 'brass' ? 'Span: up to 32 blocks' : 'Span: up to 16 blocks');
+    iso.label(brkAt, -8, -50, 'Breaker: lever + redstone');
+    iso.label(motorAt, 4, -26, 'Electric Motor', 'dim');
+    iso.svg(el);
+    document.getElementById('tier-note').textContent = tier === 'brass' ? 'Brass · 65,536 FE/t' : 'Copper · 4,096 FE/t';
+    document.getElementById('cap-power').textContent =
+      `${tier === 'brass' ? 'Brass' : 'Copper'} Power Line${state.dye === 'none' ? '' : ', dyed ' + state.dye}. ${state.dye === 'none' ? 'A thin bare cable in its material' : 'A covered cable, a little thicker than bare'} that lies flat on the face it was placed on, clipped down and following the floor and wall round their corners. It needs no Intake: it draws from anything that gives out FE. The span needs a clear line when you hang it, and after that nothing cuts it.`;
+  }
+
+  // fitting icons
+  const FITS = [
+    { name: 'Intake', on: 'fluid', text: 'Fits on the side facing a tank and is the only part that draws fluid into a line. It has a filter built in: set it with a bucket and it draws only that fluid.', draw(iso) {
+      iso.box(-0.5, -0.1, -0.1, 0.5, 1.2, 1.2, MAT.casing);
+      intake(iso, 0, 'brass', MAT.lava);
+      tube(iso, 'x', 0.32, 0.5, 0.5, 1.4, 0.1, MAT.brass, true); } },
+    { name: 'Valve', on: 'fluid', text: 'Shuts on a redstone signal. Turn its wheel to throttle the flow in 10% steps.', draw(iso) {
+      tube(iso, 'x', 0, 0.5, 0.5, 0.8, 0.1, MAT.brass); tube(iso, 'x', 0.8, 0.5, 0.5, 0.36, 0.17, shade(MAT.brass, 0.9), true);
+      tube(iso, 'y', 0.98, 0.64, 0.5, 0.28, 0.03, MAT.iron); wheel(iso, 0.98, 0.92, 0.5, 0.24);
+      tube(iso, 'x', 1.16, 0.5, 0.5, 0.8, 0.1, MAT.brass, true); } },
+    { name: 'Breaker', on: 'power', text: "The Valve's twin for power: a small switch clipped onto the wire. Flip its lever, or shut it with redstone.", draw(iso) {
+      wire(iso, [[0, 0.03, 0.5], [0.8, 0.03, 0.5]], 'brass'); cylV(iso, 1, 0, 0.5, 0.2, 0.18, MAT.brass);
+      iso.line(iso.P(1, 0.18, 0.5), iso.P(1.12, 0.5, 0.64), `stroke:${MAT.dark};stroke-width:2.4;stroke-linecap:round`);
+      const k = iso.P(1.12, 0.5, 0.64); iso.raw(`<circle cx="${f1(k[0])}" cy="${f1(k[1])}" r="2.6" fill="${MAT.valve}"/>`);
+      wire(iso, [[1.2, 0.03, 0.5], [2, 0.03, 0.5]], 'brass'); clip(iso, [0.4, 0.03, 0.5], [0, 0, 1], 'brass'); clip(iso, [1.6, 0.03, 0.5], [0, 0, 1], 'brass'); } },
+    { name: 'Filter', on: 'fluid', text: 'Lets one fluid past and nothing else, for splitting fluids partway along a line.', draw(iso) {
+      tube(iso, 'x', 0, 0.5, 0.5, 0.75, 0.1, MAT.brass); tube(iso, 'x', 0.75, 0.5, 0.5, 0.5, 0.2, MAT.iron, true);
+      iso.face('z', 0.82, 0.5, 0.5 + 0.2, `<rect x="0" y="-0.1" width="0.36" height="0.2" rx="0.03" fill="${MAT.water}"/>` + [0.09, 0.18, 0.27].map(u => `<line x1="${u}" y1="-0.1" x2="${u}" y2="0.1" stroke="${MAT.dark}" stroke-width="0.02"/>`).join('') + `<line x1="0" y1="0" x2="0.36" y2="0" stroke="${MAT.dark}" stroke-width="0.02"/>`);
+      tube(iso, 'x', 1.25, 0.5, 0.5, 0.75, 0.1, MAT.brass, true); } },
+    { name: 'Meter', on: 'fluid · power', text: 'A gauge shows the live flow. Its comparator signal follows the load, and Display Links can read it.', draw(iso) {
+      tube(iso, 'x', 0, 0.5, 0.5, 0.82, 0.1, MAT.brass); tube(iso, 'x', 0.82, 0.5, 0.5, 0.36, 0.15, shade(MAT.brass, 0.92), true);
+      tube(iso, 'y', 1, 0.6, 0.5, 0.22, 0.035, MAT.dark); dial(iso, 1, 1.05, 0.56, 0.24, 35);
+      tube(iso, 'x', 1.18, 0.5, 0.5, 0.82, 0.1, MAT.brass, true); } },
+    { name: 'Splitter', on: 'fluid · power', text: 'Choose Even, Nearest first or Round robin for the ends it feeds. Its arrow shows the mode.', draw(iso) {
+      tube(iso, 'x', 0, 0.5, 0.5, 0.8, 0.1, MAT.brass);
+      tube(iso, 'z', 1, 0.5, 0.65, 0.9, 0.1, MAT.brass, true);
+      const c = iso.P(1, 0.5, 0.5), R = K * 0.19 * iso.S;
+      iso.raw(`<circle cx="${f1(c[0])}" cy="${f1(c[1])}" r="${f1(R + 0.8)}" fill="var(--edge)"/><circle cx="${f1(c[0])}" cy="${f1(c[1])}" r="${f1(R)}" fill="${shade(MAT.brass, 0.85)}"/><circle cx="${f1(c[0] - R * 0.3)}" cy="${f1(c[1] - R * 0.35)}" r="${f1(R * 0.35)}" fill="${shade(MAT.brass, 1.25)}"/>`);
+      iso.face('y', 1, 0.5 + 0.2, 0.5, `<path d="M-0.12 0 H0.06 M0.06 0 L0.14 -0.08 M0.06 0 L0.14 0.08" stroke="${MAT.dark}" stroke-width="0.04" fill="none" stroke-linecap="round"/>`);
+      tube(iso, 'x', 1.2, 0.5, 0.5, 0.8, 0.1, MAT.brass, true); } }
+  ];
+  function fittings() {
+    const root = document.getElementById('fittings');
+    root.innerHTML = FITS.map((f, i) => `<article class="fit"><svg id="fit-${i}" role="img" aria-label="${f.name} fitting"></svg><div><h3>${f.name} <span class="on">${f.on}</span></h3><p>${f.text}</p></div></article>`).join('');
+    FITS.forEach((f, i) => { const iso = Iso(30); f.draw(iso); iso.svg(document.getElementById('fit-' + i), 6); });
+  }
+
+  const SCORES = [
+    ['Gameplay', 95, 'Only the proposed defaults need your OK.'],
+    ['World integration', 90, 'Check the battery rule against real battery mods.'],
+    ['Balance', 85, 'Recipes are proposals; play test the throughput against Wellspring upgrades.'],
+    ['Progression', 90, 'Confirm brass lines are not needed before a Geothermal Turbine.'],
+    ['Automation', 90, 'Check in game that Deployers can clip fittings on.'],
+    ['Edge cases', 85, 'Two Intakes with different fluids on one line needs a game test.'],
+    ['Overall readiness', 85, 'The lowest area sets this, not the average.']
+  ];
+  function scores() {
+    document.getElementById('scores').innerHTML = SCORES.map(([n, p, w], i) =>
+      `<div class="score${i === SCORES.length - 1 ? ' overall' : ''}"><b>${n}</b><div class="bar"><i style="width:${p}%"></i></div><span class="pct">${p}%</span><span class="why">${w}</span></div>`).join('');
+  }
+
+  function sync() {
+    document.querySelectorAll('[data-tier]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.tier === state.tier)));
+    document.querySelectorAll('[data-fluid]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.fluid === state.fluid)));
+    document.querySelectorAll('[data-goggles]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.goggles === state.goggles)));
+    document.querySelectorAll('[data-dye]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.dye === state.dye)));
+    fluidScene(); powerScene();
+    try { localStorage.setItem('lines-mock', JSON.stringify(state)); } catch (e) {}
+  }
+  document.querySelectorAll('[data-tier],[data-fluid],[data-goggles],[data-dye]').forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.tier) state.tier = b.dataset.tier;
+    if (b.dataset.fluid) state.fluid = b.dataset.fluid;
+    if (b.dataset.goggles) state.goggles = b.dataset.goggles;
+    if (b.dataset.dye) state.dye = b.dataset.dye;
+    sync();
+  }));
+  fittings(); scores(); sync();
+})();
+</script>
