@@ -40,6 +40,8 @@ public abstract class PipeBlockMixin {
 		VoxelShape shape = PipeCoverShapes.shapeOrNull(state, level, pos);
 		if (shape != null)
 			cir.setReturnValue(shape);
+		else
+			cir.setReturnValue(PipeCoverShapes.plainShape(state));
 	}
 
 	@Inject(method = "getInteractionShape", at = @At("HEAD"), cancellable = true, require = 0)
@@ -48,6 +50,8 @@ public abstract class PipeBlockMixin {
 		VoxelShape shape = PipeCoverShapes.shapeOrNull(state, level, pos);
 		if (shape != null)
 			cir.setReturnValue(shape);
+		else
+			cir.setReturnValue(PipeCoverShapes.plainShape(state));
 	}
 
 	@Inject(method = "getBlockSupportShape", at = @At("HEAD"), cancellable = true, require = 0)
@@ -56,12 +60,30 @@ public abstract class PipeBlockMixin {
 		VoxelShape shape = PipeCoverShapes.shapeOrNull(state, level, pos);
 		if (shape != null)
 			cir.setReturnValue(shape);
+		else
+			cir.setReturnValue(PipeCoverShapes.plainShape(state));
+	}
+
+	/** Pipez builds this afresh on every call, though it only depends on the block state; it's kept instead. */
+	@Inject(method = "getOcclusionShape", at = @At("HEAD"), cancellable = true, require = 0)
+	private void comedymonkeysaddons$plainOcclusion(BlockState state, BlockGetter level, BlockPos pos,
+													 CallbackInfoReturnable<VoxelShape> cir) {
+		cir.setReturnValue(PipeCoverShapes.plainShape(state));
+	}
+
+	/** As {@link #comedymonkeysaddons$plainOcclusion}. */
+	@Inject(method = "getVisualShape", at = @At("HEAD"), cancellable = true, require = 0)
+	private void comedymonkeysaddons$plainVisual(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context,
+												  CallbackInfoReturnable<VoxelShape> cir) {
+		cir.setReturnValue(PipeCoverShapes.plainShape(state));
 	}
 
 	/**
 	 * Pipes keep no shape cache, so the cover's real shape reaches everything that asks, not only the methods above:
 	 * a full cover is sturdy (torches, levers, rails go on it) and counts as a full block for pathfinding. Vanilla
-	 * builds the cache from this when blocks are registered; Pipez doesn't declare it, so it is added here.
+	 * builds the cache from this when blocks are registered; Pipez doesn't declare it, so it is added here. The cache is
+	 * per block, not per state, so bare pipes go without it too; what they lose is made up by keeping their shapes
+	 * ({@link PipeCoverShapes#plainShape}), which Pipez itself would build again on every call.
 	 */
 	public boolean hasDynamicShape() {
 		return true;

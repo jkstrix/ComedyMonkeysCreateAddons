@@ -152,6 +152,8 @@ public class ContainerWork implements BotWork {
 
 	@Nullable
 	private IItemHandler handler() {
+		if (!allHalvesLoaded(bot.level(), visit.container()))
+			return null;
 		return bot.level().getCapability(Capabilities.ItemHandler.BLOCK, visit.container(), visit.side());
 	}
 
@@ -276,6 +278,18 @@ public class ContainerWork implements BotWork {
 			&& state.hasProperty(ChestBlock.FACING) && !level.isLoaded(pos.relative(ChestBlock.getConnectedDirection(state))))
 			return List.of(pos);
 		return ChestUpgrades.halves(level, pos, state);
+	}
+
+	/**
+	 * The container at {@code pos} and, for a double chest, its other half are both in loaded chunks: asking for a
+	 * double chest's inventory reads both halves, so a half in an unloaded chunk would be loaded for it.
+	 */
+	public static boolean allHalvesLoaded(Level level, BlockPos pos) {
+		if (!level.isLoaded(pos))
+			return false;
+		BlockState state = level.getBlockState(pos);
+		return !state.hasProperty(ChestBlock.TYPE) || state.getValue(ChestBlock.TYPE) == ChestType.SINGLE
+			|| !state.hasProperty(ChestBlock.FACING) || level.isLoaded(pos.relative(ChestBlock.getConnectedDirection(state)));
 	}
 
 	/** Load handler type, for callers that hold one. */

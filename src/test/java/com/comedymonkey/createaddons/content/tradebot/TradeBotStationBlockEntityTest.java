@@ -85,7 +85,7 @@ class TradeBotStationBlockEntityTest {
 	void itemDataSurvivesTheCodecs() {
 		TradeBotData data = new TradeBotData(73_000, 1_234, 7, Map.of(UUID.randomUUID(), 12),
 			ItemContainerContents.fromItems(List.of(new ItemStack(Items.WHEAT, 64), ItemStack.EMPTY, new ItemStack(Items.IRON_INGOT, 5))),
-			List.of(new BlockPos(1, 0, 2)), Optional.of(new BlockPos(0, 1, -3)));
+			List.of(new BlockPos(1, 0, 2)), Optional.of(new BlockPos(0, 1, -3)), Map.of(UUID.randomUUID(), 4_800L));
 		Tag tag = TradeBotData.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), data).getOrThrow();
 		assertEquals(data, TradeBotData.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag).getOrThrow());
 		assertEquals(TradeBotData.EMPTY, TradeBotData.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), new CompoundTag()).getOrThrow());

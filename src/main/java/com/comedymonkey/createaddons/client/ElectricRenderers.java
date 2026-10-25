@@ -126,6 +126,10 @@ public final class ElectricRenderers {
 
 		public Turbine(BlockEntityRendererProvider.Context context) {}
 
+		/**
+		 * The controller draws the whole turbine, whose other blocks draw nothing, so it's drawn even when the
+		 * controller's own section is out of sight while the rest of the turbine is in view.
+		 */
 		@Override
 		public boolean shouldRenderOffScreen(GeothermalControllerBlockEntity be) {
 			return true;

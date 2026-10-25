@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.QuickTransfer;
 import com.comedymonkey.createaddons.content.chest.BigCompoundContainer;
+import com.comedymonkey.createaddons.content.chest.ChestStacks;
 import com.comedymonkey.createaddons.content.chest.ChestTier;
 import com.comedymonkey.createaddons.content.chest.ChestUpgrades;
 import com.comedymonkey.createaddons.content.chest.ContraptionUpgradeInteraction;
@@ -31,9 +32,11 @@ import com.simibubi.create.content.contraptions.glue.SuperGlueEntity;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -205,6 +208,39 @@ public final class StorageGameTests {
 			helper.getLevel().removePlayerImmediately(player, Entity.RemovalReason.DISCARDED);
 		}
 		helper.succeed();
+	}
+
+	/**
+	 * Automation's view of a double chest is kept between looks, but follows its halves: a half growing without a new
+	 * block state (as /data can make it) and a half going away both show at once.
+	 */
+	@GameTest(template = COURSE)
+	public static void doubleChestAutomationFollowsItsHalves(GameTestHelper helper) {
+		UpgradedChestBlockEntity left = chest(helper, new BlockPos(4, 1, 4), ChestTier.GOLD, ChestType.LEFT);
+		UpgradedChestBlockEntity right = chest(helper, new BlockPos(5, 1, 4), ChestTier.GOLD, ChestType.RIGHT);
+		IItemHandler both = left.getAutomationHandler();
+		if (both.getSlots() != 2 * ChestStacks.SLOTS)
+			helper.fail("the double chest shows " + both.getSlots() + " slots");
+		if (left.getAutomationHandler() != both)
+			helper.fail("the double chest's handler wasn't kept");
+
+		// the right half loads a stack in a slot past its 27, as a /data merge could
+		NonNullList<ItemStack> items = NonNullList.withSize(2 * ChestStacks.SLOTS, ItemStack.EMPTY);
+		items.set(40, new ItemStack(Items.COBBLESTONE, 5));
+		CompoundTag tag = right.saveWithoutMetadata(helper.getLevel().registryAccess());
+		tag.put("Items", ChestStacks.save(items, helper.getLevel().registryAccess()));
+		right.loadWithComponents(tag, helper.getLevel().registryAccess());
+		int grown = left.getAutomationHandler().getSlots();
+		if (grown != ChestStacks.SLOTS + right.getContainerSize())
+			helper.fail("after the right half grew the double chest shows " + grown + " slots");
+
+		helper.setBlock(new BlockPos(5, 1, 4), Blocks.AIR);
+		helper.runAfterDelay(2, () -> {
+			int single = left.getAutomationHandler().getSlots();
+			if (single != ChestStacks.SLOTS)
+				helper.fail("with its other half gone the chest shows " + single + " slots");
+			helper.succeed();
+		});
 	}
 
 	/** Extending a chest into a double is a block placement a claim can refuse; refused, nothing changes. */

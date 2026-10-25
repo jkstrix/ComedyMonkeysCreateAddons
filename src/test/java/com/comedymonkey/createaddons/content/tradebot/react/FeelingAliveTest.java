@@ -76,6 +76,16 @@ class FeelingAliveTest {
 		assertTrue(reactions.arrived(player, 20 + Reactions.AWAY_TICKS - 1 + Reactions.AWAY_TICKS), "back after a minute away");
 	}
 
+	@Test
+	void playersLongGoneAreForgotten() {
+		Reactions reactions = new Reactions();
+		for (int i = 0; i < 20; i++)
+			reactions.arrived(UUID.randomUUID(), i);
+		UUID back = UUID.randomUUID();
+		assertTrue(reactions.arrived(back, 20 + Reactions.AWAY_TICKS));
+		assertEquals(1, reactions.remembered(), "the twenty who left a minute ago would be greeted afresh anyway");
+	}
+
 	/** Plays {@code clip} from {@code start} for {@code seconds}, a tick at a time; returns the events fired. */
 	private static List<String> play(ClipPlayback playback, String clip, long start, float seconds) {
 		List<String> fired = new ArrayList<>();

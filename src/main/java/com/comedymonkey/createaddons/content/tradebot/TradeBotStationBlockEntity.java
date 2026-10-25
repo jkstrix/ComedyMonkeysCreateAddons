@@ -73,7 +73,16 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 	public TradeBotStationBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.TRADE_BOT_STATION.get(), pos, state);
 		int buffer = CMConfig.SERVER.tradeBotStationBuffer();
-		energy = new EnergyBuffer(buffer, buffer, 0, this::setChanged);
+		energy = new EnergyBuffer(buffer, buffer, 0, this::energyChanged);
+	}
+
+	/**
+	 * Its stored FE changed (every tick while he charges): saved with the chunk, but no neighbour updates, as the
+	 * comparator signal doesn't depend on it ({@link #tick} updates comparators itself when the signal changes).
+	 */
+	private void energyChanged() {
+		if (level != null)
+			level.blockEntityChanged(worldPosition);
 	}
 
 	@Override
@@ -281,7 +290,9 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		boolean charging = docked && tradeBot.isCharging();
 		boolean changed = false;
 		if (tradeBot != null) {
-			changed |= botCharge != tradeBot.getCharge() && level.getGameTime() % 10 == 0;
+			// his charge only as often as what it shows changes: the goggles' whole percent, and the comparator's low mark
+			int charge = tradeBot.getCharge();
+			changed |= level.getGameTime() % 10 == 0 && (shownPercent(botCharge) != shownPercent(charge) || lowCharge(botCharge) != lowCharge(charge));
 			changed |= botEntityId != tradeBot.getId() || botDocked != docked || botCharging != charging || botWoundDown != tradeBot.isWoundDown();
 			if (changed) {
 				botCharge = tradeBot.getCharge();
@@ -307,11 +318,20 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 			sendData();
 	}
 
+	/** His charge as the goggles show it, a whole percent of a full charge. */
+	static int shownPercent(int charge) {
+		return Math.round(100f * charge / CMConfig.SERVER.tradeBotFullCharge());
+	}
+
+	private static boolean lowCharge(int charge) {
+		return charge < CMConfig.SERVER.tradeBotFullCharge() * LOW_CHARGE;
+	}
+
 	public int comparatorOutput() {
 		if (bot == null)
 			return SIGNAL_NONE;
 		// out of charge, or run down (he needs his owner either way)
-		if (botWoundDown || botDocked && botCharge < CMConfig.SERVER.tradeBotFullCharge() * LOW_CHARGE)
+		if (botWoundDown || botDocked && lowCharge(botCharge))
 			return SIGNAL_OUT_OF_CHARGE;
 		return botDocked ? SIGNAL_DOCKED : SIGNAL_WORKING;
 	}

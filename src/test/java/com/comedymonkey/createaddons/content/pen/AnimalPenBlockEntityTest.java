@@ -488,4 +488,71 @@ class AnimalPenBlockEntityTest {
 		// The soonest of the two
 		assertEquals(100, loaded.ticksToNextGrown());
 	}
+
+	// ---------------------------------------------------------------- syncing
+
+	/** The bottle carries the whole animal, so the frequent syncs leave it out until it changes; the client keeps it. */
+	@Test
+	void runningSyncsSendTheCaptiveOnlyWhenItChanges() {
+		AnimalPenBlockEntity pen = pen(false);
+		pen.setPonderHerd(bottle(EntityType.COW), 3, 0);
+		ownSync(pen);
+		CompoundTag first = packet(pen);
+		assertTrue(first.contains("Captive"));
+		CompoundTag second = packet(pen);
+		assertFalse(second.contains("Captive"));
+		assertTrue(second.getBoolean("SameCaptive"));
+
+		AnimalPenBlockEntity client = pen(false);
+		client.readClient(first, registries);
+		client.readClient(second, registries);
+		assertSame(EntityType.COW, BottledAnimalItem.typeOf(client.getCaptive()), "the client keeps the animal it was sent");
+		assertEquals(3, client.getAdults());
+
+		pen.setPonderHerd(bottle(EntityType.PIG), 2, 0);
+		CompoundTag third = packet(pen);
+		assertTrue(third.contains("Captive"), "a new animal goes out");
+		client.readClient(third, registries);
+		assertSame(EntityType.PIG, BottledAnimalItem.typeOf(client.getCaptive()));
+	}
+
+	@Test
+	void savesAndFullUpdatesAlwaysCarryTheCaptive() {
+		AnimalPenBlockEntity pen = pen(false);
+		pen.setPonderHerd(bottle(EntityType.COW), 3, 0);
+		packet(pen);
+		assertTrue(pen.getUpdateTag(registries).contains("Captive"));
+		assertTrue(pen.saveWithoutMetadata(registries).contains("Captive"));
+	}
+
+	/** Anything but the pen's own sync (here, a refused break) may be filling in a fresh client copy: it gets the lot. */
+	@Test
+	void otherUpdatePacketsCarryTheCaptive() {
+		AnimalPenBlockEntity pen = pen(false);
+		pen.setPonderHerd(bottle(EntityType.COW), 3, 0);
+		ownSync(pen);
+		packet(pen);
+		com.comedymonkey.createaddons.testutil.ReflectionAccess.set(pen, "ownSyncAt", -10L);
+		assertTrue(packet(pen).contains("Captive"));
+	}
+
+	@Test
+	void theCaptiveIsResentNowAndThen() {
+		AnimalPenBlockEntity pen = pen(false);
+		pen.setPonderHerd(bottle(EntityType.COW), 3, 0);
+		ownSync(pen);
+		packet(pen);
+		// as if sent long ago
+		com.comedymonkey.createaddons.testutil.ReflectionAccess.set(pen, "sentCaptiveAt", -1000L);
+		assertTrue(packet(pen).contains("Captive"));
+	}
+
+	/** As if the pen had just sent a sync of its own (a pen with no level is at game time 0). */
+	private static void ownSync(AnimalPenBlockEntity pen) {
+		com.comedymonkey.createaddons.testutil.ReflectionAccess.set(pen, "ownSyncAt", 0L);
+	}
+
+	private CompoundTag packet(AnimalPenBlockEntity pen) {
+		return (CompoundTag) com.comedymonkey.createaddons.testutil.ReflectionAccess.call(pen, "updatePacketTag", registries);
+	}
 }

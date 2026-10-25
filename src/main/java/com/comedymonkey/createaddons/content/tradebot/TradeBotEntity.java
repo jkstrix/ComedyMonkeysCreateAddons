@@ -111,6 +111,15 @@ public class TradeBotEntity extends PathfinderMob {
 	private int xpBank;
 	/** His own standing with each villager he's traded with (D34, D42). */
 	private final Map<UUID, Integer> reputation = new HashMap<>();
+	/**
+	 * When he last traded with each of them, on his {@link #activeTicks} clock: a villager not traded with for a week
+	 * of his own time is forgotten.
+	 */
+	private final Map<UUID, Long> lastTraded = new HashMap<>();
+	/** Seven in-game days, in ticks. */
+	public static final long FORGET_VILLAGER_TICKS = 7 * 24000L;
+	/** Ticks he has been loaded and ticking, all told (saved): his clock for forgetting villagers, which stands still while he's unloaded or packed. */
+	private long activeTicks;
 	/** What he's carrying: a barrel's worth (D45). */
 	private final ItemStackHandler load = new ItemStackHandler(LOAD_SLOTS);
 	/** Set while he's packed into his item, so his removal isn't taken for him being lost. */
@@ -378,6 +387,29 @@ public class TradeBotEntity extends PathfinderMob {
 	/** One more trade with {@code villager}: his reputation with it grows, up to vanilla's cap. */
 	public void tradedWith(UUID villager) {
 		reputation.put(villager, BotPricing.raise(reputationWith(villager)));
+		lastTraded.put(villager, activeTicks);
+	}
+
+	/**
+	 * Drops his standing with villagers he hasn't traded with for {@link #FORGET_VILLAGER_TICKS} of his own time (most
+	 * are long gone), so it doesn't grow for good. Only as a trip is planned, so a price he plans with holds till he
+	 * trades.
+	 */
+	public void forgetOldVillagers() {
+		forget(reputation, lastTraded, activeTicks);
+	}
+
+	/** {@link #forgetOldVillagers}' rule: one with no date yet (an old save) starts its week {@code now}. */
+	static void forget(Map<UUID, Integer> reputation, Map<UUID, Long> lastTraded, long now) {
+		lastTraded.keySet().retainAll(reputation.keySet());
+		for (UUID villager : reputation.keySet())
+			lastTraded.putIfAbsent(villager, now);
+		lastTraded.entrySet().removeIf(entry -> {
+			if (now - entry.getValue() < FORGET_VILLAGER_TICKS)
+				return false;
+			reputation.remove(entry.getKey());
+			return true;
+		});
 	}
 
 	/** A Create Nugget of Experience is worth 3 XP. */
@@ -424,7 +456,9 @@ public class TradeBotEntity extends PathfinderMob {
 		List<ItemStack> stacks = new ArrayList<>();
 		for (int i = 0; i < load.getSlots(); i++)
 			stacks.add(load.getStackInSlot(i).copy());
-		return new TradeBotData(charge, emeralds, xpBank, reputation, ItemContainerContents.fromItems(stacks), inputs, output);
+		Map<UUID, Long> tradedAgo = new HashMap<>();
+		lastTraded.forEach((villager, at) -> tradedAgo.put(villager, activeTicks - at));
+		return new TradeBotData(charge, emeralds, xpBank, reputation, ItemContainerContents.fromItems(stacks), inputs, output, tradedAgo);
 	}
 
 	private void applyData(TradeBotData data) {
@@ -433,6 +467,8 @@ public class TradeBotEntity extends PathfinderMob {
 		xpBank = data.xpBank();
 		reputation.clear();
 		reputation.putAll(data.reputation());
+		lastTraded.clear();
+		data.tradedAgo().forEach((villager, ago) -> lastTraded.put(villager, activeTicks - ago));
 		NonNullList<ItemStack> stacks = NonNullList.withSize(LOAD_SLOTS, ItemStack.EMPTY);
 		data.load().copyInto(stacks);
 		for (int i = 0; i < LOAD_SLOTS; i++)
@@ -641,6 +677,7 @@ public class TradeBotEntity extends PathfinderMob {
 				windSpin += WIND_DEGREES_PER_TICK;
 			return;
 		}
+		activeTicks++;
 		Clip clip = clip();
 		float elapsed = clipElapsed(0);
 		docked &= clip.name().equals(DOCKED); // anything else he plays takes him out of the cradle
@@ -699,6 +736,7 @@ public class TradeBotEntity extends PathfinderMob {
 		tag.putBoolean("Docked", docked);
 		if (rundown != null)
 			tag.putString("Rundown", rundown.name());
+		tag.putLong("ActiveTicks", activeTicks);
 		TradeBotData.CODEC.encodeStart(registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE),
 			toData(List.of(), Optional.empty())).ifSuccess(data -> tag.put("TradeBot", data));
 		// what he has open: his errand isn't saved, so it's shut when he's next loaded
@@ -728,6 +766,7 @@ public class TradeBotEntity extends PathfinderMob {
 			NbtUtils.readBlockPos(wrapped, "Pos").ifPresent(leftOpen::add);
 		}
 		docked = tag.getBoolean("Docked");
+		activeTicks = tag.getLong("ActiveTicks"); // before his data: the dates in it count back from it
 		if (tag.contains("TradeBot"))
 			TradeBotData.CODEC.parse(registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), tag.get("TradeBot"))
 				.ifSuccess(this::applyData);

@@ -3,7 +3,9 @@ package com.comedymonkey.createaddons.compat.pipez.cover;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -209,6 +211,53 @@ class PipeCoverShapesTest {
 			PipeCoverShapes.shapeOrNull(state, covered(state, PipeCover.Kind.SNUG), POS));
 	}
 
+	// ---- the kept shapes
+
+	@Test
+	void keptSnugShapeIsTheFreshlyBuiltOneForEveryMask() {
+		for (int connected = 0; connected < 64; connected++)
+			for (int extracting = 0; extracting < 64; extracting++) {
+				VoxelShape fresh = PipeCoverShapes.buildShape(PipeCover.Kind.SNUG, connected, extracting);
+				VoxelShape kept = PipeCoverShapes.snugShape(connected, extracting);
+				assertSameShape(fresh, kept);
+				assertSame(kept, PipeCoverShapes.snugShape(connected, extracting), "built once and kept");
+			}
+	}
+
+	@Test
+	void maskedBoxesMatchTheStateAndBlockEntityOnes() {
+		BlockState state = pipe(Direction.EAST, Direction.DOWN, Direction.NORTH);
+		PipeTileEntity pipe = pipeEntity(state);
+		setExtracting(pipe, Direction.EAST, true);
+		setExtracting(pipe, Direction.UP, true);  // not connected: no collar
+		int connected = 1 << Direction.EAST.get3DDataValue() | 1 << Direction.DOWN.get3DDataValue()
+			| 1 << Direction.NORTH.get3DDataValue();
+		assertEquals(PipeCoverShapes.boxes(PipeCover.Kind.SNUG, connected, 1 << Direction.EAST.get3DDataValue()),
+			PipeCoverShapes.boxes(PipeCover.Kind.SNUG, state, new OneBlock(POS, state, pipe), POS));
+		assertSameShape(PipeCoverShapes.buildShape(PipeCover.Kind.SNUG, connected, 1 << Direction.EAST.get3DDataValue()),
+			PipeCoverShapes.shapeOrNull(state, coveredExtracting(state, Direction.EAST), POS));
+	}
+
+	@Test
+	void keptPlainShapeIsPipezsOwnForEveryConnection() {
+		BlockState base = pipe();
+		for (int connected = 0; connected < 64; connected++) {
+			BlockState state = base;
+			for (Direction d : Direction.values())
+				state = state.setValue(bool(state, d.getSerializedName()), (connected & 1 << d.get3DDataValue()) != 0);
+			VoxelShape pipez = ((de.maxhenkel.pipez.blocks.PipeBlock) state.getBlock())
+				.getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, state, false);
+			VoxelShape kept = PipeCoverShapes.plainShape(state);
+			assertSameShape(pipez, kept);
+			assertSame(kept, PipeCoverShapes.plainShape(state), "built once and kept");
+		}
+	}
+
+	@Test
+	void notAPipeHasNoPlainShapeOfItsOwn() {
+		assertSameShape(Shapes.block(), PipeCoverShapes.plainShape(Blocks.STONE.defaultBlockState()));
+	}
+
 	// ---- Through Pipez's own block, when the mixins are applied
 
 	@Test
@@ -229,6 +278,38 @@ class PipeCoverShapesTest {
 		assertNotNull(shape);
 		assertFalse(Shapes.joinIsNotEmpty(shape, Shapes.create(px(0, 0, 0, 2, 2, 2)), BooleanOp.AND),
 			"a bare pipe doesn't fill the block's corners");
+	}
+
+	/**
+	 * An uncovered pipe's state-only shapes come from the store, not rebuilt by Pipez (which makes a new shape on every
+	 * call, so getting the very same object back shows the mixin answered), and match what Pipez would build.
+	 */
+	@Test
+	void uncoveredPipeShapesComeFromTheStore() {
+		assumeMixinsApplied();
+		BlockState state = pipe(Direction.EAST, Direction.UP);
+		de.maxhenkel.pipez.blocks.PipeBlock block = (de.maxhenkel.pipez.blocks.PipeBlock) state.getBlock();
+		assertNotSame(block.getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, state, false),
+			block.getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, state, false), "Pipez builds a new shape each time");
+		VoxelShape kept = PipeCoverShapes.plainShape(state);
+		assertSameShape(block.getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, state, false), kept);
+		assertSame(kept, state.getCollisionShape(EmptyBlockGetter.INSTANCE, POS,
+			net.minecraft.world.phys.shapes.CollisionContext.empty()));
+		assertSame(kept, state.getBlockSupportShape(EmptyBlockGetter.INSTANCE, POS));
+		assertSame(kept, state.getOcclusionShape(EmptyBlockGetter.INSTANCE, POS));
+		assertSame(kept, state.getVisualShape(EmptyBlockGetter.INSTANCE, POS,
+			net.minecraft.world.phys.shapes.CollisionContext.empty()));
+		assertSame(kept, state.getInteractionShape(EmptyBlockGetter.INSTANCE, POS));
+	}
+
+	@Test
+	void snugCoveredPipeCollidesWithTheKeptCoverShape() {
+		assumeMixinsApplied();
+		BlockState state = pipe(Direction.NORTH, Direction.SOUTH);
+		OneBlock level = covered(state, PipeCover.Kind.SNUG);
+		int connected = 1 << Direction.NORTH.get3DDataValue() | 1 << Direction.SOUTH.get3DDataValue();
+		assertSame(PipeCoverShapes.snugShape(connected, 0),
+			state.getCollisionShape(level, POS, net.minecraft.world.phys.shapes.CollisionContext.empty()));
 	}
 
 	@Test
@@ -273,6 +354,13 @@ class PipeCoverShapesTest {
 	private static OneBlock covered(BlockState state, PipeCover.Kind kind) {
 		PipeTileEntity pipe = pipeEntity(state);
 		pipe.setData(ModAttachments.PIPE_COVER, new PipeCover(kind, Blocks.STONE.defaultBlockState()));
+		return new OneBlock(POS, state, pipe);
+	}
+
+	private static OneBlock coveredExtracting(BlockState state, Direction side) {
+		PipeTileEntity pipe = pipeEntity(state);
+		setExtracting(pipe, side, true);
+		pipe.setData(ModAttachments.PIPE_COVER, new PipeCover(PipeCover.Kind.SNUG, Blocks.STONE.defaultBlockState()));
 		return new OneBlock(POS, state, pipe);
 	}
 

@@ -87,6 +87,9 @@ public final class CuckooClocks {
 		if (level.isClientSide)
 			return null;
 		boolean inReach = inRange(level, villager.position());
+		// Out of reach it's vanilla's call; don't give the villager (and its save) a check it doesn't need
+		if (!inReach)
+			return null;
 		ClockCheck last = villager.getData(ModAttachments.CLOCK_RESTOCK_CHECK);
 		ClockCheck now = new ClockCheck(level.getGameTime(), level.getDayTime());
 		Boolean answer = decide(inReach, last, now, anyTradeUsed(villager));

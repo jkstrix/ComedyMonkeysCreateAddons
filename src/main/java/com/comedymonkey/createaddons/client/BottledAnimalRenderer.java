@@ -1,12 +1,12 @@
 package com.comedymonkey.createaddons.client;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.pen.BottledAnimalItem;
+import com.google.common.collect.MapMaker;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
@@ -39,14 +39,15 @@ public class BottledAnimalRenderer extends BlockEntityWithoutLevelRenderer {
 	/** Turned so its side shows at the angle items are seen at in the inventory. */
 	private static final float FACING = 135;
 
-	private final Map<String, Entity> animals = new LinkedHashMap<>(16, 0.75f, true) {
-		@Override
-		protected boolean removeEldestEntry(Map.Entry<String, Entity> eldest) {
-			return size() > 64;
-		}
-	};
+	/**
+	 * The animals made, by the bottle's entity data itself (the very object, which stays the same while the stack
+	 * does), so finding one costs nothing; each goes once its data is no longer used by any stack.
+	 */
+	private static final Map<CustomData, Entity> ANIMALS = new MapMaker().weakKeys().makeMap();
+	/** Bottles whose animal couldn't be made, so it isn't tried every frame. */
+	private static final Map<CustomData, Boolean> NONE = new MapMaker().weakKeys().makeMap();
 	@Nullable
-	private Level animalsFor;
+	private static Level animalsFor;
 
 	public BottledAnimalRenderer() {
 		super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
@@ -78,28 +79,38 @@ public class BottledAnimalRenderer extends BlockEntityWithoutLevelRenderer {
 				ItemRenderer.getFoilBufferDirect(buffer, type, true, stack.hasFoil()));
 	}
 
+	/** Lets go of every animal, and so the world they were made in: called as the client's world goes. */
+	public static void forget() {
+		ANIMALS.clear();
+		NONE.clear();
+		animalsFor = null;
+	}
+
 	/** The animal in this bottle, made once and kept (per world, as entities belong to one). */
 	@Nullable
-	private Entity animalFor(ItemStack stack, @Nullable Level level) {
+	private static Entity animalFor(ItemStack stack, @Nullable Level level) {
 		if (level == null)
 			return null;
 		if (level != animalsFor) {
-			animals.clear();
+			forget();
 			animalsFor = level;
 		}
 		CustomData data = stack.get(DataComponents.ENTITY_DATA);
-		if (data == null)
+		if (data == null || NONE.containsKey(data))
 			return null;
-		String key = data.copyTag().toString();
-		Entity animal = animals.get(key);
-		if (animal == null && !animals.containsKey(key)) {
+		Entity animal = ANIMALS.get(data);
+		if (animal == null) {
 			animal = BottledAnimalItem.create(stack, level).orElse(null);
+			if (animal == null) {
+				NONE.put(data, Boolean.TRUE);
+				return null;
+			}
 			if (animal instanceof LivingEntity living) {
 				living.yBodyRot = living.yBodyRotO = living.yHeadRot = living.yHeadRotO = FACING;
 				living.setYRot(FACING);
 				living.yRotO = FACING;
 			}
-			animals.put(key, animal);
+			ANIMALS.put(data, animal);
 		}
 		return animal;
 	}

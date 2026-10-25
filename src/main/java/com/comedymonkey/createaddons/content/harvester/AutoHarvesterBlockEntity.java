@@ -410,10 +410,8 @@ public class AutoHarvesterBlockEntity extends KineticBlockEntity implements Clea
 	}
 
 	private void onOutputChanged() {
-		setChanged();
+		setChanged();  // which also updates the comparators
 		syncQueued = true;
-		if (level != null)
-			level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
 	}
 
 	/** Called by block movers once they've copied this block entity elsewhere, so nothing is dropped twice. */

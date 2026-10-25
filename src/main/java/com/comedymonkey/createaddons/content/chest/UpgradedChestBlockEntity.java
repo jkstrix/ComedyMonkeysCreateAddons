@@ -2,6 +2,8 @@ package com.comedymonkey.createaddons.content.chest;
 
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
@@ -29,6 +31,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ChestLidController;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
@@ -59,6 +62,13 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 	 */
 	private boolean holdsUpgrade = true;
 	private final UpgradedChestItemHandler itemHandler = new UpgradedChestItemHandler(this);
+	/** What automation was last given (both halves of a double chest as one), and the other half in it. */
+	@Nullable
+	private IItemHandler automation;
+	@Nullable
+	private UpgradedChestBlockEntity automationPartner;
+	/** Each half's slots when the combined handler was made. */
+	private int automationSlots, automationPartnerSlots;
 	private final ChestLidController lidController = new ChestLidController();
 	private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
 		@Override
@@ -119,12 +129,36 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 	public IItemHandler getAutomationHandler() {
 		if (level == null)
 			return itemHandler;
+		// Asked on every look by hoppers and the like, so the double chest's handler is kept until the pairing changes
+		IItemHandler kept = automation;
+		UpgradedChestBlockEntity partner = automationPartner;
+		// Still right: a single chest's own slots, or both halves with the other half still there at the same size (a
+		// combined handler counts the halves' slots when it's made, and /data can change one without a new state)
+		if (kept != null && (partner == null
+			|| !partner.isRemoved() && partner.items.size() == automationPartnerSlots && items.size() == automationSlots))
+			return kept;
+		automation = null;
+		automationPartner = null;
+		ChestType type = getBlockState().getValue(UpgradedChestBlock.TYPE);
 		List<BlockPos> parts = ChestUpgrades.halves(level, worldPosition, getBlockState());
 		if (parts.size() == 2 && level.getBlockEntity(parts.get(1)) instanceof UpgradedChestBlockEntity other) {
-			boolean selfFirst = getBlockState().getValue(UpgradedChestBlock.TYPE) == ChestType.RIGHT;
-			return selfFirst ? new CombinedInvWrapper(itemHandler, other.itemHandler) : new CombinedInvWrapper(other.itemHandler, itemHandler);
+			automation = type == ChestType.RIGHT ? new CombinedInvWrapper(itemHandler, other.itemHandler)
+				: new CombinedInvWrapper(other.itemHandler, itemHandler);
+			automationPartner = other;
+			automationSlots = items.size();
+			automationPartnerSlots = other.items.size();
+			return automation;
 		}
+		// A half whose other half isn't there (yet: contraptions put chests down a block at a time) isn't kept
+		if (type == ChestType.SINGLE)
+			automation = itemHandler;
 		return itemHandler;
+	}
+
+	/** Drops the kept automation handler: the pairing, or the other half's size, has changed. */
+	void forgetAutomationHandler() {
+		automation = null;
+		automationPartner = null;
 	}
 
 	public UpgradedChestItemHandler getItemHandler() {
@@ -155,8 +189,21 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 		int slots = tierOf(state).slots();
 		if (items.size() != slots)
 			items = ChestStacks.resize(items, slots);
-		if (repaired && level != null)
-			level.invalidateCapabilities(worldPosition);
+		if (repaired) {
+			// Both halves' kept handlers counted this half's slots, in this pairing
+			UpgradedChestBlockEntity was = automationPartner;
+			forgetAutomationHandler();
+			if (was != null)
+				was.forgetAutomationHandler();
+			if (level != null) {
+				if (state.getValue(UpgradedChestBlock.TYPE) != ChestType.SINGLE) {
+					BlockPos other = worldPosition.relative(ChestBlock.getConnectedDirection(state));
+					if (level.isLoaded(other) && level.getBlockEntity(other) instanceof UpgradedChestBlockEntity partner)
+						partner.forgetAutomationHandler();
+				}
+				level.invalidateCapabilities(worldPosition);
+			}
+		}
 	}
 
 	// ---------------------------------------------------------------- lid
@@ -304,6 +351,7 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 				size = ChestStacks.SLOTS * 2;
 		items = NonNullList.withSize(size, ItemStack.EMPTY);
 		ChestStacks.load(items, saved, registries);
+		forgetAutomationHandler();
 	}
 
 	/** Keeps oversized stacks out of item components, which cannot store more than 99 per stack. */

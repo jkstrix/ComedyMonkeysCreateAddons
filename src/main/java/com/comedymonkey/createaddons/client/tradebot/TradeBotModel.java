@@ -1,5 +1,6 @@
 package com.comedymonkey.createaddons.client.tradebot;
 
+import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +20,8 @@ import net.minecraft.util.Mth;
 /** Trade Bot posed from his clips, exactly as the Blockbench preview plays them, with a short fade between clips. */
 public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 	private static final String[] CHANNELS = { "rotation", "position", "scale" };
+	/** The trade props' bones, looked up once. */
+	private static List<String> props;
 
 	private final ModelPart root;
 	private final Map<String, ModelPart> parts;
@@ -63,7 +66,9 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 	/** Poses parts from {@code clip} at {@code t}, faded in from {@code old} at {@code oldT} by {@code w} (0..1). */
 	public static void pose(Map<String, ModelPart> parts, Clip clip, float t, @Nullable Clip old, float oldT, float w) {
 		// the trade props only exist in the clips that use them
-		for (String prop : TradeBotGeometry.get().children(TradeBotGeometry.PROPS)) {
+		if (props == null)
+			props = TradeBotGeometry.get().children(TradeBotGeometry.PROPS);
+		for (String prop : props) {
 			ModelPart part = parts.get(prop);
 			if (part != null)
 				part.visible = clip.track(prop, "scale") != null || clip.step(prop, "scale") != null;

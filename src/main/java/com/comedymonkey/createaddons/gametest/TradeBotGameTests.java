@@ -538,6 +538,100 @@ public final class TradeBotGameTests {
 	}
 
 	/**
+	 * Penned in out in the yard, with no way home: he waits a moment and tries the route again, a few times, and is
+	 * then put back in his station. He never docks from where he stands as if he'd got home.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 1200)
+	public static void triesAgainForAWayHomeHeCantFind(GameTestHelper helper) {
+		floor(helper, 0, 0, 0, 23, 23, FLOOR);
+		TradeBotEntity bot = station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
+		BlockPos stop = new BlockPos(3, 1, 12);
+		helper.runAfterDelay(10, () -> bot.brain.goTo(helper.absolutePos(stop)));
+		long[] returning = { -1 };
+		boolean[] penned = { false };
+		helper.onEachTick(() -> {
+			if (!penned[0] && bot.brain.task() == TradeBotBrain.Task.WAITING) {
+				penned[0] = true;
+				solid(helper, 2, 1, 11, 4, 3, 13, WALL);
+				carve(helper, 3, 1, 12, 3, 3, 12);
+			}
+			if (penned[0] && returning[0] < 0 && bot.brain.task() == TradeBotBrain.Task.RETURNING)
+				returning[0] = helper.getTick();
+			if (bot.brain.task() == TradeBotBrain.Task.DOCKING)
+				helper.fail("docked from inside the pen, as if he'd got home");
+			if (returning[0] >= 0 && bot.isDocked() && helper.getTick() - returning[0] < 70)
+				helper.fail("put back after " + (helper.getTick() - returning[0]) + " ticks, without waiting between tries");
+		});
+		helper.succeedWhen(() -> {
+			if (returning[0] < 0 || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail("not put back in his station yet (" + bot.brain.task() + ")");
+		});
+	}
+
+	/**
+	 * His station's chunk unloads while he's out (here pretended, and again right after each time he loads it): he
+	 * still gets home and docks, loading it for the route home only, not tick after tick.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 1600)
+	public static void getsHomeWhenHisStationsChunkIsUnloaded(GameTestHelper helper) {
+		floor(helper, 0, 0, 0, 23, 23, FLOOR);
+		TradeBotEntity bot = station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
+		helper.runAfterDelay(10, () -> bot.brain.goTo(helper.absolutePos(new BlockPos(3, 1, 12))));
+		boolean[] out = { false };
+		int[] unloadedTicks = { 0 };
+		helper.onEachTick(() -> {
+			TradeBotBrain.Task task = bot.brain.task();
+			if (task == TradeBotBrain.Task.GOING)
+				out[0] = true;
+			// unloaded all the way out and back, until he's docking at it
+			if (out[0] && task != TradeBotBrain.Task.DOCKING && !(task == TradeBotBrain.Task.HOME && bot.isDocked())) {
+				bot.brain.pretendStationUnloaded();
+				unloadedTicks[0]++;
+			}
+		});
+		helper.succeedWhen(() -> {
+			if (!out[0] || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail("not home yet (" + bot.brain.task() + ", " + bot.brain.stationLoads() + " loads)");
+			if (bot.brain.stationLoads() < 1 || bot.brain.stationLoads() > 2)
+				helper.fail("loaded his station's chunk " + bot.brain.stationLoads() + " times in " + unloadedTicks[0] + " ticks away");
+		});
+	}
+
+	/**
+	 * Two farmers, one walled into its booth so there's no way to it: he finds no route to it, leaves it alone, and
+	 * sells to the other on the same trip (one route search a tick, never giving up on the reachable one for it).
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 6000, batch = "trade_bot_skips_a_buyer_he_cant_reach")
+	public static void skipsABuyerHeCantReach(GameTestHelper helper) {
+		Hall hall = tradingHall(helper);
+		helper.getLevel().setDayTime(1000);
+		// booth A walled off from the aisle: only its front spot is a place to trade from, and there's no way to it
+		solid(helper, 4, 2, 12, 8, 4, 12, WALL);
+		solid(helper, 4, 2, 13, 4, 4, 15, WALL);
+		solid(helper, 8, 2, 13, 8, 4, 15, WALL);
+		TradeBotEntity bot = station(helper, hall.station, Direction.SOUTH);
+		BlockPos input = new BlockPos(7, 1, 1), output = new BlockPos(10, 1, 1);
+		links(helper, hall.station, input, output);
+		fill(helper, input, new ItemStack(Items.WHEAT, 40));
+		Villager walledIn = seated(helper, hall.seats.get(0), VillagerProfession.FARMER, offer(Items.WHEAT, 20, 2));
+		Villager open = seated(helper, hall.seats.get(1), VillagerProfession.FARMER, offer(Items.WHEAT, 20, 2));
+		boolean[] planned = { false }, out = { false };
+		helper.onEachTick(() -> {
+			planned[0] |= bot.brain.task() == TradeBotBrain.Task.PLANNING;
+			out[0] |= !bot.isDocked();
+		});
+		helper.succeedWhen(() -> {
+			if (!out[0] || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail("not home after his trip yet (" + bot.brain.task() + ")");
+			if (open.getOffers().get(0).getUses() != 2 || walledIn.getOffers().get(0).getUses() != 0)
+				helper.fail("sold " + open.getOffers().get(0).getUses() + " lots to the farmer he can reach and "
+					+ walledIn.getOffers().get(0).getUses() + " to the walled-in one");
+			if (!planned[0])
+				helper.fail("never waited a tick to plan after a route search");
+		});
+	}
+
+	/**
 	 * Run down asleep in his cradle and wound up there: he hops out like any morning (no floating on top of his
 	 * station), then carries on, here straight back in, as he has nothing to do.
 	 */

@@ -10,7 +10,6 @@ import com.mojang.math.Axis;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -27,10 +26,13 @@ import net.minecraft.world.phys.Vec3;
 public class TradeBotStationRenderer extends SafeBlockEntityRenderer<TradeBotStationBlockEntity> {
 	private final ModelPart root;
 	private final Map<String, ModelPart> parts;
+	/** Just the cubes with any glow on them, posed as the station is. */
+	private final GlowModel glow;
 
 	public TradeBotStationRenderer(BlockEntityRendererProvider.Context context) {
 		root = context.bakeLayer(TradeBotGeometry.STATION_LAYER);
 		parts = TradeBotGeometry.get().parts(root, "station");
+		glow = GlowModel.of(parts, "station");
 	}
 
 	@Override
@@ -47,11 +49,15 @@ public class TradeBotStationRenderer extends SafeBlockEntityRenderer<TradeBotSta
 			if (glow != null)
 				glow.xScale = glow.yScale = glow.zScale = 0;
 		}
-		render(ms, buffers, light, overlay, be.facing(), root);
+		render(ms, buffers, light, overlay, be.facing(), root, glow);
 	}
 
-	/** Draws a station-frame model the way an entity at the station's dock point would be drawn (see TradeBotGeometry). */
-	static void render(PoseStack ms, MultiBufferSource buffers, int light, int overlay, Direction facing, ModelPart model) {
+	/**
+	 * Draws a station-frame model the way an entity at the station's dock point would be drawn (see TradeBotGeometry),
+	 * then its glowing cubes at full brightness.
+	 */
+	static void render(PoseStack ms, MultiBufferSource buffers, int light, int overlay, Direction facing, ModelPart model,
+					   GlowModel glow) {
 		Vec3 dock = TradeBotStationBlock.dockPoint(BlockPos.ZERO, facing);
 		ms.pushPose();
 		ms.translate(dock.x, dock.y, dock.z);
@@ -59,7 +65,7 @@ public class TradeBotStationRenderer extends SafeBlockEntityRenderer<TradeBotSta
 		ms.scale(-1, -1, 1);
 		ms.translate(0, -1.501, 0);
 		model.render(ms, buffers.getBuffer(RenderType.entityCutoutNoCull(TradeBotRenderer.TEXTURE)), light, overlay);
-		model.render(ms, buffers.getBuffer(RenderType.entityCutoutNoCull(TradeBotRenderer.GLOW)), LightTexture.FULL_BRIGHT, overlay);
+		glow.render(ms, buffers.getBuffer(RenderType.entityCutoutNoCull(TradeBotRenderer.GLOW)), overlay);
 		ms.popPose();
 	}
 

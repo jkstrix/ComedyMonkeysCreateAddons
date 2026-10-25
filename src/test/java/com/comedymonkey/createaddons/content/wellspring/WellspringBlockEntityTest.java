@@ -244,6 +244,60 @@ class WellspringBlockEntityTest {
 		assertEquals(WellspringSource.LAVA, client.getGenerationSource());
 	}
 
+	/** The packets sent while it runs carry the upgrades only after they change; the client keeps what it had. */
+	@Test
+	void runningSyncsLeaveOutUnchangedUpgrades() {
+		install(be, 0, WellspringUpgrade.DRIPSTONE);
+		install(be, 1, WellspringUpgrade.DRIPSTONE);
+		fill(be, new FluidStack(Fluids.LAVA, 500));
+		ownSync();
+		CompoundTag first = packet();
+		assertTrue(first.contains("UpgradeSlots"));
+
+		WellspringBlockEntity client = WellspringTestSupport.create();
+		client.loadWithComponents(first, REGISTRIES);
+		be.getTank().drain(200, IFluidHandler.FluidAction.EXECUTE);
+		CompoundTag second = packet();
+		assertFalse(second.contains("UpgradeSlots"));
+		assertFalse(second.contains("Capacity"));
+		client.loadWithComponents(second, REGISTRIES);
+		assertEquals(300, client.getTank().getFluidAmount());
+		assertEquals(2, client.getGenerationUpgradeCount(), "the client keeps the upgrades it was sent");
+		assertEquals(be.getTank().getCapacity(), client.getTank().getCapacity());
+
+		install(be, CAPACITY_SLOT, WellspringUpgrade.CAPACITY);
+		assertTrue(packet().contains("UpgradeSlots"), "a change to the upgrades goes out");
+	}
+
+	/** A refused break puts the block back on a player's screen from a fresh copy: anything but its own sync gets the lot. */
+	@Test
+	void otherUpdatePacketsCarryTheUpgrades() {
+		install(be, 0, WellspringUpgrade.DRIPSTONE);
+		ownSync();
+		packet();
+		ReflectionAccess.set(be, "ownSyncAt", -10L);
+		assertTrue(packet().contains("UpgradeSlots"));
+	}
+
+	@Test
+	void theUpgradesAreResentNowAndThen() {
+		install(be, 0, WellspringUpgrade.DRIPSTONE);
+		ownSync();
+		packet();
+		assertFalse(packet().contains("UpgradeSlots"));
+		ReflectionAccess.set(be, "upgradesSentAt", -1000L);
+		assertTrue(packet().contains("UpgradeSlots"));
+	}
+
+	/** As if it had just sent a sync of its own (with no level it's at game time 0). */
+	private void ownSync() {
+		ReflectionAccess.set(be, "ownSyncAt", 0L);
+	}
+
+	private CompoundTag packet() {
+		return (CompoundTag) ReflectionAccess.call(be, "updatePacketTag", REGISTRIES);
+	}
+
 	@Test
 	void updateTagEmptiesTheClientTankWhenDrained() {
 		fill(be, new FluidStack(Fluids.WATER, 500));

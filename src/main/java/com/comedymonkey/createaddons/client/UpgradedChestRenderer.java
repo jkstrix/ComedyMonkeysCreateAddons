@@ -28,11 +28,20 @@ public class UpgradedChestRenderer implements BlockEntityRenderer<UpgradedChestB
 	private static final float HINGE_Y = 10 / 16f;
 	private static final float HINGE_Z = 15 / 16f;
 
+	/** Every tier's lid for each chest type, by their ordinals, named once. */
+	private static final ModelResourceLocation[][] LIDS = new ModelResourceLocation[ChestTier.values().length][ChestType.values().length];
+
+	static {
+		for (ChestTier tier : ChestTier.values())
+			for (ChestType type : ChestType.values())
+				LIDS[tier.ordinal()][type.ordinal()] = ModelResourceLocation.standalone(ComedyMonkeysCreateAddons.asResource(
+					"block/upgraded_chest_" + tier.getSerializedName() + "_" + type.getSerializedName() + "_lid"));
+	}
+
 	public UpgradedChestRenderer(BlockEntityRendererProvider.Context context) {}
 
 	public static ModelResourceLocation lidModel(ChestTier tier, ChestType type) {
-		return ModelResourceLocation.standalone(ComedyMonkeysCreateAddons.asResource(
-			"block/upgraded_chest_" + tier.getSerializedName() + "_" + type.getSerializedName() + "_lid"));
+		return LIDS[tier.ordinal()][type.ordinal()];
 	}
 
 	@Override

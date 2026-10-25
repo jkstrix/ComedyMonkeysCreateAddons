@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import org.joml.Quaternionf;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.SaveMark;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModBlocks;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -30,13 +31,17 @@ import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
-/** Burns lava from its tank to turn its shaft. Speed and stress capacity are configurable. */
+/**
+ * Burns lava from its tank to turn its shaft. Speed and stress capacity are configurable. Short of lava it runs in
+ * spells rather than stopping and starting every tick ({@link EngineBurner}).
+ */
 public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 	private final FluidTank tank;
+	/** Server: when it runs and how the lava goes. */
+	private final EngineBurner burner = new EngineBurner();
 	/** Which way the shaft turns, set with a wrench-free value box like Simulated's Portable Engine. */
 	private ScrollOptionBehaviour<RotationDirection> direction;
-	/** mB/s accumulated each tick; every 20 is one millibucket burned. */
-	private int burnProgress;
+	/** Whether it turns: the burner's call on the server, synced to clients. */
 	private boolean running;
 	private boolean syncQueued;
 	/** Client: run every client tick (the engine's sounds and exhaust puffs); set by the client setup. */
@@ -47,7 +52,8 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 		tank = new FluidTank(engine(state).tankCapacity(), stack -> stack.getFluid().isSame(Fluids.LAVA)) {
 			@Override
 			protected void onContentsChanged() {
-				setChanged();
+				// no comparator output, so just a save
+				SaveMark.mark(MagmaEngineBlockEntity.this);
 				syncQueued = true;
 			}
 		};
@@ -95,15 +101,7 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 			return;
 		}
 
-		boolean canRun = !tank.isEmpty();
-		if (canRun) {
-			burnProgress += engine().lavaPerSecond();
-			int burn = burnProgress / 20;
-			if (burn > 0) {
-				burnProgress -= burn * 20;
-				tank.drain(burn, FluidTank.FluidAction.EXECUTE);
-			}
-		}
+		boolean canRun = burner.tick(tank, engine().lavaPerSecond());
 		if (canRun != running) {
 			running = canRun;
 			updateGeneratedRotation();
@@ -173,7 +171,7 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 	protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.write(tag, registries, clientPacket);
 		tag.put("Tank", tank.writeToNBT(registries, new CompoundTag()));
-		tag.putInt("BurnProgress", burnProgress);
+		burner.write(tag);
 		tag.putBoolean("Running", running);
 	}
 
@@ -182,7 +180,7 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 		super.read(tag, registries, clientPacket);
 		tank.setFluid(FluidStack.EMPTY);
 		tank.readFromNBT(registries, tag.getCompound("Tank"));
-		burnProgress = tag.getInt("BurnProgress");
+		burner.read(tag);
 		running = tag.getBoolean("Running");
 	}
 }

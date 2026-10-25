@@ -20,12 +20,15 @@ import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipRoot;
+import com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion.Route;
 import com.comedymonkey.createaddons.content.tradebot.react.CornerFinder;
 import com.comedymonkey.createaddons.content.tradebot.react.Reactions;
 import com.comedymonkey.createaddons.content.tradebot.trade.Buyers;
+import com.comedymonkey.createaddons.content.tradebot.trade.InputSnapshot;
 import com.comedymonkey.createaddons.content.tradebot.trade.TradeDemand;
 import com.comedymonkey.createaddons.content.tradebot.trade.TradeSpot;
 import com.comedymonkey.createaddons.content.tradebot.trade.TradeWork;
+import com.comedymonkey.createaddons.content.tradebot.trade.Unreachable;
 import com.comedymonkey.createaddons.content.tradebot.trade.VillagerClaims;
 import com.comedymonkey.createaddons.content.tradebot.work.BotWork;
 import com.comedymonkey.createaddons.content.tradebot.work.ContainerVisit;
@@ -65,7 +68,9 @@ public class TradeBotBrain {
 		/** Run down (D24, D29) until he's wound up, then carries on. */
 		WOUND_DOWN, WINDING_UP,
 		/** On his spot, waiting for a player to finish trading with his villager (players come first, D46). */
-		WAITING_TURN
+		WAITING_TURN,
+		/** A buyer he set off for had no route: the next one is looked for next tick, one route search a tick. */
+		PLANNING
 	}
 	/** Tasks a reaction or a fright may interrupt: travelling and waiting, never mid-container or mid-trade. */
 	private static final java.util.EnumSet<Task> INTERRUPTIBLE = java.util.EnumSet.of(Task.GOING, Task.WAITING, Task.APPROACHING,
@@ -87,8 +92,6 @@ public class TradeBotBrain {
 	private static final int MAX_ROUNDS = 3;
 	/** After a trip to put his load back that put nothing back, how long he leaves it unless his links or load change (ticks). */
 	private static final int RETURN_BLOCKED_TICKS = 12000;
-	/** How long a villager he couldn't get to is left alone (ticks), so he doesn't set off for it over and over. */
-	private static final int UNREACHABLE_TICKS = 2400;
 	/** A trade called off (D46): he looks puzzled and shrugs. */
 	private static final String SHRUG_CLIP = "shrug";
 
@@ -112,8 +115,16 @@ public class TradeBotBrain {
 	/** A trip to put his load back that put nothing back: not again until this time, unless his links or load change. */
 	private long returnBlockedUntil;
 	private int returnBlockedFor;
-	/** Villagers he couldn't get to, and the game time to try them again. */
-	private final Map<UUID, Long> unreachable = new HashMap<>();
+	/** Villagers he couldn't get to, left alone for a while (longer each time nothing about them changed). */
+	private final Unreachable unreachable = new Unreachable();
+	/** How often, at most, he loads his station's chunk (when it's unloaded) to head home (ticks). */
+	private static final int STATION_LOAD_TICKS = 100;
+	/** Which way his station faces, as last read; when he last loaded its chunk to head home, and how many times. */
+	@Nullable
+	private Direction stationFacing;
+	private long lastStationLoad = Long.MIN_VALUE / 2;
+	private int stationLoads;
+	private boolean pretendUnloaded;
 	private final Reactions reactions = new Reactions();
 	/** What he was doing when a reaction, a fright or running down interrupted him, to carry on with after. */
 	private Task resumeTask = Task.RETURNING;
@@ -212,11 +223,13 @@ public class TradeBotBrain {
 	 * buy (D22), sells it to them nearest-first, delivers his earnings and returns what didn't sell.
 	 */
 	public boolean trade() {
-		if (!(bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station) || station.outputPosition() == null
+		if (!(station() instanceof TradeBotStationBlockEntity station) || station.outputPosition() == null
 			|| station.isPaused() || !bot.level().isDay() || bot.level().isThundering())
 			return false;
-		List<AbstractVillager> buyers = sellingTo(reachableBuyers(), station.inputPositions());
-		TradeDemand demand = demandFrom(buyers, station.inputPositions());
+		bot.forgetOldVillagers(); // only now, before planning, so the prices he plans with hold for the trip
+		InputSnapshot stock = snapshot(station.inputPositions());
+		List<AbstractVillager> buyers = sellableBuyers(stock);
+		TradeDemand demand = demandFrom(buyers, stock);
 		boolean goods = !buyers.isEmpty();
 		if (!goods && !bot.hasEarnings() || !hasRoom(station.outputPosition()))
 			return false;
@@ -230,11 +243,12 @@ public class TradeBotBrain {
 		return true;
 	}
 
-	/** Of {@code buyers}, the ones he can sell to: an offer paid in full from his inputs and load. */
-	private List<AbstractVillager> sellingTo(List<AbstractVillager> buyers, List<BlockPos> inputs) {
-		List<AbstractVillager> selling = new ArrayList<>(buyers);
-		selling.removeIf(villager -> !sellable(List.of(villager), inputs));
-		return selling;
+	/** His station, if its chunk is loaded (nothing he does loads it). */
+	@Nullable
+	private TradeBotStationBlockEntity station() {
+		BlockPos station = bot.getStation();
+		return station != null && isLoaded(station) && bot.level().getBlockEntity(station) instanceof TradeBotStationBlockEntity home
+			? home : null;
 	}
 
 	/**
@@ -291,7 +305,7 @@ public class TradeBotBrain {
 	 * trip that put nothing back isn't tried again for a long while, unless his links or his load change.
 	 */
 	public boolean returnLoad() {
-		if (isEmpty(bot.getLoad()) || !(bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station)
+		if (isEmpty(bot.getLoad()) || !(station() instanceof TradeBotStationBlockEntity station)
 			|| station.isPaused() || !bot.level().isDay() || bot.level().isThundering())
 			return false;
 		if (bot.level().getGameTime() < returnBlockedUntil && returnBlockedFor == returnKey(station))
@@ -316,13 +330,14 @@ public class TradeBotBrain {
 	}
 
 	private boolean startJob(ContainerWork.Wanted wanted, boolean trading, boolean command, boolean returnOnly) {
-		if (!(bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station) || station.outputPosition() == null && !returnOnly)
+		if (!(station() instanceof TradeBotStationBlockEntity station) || station.outputPosition() == null && !returnOnly)
 			return false;
 		List<BlockPos> inputs = new ArrayList<>(station.inputPositions());
 		if (!inputs.isEmpty())
 			java.util.Collections.rotate(inputs, -(roundRobin++ % inputs.size()));
 		job = new Job(inputs, station.outputPosition(), wanted, trading, returnOnly);
-		debug("new job ({}trading), docked {}", trading ? "" : "not ", bot.isDocked());
+		if (debugging())
+			debug("new job ({}trading), docked {}", trading ? "" : "not ", bot.isDocked());
 		goals.clear();
 		visited.clear();
 		commanded = command;
@@ -392,8 +407,11 @@ public class TradeBotBrain {
 			while (j.input < j.inputs.size() && !ContainerWork.full(bot.getLoad())) {
 				BlockPos input = j.inputs.get(j.input);
 				ContainerVisit visit = hasWanted(input, j.wanted) ? ContainerVisit.plan(bot, input) : null;
-				if (visit != null && approach(visit, ContainerWork.Mode.TAKE, j.wanted))
+				Route route = visit != null ? approach(visit, ContainerWork.Mode.TAKE, j.wanted) : Route.NONE;
+				if (route != Route.NONE) {
+					planLater(route);
 					return;
+				}
 				j.input++;
 			}
 			j.phase = j.trading ? Phase.TRADING : Phase.DELIVERING;
@@ -402,10 +420,17 @@ public class TradeBotBrain {
 			// re-planned after each buyer, nearest first (D49)
 			for (TradeSpot spot = nextBuyer(j); spot != null; spot = nextBuyer(j)) {
 				UUID villager = spot.villager().getUUID();
-				if (VillagerClaims.claim(villager, bot.getUUID(), bot.level().getGameTime()) && approach(new TradeWork(bot, spot, this::canAffordTrade)))
+				Route route = VillagerClaims.claim(villager, bot.getUUID(), bot.level().getGameTime())
+					? approach(new TradeWork(bot, spot, this::canAffordTrade)) : null;
+				if (route == Route.PLANNED)
 					return;
 				VillagerClaims.release(villager, bot.getUUID());
-				unreachable.put(villager, bot.level().getGameTime() + UNREACHABLE_TICKS);
+				if (route == Route.LATER) {
+					planLater(route);
+					return;
+				}
+				if (route == Route.NONE) // no way there at all (not just claimed by another bot)
+					unreachable.mark(villager, spot.seat(), bot.level().getGameTime(), true);
 				j.done.add(villager);
 			}
 			if (anotherRound(j)) {
@@ -417,8 +442,11 @@ public class TradeBotBrain {
 		if (j.phase == Phase.DELIVERING) {
 			if (bot.hasEarnings() && !j.returnOnly && j.output != null) {
 				ContainerVisit visit = ContainerVisit.plan(bot, j.output);
-				if (visit != null && approach(visit, ContainerWork.Mode.DELIVER_EARNINGS, stack -> 0))
+				Route route = visit != null ? approach(visit, ContainerWork.Mode.DELIVER_EARNINGS, stack -> 0) : Route.NONE;
+				if (route != Route.NONE) {
+					planLater(route);
 					return;
+				}
 			}
 			j.phase = Phase.RETURNING_ITEMS;
 			j.returns.addAll(nearestFirst(new ArrayList<>(j.takenFrom.keySet())));
@@ -436,8 +464,13 @@ public class TradeBotBrain {
 			if (!carries(j.from(input)) || j.returnOnly && !takesSomeOfLoad(input))
 				continue;
 			ContainerVisit visit = ContainerVisit.plan(bot, input);
-			if (visit != null && approach(visit, ContainerWork.Mode.RETURN, ContainerWork.Wanted.all(j.from(input))))
+			Route route = visit != null ? approach(visit, ContainerWork.Mode.RETURN, ContainerWork.Wanted.all(j.from(input))) : Route.NONE;
+			if (route == Route.LATER)
+				j.returns.addFirst(input); // still to visit
+			if (route != Route.NONE) {
+				planLater(route);
 				return;
+			}
 		}
 		if (anotherRound(j)) {
 			nextJobStep();
@@ -452,6 +485,12 @@ public class TradeBotBrain {
 		set(Task.RETURNING);
 	}
 
+	/** He's off to the next stop; or, if he's searched for a route already this tick, he looks again next tick. */
+	private void planLater(Route route) {
+		if (route == Route.LATER)
+			set(Task.PLANNING);
+	}
+
 	/** The nearest buyer still to visit who buys something he carries, with a spot to trade from; null when there's none. */
 	@Nullable
 	private TradeSpot nextBuyer(Job j) {
@@ -460,11 +499,11 @@ public class TradeBotBrain {
 		long now = bot.level().getGameTime();
 		List<AbstractVillager> buyers = Buyers.near(bot, bot.getStation());
 		buyers.removeIf(villager -> j.done.contains(villager.getUUID()) || j.calledOff.contains(villager.getUUID())
-			|| unreachable.getOrDefault(villager.getUUID(), 0L) > now
+			|| unreachable.blocked(villager.getUUID(), now)
 			|| TradeWork.offerFor(bot, villager) == null);
 		buyers.sort(java.util.Comparator.comparingDouble(villager -> villager.distanceToSqr(bot)));
 		for (AbstractVillager villager : buyers) {
-			TradeSpot spot = TradeSpot.plan(bot, villager);
+			TradeSpot spot = TradeSpot.plan(bot, villager, j.failedSides.getOrDefault(villager.getUUID(), Set.of()));
 			if (spot != null)
 				return spot;
 			j.done.add(villager.getUUID());
@@ -472,42 +511,45 @@ public class TradeBotBrain {
 		return null;
 	}
 
-	/** Seated buyers in range he can get to and trade with. */
-	private List<AbstractVillager> reachableBuyers() {
+	/**
+	 * Seated buyers in range he can sell to (an offer paid in full from {@code stock}), get to and trade with. The
+	 * cheap checks go first, so only buyers worth it get a trading spot worked out.
+	 */
+	private List<AbstractVillager> sellableBuyers(InputSnapshot stock) {
 		List<AbstractVillager> buyers = Buyers.near(bot, bot.getStation());
 		long now = bot.level().getGameTime();
-		buyers.removeIf(villager -> unreachable.getOrDefault(villager.getUUID(), 0L) > now || TradeSpot.plan(bot, villager) == null);
+		buyers.removeIf(villager -> unreachable.blocked(villager.getUUID(), now) || !sellable(villager, stock) || TradeSpot.plan(bot, villager) == null);
 		return buyers;
 	}
 
 	/** What {@code buyers} will take, less what he already carries. */
-	private TradeDemand demandFrom(List<AbstractVillager> buyers, List<BlockPos> inputs) {
+	private TradeDemand demandFrom(List<AbstractVillager> buyers, InputSnapshot stock) {
 		TradeDemand demand = Buyers.demand(bot, buyers);
 		// whole lots only, of what's there to take: no taking 64 sticks for two lots of 35 and carrying 29 back
-		List<net.neoforged.neoforge.items.IItemHandler> stores = stores(inputs);
-		demand.limit(goods -> {
-			int count = 0;
-			for (var store : stores)
-				for (int slot = 0; slot < store.getSlots(); slot++)
-					if (goods.test(store.getStackInSlot(slot)))
-						count += store.getStackInSlot(slot).getCount();
-			return count;
-		});
+		demand.limit(stock::count);
 		for (int slot = 0; slot < bot.getLoad().getSlots(); slot++)
 			demand.moved(bot.getLoad().getStackInSlot(slot)); // what he already carries counts first
 		return demand;
 	}
 
-	/** His load and the inputs' inventories. */
-	private List<net.neoforged.neoforge.items.IItemHandler> stores(List<BlockPos> inputs) {
+	/** What his load and his (loaded) inputs hold right now, for one round of planning. */
+	private InputSnapshot snapshot(List<BlockPos> inputs) {
 		List<net.neoforged.neoforge.items.IItemHandler> stores = new ArrayList<>();
 		stores.add(bot.getLoad());
 		for (BlockPos input : inputs) {
-			var handler = bot.level().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, input, null);
+			var handler = handlerAt(input, null);
 			if (handler != null)
 				stores.add(handler);
 		}
-		return stores;
+		return InputSnapshot.of(stores);
+	}
+
+	/** A linked container's inventory, if its chunk (and a double chest's other half's) is loaded: nothing he plans loads one. */
+	@Nullable
+	private net.neoforged.neoforge.items.IItemHandler handlerAt(BlockPos pos, @Nullable Direction side) {
+		if (!com.comedymonkey.createaddons.content.tradebot.work.ContainerWork.allHalvesLoaded(bot.level(), pos))
+			return null;
+		return bot.level().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos, side);
 	}
 
 	/**
@@ -517,38 +559,30 @@ public class TradeBotBrain {
 	private boolean anotherRound(Job j) {
 		if (!j.trading || j.rounds >= MAX_ROUNDS || !canAffordTrade() || shouldGoHome())
 			return false;
-		List<AbstractVillager> buyers = reachableBuyers();
+		InputSnapshot stock = snapshot(j.inputs);
+		List<AbstractVillager> buyers = sellableBuyers(stock);
 		buyers.removeIf(villager -> j.calledOff.contains(villager.getUUID()));
-		buyers = sellingTo(buyers, j.inputs);
 		if (buyers.isEmpty())
 			return false;
 		j.rounds++;
-		j.wanted = demandFrom(buyers, j.inputs);
+		j.wanted = demandFrom(buyers, stock);
 		claimPlanned(j, buyers);
 		j.input = 0;
 		j.done.clear();
 		j.leftoversQueued = false;
 		j.returns.clear();
 		j.phase = Phase.TAKING;
-		debug("new trades opened up: round {}", j.rounds + 1);
+		if (debugging())
+			debug("new trades opened up: round {}", j.rounds + 1);
 		return true;
 	}
 
-	/** Some buyer's offer can be paid in full from his inputs and load together: a trip that will make a trade. */
-	private boolean sellable(List<AbstractVillager> buyers, List<BlockPos> inputs) {
-		List<net.neoforged.neoforge.items.IItemHandler> stores = stores(inputs);
-		for (AbstractVillager villager : buyers)
-			for (net.minecraft.world.item.trading.MerchantOffer offer : villager.getOffers()) {
-				if (!com.comedymonkey.createaddons.content.tradebot.trade.BotPricing.buys(offer))
-					continue;
-				int have = 0;
-				for (var store : stores)
-					for (int slot = 0; slot < store.getSlots(); slot++)
-						if (offer.getItemCostA().test(store.getStackInSlot(slot)))
-							have += store.getStackInSlot(slot).getCount();
-				if (have >= com.comedymonkey.createaddons.content.tradebot.trade.BotPricing.cost(offer, bot.reputationWith(villager.getUUID())))
-					return true;
-			}
+	/** One of the villager's offers can be paid in full from his inputs and load together: a trip that will make a trade. */
+	private boolean sellable(AbstractVillager villager, InputSnapshot stock) {
+		for (net.minecraft.world.item.trading.MerchantOffer offer : villager.getOffers())
+			if (com.comedymonkey.createaddons.content.tradebot.trade.BotPricing.buys(offer) && stock.has(offer.getItemCostA())
+				&& stock.count(offer.getItemCostA()) >= com.comedymonkey.createaddons.content.tradebot.trade.BotPricing.cost(offer, bot.reputationWith(villager.getUUID())))
+				return true;
 		return false;
 	}
 
@@ -566,7 +600,7 @@ public class TradeBotBrain {
 		ContainerVisit visit = ContainerVisit.plan(bot, pos);
 		if (visit == null)
 			return false;
-		var handler = bot.level().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos, visit.side());
+		var handler = handlerAt(pos, visit.side());
 		if (handler == null)
 			return false;
 		for (int slot = 0; slot < bot.getLoad().getSlots(); slot++) {
@@ -578,31 +612,37 @@ public class TradeBotBrain {
 	}
 
 	private boolean hasRoom(BlockPos output) {
-		var handler = bot.level().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, output, null);
+		var handler = handlerAt(output, null);
 		return handler != null && net.neoforged.neoforge.items.ItemHandlerHelper.insertItemStacked(handler, new ItemStack(Items.EMERALD), true).isEmpty();
 	}
 
-	private boolean approach(ContainerVisit visit, ContainerWork.Mode mode, ContainerWork.Wanted which) {
-		if (!approach(new ContainerWork(bot, visit, mode, which)))
-			return false;
-		debug("{} {} at {} from the {} side, standing at {}", mode, visit.kind(), visit.container().toShortString(), visit.side(),
-			visit.standBlock().toShortString());
-		return true;
+	private Route approach(ContainerVisit visit, ContainerWork.Mode mode, ContainerWork.Wanted which) {
+		Route route = approach(new ContainerWork(bot, visit, mode, which));
+		if (route.planned() && debugging())
+			debug("{} {} at {} from the {} side, standing at {}", mode, visit.kind(), visit.container().toShortString(), visit.side(),
+				visit.standBlock().toShortString());
+		return route;
 	}
 
-	private boolean approach(BotWork next) {
-		if (!bot.motion.moveTo(next.standBlock(), next.stand(), next.yaw()))
-			return false;
+	private Route approach(BotWork next) {
+		Route route = bot.motion.moveTo(next.standBlock(), next.stand(), next.yaw());
+		if (!route.planned())
+			return route;
 		work = next;
-		if (next instanceof TradeWork trade)
+		if (debugging() && next instanceof TradeWork trade)
 			debug("trading with {} at {}, standing at {}", trade.villager().getName().getString(), TradeSpot.seatOf(trade.villager()).toShortString(),
 				next.standBlock().toShortString());
 		set(Task.APPROACHING);
-		return true;
+		return route;
+	}
+
+	/** Logging is on ({@code /tradebot debug}): callers check first, so nothing is built for a log that's off. */
+	private static boolean debugging() {
+		return com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion.debug;
 	}
 
 	private void debug(String message, Object... args) {
-		if (com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion.debug) {
+		if (debugging()) {
 			Object[] all = new Object[args.length + 1];
 			all[0] = bot.getId();
 			System.arraycopy(args, 0, all, 1, args.length);
@@ -632,7 +672,7 @@ public class TradeBotBrain {
 	}
 
 	private boolean hasWanted(BlockPos pos, ContainerWork.Wanted wanted) {
-		var handler = bot.level().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos, null);
+		var handler = handlerAt(pos, null);
 		if (handler == null)
 			return false;
 		for (int slot = 0; slot < handler.getSlots(); slot++)
@@ -656,16 +696,14 @@ public class TradeBotBrain {
 		BlockPos station = bot.getStation();
 		if (task == Task.WOUND_DOWN)
 			return;
-		if (station == null || !(bot.level().getBlockState(station).getBlock() instanceof TradeBotStationBlock)) {
-			if (task != Task.STRANDED) {
-				bot.motion.stop();
-				set(Task.STRANDED);
-			}
+		// his station's chunk may be unloaded while he's out far from it: it's only checked (and loaded) when he heads home
+		if (station == null || isLoaded(station) && !(bot.level().getBlockState(station).getBlock() instanceof TradeBotStationBlock)) {
+			strand();
 			return;
 		}
 		renewPlanned();
 		if ((task == Task.GOING || task == Task.WAITING || task == Task.APPROACHING || task == Task.WORKING || task == Task.SHRUGGING
-			|| task == Task.WAITING_OUTPUT || task == Task.WAITING_TURN) && shouldGoHome())
+			|| task == Task.WAITING_OUTPUT || task == Task.WAITING_TURN || task == Task.PLANNING) && shouldGoHome())
 			goHome();
 		switch (task) {
 			case HOME -> {
@@ -690,8 +728,9 @@ public class TradeBotBrain {
 				if (w instanceof TradeWork trade && (!trade.available()
 					|| !VillagerClaims.claim(trade.villager().getUUID(), bot.getUUID(), bot.level().getGameTime()))) {
 					// the villager stood up, left, or another bot got there first: a shrug, and someone else
-					debug("{} can't trade now (seated {}, in place {})", trade.villager().getName().getString(),
-						com.comedymonkey.createaddons.content.VillagerSeats.sitting(trade.villager()), trade.inPlace());
+					if (debugging())
+						debug("{} can't trade now (seated {}, in place {})", trade.villager().getName().getString(),
+							com.comedymonkey.createaddons.content.VillagerSeats.sitting(trade.villager()), trade.inPlace());
 					calledOff(trade);
 				} else if (w == null)
 					nextJobStep();
@@ -699,9 +738,12 @@ public class TradeBotBrain {
 					Vec3 stand = w.stand();
 					bot.moveTo(stand.x, stand.y, stand.z, w.yaw(), 0);
 					bot.setYRot(w.yaw());
+					if (w instanceof TradeWork trade) // he got to it: if it's ever out of reach again, that starts afresh
+						unreachable.clear(trade.villager().getUUID());
 					if (w instanceof TradeWork trade && trade.busy()) {
 						// a player's trading with it: he waits his turn, checking his stock
-						debug("waits for a player to finish with {}", trade.villager().getName().getString());
+						if (debugging())
+							debug("waits for a player to finish with {}", trade.villager().getName().getString());
 						bot.playClip("count_stock");
 						set(Task.WAITING_TURN);
 					} else {
@@ -714,18 +756,26 @@ public class TradeBotBrain {
 						trade.abort();
 						UUID villager = trade.villager().getUUID();
 						// that side's no good: another side of the same villager, if there is one
+						boolean noWay = bot.motion.foundNoWay(); // not just stuck behind someone
 						if (job != null) {
 							Set<Direction> failed = job.failedSides.computeIfAbsent(villager, v -> new HashSet<>());
 							failed.add(trade.side());
 							TradeSpot other = TradeSpot.plan(bot, trade.villager(), failed);
-							debug("couldn't reach {} from the {} side{}", trade.villager().getName().getString(), trade.side(),
-								other != null ? ", trying the " + other.side() : "");
-							if (other != null && VillagerClaims.claim(villager, bot.getUUID(), bot.level().getGameTime())
-								&& approach(new TradeWork(bot, other, this::canAffordTrade)))
+							if (debugging())
+								debug("couldn't reach {} from the {} side{}", trade.villager().getName().getString(), trade.side(),
+									other != null ? ", trying the " + other.side() : "");
+							Route route = other != null && VillagerClaims.claim(villager, bot.getUUID(), bot.level().getGameTime())
+								? approach(new TradeWork(bot, other, this::canAffordTrade)) : null;
+							if (route == Route.PLANNED)
 								return;
+							if (route == Route.LATER) {
+								planLater(route); // that side's tried next tick
+								return;
+							}
+							noWay |= route == Route.NONE;
 							job.done.add(villager);
 						}
-						unreachable.put(villager, bot.level().getGameTime() + UNREACHABLE_TICKS);
+						unreachable.mark(villager, TradeSpot.seatOf(trade.villager()), bot.level().getGameTime(), noWay);
 					} else if (job != null && job.phase == Phase.TAKING)
 						job.input++;
 					else if (job != null && job.phase == Phase.DELIVERING)
@@ -770,7 +820,8 @@ public class TradeBotBrain {
 				else {
 					VillagerClaims.claim(trade.villager().getUUID(), bot.getUUID(), bot.level().getGameTime());
 					if (!trade.available() || ticks >= TURN_WAIT_TICKS) {
-						debug("gave up waiting for {}", trade.villager().getName().getString());
+						if (debugging())
+							debug("gave up waiting for {}", trade.villager().getName().getString());
 						calledOff(trade);
 					} else if (!trade.busy()) {
 						trade.start();
@@ -787,10 +838,12 @@ public class TradeBotBrain {
 				if (ticks >= OUTPUT_RETRY_TICKS)
 					nextJobStep();
 			}
+			case PLANNING -> nextJobStep();
 			case GOING -> {
 				if (!routed) {
-					routed = true;
-					if (goals.isEmpty() || !bot.motion.moveTo(goals.peek(), null, Float.NaN))
+					Route route = goals.isEmpty() ? Route.NONE : bot.motion.moveTo(goals.peek(), null, Float.NaN);
+					routed = route != Route.LATER; // later: he asks again next tick
+					if (route == Route.NONE)
 						set(Task.RETURNING);
 				} else if (bot.motion.arrived()) {
 					visited.add(goals.poll());
@@ -818,7 +871,7 @@ public class TradeBotBrain {
 						ticks = SCHEDULE_TICKS - NO_TRADE_REST_TICKS;
 					// a trip to put things back that put nothing back: not that again for a long while
 					if (job != null && job.returnOnly && job.returned == 0 && !isEmpty(bot.getLoad())
-						&& bot.level().getBlockEntity(station) instanceof TradeBotStationBlockEntity home) {
+						&& station() instanceof TradeBotStationBlockEntity home) {
 						returnBlockedUntil = bot.level().getGameTime() + RETURN_BLOCKED_TICKS;
 						returnBlockedFor = returnKey(home);
 					}
@@ -917,9 +970,14 @@ public class TradeBotBrain {
 	@Nullable
 	private Monster hostileInSight() {
 		int radius = CMConfig.SERVER.tradeBotHostileRadius();
-		return bot.level().getEntitiesOfClass(Monster.class, bot.getBoundingBox().inflate(radius),
-				mob -> mob.isAlive() && !mob.isInvisible() && mob.distanceTo(bot) <= radius && bot.hasLineOfSight(mob))
-			.stream().min(java.util.Comparator.comparingDouble(mob -> mob.distanceToSqr(bot))).orElse(null);
+		List<Monster> near = bot.level().getEntitiesOfClass(Monster.class, bot.getBoundingBox().inflate(radius),
+			mob -> mob.isAlive() && !mob.isInvisible() && mob.distanceTo(bot) <= radius);
+		// nearest first, so the looks (each a raycast) stop at the nearest one he can see
+		near.sort(java.util.Comparator.comparingDouble(mob -> mob.distanceToSqr(bot)));
+		for (Monster mob : near)
+			if (bot.hasLineOfSight(mob))
+				return mob;
+		return null;
 	}
 
 	/** He's been hit by a player: a cross look at them (D9). */
@@ -936,7 +994,8 @@ public class TradeBotBrain {
 		if (at != null)
 			bot.setYRot(com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion.yawTo(bot.position(), at.position()));
 		bot.playClip(clip);
-		debug("reacts: {}", clip);
+		if (debugging())
+			debug("reacts: {}", clip);
 		set(Task.REACTING);
 	}
 
@@ -948,7 +1007,8 @@ public class TradeBotBrain {
 		bot.motion.halt();
 		bot.setYRot(com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion.yawTo(bot.position(), mob.position()));
 		bot.playClip("scared_spot");
-		debug("scared of {} at {}", mob.getName().getString(), mob.blockPosition().toShortString());
+		if (debugging())
+			debug("scared of {} at {}", mob.getName().getString(), mob.blockPosition().toShortString());
 		set(Task.SCARED_SPOT);
 	}
 
@@ -959,8 +1019,12 @@ public class TradeBotBrain {
 			pos -> level.isLoaded(pos) && WalkNodeEvaluator.getPathTypeStatic(bot, pos) == PathType.WALKABLE,
 			pos -> level.isLoaded(pos) && !level.getBlockState(pos).getCollisionShape(level, pos).isEmpty());
 		bot.motion.setFleeing(true);
-		if (corner != null && bot.motion.moveTo(corner, null, Float.NaN)) {
-			debug("flees to {}", corner.toShortString());
+		Route route = corner != null ? bot.motion.moveTo(corner, null, Float.NaN) : Route.NONE;
+		if (route == Route.LATER)
+			return; // still spotting it: he flees next tick
+		if (route == Route.PLANNED) {
+			if (debugging())
+				debug("flees to {}", corner.toShortString());
 			set(Task.SCARED_FLEE);
 			return;
 		}
@@ -977,7 +1041,8 @@ public class TradeBotBrain {
 		bot.motion.halt();
 		bot.motion.setFleeing(false);
 		threat = null;
-		debug("wound down ({})", bot.rundown());
+		if (debugging())
+			debug("wound down ({})", bot.rundown());
 		set(Task.WOUND_DOWN);
 	}
 
@@ -989,7 +1054,7 @@ public class TradeBotBrain {
 	/** Back to what he was doing before the interruption: his job, his trip, or home. */
 	private void resume() {
 		switch (resumeTask) {
-			case APPROACHING, WORKING, SHRUGGING, WAITING_OUTPUT, WAITING_TURN -> {
+			case APPROACHING, WORKING, SHRUGGING, WAITING_OUTPUT, WAITING_TURN, PLANNING -> {
 				if (job != null)
 					nextJobStep();
 				else
@@ -1002,7 +1067,7 @@ public class TradeBotBrain {
 
 	/** On his station's cradle (run down there, or put there). */
 	private boolean onStation(BlockPos station) {
-		return bot.position().distanceTo(TradeBotStationBlock.dockPoint(station, facing(station))) < 0.75;
+		return isLoaded(station) && bot.position().distanceTo(TradeBotStationBlock.dockPoint(station, facing(station))) < 0.75;
 	}
 
 	private boolean clipOver() {
@@ -1018,7 +1083,8 @@ public class TradeBotBrain {
 	private void tradeDone(TradeWork trade) {
 		UUID villager = trade.villager().getUUID();
 		if (trade.failed()) {
-			debug("the trade with {} was called off", trade.villager().getName().getString());
+			if (debugging())
+				debug("the trade with {} was called off", trade.villager().getName().getString());
 			trade.abort();
 			if (job != null)
 				job.calledOff.add(villager);
@@ -1028,7 +1094,8 @@ public class TradeBotBrain {
 		}
 		if (job != null)
 			job.trades += trade.trades();
-		debug("{} trades with {} in one clip", trade.trades(), trade.villager().getName().getString());
+		if (debugging())
+			debug("{} trades with {} in one clip", trade.trades(), trade.villager().getName().getString());
 		if (trade.traded() && trade.stillThere() && canAffordTrade() && !shouldGoHome() && TradeWork.offerFor(bot, trade.villager()) != null) {
 			work = trade;
 			trade.start();
@@ -1057,14 +1124,27 @@ public class TradeBotBrain {
 	}
 
 	private void returnHome(BlockPos station) {
-		Direction facing = facing(station);
-		Vec3 start = dockStart(station, facing);
 		if (!routed) {
-			routed = true;
-			if (!bot.motion.moveTo(BlockPos.containing(start), start, facing.toYRot()))
+			if (ticks < 0)
+				return; // waiting a moment after a route that failed
+			// far out, his station's chunk may be unloaded: it's loaded for the route home, every few seconds at most
+			if (!reachStation(station))
+				return;
+			if (!(bot.level().getBlockState(station).getBlock() instanceof TradeBotStationBlock)) {
+				strand();
+				return;
+			}
+			Direction facing = facing(station);
+			Vec3 start = dockStart(station, facing);
+			Route route = bot.motion.moveTo(BlockPos.containing(start), start, facing.toYRot());
+			routed = route.planned();
+			// no route: try again shortly (not "arrived" where he stands, which would dock him from anywhere)
+			if (route == Route.NONE)
 				homeFailed(station, facing);
 			return;
 		}
+		Direction facing = facing(station);
+		Vec3 start = dockStart(station, facing);
 		if (bot.motion.failed()) {
 			routed = false;
 			homeFailed(station, facing);
@@ -1078,7 +1158,7 @@ public class TradeBotBrain {
 	}
 
 	private void homeFailed(BlockPos station, Direction facing) {
-		if (++homeFailures >= MAX_HOME_FAILURES) {
+		if (++homeFailures >= MAX_HOME_FAILURES && reachStation(station)) {
 			bot.dockAt(station, facing);
 			set(Task.HOME);
 		} else
@@ -1122,7 +1202,7 @@ public class TradeBotBrain {
 
 	/** Home rules: paused by redstone, night or a thunderstorm (unless sent by command), or charge running out. */
 	private boolean shouldGoHome() {
-		if (bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station && station.isPaused())
+		if (station() instanceof TradeBotStationBlockEntity station && station.isPaused())
 			return true;
 		if (!commanded && (!bot.level().isDay() || bot.level().isThundering()))
 			return true;
@@ -1130,13 +1210,63 @@ public class TradeBotBrain {
 		return bot.getCharge() <= (home * 1.5 + 4) * CMConfig.SERVER.tradeBotFePerBlock();
 	}
 
+	/**
+	 * Which way his station faces: read while its chunk is loaded, and remembered for when it isn't (he only needs it
+	 * then while rolling home, after {@link #reachStation} has loaded it to plan the route).
+	 */
 	private Direction facing(BlockPos station) {
-		BlockState state = bot.level().getBlockState(station);
-		return state.getValue(TradeBotStationBlock.FACING);
+		if (isLoaded(station)) {
+			BlockState state = bot.level().getBlockState(station);
+			if (state.hasProperty(TradeBotStationBlock.FACING))
+				stationFacing = state.getValue(TradeBotStationBlock.FACING);
+		}
+		return stationFacing != null ? stationFacing : Direction.SOUTH;
+	}
+
+	/**
+	 * His station's chunk is loaded, or is loaded now for him to head home (and only every {@link #STATION_LOAD_TICKS}
+	 * at most, so a bot far from home never loads it tick after tick). False: wait and ask again.
+	 */
+	private boolean reachStation(BlockPos station) {
+		if (isLoaded(station))
+			return true;
+		long now = bot.level().getGameTime();
+		if (now - lastStationLoad < STATION_LOAD_TICKS)
+			return false;
+		lastStationLoad = now;
+		stationLoads++;
+		pretendUnloaded = false;
+		bot.level().getChunkAt(station); // loads it
+		return isLoaded(station);
+	}
+
+	/** Whether a block's chunk is loaded (for his station, as a game test may pretend it isn't). */
+	private boolean isLoaded(BlockPos pos) {
+		return !(pretendUnloaded && pos.equals(bot.getStation())) && bot.level().isLoaded(pos);
+	}
+
+	/**
+	 * For game tests: his station's chunk counts as unloaded until he next loads it to head home ({@link #reachStation}),
+	 * and {@link #stationLoads} counts those loads.
+	 */
+	public void pretendStationUnloaded() {
+		pretendUnloaded = true;
+	}
+
+	public int stationLoads() {
+		return stationLoads;
+	}
+
+	/** No station to go home to (gone, or something else in its place). */
+	private void strand() {
+		if (task != Task.STRANDED) {
+			bot.motion.stop();
+			set(Task.STRANDED);
+		}
 	}
 
 	private void set(Task task) {
-		if (task != this.task)
+		if (debugging() && task != this.task)
 			debug("{} -> {}{}", this.task, task, job != null ? " (job " + job.phase + ")" : "");
 		this.task = task;
 		ticks = 0;

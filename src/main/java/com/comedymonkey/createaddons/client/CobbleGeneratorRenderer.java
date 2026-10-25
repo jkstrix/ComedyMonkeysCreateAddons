@@ -21,7 +21,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -49,11 +48,11 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 	/** The brass batch: four 2.25 px blocks in a 2 x 2 grid, by their north-west corners. */
 	private static final float[][] BATCH = {{5.5f, 4.25f}, {8.25f, 4.25f}, {5.5f, 7}, {8.25f, 7}};
 
-	private static final ResourceLocation WATER_STILL = ResourceLocation.withDefaultNamespace("block/water_still");
-	private static final ResourceLocation WATER_FLOW = ResourceLocation.withDefaultNamespace("block/water_flow");
-	private static final ResourceLocation LAVA_STILL = ResourceLocation.withDefaultNamespace("block/lava_still");
-	private static final ResourceLocation LAVA_FLOW = ResourceLocation.withDefaultNamespace("block/lava_flow");
-	private static final ResourceLocation BLUE_ICE = ResourceLocation.withDefaultNamespace("block/blue_ice");
+	private static final BlockSprite WATER_STILL = new BlockSprite(ResourceLocation.withDefaultNamespace("block/water_still"));
+	private static final BlockSprite WATER_FLOW = new BlockSprite(ResourceLocation.withDefaultNamespace("block/water_flow"));
+	private static final BlockSprite LAVA_STILL = new BlockSprite(ResourceLocation.withDefaultNamespace("block/lava_still"));
+	private static final BlockSprite LAVA_FLOW = new BlockSprite(ResourceLocation.withDefaultNamespace("block/lava_flow"));
+	private static final BlockSprite BLUE_ICE = new BlockSprite(ResourceLocation.withDefaultNamespace("block/blue_ice"));
 	/** Plains water colour; the water sprites are grey and tinted in-world. */
 	private static final int WATER_COLOUR = 0x3F76E4;
 	private static final int WHITE = 0xFFFFFF;
@@ -78,10 +77,13 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 		if (!state.hasProperty(CobbleGeneratorBlock.FACING))
 			return;
 		Direction front = state.getValue(CobbleGeneratorBlock.FACING);
+		boolean behind = CameraView.of(be, ms).behindGlass(front);
 		renderShaft(be, state, front.getOpposite(), ms, buffer, light, overlay);
 		VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
-		renderChamber(be, front, ms, vc, light);
-		renderDrillAndLamp(be, state, front, partialTicks, ms, vc, light, overlay);
+		// The chamber and the drill are inside, seen only through the front glass; the lamp stands proud of the front
+		if (!behind)
+			renderChamber(be, front, ms, vc, light);
+		renderDrillAndLamp(be, state, front, partialTicks, ms, vc, light, overlay, !behind);
 		// Redstone Link frequency items on top, once an antenna is fitted
 		if (be.hasAntenna())
 			LinkRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
@@ -116,16 +118,16 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 
 		GeneratorProduct product = be.product();
 		// Lava in the basin, and water beside it (or a block of blue ice, for basalt and blackstone)
-		box(vc, pose, sprite(LAVA_STILL), WHITE, glow, 2, 2, 2, 6, 3, 13);
+		box(vc, pose, LAVA_STILL.get(), WHITE, glow, 2, 2, 2, 6, 3, 13);
 		if (product.usesBlueIce())
-			box(vc, pose, sprite(BLUE_ICE), WHITE, light, 10, 2, 4, 14, 6, 9);
+			box(vc, pose, BLUE_ICE.get(), WHITE, light, 10, 2, 4, 14, 6, 9);
 		else
-			box(vc, pose, sprite(WATER_STILL), WATER_COLOUR, light, 10, 2, 2, 14, 3, 13);
+			box(vc, pose, WATER_STILL.get(), WATER_COLOUR, light, 10, 2, 2, 14, 3, 13);
 
 		// The block forming between them: one, or brass's batch of four smaller ones growing together
 		float height = be.blockHeight() * be.getFormingFraction();
 		if (height > 0.05f) {
-			TextureAtlasSprite stone = sprite(product.sprite());
+			TextureAtlasSprite stone = BlockSprite.of(product.sprite());
 			if (be.makesBatch())
 				for (float[] at : BATCH)
 					box(vc, pose, stone, WHITE, light, at[0], 2, at[1], at[0] + CobbleGeneratorBlockEntity.BATCH_HEIGHT,
@@ -136,9 +138,9 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 
 		// Pours from the nozzles down into the pools, only while it runs
 		if (be.isRunning()) {
-			box(vc, pose, sprite(LAVA_FLOW), WHITE, glow, 3.5f, 3, 6.5f, 4.5f, 10, 7.5f);
+			box(vc, pose, LAVA_FLOW.get(), WHITE, glow, 3.5f, 3, 6.5f, 4.5f, 10, 7.5f);
 			if (!product.usesBlueIce())
-				box(vc, pose, sprite(WATER_FLOW), WATER_COLOUR, light, 11.5f, 3, 6.5f, 12.5f, 10, 7.5f);
+				box(vc, pose, WATER_FLOW.get(), WATER_COLOUR, light, 11.5f, 3, 6.5f, 12.5f, 10, 7.5f);
 		}
 		ms.popPose();
 	}
@@ -147,14 +149,26 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 	 * The drill over the forming block and the status lamp, both in the chamber's frame (front north). The drill's tip
 	 * comes from the block entity (riding the block while it runs, raised when it doesn't) less its jab on each strike;
 	 * it spins with the shaft about its own vertical axis, and its rod is stretched from the collar up into the sleeve.
+	 * The drill is left out when it can't be seen ({@code drill} false); the lamp stands proud of the front, so never.
 	 */
 	private static void renderDrillAndLamp(CobbleGeneratorBlockEntity be, BlockState state, Direction front,
-										   float partialTicks, PoseStack ms, VertexConsumer vc, int light, int overlay) {
+										   float partialTicks, PoseStack ms, VertexConsumer vc, int light, int overlay,
+										   boolean drill) {
 		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5);
 		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
 		ms.translate(-0.5, -0.5, -0.5);
+		if (drill)
+			renderDrill(be, state, front, partialTicks, ms, vc, light, overlay);
+		ModelResourceLocation lamp = be.isRunning() ? LAMP_RUNNING : be.isFull() ? LAMP_FULL : be.isPowered() ? LAMP_OFF : null;
+		if (lamp != null)
+			render(ms, vc, state, lamp, LightTexture.FULL_BRIGHT, overlay);
+		ms.popPose();
+	}
 
+	/** The drill and its rod, in the chamber's frame. */
+	private static void renderDrill(CobbleGeneratorBlockEntity be, BlockState state, Direction front, float partialTicks,
+									PoseStack ms, VertexConsumer vc, int light, int overlay) {
 		boolean brass = be.makesBatch();
 		float tip = be.getDrillTip(partialTicks) - be.getDrillJab(partialTicks);
 		float spin = be.isRunning()
@@ -173,11 +187,6 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 			render(ms, vc, state, DRILL_ROD, light, overlay);
 			ms.popPose();
 		}
-
-		ModelResourceLocation lamp = be.isRunning() ? LAMP_RUNNING : be.isFull() ? LAMP_FULL : be.isPowered() ? LAMP_OFF : null;
-		if (lamp != null)
-			render(ms, vc, state, lamp, LightTexture.FULL_BRIGHT, overlay);
-		ms.popPose();
 	}
 
 	private static void render(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation location,
@@ -185,10 +194,6 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), vc, state,
 			Minecraft.getInstance().getModelManager().getModel(location), 1, 1, 1, light, overlay, ModelData.EMPTY,
 			RenderType.cutout());
-	}
-
-	private static TextureAtlasSprite sprite(ResourceLocation id) {
-		return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(id);
 	}
 
 	/**

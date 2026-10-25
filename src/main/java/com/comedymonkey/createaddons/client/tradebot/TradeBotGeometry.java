@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -83,6 +84,11 @@ public final class TradeBotGeometry {
 
 	/** A model of these root bones and everything under them. */
 	public LayerDefinition layer(String... roots) {
+		return layer(cube -> true, roots);
+	}
+
+	/** The same, with only the cubes {@code keep} lets in (every bone stays, so it poses the same). */
+	public LayerDefinition layer(Predicate<Cube> keep, String... roots) {
 		MeshDefinition mesh = new MeshDefinition();
 		Map<String, PartDefinition> parts = new HashMap<>();
 		Map<String, Bone> byName = new HashMap<>();
@@ -97,8 +103,9 @@ public final class TradeBotGeometry {
 			float[] parentPivot = isRoot ? null : byName.get(bone.parent()).pivot();
 			CubeListBuilder cubes = CubeListBuilder.create();
 			for (Cube cube : bone.cubes())
-				cubes.texOffs(cube.u(), cube.v()).addBox(p[0] - cube.to()[0], p[1] - cube.to()[1], cube.from()[2] - p[2],
-					cube.to()[0] - cube.from()[0], cube.to()[1] - cube.from()[1], cube.to()[2] - cube.from()[2]);
+				if (keep.test(cube))
+						cubes.texOffs(cube.u(), cube.v()).addBox(p[0] - cube.to()[0], p[1] - cube.to()[1], cube.from()[2] - p[2],
+						cube.to()[0] - cube.from()[0], cube.to()[1] - cube.from()[1], cube.to()[2] - cube.from()[2]);
 			PartPose pose = PartPose.offsetAndRotation(
 				parentPivot == null ? -p[0] : -(p[0] - parentPivot[0]),
 				parentPivot == null ? 24 - p[1] : -(p[1] - parentPivot[1]),
@@ -107,6 +114,15 @@ public final class TradeBotGeometry {
 			parts.put(bone.name(), parent.addOrReplaceChild(bone.name(), cubes, pose));
 		}
 		return LayerDefinition.create(mesh, textureWidth, textureHeight);
+	}
+
+	/** The texture's size the cubes' UVs are laid out on. */
+	public int textureWidth() {
+		return textureWidth;
+	}
+
+	public int textureHeight() {
+		return textureHeight;
 	}
 
 	/** Every bone of a baked layer by name, for posing. */

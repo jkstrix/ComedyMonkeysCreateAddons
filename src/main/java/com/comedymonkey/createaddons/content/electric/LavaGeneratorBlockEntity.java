@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.config.CMConfig;
+import com.comedymonkey.createaddons.content.SaveMark;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -18,9 +21,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
@@ -31,15 +37,22 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 	private static final int TANK = 8000;
 	private static final int BUFFER = 100_000;
+	/** Ticks the window keeps showing lava once the tank runs dry, so a trickle of lava doesn't flicker it. */
+	static final int FUELLED_HOLD_TICKS = 40;
 
 	private final FluidTank tank = new FluidTank(TANK, stack -> stack.getFluid().isSame(Fluids.LAVA)) {
 		@Override
 		protected void onContentsChanged() {
-			setChanged();
+			SaveMark.mark(LavaGeneratorBlockEntity.this);
 			syncQueued = true;
 		}
 	};
-	private final EnergyBuffer energy = new EnergyBuffer(BUFFER, 0, BUFFER, this::setChanged);
+	private final EnergyBuffer energy = new EnergyBuffer(BUFFER, 0, BUFFER, () -> SaveMark.mark(this));
+	/** Server: what's on each terminal (clockwise of the front, then the other side), found again when it's turned. */
+	@Nullable
+	private BlockCapabilityCache<IEnergyStorage, @Nullable Direction> rightTerminal, leftTerminal;
+	/** Ticks the tank has been empty, for the window's lava. */
+	private int dryTicks;
 	/** Lava owed, in twentieths of a millibucket: burning is in proportion to what's made. */
 	private double burnProgress;
 	/** Stays lit this many more ticks after it last made power, so a light load doesn't make it flicker. */
@@ -68,8 +81,10 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 		BlockState old = getBlockState();
 		super.setBlockState(state);
 		if (old.hasProperty(LavaGeneratorBlock.FACING) && state.hasProperty(LavaGeneratorBlock.FACING)
-			&& old.getValue(LavaGeneratorBlock.FACING) != state.getValue(LavaGeneratorBlock.FACING))
+			&& old.getValue(LavaGeneratorBlock.FACING) != state.getValue(LavaGeneratorBlock.FACING)) {
 			invalidateCapabilities();
+			rightTerminal = leftTerminal = null;
+		}
 	}
 
 	@Override
@@ -99,9 +114,13 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 		}
 		// Out of both terminals first, then make up what was taken (up to full output)
 		BlockState state = getBlockState();
-		Direction side = state.getValue(LavaGeneratorBlock.FACING).getClockWise();
-		energy.pushTo(level, worldPosition, side, energy.getEnergyStored());
-		energy.pushTo(level, worldPosition, side.getOpposite(), energy.getEnergyStored());
+		if (rightTerminal == null && level instanceof ServerLevel server) {
+			Direction side = state.getValue(LavaGeneratorBlock.FACING).getClockWise();
+			rightTerminal = EnergyBuffer.cacheFor(server, worldPosition, side);
+			leftTerminal = EnergyBuffer.cacheFor(server, worldPosition, side.getOpposite());
+		}
+		energy.pushTo(rightTerminal, energy.getEnergyStored());
+		energy.pushTo(leftTerminal, energy.getEnergyStored());
 		int fe = CMConfig.SERVER.generatorFePerTick();
 		int make = tank.isEmpty() ? 0 : Math.min(fe, energy.getMaxEnergyStored() - energy.getEnergyStored());
 		if (make > 0) {
@@ -120,8 +139,10 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 		boolean canRun = activeTicks > 0;
 
 		running = canRun;
-		// The window shows the lava whenever there's some in the tank, and the fire while it burns
-		boolean fuelled = !tank.isEmpty();
+		// The window shows the lava whenever there's some in the tank (and a moment after it runs dry, so a trickle
+		// doesn't flicker it), and the fire while it burns
+		dryTicks = tank.isEmpty() ? Math.min(dryTicks + 1, FUELLED_HOLD_TICKS + 1) : 0;
+		boolean fuelled = showsLava(state.getValue(LavaGeneratorBlock.FUELLED), !tank.isEmpty(), dryTicks);
 		if (state.getValue(LavaGeneratorBlock.LIT) != running || state.getValue(LavaGeneratorBlock.FUELLED) != fuelled)
 			level.setBlock(worldPosition, state.setValue(LavaGeneratorBlock.LIT, running).setValue(LavaGeneratorBlock.FUELLED, fuelled), 3);
 		if (level.getGameTime() % 10 == 0
@@ -131,6 +152,13 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 			syncedEnergy = energy.getEnergyStored();
 			sendData();
 		}
+	}
+
+	/** The window's lava: on as soon as there's lava, off once the tank has been dry for {@link #FUELLED_HOLD_TICKS}. */
+	static boolean showsLava(boolean showing, boolean hasLava, int dryTicks) {
+		if (hasLava)
+			return true;
+		return showing && dryTicks <= FUELLED_HOLD_TICKS;
 	}
 
 	public boolean isLit() {

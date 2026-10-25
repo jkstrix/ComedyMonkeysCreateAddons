@@ -180,6 +180,11 @@ public final class ChestUpgrades {
 	/** Upgraded chests placed (not moved) since their last check: these may join a matching neighbour. */
 	private static final Set<GlobalPos> JUST_PLACED = ConcurrentHashMap.newKeySet();
 
+	/** Forgets every freshly placed chest, when the server stops (a scheduled check that never ran mustn't carry over). */
+	public static void clearJustPlaced() {
+		JUST_PLACED.clear();
+	}
+
 	static void markJustPlaced(Level level, BlockPos pos) {
 		JUST_PLACED.add(GlobalPos.of(level.dimension(), pos.immutable()));
 	}

@@ -49,6 +49,11 @@ public class ComedyMonkeysCreateAddonsClient {
 		modBus.addListener(this::registerScreens);
 		modBus.addListener(this::registerModels);
 		modBus.addListener(this::registerClientExtensions);
+		// Cached sprites are looked up again once the block atlas is restitched, and what was read from models once
+		// they're baked again
+		modBus.addListener(BlockSprite::onStitched);
+		modBus.addListener(ComedyMonkeysCreateAddonsClient::forgetModelReads);
+		modBus.addListener(ComedyMonkeysCreateAddonsClient::registerReloadListeners);
 		// Picking containers for Trade Bot in the world, from his station screen
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(TradeBotLinkPicking::onRightClickBlock);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(TradeBotLinkPicking::onLeftClickBlock);
@@ -85,7 +90,23 @@ public class ComedyMonkeysCreateAddonsClient {
 			com.comedymonkey.createaddons.content.tradebot.clip.ClipClock.tick(mc.level, mc.level.getGameTime());
 	}
 
-	/** The machines' sound states hold their block entities, and so the world: let them go with it. */
+	/** What's read from resources once and kept is read again after a resource reload. */
+	private static void registerReloadListeners(net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent event) {
+		event.registerReloadListener((net.minecraft.server.packs.resources.ResourceManagerReloadListener) manager -> {
+			Hearing.forget();
+			TradeBotItemRenderer.forget();
+		});
+	}
+
+	/** The harvester's plants read some of their models: read them again once they're rebaked. */
+	private static void forgetModelReads(ModelEvent.BakingCompleted event) {
+		RealPlants.forget();
+	}
+
+	/**
+	 * The machines' sound states hold their block entities, and the bottled animals their entities, and so the world:
+	 * let them go with it. The sounds' ranges are read again too, in case a resource pack changed them.
+	 */
 	private static void forgetMachineSounds(net.neoforged.neoforge.event.level.LevelEvent.Unload event) {
 		if (!event.getLevel().isClientSide())
 			return;
@@ -93,6 +114,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		ElectricSounds.forget();
 		MagmaEngineSounds.forget();
 		PressureCrucibleSounds.forget();
+		Hearing.forget();
+		BottledAnimalRenderer.forget();
 	}
 
 	private void registerScreens(RegisterMenuScreensEvent event) {

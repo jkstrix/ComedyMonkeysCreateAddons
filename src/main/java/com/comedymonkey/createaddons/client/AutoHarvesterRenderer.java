@@ -68,7 +68,11 @@ public class AutoHarvesterRenderer extends SafeBlockEntityRenderer<AutoHarvester
 		if (!state.hasProperty(AutoHarvesterBlock.FACING))
 			return;
 		Direction front = state.getValue(AutoHarvesterBlock.FACING);
+		boolean behind = CameraView.of(be, ms).behindGlass(front);
 		CobbleGeneratorRenderer.renderShaft(be, state, front.getOpposite(), ms, buffer, light, overlay);
+		// Everything else is inside, seen only through the front glass
+		if (behind)
+			return;
 
 		PlantKind kind = state.getValue(AutoHarvesterBlock.PLANT);
 		VertexConsumer vc = buffer.getBuffer(RenderType.cutout());

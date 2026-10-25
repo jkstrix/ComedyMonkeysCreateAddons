@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
+import com.comedymonkey.createaddons.content.SaveMark;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModSounds;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
@@ -21,11 +24,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -42,7 +47,7 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 
 	private final FluidTank lava = tank(stack -> stack.getFluid().isSame(Fluids.LAVA));
 	private final FluidTank water = tank(stack -> stack.getFluid().isSame(Fluids.WATER));
-	private final EnergyBuffer energy = new EnergyBuffer(BUFFER, 0, BUFFER, this::setChanged);
+	private final EnergyBuffer energy = new EnergyBuffer(BUFFER, 0, BUFFER, () -> SaveMark.mark(this));
 	private final IFluidHandler fluids = new Inlets();
 	private final IEnergyStorage energyOut = energy.extractOnly();
 	private boolean formed;
@@ -63,9 +68,8 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 	private static final float SPIN_DEGREES = 30, MIN_RUNNING_SPEED = 0.25f;
 	/** Set by the client: the turbine's sounds, run each client tick. */
 	public static Consumer<GeothermalControllerBlockEntity> clientTicker = be -> {};
-	/** Blocks touching the outside of the turbine, and the side of them that faces it. */
-	private final List<BlockPos> neighbours = new ArrayList<>();
-	private final List<Direction> neighbourSides = new ArrayList<>();
+	/** Server: what's under each port flange, found when it forms (and looked up again only when it changes). */
+	private final List<BlockCapabilityCache<IEnergyStorage, @Nullable Direction>> neighbours = new ArrayList<>();
 
 	public GeothermalControllerBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.GEOTHERMAL_CONTROLLER.get(), pos, state);
@@ -75,7 +79,7 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 		return new FluidTank(TANK, valid) {
 			@Override
 			protected void onContentsChanged() {
-				setChanged();
+				SaveMark.mark(GeothermalControllerBlockEntity.this);
 				syncQueued = true;
 			}
 		};
@@ -165,7 +169,7 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 		if (formed) {
 			// Out to everything touching it first, then make up what was taken (up to full output)
 			for (int i = 0; i < neighbours.size() && energy.getEnergyStored() > 0; i++)
-				energy.pushTo(level, neighbours.get(i), neighbourSides.get(i), energy.getEnergyStored());
+				energy.pushTo(neighbours.get(i), energy.getEnergyStored());
 			int fe = CMConfig.SERVER.turbineFePerTick();
 			if (!lava.isEmpty() && !water.isEmpty())
 				make = Math.min(fe, energy.getMaxEnergyStored() - energy.getEnergyStored());
@@ -252,7 +256,6 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 		formed = now;
 		BlockPos centre = centre();
 		neighbours.clear();
-		neighbourSides.clear();
 		for (BlockPos p : BlockPos.betweenClosed(centre.offset(-1, -1, -1), centre.offset(1, 1, 1))) {
 			BlockPos pos = p.immutable();
 			BlockState state = level.getBlockState(pos);
@@ -261,10 +264,8 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 			if (level.getBlockEntity(pos) instanceof GeothermalCasingBlockEntity casing)
 				casing.setController(now ? worldPosition : null);
 			// Power goes out only through the port flanges under the base: the bottom face of the bottom layer
-			if (now && pos.getY() == centre.getY() - 1) {
-				neighbours.add(pos);
-				neighbourSides.add(Direction.DOWN);
-			}
+			if (now && pos.getY() == centre.getY() - 1 && level instanceof ServerLevel server)
+				neighbours.add(EnergyBuffer.cacheFor(server, pos, Direction.DOWN));
 		}
 		syncQueued = true;
 		invalidateStructure();

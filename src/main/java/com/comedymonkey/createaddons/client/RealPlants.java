@@ -1,6 +1,8 @@
 package com.comedymonkey.createaddons.client;
 
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -51,8 +53,43 @@ final class RealPlants {
 	/** The little tree: two logs, a cross of leaves and one on top, in blocks from the trunk's base. */
 	private static final int[][] TREE_LOGS = {{0, 0, 0}, {0, 1, 0}};
 	private static final int[][] TREE_LEAVES = {{0, 2, 0}, {1, 2, 0}, {-1, 2, 0}, {0, 2, 1}, {0, 2, -1}, {0, 3, 0}};
+	/** What's worked out once per plant, rather than every frame. Only used on the render thread. */
+	private static final Map<Block, Plant> PLANTS = new IdentityHashMap<>();
+	/** Whether each two-block crop's top half is really there ({@link #hasRealTop}), which depends on the models. */
+	private static final Map<BlockState, Boolean> REAL_TOPS = new IdentityHashMap<>();
+
+	/**
+	 * A plant's tree parts (null unless it's a sapling with a wood to match) and its "age" property with that age's
+	 * range (null if it has none).
+	 */
+	private record Plant(@Nullable Block log, @Nullable Block leaves, @Nullable IntegerProperty age, int minAge, int maxAge) {
+		static Plant of(Block block) {
+			Block log = HarvesterPlants.woodOf(block, "_log");
+			Block leaves = HarvesterPlants.woodOf(block, "_leaves");
+			IntegerProperty age = ageOf(block.defaultBlockState());
+			int min = 0, max = 0;
+			if (age != null) {
+				min = Integer.MAX_VALUE;
+				max = Integer.MIN_VALUE;
+				for (int value : age.getPossibleValues()) {
+					min = Math.min(min, value);
+					max = Math.max(max, value);
+				}
+			}
+			return new Plant(log, leaves, age, min, max);
+		}
+	}
 
 	private RealPlants() {}
+
+	/** Forgets what was worked out from the models, when they're reloaded. */
+	static void forget() {
+		REAL_TOPS.clear();
+	}
+
+	private static Plant plant(Block block) {
+		return PLANTS.computeIfAbsent(block, Plant::of);
+	}
 
 	/** Draws the plant; false if it can't be drawn as blocks, so the generic model is used instead. */
 	static boolean render(ItemStack plant, PlantKind kind, float growth, PoseStack ms, MultiBufferSource buffer, int light,
@@ -84,7 +121,7 @@ final class RealPlants {
 		if (!drawable(state))
 			return false;
 		// Plants with no growth stages (flowers, mushrooms, sunflowers) grow in size instead
-		float size = block instanceof CropBlock || ageOf(state) != null ? 1 : 0.3f + 0.7f * growth;
+		float size = block instanceof CropBlock || plant(block).age() != null ? 1 : 0.3f + 0.7f * growth;
 		// Two-block plants, like Supplementaries' flax: the top half on the bottom one, both smaller
 		if (state.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
 			block(state.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER), 0, 0, 0, TALL_SCALE * size,
@@ -101,8 +138,8 @@ final class RealPlants {
 		if (growth < SAPLING_UNTIL)
 			return single(sapling.defaultBlockState(), CROP_SCALE * (0.6f + 0.4f * growth / SAPLING_UNTIL), ms, buffer,
 				light, overlay);
-		Block log = HarvesterPlants.woodOf(sapling, "_log");
-		Block leaves = HarvesterPlants.woodOf(sapling, "_leaves");
+		Plant plant = plant(sapling);
+		Block log = plant.log(), leaves = plant.leaves();
 		if (log == null || leaves == null || !drawable(log.defaultBlockState()) || !drawable(leaves.defaultBlockState()))
 			return false;
 		// The whole tree grows from about two thirds to full size
@@ -118,11 +155,11 @@ final class RealPlants {
 	private static BlockState staged(BlockState state, Block block, float growth) {
 		if (block instanceof CropBlock crop)
 			return crop.getStateForAge(Math.round(growth * crop.getMaxAge()));
-		IntegerProperty age = ageOf(state);
+		Plant plant = plant(block);
+		IntegerProperty age = plant.age();
 		if (age == null)
 			return state;
-		int min = age.getPossibleValues().stream().min(Integer::compare).orElse(0);
-		int max = age.getPossibleValues().stream().max(Integer::compare).orElse(0);
+		int min = plant.minAge(), max = plant.maxAge();
 		return state.setValue(age, Mth.clamp(min + Math.round(growth * (max - min)), min, max));
 	}
 
@@ -140,10 +177,15 @@ final class RealPlants {
 	 * looks like the age-0 one isn't there yet. Plants without an age (sunflowers and the like) always have one.
 	 */
 	private static boolean hasRealTop(BlockState upper) {
-		IntegerProperty age = ageOf(upper);
+		return REAL_TOPS.computeIfAbsent(upper, RealPlants::lookHasRealTop);
+	}
+
+	private static boolean lookHasRealTop(BlockState upper) {
+		Plant plant = plant(upper.getBlock());
+		IntegerProperty age = plant.age();
 		if (age == null)
 			return true;
-		int youngest = age.getPossibleValues().stream().min(Integer::compare).orElse(0);
+		int youngest = plant.minAge();
 		if (upper.getValue(age) == youngest)
 			return false;
 		var models = Minecraft.getInstance().getBlockRenderer();

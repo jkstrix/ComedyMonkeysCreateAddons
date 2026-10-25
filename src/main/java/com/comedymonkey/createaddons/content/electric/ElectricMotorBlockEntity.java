@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
+import com.comedymonkey.createaddons.content.SaveMark;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModSounds;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
@@ -52,7 +53,8 @@ public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity {
 		super(ModBlockEntities.ELECTRIC_MOTOR.get(), pos, state);
 		// A second's worth at full stress, so a little gap in supply doesn't stall it
 		int buffer = Math.max(100_000, (int) Math.ceil(CMConfig.SERVER.motorMaxStress() * CMConfig.SERVER.motorFePerStress() * 20));
-		energy = new EnergyBuffer(buffer, buffer, 0, this::setChanged);
+		// No comparator output: its store changing every tick only needs a save, not a comparator update
+		energy = new EnergyBuffer(buffer, buffer, 0, () -> SaveMark.mark(this));
 	}
 
 	public IEnergyStorage getEnergy() {

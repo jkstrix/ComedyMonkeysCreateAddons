@@ -353,10 +353,8 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 	}
 
 	private void onContentsChanged() {
-		setChanged();
+		setChanged();  // which also updates the comparators
 		syncQueued = true;
-		if (level != null)
-			level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
 	}
 
 	/** Called by block movers once they've copied this block entity elsewhere, so nothing is dropped twice. */
@@ -415,6 +413,9 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 
 	/** The product out from any side; nothing goes in. */
 	private class OutputHandler implements IItemHandler {
+		/** What getStackInSlot last showed, kept while it still matches: pipes and funnels look many times a tick. */
+		private ItemStack shown = ItemStack.EMPTY;
+
 		@Override
 		public int getSlots() {
 			return 1;
@@ -422,7 +423,13 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 
 		@Override
 		public ItemStack getStackInSlot(int slot) {
-			return stored <= 0 ? ItemStack.EMPTY : productStack(Math.min(stored, 64));
+			if (stored <= 0)
+				return ItemStack.EMPTY;
+			int count = Math.min(stored, 64);
+			// rebuilt if the store or the product changed, or someone changed the stack they were shown
+			if (shown.getCount() != count || !shown.is(product().item()))
+				shown = productStack(count);
+			return shown;
 		}
 
 		@Override

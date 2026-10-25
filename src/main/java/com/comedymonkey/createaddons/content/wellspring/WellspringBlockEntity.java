@@ -34,12 +34,15 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
 public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInformation, MenuProvider, Clearable {
 	private static final int SYNC_INTERVAL = 10;
+	/** Longest a small change in the level waits to reach clients (for the screen's and goggles' exact mB). */
+	private static final int SLOW_SYNC_TICKS = 40;
 
 	private final WellspringTank tank;
 	private final WellspringUpgradeInventory upgrades;
@@ -48,6 +51,20 @@ public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInf
 	private int generationProgress;
 	private boolean syncQueued;
 	private int syncCooldown;
+	/** Ticks since the last sync, and what it showed: a sync goes at once only when the shown level changes. */
+	private int ticksSinceSync;
+	private int syncedPercent = -1;
+	@Nullable
+	private Fluid syncedFluid;
+	/** Whether the upgrades (and so the capacity) have changed since the last sync; they're left out of it otherwise. */
+	private boolean upgradesChanged = true;
+	/**
+	 * Game time of this block's own last sync, and of the last packet that carried the upgrades. Only the packet a
+	 * sync of its own sends goes without them (anything else asking, such as a refused break putting the block back on
+	 * one player's screen, may be filling in a fresh client copy), and even that carries them now and then.
+	 */
+	private long ownSyncAt = Long.MIN_VALUE / 2, upgradesSentAt = Long.MIN_VALUE / 2;
+	private static final int UPGRADES_RESEND_TICKS = 200;
 
 	// Client-side smoothing of the rendered fluid level
 	private float renderedFill;
@@ -69,7 +86,9 @@ public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInf
 			tank.setCapacity(capacity);
 			if (tank.getFluidAmount() > capacity)
 				tank.getFluid().setAmount(capacity);
+			upgradesChanged = true;
 			queueSync();
+			setChanged();  // the comparator reads the fill, which moved
 		}
 
 		int rate = getGenerationRate();
@@ -86,8 +105,17 @@ public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInf
 
 		if (syncCooldown > 0)
 			syncCooldown--;
-		if (syncQueued && syncCooldown == 0)
+		ticksSinceSync++;
+		if (syncQueued && syncCooldown == 0 && (upgradesChanged || shownChanged() || ticksSinceSync >= SLOW_SYNC_TICKS))
 			sendData();
+	}
+
+	/**
+	 * Whether clients would see a difference: another whole percent (the readouts, and the renderer's level, which
+	 * eases between them), or another fluid.
+	 */
+	private boolean shownChanged() {
+		return getFillPercent() != syncedPercent || tank.getFluid().getFluid() != syncedFluid;
 	}
 
 	void clientTick() {
@@ -223,6 +251,7 @@ public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInf
 	}
 
 	void onUpgradesChanged() {
+		upgradesChanged = true;
 		onContentsChanged();
 		if (level == null || level.isClientSide)
 			return;
@@ -322,9 +351,13 @@ public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInf
 	private void sendData() {
 		syncQueued = false;
 		syncCooldown = SYNC_INTERVAL;
+		ticksSinceSync = 0;
+		ownSyncAt = level.getGameTime();
+		syncedPercent = getFillPercent();
+		syncedFluid = tank.getFluid().getFluid();
+		// (the comparators were told when the contents changed, by setChanged)
 		BlockState state = getBlockState();
 		level.sendBlockUpdated(worldPosition, state, state, 3);
-		level.updateNeighbourForOutputSignal(worldPosition, state.getBlock());
 	}
 
 	// ---------------------------------------------------------------- goggles
@@ -443,10 +476,30 @@ public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInf
 		return tag;
 	}
 
+	/**
+	 * The changes sent while it runs: the tank always, the upgrades and capacity when they've changed or haven't been
+	 * sent for a while (the client keeps what it had for anything left out). A client first seeing it gets everything,
+	 * from {@link #getUpdateTag}, and so does anything asking other than this block's own syncs.
+	 */
 	@Nullable
 	@Override
 	public Packet<ClientGamePacketListener> getUpdatePacket() {
-		return ClientboundBlockEntityDataPacket.create(this);
+		return ClientboundBlockEntityDataPacket.create(this, (be, registries) -> ((WellspringBlockEntity) be).updatePacketTag(registries));
+	}
+
+	private CompoundTag updatePacketTag(HolderLookup.Provider registries) {
+		CompoundTag tag = getUpdateTag(registries);
+		long now = level == null ? 0 : level.getGameTime();
+		// its own sync is broadcast at the start of the next tick
+		boolean ownSync = now - ownSyncAt <= 1;
+		if (ownSync && !upgradesChanged && now - upgradesSentAt < UPGRADES_RESEND_TICKS) {
+			tag.remove("UpgradeSlots");
+			tag.remove("Capacity");
+		} else {
+			upgradesChanged = false;
+			upgradesSentAt = now;
+		}
+		return tag;
 	}
 
 	private class WellspringTank extends FluidTank {

@@ -1,5 +1,9 @@
 package com.comedymonkey.createaddons.client;
 
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.pen.AnimalPenBlock;
 import com.comedymonkey.createaddons.content.pen.AnimalPenBlockEntity;
@@ -44,6 +48,14 @@ public class AnimalPenRenderer extends SafeBlockEntityRenderer<AnimalPenBlockEnt
 	/** Where food lies in the trough. */
 	private static final float[] FOOD_X = {5.5f, 8, 10.5f};
 	private static final float FOOD_Y = 3.1f, FOOD_Z = 12;
+	/**
+	 * How many of the animals are drawn by distance, as they get too small to count: past 16 blocks two, past 32 none.
+	 * Coming back they return a block closer in (15 and 31), so standing at the edge doesn't flick them on and off.
+	 */
+	private static final double FEWER_OUT = 16 * 16, FEWER_IN = 15 * 15, NONE_OUT = 32 * 32, NONE_IN = 31 * 31;
+	private static final int ALL = 0, FEWER = 1, NONE = 2;
+	/** How many each pen drew last frame (render thread only); weak, so pens that go are forgotten. */
+	private final Map<AnimalPenBlockEntity, Integer> detail = new WeakHashMap<>();
 
 	public AnimalPenRenderer(BlockEntityRendererProvider.Context context) {}
 
@@ -54,15 +66,19 @@ public class AnimalPenRenderer extends SafeBlockEntityRenderer<AnimalPenBlockEnt
 		if (!state.hasProperty(AnimalPenBlock.FACING))
 			return;
 		Direction front = state.getValue(AnimalPenBlock.FACING);
+		CameraView camera = CameraView.of(be, ms);
 		CobbleGeneratorRenderer.renderShaft(be, state, front.getOpposite(), ms, buffer, light, overlay);
 
 		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5);
 		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
 		ms.translate(-0.5, -0.5, -0.5);
-		renderFood(be, ms, buffer, light, overlay);
-		renderAnimals(be, partialTicks, ms, buffer, light);
-		TrayItems.render(be.getOutput(), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
+		// The inside only shows through the front glass; the milk is in the side gauges, so it's always drawn
+		if (!camera.behindGlass(front)) {
+			renderFood(be, ms, buffer, light, overlay);
+			renderAnimals(be, partialTicks, ms, buffer, light, detail(be, camera));
+			TrayItems.render(be.getOutput(), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
+		}
 		renderMilk(be.getMilk(), state, ms, buffer, light);
 		ms.popPose();
 	}
@@ -99,12 +115,43 @@ public class AnimalPenRenderer extends SafeBlockEntityRenderer<AnimalPenBlockEnt
 		}
 	}
 
+	/**
+	 * How many of this pen's animals to draw from where the camera is, going on from what it drew last time. All of
+	 * them where the camera isn't known (Ponder, a shadow pass), which doesn't count as last time.
+	 */
+	private int detail(AnimalPenBlockEntity be, CameraView camera) {
+		if (!camera.known())
+			return ALL;
+		double distanceSqr = camera.distanceSqr();
+		Integer last = detail.get(be);
+		int was = last == null ? ALL : last;
+		int now = distanceSqr > NONE_OUT ? NONE : distanceSqr > FEWER_OUT ? FEWER : ALL;
+		// Moving closer, it only steps back up once it's well inside the nearer band
+		if (now < was) {
+			if (was == NONE && distanceSqr > NONE_IN)
+				now = NONE;
+			else if (now == ALL && distanceSqr > FEWER_IN)
+				now = FEWER;
+		}
+		if (last == null || now != was)
+			detail.put(be, now);
+		return now;
+	}
+
+	/** The animals; further off, just the first and the last (the youngest, if there's a baby), then none. */
 	private static void renderAnimals(AnimalPenBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
-									  int light) {
+									  int light, int detail) {
+		List<PenAnimal> shown = be.getShown();
+		if (shown.isEmpty() || detail == NONE)
+			return;
+		boolean fewer = detail == FEWER;
 		EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
 		dispatcher.setRenderShadow(false);
 		try {
-			for (PenAnimal animal : be.getShown()) {
+			for (int i = 0; i < shown.size(); i++) {
+				if (fewer && i != 0 && i != shown.size() - 1)
+					continue;
+				PenAnimal animal = shown.get(i);
 				Entity entity = animal.entity();
 				float scale = Math.min(MAX_SCALE, MAX_SIZE / Math.max(entity.getBbHeight(), entity.getBbWidth()));
 				ms.pushPose();

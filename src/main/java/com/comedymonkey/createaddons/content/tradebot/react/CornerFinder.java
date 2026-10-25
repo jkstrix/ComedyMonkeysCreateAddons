@@ -2,7 +2,9 @@ package com.comedymonkey.createaddons.content.tradebot.react;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -20,6 +22,8 @@ import net.minecraft.world.phys.Vec3;
 public final class CornerFinder {
 	/** How much one wall around a spot is worth, in blocks of distance from the mob. */
 	static final double WALL_WEIGHT = 3;
+	/** Level first, then a step up or down. */
+	private static final int[] STEPS = { 0, 1, -1 };
 
 	private CornerFinder() {}
 
@@ -28,7 +32,11 @@ public final class CornerFinder {
 	 * or null if there's nowhere but where he is.
 	 */
 	@Nullable
-	public static BlockPos find(BlockPos from, Vec3 threat, int radius, Predicate<BlockPos> standable, Predicate<BlockPos> wall) {
+	public static BlockPos find(BlockPos from, Vec3 threat, int radius, Predicate<BlockPos> standableAt, Predicate<BlockPos> wallAt) {
+		// each block is asked about once, however many spots are next to it
+		Map<BlockPos, Boolean> standables = new HashMap<>(), walls = new HashMap<>();
+		Predicate<BlockPos> standable = pos -> standables.computeIfAbsent(pos, standableAt::test);
+		Predicate<BlockPos> wall = pos -> walls.computeIfAbsent(pos, wallAt::test);
 		Set<BlockPos> seen = new HashSet<>();
 		Deque<BlockPos> queue = new ArrayDeque<>();
 		Deque<Integer> depth = new ArrayDeque<>();
@@ -50,9 +58,11 @@ public final class CornerFinder {
 			if (d >= radius)
 				continue;
 			for (Direction side : Direction.Plane.HORIZONTAL)
-				for (int dy : new int[] { 0, 1, -1 }) { // level first, then a step up or down
+				for (int dy : STEPS) {
 					BlockPos next = at.relative(side).above(dy);
-					if (!standable.test(next))
+					// a spot already found is one he can stand on (where he started may not be)
+					boolean found = seen.contains(next) && !next.equals(from);
+					if (!found && !standable.test(next))
 						continue;
 					if (seen.add(next)) {
 						queue.add(next);

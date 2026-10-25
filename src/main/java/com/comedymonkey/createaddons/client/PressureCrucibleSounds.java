@@ -9,8 +9,6 @@ import com.comedymonkey.createaddons.registry.ModSounds;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.sounds.SoundEvent;
@@ -65,21 +63,25 @@ public final class PressureCrucibleSounds {
 		s.processing = be.isProcessing();
 		s.progress = progress;
 		long now = level.getGameTime();
+		BlockPos pos = be.getBlockPos();
+		double x = pos.getX() + 0.5, y = pos.getY() + 0.5, z = pos.getZ() + 0.5;
 		if (started && now - s.lastCreak >= CREAK_GAP) {
 			s.lastCreak = now;
-			BlockPos pos = be.getBlockPos();
-			level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ModSounds.crucible("creak"),
-				SoundSource.BLOCKS, 1, 0.94f + 0.12f * level.random.nextFloat(), false);
+			SoundEvent creak = ModSounds.crucible("creak");
+			if (Hearing.inRange(creak, 1, x, y, z, Hearing.ONE_SHOT_MARGIN))
+				level.playLocalSound(x, y, z, creak, SoundSource.BLOCKS, 1, 0.94f + 0.12f * level.random.nextFloat(), false);
 		}
 
-		// The loops: started when they're wanted, then they follow the shaft and the heat, and fade out on their own
-		if ((s.gears == null || s.gears.isStopped()) && be.getSpeed() != 0)
+		// The loops: started when they're wanted, then they follow the shaft and the heat, and fade out on their own.
+		// Out of earshot they stop, and start again on coming back
+		if (MachineLoop.ended(s.gears) && be.getSpeed() != 0 && Loop.canStart(ModSounds.crucible("whirr"), pos))
 			mc.getSoundManager().play(s.gears = new Loop(be, ModSounds.crucible("whirr"),
 				() -> be.getSpeed() != 0 ? 1 : 0, () -> gearPitch(be.getSpeed())));
 		HeatLevel heat = be.getHeatLevel();
-		if ((s.fire == null || s.fire.isStopped()) && fireVolume(heat) > 0)
+		if (MachineLoop.ended(s.fire) && fireVolume(heat) > 0 && Loop.canStart(ModSounds.crucible("fire"), pos))
 			mc.getSoundManager().play(s.fire = new Loop(be, ModSounds.crucible("fire"), () -> fireVolume(be.getHeatLevel()), () -> 1));
-		if ((s.soulFire == null || s.soulFire.isStopped()) && heat == HeatLevel.SEETHING)
+		if (MachineLoop.ended(s.soulFire) && heat == HeatLevel.SEETHING
+			&& Loop.canStart(ModSounds.crucible("fire_soul"), pos))
 			mc.getSoundManager().play(s.soulFire = new Loop(be, ModSounds.crucible("fire_soul"),
 				() -> be.getHeatLevel() == HeatLevel.SEETHING ? 1 : 0, () -> 1));
 	}
@@ -100,13 +102,13 @@ public final class PressureCrucibleSounds {
 	}
 
 	/** A running loop: eases toward its volume and pitch, and stops once it has faded out or its crucible is gone. */
-	private static final class Loop extends AbstractTickableSoundInstance {
+	private static final class Loop extends MachineLoop {
 		private final PressureCrucibleBlockEntity be;
 		private final DoubleSupplier want, wantPitch;
 		private float level;
 
 		Loop(PressureCrucibleBlockEntity be, SoundEvent sound, DoubleSupplier want, DoubleSupplier wantPitch) {
-			super(sound, SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
+			super(sound);
 			this.be = be;
 			this.want = want;
 			this.wantPitch = wantPitch;
@@ -120,9 +122,14 @@ public final class PressureCrucibleSounds {
 			pitch = (float) wantPitch.getAsDouble();
 		}
 
+		/** Whether a loop from this crucible is in earshot, to start it. */
+		static boolean canStart(SoundEvent sound, BlockPos at) {
+			return Hearing.inRange(sound, 1, at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, Hearing.LOOP_START_MARGIN);
+		}
+
 		@Override
 		public void tick() {
-			if (be.isRemoved()) {
+			if (be.isRemoved() || !Hearing.inRange(getLocation(), 1, x, y, z, Hearing.LOOP_STOP_MARGIN)) {
 				stop();
 				return;
 			}

@@ -30,6 +30,7 @@ public class TradeBotRegistry extends SavedData {
 	public record Home(ResourceKey<Level> dimension, BlockPos station) {}
 
 	private final Map<UUID, Map<UUID, Home>> byOwner = new HashMap<>();
+	/** Bounded by the stations placed: an entry goes when its station is packed or removed ({@link #remove}). */
 	private final Set<UUID> gone = new HashSet<>();
 
 	public static TradeBotRegistry get(MinecraftServer server) {

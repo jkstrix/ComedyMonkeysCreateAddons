@@ -18,7 +18,6 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -31,13 +30,9 @@ import net.neoforged.neoforge.client.model.data.ModelData;
  * the shaft going into the south face. Everything is drawn into one cutout buffer.
  */
 public final class MachineRenderers {
-	private static final ResourceLocation COBBLESTONE = ResourceLocation.withDefaultNamespace("block/cobblestone");
+	private static final BlockSprite COBBLESTONE = new BlockSprite(ResourceLocation.withDefaultNamespace("block/cobblestone"));
 
 	private MachineRenderers() {}
-
-	private static TextureAtlasSprite sprite(ResourceLocation id) {
-		return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(id);
-	}
 
 	/** Turns the pose so the model's north is the machine's front, about the block centre. */
 	private static void faceFront(PoseStack ms, Direction front) {
@@ -63,36 +58,45 @@ public final class MachineRenderers {
 		ms.popPose();
 	}
 
-	/** A flat quad between four points (in block units), both sides, with a sprite's u0..u1 v0..v1 (0-16). */
+	/**
+	 * A flat quad between four points a, b, c, d (in block units), both sides, with a sprite's u0..u1 v0..v1 (0-16):
+	 * a at (u0, v0), b at (u0, v1), c at (u1, v1), d at (u1, v0).
+	 */
 	private static void quad(VertexConsumer vc, PoseStack.Pose pose, TextureAtlasSprite s, int light, int rgb,
-							 float[] a, float[] b, float[] c, float[] d, float u0, float v0, float u1, float v1) {
-		float[][] pts = {a, b, c, d};
-		float[][] uv = {{u0, v0}, {u0, v1}, {u1, v1}, {u1, v0}};
-		for (int pass = 0; pass < 2; pass++) {
-			for (int i = 0; i < 4; i++) {
-				int k = pass == 0 ? i : 3 - i;
-				vc.addVertex(pose, pts[k][0], pts[k][1], pts[k][2])
-					.setColor((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF, 255)
-					.setUv(s.getU(uv[k][0] / 16f), s.getV(uv[k][1] / 16f))
-					.setLight(light)
-					.setNormal(pose, 0, 1, 0);
-			}
-		}
+							 float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz,
+							 float dx, float dy, float dz, float u0, float v0, float u1, float v1) {
+		float ua = s.getU(u0 / 16f), ub = s.getU(u1 / 16f), va = s.getV(v0 / 16f), vb = s.getV(v1 / 16f);
+		vertex(vc, pose, light, rgb, ax, ay, az, ua, va);
+		vertex(vc, pose, light, rgb, bx, by, bz, ua, vb);
+		vertex(vc, pose, light, rgb, cx, cy, cz, ub, vb);
+		vertex(vc, pose, light, rgb, dx, dy, dz, ub, va);
+		// and the back, the other way round
+		vertex(vc, pose, light, rgb, dx, dy, dz, ub, va);
+		vertex(vc, pose, light, rgb, cx, cy, cz, ub, vb);
+		vertex(vc, pose, light, rgb, bx, by, bz, ua, vb);
+		vertex(vc, pose, light, rgb, ax, ay, az, ua, va);
+	}
+
+	private static void vertex(VertexConsumer vc, PoseStack.Pose pose, int light, int rgb, float x, float y, float z,
+							   float u, float v) {
+		vc.addVertex(pose, x, y, z)
+			.setColor((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF, 255)
+			.setUv(u, v)
+			.setLight(light)
+			.setNormal(pose, 0, 1, 0);
 	}
 
 	/** An axis-aligned box in pixels, every face, textured from the matching part of the sprite. */
 	private static void cube(VertexConsumer vc, PoseStack.Pose pose, TextureAtlasSprite s, int light,
 							 float x0, float y0, float z0, float x1, float y1, float z1) {
 		float a = x0 / 16, b = y0 / 16, c = z0 / 16, d = x1 / 16, e = y1 / 16, f = z1 / 16;
-		float[] p000 = {a, b, c}, p100 = {d, b, c}, p010 = {a, e, c}, p110 = {d, e, c};
-		float[] p001 = {a, b, f}, p101 = {d, b, f}, p011 = {a, e, f}, p111 = {d, e, f};
 		int white = 0xFFFFFF;
-		quad(vc, pose, s, light, white, p010, p011, p111, p110, x0, z0, x1, z1);           // up
-		quad(vc, pose, s, light, white, p000, p100, p101, p001, x0, z0, x1, z1);           // down
-		quad(vc, pose, s, light, white, p110, p100, p000, p010, 16 - x1, 16 - y1, 16 - x0, 16 - y0); // north
-		quad(vc, pose, s, light, white, p011, p001, p101, p111, x0, 16 - y1, x1, 16 - y0); // south
-		quad(vc, pose, s, light, white, p010, p000, p001, p011, z0, 16 - y1, z1, 16 - y0); // west
-		quad(vc, pose, s, light, white, p111, p101, p100, p110, 16 - z1, 16 - y1, 16 - z0, 16 - y0); // east
+		quad(vc, pose, s, light, white, a, e, c, a, e, f, d, e, f, d, e, c, x0, z0, x1, z1);           // up
+		quad(vc, pose, s, light, white, a, b, c, d, b, c, d, b, f, a, b, f, x0, z0, x1, z1);           // down
+		quad(vc, pose, s, light, white, d, e, c, d, b, c, a, b, c, a, e, c, 16 - x1, 16 - y1, 16 - x0, 16 - y0); // north
+		quad(vc, pose, s, light, white, a, e, f, a, b, f, d, b, f, d, e, f, x0, 16 - y1, x1, 16 - y0); // south
+		quad(vc, pose, s, light, white, a, e, c, a, b, c, a, b, f, a, e, f, z0, 16 - y1, z1, 16 - y0); // west
+		quad(vc, pose, s, light, white, d, e, f, d, b, f, d, b, c, d, e, c, 16 - z1, 16 - y1, 16 - z0, 16 - y0); // east
 	}
 
 	// ---------------------------------------------------------------- parts
@@ -149,9 +153,9 @@ public final class MachineRenderers {
 	 * the finished cobwebs in the tray at the front. Idle, the whisk is still and the strands hang slack.
 	 */
 	public static class Tangler extends SafeBlockEntityRenderer<TwoInputMachineBlockEntity> {
-		private static final ResourceLocation STRING = ComedyMonkeysCreateAddons.asResource("block/string_tangler_string");
-		private static final ResourceLocation SLIME = ComedyMonkeysCreateAddons.asResource("block/string_tangler_slime");
-		private static final ResourceLocation WEB = ComedyMonkeysCreateAddons.asResource("block/string_tangler_web");
+		private static final BlockSprite STRING = new BlockSprite(ComedyMonkeysCreateAddons.asResource("block/string_tangler_string"));
+		private static final BlockSprite SLIME = new BlockSprite(ComedyMonkeysCreateAddons.asResource("block/string_tangler_slime"));
+		private static final BlockSprite WEB = new BlockSprite(ComedyMonkeysCreateAddons.asResource("block/string_tangler_web"));
 		/** The whisk's axis, the spools' centres and the inner faces of their windings, in model pixels. */
 		private static final float AXIS_X = 8, AXIS_Y = 8, SPOOL_Z = 8, WEST_X = 3.5f, EAST_X = 12.5f, WINDING_HALF = 0.75f;
 		/** The tray's floor (the harvester's tray, rebuilt here), in pixels. */
@@ -183,12 +187,13 @@ public final class MachineRenderers {
 			renderPart(ms, vc, state, WHISK, light, overlay);
 			// The web balling up on it, turning with it
 			if (progress > 0.02f)
-				web(vc, ms.last(), sprite(WEB), light, 3 * progress);
+				web(vc, ms.last(), WEB.get(), light, 3 * progress);
 			ms.popPose();
 
 			// The spools pay out slower than the whisk turns; their winding shows how much string is left
 			float wound = string.isEmpty() ? 0 : 0.45f + 0.55f * string.getCount() / string.getMaxStackSize();
-			for (boolean west : new boolean[] {true, false}) {
+			for (int side = 0; side < 2; side++) {
+				boolean west = side == 0;
 				float x = west ? WEST_X : EAST_X;
 				ms.pushPose();
 				spinAbout(ms, x, AXIS_Y, SPOOL_Z, Axis.XP, (west ? 1 : -1) * spin / 6);
@@ -206,10 +211,9 @@ public final class MachineRenderers {
 					float r = 1.25f * wound;
 					for (int i = 0; i < 2; i++) {
 						float at = spin + (west ? 0 : Mth.PI) + i * 0.6f;
-						float[] a = {from / 16, (AXIS_Y + (i == 0 ? r : -r) * 0.6f) / 16, (SPOOL_Z - 0.5f + i) / 16};
 						float sag = working ? 0 : 0.5f;
-						float[] b = {(AXIS_X + Mth.cos(at) * 1.5f) / 16, (AXIS_Y + Mth.sin(at) * 1.5f - sag) / 16, (SPOOL_Z - 0.5f + i) / 16};
-						strand(vc, ms.last(), sprite(STRING), light, a, b);
+						strand(vc, ms.last(), STRING.get(), light, from / 16, (AXIS_Y + (i == 0 ? r : -r) * 0.6f) / 16,
+							(AXIS_X + Mth.cos(at) * 1.5f) / 16, (AXIS_Y + Mth.sin(at) * 1.5f - sag) / 16, (SPOOL_Z - 0.5f + i) / 16);
 					}
 				}
 			}
@@ -217,7 +221,7 @@ public final class MachineRenderers {
 			// The slime in its pot, a blob that shrinks as it's used
 			if (!slime.isEmpty()) {
 				float h = 0.4f + 1.1f * slime.getCount() / slime.getMaxStackSize();
-				cube(vc, ms.last(), sprite(SLIME), light, 7, 2.25f, 5, 9, 2.25f + h, 7);
+				cube(vc, ms.last(), SLIME.get(), light, 7, 2.25f, 5, 9, 2.25f + h, 7);
 			}
 
 			TrayItems.render(be.getStack(TwoInputMachineBlockEntity.OUTPUT), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
@@ -229,21 +233,23 @@ public final class MachineRenderers {
 			float x0 = (AXIS_X - half) / 16, x1 = (AXIS_X + half) / 16, y0 = (AXIS_Y - half) / 16, y1 = (AXIS_Y + half) / 16;
 			float z0 = (8 - half) / 16, z1 = (8 + half) / 16, cx = AXIS_X / 16, cy = AXIS_Y / 16, cz = 0.5f;
 			int tint = 0xFFFFFF;
-			quad(vc, pose, s, light, tint, new float[] {x0, y1, cz}, new float[] {x0, y0, cz}, new float[] {x1, y0, cz}, new float[] {x1, y1, cz}, 0, 0, 16, 16);
-			quad(vc, pose, s, light, tint, new float[] {cx, y1, z0}, new float[] {cx, y0, z0}, new float[] {cx, y0, z1}, new float[] {cx, y1, z1}, 0, 0, 16, 16);
-			quad(vc, pose, s, light, tint, new float[] {x0, cy, z0}, new float[] {x0, cy, z1}, new float[] {x1, cy, z1}, new float[] {x1, cy, z0}, 0, 0, 16, 16);
+			quad(vc, pose, s, light, tint, x0, y1, cz, x0, y0, cz, x1, y0, cz, x1, y1, cz, 0, 0, 16, 16);
+			quad(vc, pose, s, light, tint, cx, y1, z0, cx, y0, z0, cx, y0, z1, cx, y1, z1, 0, 0, 16, 16);
+			quad(vc, pose, s, light, tint, x0, cy, z0, x0, cy, z1, x1, cy, z1, x1, cy, z0, 0, 0, 16, 16);
 		}
 
-		/** A ribbon of string between two points, half a pixel wide, turned to face the front. */
+		/**
+		 * A ribbon of string from (fromX, fromY) to (toX, toY), half a pixel wide, turned to face the front, at depth
+		 * {@code z} (all in blocks).
+		 */
 		private static void strand(VertexConsumer vc, PoseStack.Pose pose, TextureAtlasSprite s, int light,
-								   float[] from, float[] to) {
-			float dx = to[0] - from[0], dy = to[1] - from[1];
+								   float fromX, float fromY, float toX, float toY, float z) {
+			float dx = toX - fromX, dy = toY - fromY;
 			float len = Mth.sqrt(dx * dx + dy * dy);
 			float w = 0.25f / 16f;
 			float nx = len < 1e-4f ? w : -dy / len * w, ny = len < 1e-4f ? 0 : dx / len * w;
-			float[] a = {from[0] + nx, from[1] + ny, from[2]}, b = {from[0] - nx, from[1] - ny, from[2]};
-			float[] c = {to[0] - nx, to[1] - ny, to[2]}, d = {to[0] + nx, to[1] + ny, to[2]};
-			quad(vc, pose, s, light, 0xFFFFFF, a, b, c, d, 0, 7, 16, 9);
+			quad(vc, pose, s, light, 0xFFFFFF, fromX + nx, fromY + ny, z, fromX - nx, fromY - ny, z, toX - nx, toY - ny, z,
+				toX + nx, toY + ny, z, 0, 7, 16, 9);
 		}
 	}
 
@@ -270,8 +276,12 @@ public final class MachineRenderers {
 			if (!state.hasProperty(TwoInputMachineBlock.FACING))
 				return;
 			Direction front = state.getValue(TwoInputMachineBlock.FACING);
+			boolean behind = CameraView.of(be, ms).behindGlass(front);
 			VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
 			shaft(be, state, front, ms, vc, light, overlay);
+			// Everything else is inside, seen only through the front glass
+			if (behind)
+				return;
 
 			ms.pushPose();
 			faceFront(ms, front);
@@ -289,7 +299,7 @@ public final class MachineRenderers {
 			boolean working = be.isProcessing() && !be.getMaking().isEmpty();
 			if (working || !be.getStack(TwoInputMachineBlockEntity.MAIN).isEmpty()) {
 				PoseStack.Pose pose = ms.last();
-				cube(vc, pose, sprite(COBBLESTONE), light, STONE_X0, STONE_Y0, STONE_Z0, STONE_X1, STONE_Y1, STONE_Z1);
+				cube(vc, pose, COBBLESTONE.get(), light, STONE_X0, STONE_Y0, STONE_Z0, STONE_X1, STONE_Y1, STONE_Z1);
 				// The new stone climbing it, stopping just short of the top so their tops never meet
 				float rise = working ? (STONE_Y1 - STONE_Y0 - 0.1f) * be.getProgress(partialTicks) : 0;
 				if (rise > 0.05f)
@@ -323,7 +333,7 @@ public final class MachineRenderers {
 			if (stack.getItem() instanceof BlockItem item)
 				return Minecraft.getInstance().getBlockRenderer().getBlockModelShaper()
 					.getParticleIcon(item.getBlock().defaultBlockState());
-			return sprite(COBBLESTONE);
+			return COBBLESTONE.get();
 		}
 	}
 }

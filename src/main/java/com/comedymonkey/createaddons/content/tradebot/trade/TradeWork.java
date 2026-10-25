@@ -167,7 +167,9 @@ public class TradeWork implements BotWork {
 		bot.addCharge(-CMConfig.SERVER.tradeBotFePerTrade());
 		villager.playSound(villager.getNotifyTradeSound(), 1, villager.getVoicePitch());
 		int today = 0;
-		if (bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station) {
+		// his station may be in an unloaded chunk while he's away: then the trade isn't counted (nothing loads it)
+		if (bot.getStation() != null && bot.level().isLoaded(bot.getStation())
+			&& bot.level().getBlockEntity(bot.getStation()) instanceof TradeBotStationBlockEntity station) {
 			station.countTrade();
 			today = station.tradesToday();
 		}

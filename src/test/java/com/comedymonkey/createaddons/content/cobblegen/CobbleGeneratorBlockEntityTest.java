@@ -271,4 +271,21 @@ class CobbleGeneratorBlockEntityTest {
 		assertEquals(6, ReflectionAccess.get(loaded, "destroyProgress"));
 		assertTrue(loaded.isPowered());
 	}
+
+	/** Pipes and funnels look many times a tick: the same stack is shown until the store changes. */
+	@Test
+	void shownStackIsKeptUntilTheStoreChanges() {
+		CobbleGeneratorBlockEntity be = generator("andesite_cobble_generator");
+		setStored(be, 40, false);
+		ItemStack shown = output(be).getStackInSlot(0);
+		assertEquals(40, shown.getCount());
+		assertSame(shown, output(be).getStackInSlot(0));
+		output(be).extractItem(0, 10, false);
+		assertEquals(30, output(be).getStackInSlot(0).getCount());
+		// someone changing the stack they were shown doesn't change what the next caller sees
+		output(be).getStackInSlot(0).setCount(5);
+		assertEquals(30, output(be).getStackInSlot(0).getCount());
+		setStored(be, 0, false);
+		assertTrue(output(be).getStackInSlot(0).isEmpty());
+	}
 }

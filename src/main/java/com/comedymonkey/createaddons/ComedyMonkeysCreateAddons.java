@@ -14,6 +14,7 @@ import com.comedymonkey.createaddons.content.pen.AnimalCapture;
 import com.comedymonkey.createaddons.content.incinerator.IncineratorBlock;
 import com.simibubi.create.api.boiler.BoilerHeater;
 import com.comedymonkey.createaddons.content.chest.ChestEvents;
+import com.comedymonkey.createaddons.content.chest.ChestUpgrades;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import com.comedymonkey.createaddons.config.CMConfig;
@@ -111,6 +112,7 @@ public class ComedyMonkeysCreateAddons {
 		// Capture Bottles catch animals for the Animal Pens
 		NeoForge.EVENT_BUS.addListener(AnimalCapture::onEntityInteract);
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> CuckooClocks.clear());
+		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> ChestUpgrades.clearJustPlaced());
 		if (ModList.get().isLoaded(PipezBlazeBurnerCompat.PIPEZ_ID)) {
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onRightClickBlock);
 			NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, PipeCoverEvents::onBlockBreak);

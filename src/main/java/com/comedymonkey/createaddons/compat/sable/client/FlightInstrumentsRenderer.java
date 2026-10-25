@@ -1,8 +1,6 @@
 package com.comedymonkey.createaddons.compat.sable.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.comedymonkey.createaddons.client.BlockSprite;
 import com.comedymonkey.createaddons.compat.sable.FlightInstrumentsBlock;
 import com.comedymonkey.createaddons.compat.sable.FlightInstrumentsBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -10,7 +8,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -18,7 +15,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -28,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * heading dial pointing the way the ship faces.
  */
 public class FlightInstrumentsRenderer extends SafeBlockEntityRenderer<FlightInstrumentsBlockEntity> {
-	private static final ResourceLocation WHITE = ResourceLocation.withDefaultNamespace("block/white_concrete");
+	private static final BlockSprite WHITE = new BlockSprite(ResourceLocation.withDefaultNamespace("block/white_concrete"));
 	/** Gauge centres on the panel texture, in sixteenths (its 64px divided by 4), u to the right and v down. */
 	private static final float[][] GAUGES = {{4, 4}, {12, 4}, {4, 12}, {12, 12}};
 	private static final float RADIUS = 2.75f;
@@ -49,7 +45,7 @@ public class FlightInstrumentsRenderer extends SafeBlockEntityRenderer<FlightIns
 		Direction facing = state.getValue(FlightInstrumentsBlock.FACING);
 		FlightInstrumentsBlockEntity.Readings r = FlightInstrumentsBlockEntity.read(be.getLevel(), be.getBlockPos(), facing);
 		VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
-		TextureAtlasSprite white = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(WHITE);
+		TextureAtlasSprite white = WHITE.get();
 
 		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5);
@@ -76,6 +72,19 @@ public class FlightInstrumentsRenderer extends SafeBlockEntityRenderer<FlightIns
 
 	/** Draws flat shapes on the panel surface, in panel texture units. */
 	private static final class Panel {
+		/** Sides of the attitude ball, and its edge as directions from the centre (clockwise from straight up). */
+		private static final int SIDES = 28;
+		private static final float[] DISC_U = new float[SIDES], DISC_V = new float[SIDES];
+		/** A polygon's corners, reused for each one drawn: at most the ball's plus two. Render thread only. */
+		private static final float[] POLY_U = new float[SIDES + 2], POLY_V = new float[SIDES + 2];
+
+		static {
+			for (int i = 0; i < SIDES; i++) {
+				DISC_U[i] = dirU(i * 360f / SIDES);
+				DISC_V[i] = dirV(i * 360f / SIDES);
+			}
+		}
+
 		private final VertexConsumer vc;
 		private final PoseStack.Pose pose;
 		private final float u0, v0;
@@ -89,88 +98,100 @@ public class FlightInstrumentsRenderer extends SafeBlockEntityRenderer<FlightIns
 			this.light = light;
 		}
 
-		/** A point on the panel, {@code layer} hundredths of a pixel above it so stacked shapes don't flicker. */
-		private float[] at(float u, float v, int layer) {
-			// The panel's front faces north: texture u runs to -x, v runs down the panel to its foot
-			return new float[] {(16 - u) / 16f, (2 + LENGTH * (1 - v / 16)) / 16f, (8 - 0.015f * layer) / 16f};
+		/** Clockwise from straight up as you look at the panel: the across (u) part of that direction... */
+		private static float dirU(float degrees) {
+			return Mth.sin((float) Math.toRadians(degrees));
 		}
 
-		private void quad(float[] a, float[] b, float[] c, float[] d, int rgb) {
-			float[][] pts = {a, b, c, d};
-			for (int pass = 0; pass < 2; pass++)
-				for (int i = 0; i < 4; i++) {
-					float[] p = pts[pass == 0 ? i : 3 - i];
-					vc.addVertex(pose, p[0], p[1], p[2])
-						.setColor((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF, 255)
-						.setUv(u0, v0)
-						.setLight(light)
-						.setNormal(pose, 0, 0, -1);
-				}
+		/** ...and the down (v) part. */
+		private static float dirV(float degrees) {
+			return -Mth.cos((float) Math.toRadians(degrees));
 		}
 
-		/** A convex polygon (u, v pairs) as a fan of quads from its first point. */
-		private void polygon(List<float[]> pts, int rgb, int layer) {
-			for (int i = 1; i + 1 < pts.size(); i++) {
-				float[] a = pts.get(0), b = pts.get(i), c = pts.get(i + 1);
-				quad(at(a[0], a[1], layer), at(b[0], b[1], layer), at(c[0], c[1], layer), at(c[0], c[1], layer), rgb);
-			}
+		/**
+		 * A quad through four panel points (u, v), both sides, {@code layer} hundredths of a pixel above the panel so
+		 * stacked shapes don't flicker.
+		 */
+		private void quad(float ua, float va, float ub, float vb, float uc, float vc, float ud, float vd, int layer, int rgb) {
+			float z = (8 - 0.015f * layer) / 16f;
+			vertex(ua, va, z, rgb);
+			vertex(ub, vb, z, rgb);
+			vertex(uc, vc, z, rgb);
+			vertex(ud, vd, z, rgb);
+			// and the back, the other way round
+			vertex(ud, vd, z, rgb);
+			vertex(uc, vc, z, rgb);
+			vertex(ub, vb, z, rgb);
+			vertex(ua, va, z, rgb);
 		}
 
-		/** Clockwise from straight up as you look at the panel. */
-		private static float[] dir(float degrees) {
-			float a = (float) Math.toRadians(degrees);
-			return new float[] {Mth.sin(a), -Mth.cos(a)};
+		/** The panel's front faces north: texture u runs to -x, v runs down the panel to its foot. */
+		private void vertex(float u, float v, float z, int rgb) {
+			this.vc.addVertex(pose, (16 - u) / 16f, (2 + LENGTH * (1 - v / 16)) / 16f, z)
+				.setColor((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF, 255)
+				.setUv(u0, v0)
+				.setLight(light)
+				.setNormal(pose, 0, 0, -1);
+		}
+
+		/** The first {@code n} corners of {@link #POLY_U}, {@link #POLY_V}, a convex polygon, as a fan of quads from the first. */
+		private void polygon(int n, int rgb, int layer) {
+			for (int i = 1; i + 1 < n; i++)
+				quad(POLY_U[0], POLY_V[0], POLY_U[i], POLY_V[i], POLY_U[i + 1], POLY_V[i + 1], POLY_U[i + 1], POLY_V[i + 1],
+					layer, rgb);
 		}
 
 		void needle(float[] c, float angle, float length, float width, int rgb, int layer) {
-			float[] d = dir(angle);
-			float px = -d[1] * width, py = d[0] * width;
-			float tx = c[0] + d[0] * length, ty = c[1] + d[1] * length;
-			quad(at(c[0] + px, c[1] + py, layer), at(c[0] - px, c[1] - py, layer),
-				at(tx - px * 0.3f, ty - py * 0.3f, layer), at(tx + px * 0.3f, ty + py * 0.3f, layer), rgb);
+			float du = dirU(angle), dv = dirV(angle);
+			float px = -dv * width, py = du * width;
+			float tx = c[0] + du * length, ty = c[1] + dv * length;
+			quad(c[0] + px, c[1] + py, c[0] - px, c[1] - py, tx - px * 0.3f, ty - py * 0.3f, tx + px * 0.3f, ty + py * 0.3f,
+				layer, rgb);
 			// A hub over the pivot
 			float h = width * 1.4f;
-			quad(at(c[0] - h, c[1] - h, layer + 1), at(c[0] - h, c[1] + h, layer + 1),
-				at(c[0] + h, c[1] + h, layer + 1), at(c[0] + h, c[1] - h, layer + 1), HUB);
+			quad(c[0] - h, c[1] - h, c[0] - h, c[1] + h, c[0] + h, c[1] + h, c[0] + h, c[1] - h, layer + 1, HUB);
 		}
 
 		/** The sky disc, the ground clipped from it by the horizon, the horizon line and the aircraft symbol. */
 		void attitude(float[] c, float roll, float pitch) {
-			int sides = 28;
-			List<float[]> disc = new ArrayList<>();
-			for (int i = 0; i < sides; i++) {
-				float[] d = dir(i * 360f / sides);
-				disc.add(new float[] {c[0] + d[0] * RADIUS, c[1] + d[1] * RADIUS});
+			for (int i = 0; i < SIDES; i++) {
+				POLY_U[i] = c[0] + DISC_U[i] * RADIUS;
+				POLY_V[i] = c[1] + DISC_V[i] * RADIUS;
 			}
-			polygon(disc, SKY, 1);
+			polygon(SIDES, SKY, 1);
 
 			// The horizon tilts against the roll and drops as the nose comes up
-			float[] down = dir(180 - roll);
+			float downU = dirU(180 - roll), downV = dirV(180 - roll);
 			float drop = Mth.clamp(pitch / 40 * RADIUS, -RADIUS * 0.9f, RADIUS * 0.9f);
-			float hx = c[0] + down[0] * drop, hy = c[1] + down[1] * drop;
-			List<float[]> ground = new ArrayList<>();
-			for (int i = 0; i < sides; i++) {
-				float[] a = disc.get(i), b = disc.get((i + 1) % sides);
-				float sa = (a[0] - hx) * down[0] + (a[1] - hy) * down[1];
-				float sb = (b[0] - hx) * down[0] + (b[1] - hy) * down[1];
-				if (sa >= 0)
-					ground.add(a);
+			float hx = c[0] + downU * drop, hy = c[1] + downV * drop;
+			int n = 0;
+			for (int i = 0; i < SIDES; i++) {
+				int j = (i + 1) % SIDES;
+				float au = c[0] + DISC_U[i] * RADIUS, av = c[1] + DISC_V[i] * RADIUS;
+				float bu = c[0] + DISC_U[j] * RADIUS, bv = c[1] + DISC_V[j] * RADIUS;
+				float sa = (au - hx) * downU + (av - hy) * downV;
+				float sb = (bu - hx) * downU + (bv - hy) * downV;
+				if (sa >= 0) {
+					POLY_U[n] = au;
+					POLY_V[n++] = av;
+				}
 				if ((sa >= 0) != (sb >= 0)) {
 					float t = sa / (sa - sb);
-					ground.add(new float[] {a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t});
+					POLY_U[n] = au + (bu - au) * t;
+					POLY_V[n++] = av + (bv - av) * t;
 				}
 			}
-			if (ground.size() >= 3)
-				polygon(ground, GROUND, 2);
+			if (n >= 3)
+				polygon(n, GROUND, 2);
 
 			// Horizon line across the ball where the sky meets the ground
-			float[] along = {-down[1], down[0]};
+			float alongU = -downV, alongV = downU;
 			float half = (float) Math.sqrt(Math.max(0, RADIUS * RADIUS - drop * drop));
 			float w = 0.12f;
-			quad(at(hx - along[0] * half - down[0] * w, hy - along[1] * half - down[1] * w, 3),
-				at(hx - along[0] * half + down[0] * w, hy - along[1] * half + down[1] * w, 3),
-				at(hx + along[0] * half + down[0] * w, hy + along[1] * half + down[1] * w, 3),
-				at(hx + along[0] * half - down[0] * w, hy + along[1] * half - down[1] * w, 3), LINE);
+			quad(hx - alongU * half - downU * w, hy - alongV * half - downV * w,
+				hx - alongU * half + downU * w, hy - alongV * half + downV * w,
+				hx + alongU * half + downU * w, hy + alongV * half + downV * w,
+				hx + alongU * half - downU * w, hy + alongV * half - downV * w, 3, LINE);
 
 			// The aircraft, fixed: two black wings and a white centre
 			bar(c[0] - 1.9f, c[1] - 0.15f, c[0] - 0.55f, c[1] + 0.15f, WINGS, 4);
@@ -179,28 +200,28 @@ public class FlightInstrumentsRenderer extends SafeBlockEntityRenderer<FlightIns
 		}
 
 		private void bar(float ua, float va, float ub, float vb, int rgb, int layer) {
-			quad(at(ua, va, layer), at(ua, vb, layer), at(ub, vb, layer), at(ub, va, layer), rgb);
+			quad(ua, va, ua, vb, ub, vb, ub, va, layer, rgb);
 		}
 
 		/** A little white plane, nose towards the heading. */
 		void plane(float[] c, float heading) {
-			float[] f = dir(heading);
-			float[] s = {-f[1], f[0]};
+			float fu = dirU(heading), fv = dirV(heading);
+			float su = -fv, sv = fu;
 			// Fuselage
-			quad(at(c[0] + f[0] * 1.3f + s[0] * 0.18f, c[1] + f[1] * 1.3f + s[1] * 0.18f, 2),
-				at(c[0] + f[0] * 1.3f - s[0] * 0.18f, c[1] + f[1] * 1.3f - s[1] * 0.18f, 2),
-				at(c[0] - f[0] * 1.1f - s[0] * 0.18f, c[1] - f[1] * 1.1f - s[1] * 0.18f, 2),
-				at(c[0] - f[0] * 1.1f + s[0] * 0.18f, c[1] - f[1] * 1.1f + s[1] * 0.18f, 2), NEEDLE);
+			quad(c[0] + fu * 1.3f + su * 0.18f, c[1] + fv * 1.3f + sv * 0.18f,
+				c[0] + fu * 1.3f - su * 0.18f, c[1] + fv * 1.3f - sv * 0.18f,
+				c[0] - fu * 1.1f - su * 0.18f, c[1] - fv * 1.1f - sv * 0.18f,
+				c[0] - fu * 1.1f + su * 0.18f, c[1] - fv * 1.1f + sv * 0.18f, 2, NEEDLE);
 			// Wings and tail
-			wing(c, f, s, 0.2f, 1.1f, 0.35f);
-			wing(c, f, s, -0.9f, 0.5f, 0.22f);
+			wing(c, fu, fv, su, sv, 0.2f, 1.1f, 0.35f);
+			wing(c, fu, fv, su, sv, -0.9f, 0.5f, 0.22f);
 		}
 
-		private void wing(float[] c, float[] f, float[] s, float at, float span, float chord) {
-			float x = c[0] + f[0] * at, y = c[1] + f[1] * at;
-			quad(at(x + s[0] * span, y + s[1] * span, 2), at(x - s[0] * span, y - s[1] * span, 2),
-				at(x - s[0] * span - f[0] * chord, y - s[1] * span - f[1] * chord, 2),
-				at(x + s[0] * span - f[0] * chord, y + s[1] * span - f[1] * chord, 2), NEEDLE);
+		private void wing(float[] c, float fu, float fv, float su, float sv, float at, float span, float chord) {
+			float x = c[0] + fu * at, y = c[1] + fv * at;
+			quad(x + su * span, y + sv * span, x - su * span, y - sv * span,
+				x - su * span - fu * chord, y - sv * span - fv * chord,
+				x + su * span - fu * chord, y + sv * span - fv * chord, 2, NEEDLE);
 		}
 	}
 }

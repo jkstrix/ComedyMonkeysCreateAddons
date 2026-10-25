@@ -3,6 +3,7 @@ package com.comedymonkey.createaddons.content.incinerator;
 import java.util.List;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.SaveMark;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 
@@ -84,7 +85,8 @@ public class IncineratorBlockEntity extends BlockEntity implements IHaveGoggleIn
 			coolIn = COOL_TICKS; // a cold fire starts its first second fresh
 		heat = (int) Math.min(FULL_HEAT, heat + things);
 		syncQueued = true;
-		setChanged();
+		// fed by pipes many times a tick, and no comparator output: just a save
+		SaveMark.mark(this);
 	}
 
 	private void setLit(boolean lit) {

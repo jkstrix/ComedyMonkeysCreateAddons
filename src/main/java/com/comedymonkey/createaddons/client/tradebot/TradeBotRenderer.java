@@ -5,7 +5,6 @@ import com.comedymonkey.createaddons.content.tradebot.TradeBotEntity;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -26,7 +25,7 @@ public class TradeBotRenderer extends MobRenderer<TradeBotEntity, TradeBotModel>
 
 	public TradeBotRenderer(EntityRendererProvider.Context context) {
 		super(context, new TradeBotModel(context.bakeLayer(TradeBotGeometry.BOT_LAYER)), 0.35f);
-		addLayer(new Glow(this));
+		addLayer(new Glow(this, GlowModel.of(getModel().parts(), TradeBotGeometry.BOT_ROOTS)));
 	}
 
 	@Override
@@ -58,15 +57,18 @@ public class TradeBotRenderer extends MobRenderer<TradeBotEntity, TradeBotModel>
 
 	/** His irises, chest lamp and station glow at full brightness, whenever the clip has them lit. */
 	private static class Glow extends RenderLayer<TradeBotEntity, TradeBotModel> {
-		Glow(RenderLayerParent<TradeBotEntity, TradeBotModel> parent) {
+		/** Just the cubes with any glow on them, posed as he is. */
+		private final GlowModel glow;
+
+		Glow(RenderLayerParent<TradeBotEntity, TradeBotModel> parent, GlowModel glow) {
 			super(parent);
+			this.glow = glow;
 		}
 
 		@Override
 		public void render(PoseStack poseStack, MultiBufferSource buffers, int light, TradeBotEntity bot, float limbSwing,
 			float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-			getParentModel().renderToBuffer(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(GLOW)), LightTexture.FULL_BRIGHT,
-				OverlayTexture.NO_OVERLAY, -1);
+			glow.render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(GLOW)), OverlayTexture.NO_OVERLAY);
 		}
 	}
 }

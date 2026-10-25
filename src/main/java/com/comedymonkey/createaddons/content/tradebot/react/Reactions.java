@@ -25,6 +25,8 @@ public final class Reactions {
 
 	private final Map<Kind, Long> last = new HashMap<>();
 	private final Map<UUID, Long> seen = new HashMap<>();
+	/** When players away long enough were last forgotten. */
+	private long lastPrune = Long.MIN_VALUE / 2;
 
 	/** Whether {@code kind} may play at {@code now}; if so, it counts as played. */
 	public boolean tryPlay(Kind kind, long now) {
@@ -37,7 +39,17 @@ public final class Reactions {
 
 	/** A player is in sight at {@code now}: true if they've just turned up (never seen, or away a minute). */
 	public boolean arrived(UUID player, long now) {
+		// players away a minute are greeted as if never seen, so they needn't be remembered
+		if (now - lastPrune >= AWAY_TICKS) {
+			lastPrune = now;
+			seen.values().removeIf(at -> now - at >= AWAY_TICKS);
+		}
 		Long at = seen.put(player, now);
 		return at == null || now - at >= AWAY_TICKS;
+	}
+
+	/** Players remembered (for tests). */
+	int remembered() {
+		return seen.size();
 	}
 }

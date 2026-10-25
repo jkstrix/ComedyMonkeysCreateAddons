@@ -33,6 +33,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -127,6 +128,25 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 	/** What {@link #getFoodHint} found for the current animal; null until looked for. */
 	@Nullable
 	private ItemStack foodHint;
+	/**
+	 * Server: the captive as last sent to clients. Its bottle carries the whole animal's data, so the frequent syncs
+	 * (milk, eggs, food) leave it out until it changes; it's only ever replaced, never changed in place.
+	 */
+	@Nullable
+	private ItemStack sentCaptive;
+	/**
+	 * When it was last sent; it goes again now and then anyway, to put right a screen's guess (see CaptiveHandler) or a
+	 * client copy that started over.
+	 */
+	private long sentCaptiveAt;
+	private static final int CAPTIVE_RESEND_TICKS = 100;
+	/**
+	 * Game time of this pen's own last sync. Only the packet that sends goes without the captive: anything else asking
+	 * (a refused break putting the block back on one player's screen) may be filling in a fresh client copy.
+	 */
+	private long ownSyncAt = Long.MIN_VALUE / 2;
+	/** Set while writing a sync that leaves the captive out. */
+	private boolean omitCaptive;
 	/** Client only: the animals walking about in the window. */
 	private final List<PenAnimal> shown = new ArrayList<>();
 
@@ -879,7 +899,9 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 	@Override
 	protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.write(tag, registries, clientPacket);
-		if (!captive.isEmpty())
+		if (clientPacket && omitCaptive)
+			tag.putBoolean("SameCaptive", true);
+		else if (!captive.isEmpty())
 			tag.put("Captive", captive.save(registries));
 		tag.putInt("Adults", adults);
 		ListTag litters = new ListTag();
@@ -906,12 +928,15 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 	@Override
 	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.read(tag, registries, clientPacket);
-		ItemStack was = captive;
-		captive = ItemStack.parseOptional(registries, tag.getCompound("Captive"));
-		if (!ItemStack.isSameItemSameComponents(was, captive)) {
-			sample = null;
-			foodHint = null;
-			shown.clear();
+		// A sync that left the captive out (see getUpdatePacket): it's the one already here
+		if (!(clientPacket && tag.getBoolean("SameCaptive"))) {
+			ItemStack was = captive;
+			captive = ItemStack.parseOptional(registries, tag.getCompound("Captive"));
+			if (!ItemStack.isSameItemSameComponents(was, captive)) {
+				sample = null;
+				foodHint = null;
+				shown.clear();
+			}
 		}
 		// Saved before pens had young: everything counts as grown
 		adults = tag.contains("Adults") ? tag.getInt("Adults") : tag.getInt("Count");
@@ -932,6 +957,37 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 			: ItemEnchantments.EMPTY;
 		if (sample instanceof Sheep sheep)
 			sheep.setSheared(!woolReady);
+	}
+
+	@Override
+	public void sendData() {
+		if (level != null)
+			ownSyncAt = level.getGameTime();
+		super.sendData();
+	}
+
+	/**
+	 * The changes this pen's own syncs send leave out the captive when it's the one clients were last sent. A client
+	 * first seeing the pen gets everything, from {@code getUpdateTag}, and so does anything else asking.
+	 */
+	@Override
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this, (be, registries) -> ((AnimalPenBlockEntity) be).updatePacketTag(registries));
+	}
+
+	private CompoundTag updatePacketTag(HolderLookup.Provider registries) {
+		long now = level == null ? 0 : level.getGameTime();
+		// its own sync is broadcast at the start of the next tick
+		omitCaptive = now - ownSyncAt <= 1 && captive == sentCaptive && now - sentCaptiveAt < CAPTIVE_RESEND_TICKS;
+		try {
+			return writeClient(new CompoundTag(), registries);
+		} finally {
+			if (!omitCaptive) {
+				sentCaptive = captive;
+				sentCaptiveAt = now;
+			}
+			omitCaptive = false;
+		}
 	}
 
 	// ---------------------------------------------------------------- handlers

@@ -91,4 +91,29 @@ class LavaGeneratorBlockEntityTest {
 	void rotorStartsStill() {
 		assertEquals(0f, generator().getRotorAngle(0.5f));
 	}
+
+	/** The window's lava comes on with the first drop and goes off only after a dry spell, so a trickle doesn't flicker it. */
+	@Test
+	void windowLavaWaitsOutADrySpell() {
+		assertTrue(LavaGeneratorBlockEntity.showsLava(false, true, 0));
+		assertFalse(LavaGeneratorBlockEntity.showsLava(false, false, 1));
+		assertTrue(LavaGeneratorBlockEntity.showsLava(true, false, LavaGeneratorBlockEntity.FUELLED_HOLD_TICKS));
+		assertFalse(LavaGeneratorBlockEntity.showsLava(true, false, LavaGeneratorBlockEntity.FUELLED_HOLD_TICKS + 1));
+	}
+
+	/** Lava every other tick, burned as soon as it comes: the window used to change (a block update) every tick. */
+	@Test
+	void aTrickleOfLavaDoesNotFlickerTheWindow() {
+		boolean showing = false;
+		int dry = 0, changes = 0;
+		for (int t = 0; t < 400; t++) {
+			boolean hasLava = t % 2 == 0;
+			dry = hasLava ? 0 : dry + 1;
+			boolean now = LavaGeneratorBlockEntity.showsLava(showing, hasLava, dry);
+			if (now != showing)
+				changes++;
+			showing = now;
+		}
+		assertEquals(1, changes);
+	}
 }

@@ -24,8 +24,26 @@ public final class PipezBlazeBurnerCompat {
 	/** Pipez looks capabilities up a handful of frames above us; this is a generous bound. */
 	private static final int CALLER_SEARCH_DEPTH = 48;
 	private static final StackWalker WALKER = StackWalker.getInstance();
+	/** How deep this thread is in Pipez pipes' ticks, set by {@code PipeLogicTileEntityMixin}: their transfers ask often. */
+	private static final ThreadLocal<int[]> PIPE_TICK_DEPTH = ThreadLocal.withInitial(() -> new int[1]);
 
 	private PipezBlazeBurnerCompat() {}
+
+	/** A Pipez pipe starts its tick on this thread. */
+	public static void enterPipeTick() {
+		PIPE_TICK_DEPTH.get()[0]++;
+	}
+
+	/** Whether this thread is in a Pipez pipe's tick. */
+	public static boolean inPipeTick() {
+		return PIPE_TICK_DEPTH.get()[0] > 0;
+	}
+
+	/** And finishes it, however it ends. */
+	public static void exitPipeTick() {
+		int[] depth = PIPE_TICK_DEPTH.get();
+		depth[0] = Math.max(0, depth[0] - 1);
+	}
 
 	@SuppressWarnings("unchecked")
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -48,6 +66,9 @@ public final class PipezBlazeBurnerCompat {
 	 * hoppers, funnels and other mods' pipes from feeding burners unless the config allows it.
 	 */
 	private static boolean calledFromPipez() {
+		// The cheap answer for a pipe moving items; anything else (a pipe working out its connections) walks the stack
+		if (inPipeTick())
+			return true;
 		return WALKER.walk(frames -> frames.limit(CALLER_SEARCH_DEPTH)
 			.anyMatch(frame -> frame.getClassName().startsWith(PIPEZ_PACKAGE)));
 	}

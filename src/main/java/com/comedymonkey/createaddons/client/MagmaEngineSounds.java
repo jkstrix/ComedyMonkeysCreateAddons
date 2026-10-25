@@ -12,8 +12,6 @@ import com.comedymonkey.createaddons.registry.ModSounds;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
@@ -96,11 +94,12 @@ public final class MagmaEngineSounds {
 			s.half = -1;
 		}
 
-		// The loops: started when they're wanted, then they follow the fire and the shaft, and fade out on their own
-		if ((s.firebox == null || s.firebox.isStopped()) && lit)
+		// The loops: started when they're wanted, then they follow the fire and the shaft, and fade out on their own.
+		// Out of earshot they stop, and start again (without the start sound) on coming back
+		if (MachineLoop.ended(s.firebox) && lit && Loop.canStart(ModSounds.engine("firebox"), pos))
 			mc.getSoundManager().play(s.firebox = new Loop(be, ModSounds.engine("firebox"),
 				() -> be.getBlockState().getValue(MagmaEngineBlock.LIT) ? 1 : 0, () -> 1));
-		if (sup && (s.blower == null || s.blower.isStopped()) && be.getSpeed() != 0)
+		if (sup && MachineLoop.ended(s.blower) && be.getSpeed() != 0 && Loop.canStart(ModSounds.engine("blower"), pos))
 			mc.getSoundManager().play(s.blower = new Loop(be, ModSounds.engine("blower"),
 				() -> Math.min(1, Math.abs(be.getSpeed()) / 128f), () -> 0.8 + 0.2 * Math.min(1, Math.abs(be.getSpeed()) / 128f)));
 
@@ -123,19 +122,21 @@ public final class MagmaEngineSounds {
 			pos.getX() + at.x, pos.getY() + at.y, pos.getZ() + at.z, push.x, push.y + 0.01, push.z);
 	}
 
+	/** A one-shot from the engine, if anyone's in earshot. */
 	private static void play(BlockPos at, SoundEvent sound, float volume, float pitch) {
-		Minecraft.getInstance().level.playLocalSound(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, sound,
-			SoundSource.BLOCKS, volume, pitch, false);
+		double x = at.getX() + 0.5, y = at.getY() + 0.5, z = at.getZ() + 0.5;
+		if (Hearing.inRange(sound, volume, x, y, z, Hearing.ONE_SHOT_MARGIN))
+			Minecraft.getInstance().level.playLocalSound(x, y, z, sound, SoundSource.BLOCKS, volume, pitch, false);
 	}
 
 	/** A running loop: eases toward its volume and pitch, and stops once it has faded out or its engine is gone. */
-	private static final class Loop extends AbstractTickableSoundInstance {
+	private static final class Loop extends MachineLoop {
 		private final MagmaEngineBlockEntity be;
 		private final DoubleSupplier want, wantPitch;
 		private float level;
 
 		Loop(MagmaEngineBlockEntity be, SoundEvent sound, DoubleSupplier want, DoubleSupplier wantPitch) {
-			super(sound, SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
+			super(sound);
 			this.be = be;
 			this.want = want;
 			this.wantPitch = wantPitch;
@@ -149,9 +150,14 @@ public final class MagmaEngineSounds {
 			pitch = (float) wantPitch.getAsDouble();
 		}
 
+		/** Whether a loop from this engine is in earshot, to start it. */
+		static boolean canStart(SoundEvent sound, BlockPos at) {
+			return Hearing.inRange(sound, 1, at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, Hearing.LOOP_START_MARGIN);
+		}
+
 		@Override
 		public void tick() {
-			if (be.isRemoved()) {
+			if (be.isRemoved() || !Hearing.inRange(getLocation(), 1, x, y, z, Hearing.LOOP_STOP_MARGIN)) {
 				stop();
 				return;
 			}

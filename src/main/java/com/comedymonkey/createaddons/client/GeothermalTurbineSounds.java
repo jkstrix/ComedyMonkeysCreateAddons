@@ -8,10 +8,9 @@ import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlockE
 import com.comedymonkey.createaddons.registry.ModSounds;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 
@@ -87,10 +86,11 @@ public final class GeothermalTurbineSounds {
 		s.spinning = speed > 0.01f;
 
 		// The loops: started when they're wanted, then they follow the rotor and the fire, and fade out on their own.
-		// Kept low (halved after play-testing): they run the whole time it's on, under the one-shots
-		if ((s.whine == null || s.whine.isStopped()) && speed > 0.03f)
+		// Kept low (halved after play-testing): they run the whole time it's on, under the one-shots. Out of earshot
+		// they stop, and start again (without the start-up sounds) on coming back
+		if (MachineLoop.ended(s.whine) && speed > 0.03f && Loop.canStart(centre, "turbine_whine"))
 			mc.getSoundManager().play(s.whine = new Loop(be, "turbine_whine", () -> 0.3 * be.rotorSpeed(), () -> 0.6 + 0.4 * be.rotorSpeed()));
-		if ((s.fire == null || s.fire.isStopped()) && running)
+		if (MachineLoop.ended(s.fire) && running && Loop.canStart(centre, "firebox_roar"))
 			mc.getSoundManager().play(s.fire = new Loop(be, "firebox_roar", () -> be.isFormed() && be.isRunning() ? 0.25 : 0, () -> 1));
 
 		if (running) {
@@ -110,19 +110,22 @@ public final class GeothermalTurbineSounds {
 		}
 	}
 
+	/** A one-shot from the turbine's middle, if anyone's in earshot. */
 	private static void play(BlockPos at, String sound, float volume, float pitch) {
-		Minecraft.getInstance().level.playLocalSound(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, ModSounds.turbine(sound),
-			SoundSource.BLOCKS, volume, pitch, false);
+		SoundEvent event = ModSounds.turbine(sound);
+		double x = at.getX() + 0.5, y = at.getY() + 0.5, z = at.getZ() + 0.5;
+		if (Hearing.inRange(event, volume, x, y, z, Hearing.ONE_SHOT_MARGIN))
+			Minecraft.getInstance().level.playLocalSound(x, y, z, event, SoundSource.BLOCKS, volume, pitch, false);
 	}
 
 	/** One of the turbine's loops: eases toward its volume and pitch, and stops once it has faded out. */
-	private static final class Loop extends AbstractTickableSoundInstance {
+	private static final class Loop extends MachineLoop {
 		private final GeothermalControllerBlockEntity be;
 		private final DoubleSupplier want, wantPitch;
 		private float level;
 
 		Loop(GeothermalControllerBlockEntity be, String sound, DoubleSupplier want, DoubleSupplier wantPitch) {
-			super(ModSounds.turbine(sound), SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
+			super(ModSounds.turbine(sound));
 			this.be = be;
 			this.want = want;
 			this.wantPitch = wantPitch;
@@ -135,9 +138,15 @@ public final class GeothermalTurbineSounds {
 			volume = 0.01f;
 		}
 
+		/** Whether a loop is in earshot of the turbine's middle, to start it. */
+		static boolean canStart(BlockPos centre, String sound) {
+			return Hearing.inRange(ModSounds.turbine(sound), 1, centre.getX() + 0.5, centre.getY() + 0.5, centre.getZ() + 0.5,
+				Hearing.LOOP_START_MARGIN);
+		}
+
 		@Override
 		public void tick() {
-			if (be.isRemoved()) {
+			if (be.isRemoved() || !Hearing.inRange(getLocation(), 1, x, y, z, Hearing.LOOP_STOP_MARGIN)) {
 				stop();
 				return;
 			}

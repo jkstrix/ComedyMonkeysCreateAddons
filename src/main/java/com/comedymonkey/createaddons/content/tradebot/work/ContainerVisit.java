@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.comedymonkey.createaddons.content.chest.ChestUpgrades;
 import com.comedymonkey.createaddons.content.chest.UpgradedChestBlock;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotEntity;
 
@@ -27,10 +26,15 @@ import net.minecraft.world.phys.Vec3;
  */
 public record ContainerVisit(BlockPos container, ContainerKind kind, Direction side, BlockPos standBlock, Vec3 stand, float yaw) {
 
-	/** The best way to use {@code container}, nearest him first; null if he can't stand anywhere to reach it. */
+	/**
+	 * The best way to use {@code container}, nearest him first; null if he can't stand anywhere to reach it, or it's in
+	 * a chunk that isn't loaded (planning never loads one).
+	 */
 	@Nullable
 	public static ContainerVisit plan(TradeBotEntity bot, BlockPos container) {
 		Level level = bot.level();
+		if (!level.isLoaded(container))
+			return null;
 		BlockState state = level.getBlockState(container);
 		Direction front = isChest(state) ? state.getValue(BlockStateProperties.HORIZONTAL_FACING) : null;
 		List<ContainerVisit> options = new ArrayList<>();
@@ -55,13 +59,13 @@ public record ContainerVisit(BlockPos container, ContainerKind kind, Direction s
 		if (high && (kind == ContainerKind.DEPOT || kind == ContainerKind.BELT))
 			kind = ContainerKind.BLIND; // a raised depot or belt: he can't reach its top, so it's the blind routine
 		// something on the lid (on either half of a double chest): it can't open for him to look in
-		if (kind == ContainerKind.CHEST && ChestUpgrades.halves(level, container, state).stream().anyMatch(half -> ChestBlock.isChestBlockedAt(level, half)))
+		if (kind == ContainerKind.CHEST && ContainerWork.loadedHalves(level, container, state).stream().anyMatch(half -> ChestBlock.isChestBlockedAt(level, half)))
 			kind = ContainerKind.CHEST_HIGH;
 		int dy = high ? -1 : 0;
 		Vec3 face = Vec3.atBottomCenterOf(container).add(side.getStepX() * 0.5, 0, side.getStepZ() * 0.5);
 		Vec3 point = face.add(side.getStepX() * kind.standoff / 16.0, 0, side.getStepZ() * kind.standoff / 16.0);
 		BlockPos standBlock = new BlockPos(BlockPos.containing(point).getX(), container.getY() + dy, BlockPos.containing(point).getZ());
-		if (WalkNodeEvaluator.getPathTypeStatic(bot, standBlock) != PathType.WALKABLE)
+		if (!level.isLoaded(standBlock) || WalkNodeEvaluator.getPathTypeStatic(bot, standBlock) != PathType.WALKABLE)
 			return null;
 		// the blocks between him and the container must be clear (he leans and reaches across them)
 		for (BlockPos between = container.relative(side).above(dy); !between.equals(standBlock); between = between.relative(side)) {

@@ -1,8 +1,12 @@
 package com.comedymonkey.createaddons.content.electric;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
@@ -64,11 +68,30 @@ public class EnergyBuffer extends EnergyStorage {
 	public int pushTo(Level level, BlockPos pos, Direction side, int limit) {
 		if (energy <= 0)
 			return 0;
-		IEnergyStorage target = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.relative(side), side.getOpposite());
+		return send(level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.relative(side), side.getOpposite()), limit);
+	}
+
+	/**
+	 * Pushes energy into what {@code target} finds; returns what was sent. Machines that push every tick keep one of
+	 * these per side ({@link #cacheFor}), so the neighbour isn't looked up again each time.
+	 */
+	public int pushTo(@Nullable BlockCapabilityCache<IEnergyStorage, @Nullable Direction> target, int limit) {
+		if (energy <= 0 || target == null)
+			return 0;
+		return send(target.getCapability(), limit);
+	}
+
+	private int send(@Nullable IEnergyStorage target, int limit) {
 		if (target == null || !target.canReceive())
 			return 0;
 		int sent = target.receiveEnergy(Math.min(energy, limit), false);
 		return consume(sent);
+	}
+
+	/** What's next to {@code pos} on side {@code side}, facing back at it, looked up only when it changes. */
+	public static BlockCapabilityCache<IEnergyStorage, @Nullable Direction> cacheFor(ServerLevel level, BlockPos pos,
+																					 Direction side) {
+		return BlockCapabilityCache.create(Capabilities.EnergyStorage.BLOCK, level, pos.relative(side), side.getOpposite());
 	}
 
 	/** A view others can only take from. */

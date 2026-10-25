@@ -70,6 +70,13 @@ public class TradeBotMotion {
 	private List<Vec3> points = List.of();
 	/** The route's blocks (the same length as {@link #points}). */
 	private List<BlockPos> nodes = List.of();
+	/**
+	 * Worked out once per route: the step onto each waypoint (null to roll it), the first step at or after each
+	 * waypoint ({@code points.size()} if none), and the distance rolled from the first waypoint to each.
+	 */
+	private Step[] steps = new Step[0];
+	private int[] nextStep = new int[0];
+	private double[] along = new double[0];
 	/** The last hops taken, from block to block (for checking that they're all square-on). */
 	private final List<Hop> hops = new ArrayList<>();
 	private static final int MAX_HOPS = 64;
@@ -80,7 +87,7 @@ public class TradeBotMotion {
 	@Nullable
 	private Vec3 finalPoint;
 	private float finalYaw = Float.NaN;
-	private boolean failed;
+	private boolean failed, noWay;
 	/** Doors and gates he opened, with the waypoint each is on (-1 once that route is gone): he shuts them once past. */
 	private final Map<BlockPos, Integer> openedDoors = new HashMap<>();
 	private double travelled;
@@ -90,6 +97,8 @@ public class TradeBotMotion {
 	@Nullable
 	private Vec3 windowStart;
 	private int windowTicks, blockedWindows, replans;
+	/** When he last searched for a route (on his clip clock), for one search a tick at most. */
+	private long plannedAt = Long.MIN_VALUE;
 	@Nullable
 	private BlockPos target;
 	private boolean fleeing;
@@ -104,19 +113,41 @@ public class TradeBotMotion {
 
 	// ---- orders
 
-	/** Plans a route to stand on {@code target}, optionally at an exact point facing {@code yaw}. False if there's none. */
-	public boolean moveTo(BlockPos target, @Nullable Vec3 exact, float yaw) {
+	/** What came of asking for a route: one to follow, none to be had, or not this tick (he's planned one already). */
+	public enum Route {
+		PLANNED, NONE, LATER;
+
+		public boolean planned() {
+			return this == PLANNED;
+		}
+	}
+
+	/**
+	 * Plans a route to stand on {@code target}, optionally at an exact point facing {@code yaw}. A route search is
+	 * the dearest thing he does, so he makes one a tick at most: a second ask in the same tick is {@link Route#LATER},
+	 * to ask again next tick (it says nothing about whether there's a way).
+	 */
+	public Route moveTo(BlockPos target, @Nullable Vec3 exact, float yaw) {
+		if (!canPlan())
+			return Route.LATER;
 		replans = 0;
 		return plan(target, exact, yaw);
 	}
 
-	private boolean plan(BlockPos target, @Nullable Vec3 exact, float yaw) {
+	/** No route search yet this tick. */
+	private boolean canPlan() {
+		return bot.now() != plannedAt;
+	}
+
+	private Route plan(BlockPos target, @Nullable Vec3 exact, float yaw) {
 		this.target = target;
+		plannedAt = bot.now();
 		Path planned = bot.getNavigation().createPath(target, 0);
 		bot.getNavigation().stop();
 		if (planned == null || !planned.canReach()) {
-			log("no route to " + target.toShortString() + (planned == null ? " (none)" : " (only partway)"));
-			return false;
+			if (debug)
+				log("no route to " + target.toShortString() + (planned == null ? " (none)" : " (only partway)"));
+			return Route.NONE;
 		}
 		path = planned;
 		List<BlockPos> route = new ArrayList<>();
@@ -127,6 +158,7 @@ public class TradeBotMotion {
 		for (BlockPos node : nodes)
 			list.add(floorCentre(bot.level(), node));
 		points = list;
+		measure();
 		next = 0;
 		finalPoint = exact != null ? exact : list.get(list.size() - 1);
 		finalYaw = yaw;
@@ -134,11 +166,12 @@ public class TradeBotMotion {
 		windowStart = null;
 		blockedWindows = 0;
 		openedDoors.replaceAll((pos, i) -> -1); // a new route: its waypoints don't match the old ones
-		log("route to " + target.toShortString() + ": " + list.size() + " waypoints");
+		if (debug)
+			log("route to " + target.toShortString() + ": " + list.size() + " waypoints");
 		skipReached();
 		if (phase == Phase.IDLE || phase == Phase.STOPPING)
 			setPhase(Phase.FACING);
-		return true;
+		return Route.PLANNED;
 	}
 
 	/** Fleeing: twice as fast, in a panic, straight for it (no turn clips). */
@@ -157,7 +190,8 @@ public class TradeBotMotion {
 		failed = false;
 		speed = 0;
 		bot.setDeltaMovement(0, bot.getDeltaMovement().y, 0);
-		log(phase + " -> halted");
+		if (debug)
+			log(phase + " -> halted");
 		phase = Phase.IDLE;
 		phaseTicks = 0;
 		// no route now to be past them on: shut the doors he opened ahead, unless he's in the way, and those once he's clear
@@ -192,6 +226,11 @@ public class TradeBotMotion {
 
 	public boolean failed() {
 		return failed;
+	}
+
+	/** He gave up because a fresh route search found no way there (not just stuck, behind someone, say). */
+	public boolean foundNoWay() {
+		return failed && noWay;
 	}
 
 	// ---- ticking (server, from the entity's AI step)
@@ -249,7 +288,8 @@ public class TradeBotMotion {
 					log("hop t=" + String.format(java.util.Locale.ROOT, "%.2f", t) + " at " + fmt(bot.position()) + " path " + fmt(bot.rootPosition(clip, clip.localTime(t)))
 						+ " anchor " + fmt(bot.clipAnchor()) + " yaw " + bot.clipAnchorYaw() + " clip " + clip.name());
 				if (clip.finished(t)) {
-					log("landed at " + fmt(bot.position()));
+					if (debug)
+						log("landed at " + fmt(bot.position()));
 					next++;
 					skipReached();
 					setPhase(next < points.size() ? Phase.FACING : Phase.IDLE);
@@ -425,7 +465,8 @@ public class TradeBotMotion {
 		if (hops.size() >= MAX_HOPS)
 			hops.remove(0);
 		hops.add(new Hop(nodes.get(next - 1), nodes.get(next)));
-		log(step + " from " + fmt(bot.position()) + " to " + fmt(to) + ": " + String.format(java.util.Locale.ROOT, "%.2f", want) + " of "
+		if (debug)
+			log(step + " from " + fmt(bot.position()) + " to " + fmt(to) + ": " + String.format(java.util.Locale.ROOT, "%.2f", want) + " of "
 			+ String.format(java.util.Locale.ROOT, "%.2f", has) + " (waypoint " + next + ")");
 		setPhase(Phase.STEPPING, false);
 	}
@@ -481,8 +522,27 @@ public class TradeBotMotion {
 	Step stepTo(int i) {
 		if (i <= 0 || i >= points.size() || path == null)
 			return null;
-		double rise = points.get(i).y - points.get(i - 1).y;
-		return classify(rise, isStairs(nodes.get(i)), isStairs(nodes.get(i - 1)));
+		return steps[i];
+	}
+
+	/** Works out the new route's steps and distances, so nothing has to look along it again while he rolls. */
+	private void measure() {
+		int n = points.size();
+		steps = new Step[n];
+		for (int i = 1; i < n; i++)
+			steps[i] = classify(points.get(i).y - points.get(i - 1).y, isStairs(nodes.get(i)), isStairs(nodes.get(i - 1)));
+		nextStep = new int[n + 1];
+		nextStep[n] = n;
+		for (int i = n - 1; i >= 0; i--)
+			nextStep[i] = steps[i] != null ? i : nextStep[i + 1];
+		along = new double[n];
+		for (int i = 1; i < n; i++)
+			along[i] = along[i - 1] + horizontal(points.get(i).subtract(points.get(i - 1)));
+	}
+
+	/** The first step at or after waypoint {@code from} (never the first waypoint), or {@code points.size()} if none. */
+	private int nextStepFrom(int from) {
+		return nextStep[Math.min(Math.max(from, 1), points.size())];
 	}
 
 	/** What a change in floor height needs: nothing (roll), a slab hop, a block hop or a stairs bounce. */
@@ -509,26 +569,26 @@ public class TradeBotMotion {
 	private Vec3 stopPoint() {
 		if (path == null || points.isEmpty())
 			return null;
-		for (int i = Math.max(next, 1); i < points.size(); i++)
-			if (stepTo(i) != null)
-				return points.get(i - 1);
-		return finalPoint;
+		int step = nextStepFrom(next);
+		return step < points.size() ? points.get(step - 1) : finalPoint;
 	}
 
+	/** How far he has still to roll to where the current brake should end, along the route. */
 	private double remainingToStop() {
 		Vec3 stop = stopPoint();
 		if (stop == null)
 			return 0;
-		double dist = 0;
-		Vec3 from = bot.position();
-		for (int i = next; i < points.size(); i++) {
-			Vec3 p = points.get(i);
-			if (stepTo(i) != null && i > 0)
-				return dist + horizontal(points.get(i - 1).subtract(from));
-			dist += horizontal(p.subtract(from));
-			from = p;
-		}
-		return dist - horizontal(points.get(points.size() - 1).subtract(stop));
+		int n = points.size();
+		if (next >= n)
+			return -horizontal(points.get(n - 1).subtract(stop));
+		Vec3 pos = bot.position();
+		int step = nextStepFrom(next);
+		if (step == next) // the step is the very next waypoint: he stops on the one before it
+			return horizontal(points.get(step - 1).subtract(pos));
+		double toNext = horizontal(points.get(next).subtract(pos));
+		if (step < n)
+			return toNext + along[step - 1] - along[next];
+		return toNext + along[n - 1] - along[next] - horizontal(points.get(n - 1).subtract(stop));
 	}
 
 	private double brakingDistance() {
@@ -568,7 +628,8 @@ public class TradeBotMotion {
 		long now = bot.level().getGameTime();
 		if (!fleeing && now - lastBump >= BUMP_COOLDOWN) {
 			lastBump = now;
-			log("bumped into something at " + bot.blockPosition().toShortString());
+			if (debug)
+				log("bumped into something at " + bot.blockPosition().toShortString());
 			setPhase(Phase.BUMPED, false);
 			bot.playClip(BUMP_CLIP);
 			return;
@@ -577,15 +638,20 @@ public class TradeBotMotion {
 	}
 
 	private void replan() {
-		log("stuck at " + bot.blockPosition().toShortString() + ", replanning");
+		if (target != null && replans < 2 && !canPlan())
+			return; // he planned a route this tick already: the next stuck moment tries again
+		if (debug)
+			log("stuck at " + bot.blockPosition().toShortString() + ", replanning");
 		Vec3 exact = finalPoint;
 		float yaw = finalYaw;
-		if (target != null && replans++ < 2 && plan(target, exact, yaw)) {
+		Route route = target != null && replans++ < 2 ? plan(target, exact, yaw) : null;
+		if (route == Route.PLANNED) {
 			setPhase(Phase.FACING);
 			return;
 		}
 		log("giving up");
 		failed = true;
+		noWay = route == Route.NONE;
 		path = null;
 		points = List.of();
 		setPhase(Phase.IDLE);
@@ -632,12 +698,14 @@ public class TradeBotMotion {
 				if (state.getBlock() instanceof DoorBlock door && door.type().canOpenByHand() && !door.isOpen(state)) {
 					door.setOpen(bot, level, state, pos, true);
 					openedDoors.put(pos.immutable(), i);
-					log("opened the door at " + pos.toShortString());
+					if (debug)
+						log("opened the door at " + pos.toShortString());
 				} else if (state.getBlock() instanceof FenceGateBlock && !state.getValue(FenceGateBlock.OPEN)) {
 					level.setBlock(pos, state.setValue(FenceGateBlock.OPEN, true), 10);
 					level.playSound(null, pos, SoundEvents.FENCE_GATE_OPEN, SoundSource.BLOCKS, 1, 1);
 					openedDoors.put(pos.immutable(), i);
-					log("opened the gate at " + pos.toShortString());
+					if (debug)
+						log("opened the gate at " + pos.toShortString());
 				}
 			}
 		}
@@ -716,7 +784,7 @@ public class TradeBotMotion {
 	}
 
 	private void setPhase(Phase phase, boolean playClip) {
-		if (this.phase != phase)
+		if (debug && this.phase != phase)
 			log(this.phase + " -> " + phase + " at " + String.format(java.util.Locale.ROOT, "%.2f %.2f %.2f", bot.getX(), bot.getY(), bot.getZ())
 				+ " yaw " + Math.round(bot.getYRot()) + " waypoint " + next + "/" + points.size());
 		this.phase = phase;

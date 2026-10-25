@@ -90,12 +90,23 @@ public final class TradeBotLinkPicking {
 		Outliner outliner = Outliner.getInstance();
 		outliner.showAABB(STATION_KEY, new AABB(station)).colored(0xE6DEC8).lineWidth(1 / 32f);
 		for (BlockPos input : be.inputPositions())
-			outliner.showAABB(input, new AABB(input)).colored(TradeBotLinks.TAKES_COLOUR).lineWidth(1 / 16f);
+			outliner.showAABB(input, outline(mc, input)).colored(TradeBotLinks.TAKES_COLOUR).lineWidth(1 / 16f);
 		BlockPos output = be.outputPosition();
 		if (output != null)
-			outliner.showAABB(output, new AABB(output)).colored(TradeBotLinks.DELIVERS_COLOUR).lineWidth(1 / 16f);
+			outliner.showAABB(output, outline(mc, output)).colored(TradeBotLinks.DELIVERS_COLOUR).lineWidth(1 / 16f);
 		if (mc.level.getGameTime() % 30 == 0)
 			hint();
+	}
+
+	/** The whole container linked at {@code pos}: both halves of a double chest (vanilla or upgraded) in one box. */
+	private static AABB outline(Minecraft mc, BlockPos pos) {
+		AABB box = new AABB(pos);
+		if (mc.level == null || !mc.level.isLoaded(pos))
+			return box;
+		for (BlockPos half : com.comedymonkey.createaddons.content.chest.ChestUpgrades.halves(mc.level, pos, mc.level.getBlockState(pos)))
+			if (mc.level.isLoaded(half))
+				box = box.minmax(new AABB(half));
+		return box;
 	}
 
 	@Nullable

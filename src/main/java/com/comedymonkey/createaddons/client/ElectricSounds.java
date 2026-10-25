@@ -11,8 +11,6 @@ import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlockEntity;
 import com.comedymonkey.createaddons.registry.ModSounds;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.sounds.SoundEvent;
@@ -83,11 +81,12 @@ public final class ElectricSounds {
 		}
 		s.lit = lit;
 
-		// The loops follow the wheel and the fire, and fade out on their own
-		if ((s.whir == null || s.whir.isStopped()) && speed > 0.03f)
+		// The loops follow the wheel and the fire, and fade out on their own; out of earshot they stop, and start
+		// again (without the start-up sounds) on coming back
+		if (MachineLoop.ended(s.whir) && speed > 0.03f && Loop.canStart(ModSounds.generator("whir"), pos))
 			mc.getSoundManager().play(s.whir = new Loop(ModSounds.generator("whir"), pos, be::isRemoved,
 				be::rotorSpeed, () -> 0.6 + 0.4 * be.rotorSpeed()));
-		if ((s.burn == null || s.burn.isStopped()) && lit)
+		if (MachineLoop.ended(s.burn) && lit && Loop.canStart(ModSounds.generator("burn"), pos))
 			mc.getSoundManager().play(s.burn = new Loop(ModSounds.generator("burn"), pos, be::isRemoved,
 				() -> be.isLit() ? 1 : 0, () -> 1));
 
@@ -117,7 +116,7 @@ public final class ElectricSounds {
 		if (powered != s.powered)
 			play(pos, ModSounds.motor(powered ? "start" : "stop"), 1, 0.97f + 0.06f * be.getLevel().random.nextFloat());
 		s.powered = powered;
-		if ((s.hum == null || s.hum.isStopped()) && powered)
+		if (MachineLoop.ended(s.hum) && powered && Loop.canStart(ModSounds.motor("hum"), pos))
 			mc.getSoundManager().play(s.hum = new Loop(ModSounds.motor("hum"), pos, be::isRemoved,
 				() -> be.getBlockState().getValue(ElectricMotorBlock.POWERED) ? 1 : 0, () -> humPitch(be.getSpeedSetting())));
 	}
@@ -127,19 +126,21 @@ public final class ElectricSounds {
 		return Mth.clamp(0.7f + 0.125f * (Mth.log2(Math.max(rpm, 1)) - 4), 0.5f, 1.2f);
 	}
 
+	/** A one-shot from the block, if anyone's in earshot. */
 	private static void play(BlockPos at, SoundEvent sound, float volume, float pitch) {
-		Minecraft.getInstance().level.playLocalSound(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, sound,
-			SoundSource.BLOCKS, volume, pitch, false);
+		double x = at.getX() + 0.5, y = at.getY() + 0.5, z = at.getZ() + 0.5;
+		if (Hearing.inRange(sound, volume, x, y, z, Hearing.ONE_SHOT_MARGIN))
+			Minecraft.getInstance().level.playLocalSound(x, y, z, sound, SoundSource.BLOCKS, volume, pitch, false);
 	}
 
 	/** A running loop: eases toward its volume and pitch, and stops once it has faded out or its block is gone. */
-	private static final class Loop extends AbstractTickableSoundInstance {
+	private static final class Loop extends MachineLoop {
 		private final BooleanSupplier removed;
 		private final DoubleSupplier want, wantPitch;
 		private float level;
 
 		Loop(SoundEvent sound, BlockPos at, BooleanSupplier removed, DoubleSupplier want, DoubleSupplier wantPitch) {
-			super(sound, SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
+			super(sound);
 			this.removed = removed;
 			this.want = want;
 			this.wantPitch = wantPitch;
@@ -152,9 +153,14 @@ public final class ElectricSounds {
 			pitch = (float) wantPitch.getAsDouble();
 		}
 
+		/** Whether a loop from this block is in earshot, to start it. */
+		static boolean canStart(SoundEvent sound, BlockPos at) {
+			return Hearing.inRange(sound, 1, at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, Hearing.LOOP_START_MARGIN);
+		}
+
 		@Override
 		public void tick() {
-			if (removed.getAsBoolean()) {
+			if (removed.getAsBoolean() || !Hearing.inRange(getLocation(), 1, x, y, z, Hearing.LOOP_STOP_MARGIN)) {
 				stop();
 				return;
 			}

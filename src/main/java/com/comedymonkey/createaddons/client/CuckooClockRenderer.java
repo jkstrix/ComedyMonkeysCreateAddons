@@ -18,9 +18,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.event.ModelEvent;
@@ -58,7 +56,7 @@ public class CuckooClockRenderer extends SafeBlockEntityRenderer<CuckooClockBloc
 	private static final float COG_SPAN = 9.55f;
 	private static final float PENDULUM_DEGREES = 14;
 	/** The sky strip behind the window, and the rectangle it fills (just behind the sun and moon disc). */
-	private static final ResourceLocation SKY_TEXTURE = ComedyMonkeysCreateAddons.asResource("block/cuckoo_clock_sky");
+	private static final BlockSprite SKY_TEXTURE = new BlockSprite(ComedyMonkeysCreateAddons.asResource("block/cuckoo_clock_sky"));
 	private static final float SKY_X0 = 4.75f, SKY_X1 = 11.25f, SKY_Y0 = 6.9f, SKY_Y1 = 10.1f, SKY_Z = 7.9f;
 	private static final int SKY_COLUMNS = 12;
 	/** The strip's layout (as the texture is drawn): 128 rows, 24 a unit of sky value, value 2.5 at the top. */
@@ -129,7 +127,7 @@ public class CuckooClockRenderer extends SafeBlockEntityRenderer<CuckooClockBloc
 	 * the middle of the window and rise to the humps at either side.
 	 */
 	private static void renderSky(PoseStack ms, VertexConsumer vc, float time, int light) {
-		TextureAtlasSprite sky = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(SKY_TEXTURE);
+		TextureAtlasSprite sky = SKY_TEXTURE.get();
 		// the sun's height: 0 at 6:00 and 18:00, 1 at noon, -1 at midnight
 		float sun = Mth.sin(Mth.positiveModulo(time, ClockTime.TICKS_PER_DAY) / ClockTime.TICKS_PER_DAY * Mth.TWO_PI);
 		// how the sky changes upwards: bluer by day (from the dusk glow at the horizon around sunrise and sunset), the

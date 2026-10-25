@@ -102,7 +102,8 @@ public class MagmaEngineRenderer extends SafeBlockEntityRenderer<MagmaEngineBloc
 		ms.popPose();
 
 		// The pistons, each sliding along its leaning cylinder
-		for (boolean left : new boolean[] {true, false}) {
+		for (int side = 0; side < 2; side++) {
+			boolean left = side == 0;
 			float out = STROKE * pistonTravel(angle, left);
 			ms.pushPose();
 			ms.translate((left ? -LEAN : LEAN) * out, LEAN * out, 0);
