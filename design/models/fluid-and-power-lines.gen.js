@@ -13,8 +13,8 @@ const OUT = process.argv.slice(2).find((a) => !a.startsWith('--')) || path.resol
 
 // ---------- palette ----------
 // Create's own copper (sampled from its fluid tank), clean; the generators' mid brass, no bright highlights
-const CU = { edge: '#904931', shade: '#9a5038', mid: '#a75a40', field: '#b26247', lit: '#c26b4c', ring: '#7a3e2a', ringLo: '#6e3725' };
-const BR = { lo: '#7e6832', field: '#8f7638', lit: '#a3873f', ring: '#6b5828', ringLo: '#5e4d24' };
+const CU = { edge: '#904931', shade: '#9a5038', mid: '#a75a40', field: '#b26247', lit: '#c26b4c', ring: '#9a5038', ringLo: '#904931' };
+const BR = { lo: '#7e6832', field: '#8f7638', lit: '#a3873f', ring: '#7e6832', ringLo: '#76612e' };
 const STEEL = ['#2f343b', '#3c424a', '#4a5059'];
 const CERAMIC = ['#7d786f', '#8f897e', '#9c968b'];
 const RED = '#7a2a22';
@@ -140,9 +140,10 @@ function pipeArm(dir, tier, { from = 8, fluid = null, slot = true, ring = true }
   const name = `${tier}_${dir}`;
   const horiz = axis !== 'y' && slot;
   // the half ring at the joint (0.5 px each side makes one 1 px ring between two pieces)
-  const rA = s > 0 ? 15.5 : 0, rB = s > 0 ? 16 : 0.5;
-  if (ring) out.push(...rod(name + '_ring', axis, rA, rB, 6, ringT, { capLo: s > 0, capHi: s < 0 }));
-  const b0 = s > 0 ? span[0] : (ring ? 0.5 : 0), b1 = s > 0 ? (ring ? 15.5 : 16) : span[1];
+  // a subtle coupling: half a pixel proud of the pipe, a quarter pixel each side of the joint
+  const rA = s > 0 ? 15.75 : 0, rB = s > 0 ? 16 : 0.25;
+  if (ring) out.push(...rod(name + '_ring', axis, rA, rB, 5, ringT, { capLo: s > 0, capHi: s < 0 }));
+  const b0 = s > 0 ? span[0] : (ring ? 0.25 : 0), b1 = s > 0 ? (ring ? 15.75 : 16) : span[1];
   // box a: the wide-and-flat one (4 across, 2 tall); box b: the tall one (2 across, 4 tall), with the slot cut in its top
   const [fa, ta] = ab(axis, b0, b1, ...(axis === 'x' ? [7, 9, 6, 10] : axis === 'z' ? [6, 10, 7, 9] : [6, 10, 7, 9]));
   out.push(C(name + '_a', fa, ta, { all: body, [END[axis][0]]: null, [END[axis][1]]: null }));
@@ -170,9 +171,9 @@ function reorder(axis, a0, a1, y0, y1, c0, c1) {
 function straight(axis, tier, o = {}) {
   const [lo, hi] = axis === 'x' ? ['west', 'east'] : axis === 'z' ? ['north', 'south'] : ['down', 'up'];
   // one arm across the whole block: build it as the 'hi' arm from 0, with a ring at each end
-  const parts = pipeArm(hi, tier, { ...o, from: 0.5 });
+  const parts = pipeArm(hi, tier, { ...o, from: 0.25 });
   const [ax] = AX[lo];
-  parts.push(...rod(`${tier}_${lo}_ring`, ax, 0, 0.5, 6, tier + '_ring', { capHi: true }));
+  parts.push(...rod(`${tier}_${lo}_ring`, ax, 0, 0.25, 5, tier + '_ring', { capHi: true }));
   return parts;
 }
 // A bend, T or end: a hub plus an arm to each connected side
@@ -386,7 +387,7 @@ function fluidRow(tier, fluid, row, label) {
   outliner.push(group(label, [8, 0, 8], row, kids));
 }
 // the end piece: arm from the west edge to the flange
-function endPiece(tier, fluid) { return [...pipeArm('east', tier, { from: 0.5, fluid, ring: false }), ...rod(tier + '_west_ring', 'x', 0, 0.5, 6, tier + '_ring', { capHi: true }), ...flange('east', tier + '_ring')]; }
+function endPiece(tier, fluid) { return [...pipeArm('east', tier, { from: 0.25, fluid, ring: false }), ...rod(tier + '_west_ring', 'x', 0, 0.25, 5, tier + '_ring', { capHi: true }), ...flange('east', tier + '_ring')]; }
 
 fluidRow('copper', 'lava', [0, 0, 0], 'copper_fluid');
 fluidRow('brass', 'water', [0, 0, 64], 'brass_fluid');
@@ -529,6 +530,44 @@ outliner.push(group('blue_cable', [8, 0, 8], DWROW2, ws4.kids));
     }
   });
   outliner.push(group('pole_variants', [8, 0, 8], row, kids));
+}
+
+// ---------- inventory icons ----------
+// 3D item models, one per item, each in its own cell; the GUI view looks down 30 degrees from the south-east corner.
+// A coil of cable for the Power Line items: three loose loops lying flat, a clip-coloured tie and a loose end
+function coil(tier) {
+  const tex = tier === 'brass' ? 'brass_twin' : 'copper', t = 1, out = [];
+  // loose loops: a gap between them, each a slightly different size
+  const loops = [[4.2, 3.9], [5.9, 4.9], [7.6, 4.2]];
+  // each loop an octagon of bars, as the Valve wheel's rim: bars on the axes lie along their tangent, diagonal ones turn 45
+  loops.forEach(([y, R], li) => {
+    const ap = R * Math.cos(Math.PI / 8), side = 2 * R * Math.sin(Math.PI / 8) + 0.15;
+    for (let k = 0; k < 8; k++) {
+      const an = (k * Math.PI) / 4, cx = 8 + ap * Math.cos(an), cz = 8 + ap * Math.sin(an), alongZ = k === 0 || k === 4;
+      const from = alongZ ? [cx - t / 2, y, cz - side / 2] : [cx - side / 2, y, cz - t / 2], to = alongZ ? [cx + t / 2, y + t, cz + side / 2] : [cx + side / 2, y + t, cz + t / 2];
+      out.push(C(`coil_` + li + '_' + k, from, to, { all: tex }, k % 2 ? { rot: ['y', k === 1 || k === 5 ? 45 : -45, [cx, y + t / 2, cz]] } : {}));
+    }
+  });
+  out.push(C('coil_tie', [11.4, 3.8, 7.25], [13.4, 9.0, 8.75], { all: CLIP[tier] }));
+  out.push(C('coil_end', [12.2, 7.6, 9.4], [15.6, 7.6 + t, 9.4 + t], { all: tex }, { rot: ['y', -22.5, [12.2, 8.1, 9.9]] }));
+  return out;
+}
+const ICONS = [
+  ['copper_fluid_line', straight('x', 'copper', {})],
+  ['brass_fluid_line', straight('x', 'brass', {})],
+  ['copper_power_line', coil('copper')],
+  ['brass_power_line', coil('brass')],
+  ['line_post', postBlock('single', 'copper', ['east', 'west'])],
+  ['intake', intake('copper', 'water', null)],
+  ['valve', (() => { const v = valve('copper', null); return [...v.parts, ...v.wheel]; })()],
+  ['breaker', (() => { const ws = { w: 1.5, h: 1.5, tex: 'copper' }; const b = breaker(ws); return [floorRun('x', 1, 15, ws), ...b.parts, ...b.lever]; })()],
+  ['filter', filter('copper', 'water', null)],
+  ['meter', (() => { const m = meterPipe('copper', null); return [...m.parts, ...m.needle]; })()],
+  ['splitter', (() => { const p = splitterPipe('copper', null, 'even'); return [...p.parts, ...p.dial]; })()],
+];
+{
+  const row = [0, 0, 560];
+  outliner.push(group('icons', [8, 0, 8], row, ICONS.map(([name, parts], i) => blockOf('icon_' + name, parts, i * 2, 0, 0, row))));
 }
 
 // ---------- clip: the moving parts ----------

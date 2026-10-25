@@ -108,7 +108,7 @@ It sits beside Create's own Fluid Pipes (8 px, copper) and should never be mista
 ## Secondary Forms
 
 **Pipes:**
-- **Coupling ring:** 6 px across (plus-shaped) and 1 px long, at the block boundary on each connected side, so there's one ring between every two pieces. It's always a darker shade of the tier material, dyed or not.
+- **Coupling ring:** subtle ("a lot more subtle"): 5 px across, only half a pixel proud of the pipe, and 0.5 px long, at the block boundary on each connected side, so there's one ring between every two pieces. It's always just a shade darker than the tier material, dyed or not.
 - **Knuckle hub:** a 6 px rounded hub (three crossed boxes) at the centre whenever the piece isn't straight: bends, T-pieces, crosses and ends.
 - **Flange:** an 8 px plus-shaped plate, 1 px thick, flat against a tank or machine at a connected end.
 - **End cap:** a 5 px rounded cap on a dead end.
