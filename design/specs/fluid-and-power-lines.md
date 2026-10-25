@@ -41,7 +41,7 @@ Clarified: **pump-free, power-free fluid lines and FE power lines in copper and 
 | D30 | Posts | **Posts are built from blocks.** Stack Line Posts to make a pole of **any height**; the top block is the **head**. The head can carry **1 to 4 branches** (a crossarm out to N, E, S or W, each with its own insulator) as well as its top insulator, so one pole can carry several spans. Branches are added and removed on the head (P12). **Poles are plain wood with no tier** (no bands at the joints); each insulator's cap shows the tier of the cable tied to it | user, 2026-10-25 |
 | D27 | Art | Dark, muted Create palette, restrained accents; every look previewed in Blockbench first; moving parts (flow windows, dial needles, valve wheels) are Flywheel instanced, like the other machines | existing mod |
 
-### Proposed defaults (need an OK at brief time)
+### Defaults (approved by the user, 2026-10-25)
 | # | Area | Proposal |
 |---|---|---|
 | P1 | World fluids | The Intake draws **only from containers**, never from water or lava source blocks in the world. Create's pump and Hose Pulley stay the way to pull world fluid, so the pump still has a job |
@@ -59,7 +59,7 @@ Clarified: **pump-free, power-free fluid lines and FE power lines in copper and 
 | P10 | Pipez worlds | A one-time hint in the Pipez cover tooltip: "Retired: use Fluid Lines and Power Lines" |
 
 ## Open Questions
-None for v1 beyond the proposed defaults above.
+None for v1.
 
 Parked for later versions:
 - **Item lines** (explicitly out of v1, per D1).
@@ -212,9 +212,9 @@ Pump-free, power-free fluid and FE lines in two tiers. Their upgrades are physic
 - Goggles show where it's hidden.
 
 # COMPLETENESS SCORE
-Gameplay: 95% · World Integration: 90% · Balance: 85% · Progression: 90% · Automation: 90% · Edge Cases: 85% · **Overall Design Readiness: 85%**
+Gameplay: 100% · World Integration: 90% · Balance: 85% · Progression: 90% · Automation: 90% · Edge Cases: 85% · **Overall Design Readiness: 85%**
 
-- Gameplay 95%: only the proposed defaults (P1–P10) need an OK.
+- Gameplay 100%: every decision and default is approved.
 - World Integration 90%: the battery source/receiver rule (Rule 5) should be checked against real battery mods.
 - Balance 85%: recipes (P7) are proposals; throughput numbers need a play test against Wellspring upgrade rates.
 - Progression 90%: confirm the brass tier isn't needed before a Geothermal Turbine.
