@@ -35,7 +35,8 @@ import net.neoforged.neoforge.client.model.data.ModelProperty;
 
 /**
  * A Power Line block's model, built from its block entity: for every face a wire lies on, the middle piece, an arm to
- * each edge it runs off (short of a wire up the next face, with a fold over an outside edge and a lug against a machine),
+ * each edge it runs off (short of a wire up the next face, with a fold over an outside edge, and up a machine's face to a
+ * socket in its middle), a riser straight up through the block into a machine across it,
  * a clip on a straight run and a splice at a junction. Where it's threaded through a drilled wall, a surround round the
  * hole on the cable's free sides. The parts are authored once, lying on the floor and running
  * north, and turned to each face and direction. Bare copper and brass twin flex, or the thicker covered cable a dyed wire
@@ -44,7 +45,7 @@ import net.neoforged.neoforge.client.model.data.ModelProperty;
 public class PowerLineModel extends EncasedLineModel {
 	private static final ModelProperty<String> WIRES = new ModelProperty<>();
 	private static final String[] STYLES = {"copper", "brass", "copper_covered", "brass_covered"};
-	private static final String[] PARTS = {"centre", "arm", "arm_inner", "fold", "clip", "splice", "lug", "grommet", "hole_edge", "hole",
+	private static final String[] PARTS = {"centre", "arm", "arm_inner", "fold", "clip", "splice", "rise", "socket", "riser", "grommet", "hole_edge", "hole",
 		"hole_bar_long", "hole_bar_short"};
 	private static final Map<String, List<BakedQuad>> CACHE = new ConcurrentHashMap<>();
 
@@ -124,14 +125,21 @@ public class PowerLineModel extends EncasedLineModel {
 					run = d;
 				else if (d == run.getOpposite())
 					straight = true;
-				add(out, style, link == WireLink.INSIDE ? "arm_inner" : "arm", face, d);
+				// into a machine: up its face to the middle and into a socket there
+				add(out, style, link == WireLink.INSIDE || link == WireLink.TERMINAL ? "arm_inner" : "arm", face, d);
 				if (link == WireLink.OUTSIDE)
 					add(out, style, "fold", face, d);
-				if (link == WireLink.TERMINAL)
-					add(out, style, "lug", face, d);
+				if (link == WireLink.TERMINAL) {
+					add(out, style, "rise", face, d);
+					add(out, style, "socket", face, d);
+				}
 				if (link == WireLink.THROUGH)
 					add(out, style, "grommet", face, d);
 			}
+			// straight up through the block into a machine across it, a socket in the middle of its face
+			boolean riser = (links & WireLink.RISE) != 0;
+			if (riser)
+				add(out, style, "riser", face, across.get(0));
 			if (holeMiddle) {
 				add(out, style, "hole", face, across.get(0));
 				for (Direction d : across)

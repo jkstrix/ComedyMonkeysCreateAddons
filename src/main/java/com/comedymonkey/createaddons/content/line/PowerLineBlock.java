@@ -109,6 +109,9 @@ public class PowerLineBlock extends BaseEntityBlock implements IWrenchable, Simp
 		for (Direction face : Direction.values()) {
 			if (!hasFace(state, face))
 				continue;
+			// (a riser up through the middle leaves no room for a fitting)
+			if ((be.links(face) & WireLink.RISE) != 0)
+				return null;
 			Direction first = null;
 			int count = 0;
 			for (Direction d : WireLink.across(face))

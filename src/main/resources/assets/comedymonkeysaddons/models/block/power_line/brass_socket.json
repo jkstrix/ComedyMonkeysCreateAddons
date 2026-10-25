@@ -1,0 +1,71 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/brass",
+    "brass_ring": "comedymonkeysaddons:block/fluid_line/brass_ring"
+  },
+  "elements": [
+    {
+      "name": "socket",
+      "from": [
+        6.5,
+        6.5,
+        0
+      ],
+      "to": [
+        9.5,
+        9.5,
+        1.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            14.5,
+            6.5,
+            16,
+            9.5
+          ],
+          "texture": "#brass_ring"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#brass_ring"
+        },
+        "west": {
+          "uv": [
+            0,
+            6.5,
+            1.5,
+            9.5
+          ],
+          "texture": "#brass_ring"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            1.5
+          ],
+          "texture": "#brass_ring"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            14.5,
+            9.5,
+            16
+          ],
+          "texture": "#brass_ring"
+        }
+      }
+    }
+  ]
+}

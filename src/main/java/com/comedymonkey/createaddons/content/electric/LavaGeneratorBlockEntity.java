@@ -94,6 +94,22 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 		return tank;
 	}
 
+	/** Half the difference to a generator whose terminal touches this one's on {@code side}, if it holds less. */
+	private void share(Direction side) {
+		BlockPos next = worldPosition.relative(side);
+		if (level == null || !level.isLoaded(next) || !(level.getBlockEntity(next) instanceof LavaGeneratorBlockEntity other)
+			|| !LavaGeneratorBlock.isTerminal(other.getBlockState(), side.getOpposite()))
+			return;
+		int move = (energy.getEnergyStored() - other.energy.getEnergyStored()) / 2;
+		if (move <= 0)
+			return;
+		move = Math.min(move, other.energy.getMaxEnergyStored() - other.energy.getEnergyStored());
+		energy.setEnergy(energy.getEnergyStored() - move);
+		other.energy.setEnergy(other.energy.getEnergyStored() + move);
+		SaveMark.mark(this);
+		SaveMark.mark(other);
+	}
+
 	public EnergyBuffer getEnergy() {
 		return energy;
 	}
@@ -114,13 +130,16 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 		}
 		// Out of both terminals first, then make up what was taken (up to full output)
 		BlockState state = getBlockState();
+		Direction side = state.getValue(LavaGeneratorBlock.FACING).getClockWise();
 		if (rightTerminal == null && level instanceof ServerLevel server) {
-			Direction side = state.getValue(LavaGeneratorBlock.FACING).getClockWise();
 			rightTerminal = EnergyBuffer.cacheFor(server, worldPosition, side);
 			leftTerminal = EnergyBuffer.cacheFor(server, worldPosition, side.getOpposite());
 		}
 		energy.pushTo(rightTerminal, energy.getEnergyStored());
 		energy.pushTo(leftTerminal, energy.getEnergyStored());
+		// generators whose terminals touch even out their stores, so a cable on any one draws on the whole row
+		share(side);
+		share(side.getOpposite());
 		int fe = CMConfig.SERVER.generatorFePerTick();
 		int make = tank.isEmpty() ? 0 : Math.min(fe, energy.getMaxEnergyStored() - energy.getEnergyStored());
 		if (make > 0) {

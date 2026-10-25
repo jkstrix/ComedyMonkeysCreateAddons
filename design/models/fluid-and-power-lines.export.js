@@ -163,7 +163,13 @@ for (const [style, [w, h, tex]] of Object.entries(STYLES)) {
   // sized from the cable, so its sides never lie within a hair of the arms'
   const sl = w / 2 + 1, sw = w / 2 + 0.5;
   wire('splice', [G.C('splice_a', [8 - sl, 0, 8 - sw], [8 + sl, t, 8 + sw], { all: clip, down: null }), G.C('splice_b', [8 - sw, 0, 8 - sl], [8 + sw, t, 8 + sl], { all: clip, down: null })]);
-  wire('lug', [G.C('lug', [6.5, 0, 0], [9.5, 3, 1], { all: clip, down: null, north: null })]);
+  // into a machine at the north edge: up its face (z 0) to the middle, and a socket there; or straight up through the
+  // block into a machine above, a socket in the middle of its face
+  const so = 1.5;
+  wire('rise', [G.C('rise', [a, 0, 0], [b, 8 - so, h], { all: tex, north: null, down: null })]);
+  wire('socket', [G.C('socket', [8 - so, 8 - so, 0], [8 + so, 8 + so, h + 0.75], { all: clip, north: null })]);
+  wire('riser', [G.C('riser', [a, h, a], [b, 16 - h - 0.75, b], { all: tex, up: null, down: null }),
+    G.C('riser_socket', [8 - so, 16 - h - 0.75, 8 - so], [8 + so, 16, 8 + so], { all: clip, up: null })]);
   // through a drilled wall: the surround on the cable's free sides (never against the floor or where it runs off), and
   // the dark hole inside it. i: the hole's half-width, o: the surround's, s: how far the surround stands off the wall
   const i = w / 2 + 0.25, o = w / 2 + 1, s = h + 0.5, bar = { all: 'steel_dark', down: null }, hole = (f) => ({ [f]: 'slot_idle', all: null });

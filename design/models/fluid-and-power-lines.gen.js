@@ -523,6 +523,26 @@ for (const [dz, ws] of [[0, wireSpec('copper', null)], [2, wireSpec('copper', 'r
   P('case3_up', [sideRun('west', 0, 8 + ws.w / 2, ws, 'wire_up'), ...flatGrommet('west', ws, ['down'])], 23, 1, 6);
   P('case3_stub', [C('tail', [16 - ws.h, 3, 8 - ws.w / 2], [16, 8 + ws.w / 2, 8 + ws.w / 2], { all: ws.tex, east: null }), ...flatGrommet('east', ws, ['down'])], 21, 1, 6);
 }
+// into machines: up a machine's side to a socket in the middle (in front); up through a block of air into the middle of
+// a raised machine's base (behind)
+{
+  const ws = wireSpec('copper', null), P = (name, list, x, y, z) => dyeKids.push(blockOf(name, list, x, y, z, DROW));
+  const h = ws.w / 2, s = 1.5;
+  for (const dz of [0, 2]) {
+    for (let x = 26; x <= 29; x++) P(`machine_floor_${x}_${dz}`, [C('floor', [0, -2, 0], [16, 0, 16], { all: 'minecraft:block/smooth_stone' })], x, 0, dz);
+    dyeKids.push(stand(`machine_${dz}`, 'create:block/andesite_casing', 28, dz === 2 ? 1 : 0, dz, DROW));
+    P(`machine_lead_${dz}`, [floorRun('x', 0, 16, ws, 'wire_lead')], 26, 0, dz);
+  }
+  // side: along the floor to just short of the machine, up its face (x 16) to the middle, and a socket there
+  P('machine_side', [floorRun('x', 0, 16 - ws.h, ws, 'wire_in'), C('rise', [16 - ws.h, 0, 8 - h], [16, 8 - s, 8 + h], { all: ws.tex, east: null, down: null }),
+    C('socket', [16 - ws.h - 0.75, 8 - s, 8 - s], [16, 8 + s, 8 + s], { all: CLIP.copper, east: null })], 27, 0, 0);
+  // base: the machine stands on two blocks of stone with a block of air under it; the cable runs in along the floor to
+  // the middle and straight up into a socket in the middle of its base
+  for (const dzs of [1, 3]) dyeKids.push(stand('machine_leg_' + dzs, 'minecraft:block/stone_bricks', 28, 0, dzs, DROW));
+  P('machine_under', [floorRun('x', 0, 8 + h, ws, 'wire_in'), C('riser', [8 - h, ws.h, 8 - h], [8 + h, 16 - ws.h - 0.75, 8 + h], { all: ws.tex, up: null, down: null }),
+    C('socket', [8 - s, 16 - ws.h - 0.75, 8 - s], [8 + s, 16, 8 + s], { all: CLIP.copper, up: null })], 28, 0, 2);
+  P('machine_lead2_2', [floorRun('x', 0, 16, ws, 'wire_lead')], 27, 0, 2);
+}
 outliner.push(group('dyes_and_encasing', [8, 0, 8], DROW, dyeKids));
 
 // Wire scene (copper, undyed): a machine, along the floor, up and along a wall, down, a junction, a Breaker, a 3-high pole

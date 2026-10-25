@@ -27,7 +27,10 @@ import net.neoforged.neoforge.capabilities.Capabilities;
  * Line Post), worked out on the server whenever anything round it changes and sent to clients for the model.
  */
 public class PowerLineBlockEntity extends LineBlockEntity {
-	/** Per face (by {@link Direction#ordinal()}), the packed {@link WireLink}s and the {@link WireLink#BASE} bit. */
+	/**
+	 * Per face (by {@link Direction#ordinal()}), the packed {@link WireLink}s with the {@link WireLink#BASE} and
+	 * {@link WireLink#RISE} bits and the hole field (see {@link WireLink}).
+	 */
 	private final int[] links = new int[6];
 	@Nullable
 	private VoxelShape shape;
@@ -72,6 +75,16 @@ public class PowerLineBlockEntity extends LineBlockEntity {
 			else if (!(level.getBlockState(support).getBlock() instanceof LineBlock)
 				&& level.getCapability(Capabilities.EnergyStorage.BLOCK, support, face.getOpposite()) != null)
 				packed |= WireLink.BASE;
+			// a machine across the block (over a floor wire, under a ceiling one) that takes power on the face towards it;
+			// not from a wall wire (it would catch whatever stood across from a passing cable), nor when a wire lies on it already
+			BlockPos across = worldPosition.relative(face.getOpposite());
+			if (face.getAxis() == Direction.Axis.Y && !PowerLineBlock.hasFace(state, face.getOpposite())) {
+				if (!level.isLoaded(across))
+					packed |= links[face.ordinal()] & WireLink.RISE;
+				else if (!(level.getBlockState(across).getBlock() instanceof LineBlock)
+					&& level.getCapability(Capabilities.EnergyStorage.BLOCK, across, face) != null)
+					packed |= WireLink.RISE;
+			}
 			next[face.ordinal()] = packed;
 		}
 		for (Direction d : Direction.values())
@@ -146,6 +159,8 @@ public class PowerLineBlockEntity extends LineBlockEntity {
 		for (Direction f : Direction.values()) {
 			int p = links[f.ordinal()];
 			if ((p & WireLink.BASE) != 0)
+				runs++;
+			if ((p & WireLink.RISE) != 0)
 				runs++;
 			if (WireLink.hole(p) != 0 && f != toward)
 				runs++;
@@ -238,8 +253,14 @@ public class PowerLineBlockEntity extends LineBlockEntity {
 			out = Shapes.or(out, PowerLineBlock.plate(face, null));
 			Direction hole = WireLink.holeEdge(links[face.ordinal()], face);
 			for (Direction d : WireLink.across(face))
-				if (link(face, d).connected() || d == hole)
+				if (link(face, d).connected() || d == hole) {
 					out = Shapes.or(out, PowerLineBlock.plate(face, d));
+					// up the machine's face to its socket: a wire lying on that face, running from this one
+					if (link(face, d) == WireLink.TERMINAL)
+						out = Shapes.or(out, PowerLineBlock.plate(d, face));
+				}
+			if ((links[face.ordinal()] & WireLink.RISE) != 0)
+				out = Shapes.or(out, net.minecraft.world.level.block.Block.box(7, 0, 7, 9, 16, 9));
 		}
 		return out.optimize();
 	}
@@ -267,7 +288,7 @@ public class PowerLineBlockEntity extends LineBlockEntity {
 	/** Some wire here meets a machine or lies on one: where the network's work starts. */
 	public boolean hasTerminal() {
 		for (Direction face : Direction.values()) {
-			if ((links[face.ordinal()] & WireLink.BASE) != 0)
+			if ((links[face.ordinal()] & (WireLink.BASE | WireLink.RISE)) != 0)
 				return true;
 			for (Direction d : WireLink.across(face))
 				if (link(face, d) == WireLink.TERMINAL)

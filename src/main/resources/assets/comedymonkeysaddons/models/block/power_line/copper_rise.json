@@ -1,0 +1,66 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/copper",
+    "body": "comedymonkeysaddons:block/fluid_line/body"
+  },
+  "elements": [
+    {
+      "name": "rise",
+      "from": [
+        7.5,
+        0,
+        0
+      ],
+      "to": [
+        8.5,
+        6.5,
+        1
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            15,
+            9.5,
+            16,
+            16
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            7.5,
+            9.5,
+            8.5,
+            16
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            9.5,
+            1,
+            16
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            1
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

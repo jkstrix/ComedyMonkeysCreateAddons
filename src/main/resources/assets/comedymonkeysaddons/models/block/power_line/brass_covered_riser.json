@@ -1,0 +1,127 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/brass",
+    "body": "comedymonkeysaddons:block/fluid_line/body",
+    "brass_ring": "comedymonkeysaddons:block/fluid_line/brass_ring"
+  },
+  "elements": [
+    {
+      "name": "riser",
+      "from": [
+        6.875,
+        1.75,
+        6.875
+      ],
+      "to": [
+        9.125,
+        13.5,
+        9.125
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.875,
+            2.5,
+            9.125,
+            14.25
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            6.875,
+            2.5,
+            9.125,
+            14.25
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            6.875,
+            2.5,
+            9.125,
+            14.25
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            6.875,
+            2.5,
+            9.125,
+            14.25
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "riser_socket",
+      "from": [
+        6.5,
+        13.5,
+        6.5
+      ],
+      "to": [
+        9.5,
+        16,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            2.5
+          ],
+          "texture": "#brass_ring"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            2.5
+          ],
+          "texture": "#brass_ring"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            2.5
+          ],
+          "texture": "#brass_ring"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            2.5
+          ],
+          "texture": "#brass_ring"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#brass_ring"
+        }
+      }
+    }
+  ]
+}

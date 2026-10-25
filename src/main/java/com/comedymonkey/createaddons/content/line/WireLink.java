@@ -17,7 +17,7 @@ public enum WireLink {
 	INSIDE,
 	/** Over the edge, down the far side of the block it lies on (an outside corner). */
 	OUTSIDE,
-	/** Into a machine that gives or takes power, through a lug on its face. */
+	/** Into a machine that gives or takes power: up its face to the middle and into a socket there. */
 	TERMINAL,
 	/** Under the foot of a Line Post. */
 	POST,
@@ -51,6 +51,13 @@ public enum WireLink {
 
 	/** Set on a face's packed links when the block the wire lies on itself gives or takes power. */
 	public static final int BASE = 1 << 12;
+
+	/**
+	 * Set on a floor or ceiling wire's packed links when a machine stands across the block, on the far side of a block of
+	 * air (a raised motor over a floor wire): the cable goes straight up from the middle into the middle of its face.
+	 * The bits: 0-11 the four links (3 each), 12 BASE, 13-15 the hole, 16 RISE.
+	 */
+	public static final int RISE = 1 << 16;
 
 	private static final int HOLE_SHIFT = 13;
 

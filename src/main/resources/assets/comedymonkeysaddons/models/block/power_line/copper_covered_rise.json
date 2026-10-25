@@ -3,58 +3,62 @@
   "render_type": "minecraft:cutout",
   "ambientocclusion": false,
   "textures": {
-    "particle": "comedymonkeysaddons:block/fluid_line/brass",
-    "brass_ring": "comedymonkeysaddons:block/fluid_line/brass_ring"
+    "particle": "comedymonkeysaddons:block/fluid_line/copper",
+    "body": "comedymonkeysaddons:block/fluid_line/body"
   },
   "elements": [
     {
-      "name": "lug",
+      "name": "rise",
       "from": [
-        6.5,
+        7.125,
         0,
         0
       ],
       "to": [
-        9.5,
-        3,
-        1
+        8.875,
+        6.5,
+        1.75
       ],
       "faces": {
         "east": {
           "uv": [
-            15,
-            13,
+            14.25,
+            9.5,
             16,
             16
           ],
-          "texture": "#brass_ring"
+          "texture": "#body",
+          "tintindex": 0
         },
         "south": {
           "uv": [
-            6.5,
-            13,
+            7.125,
             9.5,
+            8.875,
             16
           ],
-          "texture": "#brass_ring"
+          "texture": "#body",
+          "tintindex": 0
         },
         "west": {
           "uv": [
             0,
-            13,
-            1,
+            9.5,
+            1.75,
             16
           ],
-          "texture": "#brass_ring"
+          "texture": "#body",
+          "tintindex": 0
         },
         "up": {
           "uv": [
-            6.5,
+            7.125,
             0,
-            9.5,
-            1
+            8.875,
+            1.75
           ],
-          "texture": "#brass_ring"
+          "texture": "#body",
+          "tintindex": 0
         }
       }
     }

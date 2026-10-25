@@ -158,6 +158,9 @@ public final class PowerLines {
 					continue;
 				if ((be.links(face) & WireLink.BASE) != 0)
 					n.ends.add(new End(node, node.pos.relative(face), cache(node.pos.relative(face), face.getOpposite())));
+				// up (or down) through the block into a machine across it
+				if ((be.links(face) & WireLink.RISE) != 0)
+					n.ends.add(new End(node, node.pos.relative(face.getOpposite()), cache(node.pos.relative(face.getOpposite()), face)));
 				// through the wall it lies on, to the wire behind
 				if (WireLink.hole(be.links(face)) != 0)
 					wire(node.pos.relative(face, 2), next, n);

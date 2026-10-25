@@ -8,6 +8,7 @@ import com.comedymonkey.createaddons.content.line.FluidLineBlock;
 import com.comedymonkey.createaddons.content.line.FluidLineBlockEntity;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlock;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity;
+import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlockEntity;
 import com.comedymonkey.createaddons.content.line.Fitting;
 import com.comedymonkey.createaddons.content.line.LineBlockEntity;
 import com.comedymonkey.createaddons.content.line.LinePostBlock;
@@ -498,6 +499,10 @@ public final class LineGameTests {
 		helper.setBlock(pos, ModBlocks.ELECTRIC_MOTOR.get().defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST));
 	}
 
+	static int generated(GameTestHelper helper, BlockPos generator) {
+		return helper.getBlockEntity(generator) instanceof LavaGeneratorBlockEntity g ? g.getEnergy().getEnergyStored() : -1;
+	}
+
 	static int stored(GameTestHelper helper, BlockPos motor) {
 		return helper.getBlockEntity(motor) instanceof ElectricMotorBlockEntity m ? m.getEnergy().getEnergyStored() : -1;
 	}
@@ -595,6 +600,40 @@ public final class LineGameTests {
 			if (WireLink.hole(((PowerLineBlockEntity) helper.getBlockEntity(a)).links(Direction.EAST)) != 0
 				|| WireLink.hole(((PowerLineBlockEntity) helper.getBlockEntity(b)).links(Direction.WEST)) != 0)
 				helper.fail("a branching piece was threaded through the wall");
+			helper.succeed();
+		});
+	}
+
+	/** A floor wire under a motor raised on a block of air rises straight up into its base. */
+	@GameTest(template = COURSE, timeoutTicks = 100)
+	public static void wireRisesIntoARaisedMotor(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 2), under = gen.east(2), m = under.above();
+		generator(helper, gen);
+		helper.setBlock(m, ModBlocks.ELECTRIC_MOTOR.get().defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.UP));
+		wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(), Direction.DOWN);
+		wire(helper, ModBlocks.COPPER_POWER_LINE.get(), under, Direction.DOWN);
+		helper.runAtTickTime(2, () -> relink(helper, gen.east(), under));
+		helper.runAtTickTime(10, () -> {
+			if ((((PowerLineBlockEntity) helper.getBlockEntity(under)).links(Direction.DOWN) & WireLink.RISE) == 0)
+				helper.fail("the wire under the motor doesn't rise into its base");
+		});
+		helper.runAtTickTime(70, () -> {
+			if (stored(helper, m) <= 0)
+				helper.fail("no power up into the raised motor");
+			helper.succeed();
+		});
+	}
+
+	/** Lava Generators whose terminals touch even out their stores. */
+	@GameTest(template = COURSE, timeoutTicks = 80)
+	public static void touchingGeneratorsShareTheirStores(GameTestHelper helper) {
+		BlockPos a = new BlockPos(2, 1, 6), b = a.east();
+		generator(helper, a);
+		helper.setBlock(b, ModBlocks.LAVA_GENERATOR.get().defaultBlockState());
+		helper.runAtTickTime(60, () -> {
+			int ea = generated(helper, a), eb = generated(helper, b);
+			if (eb <= 0 || Math.abs(ea - eb) > Math.max(ea, eb) / 4)
+				helper.fail("the generators didn't share: " + ea + " and " + eb + " FE");
 			helper.succeed();
 		});
 	}
