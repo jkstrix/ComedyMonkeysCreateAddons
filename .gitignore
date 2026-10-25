@@ -25,6 +25,7 @@ release/
 
 # game-test server runs
 run-gametest/
+run-server/
 
 # Local preview of Minecraft's own lava pop (never committed or shipped; the game plays the vanilla event)
 design/sound/lava-generator/real/lava_pop*.ogg

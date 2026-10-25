@@ -37,7 +37,7 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 	public void setupAnim(TradeBotEntity bot, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		root.getAllParts().forEach(ModelPart::resetPose);
 		float partialTick = ageInTicks - bot.tickCount;
-		pose(parts, bot, bot.now() + partialTick);
+		pose(parts, bot, bot.clipNow(partialTick));
 		// docked and charging: the station's winder keeps turning his key
 		ModelPart key = parts.get("key");
 		if (key != null)
@@ -51,7 +51,7 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 	/** Poses these parts (his, or his station's) as the bot's playback has them at {@code now}, with the fade. */
 	public static void pose(Map<String, ModelPart> parts, TradeBotEntity bot, double now) {
 		ClipPlayback playback = bot.playback;
-		playback.observe(bot.clip(), bot.clipStart(), bot.clipSpeed(), now);
+		playback.observe(bot.clip(), bot.clipStartTime(), bot.clipSpeed(), now);
 		Clip clip = playback.clip();
 		if (clip == null)
 			return;

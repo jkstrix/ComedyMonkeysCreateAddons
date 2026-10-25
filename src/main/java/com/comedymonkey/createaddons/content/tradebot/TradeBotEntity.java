@@ -16,6 +16,7 @@ import com.comedymonkey.createaddons.content.tradebot.trade.BotPricing;
 import com.comedymonkey.createaddons.content.tradebot.trade.VillagerClaims;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
+import com.comedymonkey.createaddons.content.tradebot.clip.ClipClock;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipPlayback;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipRoot;
 import com.comedymonkey.createaddons.registry.ModSounds;
@@ -89,6 +90,9 @@ public class TradeBotEntity extends PathfinderMob {
 
 	/** Client only: the cross-fade and sound cues. */
 	public final ClipPlayback playback = new ClipPlayback();
+	/** Client only: the clip last seen from the server (id and start tick), and when it started on the {@link ClipClock}. */
+	private int seenClip = -1, seenClipStart;
+	private double localClipStart;
 	/** Client only: how far the station's winder has turned his key while charging, in degrees (60 a second). */
 	private float windSpin, windSpinO;
 	/** Client only: his wheel's turn from the ground he has actually covered (radians, 4 px radius). */
@@ -512,7 +516,38 @@ public class TradeBotEntity extends PathfinderMob {
 
 	/** Seconds the current clip has played, at {@code partialTick} into the current tick. */
 	public float clipElapsed(float partialTick) {
-		return (float) ((now() - clipStart() + partialTick) / 20) * clipSpeed();
+		return (float) ((clipNow(partialTick) - clipStartTime()) / 20) * clipSpeed();
+	}
+
+	/**
+	 * The time his clips are played at, in ticks, {@code partialTick} into the current tick. In a client's world that's
+	 * the steady {@link ClipClock}, not the world time, which jumps when the server corrects it.
+	 */
+	public double clipNow(float partialTick) {
+		return clientClock() ? ClipClock.now(partialTick) : now() + partialTick;
+	}
+
+	/** When the current clip started, on the {@link #clipNow} clock. */
+	public double clipStartTime() {
+		if (!clientClock())
+			return clipStart();
+		int id = entityData.get(CLIP), start = entityData.get(CLIP_START);
+		if (id != seenClip || start != seenClipStart) {
+			// how far into it the server already is: kept when we first see him (he may be mid-clip) or when it's a
+			// clip held at its end; a clip that changes while we watch starts now, as the world time is only a guess
+			int lead = Math.max(0, (int) (level().getGameTime() - start));
+			Clip clip = clip();
+			if (seenClip != -1 && !clip.finished(lead / 20f * entityData.get(CLIP_SPEED)))
+				lead = 0;
+			seenClip = id;
+			seenClipStart = start;
+			localClipStart = ClipClock.now(0) - lead;
+		}
+		return localClipStart;
+	}
+
+	private boolean clientClock() {
+		return level().isClientSide && !ponder;
 	}
 
 	public float clipSpeed() {
@@ -560,8 +595,8 @@ public class TradeBotEntity extends PathfinderMob {
 		yBodyRot = getYRot();
 		yHeadRot = getYRot();
 		if (level().isClientSide) {
-			playback.observe(clip(), clipStart(), clipSpeed(), now());
-			playback.tickCues(now(), this::playCue);
+			playback.observe(clip(), clipStartTime(), clipSpeed(), clipNow(0));
+			playback.tickCues(clipNow(0), this::playCue);
 			wheelAngleO = wheelAngle;
 			float r = getYRot() * Mth.DEG_TO_RAD;
 			// xOld, not xo: Ponder's world only keeps xOld up to date

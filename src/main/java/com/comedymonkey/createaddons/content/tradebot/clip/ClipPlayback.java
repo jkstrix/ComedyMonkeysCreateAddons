@@ -24,20 +24,23 @@ public final class ClipPlayback {
 
 	@Nullable
 	private Clip clip;
-	private long start;
+	private double start;
 	private float speed = 1;
 	@Nullable
 	private Clip fadeFrom;
-	private long fadeFromStart;
+	private double fadeFromStart;
 	private float fadeFromSpeed = 1;
 	private double fadeStart = Double.NEGATIVE_INFINITY;
 	private float lastCueTime = Float.NaN;
 	/** When the voice last spoke, and in which clip (by its start tick). */
 	private double lastVoice = Double.NEGATIVE_INFINITY;
-	private long lastVoiceClip = Long.MIN_VALUE;
+	private double lastVoiceClip = Double.NEGATIVE_INFINITY;
 
-	/** Follows the server's choice; a change starts a cross-fade at {@code now} (game ticks, with the partial tick). */
-	public void observe(@Nullable Clip current, long startTick, float speed, double now) {
+	/**
+	 * Follows the server's choice; a change starts a cross-fade at {@code now}. Times are in ticks with the partial tick,
+	 * on the bot's clip clock ({@code TradeBotEntity.clipNow}).
+	 */
+	public void observe(@Nullable Clip current, double startTick, float speed, double now) {
 		if (current == clip && startTick == start)
 			return;
 		if (clip != null) {

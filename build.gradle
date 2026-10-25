@@ -20,9 +20,18 @@ neoForge {
         client {
             client()
         }
+        // a local dedicated server, in its own folder so a dev client can join it from run/
         server {
             server()
             programArgument '--nogui'
+            gameDirectory = project.file('run-server')
+            // the mod's game test courses can be run here with /test, in front of a joined client
+            systemProperty 'neoforge.enableGameTest', 'true'
+        }
+        // a dev client that joins that server straight away (runClientOnServer)
+        clientOnServer {
+            client()
+            programArguments.addAll('--quickPlayMultiplayer', 'localhost:25565')
         }
         // Trade Bot's test courses, headless: builds each course, runs it, exits with the failures
         gameTestServer {

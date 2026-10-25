@@ -54,6 +54,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(TradeBotLinkPicking::onLeftClickBlock);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(TradeBotLinkPicking::onClientTick);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.tradebot.TradeBotLoopSounds::onClientTick);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ComedyMonkeysCreateAddonsClient::tickClipClock);
 		// The Geothermal Turbine's sounds run from its controller's client tick
 		com.comedymonkey.createaddons.content.electric.GeothermalControllerBlockEntity.clientTicker = GeothermalTurbineSounds::tick;
 		// The Lava Generator's and the Electric Motor's sounds run from their client ticks
@@ -74,6 +75,13 @@ public class ComedyMonkeysCreateAddonsClient {
 			modBus.addListener(com.comedymonkey.createaddons.compat.pipez.cover.client.CoveredPipeModel::wrapPipes);
 			modBus.addListener(com.comedymonkey.createaddons.compat.pipez.cover.client.PipeCoverClient::registerColors);
 		}
+	}
+
+	/** Trade Bot's clips run on a clock that keeps the server's real pace without jumping when it corrects the time. */
+	private static void tickClipClock(net.neoforged.neoforge.client.event.ClientTickEvent.Pre event) {
+		net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+		if (mc.level != null && !mc.isPaused() && mc.level.tickRateManager().runsNormally())
+			com.comedymonkey.createaddons.content.tradebot.clip.ClipClock.tick(mc.level, mc.level.getGameTime());
 	}
 
 	private void registerScreens(RegisterMenuScreensEvent event) {

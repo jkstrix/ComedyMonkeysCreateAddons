@@ -38,7 +38,7 @@ public class TradeBotStationRenderer extends SafeBlockEntityRenderer<TradeBotSta
 		root.getAllParts().forEach(ModelPart::resetPose);
 		TradeBotEntity bot = be.clientBot();
 		if (bot != null && be.getLevel() != null) {
-			TradeBotModel.pose(parts, bot, bot.now() + partialTicks);
+			TradeBotModel.pose(parts, bot, bot.clipNow(partialTicks));
 			float spin = bot.windSpin(partialTicks);
 			turn("winder_head", 0, 0, -spin);
 			turn("post_cog", spin, 0, 0);
