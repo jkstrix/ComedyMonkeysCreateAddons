@@ -1,28 +1,48 @@
 package com.comedymonkey.createaddons.client;
 
+import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.createmod.catnip.platform.NeoForgeCatnipServices;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 /**
- * Renders the stored water or lava inside the casing. The column spans exactly the height of the glass windows,
- * so the visible level matches the fill percentage and the gauge notches on the frame (25/50/75%).
+ * Renders the stored fluid inside the tank. The column spans exactly the height of the glass windows, so the visible
+ * level matches the fill percentage and the ticks on the corner posts (25/50/75%). Also stands a copper canister in
+ * each capacity socket on the lid, one per fitted Capacity Upgrade (the generation modules are in the block models).
  */
 public class WellspringRenderer implements BlockEntityRenderer<WellspringBlockEntity> {
 	private static final float INSET = 2.05f / 16f;
 	private static final float FLOOR = 3f / 16f;
 	private static final float CEILING = 13f / 16f;
+	/** One canister, modelled in the first capacity socket; the next sockets are 5 px further along x. */
+	public static final ModelResourceLocation CANISTER =
+		ModelResourceLocation.standalone(ComedyMonkeysCreateAddons.asResource("block/wellspring_canister"));
+	private static final float SOCKET_STEP = 5f / 16f;
+	private static final int SOCKETS = 3;
 
 	public WellspringRenderer(BlockEntityRendererProvider.Context context) {}
+
+	/** The canister isn't referenced by any blockstate, so it's loaded explicitly. */
+	public static void registerModels(ModelEvent.RegisterAdditional event) {
+		event.register(CANISTER);
+	}
 
 	@Override
 	public void render(WellspringBlockEntity be, float partialTicks, PoseStack poseStack, MultiBufferSource buffers,
 					   int light, int overlay) {
+		renderCanisters(be, poseStack, buffers, light, overlay);
+
 		FluidStack fluid = be.getTank().getFluid();
 		if (fluid.isEmpty())
 			return;
@@ -34,5 +54,21 @@ public class WellspringRenderer implements BlockEntityRenderer<WellspringBlockEn
 		float top = FLOOR + (CEILING - FLOOR) * Math.min(fill, 1f);
 		NeoForgeCatnipServices.FLUID_RENDERER.renderFluidBox(fluid, INSET, FLOOR, INSET, 1 - INSET, top, 1 - INSET,
 			buffers, poseStack, light, false, true);
+	}
+
+	private static void renderCanisters(WellspringBlockEntity be, PoseStack poseStack, MultiBufferSource buffers,
+										int light, int overlay) {
+		int count = Math.min(be.getCapacityUpgradeCount(), SOCKETS);
+		if (count <= 0)
+			return;
+		VertexConsumer vc = buffers.getBuffer(RenderType.cutout());
+		var model = Minecraft.getInstance().getModelManager().getModel(CANISTER);
+		for (int i = 0; i < count; i++) {
+			poseStack.pushPose();
+			poseStack.translate(i * SOCKET_STEP, 0, 0);
+			Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(poseStack.last(), vc,
+				be.getBlockState(), model, 1, 1, 1, light, overlay, ModelData.EMPTY, RenderType.cutout());
+			poseStack.popPose();
+		}
 	}
 }

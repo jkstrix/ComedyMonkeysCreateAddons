@@ -110,6 +110,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		for (ChestTier tier : ChestTier.values())
 			for (ChestType type : ChestType.values())
 				event.register(UpgradedChestRenderer.lidModel(tier, type));
+		WellspringRenderer.registerModels(event);
 		PressureCrucibleRenderer.registerModels(event);
 		CobbleGeneratorRenderer.registerModels(event);
 		MachineRenderers.registerModels(event);

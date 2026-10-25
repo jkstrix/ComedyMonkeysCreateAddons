@@ -199,6 +199,8 @@ public final class ModBlocks {
 			.strength(3.5f, 6.0f)
 			.sound(SoundType.STONE)
 			.requiresCorrectToolForDrops()
+			// the firebox mouth is recessed into the front, so it must not hide its neighbours' faces or go dark inside
+			.noOcclusion()
 			.lightLevel(state -> state.getValue(IncineratorBlock.LIT) ? 13 : 0)));
 
 	/** Lava-burning engine: four Portable Engines' worth of power from one block. */

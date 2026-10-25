@@ -37,7 +37,7 @@ copper sheet → deploy Cogwheel → deploy Glass → deploy Electron Tube.
 
 ## Fluid Wellspring
 
-A copper-framed tank with glass windows that show the fluid level (notches mark 25%, 50% and 75%). Holds water or lava; fill or empty it with buckets, pumps or pipes from any side.
+A riveted copper tank with big glass windows on all four sides that show the fluid level (ticks on the corner posts mark 25%, 50% and 75%). Holds water or lava; fill or empty it with buckets, pumps or pipes from any side.
 
 | Upgrade | Sequenced assembly on an Upgrade Template | Effect |
 |---|---|---|
@@ -48,7 +48,7 @@ A copper-framed tank with glass windows that show the fluid level (notches mark 
 | Chocolate Upgrade | Drip Template, then **3 loops** of: deploy Cocoa Beans, spout 1000 mB chocolate, deploy a Precision Mechanism, press | Generates Create chocolate |
 
 - Honey and chocolate meet lava as limestone and scoria (Create's own fluid interactions), so a Honey or Chocolate Wellspring next to a lava one is an endless limestone or scoria source. They generate 10/25/50 mB/s with 1/2/3 upgrades (configurable).
-- Up to 3 generation upgrades of one kind (lamps on top show how many) and up to 3 Capacity Upgrades.
+- Up to 3 generation upgrades of one kind (each plugs into a socket on the lid, with a lens in its fluid's colour) and up to 3 Capacity Upgrades (each a copper canister in the lid's back row).
 - **Right-click with an upgrade** to install it. **Wrench** (or sneak + right-click) opens the upgrade screen to add or remove upgrades.
 - Engineer's Goggles show the upgrades, generation rate and fill level as a percentage.
 - Display Links can read its **stored fluid** (name and millibuckets), **fill level** (as a percentage or a progress bar) and **generation rate** (mB/s, "Full" or "No upgrades").
@@ -247,7 +247,7 @@ Both machines' recipes are data-driven (`comedymonkeysaddons:tangling` and `come
 
 ## Incinerator
 
-Anything put into it is gone: items from funnels, chutes, hoppers or pipes, and any fluid from pipes, from any side. It never fills up, so it's a safe end for overflow lines. While something burned in the last 5 seconds it's **lit**, and a lit Incinerator under a **Steam Engine boiler** heats it like a lit Blaze Burner (cold, it counts as no heat). Goggles show how much it has burned.
+A squat steel furnace with a grated firebox mouth and a round hot plate on top. Anything put into it is gone: items from funnels, chutes, hoppers or pipes, and any fluid from pipes, from any side. It never fills up, so it's a safe end for overflow lines. While something burned in the last 5 seconds it's **lit** (embers glow behind the grate and the hot plate glows from the middle out), and a lit Incinerator under a **Steam Engine boiler** heats it like a lit Blaze Burner (cold, it counts as no heat). Goggles show how much it has burned.
 
 Recipe: Andesite Alloy, a Magma Block, a Furnace and Andesite Casing.
 

@@ -88,3 +88,15 @@ Shared with future blocks: `design/sound/sources/generated/` holds the local Sta
 - Blocks: `cuckoo_clock`, `cuckoo_clock_weights`.
 - Code: `content/clock/`, `client/CuckooClockRenderer.java`.
 - Assets: `models/block/cuckoo_clock*.json`, `textures/block/cuckoo_clock*.png`, its blockstates, item model and sounds.
+
+## Wellspring
+- Blocks: `wellspring`.
+- Look only: `client/WellspringRenderer.java` (the fluid column and the capacity canisters), and every model and texture with `wellspring` in its name (`models/block/wellspring_*.json`, `textures/block/wellspring_*.png`).
+- Design: `design/briefs/wellspring.md`, `design/dossiers/wellspring*`, and the Wellspring in `design/models/wellspring-incinerator*`.
+- Its generation, upgrades, menu, screen, mounted storage and Display Link sources are gameplay, not design, and aren't covered here.
+
+## Incinerator
+- Blocks: `incinerator`.
+- Look only: `models/block/incinerator*.json`, `textures/block/incinerator_*.png`, and the Incinerator's `.noOcclusion()` in `registry/ModBlocks.java`.
+- Design: `design/briefs/incinerator.md`, `design/dossiers/incinerator*`, and the Incinerator in `design/models/wellspring-incinerator*`.
+- What it burns, its boiler heat and its Ponder scene are gameplay, not design, and aren't covered here.

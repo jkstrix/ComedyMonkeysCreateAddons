@@ -1,0 +1,72 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wellspring_canister",
+    "canister": "comedymonkeysaddons:block/wellspring_canister",
+    "canister_top": "comedymonkeysaddons:block/wellspring_canister_top"
+  },
+  "elements": [
+    {
+      "name": "canister",
+      "from": [
+        1,
+        16,
+        10
+      ],
+      "to": [
+        5,
+        18,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            14,
+            15,
+            16
+          ],
+          "texture": "#canister"
+        },
+        "east": {
+          "uv": [
+            2,
+            14,
+            6,
+            16
+          ],
+          "texture": "#canister"
+        },
+        "south": {
+          "uv": [
+            1,
+            14,
+            5,
+            16
+          ],
+          "texture": "#canister"
+        },
+        "west": {
+          "uv": [
+            10,
+            14,
+            14,
+            16
+          ],
+          "texture": "#canister"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ],
+          "texture": "#canister_top"
+        }
+      }
+    }
+  ]
+}
