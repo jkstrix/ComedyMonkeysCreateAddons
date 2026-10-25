@@ -58,6 +58,20 @@ Shared with future blocks: the Auto Harvester and the pens use `client/TrayItems
 
 Shared with future blocks: `design/sound/sources/generated/` holds the local Stable Audio 3 takes (the crucible's crunch, gears and fires); add new takes beside them, never change these.
 
+## Cobble Generators
+- Blocks: all 14 generators (`andesite_`/`brass_`/`wireless_andesite_`/`wireless_brass_` `cobble`, `basalt` and `blackstone` generators; `tuff_generator`, `wireless_tuff_generator`).
+- Look only: `client/CobbleGeneratorRenderer.java` (the chamber, drill, lamp and brass batch; `SHAFT` and `renderShaft` were already shared and frozen), the drill animation in `content/cobblegen/CobbleGeneratorBlockEntity.java` (`animateDrill`, `getDrillTip`, `getDrillJab`), and every model and texture with `generator` in its name except the frozen `cobble_generator_shaft`.
+- Design: `design/briefs/cobble-generator.md`, `design/dossiers/cobble-generator*`, `design/models/cobble-generator*`.
+- Their production, stress, redstone and wireless behaviour is gameplay, not design, and isn't covered here.
+
+## String Tangler and Stone Infuser
+- Blocks: `string_tangler`, `stone_infuser`.
+- Look only: `client/MachineRenderers.java`, the infuser's dust in `content/machine/TwoInputMachineBlockEntity.java` (`sprinkleDust`), and every model and texture with `string_tangler` or `stone_infuser` in its name.
+- Design: `design/briefs/string-tangler.md`, `design/briefs/stone-infuser.md`, `design/dossiers/string-tangler*`, `design/dossiers/stone-infuser.md`, `design/models/two-input-machines*`.
+- Their recipes and machine behaviour are gameplay and aren't covered here.
+
+`client/TrayItems.java` now also has a single-stack version for these two; like the rest of it, it may grow but must keep drawing the same for every block that uses it.
+
 ## Upgraded Chests and Barrels
 - Blocks: `upgraded_chest`, `upgraded_barrel` (all five tiers; single and double chests).
 - Look only: the models and textures. Assets: `models/block/upgraded_chest_*.json`, `models/block/upgraded_barrel_*.json`, `textures/block/upgraded_chest_*.png`, `textures/block/upgraded_barrel_*.png`, and `client/UpgradedChestRenderer.java` (the lid).

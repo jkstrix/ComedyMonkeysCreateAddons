@@ -1,0 +1,202 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/stone_infuser_andesite",
+    "andesite": "comedymonkeysaddons:block/stone_infuser_andesite",
+    "turntable": "comedymonkeysaddons:block/stone_infuser_turntable",
+    "steel": "comedymonkeysaddons:block/stone_infuser_steel"
+  },
+  "elements": [
+    {
+      "name": "table",
+      "from": [
+        4.55,
+        2.75,
+        4.3
+      ],
+      "to": [
+        11.45,
+        3.5,
+        11.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.55,
+            12.5,
+            11.45,
+            13.25
+          ],
+          "texture": "#andesite"
+        },
+        "east": {
+          "uv": [
+            4.8,
+            12.5,
+            11.7,
+            13.25
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            4.55,
+            12.5,
+            11.45,
+            13.25
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            4.3,
+            12.5,
+            11.2,
+            13.25
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#turntable"
+        }
+      }
+    },
+    {
+      "name": "table_45",
+      "from": [
+        4.55,
+        2.76,
+        4.3
+      ],
+      "to": [
+        11.45,
+        3.49,
+        11.2
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          3,
+          7.75
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4.55,
+            12.51,
+            11.45,
+            13.24
+          ],
+          "texture": "#andesite"
+        },
+        "east": {
+          "uv": [
+            4.8,
+            12.51,
+            11.7,
+            13.24
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            4.55,
+            12.51,
+            11.45,
+            13.24
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            4.3,
+            12.51,
+            11.2,
+            13.24
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#turntable"
+        }
+      }
+    },
+    {
+      "name": "crown",
+      "from": [
+        6.5,
+        2.25,
+        6.25
+      ],
+      "to": [
+        9.5,
+        2.55,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            13.45,
+            9.5,
+            13.75
+          ],
+          "texture": "#andesite"
+        },
+        "east": {
+          "uv": [
+            6.75,
+            13.45,
+            9.75,
+            13.75
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            13.45,
+            9.5,
+            13.75
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            6.25,
+            13.45,
+            9.25,
+            13.75
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            6.25,
+            9.5,
+            9.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    }
+  ]
+}

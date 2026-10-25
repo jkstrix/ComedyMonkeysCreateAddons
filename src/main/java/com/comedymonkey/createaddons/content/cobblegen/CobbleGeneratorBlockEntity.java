@@ -56,6 +56,17 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 	/** Client only: the same drill countdown, run locally so the window shows the block forming in step. */
 	private int clientProgress;
 	private int clientTicksUntilNextProgress;
+	/**
+	 * Client only: the drill's tip height (pixels) this tick and last, eased toward riding the forming block while it
+	 * runs and back up to {@link #DRILL_RAISED} when it stops; and the game time of its last strike, for the jab.
+	 */
+	private float drillTip = DRILL_RAISED, prevDrillTip = DRILL_RAISED;
+	private long lastStrike = Long.MIN_VALUE;
+
+	/** Where the drill's tip waits when it isn't drilling, in pixels from the floor of the block. */
+	public static final float DRILL_RAISED = 8.75f;
+	/** The forming block's full height: one 3 px block, or the brass batch's 2.25 px blocks. */
+	public static final float BLOCK_HEIGHT = 3, BATCH_HEIGHT = 2.25f;
 
 	public CobbleGeneratorBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.COBBLE_GENERATOR.get(), pos, state);
@@ -96,6 +107,7 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 				clientWork();
 				steam();
 			}
+			animateDrill();
 			return;
 		}
 
@@ -135,12 +147,44 @@ public class CobbleGeneratorBlockEntity extends KineticBlockEntity implements Cl
 		float hardness = hardness();
 		float breakSpeed = Math.abs(getSpeed() / 100f);
 		clientProgress += Mth.clamp((int) (breakSpeed / hardness), 1, 10 - clientProgress);
+		// every hit is a strike of the drill
+		lastStrike = level.getGameTime();
 		if (clientProgress >= 10) {
 			clientProgress = 0;
 			clientTicksUntilNextProgress = 0;
 			return;
 		}
 		clientTicksUntilNextProgress = (int) (hardness / breakSpeed);
+	}
+
+	/** Client only: the drill rides the top of the forming block while it runs, and waits raised otherwise. */
+	private void animateDrill() {
+		prevDrillTip = drillTip;
+		float target = isRunning() ? 2 + blockHeight() * getFormingFraction() + 0.25f : DRILL_RAISED;
+		// it follows the block down quickly, and lifts away more slowly when it stops or a block is done
+		drillTip += (target - drillTip) * (target < drillTip ? 0.6f : 0.25f);
+	}
+
+	/** Brass makes a batch of 16, drawn as four smaller blocks. */
+	public boolean makesBatch() {
+		return perCycle() > 1;
+	}
+
+	public float blockHeight() {
+		return makesBatch() ? BATCH_HEIGHT : BLOCK_HEIGHT;
+	}
+
+	/** The drill's tip height in pixels, between ticks. */
+	public float getDrillTip(float partialTicks) {
+		return Mth.lerp(partialTicks, prevDrillTip, drillTip);
+	}
+
+	/** How far down the drill's jab is (pixels): a quick 0.75 px stab and back over 3 ticks after each strike. */
+	public float getDrillJab(float partialTicks) {
+		if (level == null || !isRunning())
+			return 0;
+		float since = level.getGameTime() - lastStrike + partialTicks;
+		return since < 0 || since > 3 ? 0 : 0.75f * Mth.sin(Mth.PI * since / 3);
 	}
 
 	/** Turning, not overstressed, not switched off and with room for more: the pours run. */

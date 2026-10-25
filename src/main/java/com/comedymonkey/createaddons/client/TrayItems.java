@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandler;
 
 /**
- * The front tray of the glass-fronted machine boxes (Auto Harvester, Animal Pens): a few of whatever is waiting to
+ * The front tray of the glass-fronted machine boxes (Auto Harvester, Animal Pens, String Tangler, Stone Infuser): a few of whatever is waiting to
  * be collected, leaning back so they show through the window. One item once there's anything, two from a third of
  * the slots in use, three from two thirds. Positions are in the block's model pixels, front facing north.
  */
@@ -44,7 +44,23 @@ final class TrayItems {
 		if (used == 0)
 			return;
 		float full = used / (float) output.getSlots();
-		int shown = full >= 2 / 3f ? 3 : full >= 1 / 3f ? 2 : 1;
+		draw(waiting, full >= 2 / 3f ? 3 : full >= 1 / 3f ? 2 : 1, bedY, level, ms, buffer, light, overlay);
+	}
+
+	/**
+	 * The same tray for a machine with a single output slot (the String Tangler, the Stone Infuser): one item once
+	 * there's anything, two from a third of a stack, three from two thirds.
+	 */
+	static void render(ItemStack output, float bedY, Level level, PoseStack ms, MultiBufferSource buffer, int light,
+					   int overlay) {
+		if (output.isEmpty())
+			return;
+		float full = output.getCount() / (float) output.getMaxStackSize();
+		draw(List.of(output), full >= 2 / 3f ? 3 : full >= 1 / 3f ? 2 : 1, bedY, level, ms, buffer, light, overlay);
+	}
+
+	private static void draw(List<ItemStack> waiting, int shown, float bedY, Level level, PoseStack ms,
+							 MultiBufferSource buffer, int light, int overlay) {
 		var items = Minecraft.getInstance().getItemRenderer();
 		for (int i = 0; i < shown; i++) {
 			// Fewer different stacks than items to show: the last one again

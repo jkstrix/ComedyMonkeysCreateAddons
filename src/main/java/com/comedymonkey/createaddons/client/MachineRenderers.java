@@ -1,5 +1,6 @@
 package com.comedymonkey.createaddons.client;
 
+import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.machine.TwoInputMachineBlock;
 import com.comedymonkey.createaddons.content.machine.TwoInputMachineBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -8,19 +9,21 @@ import com.mojang.math.Axis;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 
-import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.model.data.ModelData;
 
 /**
@@ -28,9 +31,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
  * the shaft going into the south face. Everything is drawn into one cutout buffer.
  */
 public final class MachineRenderers {
-	private static final ResourceLocation STRING = ResourceLocation.withDefaultNamespace("block/tripwire");
 	private static final ResourceLocation COBBLESTONE = ResourceLocation.withDefaultNamespace("block/cobblestone");
-	private static final int STRANDS = 6;
 
 	private MachineRenderers() {}
 
@@ -94,14 +95,68 @@ public final class MachineRenderers {
 		quad(vc, pose, s, light, white, p111, p101, p100, p110, 16 - z1, 16 - y1, 16 - z0, 16 - y0); // east
 	}
 
+	// ---------------------------------------------------------------- parts
+
+	private static ModelResourceLocation part(String name) {
+		return ModelResourceLocation.standalone(ComedyMonkeysCreateAddons.asResource("block/" + name));
+	}
+
+	private static final ModelResourceLocation WHISK = part("string_tangler_whisk");
+	private static final ModelResourceLocation SPOOL_WEST = part("string_tangler_spool_west");
+	private static final ModelResourceLocation SPOOL_EAST = part("string_tangler_spool_east");
+	private static final ModelResourceLocation WINDING_WEST = part("string_tangler_winding_west");
+	private static final ModelResourceLocation WINDING_EAST = part("string_tangler_winding_east");
+	private static final ModelResourceLocation TURNTABLE = part("stone_infuser_turntable");
+	private static final ModelResourceLocation DRIVE = part("stone_infuser_drive");
+
+	/** The machines' moving parts aren't referenced by any blockstate, so they're loaded explicitly. */
+	public static void registerModels(ModelEvent.RegisterAdditional event) {
+		for (ModelResourceLocation m : new ModelResourceLocation[] {WHISK, SPOOL_WEST, SPOOL_EAST, WINDING_WEST,
+			WINDING_EAST, TURNTABLE, DRIVE})
+			event.register(m);
+	}
+
+	private static void renderPart(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation location,
+							   int light, int overlay) {
+		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), vc, state,
+			Minecraft.getInstance().getModelManager().getModel(location), 1, 1, 1, light, overlay, ModelData.EMPTY,
+			RenderType.cutout());
+	}
+
+	/**
+	 * The shaft's turn about the model's +Z (out of the back), matching the stub: the stub spins about the world axis,
+	 * which runs the other way in model space when the back faces a negative direction.
+	 */
+	private static float modelSpin(TwoInputMachineBlockEntity be, Direction front) {
+		Direction back = front.getOpposite();
+		float angle = KineticBlockEntityRenderer.getAngleForBe(be, be.getBlockPos(), back.getAxis());
+		return back.getAxisDirection() == Direction.AxisDirection.POSITIVE ? angle : -angle;
+	}
+
+	/** Spins whatever is drawn next about a line through (x, y, z) pixels, along the given axis. */
+	private static void spinAbout(PoseStack ms, float x, float y, float z, Axis axis, float radians) {
+		ms.translate(x / 16, y / 16, z / 16);
+		ms.mulPose(axis.rotation(radians));
+		ms.translate(-x / 16, -y / 16, -z / 16);
+	}
+
 	// ---------------------------------------------------------------- String Tangler
 
 	/**
-	 * Six strands of string stretched between the copper frame and a spindle on the shaft axis. While it works they
-	 * spin with the shaft and are drawn in and twisted tighter and tighter as the job goes on. Idle with string
-	 * loaded, they hang slack and still.
+	 * The String Tangler (design/briefs/string-tangler.md): a Create whisk on the shaft's axis, turning with it while
+	 * it works; two spools of string at the side walls whose winding shows how much string is loaded, paying out to
+	 * the whisk; the slime in its pot, by how much there is; the web balling up on the whisk as the job goes on; and
+	 * the finished cobwebs in the tray at the front. Idle, the whisk is still and the strands hang slack.
 	 */
 	public static class Tangler extends SafeBlockEntityRenderer<TwoInputMachineBlockEntity> {
+		private static final ResourceLocation STRING = ComedyMonkeysCreateAddons.asResource("block/string_tangler_string");
+		private static final ResourceLocation SLIME = ComedyMonkeysCreateAddons.asResource("block/string_tangler_slime");
+		private static final ResourceLocation WEB = ComedyMonkeysCreateAddons.asResource("block/string_tangler_web");
+		/** The whisk's axis, the spools' centres and the inner faces of their windings, in model pixels. */
+		private static final float AXIS_X = 8, AXIS_Y = 8, SPOOL_Z = 8, WEST_X = 3.5f, EAST_X = 12.5f, WINDING_HALF = 0.75f;
+		/** The tray's floor (the harvester's tray, rebuilt here), in pixels. */
+		private static final float TRAY_Y = 2.5f;
+
 		public Tangler(BlockEntityRendererProvider.Context context) {}
 
 		@Override
@@ -116,61 +171,96 @@ public final class MachineRenderers {
 
 			ms.pushPose();
 			faceFront(ms, front);
-			PoseStack.Pose pose = ms.last();
-			boolean hasString = !be.getStack(TwoInputMachineBlockEntity.MAIN).isEmpty();
-			float progress = be.getProgress(partialTicks);
 			boolean working = be.isProcessing();
-			float spin = working ? KineticBlockEntityRenderer.getAngleForBe(be, be.getBlockPos(),
-				front.getAxis()) : 0;
-			TextureAtlasSprite string = sprite(STRING);
+			float spin = working ? modelSpin(be, front) : 0;
+			float progress = working ? be.getProgress(partialTicks) : 0;
+			ItemStack string = be.getStack(TwoInputMachineBlockEntity.MAIN);
+			ItemStack slime = be.getStack(TwoInputMachineBlockEntity.EXTRA);
 
-			if (hasString || working) {
-				// The axis runs north-south through the block centre; strands fan out round it
-				float outer = Mth.lerp(progress, 6.2f, 3.4f) / 16f;
-				float inner = Mth.lerp(progress, 1.2f, 0.4f) / 16f;
-				float twist = working ? 0.6f + progress * 3.5f : 0.15f;
-				float sag = working ? 0 : 0.8f / 16f;
-				for (int i = 0; i < STRANDS; i++) {
-					float base = i * Mth.TWO_PI / STRANDS + spin;
-					float z0 = (5 + (i % 3) * 3f) / 16f;
-					float z1 = (11 - (i % 3) * 3f) / 16f;
-					float[] from = point(base, outer, z0, 0);
-					float[] to = point(base + twist, inner, z1, sag);
-					strand(vc, pose, string, light, from, to);
-					// A second strand from the opposite side crossing it, so the tangle reads as a knot
-					float[] from2 = point(base + Mth.PI, outer * 0.9f, z1, 0);
-					float[] to2 = point(base + Mth.PI - twist, inner, z0, sag);
-					strand(vc, pose, string, light, from2, to2);
+			// The whisk, turning with the shaft
+			ms.pushPose();
+			spinAbout(ms, AXIS_X, AXIS_Y, 0, Axis.ZP, spin);
+			renderPart(ms, vc, state, WHISK, light, overlay);
+			// The web balling up on it, turning with it
+			if (progress > 0.02f)
+				web(vc, ms.last(), sprite(WEB), light, 3 * progress);
+			ms.popPose();
+
+			// The spools pay out slower than the whisk turns; their winding shows how much string is left
+			float wound = string.isEmpty() ? 0 : 0.45f + 0.55f * string.getCount() / string.getMaxStackSize();
+			for (boolean west : new boolean[] {true, false}) {
+				float x = west ? WEST_X : EAST_X;
+				ms.pushPose();
+				spinAbout(ms, x, AXIS_Y, SPOOL_Z, Axis.XP, (west ? 1 : -1) * spin / 6);
+				renderPart(ms, vc, state, west ? SPOOL_WEST : SPOOL_EAST, light, overlay);
+				if (wound > 0) {
+					ms.translate(0, AXIS_Y / 16, SPOOL_Z / 16);
+					ms.scale(1, wound, wound);
+					ms.translate(0, -AXIS_Y / 16, -SPOOL_Z / 16);
+					renderPart(ms, vc, state, west ? WINDING_WEST : WINDING_EAST, light, overlay);
+				}
+				ms.popPose();
+				// Two strands from the winding to the whisk, wound on where they meet it
+				if (wound > 0) {
+					float from = west ? x + WINDING_HALF : x - WINDING_HALF;
+					float r = 1.25f * wound;
+					for (int i = 0; i < 2; i++) {
+						float at = spin + (west ? 0 : Mth.PI) + i * 0.6f;
+						float[] a = {from / 16, (AXIS_Y + (i == 0 ? r : -r) * 0.6f) / 16, (SPOOL_Z - 0.5f + i) / 16};
+						float sag = working ? 0 : 0.5f;
+						float[] b = {(AXIS_X + Mth.cos(at) * 1.5f) / 16, (AXIS_Y + Mth.sin(at) * 1.5f - sag) / 16, (SPOOL_Z - 0.5f + i) / 16};
+						strand(vc, ms.last(), sprite(STRING), light, a, b);
+					}
 				}
 			}
 
+			// The slime in its pot, a blob that shrinks as it's used
+			if (!slime.isEmpty()) {
+				float h = 0.4f + 1.1f * slime.getCount() / slime.getMaxStackSize();
+				cube(vc, ms.last(), sprite(SLIME), light, 7, 2.25f, 5, 9, 2.25f + h, 7);
+			}
+
+			TrayItems.render(be.getStack(TwoInputMachineBlockEntity.OUTPUT), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
 			ms.popPose();
 		}
 
-		private static float[] point(float angle, float radius, float z, float drop) {
-			return new float[] {0.5f + Mth.cos(angle) * radius, 0.5f + Mth.sin(angle) * radius - drop, z};
+		/** Three crossed planes of web round the whisk's middle, {@code half} pixels out from the axis. */
+		private static void web(VertexConsumer vc, PoseStack.Pose pose, TextureAtlasSprite s, int light, float half) {
+			float x0 = (AXIS_X - half) / 16, x1 = (AXIS_X + half) / 16, y0 = (AXIS_Y - half) / 16, y1 = (AXIS_Y + half) / 16;
+			float z0 = (8 - half) / 16, z1 = (8 + half) / 16, cx = AXIS_X / 16, cy = AXIS_Y / 16, cz = 0.5f;
+			int tint = 0xFFFFFF;
+			quad(vc, pose, s, light, tint, new float[] {x0, y1, cz}, new float[] {x0, y0, cz}, new float[] {x1, y0, cz}, new float[] {x1, y1, cz}, 0, 0, 16, 16);
+			quad(vc, pose, s, light, tint, new float[] {cx, y1, z0}, new float[] {cx, y0, z0}, new float[] {cx, y0, z1}, new float[] {cx, y1, z1}, 0, 0, 16, 16);
+			quad(vc, pose, s, light, tint, new float[] {x0, cy, z0}, new float[] {x0, cy, z1}, new float[] {x1, cy, z1}, new float[] {x1, cy, z0}, 0, 0, 16, 16);
 		}
 
-		/** A thin ribbon of string between two points, turned to face across the shaft axis. */
+		/** A ribbon of string between two points, half a pixel wide, turned to face the front. */
 		private static void strand(VertexConsumer vc, PoseStack.Pose pose, TextureAtlasSprite s, int light,
 								   float[] from, float[] to) {
 			float dx = to[0] - from[0], dy = to[1] - from[1];
 			float len = Mth.sqrt(dx * dx + dy * dy);
-			float w = 0.45f / 16f;
+			float w = 0.25f / 16f;
 			float nx = len < 1e-4f ? w : -dy / len * w, ny = len < 1e-4f ? 0 : dx / len * w;
 			float[] a = {from[0] + nx, from[1] + ny, from[2]}, b = {from[0] - nx, from[1] - ny, from[2]};
 			float[] c = {to[0] - nx, to[1] - ny, to[2]}, d = {to[0] + nx, to[1] + ny, to[2]};
-			quad(vc, pose, s, light, 0xF2F2F2, a, b, c, d, 0, 6, 16, 8);
+			quad(vc, pose, s, light, 0xFFFFFF, a, b, c, d, 0, 7, 16, 9);
 		}
 	}
 
 	// ---------------------------------------------------------------- Stone Infuser
 
 	/**
-	 * A block of cobblestone on a stand in the chamber, with the new stone creeping up over it from the bottom as
-	 * the job goes on. A finished block waits there until it's taken.
+	 * The Stone Infuser (design/briefs/stone-infuser.md): a turntable geared down 4:1 from the shaft through a drive
+	 * rod, so the cobblestone on it turns at the speed it's given; the new stone climbing it from the bottom as the
+	 * job goes on; the nuggets piled in the feeder, by how many there are (the dust falling from its spout is the
+	 * block entity's); and finished stones in the tray at the front.
 	 */
 	public static class Infuser extends SafeBlockEntityRenderer<TwoInputMachineBlockEntity> {
+		/** The turntable's axis and the stone on it, in model pixels (set forward so its corners clear the stub). */
+		private static final float TABLE_X = 8, TABLE_Z = 7.75f, DRIVE_Y = 2.375f;
+		private static final float STONE_X0 = 5, STONE_X1 = 11, STONE_Y0 = 3.5f, STONE_Y1 = 9.5f, STONE_Z0 = 4.75f, STONE_Z1 = 10.75f;
+		private static final float TRAY_Y = 2.5f;
+
 		public Infuser(BlockEntityRendererProvider.Context context) {}
 
 		@Override
@@ -185,29 +275,46 @@ public final class MachineRenderers {
 
 			ms.pushPose();
 			faceFront(ms, front);
-			PoseStack.Pose pose = ms.last();
-			ItemStack output = be.getStack(TwoInputMachineBlockEntity.OUTPUT);
-			ItemStack making = be.getMaking();
-			boolean hasCobble = !be.getStack(TwoInputMachineBlockEntity.MAIN).isEmpty();
-			// A slow turn while it works
-			float turn = be.isProcessing() ? AnimationTickHolder.getRenderTime(be.getLevel()) * 1.5f : 0;
-			ms.pushPose();
-			ms.translate(0.5, 0, 0.5);
-			ms.mulPose(Axis.YP.rotationDegrees(turn));
-			ms.translate(-0.5, 0, -0.5);
-			pose = ms.last();
+			float spin = modelSpin(be, front);
 
-			if (be.isProcessing() && !making.isEmpty()) {
-				float rise = 8 * be.getProgress(partialTicks);
-				cube(vc, pose, sprite(COBBLESTONE), light, 4, 3.5f, 4, 12, 11.5f, 12);
+			// The drive rod turns with the shaft; the turntable geared down 4:1 under the stone
+			ms.pushPose();
+			spinAbout(ms, TABLE_X, DRIVE_Y, 0, Axis.ZP, spin);
+			renderPart(ms, vc, state, DRIVE, light, overlay);
+			ms.popPose();
+
+			ms.pushPose();
+			spinAbout(ms, TABLE_X, 0, TABLE_Z, Axis.YP, spin / 4);
+			renderPart(ms, vc, state, TURNTABLE, light, overlay);
+			boolean working = be.isProcessing() && !be.getMaking().isEmpty();
+			if (working || !be.getStack(TwoInputMachineBlockEntity.MAIN).isEmpty()) {
+				PoseStack.Pose pose = ms.last();
+				cube(vc, pose, sprite(COBBLESTONE), light, STONE_X0, STONE_Y0, STONE_Z0, STONE_X1, STONE_Y1, STONE_Z1);
+				// The new stone climbing it, stopping just short of the top so their tops never meet
+				float rise = working ? (STONE_Y1 - STONE_Y0 - 0.1f) * be.getProgress(partialTicks) : 0;
 				if (rise > 0.05f)
-					cube(vc, pose, blockSprite(making), light, 3.9f, 3.4f, 3.9f, 12.1f, 3.5f + rise, 12.1f);
-			} else if (!output.isEmpty()) {
-				cube(vc, pose, blockSprite(output), light, 4, 3.5f, 4, 12, 11.5f, 12);
-			} else if (hasCobble) {
-				cube(vc, pose, sprite(COBBLESTONE), light, 4, 3.5f, 4, 12, 11.5f, 12);
+					cube(vc, pose, blockSprite(be.getMaking()), light, STONE_X0 - 0.1f, STONE_Y0 - 0.1f, STONE_Z0 - 0.1f,
+						STONE_X1 + 0.1f, STONE_Y0 + rise, STONE_Z1 + 0.1f);
 			}
 			ms.popPose();
+
+			// The nuggets lying in the feeder: one to four, by how many are loaded
+			ItemStack nuggets = be.getStack(TwoInputMachineBlockEntity.EXTRA);
+			if (!nuggets.isEmpty()) {
+				int shown = Math.min(4, 1 + nuggets.getCount() / 16);
+				for (int i = 0; i < shown; i++) {
+					ms.pushPose();
+					ms.translate((3 + (i % 2) * 1.25f) / 16, (10.35f + i * 0.02f) / 16, (6.75f + (i / 2) * 1.5f) / 16);
+					ms.mulPose(Axis.YP.rotationDegrees(40 * i));
+					ms.mulPose(Axis.XP.rotationDegrees(90));
+					ms.scale(0.22f, 0.22f, 0.22f);
+					Minecraft.getInstance().getItemRenderer().renderStatic(nuggets, ItemDisplayContext.FIXED, light, overlay,
+						ms, buffer, be.getLevel(), i);
+					ms.popPose();
+				}
+			}
+
+			TrayItems.render(be.getStack(TwoInputMachineBlockEntity.OUTPUT), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
 			ms.popPose();
 		}
 

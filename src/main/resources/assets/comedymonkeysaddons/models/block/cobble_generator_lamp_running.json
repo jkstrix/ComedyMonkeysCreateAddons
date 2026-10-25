@@ -1,0 +1,35 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/cobble_generator_lamp_running",
+    "cobble_generator_lamp_running": "comedymonkeysaddons:block/cobble_generator_lamp_running"
+  },
+  "elements": [
+    {
+      "name": "lamp_lit",
+      "from": [
+        2.25,
+        14.25,
+        -0.5
+      ],
+      "to": [
+        3.75,
+        15.75,
+        -0.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cobble_generator_lamp_running"
+        }
+      }
+    }
+  ]
+}

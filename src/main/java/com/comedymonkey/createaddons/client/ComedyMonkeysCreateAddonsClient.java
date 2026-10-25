@@ -111,7 +111,8 @@ public class ComedyMonkeysCreateAddonsClient {
 			for (ChestType type : ChestType.values())
 				event.register(UpgradedChestRenderer.lidModel(tier, type));
 		PressureCrucibleRenderer.registerModels(event);
-		event.register(CobbleGeneratorRenderer.SHAFT);
+		CobbleGeneratorRenderer.registerModels(event);
+		MachineRenderers.registerModels(event);
 		AutoHarvesterRenderer.registerModels(event);
 		event.register(AnimalPenRenderer.MILK);
 		CuckooClockRenderer.registerModels(event);

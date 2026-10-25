@@ -1,0 +1,374 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/string_tangler_walnut",
+    "walnut": "comedymonkeysaddons:block/string_tangler_walnut"
+  },
+  "elements": [
+    {
+      "name": "spool_core",
+      "from": [
+        2.5,
+        7.25,
+        7.25
+      ],
+      "to": [
+        4.5,
+        8.75,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.5,
+            7.25,
+            13.5,
+            8.75
+          ],
+          "texture": "#walnut"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#walnut"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            7.25,
+            4.5,
+            8.75
+          ],
+          "texture": "#walnut"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#walnut"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            7.25,
+            4.5,
+            8.75
+          ],
+          "texture": "#walnut"
+        },
+        "down": {
+          "uv": [
+            2.5,
+            7.25,
+            4.5,
+            8.75
+          ],
+          "texture": "#walnut"
+        }
+      }
+    },
+    {
+      "name": "spool_flange_2.25",
+      "from": [
+        2.25,
+        6.5,
+        6.5
+      ],
+      "to": [
+        2.75,
+        9.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.25,
+            6.5,
+            13.75,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "south": {
+          "uv": [
+            2.25,
+            6.5,
+            2.75,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "up": {
+          "uv": [
+            2.25,
+            6.5,
+            2.75,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "down": {
+          "uv": [
+            2.25,
+            6.5,
+            2.75,
+            9.5
+          ],
+          "texture": "#walnut"
+        }
+      }
+    },
+    {
+      "name": "spool_flange45_2.25",
+      "from": [
+        2.3,
+        6.5,
+        6.5
+      ],
+      "to": [
+        2.7,
+        9.5,
+        9.5
+      ],
+      "rotation": {
+        "origin": [
+          3.5,
+          8,
+          8
+        ],
+        "axis": "x",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.3,
+            6.5,
+            13.7,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "south": {
+          "uv": [
+            2.3,
+            6.5,
+            2.7,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "up": {
+          "uv": [
+            2.3,
+            6.5,
+            2.7,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "down": {
+          "uv": [
+            2.3,
+            6.5,
+            2.7,
+            9.5
+          ],
+          "texture": "#walnut"
+        }
+      }
+    },
+    {
+      "name": "spool_flange_4.25",
+      "from": [
+        4.25,
+        6.5,
+        6.5
+      ],
+      "to": [
+        4.75,
+        9.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.25,
+            6.5,
+            11.75,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "south": {
+          "uv": [
+            4.25,
+            6.5,
+            4.75,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "up": {
+          "uv": [
+            4.25,
+            6.5,
+            4.75,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "down": {
+          "uv": [
+            4.25,
+            6.5,
+            4.75,
+            9.5
+          ],
+          "texture": "#walnut"
+        }
+      }
+    },
+    {
+      "name": "spool_flange45_4.25",
+      "from": [
+        4.3,
+        6.5,
+        6.5
+      ],
+      "to": [
+        4.7,
+        9.5,
+        9.5
+      ],
+      "rotation": {
+        "origin": [
+          3.5,
+          8,
+          8
+        ],
+        "axis": "x",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            11.3,
+            6.5,
+            11.7,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "south": {
+          "uv": [
+            4.3,
+            6.5,
+            4.7,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "up": {
+          "uv": [
+            4.3,
+            6.5,
+            4.7,
+            9.5
+          ],
+          "texture": "#walnut"
+        },
+        "down": {
+          "uv": [
+            4.3,
+            6.5,
+            4.7,
+            9.5
+          ],
+          "texture": "#walnut"
+        }
+      }
+    }
+  ]
+}

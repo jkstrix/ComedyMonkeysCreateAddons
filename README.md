@@ -115,7 +115,7 @@ Two more blocks you can now make with Create's Mechanical Mixer:
 
 ## Cobblestone Generators
 
-One-block, lava-and-water cobblestone generators with a glass front onto a brick chamber. The front faces you when placed and you can watch it work: water and lava pour from inlet pipes into the basin and a block of cobblestone rises between them, with puffs of steam; the pours stop when it's unpowered or full. The lava glows. Power goes in through the **shaft hole on the back**, the only side that takes a shaft.
+One-block, lava-and-water cobblestone generators: a steel casing with a glass front onto a dark chamber. The front faces you when placed and you can watch it work: water and lava pour from nozzles into the basin and a block of cobblestone rises between them, with puffs of steam, while a drill above it spins with the shaft and jabs down on every drill hit. The Brass tier makes a batch of four smaller blocks under a four-bit drill head. A lamp on the front frame shows its state: **cyan** running, **amber** full, **dark red** switched off by redstone, unlit with no rotation. The lava glows. Power goes in through the **shaft hole on the back**, the only side that takes a shaft.
 
 | Generator | Per cycle | Holds | Stress | Recipe |
 |---|---|---|---|---|
@@ -214,8 +214,9 @@ Recipe: a Precision Mechanism over a Magma Engine over Brass Casing.
 
 ## String Tangler
 
-A copper-framed glass box with a spindle inside. Every **4 string and 1 slime ball** become a **cobweb**: while it works the
-strands spin with the shaft, are pulled in and twisted tighter and tighter, and a web balls up in the middle. Power goes in
+A copper-trimmed machine with a Create whisk on the shaft inside. Every **4 string and 1 slime ball** become a **cobweb**: the
+string pays out from two spools (their winding shows how much is loaded) onto the whisk as it spins, the slime sits in a
+little pot, and the web balls up on the whisk until it drops into the tray at the front. Power goes in
 through the back (the glass front faces you when placed); faster rotation tangles faster (160 ticks at 16 RPM, half a second
 at 256 RPM). Hoppers, funnels and pipes load both ingredients and take the cobwebs from any side; by hand, right-click with
 string or slime to load it and with an empty hand to take the cobwebs.
@@ -235,7 +236,8 @@ Makes Create's ore-bearing stones from **cobblestone and 9 nuggets** of the matc
 
 Crushing one of these stones gives some nuggets back, but always fewer than 9 (veridium about 8, the others 2 to 4), so it
 can't loop into free metal. Crushing **tuff** gives a few of all four nuggets, so a Tuff Generator can feed it. Through the
-window you can watch the new stone creep up over a block of cobblestone. Power goes in through the back; 200 ticks at 16 RPM.
+window you can watch the cobblestone turn on a turntable geared to the shaft while metal dust falls on it from the nugget
+feeder and the new stone creeps up over it; finished stones wait in the tray at the front. Power goes in through the back; 200 ticks at 16 RPM.
 Loading and unloading work as for the String Tangler.
 
 Recipe: Andesite Casing, Framed Glass, iron sheets, a Basin and a shaft.

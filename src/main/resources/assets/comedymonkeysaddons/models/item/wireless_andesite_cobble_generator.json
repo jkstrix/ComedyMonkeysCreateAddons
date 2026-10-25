@@ -4,144 +4,35 @@
   "ambientocclusion": false,
   "textures": {
     "particle": "comedymonkeysaddons:block/andesite_cobble_generator_side",
-    "front": "comedymonkeysaddons:block/andesite_cobble_generator_front",
-    "back": "create:block/gearbox",
-    "side": "comedymonkeysaddons:block/andesite_cobble_generator_side",
-    "top": "comedymonkeysaddons:block/andesite_cobble_generator_top",
-    "bottom": "comedymonkeysaddons:block/andesite_cobble_generator_bottom",
-    "chamber": "comedymonkeysaddons:block/cobble_generator_chamber",
-    "floor": "comedymonkeysaddons:block/cobble_generator_floor",
-    "ceiling": "comedymonkeysaddons:block/cobble_generator_ceiling",
-    "pipe": "comedymonkeysaddons:block/cobble_generator_pipe",
-    "glass": "comedymonkeysaddons:block/cobble_generator_glass",
-    "lava": "minecraft:block/lava_still",
-    "water": "comedymonkeysaddons:block/cobble_generator_item_water",
-    "cobble": "minecraft:block/cobblestone",
-    "antenna": "create:block/redstone_antenna",
-    "bridge": "create:block/redstone_bridge"
+    "andesite_cobble_generator_front": "comedymonkeysaddons:block/andesite_cobble_generator_front",
+    "andesite_cobble_generator_side": "comedymonkeysaddons:block/andesite_cobble_generator_side",
+    "andesite_cobble_generator_back": "comedymonkeysaddons:block/andesite_cobble_generator_back",
+    "andesite_cobble_generator_top": "comedymonkeysaddons:block/andesite_cobble_generator_top",
+    "cobble_generator_ceiling": "comedymonkeysaddons:block/cobble_generator_ceiling",
+    "cobble_generator_floor": "comedymonkeysaddons:block/cobble_generator_floor",
+    "andesite_cobble_generator_bottom": "comedymonkeysaddons:block/andesite_cobble_generator_bottom",
+    "cobble_generator_chamber": "comedymonkeysaddons:block/cobble_generator_chamber",
+    "cobble_generator_glass": "comedymonkeysaddons:block/cobble_generator_glass",
+    "cobble_generator_lamp": "comedymonkeysaddons:block/cobble_generator_lamp",
+    "cobble_generator_steel": "comedymonkeysaddons:block/cobble_generator_steel",
+    "cobble_generator_steel_light": "comedymonkeysaddons:block/cobble_generator_steel_light",
+    "cobble_generator_pipe": "comedymonkeysaddons:block/cobble_generator_pipe",
+    "cobble_generator_dark": "comedymonkeysaddons:block/cobble_generator_dark",
+    "redstone_antenna": "create:block/redstone_antenna",
+    "redstone_bridge": "create:block/redstone_bridge",
+    "lava_still": "minecraft:block/lava_still",
+    "cobble_generator_item_water": "comedymonkeysaddons:block/cobble_generator_item_water",
+    "cobblestone": "minecraft:block/cobblestone",
+    "cobble_generator_drill": "comedymonkeysaddons:block/cobble_generator_drill",
+    "cobble_generator_drill_collar": "comedymonkeysaddons:block/cobble_generator_drill_collar"
   },
   "elements": [
     {
+      "name": "top",
       "from": [
         0,
         14,
         0
-      ],
-      "to": [
-        16,
-        16,
-        1
-      ],
-      "faces": {
-        "up": {
-          "texture": "#top",
-          "cullface": "up"
-        },
-        "east": {
-          "texture": "#side",
-          "cullface": "east"
-        },
-        "west": {
-          "texture": "#side",
-          "cullface": "west"
-        },
-        "north": {
-          "texture": "#front",
-          "cullface": "north"
-        },
-        "down": {
-          "texture": "#ceiling"
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        0,
-        0
-      ],
-      "to": [
-        16,
-        2,
-        1
-      ],
-      "faces": {
-        "down": {
-          "texture": "#bottom",
-          "cullface": "down"
-        },
-        "east": {
-          "texture": "#side",
-          "cullface": "east"
-        },
-        "west": {
-          "texture": "#side",
-          "cullface": "west"
-        },
-        "north": {
-          "texture": "#front",
-          "cullface": "north"
-        },
-        "up": {
-          "texture": "#floor"
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        2,
-        0
-      ],
-      "to": [
-        2,
-        14,
-        1
-      ],
-      "faces": {
-        "west": {
-          "texture": "#side",
-          "cullface": "west"
-        },
-        "north": {
-          "texture": "#front",
-          "cullface": "north"
-        },
-        "east": {
-          "texture": "#chamber"
-        }
-      }
-    },
-    {
-      "from": [
-        14,
-        2,
-        0
-      ],
-      "to": [
-        16,
-        14,
-        1
-      ],
-      "faces": {
-        "east": {
-          "texture": "#side",
-          "cullface": "east"
-        },
-        "north": {
-          "texture": "#front",
-          "cullface": "north"
-        },
-        "west": {
-          "texture": "#chamber"
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        0,
-        14
       ],
       "to": [
         16,
@@ -149,395 +40,740 @@
         16
       ],
       "faces": {
-        "up": {
-          "texture": "#top",
-          "cullface": "up"
-        },
-        "down": {
-          "texture": "#bottom",
-          "cullface": "down"
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#andesite_cobble_generator_front"
         },
         "east": {
-          "texture": "#side",
-          "cullface": "east"
-        },
-        "west": {
-          "texture": "#side",
-          "cullface": "west"
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#andesite_cobble_generator_side"
         },
         "south": {
-          "texture": "#back",
-          "cullface": "south"
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#andesite_cobble_generator_back"
         },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#andesite_cobble_generator_side"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#andesite_cobble_generator_top"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cobble_generator_ceiling"
+        }
+      }
+    },
+    {
+      "name": "bottom",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
         "north": {
-          "texture": "#chamber"
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        0,
-        1
-      ],
-      "to": [
-        2,
-        16,
-        14
-      ],
-      "faces": {
-        "up": {
-          "texture": "#top",
-          "cullface": "up"
-        },
-        "down": {
-          "texture": "#bottom",
-          "cullface": "down"
-        },
-        "west": {
-          "texture": "#side",
-          "cullface": "west"
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#andesite_cobble_generator_front"
         },
         "east": {
-          "texture": "#chamber"
-        }
-      }
-    },
-    {
-      "from": [
-        14,
-        0,
-        1
-      ],
-      "to": [
-        16,
-        16,
-        14
-      ],
-      "faces": {
-        "up": {
-          "texture": "#top",
-          "cullface": "up"
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#andesite_cobble_generator_side"
         },
-        "down": {
-          "texture": "#bottom",
-          "cullface": "down"
-        },
-        "east": {
-          "texture": "#side",
-          "cullface": "east"
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#andesite_cobble_generator_back"
         },
         "west": {
-          "texture": "#chamber"
-        }
-      }
-    },
-    {
-      "from": [
-        2,
-        14,
-        1
-      ],
-      "to": [
-        14,
-        16,
-        14
-      ],
-      "faces": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#andesite_cobble_generator_side"
+        },
         "up": {
-          "texture": "#top",
-          "cullface": "up"
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cobble_generator_floor"
         },
         "down": {
-          "texture": "#ceiling"
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#andesite_cobble_generator_bottom"
         }
       }
     },
     {
+      "name": "wall_west",
       "from": [
-        2,
         0,
-        1
+        2,
+        0
       ],
       "to": [
-        14,
         2,
-        14
+        14,
+        16
       ],
       "faces": {
-        "down": {
-          "texture": "#bottom",
-          "cullface": "down"
+        "north": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#andesite_cobble_generator_front"
         },
-        "up": {
-          "texture": "#floor"
+        "east": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#cobble_generator_chamber"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#andesite_cobble_generator_back"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#andesite_cobble_generator_side"
         }
       }
     },
     {
+      "name": "wall_east",
+      "from": [
+        14,
+        2,
+        0
+      ],
+      "to": [
+        16,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#andesite_cobble_generator_front"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#andesite_cobble_generator_side"
+        },
+        "south": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#andesite_cobble_generator_back"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#cobble_generator_chamber"
+        }
+      }
+    },
+    {
+      "name": "wall_back",
+      "from": [
+        2,
+        2,
+        14
+      ],
+      "to": [
+        14,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#cobble_generator_chamber"
+        },
+        "south": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#andesite_cobble_generator_back"
+        }
+      }
+    },
+    {
+      "name": "glass",
+      "from": [
+        2,
+        2,
+        1.2
+      ],
+      "to": [
+        14,
+        14,
+        1.2
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#cobble_generator_glass"
+        },
+        "south": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#cobble_generator_glass"
+        }
+      }
+    },
+    {
+      "name": "lamp",
+      "from": [
+        2.25,
+        14.25,
+        -0.25
+      ],
+      "to": [
+        3.75,
+        15.75,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cobble_generator_lamp"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.25,
+            0.25,
+            1.75
+          ],
+          "texture": "#cobble_generator_steel"
+        },
+        "west": {
+          "uv": [
+            15.75,
+            0.25,
+            16,
+            1.75
+          ],
+          "texture": "#cobble_generator_steel"
+        },
+        "up": {
+          "uv": [
+            2.25,
+            15.75,
+            3.75,
+            16
+          ],
+          "texture": "#cobble_generator_steel"
+        },
+        "down": {
+          "uv": [
+            2.25,
+            0,
+            3.75,
+            0.25
+          ],
+          "texture": "#cobble_generator_steel"
+        }
+      }
+    },
+    {
+      "name": "drill_mount",
+      "from": [
+        6,
+        13.25,
+        4.5
+      ],
+      "to": [
+        10,
+        14,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            2,
+            10,
+            2.75
+          ],
+          "texture": "#cobble_generator_steel"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            2,
+            11.5,
+            2.75
+          ],
+          "texture": "#cobble_generator_steel"
+        },
+        "south": {
+          "uv": [
+            6,
+            2,
+            10,
+            2.75
+          ],
+          "texture": "#cobble_generator_steel"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            2,
+            8.5,
+            2.75
+          ],
+          "texture": "#cobble_generator_steel"
+        },
+        "down": {
+          "uv": [
+            6,
+            7.5,
+            10,
+            11.5
+          ],
+          "texture": "#cobble_generator_steel"
+        }
+      }
+    },
+    {
+      "name": "drill_sleeve",
+      "from": [
+        7.25,
+        12.25,
+        5.75
+      ],
+      "to": [
+        8.75,
+        13.25,
+        7.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.25,
+            2.75,
+            8.75,
+            3.75
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "east": {
+          "uv": [
+            8.75,
+            2.75,
+            10.25,
+            3.75
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "south": {
+          "uv": [
+            7.25,
+            2.75,
+            8.75,
+            3.75
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "west": {
+          "uv": [
+            5.75,
+            2.75,
+            7.25,
+            3.75
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "down": {
+          "uv": [
+            7.25,
+            8.75,
+            8.75,
+            10.25
+          ],
+          "texture": "#cobble_generator_steel_light"
+        }
+      }
+    },
+    {
+      "name": "nozzle_lava",
+      "from": [
+        3.25,
+        10.75,
+        6.25
+      ],
+      "to": [
+        4.75,
+        14,
+        7.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.25,
+            2,
+            12.75,
+            5.25
+          ],
+          "texture": "#cobble_generator_pipe"
+        },
+        "east": {
+          "uv": [
+            8.25,
+            2,
+            9.75,
+            5.25
+          ],
+          "texture": "#cobble_generator_pipe"
+        },
+        "south": {
+          "uv": [
+            3.25,
+            2,
+            4.75,
+            5.25
+          ],
+          "texture": "#cobble_generator_pipe"
+        },
+        "west": {
+          "uv": [
+            6.25,
+            2,
+            7.75,
+            5.25
+          ],
+          "texture": "#cobble_generator_pipe"
+        },
+        "down": {
+          "uv": [
+            3.25,
+            8.25,
+            4.75,
+            9.75
+          ],
+          "texture": "#cobble_generator_pipe"
+        }
+      }
+    },
+    {
+      "name": "nozzle_lava_tip",
       "from": [
         3,
-        11,
+        10,
         6
       ],
       "to": [
         5,
-        14,
+        10.75,
         8
       ],
       "faces": {
         "north": {
-          "texture": "#pipe"
-        },
-        "south": {
-          "texture": "#pipe"
+          "uv": [
+            11,
+            5.25,
+            13,
+            6
+          ],
+          "texture": "#cobble_generator_steel_light"
         },
         "east": {
-          "texture": "#pipe"
+          "uv": [
+            8,
+            5.25,
+            10,
+            6
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "south": {
+          "uv": [
+            3,
+            5.25,
+            5,
+            6
+          ],
+          "texture": "#cobble_generator_steel_light"
         },
         "west": {
-          "texture": "#pipe"
+          "uv": [
+            6,
+            5.25,
+            8,
+            6
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "up": {
+          "uv": [
+            3,
+            6,
+            5,
+            8
+          ],
+          "texture": "#cobble_generator_steel_light"
         },
         "down": {
-          "texture": "#pipe"
+          "uv": [
+            3,
+            8,
+            5,
+            10
+          ],
+          "texture": "#cobble_generator_dark"
         }
       }
     },
     {
+      "name": "nozzle_water",
+      "from": [
+        11.25,
+        10.75,
+        6.25
+      ],
+      "to": [
+        12.75,
+        14,
+        7.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.25,
+            2,
+            4.75,
+            5.25
+          ],
+          "texture": "#cobble_generator_pipe"
+        },
+        "east": {
+          "uv": [
+            8.25,
+            2,
+            9.75,
+            5.25
+          ],
+          "texture": "#cobble_generator_pipe"
+        },
+        "south": {
+          "uv": [
+            11.25,
+            2,
+            12.75,
+            5.25
+          ],
+          "texture": "#cobble_generator_pipe"
+        },
+        "west": {
+          "uv": [
+            6.25,
+            2,
+            7.75,
+            5.25
+          ],
+          "texture": "#cobble_generator_pipe"
+        },
+        "down": {
+          "uv": [
+            11.25,
+            8.25,
+            12.75,
+            9.75
+          ],
+          "texture": "#cobble_generator_pipe"
+        }
+      }
+    },
+    {
+      "name": "nozzle_water_tip",
       "from": [
         11,
-        11,
+        10,
         6
       ],
       "to": [
         13,
-        14,
+        10.75,
         8
       ],
       "faces": {
         "north": {
-          "texture": "#pipe"
-        },
-        "south": {
-          "texture": "#pipe"
+          "uv": [
+            3,
+            5.25,
+            5,
+            6
+          ],
+          "texture": "#cobble_generator_steel_light"
         },
         "east": {
-          "texture": "#pipe"
+          "uv": [
+            8,
+            5.25,
+            10,
+            6
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "south": {
+          "uv": [
+            11,
+            5.25,
+            13,
+            6
+          ],
+          "texture": "#cobble_generator_steel_light"
         },
         "west": {
-          "texture": "#pipe"
+          "uv": [
+            6,
+            5.25,
+            8,
+            6
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "up": {
+          "uv": [
+            11,
+            6,
+            13,
+            8
+          ],
+          "texture": "#cobble_generator_steel_light"
         },
         "down": {
-          "texture": "#pipe"
+          "uv": [
+            11,
+            8,
+            13,
+            10
+          ],
+          "texture": "#cobble_generator_dark"
         }
       }
     },
     {
-      "from": [
-        3.5,
-        10,
-        6.5
-      ],
-      "to": [
-        4.5,
-        11,
-        7.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#pipe"
-        },
-        "south": {
-          "texture": "#pipe"
-        },
-        "east": {
-          "texture": "#pipe"
-        },
-        "west": {
-          "texture": "#pipe"
-        },
-        "down": {
-          "texture": "#pipe"
-        }
-      }
-    },
-    {
-      "from": [
-        11.5,
-        10,
-        6.5
-      ],
-      "to": [
-        12.5,
-        11,
-        7.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#pipe"
-        },
-        "south": {
-          "texture": "#pipe"
-        },
-        "east": {
-          "texture": "#pipe"
-        },
-        "west": {
-          "texture": "#pipe"
-        },
-        "down": {
-          "texture": "#pipe"
-        }
-      }
-    },
-    {
-      "from": [
-        2,
-        2,
-        2
-      ],
-      "to": [
-        6,
-        3,
-        13
-      ],
-      "faces": {
-        "up": {
-          "texture": "#lava"
-        },
-        "north": {
-          "texture": "#lava"
-        },
-        "east": {
-          "texture": "#lava"
-        }
-      },
-      "shade": false
-    },
-    {
-      "from": [
-        10,
-        2,
-        2
-      ],
-      "to": [
-        14,
-        3,
-        13
-      ],
-      "faces": {
-        "up": {
-          "texture": "#water"
-        },
-        "north": {
-          "texture": "#water"
-        },
-        "west": {
-          "texture": "#water"
-        }
-      }
-    },
-    {
-      "from": [
-        6.5,
-        2,
-        5
-      ],
-      "to": [
-        9.5,
-        4,
-        8
-      ],
-      "faces": {
-        "up": {
-          "texture": "#cobble"
-        },
-        "north": {
-          "texture": "#cobble"
-        },
-        "east": {
-          "texture": "#cobble"
-        },
-        "west": {
-          "texture": "#cobble"
-        }
-      }
-    },
-    {
-      "from": [
-        3.5,
-        3,
-        6.5
-      ],
-      "to": [
-        4.5,
-        10,
-        7.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#lava"
-        },
-        "east": {
-          "texture": "#lava"
-        },
-        "west": {
-          "texture": "#lava"
-        },
-        "south": {
-          "texture": "#lava"
-        }
-      },
-      "shade": false
-    },
-    {
-      "from": [
-        11.5,
-        3,
-        6.5
-      ],
-      "to": [
-        12.5,
-        10,
-        7.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#water"
-        },
-        "east": {
-          "texture": "#water"
-        },
-        "west": {
-          "texture": "#water"
-        },
-        "south": {
-          "texture": "#water"
-        }
-      }
-    },
-    {
-      "from": [
-        2,
-        2,
-        0.9
-      ],
-      "to": [
-        14,
-        14,
-        0.9
-      ],
-      "faces": {
-        "north": {
-          "texture": "#glass"
-        },
-        "south": {
-          "texture": "#glass"
-        }
-      },
-      "shade": false
-    },
-    {
+      "name": "antenna_a",
       "from": [
         11,
         16,
@@ -556,7 +792,7 @@
             3,
             10
           ],
-          "texture": "#antenna"
+          "texture": "#redstone_antenna"
         },
         "south": {
           "uv": [
@@ -565,7 +801,7 @@
             3,
             10
           ],
-          "texture": "#antenna"
+          "texture": "#redstone_antenna"
         },
         "down": {
           "uv": [
@@ -574,11 +810,12 @@
             3,
             10
           ],
-          "texture": "#antenna"
+          "texture": "#redstone_antenna"
         }
       }
     },
     {
+      "name": "antenna_b",
       "from": [
         12,
         16,
@@ -597,7 +834,7 @@
             3,
             10
           ],
-          "texture": "#antenna"
+          "texture": "#redstone_antenna"
         },
         "west": {
           "uv": [
@@ -606,11 +843,12 @@
             3,
             10
           ],
-          "texture": "#antenna"
+          "texture": "#redstone_antenna"
         }
       }
     },
     {
+      "name": "antenna_tip",
       "from": [
         12,
         24,
@@ -629,11 +867,12 @@
             2,
             2
           ],
-          "texture": "#antenna"
+          "texture": "#redstone_antenna"
         }
       }
     },
     {
+      "name": "antenna_plate",
       "from": [
         10,
         22,
@@ -652,7 +891,7 @@
             9,
             5
           ],
-          "texture": "#antenna"
+          "texture": "#redstone_antenna"
         },
         "down": {
           "uv": [
@@ -661,11 +900,12 @@
             9,
             5
           ],
-          "texture": "#antenna"
+          "texture": "#redstone_antenna"
         }
       }
     },
     {
+      "name": "pad_red",
       "from": [
         3.5,
         16,
@@ -684,7 +924,7 @@
             13,
             2.5
           ],
-          "texture": "#bridge"
+          "texture": "#redstone_bridge"
         },
         "east": {
           "uv": [
@@ -693,7 +933,7 @@
             13,
             2.5
           ],
-          "texture": "#bridge"
+          "texture": "#redstone_bridge"
         },
         "south": {
           "uv": [
@@ -702,7 +942,7 @@
             13,
             2.5
           ],
-          "texture": "#bridge"
+          "texture": "#redstone_bridge"
         },
         "west": {
           "uv": [
@@ -711,7 +951,7 @@
             13,
             2.5
           ],
-          "texture": "#bridge"
+          "texture": "#redstone_bridge"
         },
         "up": {
           "uv": [
@@ -720,11 +960,12 @@
             13,
             2
           ],
-          "texture": "#bridge"
+          "texture": "#redstone_bridge"
         }
       }
     },
     {
+      "name": "pad_blue",
       "from": [
         8.5,
         16,
@@ -743,7 +984,7 @@
             13,
             2.5
           ],
-          "texture": "#bridge"
+          "texture": "#redstone_bridge"
         },
         "east": {
           "uv": [
@@ -752,7 +993,7 @@
             13,
             2.5
           ],
-          "texture": "#bridge"
+          "texture": "#redstone_bridge"
         },
         "south": {
           "uv": [
@@ -761,7 +1002,7 @@
             13,
             2.5
           ],
-          "texture": "#bridge"
+          "texture": "#redstone_bridge"
         },
         "west": {
           "uv": [
@@ -770,7 +1011,7 @@
             13,
             2.5
           ],
-          "texture": "#bridge"
+          "texture": "#redstone_bridge"
         },
         "up": {
           "uv": [
@@ -779,7 +1020,427 @@
             15,
             2
           ],
-          "texture": "#bridge"
+          "texture": "#redstone_bridge"
+        }
+      }
+    },
+    {
+      "name": "lava_pool",
+      "from": [
+        2,
+        2,
+        2
+      ],
+      "to": [
+        6,
+        3,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            13,
+            14,
+            14
+          ],
+          "texture": "#lava_still"
+        },
+        "east": {
+          "uv": [
+            3,
+            13,
+            14,
+            14
+          ],
+          "texture": "#lava_still"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            6,
+            13
+          ],
+          "texture": "#lava_still"
+        }
+      }
+    },
+    {
+      "name": "water_pool",
+      "from": [
+        10,
+        2,
+        2
+      ],
+      "to": [
+        14,
+        3,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            13,
+            6,
+            14
+          ],
+          "texture": "#cobble_generator_item_water"
+        },
+        "west": {
+          "uv": [
+            2,
+            13,
+            13,
+            14
+          ],
+          "texture": "#cobble_generator_item_water"
+        },
+        "up": {
+          "uv": [
+            10,
+            2,
+            14,
+            13
+          ],
+          "texture": "#cobble_generator_item_water"
+        }
+      }
+    },
+    {
+      "name": "block",
+      "from": [
+        6.5,
+        2,
+        5
+      ],
+      "to": [
+        9.5,
+        4,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            12,
+            9.5,
+            14
+          ],
+          "texture": "#cobblestone"
+        },
+        "east": {
+          "uv": [
+            8,
+            12,
+            11,
+            14
+          ],
+          "texture": "#cobblestone"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            12,
+            9.5,
+            14
+          ],
+          "texture": "#cobblestone"
+        },
+        "west": {
+          "uv": [
+            5,
+            12,
+            8,
+            14
+          ],
+          "texture": "#cobblestone"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            5,
+            9.5,
+            8
+          ],
+          "texture": "#cobblestone"
+        }
+      }
+    },
+    {
+      "name": "tip",
+      "from": [
+        7.625,
+        8.75,
+        6.125
+      ],
+      "to": [
+        8.375,
+        9.5,
+        6.875
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.625,
+            6.5,
+            8.375,
+            7.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            9.125,
+            6.5,
+            9.875,
+            7.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            7.625,
+            6.5,
+            8.375,
+            7.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            6.125,
+            6.5,
+            6.875,
+            7.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            7.625,
+            6.125,
+            8.375,
+            6.875
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            7.625,
+            9.125,
+            8.375,
+            9.875
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "mid",
+      "from": [
+        7.25,
+        9.5,
+        5.75
+      ],
+      "to": [
+        8.75,
+        10.5,
+        7.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.25,
+            5.5,
+            8.75,
+            6.5
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            8.75,
+            5.5,
+            10.25,
+            6.5
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            7.25,
+            5.5,
+            8.75,
+            6.5
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            5.75,
+            5.5,
+            7.25,
+            6.5
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            7.25,
+            5.75,
+            8.75,
+            7.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            7.25,
+            8.75,
+            8.75,
+            10.25
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "top",
+      "from": [
+        6.875,
+        10.5,
+        5.375
+      ],
+      "to": [
+        9.125,
+        11.5,
+        7.625
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.875,
+            4.5,
+            9.125,
+            5.5
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            8.375,
+            4.5,
+            10.625,
+            5.5
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            6.875,
+            4.5,
+            9.125,
+            5.5
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            5.375,
+            4.5,
+            7.625,
+            5.5
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            6.875,
+            5.375,
+            9.125,
+            7.625
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            6.875,
+            8.375,
+            9.125,
+            10.625
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "collar",
+      "from": [
+        6.5,
+        11.5,
+        5
+      ],
+      "to": [
+        9.5,
+        12.25,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            3.75,
+            9.5,
+            4.5
+          ],
+          "texture": "#cobble_generator_drill_collar"
+        },
+        "east": {
+          "uv": [
+            8,
+            3.75,
+            11,
+            4.5
+          ],
+          "texture": "#cobble_generator_drill_collar"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            3.75,
+            9.5,
+            4.5
+          ],
+          "texture": "#cobble_generator_drill_collar"
+        },
+        "west": {
+          "uv": [
+            5,
+            3.75,
+            8,
+            4.5
+          ],
+          "texture": "#cobble_generator_drill_collar"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            5,
+            9.5,
+            8
+          ],
+          "texture": "#cobble_generator_drill_collar"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            8,
+            9.5,
+            11
+          ],
+          "texture": "#cobble_generator_drill_collar"
         }
       }
     }

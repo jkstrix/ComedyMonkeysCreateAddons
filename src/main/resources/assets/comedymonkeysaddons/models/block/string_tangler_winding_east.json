@@ -1,0 +1,80 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/string_tangler_string",
+    "string": "comedymonkeysaddons:block/string_tangler_string"
+  },
+  "elements": [
+    {
+      "name": "spool_winding",
+      "from": [
+        11.75,
+        6.75,
+        6.75
+      ],
+      "to": [
+        13.25,
+        9.25,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.75,
+            6.75,
+            4.25,
+            9.25
+          ],
+          "texture": "#string"
+        },
+        "east": {
+          "uv": [
+            6.75,
+            6.75,
+            9.25,
+            9.25
+          ],
+          "texture": "#string"
+        },
+        "south": {
+          "uv": [
+            11.75,
+            6.75,
+            13.25,
+            9.25
+          ],
+          "texture": "#string"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            6.75,
+            9.25,
+            9.25
+          ],
+          "texture": "#string"
+        },
+        "up": {
+          "uv": [
+            11.75,
+            6.75,
+            13.25,
+            9.25
+          ],
+          "texture": "#string"
+        },
+        "down": {
+          "uv": [
+            11.75,
+            6.75,
+            13.25,
+            9.25
+          ],
+          "texture": "#string"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,980 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/cobble_generator_drill",
+    "cobble_generator_drill": "comedymonkeysaddons:block/cobble_generator_drill",
+    "cobble_generator_steel_light": "comedymonkeysaddons:block/cobble_generator_steel_light",
+    "cobble_generator_steel": "comedymonkeysaddons:block/cobble_generator_steel",
+    "cobble_generator_drill_collar_brass": "comedymonkeysaddons:block/cobble_generator_drill_collar_brass"
+  },
+  "elements": [
+    {
+      "name": "tip_-1.25_-1.25",
+      "from": [
+        6.488,
+        0,
+        4.988
+      ],
+      "to": [
+        7.013,
+        0.75,
+        5.513
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.988,
+            15.25,
+            9.513,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            10.488,
+            15.25,
+            11.013,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            6.488,
+            15.25,
+            7.013,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            4.988,
+            15.25,
+            5.513,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            6.488,
+            4.988,
+            7.013,
+            5.513
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            6.488,
+            10.488,
+            7.013,
+            11.013
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "mid_-1.25_-1.25",
+      "from": [
+        6.225,
+        0.75,
+        4.725
+      ],
+      "to": [
+        7.275,
+        1.75,
+        5.775
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.725,
+            14.25,
+            9.775,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            10.225,
+            14.25,
+            11.275,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            6.225,
+            14.25,
+            7.275,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            4.725,
+            14.25,
+            5.775,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            6.225,
+            4.725,
+            7.275,
+            5.775
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            6.225,
+            10.225,
+            7.275,
+            11.275
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "top_-1.25_-1.25",
+      "from": [
+        5.963,
+        1.75,
+        4.463
+      ],
+      "to": [
+        7.538,
+        2.75,
+        6.038
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.463,
+            13.25,
+            10.038,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            9.963,
+            13.25,
+            11.538,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            5.963,
+            13.25,
+            7.538,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            4.463,
+            13.25,
+            6.038,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            5.963,
+            4.463,
+            7.538,
+            6.038
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            5.963,
+            9.963,
+            7.538,
+            11.538
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "tip_1.25_-1.25",
+      "from": [
+        8.988,
+        0,
+        4.988
+      ],
+      "to": [
+        9.513,
+        0.75,
+        5.513
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.488,
+            15.25,
+            7.012,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            10.488,
+            15.25,
+            11.013,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            8.988,
+            15.25,
+            9.513,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            4.988,
+            15.25,
+            5.513,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            8.988,
+            4.988,
+            9.513,
+            5.513
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            8.988,
+            10.488,
+            9.513,
+            11.013
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "mid_1.25_-1.25",
+      "from": [
+        8.725,
+        0.75,
+        4.725
+      ],
+      "to": [
+        9.775,
+        1.75,
+        5.775
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.225,
+            14.25,
+            7.275,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            10.225,
+            14.25,
+            11.275,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            8.725,
+            14.25,
+            9.775,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            4.725,
+            14.25,
+            5.775,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            8.725,
+            4.725,
+            9.775,
+            5.775
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            8.725,
+            10.225,
+            9.775,
+            11.275
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "top_1.25_-1.25",
+      "from": [
+        8.463,
+        1.75,
+        4.463
+      ],
+      "to": [
+        10.038,
+        2.75,
+        6.038
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.963,
+            13.25,
+            7.538,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            9.963,
+            13.25,
+            11.538,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            8.463,
+            13.25,
+            10.038,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            4.463,
+            13.25,
+            6.038,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            8.463,
+            4.463,
+            10.038,
+            6.038
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            8.463,
+            9.963,
+            10.038,
+            11.538
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "tip_-1.25_1.25",
+      "from": [
+        6.488,
+        0,
+        7.488
+      ],
+      "to": [
+        7.013,
+        0.75,
+        8.012
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.988,
+            15.25,
+            9.513,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            7.988,
+            15.25,
+            8.513,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            6.488,
+            15.25,
+            7.013,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            7.488,
+            15.25,
+            8.012,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            6.488,
+            7.488,
+            7.013,
+            8.012
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            6.488,
+            7.988,
+            7.013,
+            8.513
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "mid_-1.25_1.25",
+      "from": [
+        6.225,
+        0.75,
+        7.225
+      ],
+      "to": [
+        7.275,
+        1.75,
+        8.275
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.725,
+            14.25,
+            9.775,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            7.725,
+            14.25,
+            8.775,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            6.225,
+            14.25,
+            7.275,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            7.225,
+            14.25,
+            8.275,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            6.225,
+            7.225,
+            7.275,
+            8.275
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            6.225,
+            7.725,
+            7.275,
+            8.775
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "top_-1.25_1.25",
+      "from": [
+        5.963,
+        1.75,
+        6.963
+      ],
+      "to": [
+        7.538,
+        2.75,
+        8.538
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.463,
+            13.25,
+            10.038,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            7.463,
+            13.25,
+            9.038,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            5.963,
+            13.25,
+            7.538,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            6.963,
+            13.25,
+            8.538,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            5.963,
+            6.963,
+            7.538,
+            8.538
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            5.963,
+            7.463,
+            7.538,
+            9.038
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "tip_1.25_1.25",
+      "from": [
+        8.988,
+        0,
+        7.488
+      ],
+      "to": [
+        9.513,
+        0.75,
+        8.012
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.488,
+            15.25,
+            7.012,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            7.988,
+            15.25,
+            8.513,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            8.988,
+            15.25,
+            9.513,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            7.488,
+            15.25,
+            8.012,
+            16
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            8.988,
+            7.488,
+            9.513,
+            8.012
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            8.988,
+            7.988,
+            9.513,
+            8.513
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "mid_1.25_1.25",
+      "from": [
+        8.725,
+        0.75,
+        7.225
+      ],
+      "to": [
+        9.775,
+        1.75,
+        8.275
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.225,
+            14.25,
+            7.275,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            7.725,
+            14.25,
+            8.775,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            8.725,
+            14.25,
+            9.775,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            7.225,
+            14.25,
+            8.275,
+            15.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            8.725,
+            7.225,
+            9.775,
+            8.275
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            8.725,
+            7.725,
+            9.775,
+            8.775
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "top_1.25_1.25",
+      "from": [
+        8.463,
+        1.75,
+        6.963
+      ],
+      "to": [
+        10.038,
+        2.75,
+        8.538
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.963,
+            13.25,
+            7.538,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "east": {
+          "uv": [
+            7.463,
+            13.25,
+            9.038,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "south": {
+          "uv": [
+            8.463,
+            13.25,
+            10.038,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "west": {
+          "uv": [
+            6.963,
+            13.25,
+            8.538,
+            14.25
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "up": {
+          "uv": [
+            8.463,
+            6.963,
+            10.038,
+            8.538
+          ],
+          "texture": "#cobble_generator_drill"
+        },
+        "down": {
+          "uv": [
+            8.463,
+            7.463,
+            10.038,
+            9.038
+          ],
+          "texture": "#cobble_generator_drill"
+        }
+      }
+    },
+    {
+      "name": "plate",
+      "from": [
+        5.25,
+        2.75,
+        3.75
+      ],
+      "to": [
+        10.75,
+        3.25,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.25,
+            12.75,
+            10.75,
+            13.25
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "east": {
+          "uv": [
+            6.75,
+            12.75,
+            12.25,
+            13.25
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "south": {
+          "uv": [
+            5.25,
+            12.75,
+            10.75,
+            13.25
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "west": {
+          "uv": [
+            3.75,
+            12.75,
+            9.25,
+            13.25
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "up": {
+          "uv": [
+            5.25,
+            3.75,
+            10.75,
+            9.25
+          ],
+          "texture": "#cobble_generator_steel_light"
+        },
+        "down": {
+          "uv": [
+            5.25,
+            6.75,
+            10.75,
+            12.25
+          ],
+          "texture": "#cobble_generator_steel"
+        }
+      }
+    },
+    {
+      "name": "collar",
+      "from": [
+        6.75,
+        3.25,
+        5.25
+      ],
+      "to": [
+        9.25,
+        3.75,
+        7.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.75,
+            12.25,
+            9.25,
+            12.75
+          ],
+          "texture": "#cobble_generator_drill_collar_brass"
+        },
+        "east": {
+          "uv": [
+            8.25,
+            12.25,
+            10.75,
+            12.75
+          ],
+          "texture": "#cobble_generator_drill_collar_brass"
+        },
+        "south": {
+          "uv": [
+            6.75,
+            12.25,
+            9.25,
+            12.75
+          ],
+          "texture": "#cobble_generator_drill_collar_brass"
+        },
+        "west": {
+          "uv": [
+            5.25,
+            12.25,
+            7.75,
+            12.75
+          ],
+          "texture": "#cobble_generator_drill_collar_brass"
+        },
+        "up": {
+          "uv": [
+            6.75,
+            5.25,
+            9.25,
+            7.75
+          ],
+          "texture": "#cobble_generator_drill_collar_brass"
+        },
+        "down": {
+          "uv": [
+            6.75,
+            8.25,
+            9.25,
+            10.75
+          ],
+          "texture": "#cobble_generator_drill_collar_brass"
+        }
+      }
+    }
+  ]
+}

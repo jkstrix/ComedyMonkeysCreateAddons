@@ -3,17 +3,22 @@ package com.comedymonkey.createaddons.content.machine;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 
 import net.createmod.catnip.lang.LangBuilder;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -26,6 +31,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
@@ -79,6 +85,8 @@ public class TwoInputMachineBlockEntity extends KineticBlockEntity implements Cl
 		if (level.isClientSide) {
 			if (processing && getSpeed() != 0 && timer > 0)
 				timer = Math.max(0, timer - processingSpeed());
+			if (processing && kind == MachineKind.INFUSING)
+				sprinkleDust();
 			return;
 		}
 
@@ -107,6 +115,32 @@ public class TwoInputMachineBlockEntity extends KineticBlockEntity implements Cl
 			syncQueued = false;
 			sendData();
 		}
+	}
+
+	/** The infuser's feeder spout, in model pixels (window north): the dust falls from here onto the stone. */
+	private static final double SPOUT_X = 6, SPOUT_Y = 9.9, SPOUT_Z = 7.6;
+
+	/**
+	 * Client only: while the Stone Infuser works, a fine dust of the metal falls from the feeder's spout onto the
+	 * turning stone, in the colour of the stone it's making.
+	 */
+	private void sprinkleDust() {
+		if (level == null || getSpeed() == 0 || level.random.nextInt(3) != 0)
+			return;
+		Direction front = getBlockState().getValue(TwoInputMachineBlock.FACING);
+		Vec3 local = new Vec3(SPOUT_X / 16 + (level.random.nextDouble() - 0.5) * 0.04, SPOUT_Y / 16,
+			SPOUT_Z / 16 + (level.random.nextDouble() - 0.5) * 0.04);
+		Vec3 at = VecHelper.rotateCentered(local, -(front.toYRot() + 180), Direction.Axis.Y);
+		level.addParticle(new DustParticleOptions(dustColour(), 0.35f), worldPosition.getX() + at.x,
+			worldPosition.getY() + at.y, worldPosition.getZ() + at.z, 0, -0.02, 0);
+	}
+
+	/** Asurine blue, crimsite red, ochrum gold, veridium green (muted), from the stone being made; grey otherwise. */
+	private Vector3f dustColour() {
+		String id = BuiltInRegistries.ITEM.getKey(making.getItem()).getPath();
+		int rgb = id.contains("asurine") ? 0x4F7C96 : id.contains("crimsite") ? 0x8A3A30 : id.contains("ochrum") ? 0xA3873F
+			: id.contains("veridium") ? 0x4E7A5A : 0x8A8C86;
+		return new Vector3f(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f);
 	}
 
 	public float processingSpeed() {
