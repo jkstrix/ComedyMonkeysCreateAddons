@@ -61,6 +61,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.tradebot.TradeBotLoopSounds::onClientTick);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ComedyMonkeysCreateAddonsClient::tickClipClock);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ComedyMonkeysCreateAddonsClient::forgetMachineSounds);
+		// Development only: Flywheel on/off A/B screenshots on request
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.dev.ShotRunner::onClientTick);
 		// The Geothermal Turbine's sounds run from its controller's client tick
 		com.comedymonkey.createaddons.content.electric.GeothermalControllerBlockEntity.clientTicker = GeothermalTurbineSounds::tick;
 		// The Lava Generator's and the Electric Motor's sounds run from their client ticks
@@ -101,6 +103,7 @@ public class ComedyMonkeysCreateAddonsClient {
 	/** The harvester's plants read some of their models: read them again once they're rebaked. */
 	private static void forgetModelReads(ModelEvent.BakingCompleted event) {
 		RealPlants.forget();
+		com.comedymonkey.createaddons.client.parts.PartModels.forget();
 	}
 
 	/**
@@ -199,6 +202,8 @@ public class ComedyMonkeysCreateAddonsClient {
 	}
 
 	private void clientSetup(FMLClientSetupEvent event) {
+		// The machines' moving parts, drawn by Flywheel when it can
+		event.enqueueWork(com.comedymonkey.createaddons.client.parts.MachineVisuals::register);
 		// Upgraded chest item picks its tier's model (0 copper .. 0.3 diamond)
 		event.enqueueWork(() -> ItemProperties.register(ModItems.UPGRADED_CHEST.get(),
 			ComedyMonkeysCreateAddons.asResource("tier"),

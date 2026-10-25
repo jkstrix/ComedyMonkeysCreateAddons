@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.client.parts.PartSink;
 import com.comedymonkey.createaddons.content.pen.AnimalPenBlock;
 import com.comedymonkey.createaddons.content.pen.AnimalPenBlockEntity;
 import com.comedymonkey.createaddons.content.pen.PenAnimal;
@@ -67,32 +68,42 @@ public class AnimalPenRenderer extends SafeBlockEntityRenderer<AnimalPenBlockEnt
 			return;
 		Direction front = state.getValue(AnimalPenBlock.FACING);
 		CameraView camera = CameraView.of(be, ms);
-		CobbleGeneratorRenderer.renderShaft(be, state, front.getOpposite(), ms, buffer, light, overlay);
+		parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
 
-		ms.pushPose();
-		ms.translate(0.5, 0.5, 0.5);
-		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
-		ms.translate(-0.5, -0.5, -0.5);
-		// The inside only shows through the front glass; the milk is in the side gauges, so it's always drawn
+		// The inside only shows through the front glass
 		if (!camera.behindGlass(front)) {
+			ms.pushPose();
+			ms.translate(0.5, 0.5, 0.5);
+			ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
+			ms.translate(-0.5, -0.5, -0.5);
 			renderFood(be, ms, buffer, light, overlay);
 			renderAnimals(be, partialTicks, ms, buffer, light, detail(be, camera));
 			TrayItems.render(be.getOutput(), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
+			ms.popPose();
 		}
-		renderMilk(be.getMilk(), state, ms, buffer, light);
-		ms.popPose();
 	}
 
-	private static void renderMilk(FluidTank milk, BlockState state, PoseStack ms, MultiBufferSource buffer, int light) {
+	/**
+	 * The part models: the shaft end and the milk in the side gauges (for this renderer, or Flywheel's visual). The milk
+	 * is in the side gauges, so it's always drawn.
+	 */
+	public static void parts(AnimalPenBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
+		BlockState state = be.getBlockState();
+		if (!state.hasProperty(AnimalPenBlock.FACING))
+			return;
+		Direction front = state.getValue(AnimalPenBlock.FACING);
+		CobbleGeneratorRenderer.shaft(be, front.getOpposite(), ms, sink, light);
+		FluidTank milk = be.getMilk();
 		if (milk.isEmpty())
 			return;
 		float level = Math.min(1, milk.getFluidAmount() / (float) milk.getCapacity());
 		ms.pushPose();
+		ms.translate(0.5, 0.5, 0.5);
+		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
+		ms.translate(-0.5, -0.5, -0.5);
 		ms.translate(0, MILK_Y / 16, 0);
 		ms.scale(1, MILK_HEIGHT * level, 1);
-		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), buffer.getBuffer(RenderType.cutout()),
-			state, Minecraft.getInstance().getModelManager().getModel(MILK), 1, 1, 1, light, OverlayTexture.NO_OVERLAY,
-			ModelData.EMPTY, RenderType.cutout());
+		sink.part(MILK, ms, light);
 		ms.popPose();
 	}
 

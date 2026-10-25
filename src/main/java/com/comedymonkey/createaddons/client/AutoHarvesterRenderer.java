@@ -1,25 +1,21 @@
 package com.comedymonkey.createaddons.client;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.client.parts.PartSink;
 import com.comedymonkey.createaddons.content.harvester.AutoHarvesterBlock;
 import com.comedymonkey.createaddons.content.harvester.AutoHarvesterBlockEntity;
 import com.comedymonkey.createaddons.content.harvester.PlantKind;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.model.data.ModelData;
 
 /**
  * Draws the moving inside of an Auto Harvester behind its glass: the plant growing in the planter, and
@@ -69,13 +65,12 @@ public class AutoHarvesterRenderer extends SafeBlockEntityRenderer<AutoHarvester
 			return;
 		Direction front = state.getValue(AutoHarvesterBlock.FACING);
 		boolean behind = CameraView.of(be, ms).behindGlass(front);
-		CobbleGeneratorRenderer.renderShaft(be, state, front.getOpposite(), ms, buffer, light, overlay);
+		parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light, !behind);
 		// Everything else is inside, seen only through the front glass
 		if (behind)
 			return;
 
 		PlantKind kind = state.getValue(AutoHarvesterBlock.PLANT);
-		VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
 		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5);
 		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
@@ -83,16 +78,37 @@ public class AutoHarvesterRenderer extends SafeBlockEntityRenderer<AutoHarvester
 		if (kind != PlantKind.NONE) {
 			float growth = be.getGrowth(partialTicks);
 			if (!RealPlants.render(be.getPlant(), kind, growth, ms, buffer, light, overlay))
-				renderPlant(ms, vc, state, kind, growth, light);
+				renderPlant(ms, PartSink.screen(buffer, state, overlay), kind, growth, light);
 		}
-		renderHead(ms, vc, state, kind, be.getHarvestProgress(partialTicks), light);
 		TrayItems.render(be.getOutput(), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
 		ms.popPose();
 	}
 
+	/** The part models: the shaft end and the head on its rail (for this renderer, or Flywheel's visual). */
+	public static void parts(AutoHarvesterBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
+		parts(be, partialTicks, ms, sink, light, true);
+	}
+
+	/** The head is inside, left out when it can't be seen ({@code inside} false). */
+	private static void parts(AutoHarvesterBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light,
+							  boolean inside) {
+		BlockState state = be.getBlockState();
+		if (!state.hasProperty(AutoHarvesterBlock.FACING))
+			return;
+		Direction front = state.getValue(AutoHarvesterBlock.FACING);
+		CobbleGeneratorRenderer.shaft(be, front.getOpposite(), ms, sink, light);
+		if (!inside)
+			return;
+		ms.pushPose();
+		ms.translate(0.5, 0.5, 0.5);
+		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
+		ms.translate(-0.5, -0.5, -0.5);
+		renderHead(ms, sink, state.getValue(AutoHarvesterBlock.PLANT), be.getHarvestProgress(partialTicks), light);
+		ms.popPose();
+	}
+
 	/** The generic plant, for anything {@link RealPlants} can't draw: crops shoot up, trees grow all over. */
-	private static void renderPlant(PoseStack ms, VertexConsumer vc, BlockState state, PlantKind kind, float growth,
-									int light) {
+	private static void renderPlant(PoseStack ms, PartSink sink, PlantKind kind, float growth, int light) {
 		ms.pushPose();
 		ms.translate(0.5, SOIL_Y / 16, 0.5);
 		if (kind == PlantKind.TREE) {
@@ -103,12 +119,12 @@ public class AutoHarvesterRenderer extends SafeBlockEntityRenderer<AutoHarvester
 			ms.scale(wide, 0.15f + 0.85f * growth, wide);
 		}
 		ms.translate(-0.5, -SOIL_Y / 16, -0.5);
-		draw(ms, vc, state, kind == PlantKind.TREE ? TREE : CROP, light);
+		sink.part(kind == PlantKind.TREE ? TREE : CROP, ms, light);
 		ms.popPose();
 	}
 
 	/** Carriage on the rail, the pole down to the tool, and the tool itself, at {@code t} (0-1) into a harvest. */
-	private static void renderHead(PoseStack ms, VertexConsumer vc, BlockState state, PlantKind kind, float t, int light) {
+	private static void renderHead(PoseStack ms, PartSink sink, PlantKind kind, float t, int light) {
 		float x = PARK_X, y = PARK_Y, spin = 0;
 		if (t >= 0) {
 			// Plunge, sweep across the planter, lift, return; the cut comes at the end of the sweep
@@ -128,12 +144,12 @@ public class AutoHarvesterRenderer extends SafeBlockEntityRenderer<AutoHarvester
 
 		ms.pushPose();
 		ms.translate((x - PARK_X) / 16, 0, 0);
-		draw(ms, vc, state, CARRIAGE, light);
+		sink.part(CARRIAGE, ms, light);
 		if (y < CARRIAGE_BOTTOM) {
 			ms.pushPose();
 			ms.translate(0, y / 16, 0);
 			ms.scale(1, CARRIAGE_BOTTOM - y, 1);
-			draw(ms, vc, state, POLE, light);
+			sink.part(POLE, ms, light);
 			ms.popPose();
 		}
 		ms.popPose();
@@ -144,7 +160,7 @@ public class AutoHarvesterRenderer extends SafeBlockEntityRenderer<AutoHarvester
 		ms.translate(0.5, 0.5, 0);
 		ms.mulPose(Axis.ZP.rotationDegrees(-spin));
 		ms.translate(-0.5, -0.5, 0);
-		draw(ms, vc, state, kind == PlantKind.TREE ? SAW : REEL, light);
+		sink.part(kind == PlantKind.TREE ? SAW : REEL, ms, light);
 		ms.popPose();
 	}
 
@@ -152,9 +168,4 @@ public class AutoHarvesterRenderer extends SafeBlockEntityRenderer<AutoHarvester
 		return f * f * (3 - 2 * f);
 	}
 
-	private static void draw(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation location, int light) {
-		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), vc, state,
-			Minecraft.getInstance().getModelManager().getModel(location), 1, 1, 1, light, OverlayTexture.NO_OVERLAY,
-			ModelData.EMPTY, RenderType.cutout());
-	}
 }

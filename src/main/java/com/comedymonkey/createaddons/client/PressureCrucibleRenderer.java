@@ -3,9 +3,9 @@ package com.comedymonkey.createaddons.client;
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.client.parts.PartSink;
 import com.comedymonkey.createaddons.content.crucible.PressureCrucibleBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
@@ -15,7 +15,6 @@ import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRender
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
@@ -23,7 +22,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.model.data.ModelData;
 
 /**
  * Draws the moving parts of a Pressure Crucible, a square screw press (design/briefs/pressure-crucible.md): the shaft
@@ -69,13 +67,28 @@ public class PressureCrucibleRenderer extends SafeBlockEntityRenderer<PressureCr
 	@Override
 	protected void renderSafe(PressureCrucibleBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
 							  int light, int overlay) {
+		parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
+
+		// Contents lying in the bowl, under the platen
+		ItemStack input = be.getInventory().getStackInSlot(PressureCrucibleBlockEntity.INPUT);
+		ItemStack output = be.getInventory().getStackInSlot(PressureCrucibleBlockEntity.OUTPUT);
+		int layers = input.isEmpty() ? 0 : Math.min(4, 1 + input.getCount() / 16);
+		for (int i = 0; i < layers; i++)
+			renderFlat(be, input, ms, buffer, light, overlay, 0.5f + (i % 2 == 0 ? -0.03f : 0.03f),
+				0.5f + (i < 2 ? -0.03f : 0.03f), 4.05f / 16 + i * 0.008f, 37 * i);
+		if (!output.isEmpty())
+			renderFlat(be, output, ms, buffer, light, overlay, 0.5f, 0.5f, 4.05f / 16 + layers * 0.008f + 0.008f, 15);
+	}
+
+	/**
+	 * The part models: the shaft end, the screw and its gear, the pinion, the platen, the gauge needle and the bowl's
+	 * glow (for this renderer, or Flywheel's visual). Cutout, since the gear faces and the dial are round cut-outs.
+	 */
+	public static void parts(PressureCrucibleBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
 		BlockState state = be.getBlockState();
 		if (!state.hasProperty(HorizontalKineticBlock.HORIZONTAL_FACING))
 			return;
 		Direction back = state.getValue(HorizontalKineticBlock.HORIZONTAL_FACING);
-		// One buffer for everything (asking for another render type would finish this one mid-draw); cutout, since
-		// the gear faces and the dial are round cut-outs
-		VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
 
 		// Shaft end, turning with the network. The model points south; turn it to the back, then spin it about the
 		// world axis exactly as Create spins shafts so it lines up with the shaft it connects to.
@@ -86,7 +99,7 @@ public class PressureCrucibleRenderer extends SafeBlockEntityRenderer<PressureCr
 		ms.mulPose(axis == Direction.Axis.X ? Axis.XP.rotation(angle) : Axis.ZP.rotation(angle));
 		ms.mulPose(Axis.YP.rotationDegrees(-back.toYRot()));
 		ms.translate(-0.5, -0.5, -0.5);
-		render(ms, vc, state, SHAFT, light, overlay);
+		sink.part(SHAFT, ms, light);
 		ms.popPose();
 
 		// Everything else in the model's frame, turned to the back's direction
@@ -99,14 +112,14 @@ public class PressureCrucibleRenderer extends SafeBlockEntityRenderer<PressureCr
 		// faces a negative direction
 		float spin = back.getAxisDirection() == Direction.AxisDirection.POSITIVE ? angle : -angle;
 		// The big gear and the screw turn with the shaft, the pinion that drives them faster and the other way
-		spinAbout(ms, vc, state, SCREW, SCREW_X, SCREW_Z, spin, light, overlay);
-		spinAbout(ms, vc, state, PINION, PINION_X, PINION_Z, -RATIO * spin, light, overlay);
+		spinAbout(ms, sink, SCREW, SCREW_X, SCREW_Z, spin, light);
+		spinAbout(ms, sink, PINION, PINION_X, PINION_Z, -RATIO * spin, light);
 
 		// The platen: top of travel when idle, lowering steadily as the current item is pressed
 		float plate = be.getPlate(partialTicks);
 		ms.pushPose();
 		ms.translate(0, PLATE_TOP - plate * (PLATE_TOP - PLATE_BOTTOM), 0);
-		render(ms, vc, state, RAM, light, overlay);
+		sink.part(RAM, ms, light);
 		ms.popPose();
 
 		// The gauge needle climbs to the red as the platen comes down
@@ -114,25 +127,15 @@ public class PressureCrucibleRenderer extends SafeBlockEntityRenderer<PressureCr
 		ms.translate(GAUGE_X / 16, GAUGE_Y / 16, 0);
 		ms.mulPose(Axis.ZP.rotationDegrees(NEEDLE_REST + NEEDLE_SWEEP * plate));
 		ms.translate(-GAUGE_X / 16, -GAUGE_Y / 16, 0);
-		render(ms, vc, state, NEEDLE, light, overlay);
+		sink.part(NEEDLE, ms, light);
 		ms.popPose();
 
 		// The bowl glows with the burner under it: a faint red when smouldering, full-bright amber or soul blue when lit
 		HeatLevel heat = be.getHeatLevel();
 		ModelResourceLocation glow = heatModel(heat);
 		if (glow != null)
-			render(ms, vc, state, glow, heat.isAtLeast(HeatLevel.KINDLED) ? LightTexture.FULL_BRIGHT : light, overlay);
+			sink.part(glow, ms, heat.isAtLeast(HeatLevel.KINDLED) ? LightTexture.FULL_BRIGHT : light);
 		ms.popPose();
-
-		// Contents lying in the bowl, under the platen
-		ItemStack input = be.getInventory().getStackInSlot(PressureCrucibleBlockEntity.INPUT);
-		ItemStack output = be.getInventory().getStackInSlot(PressureCrucibleBlockEntity.OUTPUT);
-		int layers = input.isEmpty() ? 0 : Math.min(4, 1 + input.getCount() / 16);
-		for (int i = 0; i < layers; i++)
-			renderFlat(be, input, ms, buffer, light, overlay, 0.5f + (i % 2 == 0 ? -0.03f : 0.03f),
-				0.5f + (i < 2 ? -0.03f : 0.03f), 4.05f / 16 + i * 0.008f, 37 * i);
-		if (!output.isEmpty())
-			renderFlat(be, output, ms, buffer, light, overlay, 0.5f, 0.5f, 4.05f / 16 + layers * 0.008f + 0.008f, 15);
 	}
 
 	/** A dying burner still smoulders until it goes out. */
@@ -146,21 +149,14 @@ public class PressureCrucibleRenderer extends SafeBlockEntityRenderer<PressureCr
 		};
 	}
 
-	private static void spinAbout(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation part, float x,
-								  float z, float radians, int light, int overlay) {
+	private static void spinAbout(PoseStack ms, PartSink sink, ModelResourceLocation part, float x, float z, float radians,
+								  int light) {
 		ms.pushPose();
 		ms.translate(x / 16, 0, z / 16);
 		ms.mulPose(Axis.YP.rotation(radians));
 		ms.translate(-x / 16, 0, -z / 16);
-		render(ms, vc, state, part, light, overlay);
+		sink.part(part, ms, light);
 		ms.popPose();
-	}
-
-	private static void render(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation location,
-							   int light, int overlay) {
-		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), vc, state,
-			Minecraft.getInstance().getModelManager().getModel(location), 1, 1, 1, light, overlay, ModelData.EMPTY,
-			RenderType.cutout());
 	}
 
 	private static void renderFlat(PressureCrucibleBlockEntity be, ItemStack stack, PoseStack ms, MultiBufferSource buffer,

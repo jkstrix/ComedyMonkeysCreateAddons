@@ -3,25 +3,22 @@ package com.comedymonkey.createaddons.client;
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.client.parts.PartSink;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineBlock;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.model.data.ModelData;
 
 /**
  * The Magma Engine's moving parts, all driven by the shaft's angle so they speed up and stop with it: the shaft stub and
@@ -78,6 +75,11 @@ public class MagmaEngineRenderer extends SafeBlockEntityRenderer<MagmaEngineBloc
 	@Override
 	protected void renderSafe(MagmaEngineBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
 							  int light, int overlay) {
+		parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
+	}
+
+	/** Everything it draws is a part model (for this renderer, or Flywheel's visual). */
+	public static void parts(MagmaEngineBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
 		BlockState state = be.getBlockState();
 		if (!state.hasProperty(MagmaEngineBlock.FACING))
 			return;
@@ -86,8 +88,6 @@ public class MagmaEngineRenderer extends SafeBlockEntityRenderer<MagmaEngineBloc
 		// The model's +Z runs out of the back; the world angle turns about the axis' positive direction
 		float spin = facing.getAxisDirection() == Direction.AxisDirection.POSITIVE ? -angle : angle;
 		Parts parts = be.isSupercharged() ? SUPERCHARGED : STANDARD;
-		// One buffer for everything: asking for another render type would finish this one mid-draw
-		VertexConsumer vc = buffer.getBuffer(RenderType.solid());
 
 		ms.pushPose();
 		ms.mulPose(MagmaEngineBlock.modelToWorld(facing));
@@ -97,8 +97,9 @@ public class MagmaEngineRenderer extends SafeBlockEntityRenderer<MagmaEngineBloc
 		ms.translate(0.5f, 0.5f, 0);
 		ms.mulPose(Axis.ZP.rotation(spin));
 		ms.translate(-0.5f, -0.5f, 0);
-		render(ms, vc, state, CobbleGeneratorRenderer.SHAFT, light, overlay);
-		render(ms, vc, state, parts.flywheel(), light, overlay);
+		sink.part(CobbleGeneratorRenderer.SHAFT, ms, light, RenderType.solid());
+		// cutout: the flywheel's spokes and the parts' edges are cut out of their textures
+		sink.part(parts.flywheel(), ms, light);
 		ms.popPose();
 
 		// The pistons, each sliding along its leaning cylinder
@@ -107,7 +108,7 @@ public class MagmaEngineRenderer extends SafeBlockEntityRenderer<MagmaEngineBloc
 			float out = STROKE * pistonTravel(angle, left);
 			ms.pushPose();
 			ms.translate((left ? -LEAN : LEAN) * out, LEAN * out, 0);
-			render(ms, vc, state, left ? parts.pistonLeft() : parts.pistonRight(), light, overlay);
+			sink.part(left ? parts.pistonLeft() : parts.pistonRight(), ms, light);
 			ms.popPose();
 		}
 
@@ -117,16 +118,9 @@ public class MagmaEngineRenderer extends SafeBlockEntityRenderer<MagmaEngineBloc
 			ms.translate(BLOWER_X / 16, BLOWER_Y / 16, 0);
 			ms.mulPose(Axis.ZP.rotation(2 * spin));
 			ms.translate(-BLOWER_X / 16, -BLOWER_Y / 16, 0);
-			render(ms, vc, state, parts.blowerPulley(), light, overlay);
+			sink.part(parts.blowerPulley(), ms, light);
 			ms.popPose();
 		}
 		ms.popPose();
-	}
-
-	private static void render(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation location,
-							   int light, int overlay) {
-		BakedModel model = Minecraft.getInstance().getModelManager().getModel(location);
-		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), vc, state, model,
-			1, 1, 1, light, overlay, ModelData.EMPTY, RenderType.solid());
 	}
 }

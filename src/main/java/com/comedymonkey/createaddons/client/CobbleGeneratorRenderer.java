@@ -1,6 +1,7 @@
 package com.comedymonkey.createaddons.client;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.client.parts.PartSink;
 import com.comedymonkey.createaddons.content.cobblegen.CobbleGeneratorBlock;
 import com.comedymonkey.createaddons.content.cobblegen.CobbleGeneratorBlockEntity;
 import com.comedymonkey.createaddons.content.cobblegen.GeneratorProduct;
@@ -12,7 +13,6 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.redstone.link.LinkRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -23,7 +23,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.model.data.ModelData;
 
 /**
  * Draws what goes on inside a Cobblestone Generator, behind its glass front, in 3D (design/briefs/cobble-generator.md):
@@ -78,20 +77,48 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 			return;
 		Direction front = state.getValue(CobbleGeneratorBlock.FACING);
 		boolean behind = CameraView.of(be, ms).behindGlass(front);
-		renderShaft(be, state, front.getOpposite(), ms, buffer, light, overlay);
-		VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
-		// The chamber and the drill are inside, seen only through the front glass; the lamp stands proud of the front
+		// The shaft, drill and lamp are part models (Flywheel draws them when it can); the drill is inside, seen only
+		// through the front glass, the lamp stands proud of the front
+		parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light, !behind);
 		if (!behind)
-			renderChamber(be, front, ms, vc, light);
-		renderDrillAndLamp(be, state, front, partialTicks, ms, vc, light, overlay, !behind);
+			renderChamber(be, front, ms, buffer.getBuffer(RenderType.cutout()), light);
 		// Redstone Link frequency items on top, once an antenna is fitted
 		if (be.hasAntenna())
 			LinkRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
 	}
 
-	/** The shaft end going into {@code back}, turning with the network; shared with the Auto Harvester. */
+	/** The part models: the shaft end, the drill and its rod, and the lamp (for the renderer, or Flywheel's visual). */
+	public static void parts(CobbleGeneratorBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
+		parts(be, partialTicks, ms, sink, light, true);
+	}
+
+	private static void parts(CobbleGeneratorBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light,
+							  boolean drill) {
+		BlockState state = be.getBlockState();
+		if (!state.hasProperty(CobbleGeneratorBlock.FACING))
+			return;
+		Direction front = state.getValue(CobbleGeneratorBlock.FACING);
+		shaft(be, front.getOpposite(), ms, sink, light);
+		ms.pushPose();
+		ms.translate(0.5, 0.5, 0.5);
+		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
+		ms.translate(-0.5, -0.5, -0.5);
+		if (drill)
+			drill(be, front, partialTicks, ms, sink, light);
+		ModelResourceLocation lamp = be.isRunning() ? LAMP_RUNNING : be.isFull() ? LAMP_FULL : be.isPowered() ? LAMP_OFF : null;
+		if (lamp != null)
+			sink.part(lamp, ms, LightTexture.FULL_BRIGHT);
+		ms.popPose();
+	}
+
+	/** The shaft end going into {@code back}, turning with the network, straight to the screen (the pen, harvester, clock). */
 	static void renderShaft(KineticBlockEntity be, BlockState state, Direction back, PoseStack ms,
 									MultiBufferSource buffer, int light, int overlay) {
+		shaft(be, back, ms, PartSink.screen(buffer, state, overlay), light);
+	}
+
+	/** The shaft end going into {@code back}, turning with the network. */
+	public static void shaft(KineticBlockEntity be, Direction back, PoseStack ms, PartSink sink, int light) {
 		Direction.Axis axis = back.getAxis();
 		float angle = KineticBlockEntityRenderer.getAngleForBe(be, be.getBlockPos(), axis);
 		ms.pushPose();
@@ -100,9 +127,7 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 		ms.mulPose(axis == Direction.Axis.X ? Axis.XP.rotation(angle) : Axis.ZP.rotation(angle));
 		ms.mulPose(Axis.YP.rotationDegrees(-(back.toYRot() + 180)));
 		ms.translate(-0.5, -0.5, -0.5);
-		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(),
-			buffer.getBuffer(RenderType.solid()), state, Minecraft.getInstance().getModelManager().getModel(SHAFT),
-			1, 1, 1, light, overlay, ModelData.EMPTY, RenderType.solid());
+		sink.part(SHAFT, ms, light, RenderType.solid());
 		ms.popPose();
 	}
 
@@ -146,29 +171,12 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 	}
 
 	/**
-	 * The drill over the forming block and the status lamp, both in the chamber's frame (front north). The drill's tip
-	 * comes from the block entity (riding the block while it runs, raised when it doesn't) less its jab on each strike;
-	 * it spins with the shaft about its own vertical axis, and its rod is stretched from the collar up into the sleeve.
-	 * The drill is left out when it can't be seen ({@code drill} false); the lamp stands proud of the front, so never.
+	 * The drill and its rod, in the chamber's frame (front north). The drill's tip comes from the block entity (riding
+	 * the block while it runs, raised when it doesn't) less its jab on each strike; it spins with the shaft about its
+	 * own vertical axis, and its rod is stretched from the collar up into the sleeve.
 	 */
-	private static void renderDrillAndLamp(CobbleGeneratorBlockEntity be, BlockState state, Direction front,
-										   float partialTicks, PoseStack ms, VertexConsumer vc, int light, int overlay,
-										   boolean drill) {
-		ms.pushPose();
-		ms.translate(0.5, 0.5, 0.5);
-		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
-		ms.translate(-0.5, -0.5, -0.5);
-		if (drill)
-			renderDrill(be, state, front, partialTicks, ms, vc, light, overlay);
-		ModelResourceLocation lamp = be.isRunning() ? LAMP_RUNNING : be.isFull() ? LAMP_FULL : be.isPowered() ? LAMP_OFF : null;
-		if (lamp != null)
-			render(ms, vc, state, lamp, LightTexture.FULL_BRIGHT, overlay);
-		ms.popPose();
-	}
-
-	/** The drill and its rod, in the chamber's frame. */
-	private static void renderDrill(CobbleGeneratorBlockEntity be, BlockState state, Direction front, float partialTicks,
-									PoseStack ms, VertexConsumer vc, int light, int overlay) {
+	private static void drill(CobbleGeneratorBlockEntity be, Direction front, float partialTicks, PoseStack ms,
+							  PartSink sink, int light) {
 		boolean brass = be.makesBatch();
 		float tip = be.getDrillTip(partialTicks) - be.getDrillJab(partialTicks);
 		float spin = be.isRunning()
@@ -177,23 +185,16 @@ public class CobbleGeneratorRenderer extends SafeBlockEntityRenderer<CobbleGener
 		ms.translate(DRILL_X / 16, tip / 16, DRILL_Z / 16);
 		ms.mulPose(Axis.YP.rotation(spin));
 		ms.translate(-DRILL_X / 16, 0, -DRILL_Z / 16);
-		render(ms, vc, state, brass ? DRILL_BRASS : DRILL, light, overlay);
+		sink.part(brass ? DRILL_BRASS : DRILL, ms, light);
 		ms.popPose();
 		float rodBottom = tip + (brass ? COLLAR_BRASS : COLLAR);
 		if (rodBottom < SLEEVE) {
 			ms.pushPose();
 			ms.translate(0, rodBottom / 16, 0);
 			ms.scale(1, SLEEVE - rodBottom, 1);
-			render(ms, vc, state, DRILL_ROD, light, overlay);
+			sink.part(DRILL_ROD, ms, light);
 			ms.popPose();
 		}
-	}
-
-	private static void render(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation location,
-							   int light, int overlay) {
-		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), vc, state,
-			Minecraft.getInstance().getModelManager().getModel(location), 1, 1, 1, light, overlay, ModelData.EMPTY,
-			RenderType.cutout());
 	}
 
 	/**

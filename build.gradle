@@ -94,6 +94,8 @@ dependencies {
     // Create API to compile against
     compileOnly("com.simibubi.create:create-${minecraft_version}:${create_build}:slim") { transitive = false }
     compileOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}") { transitive = false }
+    // Flywheel (bundled in Create's release jar at runtime): the machines' moving parts are instanced visuals
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}") { transitive = false }
     // Full Create release for running in dev (jar-in-jar bundles Flywheel, Ponder and Registrate)
     runtimeOnly("maven.modrinth:create:${create_modrinth_version}")
 

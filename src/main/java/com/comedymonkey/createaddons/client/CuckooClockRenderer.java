@@ -1,6 +1,7 @@
 package com.comedymonkey.createaddons.client;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.client.parts.PartSink;
 import com.comedymonkey.createaddons.content.clock.ClockTime;
 import com.comedymonkey.createaddons.content.clock.CuckooClockBlock;
 import com.comedymonkey.createaddons.content.clock.CuckooClockBlockEntity;
@@ -82,10 +83,43 @@ public class CuckooClockRenderer extends SafeBlockEntityRenderer<CuckooClockBloc
 		BlockState state = be.getBlockState();
 		if (!state.hasProperty(CuckooClockBlock.FACING))
 			return;
-		Direction front = state.getValue(CuckooClockBlock.FACING);
-		CobbleGeneratorRenderer.renderShaft(be, state, front.getOpposite(), ms, buffer, light, overlay);
+		parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
 
-		VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
+		// What isn't a part model: the sky behind the disc, and the villager's little workstation
+		Direction front = state.getValue(CuckooClockBlock.FACING);
+		ms.pushPose();
+		ms.translate(0.5, 0.5, 0.5);
+		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
+		ms.translate(-0.5, -0.5, -0.5);
+		renderSky(ms, buffer.getBuffer(RenderType.cutout()), be.getShownTime(partialTicks), light);
+		float t = be.getShowTime(partialTicks);
+		float villagerOut = t < 0 ? 0 : ClockTime.villagerOut(t, be.getShowCalls());
+		BlockState station = be.getWorkstation();
+		if (villagerOut > 0 && station != null) {
+			if (station.hasProperty(BlockStateProperties.HORIZONTAL_FACING))
+				station = station.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH);
+			ms.pushPose();
+			ms.translate(0, 0, (1 - villagerOut) * VILLAGER_IN / 16);
+			ms.translate((STATION_X - STATION_SIZE / 2) / 16, STATION_Y / 16, (STATION_Z - STATION_SIZE / 2) / 16);
+			ms.scale(STATION_SIZE / 16, STATION_SIZE / 16, STATION_SIZE / 16);
+			Minecraft.getInstance().getBlockRenderer().renderSingleBlock(station, ms, buffer, light, overlay,
+				ModelData.EMPTY, null);
+			ms.popPose();
+		}
+		ms.popPose();
+	}
+
+	/**
+	 * The part models: the shaft end, the cogs, the hands, the sun and moon disc, the pendulum, the doors, the cuckoo and
+	 * the villager (for this renderer, or Flywheel's visual).
+	 */
+	public static void parts(CuckooClockBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
+		BlockState state = be.getBlockState();
+		if (!state.hasProperty(CuckooClockBlock.FACING))
+			return;
+		Direction front = state.getValue(CuckooClockBlock.FACING);
+		CobbleGeneratorRenderer.shaft(be, front.getOpposite(), ms, sink, light);
+
 		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5);
 		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
@@ -97,25 +131,24 @@ public class CuckooClockRenderer extends SafeBlockEntityRenderer<CuckooClockBloc
 			ms.pushPose();
 			ms.translate(side * COG_SPAN / 16, 0, 0);
 			turn(ms, Axis.XP, cog * Mth.RAD_TO_DEG, 3.225f, 4, 12);
-			draw(ms, vc, state, COG, light);
+			sink.part(COG, ms, light);
 			ms.popPose();
 		}
 
 		// hands, clockwise from 12 as seen from the front; the disc has noon's sun at the top and turns once a day
 		float time = be.getShownTime(partialTicks);
 		float hours = (Mth.positiveModulo(time, ClockTime.TICKS_PER_DAY) / 1000f + 6) % 12;
-		drawTurned(ms, vc, state, HOUR_HAND, light, Axis.ZP, hours * 30, 8, DIAL_Y, 0);
-		drawTurned(ms, vc, state, MINUTE_HAND, light, Axis.ZP, Mth.positiveModulo(time, 1000) / 1000f * 360, 8, DIAL_Y, 0);
+		drawTurned(ms, sink, HOUR_HAND, light, Axis.ZP, hours * 30, 8, DIAL_Y, 0);
+		drawTurned(ms, sink, MINUTE_HAND, light, Axis.ZP, Mth.positiveModulo(time, 1000) / 1000f * 360, 8, DIAL_Y, 0);
 		float day = Mth.positiveModulo(time - ClockTime.NOON, ClockTime.TICKS_PER_DAY) / ClockTime.TICKS_PER_DAY;
-		renderSky(ms, vc, time, light);
-		drawTurned(ms, vc, state, SKY_DISC, light, Axis.ZP, day * 360, 8, DISC_Y, 0);
+		drawTurned(ms, sink, SKY_DISC, light, Axis.ZP, day * 360, 8, DISC_Y, 0);
 
 		float swing = 0;
 		if (be.isRunning())
 			swing = PENDULUM_DEGREES * Mth.sin(be.getSwingTicks(partialTicks) * Mth.TWO_PI / CuckooClockBlockEntity.SWING_TICKS);
-		drawTurned(ms, vc, state, PENDULUM, light, Axis.ZP, swing, 8, PENDULUM_Y, PENDULUM_Z);
+		drawTurned(ms, sink, PENDULUM, light, Axis.ZP, swing, 8, PENDULUM_Y, PENDULUM_Z);
 
-		renderShow(be, partialTicks, ms, buffer, vc, state, light, overlay);
+		show(be, partialTicks, ms, sink, light);
 		ms.popPose();
 	}
 
@@ -167,18 +200,17 @@ public class CuckooClockRenderer extends SafeBlockEntityRenderer<CuckooClockBloc
 	}
 
 	/** The doors, the cuckoo and the villager: closed and inside unless a show is on. */
-	private static void renderShow(CuckooClockBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
-								   VertexConsumer vc, BlockState state, int light, int overlay) {
+	private static void show(CuckooClockBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
 		float t = be.getShowTime(partialTicks);
 		int calls = be.getShowCalls();
 		float birdDoors = t < 0 ? 0 : ClockTime.birdDoors(t, calls), birdOut = t < 0 ? 0 : ClockTime.birdOut(t, calls);
 		float lowDoors = t < 0 ? 0 : ClockTime.villagerDoors(t, calls), villagerOut = t < 0 ? 0 : ClockTime.villagerOut(t, calls);
 
 		// the leaves swing out towards the front: the left one (reaching +x from its hinge) about +y, the right about -y
-		drawTurned(ms, vc, state, DOOR_LEFT, light, Axis.YP, birdDoors * DOOR_DEGREES, HINGE_LEFT, 0, BIRD_HINGE_Z);
-		drawTurned(ms, vc, state, DOOR_RIGHT, light, Axis.YP, -birdDoors * DOOR_DEGREES, HINGE_RIGHT, 0, BIRD_HINGE_Z);
-		drawTurned(ms, vc, state, LOW_DOOR_LEFT, light, Axis.YP, lowDoors * DOOR_DEGREES, HINGE_LEFT, 0, LOW_HINGE_Z);
-		drawTurned(ms, vc, state, LOW_DOOR_RIGHT, light, Axis.YP, -lowDoors * DOOR_DEGREES, HINGE_RIGHT, 0, LOW_HINGE_Z);
+		drawTurned(ms, sink, DOOR_LEFT, light, Axis.YP, birdDoors * DOOR_DEGREES, HINGE_LEFT, 0, BIRD_HINGE_Z);
+		drawTurned(ms, sink, DOOR_RIGHT, light, Axis.YP, -birdDoors * DOOR_DEGREES, HINGE_RIGHT, 0, BIRD_HINGE_Z);
+		drawTurned(ms, sink, LOW_DOOR_LEFT, light, Axis.YP, lowDoors * DOOR_DEGREES, HINGE_LEFT, 0, LOW_HINGE_Z);
+		drawTurned(ms, sink, LOW_DOOR_RIGHT, light, Axis.YP, -lowDoors * DOOR_DEGREES, HINGE_RIGHT, 0, LOW_HINGE_Z);
 
 		if (birdOut > 0) {
 			// it leans forward and tips its head down a little as it calls
@@ -186,25 +218,14 @@ public class CuckooClockRenderer extends SafeBlockEntityRenderer<CuckooClockBloc
 			ms.pushPose();
 			ms.translate(0, 0, (1 - birdOut) * BIRD_IN / 16 - call * 0.4f / 16);
 			turn(ms, Axis.XP, -call * 12, 8, 11.5f, 6.4f);
-			draw(ms, vc, state, BIRD, light);
+			sink.part(BIRD, ms, light);
 			ms.popPose();
 		}
 
 		if (villagerOut > 0) {
 			ms.pushPose();
 			ms.translate(0, 0, (1 - villagerOut) * VILLAGER_IN / 16);
-			draw(ms, vc, state, VILLAGER, light);
-			BlockState station = be.getWorkstation();
-			if (station != null) {
-				if (station.hasProperty(BlockStateProperties.HORIZONTAL_FACING))
-					station = station.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH);
-				ms.pushPose();
-				ms.translate((STATION_X - STATION_SIZE / 2) / 16, STATION_Y / 16, (STATION_Z - STATION_SIZE / 2) / 16);
-				ms.scale(STATION_SIZE / 16, STATION_SIZE / 16, STATION_SIZE / 16);
-				Minecraft.getInstance().getBlockRenderer().renderSingleBlock(station, ms, buffer, light, overlay,
-					ModelData.EMPTY, null);
-				ms.popPose();
-			}
+			sink.part(VILLAGER, ms, light);
 			ms.popPose();
 		}
 	}
@@ -216,17 +237,12 @@ public class CuckooClockRenderer extends SafeBlockEntityRenderer<CuckooClockBloc
 		ms.translate(-x / 16, -y / 16, -z / 16);
 	}
 
-	private static void drawTurned(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation location,
-								   int light, Axis axis, float degrees, float x, float y, float z) {
+	private static void drawTurned(PoseStack ms, PartSink sink, ModelResourceLocation location, int light, Axis axis,
+								   float degrees, float x, float y, float z) {
 		ms.pushPose();
 		turn(ms, axis, degrees, x, y, z);
-		draw(ms, vc, state, location, light);
+		sink.part(location, ms, light);
 		ms.popPose();
 	}
 
-	private static void draw(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation location, int light) {
-		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), vc, state,
-			Minecraft.getInstance().getModelManager().getModel(location), 1, 1, 1, light, OverlayTexture.NO_OVERLAY,
-			ModelData.EMPTY, RenderType.cutout());
-	}
 }

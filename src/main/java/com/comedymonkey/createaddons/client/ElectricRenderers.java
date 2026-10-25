@@ -1,6 +1,7 @@
 package com.comedymonkey.createaddons.client;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.client.parts.PartSink;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlock;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity;
 import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlock;
@@ -8,22 +9,18 @@ import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlockE
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlock;
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.model.data.ModelData;
 
 /** The moving and whole-machine parts of the Electric Motor, Lava Generator and Geothermal Turbine. */
 public final class ElectricRenderers {
@@ -50,12 +47,6 @@ public final class ElectricRenderers {
 			event.register(m);
 	}
 
-	private static void drawModel(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation location, int light) {
-		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), vc, state,
-			Minecraft.getInstance().getModelManager().getModel(location), 1, 1, 1, light,
-			net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, ModelData.EMPTY, RenderType.cutout());
-	}
-
 	/** Turns a model made facing north to face {@code facing}, about the block's centre. */
 	private static void face(PoseStack ms, Direction facing) {
 		ms.translate(0.5, 0.5, 0.5);
@@ -75,6 +66,11 @@ public final class ElectricRenderers {
 		@Override
 		protected void renderSafe(ElectricMotorBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
 								  int light, int overlay) {
+			parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
+		}
+
+		/** The shaft end is its only part model (for this renderer, or Flywheel's visual). */
+		public static void parts(ElectricMotorBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
 			BlockState state = be.getBlockState();
 			Direction facing = state.getValue(ElectricMotorBlock.FACING);
 			Direction.Axis axis = facing.getAxis();
@@ -88,7 +84,7 @@ public final class ElectricRenderers {
 			});
 			ms.translate(-0.5, -0.5, -0.5);
 			face(ms, facing);
-			drawModel(ms, buffer.getBuffer(RenderType.cutout()), state, CobbleGeneratorRenderer.SHAFT, light);
+			sink.part(CobbleGeneratorRenderer.SHAFT, ms, light);
 			ms.popPose();
 		}
 	}
@@ -100,13 +96,18 @@ public final class ElectricRenderers {
 		@Override
 		protected void renderSafe(LavaGeneratorBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
 								  int light, int overlay) {
+			parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
+		}
+
+		/** The turbine wheel is its only part model (for this renderer, or Flywheel's visual). */
+		public static void parts(LavaGeneratorBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
 			BlockState state = be.getBlockState();
 			ms.pushPose();
 			face(ms, state.getValue(LavaGeneratorBlock.FACING));
 			ms.translate(8 / 16f, 11.5 / 16f, 4 / 16f);
 			ms.mulPose(Axis.ZP.rotationDegrees(be.getRotorAngle(partialTicks)));
 			ms.translate(-8 / 16f, -11.5 / 16f, -4 / 16f);
-			drawModel(ms, buffer.getBuffer(RenderType.cutout()), state, GENERATOR_ROTOR, light);
+			sink.part(GENERATOR_ROTOR, ms, light);
 			ms.popPose();
 		}
 	}
@@ -143,55 +144,59 @@ public final class ElectricRenderers {
 		@Override
 		protected void renderSafe(GeothermalControllerBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
 								  int light, int overlay) {
+			parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
+		}
+
+		/** Everything it draws is a part model (for this renderer, or Flywheel's visual). */
+		public static void parts(GeothermalControllerBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
 			BlockState state = be.getBlockState();
 			if (!state.getValue(GeothermalControllerBlock.FORMED) || be.getLevel() == null)
 				return;
 			Direction facing = state.getValue(GeothermalControllerBlock.FACING);
 			// Lit like the air in front of the panel, so the big model isn't dark from sampling its own inside
 			int front = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(facing));
-			VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
 			ms.pushPose();
 			Direction back = facing.getOpposite();
 			ms.translate(back.getStepX(), 0, back.getStepZ());
 			face(ms, facing);
 			boolean lit = state.getValue(GeothermalControllerBlock.LIT);
-			drawModel(ms, vc, state, TURBINE, front);
+			sink.part(TURBINE, ms, front);
 			// The firebox only glows while it burns; off, the grates are dark iron
 			if (lit)
-				drawModel(ms, vc, state, TURBINE_GLOW, LightTexture.FULL_BRIGHT);
-			turned(ms, vc, state, TURBINE_ROTOR, front, Axis.XP, -be.rotorAngle(partialTicks), 0, ROTOR_Y, ROTOR_Z);
+				sink.part(TURBINE_GLOW, ms, LightTexture.FULL_BRIGHT);
+			turned(ms, sink, TURBINE_ROTOR, front, Axis.XP, -be.rotorAngle(partialTicks), 0, ROTOR_Y, ROTOR_Z);
 			// Energy dial sweeps clockwise from lower left (empty) to lower right (full); steam follows the load
-			turned(ms, vc, state, NEEDLE_ENERGY, front, Axis.ZP, -135 + 270 * be.energyFill(), ENERGY_X, ENERGY_Y, ENERGY_Z);
-			turned(ms, vc, state, NEEDLE_STEAM, front, Axis.XP, 70 - 140 * be.load() * Math.min(1, be.rotorSpeed() * 4), STEAM_X, STEAM_Y, STEAM_Z);
+			turned(ms, sink, NEEDLE_ENERGY, front, Axis.ZP, -135 + 270 * be.energyFill(), ENERGY_X, ENERGY_Y, ENERGY_Z);
+			turned(ms, sink, NEEDLE_STEAM, front, Axis.XP, 70 - 140 * be.load() * Math.min(1, be.rotorSpeed() * 4), STEAM_X, STEAM_Y, STEAM_Z);
 			if (lit)
-				drawModel(ms, vc, state, LAMP_OUTPUT, LightTexture.FULL_BRIGHT);
+				sink.part(LAMP_OUTPUT, ms, LightTexture.FULL_BRIGHT);
 			if (be.isStalled())
-				drawModel(ms, vc, state, LAMP_STALL, LightTexture.FULL_BRIGHT);
-			gauge(ms, vc, state, GAUGE_LAVA, be.lavaFill());
-			gauge(ms, vc, state, GAUGE_WATER, be.waterFill());
+				sink.part(LAMP_STALL, ms, LightTexture.FULL_BRIGHT);
+			gauge(ms, sink, GAUGE_LAVA, be.lavaFill());
+			gauge(ms, sink, GAUGE_WATER, be.waterFill());
 			ms.popPose();
 		}
 
 		/** A part turned by {@code degrees} about {@code axis} through a pivot given in model pixels. */
-		private static void turned(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation model, int light,
+		private static void turned(PoseStack ms, PartSink sink, ModelResourceLocation model, int light,
 								   Axis axis, float degrees, float x, float y, float z) {
 			ms.pushPose();
 			ms.translate(x / 16, y / 16, z / 16);
 			ms.mulPose(axis.rotationDegrees(degrees));
 			ms.translate(-x / 16, -y / 16, -z / 16);
-			drawModel(ms, vc, state, model, light);
+			sink.part(model, ms, light);
 			ms.popPose();
 		}
 
 		/** A gauge's fill, from the foot of its window up to its level. */
-		private static void gauge(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation model, float fill) {
+		private static void gauge(PoseStack ms, PartSink sink, ModelResourceLocation model, float fill) {
 			if (fill <= 0.005f)
 				return;
 			ms.pushPose();
 			ms.translate(0, GAUGE_FOOT / 16, 0);
 			ms.scale(1, Math.min(1, fill), 1);
 			ms.translate(0, -GAUGE_FOOT / 16, 0);
-			drawModel(ms, vc, state, model, LightTexture.FULL_BRIGHT);
+			sink.part(model, ms, LightTexture.FULL_BRIGHT);
 			ms.popPose();
 		}
 	}

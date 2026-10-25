@@ -1,6 +1,7 @@
 package com.comedymonkey.createaddons.client;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.client.parts.PartSink;
 import com.comedymonkey.createaddons.content.machine.TwoInputMachineBlock;
 import com.comedymonkey.createaddons.content.machine.TwoInputMachineBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -23,7 +24,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.model.data.ModelData;
 
 /**
  * What goes on inside the String Tangler and the Stone Infuser, both modelled with the window facing north and
@@ -42,8 +42,7 @@ public final class MachineRenderers {
 	}
 
 	/** The shaft stub in the back, spun about the world axis like the shaft it meets. */
-	private static void shaft(TwoInputMachineBlockEntity be, BlockState state, Direction front, PoseStack ms,
-							  VertexConsumer vc, int light, int overlay) {
+	private static void shaft(TwoInputMachineBlockEntity be, Direction front, PoseStack ms, PartSink sink, int light) {
 		Direction back = front.getOpposite();
 		Direction.Axis axis = back.getAxis();
 		float angle = KineticBlockEntityRenderer.getAngleForBe(be, be.getBlockPos(), axis);
@@ -52,9 +51,7 @@ public final class MachineRenderers {
 		ms.mulPose(axis == Direction.Axis.X ? Axis.XP.rotation(angle) : Axis.ZP.rotation(angle));
 		ms.mulPose(Axis.YP.rotationDegrees(-(back.toYRot() + 180)));
 		ms.translate(-0.5, -0.5, -0.5);
-		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), vc, state,
-			Minecraft.getInstance().getModelManager().getModel(CobbleGeneratorRenderer.SHAFT), 1, 1, 1, light, overlay,
-			ModelData.EMPTY, RenderType.cutout());
+		sink.part(CobbleGeneratorRenderer.SHAFT, ms, light);
 		ms.popPose();
 	}
 
@@ -120,13 +117,6 @@ public final class MachineRenderers {
 			event.register(m);
 	}
 
-	private static void renderPart(PoseStack ms, VertexConsumer vc, BlockState state, ModelResourceLocation location,
-							   int light, int overlay) {
-		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(ms.last(), vc, state,
-			Minecraft.getInstance().getModelManager().getModel(location), 1, 1, 1, light, overlay, ModelData.EMPTY,
-			RenderType.cutout());
-	}
-
 	/**
 	 * The shaft's turn about the model's +Z (out of the back), matching the stub: the stub spins about the world axis,
 	 * which runs the other way in model space when the back faces a negative direction.
@@ -169,44 +159,31 @@ public final class MachineRenderers {
 			BlockState state = be.getBlockState();
 			if (!state.hasProperty(TwoInputMachineBlock.FACING))
 				return;
+			parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
 			Direction front = state.getValue(TwoInputMachineBlock.FACING);
 			VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
-			shaft(be, state, front, ms, vc, light, overlay);
 
 			ms.pushPose();
 			faceFront(ms, front);
 			boolean working = be.isProcessing();
 			float spin = working ? modelSpin(be, front) : 0;
 			float progress = working ? be.getProgress(partialTicks) : 0;
-			ItemStack string = be.getStack(TwoInputMachineBlockEntity.MAIN);
 			ItemStack slime = be.getStack(TwoInputMachineBlockEntity.EXTRA);
 
-			// The whisk, turning with the shaft
-			ms.pushPose();
-			spinAbout(ms, AXIS_X, AXIS_Y, 0, Axis.ZP, spin);
-			renderPart(ms, vc, state, WHISK, light, overlay);
-			// The web balling up on it, turning with it
-			if (progress > 0.02f)
-				web(vc, ms.last(), WEB.get(), light, 3 * progress);
-			ms.popPose();
-
-			// The spools pay out slower than the whisk turns; their winding shows how much string is left
-			float wound = string.isEmpty() ? 0 : 0.45f + 0.55f * string.getCount() / string.getMaxStackSize();
-			for (int side = 0; side < 2; side++) {
-				boolean west = side == 0;
-				float x = west ? WEST_X : EAST_X;
+			// The web balling up on the whisk, turning with it
+			if (progress > 0.02f) {
 				ms.pushPose();
-				spinAbout(ms, x, AXIS_Y, SPOOL_Z, Axis.XP, (west ? 1 : -1) * spin / 6);
-				renderPart(ms, vc, state, west ? SPOOL_WEST : SPOOL_EAST, light, overlay);
-				if (wound > 0) {
-					ms.translate(0, AXIS_Y / 16, SPOOL_Z / 16);
-					ms.scale(1, wound, wound);
-					ms.translate(0, -AXIS_Y / 16, -SPOOL_Z / 16);
-					renderPart(ms, vc, state, west ? WINDING_WEST : WINDING_EAST, light, overlay);
-				}
+				spinAbout(ms, AXIS_X, AXIS_Y, 0, Axis.ZP, spin);
+				web(vc, ms.last(), WEB.get(), light, 3 * progress);
 				ms.popPose();
-				// Two strands from the winding to the whisk, wound on where they meet it
-				if (wound > 0) {
+			}
+
+			// Two strands from each spool's winding to the whisk, wound on where they meet it
+			float wound = wound(be.getStack(TwoInputMachineBlockEntity.MAIN));
+			if (wound > 0)
+				for (int side = 0; side < 2; side++) {
+					boolean west = side == 0;
+					float x = west ? WEST_X : EAST_X;
 					float from = west ? x + WINDING_HALF : x - WINDING_HALF;
 					float r = 1.25f * wound;
 					for (int i = 0; i < 2; i++) {
@@ -216,7 +193,6 @@ public final class MachineRenderers {
 							(AXIS_X + Mth.cos(at) * 1.5f) / 16, (AXIS_Y + Mth.sin(at) * 1.5f - sag) / 16, (SPOOL_Z - 0.5f + i) / 16);
 					}
 				}
-			}
 
 			// The slime in its pot, a blob that shrinks as it's used
 			if (!slime.isEmpty()) {
@@ -226,6 +202,46 @@ public final class MachineRenderers {
 
 			TrayItems.render(be.getStack(TwoInputMachineBlockEntity.OUTPUT), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
 			ms.popPose();
+		}
+
+		/** The part models: the shaft end, the whisk, the spools and their windings (for this renderer, or Flywheel's visual). */
+		public static void parts(TwoInputMachineBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
+			BlockState state = be.getBlockState();
+			if (!state.hasProperty(TwoInputMachineBlock.FACING))
+				return;
+			Direction front = state.getValue(TwoInputMachineBlock.FACING);
+			shaft(be, front, ms, sink, light);
+			ms.pushPose();
+			faceFront(ms, front);
+			float spin = be.isProcessing() ? modelSpin(be, front) : 0;
+
+			// The whisk, turning with the shaft
+			ms.pushPose();
+			spinAbout(ms, AXIS_X, AXIS_Y, 0, Axis.ZP, spin);
+			sink.part(WHISK, ms, light);
+			ms.popPose();
+
+			// The spools pay out slower than the whisk turns; their winding shows how much string is left
+			float wound = wound(be.getStack(TwoInputMachineBlockEntity.MAIN));
+			for (int side = 0; side < 2; side++) {
+				boolean west = side == 0;
+				ms.pushPose();
+				spinAbout(ms, west ? WEST_X : EAST_X, AXIS_Y, SPOOL_Z, Axis.XP, (west ? 1 : -1) * spin / 6);
+				sink.part(west ? SPOOL_WEST : SPOOL_EAST, ms, light);
+				if (wound > 0) {
+					ms.translate(0, AXIS_Y / 16, SPOOL_Z / 16);
+					ms.scale(1, wound, wound);
+					ms.translate(0, -AXIS_Y / 16, -SPOOL_Z / 16);
+					sink.part(west ? WINDING_WEST : WINDING_EAST, ms, light);
+				}
+				ms.popPose();
+			}
+			ms.popPose();
+		}
+
+		/** How full the windings are drawn: none without string, else from 45 % to full with the stack. */
+		private static float wound(ItemStack string) {
+			return string.isEmpty() ? 0 : 0.45f + 0.55f * string.getCount() / string.getMaxStackSize();
 		}
 
 		/** Three crossed planes of web round the whisk's middle, {@code half} pixels out from the axis. */
@@ -277,27 +293,21 @@ public final class MachineRenderers {
 				return;
 			Direction front = state.getValue(TwoInputMachineBlock.FACING);
 			boolean behind = CameraView.of(be, ms).behindGlass(front);
-			VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
-			shaft(be, state, front, ms, vc, light, overlay);
+			parts(be, ms, PartSink.forRenderer(be, buffer, overlay), light, !behind);
 			// Everything else is inside, seen only through the front glass
 			if (behind)
 				return;
+			VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
 
 			ms.pushPose();
 			faceFront(ms, front);
 			float spin = modelSpin(be, front);
 
-			// The drive rod turns with the shaft; the turntable geared down 4:1 under the stone
-			ms.pushPose();
-			spinAbout(ms, TABLE_X, DRIVE_Y, 0, Axis.ZP, spin);
-			renderPart(ms, vc, state, DRIVE, light, overlay);
-			ms.popPose();
-
-			ms.pushPose();
-			spinAbout(ms, TABLE_X, 0, TABLE_Z, Axis.YP, spin / 4);
-			renderPart(ms, vc, state, TURNTABLE, light, overlay);
+			// The cobblestone on the turntable, turning with it
 			boolean working = be.isProcessing() && !be.getMaking().isEmpty();
 			if (working || !be.getStack(TwoInputMachineBlockEntity.MAIN).isEmpty()) {
+				ms.pushPose();
+				spinAbout(ms, TABLE_X, 0, TABLE_Z, Axis.YP, spin / 4);
 				PoseStack.Pose pose = ms.last();
 				cube(vc, pose, COBBLESTONE.get(), light, STONE_X0, STONE_Y0, STONE_Z0, STONE_X1, STONE_Y1, STONE_Z1);
 				// The new stone climbing it, stopping just short of the top so their tops never meet
@@ -305,8 +315,8 @@ public final class MachineRenderers {
 				if (rise > 0.05f)
 					cube(vc, pose, blockSprite(be.getMaking()), light, STONE_X0 - 0.1f, STONE_Y0 - 0.1f, STONE_Z0 - 0.1f,
 						STONE_X1 + 0.1f, STONE_Y0 + rise, STONE_Z1 + 0.1f);
+				ms.popPose();
 			}
-			ms.popPose();
 
 			// The nuggets lying in the feeder: one to four, by how many are loaded
 			ItemStack nuggets = be.getStack(TwoInputMachineBlockEntity.EXTRA);
@@ -325,6 +335,35 @@ public final class MachineRenderers {
 			}
 
 			TrayItems.render(be.getStack(TwoInputMachineBlockEntity.OUTPUT), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
+			ms.popPose();
+		}
+
+		/** The part models: the shaft end, the drive rod and the turntable (for this renderer, or Flywheel's visual). */
+		public static void parts(TwoInputMachineBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
+			parts(be, ms, sink, light, true);
+		}
+
+		/** The drive and the turntable are inside, left out when they can't be seen ({@code inside} false). */
+		private static void parts(TwoInputMachineBlockEntity be, PoseStack ms, PartSink sink, int light, boolean inside) {
+			BlockState state = be.getBlockState();
+			if (!state.hasProperty(TwoInputMachineBlock.FACING))
+				return;
+			Direction front = state.getValue(TwoInputMachineBlock.FACING);
+			shaft(be, front, ms, sink, light);
+			if (!inside)
+				return;
+			ms.pushPose();
+			faceFront(ms, front);
+			float spin = modelSpin(be, front);
+			// The drive rod turns with the shaft; the turntable geared down 4:1 under the stone
+			ms.pushPose();
+			spinAbout(ms, TABLE_X, DRIVE_Y, 0, Axis.ZP, spin);
+			sink.part(DRIVE, ms, light);
+			ms.popPose();
+			ms.pushPose();
+			spinAbout(ms, TABLE_X, 0, TABLE_Z, Axis.YP, spin / 4);
+			sink.part(TURNTABLE, ms, light);
+			ms.popPose();
 			ms.popPose();
 		}
 

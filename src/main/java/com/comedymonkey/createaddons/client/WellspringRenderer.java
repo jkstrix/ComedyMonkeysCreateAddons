@@ -1,19 +1,16 @@
 package com.comedymonkey.createaddons.client;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.client.parts.PartSink;
 import com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.createmod.catnip.platform.NeoForgeCatnipServices;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 /**
@@ -41,7 +38,7 @@ public class WellspringRenderer implements BlockEntityRenderer<WellspringBlockEn
 	@Override
 	public void render(WellspringBlockEntity be, float partialTicks, PoseStack poseStack, MultiBufferSource buffers,
 					   int light, int overlay) {
-		renderCanisters(be, poseStack, buffers, light, overlay);
+		parts(be, partialTicks, poseStack, PartSink.forRenderer(be, buffers, overlay), light);
 
 		FluidStack fluid = be.getTank().getFluid();
 		if (fluid.isEmpty())
@@ -56,19 +53,14 @@ public class WellspringRenderer implements BlockEntityRenderer<WellspringBlockEn
 			buffers, poseStack, light, false, true);
 	}
 
-	private static void renderCanisters(WellspringBlockEntity be, PoseStack poseStack, MultiBufferSource buffers,
-										int light, int overlay) {
+	/** The canisters are its only part models (for this renderer, or Flywheel's visual); the fluid stays here. */
+	public static void parts(WellspringBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
 		int count = Math.min(be.getCapacityUpgradeCount(), SOCKETS);
-		if (count <= 0)
-			return;
-		VertexConsumer vc = buffers.getBuffer(RenderType.cutout());
-		var model = Minecraft.getInstance().getModelManager().getModel(CANISTER);
 		for (int i = 0; i < count; i++) {
-			poseStack.pushPose();
-			poseStack.translate(i * SOCKET_STEP, 0, 0);
-			Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(poseStack.last(), vc,
-				be.getBlockState(), model, 1, 1, 1, light, overlay, ModelData.EMPTY, RenderType.cutout());
-			poseStack.popPose();
+			ms.pushPose();
+			ms.translate(i * SOCKET_STEP, 0, 0);
+			sink.part(CANISTER, ms, light);
+			ms.popPose();
 		}
 	}
 }
