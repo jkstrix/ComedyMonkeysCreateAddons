@@ -34,7 +34,9 @@ public class FlightInstrumentsRenderer extends SafeBlockEntityRenderer<FlightIns
 	private static final float RADIUS = 2.75f;
 	/** The panel's length up its lean, in pixels: it rises 14, from the lip to the top of the block. */
 	private static final float LENGTH = (float) (14 / Math.cos(Math.toRadians(22.5)));
-	private static final int SKY = 0x5AA6E8, GROUND = 0x8A5A2E, LINE = 0xF0F0F0, NEEDLE = 0xF0F0F0, SHORT = 0xF0B040;
+	/** The ship-hardware palette (design/briefs/flight-instruments.md): muted, never near-white. */
+	private static final int SKY = 0x4F7C96, GROUND = 0x634532, LINE = 0xC9C2A8, NEEDLE = 0xC9C2A8, SHORT = 0xD99A4A;
+	private static final int HUB = 0x2F343B, WINGS = 0x1F2327, CENTRE = 0xA3873F;
 
 	public FlightInstrumentsRenderer(BlockEntityRendererProvider.Context context) {}
 
@@ -129,7 +131,7 @@ public class FlightInstrumentsRenderer extends SafeBlockEntityRenderer<FlightIns
 			// A hub over the pivot
 			float h = width * 1.4f;
 			quad(at(c[0] - h, c[1] - h, layer + 1), at(c[0] - h, c[1] + h, layer + 1),
-				at(c[0] + h, c[1] + h, layer + 1), at(c[0] + h, c[1] - h, layer + 1), 0x2A2A2A);
+				at(c[0] + h, c[1] + h, layer + 1), at(c[0] + h, c[1] - h, layer + 1), HUB);
 		}
 
 		/** The sky disc, the ground clipped from it by the horizon, the horizon line and the aircraft symbol. */
@@ -171,9 +173,9 @@ public class FlightInstrumentsRenderer extends SafeBlockEntityRenderer<FlightIns
 				at(hx + along[0] * half - down[0] * w, hy + along[1] * half - down[1] * w, 3), LINE);
 
 			// The aircraft, fixed: two black wings and a white centre
-			bar(c[0] - 1.9f, c[1] - 0.15f, c[0] - 0.55f, c[1] + 0.15f, 0x101010, 4);
-			bar(c[0] + 0.55f, c[1] - 0.15f, c[0] + 1.9f, c[1] + 0.15f, 0x101010, 4);
-			bar(c[0] - 0.35f, c[1] - 0.35f, c[0] + 0.35f, c[1] + 0.35f, 0xF0F0F0, 4);
+			bar(c[0] - 1.9f, c[1] - 0.15f, c[0] - 0.55f, c[1] + 0.15f, WINGS, 4);
+			bar(c[0] + 0.55f, c[1] - 0.15f, c[0] + 1.9f, c[1] + 0.15f, WINGS, 4);
+			bar(c[0] - 0.35f, c[1] - 0.35f, c[0] + 0.35f, c[1] + 0.35f, CENTRE, 4);
 		}
 
 		private void bar(float ua, float va, float ub, float vb, int rgb, int layer) {

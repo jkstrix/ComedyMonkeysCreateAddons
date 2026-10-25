@@ -1,0 +1,149 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/compact_gyroscope_dark",
+    "dark": "comedymonkeysaddons:block/compact_gyroscope_dark"
+  },
+  "elements": [
+    {
+      "name": "jaw_-1_down",
+      "from": [
+        4.75,
+        6.75,
+        7.5
+      ],
+      "to": [
+        6.25,
+        7.25,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.75,
+            8.75,
+            11.25,
+            9.25
+          ],
+          "texture": "#dark"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            8.75,
+            8.5,
+            9.25
+          ],
+          "texture": "#dark"
+        },
+        "south": {
+          "uv": [
+            4.75,
+            8.75,
+            6.25,
+            9.25
+          ],
+          "texture": "#dark"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            8.75,
+            8.5,
+            9.25
+          ],
+          "texture": "#dark"
+        },
+        "up": {
+          "uv": [
+            4.75,
+            7.5,
+            6.25,
+            8.5
+          ],
+          "texture": "#dark"
+        },
+        "down": {
+          "uv": [
+            4.75,
+            7.5,
+            6.25,
+            8.5
+          ],
+          "texture": "#dark"
+        }
+      }
+    },
+    {
+      "name": "jaw_1_down",
+      "from": [
+        9.75,
+        6.75,
+        7.5
+      ],
+      "to": [
+        11.25,
+        7.25,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.75,
+            8.75,
+            6.25,
+            9.25
+          ],
+          "texture": "#dark"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            8.75,
+            8.5,
+            9.25
+          ],
+          "texture": "#dark"
+        },
+        "south": {
+          "uv": [
+            9.75,
+            8.75,
+            11.25,
+            9.25
+          ],
+          "texture": "#dark"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            8.75,
+            8.5,
+            9.25
+          ],
+          "texture": "#dark"
+        },
+        "up": {
+          "uv": [
+            9.75,
+            7.5,
+            11.25,
+            8.5
+          ],
+          "texture": "#dark"
+        },
+        "down": {
+          "uv": [
+            9.75,
+            7.5,
+            11.25,
+            8.5
+          ],
+          "texture": "#dark"
+        }
+      }
+    }
+  ]
+}

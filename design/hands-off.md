@@ -72,6 +72,12 @@ Shared with future blocks: `design/sound/sources/generated/` holds the local Sta
 
 `client/TrayItems.java` now also has a single-stack version for these two; like the rest of it, it may grow but must keep drawing the same for every block that uses it.
 
+## Aeronautics set (Compact Gyroscope, Torque Rotor, Flight Instruments)
+- Blocks: `compact_gyroscope`, `torque_rotor`, `flight_instruments`.
+- Look only: `compat/sable/client/AeronauticsRenderers.java`, the colours in `compat/sable/client/FlightInstrumentsRenderer.java`, the gyroscope's gimbal angles in `compat/sable/CompactGyroscopeBlockEntity.java` (`gimbal`, `getGimbalOuter`, `getGimbalInner`), the instruments' outline in `compat/sable/FlightInstrumentsBlock.java`, and every model and texture with `compact_gyroscope`, `torque_rotor` or `flight_instruments` in its name.
+- Design: `design/briefs/compact-gyroscope.md`, `design/briefs/torque-rotor.md`, `design/briefs/flight-instruments.md`, `design/dossiers/compact-gyroscope.md`, `design/dossiers/torque-rotor.md`, `design/dossiers/flight-instruments.md`, `design/dossiers/aeronautics-set/`, `design/models/ship-hardware*`.
+- Their physics (levelling, braking, torque) and readings are gameplay, not design, and aren't covered here.
+
 ## Upgraded Chests and Barrels
 - Blocks: `upgraded_chest`, `upgraded_barrel` (all five tiers; single and double chests).
 - Look only: the models and textures. Assets: `models/block/upgraded_chest_*.json`, `models/block/upgraded_barrel_*.json`, `textures/block/upgraded_chest_*.png`, `textures/block/upgraded_barrel_*.png`, and `client/UpgradedChestRenderer.java` (the lid).

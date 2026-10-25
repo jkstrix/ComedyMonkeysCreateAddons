@@ -41,6 +41,8 @@ public class FlightInstrumentsBlock extends BaseEntityBlock implements IWrenchab
 			VoxelShape shape = box(facing, 0, 5, 2);
 			for (int y = 2; y < 16; y += 2)
 				shape = Shapes.or(shape, box(facing, y, 8 + (int) ((y - 2) * Math.tan(Math.toRadians(22.5))), y + 2));
+			// the hand rail on the lip, and the glare hood over the panel's top edge (it overhangs the top by under a pixel)
+			shape = Shapes.or(shape, box(facing, 2, 5, 4), box(facing, 14, 11, 17));
 			SHAPES.put(facing, shape.optimize());
 		}
 	}

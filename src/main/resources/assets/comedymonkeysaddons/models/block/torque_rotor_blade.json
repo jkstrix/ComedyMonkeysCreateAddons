@@ -1,0 +1,315 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/torque_rotor_blade",
+    "brass": "comedymonkeysaddons:block/torque_rotor_brass",
+    "blade": "comedymonkeysaddons:block/torque_rotor_blade"
+  },
+  "elements": [
+    {
+      "name": "blade_root",
+      "from": [
+        10,
+        6,
+        6.75
+      ],
+      "to": [
+        12,
+        7.25,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            8.75,
+            6,
+            10
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            6.75,
+            8.75,
+            9.25,
+            10
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            10,
+            8.75,
+            12,
+            10
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            8.75,
+            9.25,
+            10
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            10,
+            6.75,
+            12,
+            9.25
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            10,
+            6.75,
+            12,
+            9.25
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "blade_inner",
+      "from": [
+        12,
+        6.125,
+        6.25
+      ],
+      "to": [
+        16,
+        6.875,
+        9.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          6.5,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            9.125,
+            4,
+            9.875
+          ],
+          "texture": "#blade"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            9.125,
+            9.75,
+            9.875
+          ],
+          "texture": "#blade"
+        },
+        "south": {
+          "uv": [
+            12,
+            9.125,
+            16,
+            9.875
+          ],
+          "texture": "#blade"
+        },
+        "west": {
+          "uv": [
+            6.25,
+            9.125,
+            9.5,
+            9.875
+          ],
+          "texture": "#blade"
+        },
+        "up": {
+          "uv": [
+            12,
+            6.25,
+            16,
+            9.5
+          ],
+          "texture": "#blade"
+        },
+        "down": {
+          "uv": [
+            12,
+            6.5,
+            16,
+            9.75
+          ],
+          "texture": "#blade"
+        }
+      }
+    },
+    {
+      "name": "blade_outer",
+      "from": [
+        16,
+        6.125,
+        5.5
+      ],
+      "to": [
+        20,
+        6.875,
+        9.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          6.5,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            9.125,
+            16,
+            9.875
+          ],
+          "texture": "#blade"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            9.125,
+            10.5,
+            9.875
+          ],
+          "texture": "#blade"
+        },
+        "south": {
+          "uv": [
+            0,
+            9.125,
+            4,
+            9.875
+          ],
+          "texture": "#blade"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            9.125,
+            9.5,
+            9.875
+          ],
+          "texture": "#blade"
+        },
+        "up": {
+          "uv": [
+            0,
+            5.5,
+            4,
+            9.5
+          ],
+          "texture": "#blade"
+        },
+        "down": {
+          "uv": [
+            0,
+            6.5,
+            4,
+            10.5
+          ],
+          "texture": "#blade"
+        }
+      }
+    },
+    {
+      "name": "blade_edge",
+      "from": [
+        12,
+        6.175,
+        9.5
+      ],
+      "to": [
+        20,
+        6.825,
+        10.25
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          6.5,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            9.175,
+            8,
+            9.825
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            5.75,
+            9.175,
+            6.5,
+            9.825
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            8,
+            9.175,
+            16,
+            9.825
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            9.5,
+            9.175,
+            10.25,
+            9.825
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            8,
+            9.5,
+            16,
+            10.25
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            8,
+            5.75,
+            16,
+            6.5
+          ],
+          "texture": "#brass"
+        }
+      }
+    }
+  ]
+}

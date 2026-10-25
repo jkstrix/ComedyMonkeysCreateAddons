@@ -1,833 +1,373 @@
 {
-  "parent": "minecraft:block/block",
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
   "ambientocclusion": false,
   "textures": {
-    "casing": "create:block/andesite_casing",
-    "collar": "create:block/brass_casing",
-    "hub": "create:block/brass_block",
-    "blade": "comedymonkeysaddons:block/torque_rotor_blade",
-    "tip": "create:block/brass_block",
-    "particle": "create:block/andesite_casing"
+    "particle": "comedymonkeysaddons:block/torque_rotor_brass",
+    "brass": "comedymonkeysaddons:block/torque_rotor_brass"
   },
   "elements": [
     {
+      "name": "hub",
       "from": [
-        5,
-        4,
-        5
+        5.25,
+        5.75,
+        5.25
       ],
       "to": [
-        11,
-        9,
-        11
-      ],
-      "faces": {
-        "north": {
-          "uv": [
-            5,
-            7,
-            11,
-            12
-          ],
-          "texture": "#hub"
-        },
-        "east": {
-          "uv": [
-            5,
-            7,
-            11,
-            12
-          ],
-          "texture": "#hub"
-        },
-        "south": {
-          "uv": [
-            5,
-            7,
-            11,
-            12
-          ],
-          "texture": "#hub"
-        },
-        "west": {
-          "uv": [
-            5,
-            7,
-            11,
-            12
-          ],
-          "texture": "#hub"
-        },
-        "up": {
-          "uv": [
-            5,
-            5,
-            11,
-            11
-          ],
-          "texture": "#hub"
-        },
-        "down": {
-          "uv": [
-            5,
-            5,
-            11,
-            11
-          ],
-          "texture": "#hub"
-        }
-      }
-    },
-    {
-      "from": [
-        6,
-        9,
-        6
-      ],
-      "to": [
-        10,
-        10.5,
-        10
-      ],
-      "faces": {
-        "north": {
-          "uv": [
-            6,
-            5.5,
-            10,
-            7
-          ],
-          "texture": "#hub"
-        },
-        "east": {
-          "uv": [
-            6,
-            5.5,
-            10,
-            7
-          ],
-          "texture": "#hub"
-        },
-        "south": {
-          "uv": [
-            6,
-            5.5,
-            10,
-            7
-          ],
-          "texture": "#hub"
-        },
-        "west": {
-          "uv": [
-            6,
-            5.5,
-            10,
-            7
-          ],
-          "texture": "#hub"
-        },
-        "up": {
-          "uv": [
-            6,
-            6,
-            10,
-            10
-          ],
-          "texture": "#hub"
-        },
-        "down": {
-          "uv": [
-            6,
-            6,
-            10,
-            10
-          ],
-          "texture": "#hub"
-        }
-      }
-    },
-    {
-      "from": [
-        7,
-        10.5,
-        7
-      ],
-      "to": [
-        9,
-        11.5,
-        9
-      ],
-      "faces": {
-        "north": {
-          "uv": [
-            7,
-            4.5,
-            9,
-            5.5
-          ],
-          "texture": "#hub"
-        },
-        "east": {
-          "uv": [
-            7,
-            4.5,
-            9,
-            5.5
-          ],
-          "texture": "#hub"
-        },
-        "south": {
-          "uv": [
-            7,
-            4.5,
-            9,
-            5.5
-          ],
-          "texture": "#hub"
-        },
-        "west": {
-          "uv": [
-            7,
-            4.5,
-            9,
-            5.5
-          ],
-          "texture": "#hub"
-        },
-        "up": {
-          "uv": [
-            7,
-            7,
-            9,
-            9
-          ],
-          "texture": "#hub"
-        },
-        "down": {
-          "uv": [
-            7,
-            7,
-            9,
-            9
-          ],
-          "texture": "#hub"
-        }
-      }
-    },
-    {
-      "from": [
-        11,
-        6.5,
-        6.5
-      ],
-      "to": [
-        20,
+        10.75,
         7.5,
-        9.5
+        10.75
       ],
       "faces": {
         "north": {
           "uv": [
-            0,
-            0,
-            9,
-            1.0
+            5.25,
+            8.5,
+            10.75,
+            10.25
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "east": {
           "uv": [
-            0,
-            0,
-            3.0,
-            1.0
+            5.25,
+            8.5,
+            10.75,
+            10.25
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "south": {
           "uv": [
-            0,
-            0,
-            9,
-            1.0
+            5.25,
+            8.5,
+            10.75,
+            10.25
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "west": {
           "uv": [
-            0,
-            0,
-            3.0,
-            1.0
+            5.25,
+            8.5,
+            10.75,
+            10.25
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "up": {
           "uv": [
-            0,
-            0,
-            9,
-            3.0
+            5.25,
+            5.25,
+            10.75,
+            10.75
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "down": {
           "uv": [
-            0,
-            0,
-            9,
-            3.0
+            5.25,
+            5.25,
+            10.75,
+            10.75
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         }
-      },
-      "rotation": {
-        "axis": "x",
-        "angle": -22.5,
-        "origin": [
-          8,
-          7,
-          8
-        ]
       }
     },
     {
+      "name": "hub_45",
       "from": [
-        17.99,
-        6.49,
-        6.49
+        5.27,
+        5.77,
+        5.27
       ],
       "to": [
-        20.01,
-        7.51,
-        9.51
+        10.73,
+        7.48,
+        10.73
       ],
+      "rotation": {
+        "origin": [
+          8,
+          5.75,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
       "faces": {
         "north": {
           "uv": [
-            0,
-            0,
-            2.020000000000003,
-            1.0199999999999996
+            5.27,
+            8.52,
+            10.73,
+            10.23
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         },
         "east": {
           "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            1.0199999999999996
+            5.27,
+            8.52,
+            10.73,
+            10.23
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         },
         "south": {
           "uv": [
-            0,
-            0,
-            2.020000000000003,
-            1.0199999999999996
+            5.27,
+            8.52,
+            10.73,
+            10.23
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         },
         "west": {
           "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            1.0199999999999996
+            5.27,
+            8.52,
+            10.73,
+            10.23
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         },
         "up": {
           "uv": [
-            0,
-            0,
-            2.020000000000003,
-            3.0199999999999996
+            5.27,
+            5.27,
+            10.73,
+            10.73
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         },
         "down": {
           "uv": [
-            0,
-            0,
-            2.020000000000003,
-            3.0199999999999996
+            5.27,
+            5.27,
+            10.73,
+            10.73
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         }
-      },
-      "rotation": {
-        "axis": "x",
-        "angle": -22.5,
-        "origin": [
-          8,
-          7,
-          8
-        ]
       }
     },
     {
+      "name": "spinner",
       "from": [
-        -4,
-        6.5,
-        6.5
-      ],
-      "to": [
-        5,
+        6.25,
         7.5,
-        9.5
+        6.25
+      ],
+      "to": [
+        9.75,
+        8.5,
+        9.75
       ],
       "faces": {
         "north": {
           "uv": [
-            0,
-            0,
-            9,
-            1.0
+            6.25,
+            7.5,
+            9.75,
+            8.5
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "east": {
           "uv": [
-            0,
-            0,
-            3.0,
-            1.0
+            6.25,
+            7.5,
+            9.75,
+            8.5
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "south": {
           "uv": [
-            0,
-            0,
-            9,
-            1.0
+            6.25,
+            7.5,
+            9.75,
+            8.5
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "west": {
           "uv": [
-            0,
-            0,
-            3.0,
-            1.0
+            6.25,
+            7.5,
+            9.75,
+            8.5
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "up": {
           "uv": [
-            0,
-            0,
-            9,
-            3.0
+            6.25,
+            6.25,
+            9.75,
+            9.75
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "down": {
           "uv": [
-            0,
-            0,
-            9,
-            3.0
+            6.25,
+            6.25,
+            9.75,
+            9.75
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         }
-      },
-      "rotation": {
-        "axis": "x",
-        "angle": 22.5,
-        "origin": [
-          8,
-          7,
-          8
-        ]
       }
     },
     {
+      "name": "spinner_45",
       "from": [
-        -4.01,
-        6.49,
-        6.49
+        6.27,
+        7.52,
+        6.27
       ],
       "to": [
-        -1.99,
-        7.51,
-        9.51
+        9.73,
+        8.48,
+        9.73
       ],
+      "rotation": {
+        "origin": [
+          8,
+          7.5,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
       "faces": {
         "north": {
           "uv": [
-            0,
-            0,
-            2.0199999999999996,
-            1.0199999999999996
+            6.27,
+            7.52,
+            9.73,
+            8.48
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         },
         "east": {
           "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            1.0199999999999996
+            6.27,
+            7.52,
+            9.73,
+            8.48
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         },
         "south": {
           "uv": [
-            0,
-            0,
-            2.0199999999999996,
-            1.0199999999999996
+            6.27,
+            7.52,
+            9.73,
+            8.48
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         },
         "west": {
           "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            1.0199999999999996
+            6.27,
+            7.52,
+            9.73,
+            8.48
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         },
         "up": {
           "uv": [
-            0,
-            0,
-            2.0199999999999996,
-            3.0199999999999996
+            6.27,
+            6.27,
+            9.73,
+            9.73
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         },
         "down": {
           "uv": [
-            0,
-            0,
-            2.0199999999999996,
-            3.0199999999999996
+            6.27,
+            6.27,
+            9.73,
+            9.73
           ],
-          "texture": "#tip"
+          "texture": "#brass"
         }
-      },
-      "rotation": {
-        "axis": "x",
-        "angle": 22.5,
-        "origin": [
-          8,
-          7,
-          8
-        ]
       }
     },
     {
+      "name": "spinner_tip",
       "from": [
-        6.5,
-        6.5,
-        11
+        7.25,
+        8.5,
+        7.25
       ],
       "to": [
-        9.5,
-        7.5,
-        20
+        8.75,
+        9.25,
+        8.75
       ],
       "faces": {
         "north": {
           "uv": [
-            0,
-            0,
-            3.0,
-            1.0
+            7.25,
+            6.75,
+            8.75,
+            7.5
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "east": {
           "uv": [
-            0,
-            0,
-            9,
-            1.0
+            7.25,
+            6.75,
+            8.75,
+            7.5
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "south": {
           "uv": [
-            0,
-            0,
-            3.0,
-            1.0
+            7.25,
+            6.75,
+            8.75,
+            7.5
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "west": {
           "uv": [
-            0,
-            0,
-            9,
-            1.0
+            7.25,
+            6.75,
+            8.75,
+            7.5
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "up": {
           "uv": [
-            0,
-            0,
-            3.0,
-            9
+            7.25,
+            7.25,
+            8.75,
+            8.75
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         },
         "down": {
           "uv": [
-            0,
-            0,
-            3.0,
-            9
+            7.25,
+            7.25,
+            8.75,
+            8.75
           ],
-          "texture": "#blade"
+          "texture": "#brass"
         }
-      },
-      "rotation": {
-        "axis": "z",
-        "angle": -22.5,
-        "origin": [
-          8,
-          7,
-          8
-        ]
-      }
-    },
-    {
-      "from": [
-        6.49,
-        6.49,
-        17.99
-      ],
-      "to": [
-        9.51,
-        7.51,
-        20.01
-      ],
-      "faces": {
-        "north": {
-          "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            1.0199999999999996
-          ],
-          "texture": "#tip"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            2.020000000000003,
-            1.0199999999999996
-          ],
-          "texture": "#tip"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            1.0199999999999996
-          ],
-          "texture": "#tip"
-        },
-        "west": {
-          "uv": [
-            0,
-            0,
-            2.020000000000003,
-            1.0199999999999996
-          ],
-          "texture": "#tip"
-        },
-        "up": {
-          "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            2.020000000000003
-          ],
-          "texture": "#tip"
-        },
-        "down": {
-          "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            2.020000000000003
-          ],
-          "texture": "#tip"
-        }
-      },
-      "rotation": {
-        "axis": "z",
-        "angle": -22.5,
-        "origin": [
-          8,
-          7,
-          8
-        ]
-      }
-    },
-    {
-      "from": [
-        6.5,
-        6.5,
-        -4
-      ],
-      "to": [
-        9.5,
-        7.5,
-        5
-      ],
-      "faces": {
-        "north": {
-          "uv": [
-            0,
-            0,
-            3.0,
-            1.0
-          ],
-          "texture": "#blade"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            9,
-            1.0
-          ],
-          "texture": "#blade"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
-            3.0,
-            1.0
-          ],
-          "texture": "#blade"
-        },
-        "west": {
-          "uv": [
-            0,
-            0,
-            9,
-            1.0
-          ],
-          "texture": "#blade"
-        },
-        "up": {
-          "uv": [
-            0,
-            0,
-            3.0,
-            9
-          ],
-          "texture": "#blade"
-        },
-        "down": {
-          "uv": [
-            0,
-            0,
-            3.0,
-            9
-          ],
-          "texture": "#blade"
-        }
-      },
-      "rotation": {
-        "axis": "z",
-        "angle": 22.5,
-        "origin": [
-          8,
-          7,
-          8
-        ]
-      }
-    },
-    {
-      "from": [
-        6.49,
-        6.49,
-        -4.01
-      ],
-      "to": [
-        9.51,
-        7.51,
-        -1.99
-      ],
-      "faces": {
-        "north": {
-          "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            1.0199999999999996
-          ],
-          "texture": "#tip"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            2.0199999999999996,
-            1.0199999999999996
-          ],
-          "texture": "#tip"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            1.0199999999999996
-          ],
-          "texture": "#tip"
-        },
-        "west": {
-          "uv": [
-            0,
-            0,
-            2.0199999999999996,
-            1.0199999999999996
-          ],
-          "texture": "#tip"
-        },
-        "up": {
-          "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            2.0199999999999996
-          ],
-          "texture": "#tip"
-        },
-        "down": {
-          "uv": [
-            0,
-            0,
-            3.0199999999999996,
-            2.0199999999999996
-          ],
-          "texture": "#tip"
-        }
-      },
-      "rotation": {
-        "axis": "z",
-        "angle": 22.5,
-        "origin": [
-          8,
-          7,
-          8
-        ]
       }
     }
   ]

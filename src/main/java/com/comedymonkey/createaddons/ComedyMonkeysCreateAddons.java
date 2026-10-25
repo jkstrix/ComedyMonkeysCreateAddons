@@ -271,6 +271,7 @@ public class ComedyMonkeysCreateAddons {
 				AeronauticsContent.commonSetup();
 				registerCreateTooltip(AeronauticsContent.COMPACT_GYROSCOPE_ITEM.get());
 				registerCreateTooltip(AeronauticsContent.TORQUE_ROTOR_ITEM.get());
+				registerCreateTooltip(AeronauticsContent.FLIGHT_INSTRUMENTS_ITEM.get());
 			}
 
 			ModDisplaySources.bindBlocks();

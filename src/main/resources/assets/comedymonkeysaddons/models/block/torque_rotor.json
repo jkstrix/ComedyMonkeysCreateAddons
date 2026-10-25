@@ -1,15 +1,17 @@
 {
-  "parent": "minecraft:block/block",
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
   "textures": {
-    "casing": "create:block/andesite_casing",
-    "collar": "create:block/brass_casing",
-    "hub": "create:block/brass_block",
-    "blade": "comedymonkeysaddons:block/torque_rotor_blade",
-    "tip": "create:block/brass_block",
-    "particle": "create:block/andesite_casing"
+    "particle": "comedymonkeysaddons:block/torque_rotor_plate",
+    "plate": "comedymonkeysaddons:block/torque_rotor_plate",
+    "flange": "comedymonkeysaddons:block/torque_rotor_flange",
+    "nacelle": "comedymonkeysaddons:block/torque_rotor_nacelle",
+    "steel": "comedymonkeysaddons:block/torque_rotor_steel"
   },
   "elements": [
     {
+      "name": "flange_n",
       "from": [
         1,
         0,
@@ -17,123 +19,510 @@
       ],
       "to": [
         15,
-        3,
+        2,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            14,
+            15,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "east": {
+          "uv": [
+            10,
+            14,
+            15,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "south": {
+          "uv": [
+            1,
+            14,
+            15,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "west": {
+          "uv": [
+            1,
+            14,
+            6,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            15,
+            6
+          ],
+          "texture": "#flange"
+        },
+        "down": {
+          "uv": [
+            1,
+            10,
+            15,
+            15
+          ],
+          "texture": "#flange"
+        }
+      }
+    },
+    {
+      "name": "flange_s",
+      "from": [
+        1,
+        0,
+        10
+      ],
+      "to": [
+        15,
+        2,
         15
       ],
       "faces": {
         "north": {
           "uv": [
             1,
-            13,
+            14,
             15,
             16
           ],
-          "texture": "#casing"
+          "texture": "#plate"
         },
         "east": {
           "uv": [
             1,
-            13,
-            15,
+            14,
+            6,
             16
           ],
-          "texture": "#casing"
+          "texture": "#plate"
         },
         "south": {
           "uv": [
             1,
-            13,
+            14,
             15,
             16
           ],
-          "texture": "#casing"
+          "texture": "#plate"
         },
         "west": {
           "uv": [
-            1,
-            13,
+            10,
+            14,
             15,
             16
           ],
-          "texture": "#casing"
+          "texture": "#plate"
         },
         "up": {
           "uv": [
             1,
-            1,
+            10,
             15,
             15
           ],
-          "texture": "#casing"
+          "texture": "#flange"
         },
         "down": {
           "uv": [
             1,
             1,
             15,
-            15
+            6
           ],
-          "texture": "#casing",
-          "cullface": "down"
+          "texture": "#flange"
         }
       }
     },
     {
+      "name": "flange_w",
       "from": [
-        4,
-        3,
-        4
+        1,
+        0,
+        6
       ],
       "to": [
-        12,
-        4,
-        12
+        6,
+        2,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            14,
+            10,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "west": {
+          "uv": [
+            6,
+            14,
+            10,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "up": {
+          "uv": [
+            1,
+            6,
+            6,
+            10
+          ],
+          "texture": "#flange"
+        },
+        "down": {
+          "uv": [
+            1,
+            6,
+            6,
+            10
+          ],
+          "texture": "#flange"
+        }
+      }
+    },
+    {
+      "name": "flange_e",
+      "from": [
+        10,
+        0,
+        6
+      ],
+      "to": [
+        15,
+        2,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            14,
+            10,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "west": {
+          "uv": [
+            6,
+            14,
+            10,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "up": {
+          "uv": [
+            10,
+            6,
+            15,
+            10
+          ],
+          "texture": "#flange"
+        },
+        "down": {
+          "uv": [
+            10,
+            6,
+            15,
+            10
+          ],
+          "texture": "#flange"
+        }
+      }
+    },
+    {
+      "name": "nacelle",
+      "from": [
+        4.25,
+        2,
+        4.25
+      ],
+      "to": [
+        11.75,
+        5.5,
+        11.75
       ],
       "faces": {
         "north": {
           "uv": [
-            4,
-            12,
-            12,
-            13
+            4.25,
+            10.5,
+            11.75,
+            14
           ],
-          "texture": "#collar"
+          "texture": "#nacelle"
         },
         "east": {
           "uv": [
-            4,
-            12,
-            12,
-            13
+            4.25,
+            10.5,
+            11.75,
+            14
           ],
-          "texture": "#collar"
+          "texture": "#nacelle"
         },
         "south": {
           "uv": [
-            4,
-            12,
-            12,
-            13
+            4.25,
+            10.5,
+            11.75,
+            14
           ],
-          "texture": "#collar"
+          "texture": "#nacelle"
         },
         "west": {
           "uv": [
-            4,
-            12,
-            12,
-            13
+            4.25,
+            10.5,
+            11.75,
+            14
           ],
-          "texture": "#collar"
+          "texture": "#nacelle"
         },
         "up": {
           "uv": [
-            4,
-            4,
-            12,
-            12
+            4.25,
+            4.25,
+            11.75,
+            11.75
           ],
-          "texture": "#collar"
+          "texture": "#nacelle"
+        }
+      }
+    },
+    {
+      "name": "nacelle_45",
+      "from": [
+        4.27,
+        2.02,
+        4.27
+      ],
+      "to": [
+        11.73,
+        5.48,
+        11.73
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          2,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4.27,
+            10.52,
+            11.73,
+            13.98
+          ],
+          "texture": "#nacelle"
+        },
+        "east": {
+          "uv": [
+            4.27,
+            10.52,
+            11.73,
+            13.98
+          ],
+          "texture": "#nacelle"
+        },
+        "south": {
+          "uv": [
+            4.27,
+            10.52,
+            11.73,
+            13.98
+          ],
+          "texture": "#nacelle"
+        },
+        "west": {
+          "uv": [
+            4.27,
+            10.52,
+            11.73,
+            13.98
+          ],
+          "texture": "#nacelle"
+        },
+        "up": {
+          "uv": [
+            4.27,
+            4.27,
+            11.73,
+            11.73
+          ],
+          "texture": "#nacelle"
+        }
+      }
+    },
+    {
+      "name": "nacelle_lip",
+      "from": [
+        3.75,
+        5,
+        3.75
+      ],
+      "to": [
+        12.25,
+        5.75,
+        12.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.75,
+            10.25,
+            12.25,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            3.75,
+            10.25,
+            12.25,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            3.75,
+            10.25,
+            12.25,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            3.75,
+            10.25,
+            12.25,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            3.75,
+            3.75,
+            12.25,
+            12.25
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            3.75,
+            3.75,
+            12.25,
+            12.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "nacelle_lip_45",
+      "from": [
+        3.77,
+        5.02,
+        3.77
+      ],
+      "to": [
+        12.23,
+        5.73,
+        12.23
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          5,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3.77,
+            10.27,
+            12.23,
+            10.98
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            3.77,
+            10.27,
+            12.23,
+            10.98
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            3.77,
+            10.27,
+            12.23,
+            10.98
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            3.77,
+            10.27,
+            12.23,
+            10.98
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            3.77,
+            3.77,
+            12.23,
+            12.23
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            3.77,
+            3.77,
+            12.23,
+            12.23
+          ],
+          "texture": "#steel"
         }
       }
     }

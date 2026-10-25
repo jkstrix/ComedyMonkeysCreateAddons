@@ -60,12 +60,17 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 	// Worked out in the physics step, read back on the server tick and sent to clients for the goggles
 	private volatile float physicsEffort;
 	private volatile float physicsTilt;
+	/** The gimbal's ring angles (degrees) that keep the flywheel level with the world: outer about Z, inner about X. */
+	private volatile float physicsOuter, physicsInner;
 	private volatile int physicsSteps;
 	private int stepsLastSeen;
 	/** Synced: whether it's on a ship, how hard it's pushing (0 to 1) and the ship's tilt in degrees. */
 	private boolean onShip;
 	private float effort;
 	private float tilt;
+	private float gimbalOuter, gimbalInner;
+	/** Client: the rings eased toward the synced angles, this tick and last. */
+	private float shownOuter, shownInner, shownOuterLast, shownInnerLast;
 
 	public CompactGyroscopeBlockEntity(BlockPos pos, BlockState state) {
 		super(AeronauticsContent.COMPACT_GYROSCOPE_BE.get(), pos, state);
@@ -93,6 +98,10 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 			flywheelAngleLast = flywheelAngle;
 			// RPM to degrees per tick
 			flywheelAngle = (flywheelAngle + effectiveSpeed.getValue() * 0.3f) % 360;
+			shownOuterLast = shownOuter;
+			shownInnerLast = shownInner;
+			shownOuter += (gimbalOuter - shownOuter) * 0.2f;
+			shownInner += (gimbalInner - shownInner) * 0.2f;
 		}
 		if (level != null && !level.isClientSide && level.getGameTime() % 10 == 0)
 			syncReadings();
@@ -109,6 +118,21 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 		return (float) Math.toRadians(last + (now - last) * partialTicks);
 	}
 
+	/** The gimbal's outer ring angle about the block's Z axis, in radians, smoothed between ticks. */
+	public float getGimbalOuter(float partialTicks) {
+		return (float) Math.toRadians(shownOuterLast + (shownOuter - shownOuterLast) * partialTicks);
+	}
+
+	/** The gimbal's inner ring angle about the outer ring's X axis, in radians, smoothed between ticks. */
+	public float getGimbalInner(float partialTicks) {
+		return (float) Math.toRadians(shownInnerLast + (shownInner - shownInnerLast) * partialTicks);
+	}
+
+	/** The redstone signal braking the flywheel, 0 to 15. */
+	public int getBrake() {
+		return brake;
+	}
+
 	/** Passes what the physics step saw on to clients, when it has changed enough to show. */
 	private void syncReadings() {
 		int steps = physicsSteps;
@@ -116,10 +140,14 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 		stepsLastSeen = steps;
 		float nowEffort = nowOnShip ? physicsEffort : 0;
 		float nowTilt = nowOnShip ? physicsTilt : 0;
-		if (nowOnShip != onShip || Math.abs(nowEffort - effort) > 0.03f || Math.abs(nowTilt - tilt) > 0.5f) {
+		float nowOuter = nowOnShip ? physicsOuter : 0, nowInner = nowOnShip ? physicsInner : 0;
+		if (nowOnShip != onShip || Math.abs(nowEffort - effort) > 0.03f || Math.abs(nowTilt - tilt) > 0.5f
+			|| Math.abs(nowOuter - gimbalOuter) > 0.5f || Math.abs(nowInner - gimbalInner) > 0.5f) {
 			onShip = nowOnShip;
 			effort = nowEffort;
 			tilt = nowTilt;
+			gimbalOuter = nowOuter;
+			gimbalInner = nowInner;
 			sendData();
 		}
 	}
@@ -140,6 +168,7 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 			integral.zero();
 			physicsEffort = 0;
 			physicsTilt = (float) tiltDegrees(subLevel.logicalPose().orientation());
+			gimbal(subLevel.logicalPose().orientation());
 			return;
 		}
 		MassData mass = subLevel.getMassTracker();
@@ -179,6 +208,17 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 		double full = Math.max(CMConfig.SERVER.gyroStrength(), 1) * timeStep;
 		physicsEffort = (float) Math.min(1, Math.sqrt(restoringImpulse.length() / full));
 		physicsTilt = (float) tiltDegrees(orientation);
+		gimbal(orientation);
+	}
+
+	/**
+	 * The ring angles that hold the flywheel's axis on world up, seen from the ship: the outer ring turns about the
+	 * block's Z by a and the inner about its X by b, which tips the axis to (-sin a cos b, cos a cos b, sin b).
+	 */
+	private void gimbal(Quaterniondc orientation) {
+		Vector3d up = orientation.transformInverse(new Vector3d(WORLD_UP));
+		physicsInner = (float) Math.toDegrees(Math.asin(Math.max(-1, Math.min(1, up.z))));
+		physicsOuter = (float) Math.toDegrees(Math.atan2(-up.x, up.y));
 	}
 
 	/** How far the ship's up is from world up, in degrees. */
@@ -235,6 +275,8 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 			tag.putBoolean("OnShip", onShip);
 			tag.putFloat("Effort", effort);
 			tag.putFloat("Tilt", tilt);
+			tag.putFloat("GimbalOuter", gimbalOuter);
+			tag.putFloat("GimbalInner", gimbalInner);
 		}
 	}
 
@@ -246,6 +288,8 @@ public class CompactGyroscopeBlockEntity extends KineticBlockEntity implements B
 			onShip = tag.getBoolean("OnShip");
 			effort = tag.getFloat("Effort");
 			tilt = tag.getFloat("Tilt");
+			gimbalOuter = tag.getFloat("GimbalOuter");
+			gimbalInner = tag.getFloat("GimbalInner");
 		}
 	}
 

@@ -370,7 +370,7 @@
   "comedymonkeysaddons.gui.goggles.magma_engine.burning": "Burning %s mB of lava a second",
   "comedymonkeysaddons.gui.goggles.magma_engine.no_fuel": "Out of lava",
   "block.comedymonkeysaddons.compact_gyroscope": "Compact Gyroscope",
-  "block.comedymonkeysaddons.compact_gyroscope.tooltip.summary": "A _Gyroscope_ squeezed into _one block_: a flywheel spinning in a _framed glass_ case that keeps _Aeronautics ships level_.",
+  "block.comedymonkeysaddons.compact_gyroscope.tooltip.summary": "A _Gyroscope_ squeezed into _one block_: a flywheel in a _brass gimbal_ that stays level while the ship tilts round it, and keeps _Aeronautics ships level_.",
   "block.comedymonkeysaddons.compact_gyroscope.tooltip.condition1": "When Spinning on a Ship",
   "block.comedymonkeysaddons.compact_gyroscope.tooltip.behaviour1": "Pushes the ship back _upright_ and _damps_ its wobble, exactly like the _Gyroscope_ it is made from. Reaches full strength at _256 RPM_. Takes a _shaft_ from above or below.",
   "block.comedymonkeysaddons.compact_gyroscope.tooltip.condition2": "In the Crafting Grid",
