@@ -35,13 +35,18 @@ public final class BatteryStore implements IEnergyStorage {
 	/** The last tick its Batteries ran (a gap: they were away, and its record ran it meanwhile). */
 	long ran = Long.MIN_VALUE;
 
+	/** Each member's place in the order, for its share. */
+	private final java.util.Map<BatteryBlockEntity, Integer> index = new java.util.IdentityHashMap<>();
+
 	BatteryStore(List<BatteryBlockEntity> members, boolean tower, long capacity, long perTick) {
 		this.members = members;
 		this.tower = tower;
 		this.capacity = capacity;
 		this.perTick = perTick;
-		for (BatteryBlockEntity be : members)
-			energy += be.charge;
+		for (int i = 0; i < members.size(); i++) {
+			energy += members.get(i).charge;
+			index.put(members.get(i), i);
+		}
 	}
 
 	boolean valid() {
@@ -64,8 +69,12 @@ public final class BatteryStore implements IEnergyStorage {
 
 	/** A member's share: the store split evenly, the odd FE to the first members (in position order). */
 	int shareOf(BatteryBlockEntity be) {
-		int i = members.indexOf(be);
-		return i < 0 ? be.charge : share(i);
+		Integer i = index.get(be);
+		return i == null ? be.charge : share(i);
+	}
+
+	boolean contains(BatteryBlockEntity be) {
+		return index.containsKey(be);
 	}
 
 	private int share(int i) {
@@ -102,6 +111,16 @@ public final class BatteryStore implements IEnergyStorage {
 
 	long perTick() {
 		return perTick;
+	}
+
+	/** What was drawn from it and not used, back: past its capacity and rate, since it was its own. */
+	int refund(int fe) {
+		if (!valid || fe <= 0)
+			return 0;
+		energy += fe;
+		outNow = Math.max(0, outNow - fe);
+		changed();
+		return fe;
 	}
 
 	/** Lightning and the like: in, past the rate, up to full (what doesn't fit is lost). */

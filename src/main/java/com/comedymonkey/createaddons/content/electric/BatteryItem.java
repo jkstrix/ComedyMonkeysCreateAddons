@@ -32,10 +32,13 @@ public class BatteryItem extends BlockItem {
 		super(block, properties);
 	}
 
+	/** Filling a layer: the Batteries it places don't fill one of their own. */
+	private static boolean filling;
+
 	@Override
 	public InteractionResult place(BlockPlaceContext context) {
 		InteractionResult result = super.place(context);
-		if (result.consumesAction() && !context.getLevel().isClientSide)
+		if (result.consumesAction() && !context.getLevel().isClientSide && !filling)
 			fillLayer(context);
 		return result;
 	}
@@ -57,24 +60,35 @@ public class BatteryItem extends BlockItem {
 				BlockPos p = centre.offset(dx, 0, dz);
 				if (p.equals(placed))
 					continue;
-				if (!level.getBlockState(p).canBeReplaced())
-					return;
 				rest.add(p);
 			}
 		Player player = context.getPlayer();
 		ItemStack stack = context.getItemInHand();
-		boolean creative = player != null && player.getAbilities().instabuild;
+		if (player == null || player.getItemInHand(context.getHand()) != stack)
+			return;
+		boolean creative = player.getAbilities().instabuild;
 		if (!creative && stack.getCount() < rest.size())
 			return;
-		// they face the tower's way, as the one placed does when it re-forms
-		BlockState state = getBlock().defaultBlockState().setValue(BatteryBlock.FACING, tower.towerFacing());
-		for (BlockPos p : rest) {
-			level.setBlock(p, BatteryBlock.joins(state, level, p), Block.UPDATE_ALL_IMMEDIATE);
-			BlockItem.updateCustomBlockEntityTag(level, player, p, stack);
-			if (level.getBlockEntity(p) instanceof BatteryBlockEntity be)
-				be.applyComponentsFromItemStack(stack);
-			if (!creative)
-				stack.shrink(1);
+		// all of the layer or none: clear, the player allowed to build there, nobody standing in it
+		BlockState state = getBlock().defaultBlockState();
+		for (BlockPos p : rest)
+			if (!level.getBlockState(p).canBeReplaced() || !level.mayInteract(player, p) || !player.mayUseItemAt(p, face, stack)
+				|| !level.isUnobstructed(state, p, net.minecraft.world.phys.shapes.CollisionContext.of(player)))
+				return;
+		// each placed the way a player places a block (so protection and claims are asked), against the tower's layer
+		filling = true;
+		try {
+			for (BlockPos p : rest) {
+				if (stack.isEmpty())
+					break;
+				BlockPos against = p.relative(face.getOpposite());
+				net.minecraft.world.phys.Vec3 hit = net.minecraft.world.phys.Vec3.atCenterOf(against).add(face.getStepX() * 0.5, face.getStepY() * 0.5,
+					face.getStepZ() * 0.5);
+				stack.useOn(new net.minecraft.world.item.context.UseOnContext(player, context.getHand(),
+					new net.minecraft.world.phys.BlockHitResult(hit, face, against, false)));
+			}
+		} finally {
+			filling = false;
 		}
 	}
 

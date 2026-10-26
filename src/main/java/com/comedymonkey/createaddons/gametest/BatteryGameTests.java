@@ -434,9 +434,12 @@ public final class BatteryGameTests {
 		});
 	}
 
-	/** A tower that re-forms with the same master keeps its spans; one that doesn't drops them (the post lets go too). */
+	/**
+	 * A tower's cables stay up when it re-forms: on the same master (its top layer broken), or on the one above (its
+	 * bottom layer broken), the post's end moved over with them.
+	 */
 	@GameTest(template = COURSE, timeoutTicks = 40)
-	public static void spansStayOrComeDown(GameTestHelper helper) {
+	public static void spansFollowTheTower(GameTestHelper helper) {
 		BlockPos c = new BlockPos(1, 1, 2), post = new BlockPos(9, 1, 3);
 		batteries(helper, c, 3, 5, 3, 0);
 		post(helper, post);
@@ -450,14 +453,117 @@ public final class BatteryGameTests {
 		helper.runAtTickTime(8, () -> {
 			if (be(helper, master(c)).spans().size() != 1 || ((LinePostBlockEntity) helper.getBlockEntity(post)).spans().size() != 1)
 				helper.fail("the span came down when the tower re-formed on the same master");
-			// the bottom layer: what re-forms stands higher, on another master
+			// the bottom layer: what re-forms stands higher, on the master above
 			helper.setBlock(c.offset(0, 0, 2), Blocks.AIR);
 		});
 		helper.runAtTickTime(11, () -> {
-			if (!((LinePostBlockEntity) helper.getBlockEntity(post)).spans().isEmpty())
-				helper.fail("the post still holds a span to a tower that's gone");
-			if (!be(helper, master(c).above()).isMaster())
+			BatteryBlockEntity up = be(helper, master(c).above());
+			if (!up.isMaster())
 				helper.fail("the upper run didn't re-form");
+			LinePostBlockEntity p = (LinePostBlockEntity) helper.getBlockEntity(post);
+			if (up.spans().size() != 1 || p.spans().size() != 1 || !p.spans().get(0).equals(up.spans().get(0).reversed()))
+				helper.fail("the span didn't move to the new master (tower " + up.spans() + ", post " + p.spans() + ")");
+			helper.succeed();
+		});
+	}
+
+	/** Taken by a contraption (its block entity first, then the block): the rest of the tower is plain, nothing lost. */
+	@GameTest(template = COURSE, timeoutTicks = 30)
+	public static void contraptionTakesATowerBlock(GameTestHelper helper) {
+		BlockPos c = new BlockPos(2, 1, 2), taken = c.offset(2, 1, 2);
+		batteries(helper, c, 3, 3, 3, 10_000);
+		helper.runAtTickTime(5, () -> {
+			BlockPos abs = helper.absolutePos(taken);
+			helper.getLevel().removeBlockEntity(abs);
+			helper.getLevel().setBlock(abs, Blocks.AIR.defaultBlockState(), 2 | 16 | 64);
+		});
+		helper.runAtTickTime(8, () -> {
+			for (int y = 0; y < 3; y++)
+				for (int z = 0; z < 3; z++)
+					for (int x = 0; x < 3; x++)
+						if (formed(helper, c.offset(x, y, z)))
+							helper.fail("still formed at " + c.offset(x, y, z));
+			long left = total(helper, c, 3, 3, 3);
+			if (left != 26 * 10_000L)
+				helper.fail("left " + left + ", not 26 Batteries' worth");
+			helper.succeed();
+		});
+	}
+
+	/** Two towers stacked on one footprint: breaking the lower one leaves the upper one as it is. */
+	@GameTest(template = COURSE, timeoutTicks = 60)
+	public static void breakingOneStackedTowerLeavesTheOther(GameTestHelper helper) {
+		BlockPos c = new BlockPos(2, 1, 2);
+		batteries(helper, c, 3, 12, 3, 0);
+		helper.runAtTickTime(5, () -> {
+			if (be(helper, master(c).above(9)).height() != 3)
+				helper.fail("12 high isn't 9 and 3");
+			helper.setBlock(c.offset(1, 5, 1), Blocks.AIR);
+		});
+		helper.runAtTickTime(8, () -> {
+			if (!be(helper, master(c).above(9)).isMaster() || be(helper, master(c).above(9)).height() != 3)
+				helper.fail("the upper tower was taken apart");
+			if (be(helper, master(c)).height() != 5 || formed(helper, c.offset(0, 6, 0)))
+				helper.fail("the lower tower didn't re-form 5 high with the layers above the break plain");
+			helper.succeed();
+		});
+	}
+
+	/** Filling a layer never walls anyone in: with a cow standing in it (a player is the same), only the one Battery goes down. */
+	@GameTest(template = COURSE, timeoutTicks = 30)
+	public static void fillingALayerWallsNobodyIn(GameTestHelper helper) {
+		BlockPos c = new BlockPos(2, 1, 2), top = c.offset(1, 2, 1), corner = c.offset(0, 3, 0);
+		batteries(helper, c, 3, 3, 3, 0);
+		ItemStack stack = new ItemStack(ModBlocks.BATTERY.get().asItem(), 9);
+		helper.runAtTickTime(5, () -> {
+			helper.spawn(net.minecraft.world.entity.EntityType.COW, corner);
+			net.minecraft.world.entity.player.Player player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+			player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, stack);
+			BlockPos abs = helper.absolutePos(top);
+			net.minecraft.world.phys.BlockHitResult hit = new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(abs).add(0, 0.5, 0),
+				Direction.UP, abs, false);
+			((net.minecraft.world.item.BlockItem) stack.getItem()).place(new net.minecraft.world.item.context.BlockPlaceContext(player,
+				net.minecraft.world.InteractionHand.MAIN_HAND, stack, hit));
+		});
+		helper.runAtTickTime(8, () -> {
+			if (!helper.getBlockState(corner).isAir())
+				helper.fail("a Battery was put where the cow stands");
+			if (stack.getCount() != 8)
+				helper.fail(stack.getCount() + " left, not 8: the layer was filled round the cow");
+			helper.succeed();
+		});
+	}
+
+	/** A tower with one block away (its master running): it can't run live, so it runs on paper meanwhile. */
+	@GameTest(template = COURSE, timeoutTicks = 240)
+	public static void partlyAwayTowerRunsOnPaper(GameTestHelper helper) {
+		BlockPos c = new BlockPos(1, 1, 2), post = new BlockPos(9, 1, 3), w = post.east(), m = post.east(2);
+		batteries(helper, c, 3, 3, 3, 100_000);
+		post(helper, post);
+		LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), w, Direction.DOWN);
+		LineGameTests.motor(helper, m);
+		BlockPos key = helper.absolutePos(master(c)), far = helper.absolutePos(c.offset(2, 2, 2));
+		helper.runAtTickTime(5, () -> {
+			LineGameTests.relink(helper, w);
+			Span s = new Span(0, post.subtract(master(c)), 0, LineTier.COPPER, null, false, 3);
+			be(helper, master(c)).addSpan(s);
+			((LinePostBlockEntity) helper.getBlockEntity(post)).addSpan(s.reversed());
+		});
+		double[] before = new double[1];
+		helper.runAtTickTime(80, () -> {
+			before[0] = com.comedymonkey.createaddons.content.line.PowerGridTesting.storeRecord(helper.getLevel(), key);
+			if (before[0] <= 0)
+				helper.fail("the tower kept no record");
+			com.comedymonkey.createaddons.content.line.PowerGridTesting.away(helper.getLevel(), far, true, 200);
+			helper.setBlock(m, Blocks.AIR);
+			LineGameTests.motor(helper, m);
+			LineGameTests.relink(helper, w);
+		});
+		helper.runAtTickTime(160, () -> {
+			if (LineGameTests.stored(helper, m) <= 0)
+				helper.fail("the motor got nothing from the part-away tower");
+			if (com.comedymonkey.createaddons.content.line.PowerGridTesting.storeRecord(helper.getLevel(), key) >= before[0])
+				helper.fail("the record didn't go down");
 			helper.succeed();
 		});
 	}

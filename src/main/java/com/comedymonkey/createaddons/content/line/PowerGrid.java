@@ -98,6 +98,11 @@ public final class PowerGrid extends SavedData {
 		java.util.Collection<BlockPos> storeBlocks();
 	}
 
+	/** A store that takes back what was drawn from it and not used, past its capacity and rate (it was its own). */
+	public interface Refund {
+		int refund(int fe);
+	}
+
 	/**
 	 * A shared store's record, for running it on paper while none of it is running: what it holds, what it can hold, its
 	 * rate a tick, and its blocks. While it runs it writes its state here every tick; once all of it is away the network
@@ -107,6 +112,8 @@ public final class PowerGrid extends SavedData {
 		double energy, seen;
 		long cap, perTick;
 		List<BlockPos> members = List.of();
+		/** It runs only whole (an Industrial Battery): while any of it isn't loaded, it's on paper. */
+		boolean whole;
 		/** This tick's moves, against its rate (not saved). */
 		private long tick = Long.MIN_VALUE;
 		private double inNow, outNow;
@@ -115,6 +122,10 @@ public final class PowerGrid extends SavedData {
 
 		public double energy() {
 			return energy;
+		}
+
+		public boolean whole() {
+			return whole;
 		}
 	}
 
@@ -416,6 +427,7 @@ public final class PowerGrid extends SavedData {
 				p.seen = c.getDouble("Seen");
 				p.cap = c.getLong("Cap");
 				p.perTick = c.getLong("PerTick");
+				p.whole = c.getBoolean("Whole");
 				List<BlockPos> members = new ArrayList<>();
 				for (long mp : c.getLongArray("Members"))
 					members.add(BlockPos.of(mp));
@@ -472,6 +484,8 @@ public final class PowerGrid extends SavedData {
 				c.putDouble("Seen", p.seen);
 				c.putLong("Cap", p.cap);
 				c.putLong("PerTick", p.perTick);
+				if (p.whole)
+					c.putBoolean("Whole", true);
 				c.put("Members", new LongArrayTag(p.members.stream().mapToLong(BlockPos::asLong).toArray()));
 				stores.add(c);
 			}
@@ -801,7 +815,8 @@ public final class PowerGrid extends SavedData {
 	 * A shared store has run this tick: its record as it stands, if a line meets any block of it ({@code members} is
 	 * read only when {@code refresh}, or the record is new). Records of other stores its blocks were in go.
 	 */
-	public void noteStore(BlockPos key, java.util.function.Supplier<List<BlockPos>> members, long energy, long cap, long perTick, boolean refresh) {
+	public void noteStore(BlockPos key, java.util.function.Supplier<List<BlockPos>> members, long energy, long cap, long perTick, boolean whole,
+						  boolean refresh) {
 		StorePaper p = records.stores.get(key);
 		// a new record only on a refresh (once a second): a store no line meets isn't looked at every tick
 		if (p == null && !refresh)
@@ -835,6 +850,7 @@ public final class PowerGrid extends SavedData {
 		p.energy = p.seen = energy;
 		p.cap = cap;
 		p.perTick = perTick;
+		p.whole = whole;
 	}
 
 	/**
@@ -906,7 +922,18 @@ public final class PowerGrid extends SavedData {
 	/** A record as something the network fills and draws, at the store's rate a tick (a second's worth when only asked). */
 	IEnergyStorage paperStore(StorePaper p, ServerLevel level) {
 		if (p.view == null)
-			p.view = new IEnergyStorage() {
+			p.view = new RefundingStorage() {
+				@Override
+				public int refund(int fe) {
+					if (fe <= 0)
+						return 0;
+					roll();
+					p.energy += fe;
+					p.outNow = Math.max(0, p.outNow - fe);
+					records.setDirty();
+					return fe;
+				}
+
 				private void roll() {
 					long now = level.getGameTime();
 					if (p.tick != now) {
@@ -963,6 +990,9 @@ public final class PowerGrid extends SavedData {
 			};
 		return p.view;
 	}
+
+	/** An energy store that takes refunds too. */
+	public interface RefundingStorage extends IEnergyStorage, Refund {}
 
 	/** Takes up to max FE from a record's store this tick (or only says what it would). */
 	int draw(Paper p, int max, long now, boolean simulate, ServerLevel level) {

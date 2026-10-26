@@ -511,6 +511,31 @@ public final class PowerLines {
 		return out;
 	}
 
+	/**
+	 * The shared store a line meets at t, from its record, if it's on paper: all of it away, or (an Industrial Battery,
+	 * which runs only whole) not all of it running. Looked up again each tick: once it runs again its record is taken
+	 * back, and gives nothing more.
+	 */
+	private boolean paperStore(BlockPos t, int c, Device d, Map<BlockPos, StoreAt> stores) {
+		BlockPos rk = grid.storeKeyFor(t);
+		PowerGrid.StorePaper rec = rk == null ? null : grid.storePaper(rk);
+		if (rec == null || !onPaper(rk, rec))
+			return false;
+		StoreAt s = stores.computeIfAbsent(rk, k -> new StoreAt(() -> {
+			PowerGrid.StorePaper r = grid.storePaper(k);
+			return r != null && onPaper(k, r) ? grid.paperStore(r, level) : null;
+		}, d.key()));
+		if (!s.circuits.contains(c))
+			s.circuits.add(c);
+		return true;
+	}
+
+	private boolean onPaper(BlockPos key, PowerGrid.StorePaper r) {
+		if (grid.allAway(r, level))
+			return true;
+		return r.whole() && !(PowerGrid.running(level, key) && level.getBlockEntity(key) instanceof PowerGrid.Store s && s.storeKey() != null);
+	}
+
 	/** A shared store's key at block t, if it's one (loaded). */
 	@Nullable
 	private BlockPos storeKeyAt(BlockPos t) {
@@ -982,21 +1007,14 @@ public final class PowerLines {
 				}
 				if (!PowerGrid.running(level, t)) {
 					// a shared store all of which is away: on paper, from its record
-					BlockPos rk = grid.storeKeyFor(t);
-					PowerGrid.StorePaper rec = rk == null ? null : grid.storePaper(rk);
-					if (rec != null && grid.allAway(rec, level)) {
-						// looked up each time: once any of it runs again the record is taken back, and gives nothing more
-						StoreAt s = stores.computeIfAbsent(rk, k -> new StoreAt(() -> {
-							PowerGrid.StorePaper r = grid.storePaper(k);
-							return r != null && grid.allAway(r, level) ? grid.paperStore(r, level) : null;
-						}, d.key()));
-						if (!s.circuits.contains(c))
-							s.circuits.add(c);
-					}
+					paperStore(t, c, d, stores);
 					continue;
 				}
 				// a store shared between blocks or circuits: once, below
 				BlockPos sk = storeKeyAt(t);
+				// an Industrial Battery whose blocks aren't all loaded can't be worked out: on paper meanwhile
+				if (sk == null && level.getBlockEntity(t) instanceof PowerGrid.Store && paperStore(t, c, d, stores))
+					continue;
 				if (sk != null) {
 					grid.storeFace(t, sk);
 					StoreAt s = stores.computeIfAbsent(sk.immutable(), k -> new StoreAt(d.energy()::getCapability, d.key()));
@@ -1260,7 +1278,10 @@ public final class PowerLines {
 					pool[c] -= grid.giveBack(s.paper(), back);
 				} else {
 					IEnergyStorage e = s.energy().get();
-					if (e != null && e.canReceive())
+					// a store takes back its own, past what it could take in (a bank holding more than it can)
+					if (e instanceof PowerGrid.Refund r)
+						pool[c] -= r.refund((int) back);
+					else if (e != null && e.canReceive())
 						pool[c] -= e.receiveEnergy((int) back, false);
 				}
 			}

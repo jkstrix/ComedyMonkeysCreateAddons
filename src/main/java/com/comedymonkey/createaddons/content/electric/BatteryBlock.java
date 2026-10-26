@@ -66,6 +66,10 @@ public class BatteryBlock extends Block implements IBE<BatteryBlockEntity>, IWre
 		return side != null && side.getAxis().isHorizontal() && !state.getValue(FORMED);
 	}
 
+	static boolean isFormed(BlockState state) {
+		return state.getBlock() instanceof BatteryBlock && state.getValue(FORMED);
+	}
+
 	/** A plain Battery: it joins those beside it. */
 	static boolean isPlain(BlockState state) {
 		return state.getBlock() instanceof BatteryBlock && !state.getValue(FORMED);

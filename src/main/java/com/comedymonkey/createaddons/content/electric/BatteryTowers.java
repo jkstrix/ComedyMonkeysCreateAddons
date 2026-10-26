@@ -121,18 +121,25 @@ public final class BatteryTowers {
 		BlockState state = level.getBlockState(pos);
 		if (!(state.getBlock() instanceof BatteryBlock) || !(level.getBlockEntity(pos) instanceof BatteryBlockEntity be))
 			return;
-		if (state.getValue(BatteryBlock.FORMED)) {
-			BatteryBlockEntity m = be.masterEntity();
-			if (m != null && be.tile() != null && java.util.Objects.equals(towerOf(m), towerOf(be)))
-				return;
-			be.setTower(null, 0, state.getValue(BatteryBlock.FACING));
-			be.forgetSpans();
-			level.setBlock(pos, BatteryBlock.joins(state.setValue(BatteryBlock.FORMED, false), level, pos), 3);
-			state = level.getBlockState(pos);
-		}
-		Direction facing = state.getValue(BatteryBlock.FACING);
-		// each footprint it could complete, lowest corner first; once one forms it's taken
 		try {
+			if (state.getValue(BatteryBlock.FORMED)) {
+				// its tower stands as it was: nothing to do (a check after loading, or after something went missing)
+				if (intact(level, be))
+					return;
+				// what's left of its tower is plain again, and so is it
+				Tower t = towerOf(be);
+				if (t != null)
+					unform(level, t, null);
+				if (be.master != null || level.getBlockState(pos).getValue(BatteryBlock.FORMED)) {
+					be.dissolveStore();
+					be.setTower(null, 0, state.getValue(BatteryBlock.FACING));
+					be.forgetSpans();
+					level.setBlock(pos, BatteryBlock.joins(level.getBlockState(pos).setValue(BatteryBlock.FORMED, false), level, pos), 3);
+				}
+				state = level.getBlockState(pos);
+			}
+			Direction facing = state.getValue(BatteryBlock.FACING);
+			// each footprint it could complete, lowest corner first; once one forms it's taken
 			for (int x0 = pos.getX() - 2; x0 <= pos.getX(); x0++)
 				for (int z0 = pos.getZ() - 2; z0 <= pos.getZ(); z0++)
 					if (column(level, x0, z0, pos.getY(), facing, null))
@@ -140,6 +147,24 @@ public final class BatteryTowers {
 		} finally {
 			finish(level);
 		}
+	}
+
+	/**
+	 * A formed block's tower stands as it formed: every block of it there (as far as it's loaded: it never loads a
+	 * chunk to look), formed in this tower, where it formed (not moved here by a contraption).
+	 */
+	private static boolean intact(ServerLevel level, BatteryBlockEntity be) {
+		// (formed before blocks noted where: taken as not moved)
+		if (be.master == null || be.height < MIN || be.formedAt != null && !be.getBlockPos().equals(be.formedAt))
+			return false;
+		for (BlockPos p : blocks(be.master, be.height, be.towerFacing)) {
+			if (!level.isLoaded(p))
+				continue;
+			if (!(level.getBlockEntity(p) instanceof BatteryBlockEntity o) || !BatteryBlock.isFormed(o.getBlockState()) || !be.master.equals(o.master)
+				|| o.height != be.height || o.towerFacing != be.towerFacing || o.formedAt != null && !p.equals(o.formedAt))
+				return false;
+		}
+		return true;
 	}
 
 	/** A layer of the footprint every block of which is a Battery, plain or in a tower on this same footprint. */
@@ -210,7 +235,8 @@ public final class BatteryTowers {
 	private static Set<Tower> towersIn(ServerLevel level, int x0, int z0, int bottom, int top) {
 		Set<Tower> out = new LinkedHashSet<>();
 		for (int y = bottom; y <= top; y++)
-			if (level.getBlockEntity(new BlockPos(x0 + 1, y, z0 + 1)) instanceof BatteryBlockEntity be && be.isFormed()) {
+			if (level.isLoaded(new BlockPos(x0 + 1, y, z0 + 1)) && level.getBlockEntity(new BlockPos(x0 + 1, y, z0 + 1)) instanceof BatteryBlockEntity be
+				&& be.isFormed()) {
 				Tower t = towerOf(be);
 				if (t != null)
 					out.add(t);
@@ -235,27 +261,54 @@ public final class BatteryTowers {
 		List<com.comedymonkey.createaddons.content.line.Span> back = LOOSE.remove(master);
 		if (back != null && level.getBlockEntity(master) instanceof BatteryBlockEntity m)
 			m.giveSpans(back);
+		// a tower on this footprint that came apart with another master (one layer up or down): its cables move over
+		for (BlockPos old : new ArrayList<>(LOOSE.keySet()))
+			if (old.getX() == master.getX() && old.getZ() == master.getZ() && old.getY() >= t.bottom() - MAX && old.getY() <= t.top()
+				&& level.getBlockEntity(master) instanceof BatteryBlockEntity m)
+				moveSpans(level, old, m, LOOSE.remove(old));
 		com.comedymonkey.createaddons.content.line.PowerLines.of(level).changed(master);
 		level.blockEvent(master, level.getBlockState(master).getBlock(), EVENT_FORM, 0);
 		play(level, Sound.FORM, middle(t));
 		ModAdvancements.awardNearby(level, BlockPos.containing(middle(t)), ModAdvancements.INDUSTRIAL_BATTERY_FORMED, ItemStack.EMPTY, t.height());
 	}
 
+	/** Spans that were on a master at {@code from} go on {@code to}, the posts at their far ends told. */
+	private static void moveSpans(ServerLevel level, BlockPos from, BatteryBlockEntity to, List<com.comedymonkey.createaddons.content.line.Span> spans) {
+		List<com.comedymonkey.createaddons.content.line.Span> moved = new ArrayList<>();
+		for (com.comedymonkey.createaddons.content.line.Span s : spans) {
+			BlockPos far = from.offset(s.offset());
+			com.comedymonkey.createaddons.content.line.SpanHolder post =
+				level.isLoaded(far) ? com.comedymonkey.createaddons.content.line.SpanHolder.at(level, far) : null;
+			if (post == null || !post.removeSpan(s.reversed())) {
+				// the post isn't loaded or doesn't hold it now: it comes down (the post's end pays)
+				LOOSE.computeIfAbsent(from, k -> new ArrayList<>()).add(s);
+				continue;
+			}
+			com.comedymonkey.createaddons.content.line.Span m = new com.comedymonkey.createaddons.content.line.Span(s.from(), far.subtract(to.getBlockPos()),
+				s.to(), s.tier(), s.dye(), s.owner(), s.wires());
+			post.addSpan(m.reversed());
+			moved.add(m);
+		}
+		if (!moved.isEmpty())
+			to.giveSpans(moved);
+	}
+
 	/** Back to plain Batteries, each with its share ({@code without}: a block that's going, already given its share). */
 	private static void unform(ServerLevel level, Tower t, @Nullable BlockPos without) {
 		BlockPos master = t.master();
 		List<BlockPos> blocks = blocks(master, t.height(), t.facing());
-		if (level.getBlockEntity(master) instanceof BatteryBlockEntity m) {
+		if (level.isLoaded(master) && level.getBlockEntity(master) instanceof BatteryBlockEntity m) {
 			List<com.comedymonkey.createaddons.content.line.Span> off = m.takeSpans();
 			if (!off.isEmpty())
 				LOOSE.computeIfAbsent(master, k -> new ArrayList<>()).addAll(off);
 		}
 		com.comedymonkey.createaddons.content.line.PowerLines.of(level).changed(master);
+		// (never loading a chunk: a block of it left unloaded checks its tower when it loads, and goes plain then)
 		for (BlockPos p : blocks)
-			if (level.getBlockEntity(p) instanceof BatteryBlockEntity be && be.isFormed() && master.equals(be.master))
+			if (level.isLoaded(p) && level.getBlockEntity(p) instanceof BatteryBlockEntity be && be.isFormed() && master.equals(be.master))
 				be.dissolveStore();
 		for (BlockPos p : blocks) {
-			if (p.equals(without) || !(level.getBlockEntity(p) instanceof BatteryBlockEntity be) || !master.equals(be.master))
+			if (p.equals(without) || !level.isLoaded(p) || !(level.getBlockEntity(p) instanceof BatteryBlockEntity be) || !master.equals(be.master))
 				continue;
 			BlockState s = level.getBlockState(p);
 			be.setTower(null, 0, s.getValue(BatteryBlock.FACING));
@@ -265,6 +318,8 @@ public final class BatteryTowers {
 		}
 		// bus bars now that they're plain (each saw its neighbours still formed when it changed)
 		for (BlockPos p : blocks) {
+			if (!level.isLoaded(p))
+				continue;
 			BlockState s = level.getBlockState(p);
 			if (!p.equals(without) && s.getBlock() instanceof BatteryBlock) {
 				BlockState joined = BatteryBlock.joins(s, level, p);
@@ -281,7 +336,7 @@ public final class BatteryTowers {
 	 * can (only the switch-in is heard then). Carried off by a contraption, the rest is going too: nothing re-forms.
 	 */
 	static void removed(ServerLevel level, BlockPos pos, BlockState state, BatteryBlockEntity be, boolean moving) {
-		Tower t = state.getValue(BatteryBlock.FORMED) ? towerOf(be) : null;
+		Tower t = state.getBlock() instanceof BatteryBlock && state.getValue(BatteryBlock.FORMED) ? towerOf(be) : null;
 		be.dissolveStore();
 		if (t == null)
 			return;
@@ -290,7 +345,7 @@ public final class BatteryTowers {
 			be.setTower(null, 0, state.getValue(BatteryBlock.FACING));
 			if (moving)
 				return;
-			// the runs left below and above the broken layer (with any tower stacked on the same footprint)
+			// the runs left below and above the broken layer, within this tower (one stacked on it stays as it is)
 			int y = pos.getY();
 			int[] below = run(level, t, y - 1, -1, pos), above = run(level, t, y + 1, 1, pos);
 			int[] keep = above[1] - above[0] > below[1] - below[0] ? above : below;
@@ -305,9 +360,9 @@ public final class BatteryTowers {
 	/** From layer y going one way, the full layers on the tower's footprint: {low, high} (empty if high < low). */
 	private static int[] run(ServerLevel level, Tower t, int y, int step, BlockPos without) {
 		int end = y;
-		if (!fillable(level, t.x0(), t.z0(), y, without))
+		if (y < t.bottom() || y > t.top() || !fillable(level, t.x0(), t.z0(), y, without))
 			return step < 0 ? new int[] {y + 1, y} : new int[] {y, y - 1};
-		while (fillable(level, t.x0(), t.z0(), end + step, without))
+		while (end + step >= t.bottom() && end + step <= t.top() && fillable(level, t.x0(), t.z0(), end + step, without))
 			end += step;
 		return step < 0 ? new int[] {end, y} : new int[] {y, end};
 	}

@@ -66,6 +66,9 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 	BlockPos master;
 	int height;
 	Direction towerFacing = Direction.NORTH;
+	/** Where it stood when it formed: put down anywhere else (moved by a contraption), its tower isn't there. */
+	@Nullable
+	BlockPos formedAt;
 	/** A master's spans of Power Line, from its four insulators (front-left, front-right, back-left, back-right) to posts. */
 	private final List<Span> spans = new ArrayList<>();
 	/** Server: what's on each side, for pushing into machines. */
@@ -87,17 +90,29 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 	private float drawn = -1, drawnLast;
 
 	/** What machines and cables see: the store, whatever it is at the moment (nothing while it can't be worked out). */
-	private final IEnergyStorage view = new IEnergyStorage() {
+	private final IEnergyStorage view = new com.comedymonkey.createaddons.content.line.PowerGrid.RefundingStorage() {
+		/** Not while this block isn't running (its chunk loaded but still): its store may be on paper then. */
+		@Nullable
+		private BatteryStore live() {
+			return com.comedymonkey.createaddons.content.line.PowerGrid.givesHere(level, worldPosition) ? store() : null;
+		}
+
 		@Override
 		public int receiveEnergy(int max, boolean simulate) {
-			BatteryStore s = store();
+			BatteryStore s = live();
 			return s == null ? 0 : s.receiveEnergy(max, simulate);
 		}
 
 		@Override
 		public int extractEnergy(int max, boolean simulate) {
-			BatteryStore s = store();
+			BatteryStore s = live();
 			return s == null ? 0 : s.extractEnergy(max, simulate);
+		}
+
+		@Override
+		public int refund(int fe) {
+			BatteryStore s = store();
+			return s == null ? 0 : s.refund(fe);
 		}
 
 		@Override
@@ -206,6 +221,7 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 		this.master = master == null ? null : master.immutable();
 		this.height = master == null ? 0 : height;
 		this.towerFacing = facing;
+		this.formedAt = master == null ? null : worldPosition.immutable();
 		SaveMark.mark(this);
 	}
 
@@ -382,7 +398,7 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 			return store;
 		if (getBlockState().getValue(BatteryBlock.FORMED) && !isMaster()) {
 			BatteryBlockEntity m = masterEntity();
-			if (m != null && m.store != null && m.store.valid() && m.store.members.contains(this))
+			if (m != null && m.store != null && m.store.valid() && m.store.contains(this))
 				return m.store;
 		}
 		return null;
@@ -458,9 +474,14 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 	private BatteryStore buildTower() {
 		List<BatteryBlockEntity> found = new ArrayList<>();
 		for (BlockPos p : BatteryTowers.blocks(master, height, towerFacing)) {
-			if (!level.isLoaded(p) || !(level.getBlockEntity(p) instanceof BatteryBlockEntity be) || be.isRemoved()
-				|| !be.isFormed() || !master.equals(be.master))
+			if (!level.isLoaded(p) || com.comedymonkey.createaddons.content.line.PowerGrid.away(level, p))
 				return null;
+			if (!(level.getBlockEntity(p) instanceof BatteryBlockEntity be) || be.isRemoved() || !be.isFormed() || !master.equals(be.master)
+				|| be.formedAt != null && !p.equals(be.formedAt)) {
+				// all of it here, and something's wrong (a block gone without its tower knowing): worked out again
+				level.scheduleTick(worldPosition, getBlockState().getBlock(), 1);
+				return null;
+			}
 			found.add(be);
 		}
 		// as much as its cables carry: no rate of its own
@@ -496,6 +517,9 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 		super.onLoad();
 		if (level != null && level.isClientSide && master != null)
 			clientTowerChanged.accept(this);
+		// a formed block checks its tower is still here (part of it may have gone while this chunk was unloaded)
+		if (level instanceof ServerLevel && BatteryBlock.isFormed(getBlockState()))
+			level.scheduleTick(worldPosition, getBlockState().getBlock(), 1);
 		if (level instanceof ServerLevel server && master != null && worldPosition.equals(master)) {
 			PowerLines.of(server).loaded(worldPosition);
 			// a tick later, once the posts have loaded too
@@ -508,6 +532,18 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 			if (level.isLoaded(q) && level.getBlockEntity(q) instanceof BatteryBlockEntity be && BatteryBlock.isPlain(be.getBlockState()))
 				be.dissolveStore();
 		}
+	}
+
+	/**
+	 * Gone from the world (not unloaded): broken, or taken by a contraption or Carry On, which take the block entity
+	 * before the block, so the block can't do it. Its tower comes apart, nothing re-forming (the rest may be going too);
+	 * after a break the block has done it already.
+	 */
+	@Override
+	public void remove() {
+		super.remove();
+		if (level instanceof ServerLevel server)
+			BatteryTowers.removed(server, worldPosition, getBlockState(), this, true);
 	}
 
 	/** Broken or unloaded: what it was part of goes on without it (it keeps its share). */
@@ -600,7 +636,7 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 						for (BatteryBlockEntity be : noted.members)
 							blocks.add(be.worldPosition);
 						return blocks;
-					}, s.energy(), s.capacity(), s.perTick(), Math.floorMod(key.hashCode() + now, 20) == 0);
+					}, s.energy(), s.capacity(), s.perTick(), s.tower, Math.floorMod(key.hashCode() + now, 20) == 0);
 		}
 		if (!state.getValue(BatteryBlock.FORMED))
 			push(s);
@@ -628,7 +664,7 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 			int taken = s.extractEnergy(can, false);
 			int sent = target.receiveEnergy(taken, false);
 			if (sent < taken)
-				s.add(taken - sent);
+				s.refund(taken - sent);
 		}
 	}
 
@@ -646,7 +682,10 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 		shownSize = s.members.size();
 		if (now % 10 != 0)
 			return;
-		if (Math.abs(fill - syncedFill) >= 1 / 256f || flow != syncedFlow || flow != 0 && now % 40 == 0) {
+		// a tower's master shows a smooth column; a Battery's tubes go in eighths (and the goggles' figures, now and then)
+		boolean changed = s.tower ? Math.abs(fill - syncedFill) >= 1 / 256f || flow != 0 && now % 40 == 0
+			: Math.round(fill * 8) != Math.round(syncedFill * 8) || flow != 0 && now % 100 == 0;
+		if (syncedFill < 0 || changed || flow != syncedFlow) {
 			syncedFill = fill;
 			syncedFlow = flow;
 			sendData();
@@ -729,6 +768,8 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 			tag.putLong("Master", master.asLong());
 			tag.putInt("Height", height);
 			tag.putString("TowerFacing", towerFacing.getSerializedName());
+			if (formedAt != null)
+				tag.putLong("FormedAt", formedAt.asLong());
 		}
 		if (!spans.isEmpty()) {
 			ListTag list = new ListTag();
@@ -757,9 +798,11 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 			height = tag.getInt("Height");
 			Direction f = Direction.byName(tag.getString("TowerFacing"));
 			towerFacing = f == null || f.getAxis().isVertical() ? Direction.NORTH : f;
+			formedAt = tag.contains("FormedAt") ? BlockPos.of(tag.getLong("FormedAt")) : null;
 		} else {
 			master = null;
 			height = 0;
+			formedAt = null;
 		}
 		List<Span> before = clientPacket ? new ArrayList<>(spans) : List.of();
 		spans.clear();
