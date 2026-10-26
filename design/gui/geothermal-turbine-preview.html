@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Geothermal Turbine screen</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+<style>
+  :root { --bg: #23262a; --fg: #d6d8d4; --muted: #8f918b; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, sans-serif; padding: 24px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  h2 { font-size: 15px; margin: 0 0 8px; color: var(--muted); font-weight: 500; }
+  p { margin: 0 0 16px; max-width: 75ch; color: var(--muted); }
+  .row { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 28px; }
+  /* each screen at GUI scale 3 */
+  .screen { position: relative; width: calc(224px * 3); background-size: calc(256px * 3) auto; background-repeat: no-repeat; image-rendering: pixelated; }
+  .turbine { height: calc(116px * 3); background-image: url(geothermal_turbine.png); }
+  .motor { height: calc(132px * 3); background-image: url(electric_motor_ref.png); }
+  .t { position: absolute; font-family: VT323, monospace; font-size: 27px; line-height: 1; white-space: nowrap; color: #d8d2c4; text-shadow: 3px 3px 0 #3a3630; }
+  .title { color: #2b2724; text-shadow: none; left: 0; width: 100%; text-align: center; top: 9px; }
+  .teal { color: #8fd6cc; text-shadow: 3px 3px 0 #23403c; }
+  .confirm { position: absolute; width: 54px; height: 54px; background: #6c6a64; box-shadow: inset 3px 3px 0 #8d8a83, inset -3px -3px 0 #3f3d39;
+    display: grid; place-items: center; color: #8fd66f; font: 700 30px/1 system-ui; }
+  small { color: var(--muted); }
+</style>
+</head>
+<body>
+<h1>Geothermal Turbine screen (preview)</h1>
+<p>Right-click the turbine's controller with a wrench to open it (sneak-wrench still turns or picks it up, as now).
+  Scroll the <b>Power</b> field to set its level in 10% steps; it takes effect when the screen closes, like the Electric Motor's.
+  The turbine always runs at this level while it has lava and water, and burns them in proportion. Andesite band for the turbine's
+  trim, over its dark blue-grey steel; laid out like the motor's screen (shown below for comparison).</p>
+
+<div class="row">
+  <div>
+    <h2>Full power (the default)</h2>
+    <div class="screen turbine">
+      <div class="t title">Geothermal Turbine</div>
+      <div class="t" style="left:36px;top:96px">Power</div>
+      <div class="t" style="left:270px;top:96px">46,080 FE/t (100%)</div>
+      <div class="t teal" style="left:48px;top:183px">Makes 46,080 FE a tick</div>
+      <div class="t" style="left:48px;top:216px">Lava 90 mB/s, water 250 mB/s</div>
+      <div class="t" style="left:48px;top:249px">45 Lava Generators' worth</div>
+      <div class="confirm" style="left:582px;top:258px">✓</div>
+    </div>
+  </div>
+  <div>
+    <h2>Turned down to 50%</h2>
+    <div class="screen turbine">
+      <div class="t title">Geothermal Turbine</div>
+      <div class="t" style="left:36px;top:96px">Power</div>
+      <div class="t" style="left:270px;top:96px">23,040 FE/t (50%)</div>
+      <div class="t teal" style="left:48px;top:183px">Makes 23,040 FE a tick</div>
+      <div class="t" style="left:48px;top:216px">Lava 45 mB/s, water 125 mB/s</div>
+      <div class="t" style="left:48px;top:249px">22.5 Lava Generators' worth</div>
+      <div class="confirm" style="left:582px;top:258px">✓</div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div>
+    <h2>For comparison: the Electric Motor's screen (in the mod now)</h2>
+    <div class="screen motor">
+      <div class="t title">Electric Motor</div>
+      <div class="t" style="left:36px;top:96px">Speed</div>
+      <div class="t" style="left:270px;top:96px">64 RPM</div>
+      <div class="t" style="left:36px;top:162px">Stress</div>
+      <div class="t" style="left:270px;top:162px">16,384 SU</div>
+      <div class="t" style="left:36px;top:234px">Direction</div>
+      <div class="t" style="left:330px;top:234px">Clockwise</div>
+      <div class="t teal" style="left:48px;top:309px">Draws 1,024 FE a tick</div>
+      <div class="t" style="left:48px;top:339px">1 Lava Generator</div>
+      <div class="confirm" style="left:582px;top:306px">✓</div>
+    </div>
+  </div>
+</div>
+<p><small>Text is drawn in a stand-in pixel font; in game it's Minecraft's. Background: <code>design/gui/geothermal_turbine.png</code>, from
+  <code>design/gui/geothermal-turbine.gui.js</code>. The confirm button is Create's own, drawn by Create in game.</small></p>
+</body>
+</html>

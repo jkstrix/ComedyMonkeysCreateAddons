@@ -155,18 +155,13 @@ public class LinePostBlockEntity extends BlockEntity {
 	@Override
 	public void onLoad() {
 		super.onLoad();
+		if (level != null && level.isClientSide)
+			clientSpansChanged.accept(this);
 		if (level instanceof ServerLevel server) {
-			PowerLines.of(server).changed(worldPosition);
+			PowerLines.of(server).loaded(worldPosition);
 			// a tick later, once the far posts have loaded too
 			server.getServer().execute(this::dropBrokenSpans);
 		}
-	}
-
-	@Override
-	public void onChunkUnloaded() {
-		super.onChunkUnloaded();
-		if (level instanceof ServerLevel server)
-			PowerLines.of(server).changed(worldPosition);
 	}
 
 	@Override
@@ -184,7 +179,20 @@ public class LinePostBlockEntity extends BlockEntity {
 		spans.clear();
 		for (Tag t : tag.getList("Spans", Tag.TAG_COMPOUND))
 			spans.add(Span.load((CompoundTag) t));
+		if (level != null && level.isClientSide)
+			clientSpansChanged.accept(this);
 	}
+
+	/** Client: unloading, so the spans hung to it from other posts go too (as the renderer draws them only to a post that's there). */
+	@Override
+	public void onChunkUnloaded() {
+		super.onChunkUnloaded();
+		if (level != null && level.isClientSide)
+			clientSpansChanged.accept(this);
+	}
+
+	/** Client: its spans changed, or it came into view (the posts its spans hang to lay them out again); set by the client setup. */
+	public static java.util.function.Consumer<LinePostBlockEntity> clientSpansChanged = be -> {};
 
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {

@@ -68,6 +68,15 @@ public class LavaGeneratorBlock extends Block implements IBE<LavaGeneratorBlockE
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	/** Broken or replaced: no longer a generator its line can reach from afar. */
+	@Override
+	protected void onRemove(BlockState state, net.minecraft.world.level.Level level, net.minecraft.core.BlockPos pos, BlockState newState,
+							boolean movedByPiston) {
+		if (!state.is(newState.getBlock()) && level instanceof net.minecraft.server.level.ServerLevel server)
+			com.comedymonkey.createaddons.content.line.PowerGrid.of(server).forget(pos);
+		super.onRemove(state, level, pos, newState, movedByPiston);
+	}
+
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));

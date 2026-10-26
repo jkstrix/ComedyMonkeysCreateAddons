@@ -26,12 +26,14 @@ import net.neoforged.neoforge.capabilities.Capabilities;
  * how it runs off towards each edge (on along the next block, up the next face, over the edge, into a machine, under a
  * Line Post), worked out on the server whenever anything round it changes and sent to clients for the model.
  */
-public class PowerLineBlockEntity extends LineBlockEntity {
+public class PowerLineBlockEntity extends LineBlockEntity implements NetworkReading.Shown {
 	/**
 	 * Per face (by {@link Direction#ordinal()}), the packed {@link WireLink}s with the {@link WireLink#BASE} and
 	 * {@link WireLink#RISE} bits and the hole field (see {@link WireLink}).
 	 */
 	private final int[] links = new int[6];
+	/** A Splitter's priority for each branch, by direction: 0 first, 1 second (the default), 2 last. */
+	private final byte[] priority = {1, 1, 1, 1, 1, 1};
 	@Nullable
 	private VoxelShape shape;
 
@@ -101,8 +103,8 @@ public class PowerLineBlockEntity extends LineBlockEntity {
 			shape = null;
 			changed(false);
 			rerenderOnClients();
-			// no longer a straight run (something joined it on the side): the fitting comes off
-			if (fitting() != Fitting.NONE && state.getBlock() instanceof PowerLineBlock wire && wire.straightSide(level, worldPosition, state) == null)
+			// no longer a straight run (something joined it on the side), or for a Splitter a junction: the fitting comes off
+			if (fitting() != Fitting.NONE && state.getBlock() instanceof PowerLineBlock wire && wire.sideFor(fitting(), level, worldPosition, state) == null)
 				removeFitting(null);
 		}
 	}
@@ -278,12 +280,112 @@ public class PowerLineBlockEntity extends LineBlockEntity {
 			}
 	}
 
+	// ---------- a Splitter's priorities ----------
+
+	/** The ways the wire runs off its face (a junction's branches), in order round it. */
+	public List<Direction> branches() {
+		Direction face = face();
+		List<Direction> out = new java.util.ArrayList<>();
+		if (face != null)
+			for (Direction d : WireLink.across(face))
+				if (link(face, d).connected())
+					out.add(d);
+		return out;
+	}
+
+	/** The face it lies on, if only one. */
+	@Nullable
+	public Direction face() {
+		Direction face = null;
+		for (Direction d : Direction.values())
+			if (PowerLineBlock.hasFace(getBlockState(), d)) {
+				if (face != null)
+					return null;
+				face = d;
+			}
+		return face;
+	}
+
+	/** A Splitter's priority for the branch that way: 0 first, 1 second (the default), 2 last. */
+	public int priority(Direction d) {
+		return priority[d.ordinal()];
+	}
+
+	public byte[] priorities() {
+		return priority.clone();
+	}
+
+	/** From its screen, checked on the server: only a real change rebuilds the network. */
+	public void setPriorities(byte[] levels) {
+		byte[] next = priority.clone();
+		for (int i = 0; i < 6 && i < levels.length; i++)
+			next[i] = (byte) Math.clamp(levels[i], 0, 2);
+		if (Arrays.equals(next, priority))
+			return;
+		System.arraycopy(next, 0, priority, 0, 6);
+		changed(false);
+	}
+
+	/** The branch served first, for the dial's pointer: only when exactly one branch comes first (else null). */
+	@Nullable
+	public Direction firstBranch() {
+		Direction first = null;
+		int ties = 0;
+		for (Direction d : branches()) {
+			if (first == null || priority(d) < priority(first)) {
+				first = d;
+				ties = 1;
+			} else if (priority(d) == priority(first)) {
+				ties++;
+			}
+		}
+		return ties == 1 ? first : null;
+	}
+
+	@Override
+	protected Component splitterLine() {
+		Direction first = firstBranch();
+		if (first != null)
+			return Component.translatable(key("splitter_first"),
+				Component.translatable("comedymonkeysaddons.gui.splitter.dir_" + first.getName()));
+		List<Direction> b = branches();
+		for (Direction d : b)
+			if (priority(d) != priority(b.get(0)))
+				return Component.translatable(key("splitter_ranked"));
+		return Component.translatable(key("splitter_even"));
+	}
+
+	@Override
+	public void setFitting(Fitting f, Direction side) {
+		Arrays.fill(priority, (byte) 1);
+		super.setFitting(f, side);
+	}
+
+	/** A Splitter from before they went on junctions, on a straight piece: it comes off (given back) when it loads. */
+	private void dropStraightSplitter() {
+		if (fitting() == Fitting.SPLITTER && level != null && getBlockState().getBlock() instanceof PowerLineBlock wire
+			&& wire.junctionSide(level, worldPosition, getBlockState()) == null)
+			removeFitting(null);
+	}
+
 	@Override
 	protected void networkChanged(ServerLevel level) {
 		PowerLines.of(level).changed(worldPosition);
 		if (hasTerminal())
 			PowerLines.of(level).addTerminal(worldPosition);
 	}
+
+	/** Loaded: the grid already has it unless it's new to it (it can't have changed while it was unloaded). */
+	@Override
+	protected void networkLoaded(ServerLevel level) {
+		PowerLines.of(level).loaded(worldPosition);
+		if (hasTerminal())
+			PowerLines.of(level).addTerminal(worldPosition);
+	}
+
+	/** Unloading changes nothing: the grid keeps it as it was. */
+	@Override
+	protected void networkUnloaded(ServerLevel level) {}
 
 	/** Some wire here meets a machine or lies on one: where the network's work starts. */
 	public boolean hasTerminal() {
@@ -304,8 +406,10 @@ public class PowerLineBlockEntity extends LineBlockEntity {
 	@Override
 	public void onLoad() {
 		super.onLoad();
-		if (level != null && !level.isClientSide)
+		if (level != null && !level.isClientSide) {
 			relink();
+			dropStraightSplitter();
+		}
 	}
 
 	@Override
@@ -315,6 +419,11 @@ public class PowerLineBlockEntity extends LineBlockEntity {
 		int[] read = tag.getIntArray("Links");
 		Arrays.fill(links, 0);
 		System.arraycopy(read, 0, links, 0, Math.min(read.length, 6));
+		reading.read(tag);
+		Arrays.fill(priority, (byte) 1);
+		byte[] levels = tag.getByteArray("Priority");
+		for (int i = 0; i < 6 && i < levels.length; i++)
+			priority[i] = (byte) Math.clamp(levels[i], 0, 2);
 		shape = null;
 		// (the base class told the network before these were read)
 		if (level instanceof ServerLevel server && hasTerminal())
@@ -329,16 +438,29 @@ public class PowerLineBlockEntity extends LineBlockEntity {
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 		tag.putIntArray("Links", links);
+		tag.putByteArray("Priority", priority);
 	}
 
 	@Override
 	protected void writeClient(CompoundTag tag, HolderLookup.Provider registries) {
 		tag.putIntArray("Links", links);
+		tag.putByteArray("Priority", priority);
+		reading.write(tag);
 	}
 
 	@Override
 	protected void addLineTooltip(List<Component> tooltip) {
 		line(tooltip, Component.translatable(key("power_line_capacity"), rate()));
+		reading.addTo(tooltip, level, 1);
+	}
+
+	/** Its network's figures, set on the wires that meet a machine. */
+	private final NetworkReading reading = new NetworkReading();
+
+	@Override
+	public void networkReading(int makes, int uses) {
+		if (level != null && reading.set(makes, uses, level.getGameTime()))
+			sync();
 	}
 
 	@Override

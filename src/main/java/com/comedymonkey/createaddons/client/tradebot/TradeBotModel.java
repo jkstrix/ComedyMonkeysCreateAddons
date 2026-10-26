@@ -53,7 +53,14 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 
 	/** Poses these parts (his, or his station's) as the bot's playback has them at {@code now}, with the fade. */
 	public static void pose(Map<String, ModelPart> parts, TradeBotEntity bot, double now) {
-		ClipPlayback playback = bot.playback;
+		pose(parts, bot, bot.playback, now);
+	}
+
+	/**
+	 * The same, following his clip with a playback of its own (the station's Flywheel visual, off the main thread, keeps
+	 * its own so it never writes his).
+	 */
+	public static void pose(Map<String, ModelPart> parts, TradeBotEntity bot, ClipPlayback playback, double now) {
 		playback.observe(bot.clip(), bot.clipStartTime(), bot.clipSpeed(), now);
 		Clip clip = playback.clip();
 		if (clip == null)

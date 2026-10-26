@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Splitter screen</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+<style>
+  :root { --bg: #23262a; --fg: #d6d8d4; --muted: #8f918b; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, sans-serif; padding: 24px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  h2 { font-size: 15px; margin: 0 0 8px; color: var(--muted); font-weight: 500; }
+  p, ul { margin: 0 0 16px; max-width: 80ch; color: var(--muted); }
+  .row { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 28px; }
+  .screen { position: relative; width: calc(224px * 3); background-size: calc(256px * 3) auto; background-repeat: no-repeat; image-rendering: pixelated; }
+  .s3 { height: calc(136px * 3); background-image: url(splitter_3.png); }
+  .s4 { height: calc(163px * 3); background-image: url(splitter_4.png); }
+  .t { position: absolute; font-family: VT323, monospace; font-size: 27px; line-height: 1; white-space: nowrap; color: #d8d2c4; text-shadow: 3px 3px 0 #3a3630; }
+  .title { color: #2b2724; text-shadow: none; left: 0; width: 100%; text-align: center; top: 9px; }
+  .dim { color: #8a8478; text-shadow: 3px 3px 0 #2a2622; }
+  .teal { color: #8fd6cc; text-shadow: 3px 3px 0 #23403c; }
+  .first { color: #e0c27a; }
+  .confirm { position: absolute; width: 54px; height: 54px; background: #6c6a64; box-shadow: inset 3px 3px 0 #8d8a83, inset -3px -3px 0 #3f3d39;
+    display: grid; place-items: center; color: #8fd66f; font: 700 30px/1 system-ui; }
+</style>
+</head>
+<body>
+<h1>Splitter screen, on a Power Line (preview)</h1>
+<p>The Power Line Splitter goes on a <b>junction</b> (a T or a cross) on a floor, wall or ceiling, and a wrench opens this. One row per branch: which way it goes,
+  what's down it, and its <b>priority</b>, scrolled between <b>First</b>, <b>Second</b> and <b>Last</b>. When there isn't enough power, the First branches
+  get all they want, then the Second, then the Last; branches on the same level share evenly (all on one level is plain even sharing, the default).
+  A branch with only generators down it shows <i>Power in</i> instead of a field. The read-out says how it stands right now. On the block, the dial's
+  pointer points at the First branch (no pointer when they're all level).</p>
+
+<div class="row">
+  <div>
+    <h2>A T on the floor, short of power</h2>
+    <div class="screen s3">
+      <div class="t title">Splitter</div>
+      <div class="t" style="left:36px;top:69px">West</div>
+      <div class="t dim" style="left:36px;top:99px">2 Lava Generators</div>
+      <div class="t dim" style="left:450px;top:81px">Power in</div>
+      <div class="t" style="left:36px;top:150px">East</div>
+      <div class="t dim" style="left:36px;top:180px">2 Electric Motors</div>
+      <div class="t first" style="left:450px;top:162px">First</div>
+      <div class="t" style="left:36px;top:231px">South</div>
+      <div class="t dim" style="left:36px;top:261px">1 Electric Motor</div>
+      <div class="t" style="left:450px;top:243px">Second</div>
+      <div class="t teal" style="left:36px;top:324px">Has 2,048 of 3,072 FE/t</div>
+      <div class="t" style="left:36px;top:354px">East first, then South</div>
+      <div class="confirm" style="left:582px;top:318px">✓</div>
+    </div>
+  </div>
+  <div>
+    <h2>A cross on a ceiling, enough power</h2>
+    <div class="screen s4">
+      <div class="t title">Splitter</div>
+      <div class="t" style="left:36px;top:69px">North</div>
+      <div class="t dim" style="left:36px;top:99px">1 Electric Motor</div>
+      <div class="t first" style="left:450px;top:81px">First</div>
+      <div class="t" style="left:36px;top:150px">East</div>
+      <div class="t dim" style="left:36px;top:180px">3 machines</div>
+      <div class="t" style="left:450px;top:162px">Second</div>
+      <div class="t" style="left:36px;top:231px">South</div>
+      <div class="t dim" style="left:36px;top:261px">2 Electric Motors</div>
+      <div class="t" style="left:450px;top:243px">Second</div>
+      <div class="t" style="left:36px;top:312px">West</div>
+      <div class="t dim" style="left:36px;top:342px">1 Geothermal Turbine</div>
+      <div class="t dim" style="left:450px;top:324px">Power in</div>
+      <div class="t teal" style="left:36px;top:405px">Enough for every branch</div>
+      <div class="t" style="left:36px;top:435px">Using 5,120 of 46,080 FE/t</div>
+      <div class="confirm" style="left:582px;top:399px">✓</div>
+    </div>
+  </div>
+</div>
+<p><small>Stand-in pixel font; in game it's Minecraft's. Backgrounds: <code>design/gui/splitter_3.png</code> and <code>splitter_4.png</code>, from
+  <code>design/gui/splitter.gui.js</code>. The confirm button and scroll fields are Create's own widgets in game. On a wall the rows read Up, Down and the two
+  sideways directions.</small></p>
+</body>
+</html>

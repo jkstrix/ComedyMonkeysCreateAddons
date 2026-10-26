@@ -90,13 +90,10 @@ public final class FluidLines {
 		if (!(event.getLevel() instanceof ServerLevel server) || !(event.getChunk() instanceof net.minecraft.world.level.chunk.LevelChunk chunk))
 			return;
 		FluidLines fluid = BY_LEVEL.get(server.dimension());
-		PowerLines power = PowerLines.existing(server);
-		for (net.minecraft.world.level.block.entity.BlockEntity be : chunk.getBlockEntities().values()) {
+		// (the Power Lines' grid keeps what's in it as it was: nothing changes in an unloaded chunk)
+		for (net.minecraft.world.level.block.entity.BlockEntity be : chunk.getBlockEntities().values())
 			if (fluid != null && be instanceof FluidLineBlockEntity)
 				fluid.changed(be.getBlockPos());
-			if (power != null && (be instanceof PowerLineBlockEntity || be instanceof LinePostBlockEntity))
-				power.changed(be.getBlockPos());
-		}
 	}
 
 	/** Something about the line at pos changed: its network, and any its neighbours were in, are worked out again. */
@@ -201,7 +198,10 @@ public final class FluidLines {
 		return BlockCapabilityCache.create(Capabilities.FluidHandler.BLOCK, level, target, from.getOpposite());
 	}
 
-	/** A tank the line delivers into, through side {@code side} of the line block at {@code pos}. */
+	/**
+	 * A tank the line delivers into, through side {@code side} of the line block at {@code pos}. A generator it feeds is
+	 * told what it was brought from a Wellspring (its fuel income, for running on paper).
+	 */
 	record End(BlockPos pos, Direction side, BlockCapabilityCache<IFluidHandler, Direction> tank) {
 		BlockPos target() {
 			return pos.relative(side);
@@ -470,6 +470,14 @@ public final class FluidLines {
 				left -= source.fill(drawn.copyWithAmount(left), FluidAction.EXECUTE);
 			Sharing.spend(claims, given, capLeft);
 			for (int i = 0; i < given.length; i++) {
+				// (both ends are loaded: it just drew from one and filled the other)
+				if (given[i] > 0) {
+					End e = open.get(i).end;
+					ServerLevel lv = e.tank().level();
+					if (lv.getBlockEntity(e.target()) instanceof PowerGrid.Generator g
+						&& lv.getBlockEntity(in.target()) instanceof com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity)
+						g.fed(in.target(), drawn.getFluid(), given[i]);
+				}
 				for (BlockPos m : open.get(i).meters)
 					metered.merge(m, given[i], Integer::sum);
 				if (given[i] > 0 && now % 5 == 0)

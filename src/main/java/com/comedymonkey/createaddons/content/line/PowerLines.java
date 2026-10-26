@@ -3,6 +3,8 @@ package com.comedymonkey.createaddons.content.line;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +12,13 @@ import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.comedymonkey.createaddons.content.line.PowerGrid.End;
+import com.comedymonkey.createaddons.content.line.PowerGrid.Node;
+import com.comedymonkey.createaddons.content.line.PowerGrid.Piece;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -22,26 +29,41 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 /**
- * The Power Lines of one level, as networks: wires joined to wires, round corners, up Line Posts and along the spans
- * between their insulators, with the machines at their ends. Each tick a network moves up to its tier's rate from
- * whatever gives power (a generator, a battery) to whatever takes it (a motor), shared evenly unless a Splitter says
- * otherwise, and not past an open Breaker. A battery is charged by generators but never by another battery, so power
- * doesn't slosh between them. Like the Fluid Lines, networks are worked out when needed and forgotten on any change;
- * parts in unloaded chunks are left out until they load.
+ * The Power Lines of one level, as networks: wires joined to wires, round corners and through walls, up Line Posts and
+ * along the spans between poles, with the machines at their ends. What's joined to what is the level's {@link PowerGrid},
+ * read from the world only when a piece changes; blocks in unloaded chunks don't change, so it holds for them too.
+ * <p>
+ * Once a second at most, and only while a device on it is live (a machine whose chunk is running and wants power;
+ * generators never wake it), a network sets a second of what its devices want against what its generators give, with
+ * no walking of the cables: generators whose own chunk is running give from their store, the rest on paper from their
+ * record, as if they stood beside the devices. A line carries up to its tier's rate. Brass feeds copper where they meet
+ * on a pole or at a wrenched Breaker, never the other way. If there isn't enough, devices share it evenly, unless a
+ * Splitter ranks their branches. What the generators give beyond that charges batteries; when it's short, batteries
+ * give. An open Breaker cuts the line (read each update, so switching it never rebuilds the network).
  */
 public final class PowerLines {
 	private static final Map<ResourceKey<Level>, PowerLines> BY_LEVEL = new HashMap<>();
+	/** Ticks between a network's updates: each moves this many ticks' worth at once. */
+	static final int INTERVAL = 20;
 
 	private final ServerLevel level;
+	private final PowerGrid grid;
 	private final Map<Node, Network> byNode = new HashMap<>();
-	/** Wire blocks that meet a machine: where the work starts. */
-	private final Set<BlockPos> terminals = new LinkedHashSet<>();
-
-	/** A wire block (insulator -1) or one insulator on a Line Post head. */
-	public record Node(BlockPos pos, int insulator) {}
+	/** Wire blocks that meet a machine, where the work starts, with the tick their network last updated. */
+	private final Map<BlockPos, Long> terminals = new LinkedHashMap<>();
+	/** The same, by the tick of the second each looks on, so a tick only goes through its twentieth. */
+	@SuppressWarnings("unchecked")
+	private final Set<BlockPos>[] phases = new Set[INTERVAL];
+	/** What machines used, kept across a rebuild of their network (so a full one stays full): store, given, when. */
+	private final Map<BlockPos, double[]> carriedUse = new HashMap<>();
+	/** Networks with a plan for this second: handed out a twentieth each tick. */
+	private final Set<Network> flowing = new LinkedHashSet<>();
+	/** Where something changed, or loaded, since the last tick: read once, at the start of the next. */
+	private final Set<BlockPos> changedAt = new LinkedHashSet<>(), loadedAt = new LinkedHashSet<>();
 
 	private PowerLines(ServerLevel level) {
 		this.level = level;
+		this.grid = PowerGrid.of(level);
 	}
 
 	public static PowerLines of(ServerLevel level) {
@@ -53,15 +75,9 @@ public final class PowerLines {
 		return lines;
 	}
 
-	/** This level's Power Lines, if any were made yet. */
-	@Nullable
-	static PowerLines existing(ServerLevel level) {
-		PowerLines lines = BY_LEVEL.get(level.dimension());
-		return lines != null && lines.level == level ? lines : null;
-	}
-
 	public static void clear() {
 		BY_LEVEL.clear();
+		PowerGrid.AWAY.clear();
 	}
 
 	public static void onLevelTick(LevelTickEvent.Post event) {
@@ -72,16 +88,299 @@ public final class PowerLines {
 		}
 	}
 
-	/** Something at pos changed: every network it or the blocks round it (corners too) were in is worked out again. */
+	/** Something at pos changed: it and the blocks round it (corners, and through a wall) are read again. */
 	public void changed(BlockPos pos) {
-		for (int dx = -1; dx <= 1; dx++)
-			for (int dy = -1; dy <= 1; dy++)
-				for (int dz = -1; dz <= 1; dz++) {
-					BlockPos p = pos.offset(dx, dy, dz);
-					for (int i = -1; i <= 4; i++)
-						forget(new Node(p, i));
-				}
+		changedAt.add(pos.immutable());
 	}
+
+	/** A piece at pos loaded: read only if the grid hasn't got it (it can't have changed while it was unloaded). */
+	public void loaded(BlockPos pos) {
+		loadedAt.add(pos.immutable());
+	}
+
+	void addTerminal(BlockPos pos) {
+		BlockPos p = pos.immutable();
+		if (terminals.putIfAbsent(p, -1L) == null)
+			phase(p).add(p);
+	}
+
+	private Set<BlockPos> phase(BlockPos pos) {
+		int i = Math.floorMod(-pos.hashCode(), INTERVAL);
+		if (phases[i] == null)
+			phases[i] = new LinkedHashSet<>();
+		return phases[i];
+	}
+
+	private void tick() {
+		readChanges();
+		long now = level.getGameTime();
+		// generators away worked forward about once a second; and use carried over a rebuild, kept only a few seconds
+		if (now % INTERVAL == 0) {
+			grid.tickAway(level, now);
+			carriedUse.values().removeIf(u -> now - u[2] > 5 * INTERVAL);
+		}
+		Set<BlockPos> due = phases[(int) Math.floorMod(now, INTERVAL)];
+		for (BlockPos pos : due == null ? List.<BlockPos>of() : new ArrayList<>(due)) {
+			// each machine's wire looks once a second, spread over the second (its machines are checked one by one)
+			if (!level.isLoaded(pos))
+				continue;
+			if (!(level.getBlockEntity(pos) instanceof PowerLineBlockEntity be) || !be.hasTerminal()) {
+				terminals.remove(pos);
+				due.remove(pos);
+				continue;
+			}
+			Node node = new Node(pos, Node.WIRE);
+			Network n = byNode.get(node);
+			if (n == null)
+				n = build(node);
+			if (n != null)
+				n.tick(now);
+		}
+		for (Network n : new ArrayList<>(flowing))
+			n.flow(now);
+	}
+
+	// ---------- what a Splitter's screen shows ----------
+
+	/** One branch of a Splitter: the machines down it, and the generators (with their name if they're all one kind). */
+	public record Branch(Direction dir, int devices, @Nullable Component deviceName, int generators, @Nullable Component generatorName) {}
+
+	/**
+	 * A Splitter's branches, and how its line stood at the last update (FE a tick): what it had to give, what its devices
+	 * wanted, and what they took; {@code known} is false until the network has updated since it was last worked out.
+	 */
+	public record SplitterView(List<Branch> branches, double has, double wanted, double took, boolean known) {}
+
+	public SplitterView splitter(PowerLineBlockEntity be) {
+		readChanges();
+		Node node = new Node(be.getBlockPos(), Node.WIRE);
+		Piece piece = grid.piece(node);
+		Network n = byNode.get(node);
+		if (n == null)
+			n = build(node);
+		List<Branch> out = new ArrayList<>();
+		for (Direction d : be.branches()) {
+			List<End> ends = new ArrayList<>();
+			if (piece != null && n != null) {
+				for (End e : piece.ends)
+					if (e.side().getOpposite() == d)
+						ends.add(e);
+				for (PowerGrid.Link l : piece.links)
+					if (l.via() == d)
+						for (Node m : behind(node, l.to(), n.nodes))
+							ends.addAll(grid.piece(m).ends);
+			}
+			// one count a machine, however many wires meet it (a turbine's port casings: the turbine)
+			Set<BlockPos> seen = new HashSet<>();
+			int devices = 0, generators = 0;
+			List<Component> deviceNames = new ArrayList<>(), generatorNames = new ArrayList<>();
+			for (End e : ends) {
+				BlockPos t = e.target();
+				BlockPos key = generatorKeyAt(t);
+				if (key != null) {
+					if (seen.add(key)) {
+						generators++;
+						generatorNames.add(level.isLoaded(key) ? level.getBlockState(key).getBlock().getName() : null);
+					}
+					continue;
+				}
+				if (!seen.add(t))
+					continue;
+				IEnergyStorage cap = level.isLoaded(t) ? level.getCapability(Capabilities.EnergyStorage.BLOCK, t, e.side()) : null;
+				if (cap != null && cap.canExtract() && !cap.canReceive()) {
+					generators++;
+					generatorNames.add(level.getBlockState(t).getBlock().getName());
+				} else {
+					devices++;
+					deviceNames.add(level.isLoaded(t) ? level.getBlockState(t).getBlock().getName() : null);
+				}
+			}
+			out.add(new Branch(d, devices, oneName(deviceNames), generators, oneName(generatorNames)));
+		}
+		if (n == null || n.lastCircuit == null)
+			return new SplitterView(out, 0, 0, 0, false);
+		Integer seg = n.segOf.get(node);
+		int c = seg == null ? -1 : n.lastCircuit[seg];
+		if (c < 0 || c >= n.lastSupply.length)
+			return new SplitterView(out, 0, 0, 0, true);
+		return new SplitterView(out, n.lastSupply[c], n.lastDemand[c], n.lastTook[c], true);
+	}
+
+	/** The name they all share, or null if they're not all one kind (or one isn't known). */
+	@Nullable
+	private static Component oneName(List<Component> names) {
+		if (names.isEmpty() || names.contains(null))
+			return null;
+		for (Component c : names)
+			if (!c.getString().equals(names.get(0).getString()))
+				return null;
+		return names.get(0);
+	}
+
+	/** The pieces of a network reached from {@code from} without going through {@code splitter}. */
+	private Set<Node> behind(Node splitter, Node from, Set<Node> within) {
+		Set<Node> seen = new HashSet<>();
+		if (!within.contains(from))
+			return seen;
+		ArrayDeque<Node> queue = new ArrayDeque<>();
+		seen.add(from);
+		queue.add(from);
+		while (!queue.isEmpty())
+			for (Node o : grid.neighbours(queue.poll()))
+				if (!o.equals(splitter) && seen.add(o))
+					queue.add(o);
+		return seen;
+	}
+
+	/** The generator a line meets at block t, by its key: from the block if it's loaded, else from where it was met. */
+	@Nullable
+	private BlockPos generatorKeyAt(BlockPos t) {
+		if (level.isLoaded(t)) {
+			if (level.getBlockEntity(t) instanceof PowerGrid.Generator g)
+				return g.generatorKey();
+			if (grid.keyAt(t) != null)
+				grid.dropFace(t);
+			return null;
+		}
+		return grid.keyAt(t);
+	}
+
+	// ---------- reading the pieces ----------
+
+	private void readChanges() {
+		if (changedAt.isEmpty() && loadedAt.isEmpty())
+			return;
+		// every block to read, each once: what changed, the blocks round it and through a wall beside it
+		Set<BlockPos> force = new LinkedHashSet<>();
+		for (BlockPos pos : changedAt) {
+			for (int dx = -1; dx <= 1; dx++)
+				for (int dy = -1; dy <= 1; dy++)
+					for (int dz = -1; dz <= 1; dz++)
+						force.add(pos.offset(dx, dy, dz));
+			for (Direction d : Direction.values())
+				force.add(pos.relative(d, 2));
+		}
+		changedAt.clear();
+		Set<BlockPos> lazy = new LinkedHashSet<>(loadedAt);
+		loadedAt.clear();
+		lazy.removeAll(force);
+		Set<Node> touched = new HashSet<>();
+		Set<BlockPos> read = new HashSet<>();
+		for (BlockPos pos : force)
+			read(pos, touched, true, read);
+		for (BlockPos pos : lazy)
+			read(pos, touched, false, read);
+		for (Node n : touched)
+			forget(n);
+	}
+
+	/** Reads what's at p into the grid (when {@code force}, or the grid hasn't got it), noting the pieces touched. */
+	private void read(BlockPos p, Set<Node> touched, boolean force, Set<BlockPos> read) {
+		if (!level.isLoaded(p) || (force && !read.add(p)))
+			return;
+		BlockState state = level.getBlockState(p);
+		Node wire = new Node(p, Node.WIRE);
+		if (state.getBlock() instanceof PowerLineBlock && level.getBlockEntity(p) instanceof PowerLineBlockEntity be) {
+			if (force || grid.piece(wire) == null)
+				set(wire, readWire(be), touched);
+		} else if (grid.piece(wire) != null) {
+			set(wire, null, touched);
+		}
+		BlockPos head = state.getBlock() instanceof LinePostBlock ? LinePostBlock.head(level, p) : null;
+		Node pole = new Node(p, Node.POLE);
+		if (!p.equals(head) && grid.piece(pole) != null)
+			set(pole, null, touched);
+		if (head != null) {
+			Node h = new Node(head, Node.POLE);
+			if (force || grid.piece(h) == null) {
+				set(h, readPole(head), touched);
+				// and the wires at its foot, which join it
+				BlockPos foot = LinePostBlock.foot(level, head);
+				if (force && foot != null)
+					for (Direction d : Direction.values())
+						if (level.isLoaded(foot.relative(d)) && !(level.getBlockState(foot.relative(d)).getBlock() instanceof LinePostBlock))
+							read(foot.relative(d), touched, true, read);
+			}
+		}
+	}
+
+	private void set(Node node, @Nullable Piece piece, Set<Node> touched) {
+		touched.add(node);
+		touched.addAll(grid.neighbours(node));
+		touched.addAll(grid.listing(node));
+		grid.put(node, piece);
+		touched.addAll(grid.neighbours(node));
+		if (piece != null)
+			for (PowerGrid.Link l : piece.links)
+				touched.add(l.to());
+	}
+
+	private Piece readWire(PowerLineBlockEntity be) {
+		LineTier tier = be.tier();
+		Piece p = new Piece(tier, be.fitting(), be.fitting() != Fitting.BREAKER || be.passes() > 0);
+		if (be.fitting() == Fitting.SPLITTER)
+			p.priority = be.priorities();
+		BlockPos pos = be.getBlockPos();
+		BlockState state = be.getBlockState();
+		for (Direction face : Direction.values()) {
+			if (!PowerLineBlock.hasFace(state, face))
+				continue;
+			int links = be.links(face);
+			if ((links & WireLink.BASE) != 0)
+				p.ends.add(new End(pos.relative(face), face.getOpposite()));
+			// up (or down) through the block into a machine across it
+			if ((links & WireLink.RISE) != 0)
+				p.ends.add(new End(pos.relative(face.getOpposite()), face));
+			// through the wall it lies on, to the wire behind
+			if (WireLink.hole(links) != 0)
+				link(p, new Node(pos.relative(face, 2), Node.WIRE), tier, face);
+			for (Direction d : WireLink.across(face)) {
+				BlockPos to = pos.relative(d);
+				switch (be.link(face, d)) {
+					case LINE -> link(p, new Node(to, Node.WIRE), tier, d);
+					case THROUGH -> link(p, new Node(to.relative(d), Node.WIRE), tier, d);
+					case OUTSIDE -> link(p, new Node(to.relative(face), Node.WIRE), tier, d);
+					case POST -> {
+						BlockPos head = level.isLoaded(to) ? LinePostBlock.head(level, to) : null;
+						if (head != null)
+							link(p, new Node(head, Node.POLE), tier, d);
+					}
+					case TERMINAL -> p.ends.add(new End(to, d.getOpposite()));
+					default -> {}
+				}
+			}
+		}
+		return p;
+	}
+
+	/** A whole pole: the spans tied to its head, and the wires run to its foot. */
+	private Piece readPole(BlockPos head) {
+		Piece p = new Piece(null, Fitting.NONE, true);
+		if (level.getBlockEntity(head) instanceof LinePostBlockEntity post)
+			for (Span s : post.spans())
+				link(p, new Node(head.offset(s.offset()), Node.POLE), s.tier(), null);
+		BlockPos foot = LinePostBlock.foot(level, head);
+		if (foot == null)
+			return p;
+		Direction facing = level.getBlockState(foot).getValue(LinePostBlock.FACING);
+		for (Direction d : Direction.values()) {
+			if (d.getAxis() == facing.getAxis())
+				continue;
+			BlockPos w = foot.relative(d);
+			if (level.isLoaded(w) && level.getBlockEntity(w) instanceof PowerLineBlockEntity be
+				&& be.link(facing.getOpposite(), d.getOpposite()) == WireLink.POST)
+				link(p, new Node(w, Node.WIRE), be.tier(), null);
+		}
+		return p;
+	}
+
+	private static void link(Piece p, Node to, LineTier tier, @Nullable Direction via) {
+		PowerGrid.Link l = new PowerGrid.Link(to, tier, via);
+		if (!p.links.contains(l))
+			p.links.add(l);
+	}
+
+	// ---------- networks ----------
 
 	private void forget(Node node) {
 		Network n = byNode.get(node);
@@ -89,310 +388,766 @@ public final class PowerLines {
 			return;
 		for (Node m : n.nodes)
 			byNode.remove(m);
-		n.zeroMeters(level);
-	}
-
-	void addTerminal(BlockPos pos) {
-		terminals.add(pos.immutable());
-	}
-
-	private void tick() {
+		flowing.remove(n);
 		long now = level.getGameTime();
-		for (BlockPos pos : new ArrayList<>(terminals)) {
-			if (!level.isLoaded(pos))
-				continue;
-			if (!(level.getBlockEntity(pos) instanceof PowerLineBlockEntity be) || !be.hasTerminal()) {
-				terminals.remove(pos);
-				continue;
-			}
-			Node node = new Node(pos, -1);
-			Network n = byNode.get(node);
-			// a chunk it runs through went, or one at its edge came back: worked out again
-			if (n != null && !n.chunksAsBuilt(level)) {
-				forget(node);
-				n = null;
-			}
-			if (n == null)
-				n = build(node);
-			if (n != null)
-				n.tick(now);
-		}
+		n.use.forEach((pos, u) -> carriedUse.put(pos, new double[] {u[0], u[1], now}));
+		n.zeroMeters();
 	}
 
-	// ---------- walking the network ----------
+	/** One tier of line at a node: a wire's own, or one of the tiers of cable tied to a pole. */
+	private record Sub(Node node, LineTier tier) {}
 
+	/**
+	 * Everything joined to start, sorted into segments (each one tier; every Breaker a segment of its own, switched in
+	 * each update), the feeds from brass to copper, and the machines with their Splitter priority.
+	 */
 	@Nullable
 	private Network build(Node start) {
-		if (!(level.getBlockState(start.pos).getBlock() instanceof PowerLineBlock line))
+		if (grid.piece(start) == null)
 			return null;
-		Network n = new Network(line.tier());
+		Network n = new Network();
 		ArrayDeque<Node> queue = new ArrayDeque<>();
 		queue.add(start);
 		n.nodes.add(start);
-		while (!queue.isEmpty()) {
-			Node node = queue.poll();
-			byNode.put(node, n);
-			List<Node> next = new ArrayList<>();
-			visit(node, n, next);
-			n.links.put(node, next);
-			for (Node m : next)
+		while (!queue.isEmpty())
+			for (Node m : grid.neighbours(queue.poll()))
 				if (n.nodes.add(m))
 					queue.add(m);
-		}
-		n.route();
 		for (Node m : n.nodes)
-			n.chunks.add(net.minecraft.world.level.ChunkPos.asLong(m.pos));
+			byNode.put(m, n);
+		// segments: same-tier pieces joined, not through a Breaker
+		Map<Sub, Integer> seg = new HashMap<>();
+		List<LineTier> tiers = new ArrayList<>();
+		for (Node m : n.nodes)
+			for (LineTier t : tiersAt(m)) {
+				Sub first = new Sub(m, t);
+				if (seg.containsKey(first))
+					continue;
+				int id = tiers.size();
+				tiers.add(t);
+				seg.put(first, id);
+				if (grid.piece(m).fitting == Fitting.BREAKER)
+					continue;
+				ArrayDeque<Sub> walk = new ArrayDeque<>();
+				walk.add(first);
+				while (!walk.isEmpty()) {
+					Sub s = walk.poll();
+					for (Node o : grid.neighbours(s.node())) {
+						Piece op = grid.piece(o);
+						if (grid.linkTier(s.node(), o) != t || (op.tier != null && op.tier != t) || op.fitting == Fitting.BREAKER)
+							continue;
+						Sub next = new Sub(o, t);
+						if (seg.putIfAbsent(next, id) == null)
+							walk.add(next);
+					}
+				}
+			}
+		n.segTier = tiers.toArray(new LineTier[0]);
+		Map<Node, int[]> keys = n.rankSplitters();
+		for (Node m : n.nodes) {
+			Piece p = grid.piece(m);
+			// brass feeds copper where both are tied to one pole
+			if (m.isPole()) {
+				Integer brass = seg.get(new Sub(m, LineTier.BRASS)), copper = seg.get(new Sub(m, LineTier.COPPER));
+				if (brass != null && copper != null)
+					n.feeds.add(new Feed(brass, copper, keys.get(m), null));
+				continue;
+			}
+			int s = seg.get(new Sub(m, p.tier));
+			n.segOf.put(m, s);
+			if (p.fitting == Fitting.BREAKER) {
+				n.breakers.add(m);
+				for (Node o : grid.neighbours(m)) {
+					Piece op = grid.piece(o);
+					if (o.isPole()) {
+						Integer pole = seg.get(new Sub(o, p.tier));
+						if (pole != null)
+							n.switches.add(new int[] {s, pole, n.breakers.size() - 1});
+						continue;
+					}
+					if (op.tier == null)
+						continue;
+					Integer other = seg.get(new Sub(o, op.tier));
+					if (other == null)
+						continue;
+					if (op.tier == p.tier)
+						n.switches.add(new int[] {s, other, n.breakers.size() - 1});
+					// a wrenched joint to the other tier: brass feeds copper through it, while it's on
+					else if (p.tier == LineTier.BRASS)
+						n.feeds.add(new Feed(s, other, keys.get(o), m));
+					else
+						n.feeds.add(new Feed(other, s, keys.get(m), m));
+				}
+			}
+			if (p.fitting == Fitting.METER)
+				n.meters.put(m, s);
+			for (End e : p.ends) {
+				int[] key = keys.get(m);
+				// a machine on a Splitter's own block, on one of its branches
+				if (p.fitting == Fitting.SPLITTER && p.priority != null && n.splitterIndex.containsKey(m)) {
+					key = key.clone();
+					key[n.splitterIndex.get(m)] = p.priority[e.side().getOpposite().ordinal()];
+				}
+				n.ends.add(new Device(e, s, BlockCapabilityCache.create(Capabilities.EnergyStorage.BLOCK, level, e.target(), e.side()), key));
+				// a generator it meets: where the line meets it, so it's found without loading it once it's on paper
+				if (level.isLoaded(e.target()) && level.getBlockEntity(e.target()) instanceof PowerGrid.Generator g)
+					grid.face(e.target(), g.generatorKey());
+			}
+		}
+		// keep the once-a-second rhythm across a rebuild: from when its machines' network last updated
+		for (Node m : n.nodes)
+			if (!m.isPole() && !grid.piece(m).ends.isEmpty()) {
+				n.wires.add(m.pos());
+				Long last = terminals.get(m.pos());
+				if (last != null)
+					n.lastTick = Math.max(n.lastTick, last);
+			}
 		return n;
 	}
 
-	/** The nodes joined to this one, and (into the network) the machines it meets and its fitting. */
-	private void visit(Node node, Network n, List<Node> next) {
-		if (node.insulator < 0) {
-			BlockState state = level.getBlockState(node.pos);
-			if (!(level.getBlockEntity(node.pos) instanceof PowerLineBlockEntity be) || be.tier() != n.tier)
-				return;
-			if (be.fitting() != Fitting.NONE)
-				n.fittings.put(node, be);
-			for (Direction face : Direction.values()) {
-				if (!PowerLineBlock.hasFace(state, face))
-					continue;
-				if ((be.links(face) & WireLink.BASE) != 0)
-					n.ends.add(new End(node, node.pos.relative(face), cache(node.pos.relative(face), face.getOpposite())));
-				// up (or down) through the block into a machine across it
-				if ((be.links(face) & WireLink.RISE) != 0)
-					n.ends.add(new End(node, node.pos.relative(face.getOpposite()), cache(node.pos.relative(face.getOpposite()), face)));
-				// through the wall it lies on, to the wire behind
-				if (WireLink.hole(be.links(face)) != 0)
-					wire(node.pos.relative(face, 2), next, n);
-				for (Direction d : WireLink.across(face)) {
-					BlockPos to = node.pos.relative(d);
-					switch (be.link(face, d)) {
-						case LINE -> wire(to, next, n);
-						case THROUGH -> wire(to.relative(d), next, n);
-						case OUTSIDE -> wire(to.relative(face), next, n);
-						case POST -> {
-							BlockPos head = level.isLoaded(to) ? LinePostBlock.head(level, to) : null;
-							if (head != null)
-								next.add(new Node(head, 0));
-							else
-								n.edges.add(net.minecraft.world.level.ChunkPos.asLong(to));
-						}
-						case TERMINAL -> n.ends.add(new End(node, to, cache(to, d.getOpposite())));
-						default -> {}
-					}
-				}
+	/** The tiers of line at a piece: a wire's own, or each tier of cable tied to a pole. */
+	private List<LineTier> tiersAt(Node m) {
+		Piece p = grid.piece(m);
+		if (p.tier != null)
+			return List.of(p.tier);
+		List<LineTier> out = new ArrayList<>();
+		for (Node o : grid.neighbours(m)) {
+			LineTier t = grid.linkTier(m, o);
+			if (t != null && !out.contains(t))
+				out.add(t);
+		}
+		return out;
+	}
+
+	/** A machine on the line, in segment {@code seg}, ranked by the Splitters it's behind ({@code key}). */
+	private record Device(End end, int seg, BlockCapabilityCache<IEnergyStorage, Direction> energy, int[] key) {}
+
+	/**
+	 * Brass segment {@code from} feeds copper segment {@code to}, ranked among the brass circuit's devices by {@code key};
+	 * through the Breaker at {@code breaker} (only while it's on), or a pole (null).
+	 */
+	private record Feed(int from, int to, int[] key, @Nullable Node breaker) {}
+
+	/** Something giving power this second: a running block (looked up each tick), or a generator on paper. */
+	private record Source(int circuit, @Nullable BlockCapabilityCache<IEnergyStorage, Direction> energy, @Nullable PowerGrid.Paper paper, int offer, boolean store,
+						  @Nullable BlockPos generator) {}
+
+	/** Something taking power this second: what it wants of the second (room to fill, and its use). */
+	private record Taker(int circuit, BlockCapabilityCache<IEnergyStorage, Direction> energy, BlockPos pos, int want, boolean store, int[] key) {}
+
+	/** A network's plan for the next second, handed out a twentieth each tick. */
+	private record Schedule(int count, double[] fed, List<Source> sources, double[] budget, List<Taker> takers, double[] perTick,
+							double[] carry, List<Feed> feeds, double[] grant, int[] circuitOf, double[] flowed, double[] devices) {
+		Schedule(int count, double[] fed, List<Source> sources, double[] budget, List<Taker> takers, double[] perTick, double[] carry,
+				 List<Feed> feeds, double[] grant, int[] circuitOf) {
+			this(count, fed, sources, budget, takers, perTick, carry, feeds, grant, circuitOf, new double[count], new double[count]);
+		}
+	}
+
+	/** Splitter priorities compared: the first Splitter's level decides, then the next's (nearest the generators first). */
+	private static int compareKeys(int[] a, int[] b) {
+		for (int i = 0; i < Math.min(a.length, b.length); i++)
+			if (a[i] != b[i])
+				return Integer.compare(a[i], b[i]);
+		return 0;
+	}
+
+	/**
+	 * Shares {@code total} between claims, as the fraction of what each wants it gets: the first priority level gets all it
+	 * wants first, then the next; the claims on one level share evenly.
+	 */
+	private static double[] allocate(double total, double[] wants, int[][] keys) {
+		int n = wants.length;
+		Integer[] order = new Integer[n];
+		for (int i = 0; i < n; i++)
+			order[i] = i;
+		java.util.Arrays.sort(order, (x, y) -> compareKeys(keys[x], keys[y]));
+		double[] share = new double[n];
+		double left = total;
+		for (int i = 0; i < n;) {
+			int j = i;
+			while (j < n && compareKeys(keys[order[j]], keys[order[i]]) == 0)
+				j++;
+			// within the level: the smallest wants filled first, each of the rest an equal part of what's left
+			Integer[] level = java.util.Arrays.copyOfRange(order, i, j);
+			java.util.Arrays.sort(level, (x, y) -> Double.compare(wants[x], wants[y]));
+			for (int k = 0; k < level.length; k++) {
+				int t = level[k];
+				double part = Math.max(0, left) / (level.length - k), got = Math.min(wants[t], part);
+				share[t] = wants[t] <= 0 ? 0 : got / wants[t];
+				left -= got;
 			}
-			return;
+			i = j;
 		}
-		if (!(level.getBlockEntity(node.pos) instanceof LinePostBlockEntity post) || !LinePostBlock.hasInsulator(post.getBlockState(), node.insulator))
-			return;
-		for (Span s : post.spansAt(node.insulator)) {
-			BlockPos far = node.pos.offset(s.offset());
-			if (!level.isLoaded(far))
-				n.edges.add(net.minecraft.world.level.ChunkPos.asLong(far));
-			else if (s.tier() == n.tier && LinePostBlock.hasInsulator(level.getBlockState(far), s.to()))
-				next.add(new Node(far, s.to()));
-		}
-		// the top insulator: down the pole to the wires running under its foot
-		if (node.insulator == 0) {
-			BlockPos foot = LinePostBlock.foot(level, node.pos);
-			if (foot == null)
-				return;
-			Direction facing = level.getBlockState(foot).getValue(LinePostBlock.FACING);
-			for (Direction d : Direction.values()) {
-				if (d.getAxis() == facing.getAxis())
-					continue;
-				BlockPos w = foot.relative(d);
-				if (level.isLoaded(w) && level.getBlockEntity(w) instanceof PowerLineBlockEntity be && be.tier() == n.tier
-					&& be.link(facing.getOpposite(), d.getOpposite()) == WireLink.POST)
-					next.add(new Node(w, -1));
-			}
-		}
-	}
-
-	private void wire(BlockPos pos, List<Node> next, Network n) {
-		if (!level.isLoaded(pos))
-			n.edges.add(net.minecraft.world.level.ChunkPos.asLong(pos));
-		else if (level.getBlockState(pos).getBlock() instanceof PowerLineBlock)
-			next.add(new Node(pos, -1));
-	}
-
-	private BlockCapabilityCache<IEnergyStorage, Direction> cache(BlockPos target, Direction side) {
-		return BlockCapabilityCache.create(Capabilities.EnergyStorage.BLOCK, level, target, side);
-	}
-
-	/** A machine on the line: the block {@code target}, met from the wire at {@code node}. */
-	record End(Node node, BlockPos target, BlockCapabilityCache<IEnergyStorage, Direction> energy) {}
-
-	/** The way from one machine to another: its length and the fittings on the way, read as they are set each tick. */
-	record Route(End to, int length, List<LineBlockEntity> breakers, @Nullable BlockPos splitter, @Nullable LineBlockEntity splitterBe,
-				 List<Node> meters) {
-		boolean shut() {
-			for (LineBlockEntity b : breakers)
-				if (b.passes() <= 0)
-					return true;
-			return false;
-		}
-
-		SplitMode mode() {
-			return splitterBe == null ? SplitMode.EVEN : splitterBe.splitMode();
-		}
+		return share;
 	}
 
 	final class Network {
-		final LineTier tier;
 		final Set<Node> nodes = new LinkedHashSet<>();
-		final Map<Node, List<Node>> links = new HashMap<>();
-		final List<End> ends = new ArrayList<>();
-		final Map<Node, LineBlockEntity> fittings = new HashMap<>();
-		final Map<End, List<Route>> routes = new HashMap<>();
-		final Map<BlockPos, Integer> turns = new HashMap<>();
-		/** The chunks its pieces are in, and the unloaded ones a piece runs on into. */
-		final Set<Long> chunks = new java.util.HashSet<>(), edges = new java.util.HashSet<>();
+		LineTier[] segTier;
+		final Map<Node, Integer> segOf = new HashMap<>();
+		final List<Device> ends = new ArrayList<>();
+		final List<Feed> feeds = new ArrayList<>();
+		final List<Node> breakers = new ArrayList<>();
+		/** Segment, segment, Breaker (index into breakers): joined while that Breaker is on. */
+		final List<int[]> switches = new ArrayList<>();
+		final Map<Node, Integer> meters = new HashMap<>();
+		final Map<Node, Integer> splitterIndex = new HashMap<>();
+		/** Its wire blocks that meet a machine (its terminals). */
+		final List<BlockPos> wires = new ArrayList<>();
+		/** At the last update: each segment's circuit, and per circuit a tick's worth of supply, demand and what was taken. */
+		@Nullable
+		int[] lastCircuit;
+		double[] lastSupply = new double[0], lastDemand = new double[0], lastTook = new double[0];
+		/** What its generators are making, FE a tick (flat out, less any out of fuel), at the last update. */
+		double lastMakes;
 		long lastTick = -1;
-		int turn;
+		/** The plan for this second, if anything on it is live. */
+		@Nullable
+		Schedule plan;
+		/** Each machine's store at the last update, and what it was given since: what it uses in a second. */
+		final Map<BlockPos, double[]> use = new HashMap<>();
+		/** The live generators' stores, looked up each tick. */
+		final Map<BlockPos, BlockCapabilityCache<IEnergyStorage, Direction>> generatorCaches = new HashMap<>();
 
-		Network(LineTier tier) {
-			this.tier = tier;
-		}
-
-		/** Every chunk it runs through is still there, and none at its edge has come back. */
-		boolean chunksAsBuilt(ServerLevel level) {
-			for (long c : chunks)
-				if (!level.hasChunk(net.minecraft.world.level.ChunkPos.getX(c), net.minecraft.world.level.ChunkPos.getZ(c)))
-					return false;
-			for (long c : edges)
-				if (level.hasChunk(net.minecraft.world.level.ChunkPos.getX(c), net.minecraft.world.level.ChunkPos.getZ(c)))
-					return false;
-			return true;
-		}
-
-		/** From every machine, the way to every other, walking the joints. */
-		void route() {
-			for (End from : ends) {
-				Map<Node, Node> parent = new HashMap<>();
-				Map<Node, Integer> dist = new HashMap<>();
-				ArrayDeque<Node> queue = new ArrayDeque<>();
-				dist.put(from.node, 0);
-				queue.add(from.node);
-				while (!queue.isEmpty()) {
-					Node node = queue.poll();
-					for (Node m : links.getOrDefault(node, List.of()))
-						if (!dist.containsKey(m)) {
-							dist.put(m, dist.get(node) + 1);
-							parent.put(m, node);
-							queue.add(m);
-						}
-				}
-				List<Route> list = new ArrayList<>();
-				for (End to : ends) {
-					if (to == from || to.target.equals(from.target) || !dist.containsKey(to.node))
-						continue;
-					List<LineBlockEntity> breakers = new ArrayList<>();
-					BlockPos splitter = null;
-					LineBlockEntity splitterBe = null;
-					List<Node> meters = new ArrayList<>();
-					for (Node p = to.node; p != null; p = parent.get(p)) {
-						LineBlockEntity f = fittings.get(p);
-						if (f == null)
-							continue;
-						switch (f.fitting()) {
-							case BREAKER -> breakers.add(f);
-							case SPLITTER -> {
-								if (splitter == null) {
-									splitter = p.pos;
-									splitterBe = f;
-								}
-							}
-							case METER -> meters.add(p);
-							default -> {}
-						}
+		/**
+		 * Every piece's priority behind the Splitters: walking out from the generators (or from anywhere, if it has none),
+		 * each piece takes the one before it's, and passing a Splitter sets that Splitter's level for the branch taken.
+		 * Splitters are numbered as they're reached, so one nearer the generators decides first.
+		 */
+		Map<Node, int[]> rankSplitters() {
+			List<Node> roots = new ArrayList<>();
+			for (Node m : nodes)
+				for (End e : grid.piece(m).ends)
+					if (generatorKeyAt(e.target()) != null) {
+						roots.add(m);
+						break;
 					}
-					list.add(new Route(to, dist.get(to.node), breakers, splitter, splitterBe, meters));
-				}
-				routes.put(from, list);
+			if (roots.isEmpty())
+				roots.add(nodes.iterator().next());
+			// the walk, and the Splitters in the order it reaches them
+			Map<Node, Node> parent = new HashMap<>();
+			List<Node> order = new ArrayList<>();
+			ArrayDeque<Node> queue = new ArrayDeque<>(roots);
+			Set<Node> seen = new HashSet<>(roots);
+			while (!queue.isEmpty()) {
+				Node m = queue.poll();
+				order.add(m);
+				Piece p = grid.piece(m);
+				if (p.fitting == Fitting.SPLITTER && p.priority != null)
+					splitterIndex.put(m, splitterIndex.size());
+				for (Node o : grid.neighbours(m))
+					if (seen.add(o)) {
+						parent.put(o, m);
+						queue.add(o);
+					}
 			}
+			int count = splitterIndex.size();
+			int[] even = new int[count];
+			java.util.Arrays.fill(even, 1);
+			Map<Node, int[]> keys = new HashMap<>();
+			for (Node m : order) {
+				Node from = parent.get(m);
+				if (from == null) {
+					keys.put(m, even);
+					continue;
+				}
+				int[] key = keys.get(from);
+				Integer k = splitterIndex.get(from);
+				if (k != null) {
+					// through a Splitter: the level of the branch this piece is on
+					Direction via = null;
+					for (PowerGrid.Link l : grid.piece(from).links)
+						if (l.to().equals(m))
+							via = l.via();
+					key = key.clone();
+					key[k] = via == null ? 1 : grid.piece(from).priority[via.ordinal()];
+				}
+				keys.put(m, key);
+			}
+			return keys;
 		}
 
+		/**
+		 * The once-a-second update: who's live, what each wants, what each gives, and the plan for the next second, handed
+		 * out a twentieth at a time by {@link #flow} each tick (so stores stay level: a motor with enough coming in sits
+		 * full, a generator making more than is used stays topped up).
+		 */
 		void tick(long now) {
-			if (lastTick == now)
+			if (lastTick >= 0 && now - lastTick < INTERVAL)
 				return;
 			lastTick = now;
-			int remaining = tier.powerPerTick();
-			Map<Node, Integer> metered = new HashMap<>();
-			int count = ends.size();
-			for (int k = 0; k < count && remaining > 0; k++) {
-				End from = ends.get((turn + k) % count);
-				IEnergyStorage source = from.energy.getCapability();
-				if (source == null || !source.canExtract())
-					continue;
-				int offer = source.extractEnergy(remaining, true);
-				if (offer <= 0)
-					continue;
-				boolean store = source.canReceive();
-				int moved = deliver(source, offer, from, false, metered);
-				// what pure takers left, batteries may have, but only from a generator
-				if (!store && moved < offer)
-					moved += deliver(source, offer - moved, from, true, metered);
-				remaining -= moved;
+			for (BlockPos w : wires)
+				terminals.computeIfPresent(w, (k, v) -> now);
+			// circuits this update: segments joined through the Breakers that are on
+			boolean[] on = new boolean[breakers.size()];
+			for (int i = 0; i < on.length; i++) {
+				Node b = breakers.get(i);
+				Piece p = grid.piece(b);
+				if (level.isLoaded(b.pos()) && level.getBlockEntity(b.pos()) instanceof LineBlockEntity be && (be.passes() > 0) != p.closed) {
+					p.closed = be.passes() > 0;
+					grid.setDirty();
+				}
+				on[i] = p.closed;
 			}
-			turn++;
-			for (Map.Entry<Node, LineBlockEntity> f : fittings.entrySet())
-				if (f.getValue().fitting() == Fitting.METER && !f.getValue().isRemoved())
-					f.getValue().readMeter(metered.getOrDefault(f.getKey(), 0));
+			int[] circuitOf = circuits(on);
+			int count = 0;
+			for (int c : circuitOf)
+				count = Math.max(count, c + 1);
+			LineTier[] tiers = new LineTier[count];
+			for (int s = 0; s < circuitOf.length; s++)
+				tiers[circuitOf[s]] = segTier[s];
+			Map<Long, Feed> pairs = new LinkedHashMap<>();
+			for (Feed f : feeds) {
+				if (f.breaker() != null && !grid.piece(f.breaker()).closed)
+					continue;
+				int from = circuitOf[f.from()], to = circuitOf[f.to()];
+				if (from != to)
+					pairs.putIfAbsent(((long) from << 32) | to, new Feed(from, to, f.key(), null));
+			}
+			List<Feed> active = new ArrayList<>(pairs.values());
+
+			List<Source> sources = new ArrayList<>();
+			List<Taker> takers = new ArrayList<>();
+			double[] gen = new double[count], stored = new double[count], want = new double[count], room = new double[count];
+			// one share a machine, however many wires meet it: by its block (a generator by its key)
+			Set<BlockPos> seen = new HashSet<>();
+			Map<BlockPos, double[]> nextUse = new HashMap<>();
+			boolean live = false;
+			double makes = 0;
+			for (Device d : ends) {
+				BlockPos t = d.end().target();
+				int c = circuitOf[d.seg()], rate = tiers[c].powerPerTick() * INTERVAL;
+				BlockPos key = generatorKeyAt(t);
+				if (key != null) {
+					if (!seen.add(key))
+						continue;
+					// live or on paper by the generator's own block, not the one the line meets
+					if (PowerGrid.running(level, key)) {
+						if (!(level.getBlockEntity(key) instanceof PowerGrid.Generator)) {
+							grid.forget(key);
+							continue;
+						}
+						BlockCapabilityCache<IEnergyStorage, Direction> cache = generatorCaches.computeIfAbsent(key.immutable(),
+							k -> BlockCapabilityCache.create(Capabilities.EnergyStorage.BLOCK, level, k, null));
+						IEnergyStorage e = cache.getCapability();
+						int offer = e == null || !e.canExtract() ? 0 : e.extractEnergy(rate, true);
+						PowerGrid.Paper rec = grid.paper(key);
+						makes += rec != null ? rec.making(level) : offer / (double) INTERVAL;
+						if (offer > 0) {
+							sources.add(new Source(c, cache, null, offer, false, key.immutable()));
+							gen[c] += offer;
+						}
+						continue;
+					}
+					// on paper, with the touching generators it shares its store with
+					for (BlockPos k : grid.row(key)) {
+						if (!k.equals(key) && !seen.add(k))
+							continue;
+						PowerGrid.Paper p = grid.paper(k);
+						if (p == null || PowerGrid.running(level, k))
+							continue;
+						makes += p.making(level);
+						int offer = grid.draw(p, rate, now, true, level);
+						if (offer > 0) {
+							sources.add(new Source(c, null, p, offer, false, k.immutable()));
+							gen[c] += offer;
+						}
+					}
+					continue;
+				}
+				if (!PowerGrid.running(level, t) || !seen.add(t))
+					continue;
+				IEnergyStorage e = d.energy().getCapability();
+				if (e == null)
+					continue;
+				boolean in = e.canReceive(), out = e.canExtract();
+				if (out) {
+					int offer = e.extractEnergy(rate, true);
+					if (offer > 0) {
+						sources.add(new Source(c, d.energy(), null, offer, in, null));
+						(in ? stored : gen)[c] += offer;
+						// another mod's generator: what it could give this second, as a rate
+						if (!in)
+							makes += offer / (double) INTERVAL;
+					}
+				}
+				if (in) {
+					// a second's worth: room to fill, and (for a machine) what it used in the last second
+					int roomNow = e.receiveEnergy(rate, true);
+					double used = 0;
+					double[] last = use.get(t);
+					if (last == null)
+						last = carriedUse.remove(t);
+					if (last != null && !out)
+						used = Math.max(0, last[1] + last[0] - e.getEnergyStored());
+					nextUse.put(t.immutable(), new double[] {e.getEnergyStored(), 0});
+					int w = (int) Math.min(rate, roomNow + used);
+					if (w > 0) {
+						takers.add(new Taker(c, d.energy(), t.immutable(), w, out, d.key()));
+						(out ? room : want)[c] += w;
+						live = true;
+					}
+				}
+			}
+			use.clear();
+			use.putAll(nextUse);
+			lastMakes = makes;
+			lastCircuit = circuitOf;
+			lastSupply = new double[count];
+			lastDemand = new double[count];
+			lastTook = new double[count];
+			if (!live) {
+				flowing.remove(this);
+				plan = null;
+				publish(0);
+				return;
+			}
+			Plan plan = plan(tiers, active, gen, stored, want, room, takers);
+			for (int c = 0; c < count; c++) {
+				lastSupply[c] = plan.supply[c] / INTERVAL;
+				lastDemand[c] = plan.demand[c] / INTERVAL;
+			}
+			// the next second, a twentieth a tick: each source's part of what its circuit gives, each taker's share
+			double[] budget = new double[sources.size()];
+			for (int i = 0; i < sources.size(); i++) {
+				Source s = sources.get(i);
+				int c = s.circuit();
+				double from = s.store() ? plan.fromStores[c] : plan.fromGenerators[c], all = s.store() ? stored[c] : gen[c];
+				budget[i] = all <= 0 ? 0 : Math.min(s.offer(), from * s.offer() / all) / INTERVAL;
+			}
+			double[] perTick = new double[takers.size()];
+			for (int i = 0; i < takers.size(); i++)
+				perTick[i] = takers.get(i).want() * (takers.get(i).store() ? 1 : plan.share[i]) / INTERVAL;
+			double[] grant = new double[active.size()];
+			for (int i = 0; i < active.size(); i++)
+				grant[i] = plan.grant[i] / INTERVAL;
+			this.plan = new Schedule(count, plan.fed, sources, budget, takers, perTick, new double[takers.size()], active, grant, circuitOf);
+			flowing.add(this);
 		}
 
-		/** Moves up to {@code offer} FE from source to the takers (batteries only when {@code stores}); returns how much. */
-		private int deliver(IEnergyStorage source, int offer, End from, boolean stores, Map<Node, Integer> metered) {
-			List<Route> open = new ArrayList<>();
-			List<IEnergyStorage> sinks = new ArrayList<>();
-			List<Sharing.Claim> claims = new ArrayList<>();
-			Set<BlockPos> targets = new java.util.HashSet<>();
-			for (Route r : routes.getOrDefault(from, List.of())) {
-				if (r.to.target.equals(from.target) || r.shut())
-					continue;
-				IEnergyStorage sink = r.to.energy.getCapability();
-				// one share a machine, however many wires meet it
-				if (sink == null || sink == source || !sink.canReceive() || sink.canExtract() != stores || sinks.contains(sink)
-					|| targets.contains(r.to.target))
-					continue;
-				targets.add(r.to.target);
-				int room = sink.receiveEnergy(offer, true);
-				if (room <= 0)
-					continue;
-				open.add(r);
-				sinks.add(sink);
-				claims.add(new Sharing.Claim(room, r.length, r.splitter, r.mode(), List.of()));
+		/**
+		 * Each tick while it has a plan: a twentieth of the second's plan, as much as the takers will have this tick, drawn
+		 * from its sources in proportion and nothing more (no simulating the network, no walking it).
+		 */
+		void flow(long now) {
+			Schedule f = plan;
+			if (f == null)
+				return;
+			// a second's plan, and no longer: one not renewed (its machines' wires stopped running) stops
+			if (now - lastTick >= INTERVAL + 2) {
+				plan = null;
+				flowing.remove(this);
+				return;
 			}
-			if (open.isEmpty())
-				return 0;
-			int[] share = Sharing.allocate(offer, claims, new HashMap<>(), turns);
-			int total = 0;
-			for (int s : share)
-				total += s;
-			if (total <= 0)
-				return 0;
-			int drawn = source.extractEnergy(total, false);
-			int left = drawn;
-			for (int i = 0; i < share.length && left > 0; i++) {
-				int give = Math.min(share[i], left);
-				if (give <= 0)
+			int count = f.count;
+			double[] need = new double[count], devices = new double[count];
+			int[] accept = new int[f.takers.size()];
+			IEnergyStorage[] taker = new IEnergyStorage[f.takers.size()];
+			for (int i = 0; i < accept.length; i++) {
+				Taker t = f.takers.get(i);
+				IEnergyStorage e = t.energy().getCapability();
+				if (e == null)
 					continue;
-				int took = sinks.get(i).receiveEnergy(give, false);
-				left -= took;
-				for (Node m : open.get(i).meters)
-					metered.merge(m, took, Integer::sum);
+				taker[i] = e;
+				double due = f.perTick[i] + f.carry[i];
+				int whole = (int) Math.floor(due);
+				f.carry[i] = Math.min(1, due - whole);
+				accept[i] = whole <= 0 ? 0 : e.receiveEnergy(whole, true);
+				need[t.circuit()] += accept[i];
+				if (!t.store())
+					devices[t.circuit()] += accept[i];
 			}
-			// anything turned down after all goes back where it came from, if it can take it
-			if (left > 0 && source.canReceive())
-				left -= source.receiveEnergy(left, false);
-			return drawn - left;
+			double[] budget = new double[count];
+			for (int i = 0; i < f.sources.size(); i++)
+				budget[f.sources.get(i).circuit()] += f.budget[i];
+			// copper fed by brass: what its own sources can't give, asked of the brass, up to what was planned
+			double[] own = new double[count], passed = new double[f.feeds.size()], asked = new double[count];
+			for (int c = 0; c < count; c++) {
+				if (f.fed[c] <= 0)
+					continue;
+				own[c] = Math.min(need[c], budget[c]);
+				double rest = need[c] - own[c];
+				for (int i = 0; i < f.feeds.size() && rest > 0; i++)
+					if (f.feeds.get(i).to() == c) {
+						passed[i] = Math.min(rest, f.grant[i]);
+						rest -= passed[i];
+						asked[f.feeds.get(i).from()] += passed[i];
+					}
+			}
+			for (int c = 0; c < count; c++)
+				if (f.fed[c] <= 0)
+					own[c] = Math.min(need[c] + asked[c], budget[c]);
+			// draw it, each source its part
+			double[] pool = new double[count], took = new double[f.sources.size()];
+			for (int i = 0; i < f.sources.size(); i++) {
+				Source s = f.sources.get(i);
+				int c = s.circuit();
+				if (budget[c] <= 0 || own[c] <= 0)
+					continue;
+				int take = (int) Math.round(own[c] * f.budget[i] / budget[c]);
+				if (take <= 0)
+					continue;
+				// a generator on paper that's running again gives for real from now (its record is its own again), and one
+				// running that has gone away gives on paper only from the next plan
+				if (s.generator() != null && (s.paper() != null) == PowerGrid.running(level, s.generator()))
+					continue;
+				if (s.paper() != null) {
+					took[i] = grid.draw(s.paper(), take, now, false, level);
+				} else {
+					IEnergyStorage e = s.energy().getCapability();
+					took[i] = e == null ? 0 : e.extractEnergy(take, false);
+				}
+				pool[c] += took[i];
+			}
+			// brass passes the copper its part first if it's short, in proportion; then each circuit gives its takers
+			for (int c = 0; c < count; c++) {
+				if (f.fed[c] > 0)
+					continue;
+				double want = need[c] + asked[c], scale = want <= 0 ? 0 : Math.min(1, pool[c] / want);
+				for (int i = 0; i < f.feeds.size(); i++)
+					if (f.feeds.get(i).from() == c && passed[i] > 0) {
+						double give = passed[i] * scale;
+						pool[c] -= give;
+						pool[f.feeds.get(i).to()] += give;
+					}
+			}
+			double[] flowed = new double[count];
+			for (int c = 0; c < count; c++)
+				flowed[c] = give(f, accept, taker, c, false, pool) + give(f, accept, taker, c, true, pool);
+			// anything left (a taker that turned it down after all, rounding) goes back where it came from
+			for (int i = 0; i < f.sources.size(); i++) {
+				Source s = f.sources.get(i);
+				int c = s.circuit();
+				if (pool[c] < 1 || took[i] <= 0)
+					continue;
+				double back = Math.min(pool[c], took[i]);
+				if (s.paper() != null) {
+					pool[c] -= grid.giveBack(s.paper(), back);
+				} else {
+					IEnergyStorage e = s.energy().getCapability();
+					if (e != null && e.canReceive())
+						pool[c] -= e.receiveEnergy((int) back, false);
+				}
+			}
+			for (int c = 0; c < count; c++) {
+				f.flowed[c] += flowed[c];
+				f.devices[c] += devices[c];
+			}
+			// once a second, the Meters, the read-out and the goggles' figures
+			if (now - lastTick == INTERVAL - 1) {
+				double uses = 0;
+				for (int c = 0; c < count && c < lastTook.length; c++) {
+					lastTook[c] = f.devices[c] / INTERVAL;
+					uses += lastTook[c];
+				}
+				publish(uses);
+				for (Map.Entry<Node, Integer> m : meters.entrySet())
+					if (level.isLoaded(m.getKey().pos()) && level.getBlockEntity(m.getKey().pos()) instanceof LineBlockEntity be && be.fitting() == Fitting.METER)
+						be.readMeter((int) (f.flowed[f.circuitOf[m.getValue()]] / INTERVAL));
+				java.util.Arrays.fill(f.flowed, 0);
+				java.util.Arrays.fill(f.devices, 0);
+			}
 		}
 
-		void zeroMeters(ServerLevel level) {
-			for (Map.Entry<Node, LineBlockEntity> f : fittings.entrySet())
-				if (f.getValue().fitting() == Fitting.METER && !f.getValue().isRemoved() && level.isLoaded(f.getKey().pos))
-					f.getValue().readMeter(0);
+		/** Gives the takers of circuit c of the kind asked what they'll have this tick, scaled to what's in the pool. */
+		private double give(Schedule f, int[] accept, IEnergyStorage[] taker, int c, boolean stores, double[] pool) {
+			double total = 0;
+			for (int i = 0; i < accept.length; i++)
+				if (f.takers.get(i).circuit() == c && f.takers.get(i).store() == stores)
+					total += accept[i];
+			if (total <= 0 || pool[c] < 1)
+				return 0;
+			double scale = Math.min(1, pool[c] / total), gave = 0;
+			for (int i = 0; i < accept.length; i++) {
+				Taker t = f.takers.get(i);
+				if (t.circuit() != c || t.store() != stores || taker[i] == null || accept[i] <= 0)
+					continue;
+				int amount = (int) Math.min(pool[c], Math.floor(accept[i] * scale));
+				if (amount <= 0)
+					continue;
+				int took = taker[i].receiveEnergy(amount, false);
+				pool[c] -= took;
+				gave += took;
+				double[] u = use.get(t.pos());
+				if (u != null)
+					u[1] += took;
+			}
+			return gave;
+		}
+
+		/** Tells the machines on it, and the wires that meet them, what it makes and uses (for their goggles). */
+		private void publish(double uses) {
+			int makes = (int) Math.round(lastMakes), using = (int) Math.round(uses);
+			for (Device d : ends) {
+				BlockPos t = d.end().target();
+				if (level.isLoaded(t) && level.getBlockEntity(t) instanceof NetworkReading.Shown s)
+					s.networkReading(makes, using);
+			}
+			for (BlockPos w : wires)
+				if (level.isLoaded(w) && level.getBlockEntity(w) instanceof NetworkReading.Shown s)
+					s.networkReading(makes, using);
+		}
+
+		/** Each segment's circuit: segments joined through the Breakers that are on. */
+		private int[] circuits(boolean[] on) {
+			int n = segTier.length;
+			int[] root = new int[n];
+			for (int i = 0; i < n; i++)
+				root[i] = i;
+			for (int[] sw : switches)
+				if (on[sw[2]]) {
+					int a = find(root, sw[0]), b = find(root, sw[1]);
+					if (a != b)
+						root[a] = b;
+				}
+			int[] out = new int[n];
+			Map<Integer, Integer> ids = new HashMap<>();
+			for (int i = 0; i < n; i++)
+				out[i] = ids.computeIfAbsent(find(root, i), k -> ids.size());
+			return out;
+		}
+
+		private static int find(int[] root, int i) {
+			while (root[i] != i)
+				i = root[i] = root[root[i]];
+			return i;
+		}
+
+		/** The share of what each taker wants it gets, and per circuit what it draws and passes on. */
+		private final class Plan {
+			final double[] share, fromGenerators, fromStores, fed, supply, demand;
+			/** What each feed passes from brass to copper. */
+			final double[] grant;
+
+			Plan(int count, int takers, int feeds) {
+				share = new double[takers];
+				supply = new double[count];
+				demand = new double[count];
+				fromGenerators = new double[count];
+				fromStores = new double[count];
+				fed = new double[count];
+				grant = new double[feeds];
+			}
+		}
+
+		private Plan plan(LineTier[] tiers, List<Feed> feeds, double[] gen, double[] stored, double[] want, double[] room, List<Taker> takers) {
+			int count = tiers.length;
+			Plan plan = new Plan(count, takers.size(), feeds.size());
+			double[] cap = new double[count], need = new double[count], asked = new double[count], received = new double[count],
+				spare = new double[count];
+			for (int c = 0; c < count; c++)
+				cap[c] = (double) tiers[c].powerPerTick() * INTERVAL;
+			for (Feed f : feeds)
+				plan.fed[f.to()]++;
+			// a copper circuit asks the brass feeding it for what its own generators can't give (its devices, then its
+			// batteries), up to its rate; at first an even part of it from each brass circuit feeding it
+			for (int c = 0; c < count; c++)
+				if (plan.fed[c] > 0)
+					need[c] = Math.max(0, Math.min(want[c] + room[c], cap[c]) - gen[c]);
+			for (Feed f : feeds)
+				asked[f.from()] += need[f.to()] / plan.fed[f.to()];
+			// brass (and copper fed by nothing) first
+			for (int c = 0; c < count; c++) {
+				if (plan.fed[c] > 0)
+					continue;
+				double demand = want[c] + asked[c];
+				boolean short_ = gen[c] < demand;
+				double supply = Math.min(cap[c], gen[c] + (short_ ? stored[c] : 0));
+				double deliver = Math.min(supply, demand);
+				plan.supply[c] = supply;
+				plan.demand[c] = want[c];
+				// what it can give, shared by priority between its devices and the copper it feeds
+				List<Integer> mine = new ArrayList<>(), out = new ArrayList<>();
+				for (int i = 0; i < takers.size(); i++)
+					if (takers.get(i).circuit() == c && !takers.get(i).store())
+						mine.add(i);
+				for (int i = 0; i < feeds.size(); i++)
+					if (feeds.get(i).from() == c)
+						out.add(i);
+				double[] wants = new double[mine.size() + out.size()];
+				int[][] keys = new int[wants.length][];
+				for (int k = 0; k < mine.size(); k++) {
+					wants[k] = takers.get(mine.get(k)).want();
+					keys[k] = takers.get(mine.get(k)).key();
+				}
+				for (int k = 0; k < out.size(); k++) {
+					Feed f = feeds.get(out.get(k));
+					wants[mine.size() + k] = need[f.to()] / plan.fed[f.to()];
+					keys[mine.size() + k] = f.key();
+				}
+				double[] got = allocate(deliver, wants, keys);
+				for (int k = 0; k < mine.size(); k++)
+					plan.share[mine.get(k)] = got[k];
+				for (int k = 0; k < out.size(); k++) {
+					int i = out.get(k);
+					plan.grant[i] = got[mine.size() + k] * wants[mine.size() + k];
+					received[feeds.get(i).to()] += plan.grant[i];
+				}
+				double fromGen = Math.min(gen[c], deliver);
+				plan.fromGenerators[c] = fromGen;
+				plan.fromStores[c] = deliver - fromGen;
+				spare[c] = short_ ? 0 : Math.max(0, Math.min(cap[c], gen[c]) - deliver);
+			}
+			// a copper circuit one brass circuit couldn't serve asks the others for the rest, from what they have spare
+			for (int c = 0; c < count; c++) {
+				if (plan.fed[c] <= 0)
+					continue;
+				double rest = need[c] - received[c];
+				for (int i = 0; i < feeds.size() && rest > 1e-6; i++) {
+					Feed f = feeds.get(i);
+					if (f.to() != c || spare[f.from()] <= 0)
+						continue;
+					double more = Math.min(rest, spare[f.from()]);
+					spare[f.from()] -= more;
+					plan.grant[i] += more;
+					plan.fromGenerators[f.from()] += more;
+					received[c] += more;
+					rest -= more;
+				}
+			}
+			// what brass generators still have spare charges its batteries, as far as the line's rate allows
+			for (int c = 0; c < count; c++)
+				if (plan.fed[c] <= 0)
+					plan.fromGenerators[c] += Math.max(0, Math.min(room[c], spare[c]));
+			// then the copper the brass feeds: its own generators and what it was passed
+			for (int c = 0; c < count; c++) {
+				if (plan.fed[c] <= 0)
+					continue;
+				double in = received[c];
+				boolean short_ = gen[c] + in < want[c];
+				double supply = Math.min(cap[c], gen[c] + in + (short_ ? stored[c] : 0));
+				double deliver = Math.min(supply, want[c]);
+				plan.supply[c] = supply;
+				plan.demand[c] = want[c];
+				List<Integer> mine = new ArrayList<>();
+				for (int i = 0; i < takers.size(); i++)
+					if (takers.get(i).circuit() == c && !takers.get(i).store())
+						mine.add(i);
+				double[] wants = new double[mine.size()];
+				int[][] keys = new int[mine.size()][];
+				for (int k = 0; k < mine.size(); k++) {
+					wants[k] = takers.get(mine.get(k)).want();
+					keys[k] = takers.get(mine.get(k)).key();
+				}
+				double[] got = allocate(deliver, wants, keys);
+				for (int k = 0; k < mine.size(); k++)
+					plan.share[mine.get(k)] = got[k];
+				double usedIn = Math.min(in, deliver), own = deliver - usedIn;
+				double fromGen = Math.min(gen[c], own);
+				plan.fromStores[c] = own - fromGen;
+				// batteries take what it was passed and didn't use, then what its own generators have spare
+				double charge = Math.max(0, Math.min(room[c], cap[c] - deliver));
+				double fromIn = Math.min(charge, in - usedIn);
+				plan.fromGenerators[c] = fromGen + (short_ ? 0 : Math.max(0, Math.min(charge - fromIn, gen[c] - fromGen)));
+			}
+			return plan;
+		}
+
+		void zeroMeters() {
+			for (Node m : meters.keySet())
+				if (level.isLoaded(m.pos()) && level.getBlockEntity(m.pos()) instanceof LineBlockEntity be && be.fitting() == Fitting.METER)
+					be.readMeter(0);
 		}
 	}
 }

@@ -41,6 +41,7 @@ public final class TradeBotGeometry {
 	public static final String PATH = "/assets/comedymonkeysaddons/trade_bot/geometry.json";
 	public static final ModelLayerLocation BOT_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_bot"), "main");
 	public static final ModelLayerLocation STATION_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_bot"), "station");
+	public static final ModelLayerLocation STATION_GLOW_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_bot"), "station_glow");
 
 	public record Bone(String name, @Nullable String parent, float[] pivot, float[] rotation, List<Cube> cubes) {}
 
@@ -80,6 +81,11 @@ public final class TradeBotGeometry {
 
 	public static LayerDefinition stationLayer() {
 		return get().layer("station");
+	}
+
+	/** Only the station's cubes with any glow on them (its Flywheel visual draws them at full brightness). */
+	public static LayerDefinition stationGlowLayer() {
+		return get().layer(GlowModel.glowing(get()), "station");
 	}
 
 	/** A model of these root bones and everything under them. */

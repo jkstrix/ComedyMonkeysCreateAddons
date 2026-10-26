@@ -22,20 +22,21 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 
 /**
  * The fittings clipped onto a Power Line: a Breaker with its lever (snapping over when flipped), a Meter whose needle
- * swings to the flow, a Splitter whose dial clicks round to its mode. They lie on the wire's face across its run. Plain
+ * swings to the flow, a Splitter on a junction whose dial points at the branch served first (or shows the fork when
+ * they're all level). They lie on the wire's face across its run. Plain
  * wire draws nothing here. All of it is part models, which Flywheel draws instead when it's on.
  */
 public class PowerLineRenderer implements BlockEntityRenderer<PowerLineBlockEntity> {
 	public static final ModelResourceLocation BREAKER = part("breaker"), LEVER = part("breaker_lever"), METER = part("wire_meter"),
 		NEEDLE = part("wire_meter_needle"), SPLITTER = part("wire_splitter"), DIAL_EVEN = part("wire_splitter_dial_even"),
-		DIAL_NEAREST = part("wire_splitter_dial_nearest"), DIAL_ROBIN = part("wire_splitter_dial_robin");
+		DIAL_NEAREST = part("wire_splitter_dial_nearest"), DIAL_ROBIN = part("wire_splitter_dial_robin"), DIAL_FIRST = part("wire_splitter_dial_first");
 
 	private static ModelResourceLocation part(String name) {
 		return ModelResourceLocation.standalone(ComedyMonkeysCreateAddons.asResource("block/line_fitting/" + name));
 	}
 
 	public static void registerModels(ModelEvent.RegisterAdditional event) {
-		for (ModelResourceLocation m : new ModelResourceLocation[] {BREAKER, LEVER, METER, NEEDLE, SPLITTER, DIAL_EVEN, DIAL_NEAREST, DIAL_ROBIN})
+		for (ModelResourceLocation m : new ModelResourceLocation[] {BREAKER, LEVER, METER, NEEDLE, SPLITTER, DIAL_EVEN, DIAL_NEAREST, DIAL_ROBIN, DIAL_FIRST})
 			event.register(m);
 	}
 
@@ -52,6 +53,10 @@ public class PowerLineRenderer implements BlockEntityRenderer<PowerLineBlockEnti
 			return;
 		BlockState state = be.getBlockState();
 		Direction run = be.fittingSide(), face = null;
+		// a Splitter is turned to point at its first branch
+		Direction first = be.fitting() == Fitting.SPLITTER ? be.firstBranch() : null;
+		if (first != null)
+			run = first;
 		for (Direction d : Direction.values())
 			if (PowerLineBlock.hasFace(state, d) && d.getAxis() != run.getAxis()
 				&& (face == null || be.link(d, run).connected() || be.link(d, run.getOpposite()).connected()))
@@ -75,13 +80,7 @@ public class PowerLineRenderer implements BlockEntityRenderer<PowerLineBlockEnti
 			}
 			case SPLITTER -> {
 				sink.part(SPLITTER, ms, light);
-				ModelResourceLocation dial = switch (be.splitMode()) {
-					case EVEN -> DIAL_EVEN;
-					case NEAREST -> DIAL_NEAREST;
-					case ROUND_ROBIN -> DIAL_ROBIN;
-				};
-				float shown = be.easeShown(be.splitMode().ordinal() * 120f, 0.3f);
-				rotated(ms, 8, 2, 8, Axis.YP, -shown, () -> sink.part(dial, ms, light));
+				sink.part(first != null ? DIAL_FIRST : DIAL_EVEN, ms, light);
 			}
 			default -> {}
 		}

@@ -28,7 +28,8 @@ import net.minecraft.world.phys.Vec3;
  * A machine's model parts as Flywheel instances: every frame its renderer's part method poses them, exactly as it
  * would for the screen, and each part goes to the instance in the same place in the order (a new one only when the
  * part changes there, as when a lamp changes colour). Moving the instances costs a matrix per part, not a re-drawn
- * model. Parts the method leaves out this frame are hidden. Fluids, items and other things that aren't part models
+ * model, and an instance is only sent to the GPU again when it moved, changed light or was shown or hidden: a part
+ * standing still costs a comparison a frame. Parts the method leaves out this frame are hidden. Fluids, items and other things that aren't part models
  * stay with the renderer.
  * <p>
  * Only {@link #beginFrame} (and the constructor) touches the instances: Flywheel runs light updates on its worker
@@ -54,6 +55,10 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 	private final List<ModelResourceLocation> models = new ArrayList<>();
 	private final List<RenderType> types = new ArrayList<>();
 	private final List<TransformedInstance> instances = new ArrayList<>();
+	/** What each instance was last sent as: its pose, light, and whether it's showing. */
+	private final List<org.joml.Matrix4f> poses = new ArrayList<>();
+	private final List<int[]> lights = new ArrayList<>();
+	private final List<boolean[]> showing = new ArrayList<>();
 	private final PoseStack ms = new PoseStack();
 	private final PartSink sink = this::place;
 	private volatile int light;
@@ -118,34 +123,51 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 		ms.translate(visualPos.getX(), visualPos.getY(), visualPos.getZ());
 		parts.draw(blockEntity, partialTick, ms, sink, light);
 		for (int i = next; i < instances.size(); i++)
-			instances.get(i).setVisible(false);
+			hide(i);
+	}
+
+	private void hide(int i) {
+		if (!showing.get(i)[0])
+			return;
+		showing.get(i)[0] = false;
+		instances.get(i).setVisible(false);
 	}
 
 	private void hideAll() {
 		if (hidden)
 			return;
 		hidden = true;
-		instances.forEach(instance -> instance.setVisible(false));
+		for (int i = 0; i < instances.size(); i++)
+			hide(i);
 	}
 
 	private void place(ModelResourceLocation model, PoseStack pose, int partLight, RenderType type) {
 		TransformedInstance instance;
-		if (next < instances.size() && models.get(next).equals(model) && types.get(next) == type)
-			instance = instances.get(next);
-		else {
+		int i = next++;
+		if (i < instances.size() && models.get(i).equals(model) && types.get(i) == type) {
+			instance = instances.get(i);
+			// standing still, same light, already showing: nothing to send
+			if (showing.get(i)[0] && lights.get(i)[0] == partLight && poses.get(i).equals(pose.last().pose()))
+				return;
+		} else {
 			instance = instancerProvider().instancer(InstanceTypes.TRANSFORMED, PartModels.get(model, type)).createInstance();
-			if (next < instances.size()) {
-				instances.get(next).delete();
-				instances.set(next, instance);
-				models.set(next, model);
-				types.set(next, type);
+			if (i < instances.size()) {
+				instances.get(i).delete();
+				instances.set(i, instance);
+				models.set(i, model);
+				types.set(i, type);
 			} else {
 				instances.add(instance);
 				models.add(model);
 				types.add(type);
+				poses.add(new org.joml.Matrix4f());
+				lights.add(new int[1]);
+				showing.add(new boolean[1]);
 			}
 		}
-		next++;
+		poses.get(i).set(pose.last().pose());
+		lights.get(i)[0] = partLight;
+		showing.get(i)[0] = true;
 		instance.setTransform(pose.last());
 		instance.light(partLight);
 		instance.setVisible(true);
@@ -163,5 +185,8 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 		instances.clear();
 		models.clear();
 		types.clear();
+		poses.clear();
+		lights.clear();
+		showing.clear();
 	}
 }

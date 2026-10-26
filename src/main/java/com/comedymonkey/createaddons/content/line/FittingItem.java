@@ -43,9 +43,9 @@ public class FittingItem extends Item {
 			tell(level, player, "fitting_already");
 			return InteractionResult.FAIL;
 		}
-		Direction side = line.straightSide(level, pos, state);
+		Direction side = line.sideFor(fitting, level, pos, state);
 		if (side == null) {
-			tell(level, player, "fitting_needs_straight");
+			tell(level, player, fitting == Fitting.SPLITTER && line instanceof PowerLineBlock ? "fitting_needs_junction" : "fitting_needs_straight");
 			return InteractionResult.FAIL;
 		}
 		if (!level.isClientSide) {

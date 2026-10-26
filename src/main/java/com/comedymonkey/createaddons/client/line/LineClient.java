@@ -47,6 +47,9 @@ public final class LineClient {
 				return state.getBlock() instanceof LineBlock ? LineColors.tier(tierOf(state.getBlock())) : -1;
 			if (be.encasing() != null)
 				return event.getBlockColors().getColor(be.encasing(), level, pos, tint);
+			// (1: a Breaker's arm towards a wire of the other tier, drawn in that tier's colour)
+			if (tint == 1)
+				return LineColors.of(be.tier() == LineTier.BRASS ? LineTier.COPPER : LineTier.BRASS, be.dye());
 			return tint == 0 ? LineColors.of(be.tier(), be.dye()) : -1;
 		}, lineBlocks());
 	}

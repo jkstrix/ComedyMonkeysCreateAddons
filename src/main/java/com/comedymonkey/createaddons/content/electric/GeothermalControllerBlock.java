@@ -12,7 +12,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -41,6 +43,16 @@ public class GeothermalControllerBlock extends Block implements IBE<GeothermalCo
 	 * Turned by a wrench, it faces a different 3x3x3: it comes out unformed and unlit (onRemove frees the old casings),
 	 * and forms again if the new cube is a turbine.
 	 */
+	/** On a formed turbine a wrench opens its power level; on an unformed controller it turns it, as before. */
+	@Override
+	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
+		if (!state.getValue(FORMED))
+			return IWrenchable.super.onWrenched(state, context);
+		if (context.getLevel().isClientSide)
+			com.comedymonkey.createaddons.client.GeothermalTurbineScreen.open(context.getClickedPos());
+		return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
+	}
+
 	@Override
 	public BlockState getRotatedBlockState(BlockState originalState, Direction targetedFace) {
 		return IWrenchable.super.getRotatedBlockState(originalState, targetedFace).setValue(FORMED, false).setValue(LIT, false);
@@ -101,6 +113,9 @@ public class GeothermalControllerBlock extends Block implements IBE<GeothermalCo
 		boolean turned = state.is(newState.getBlock()) && state.getValue(FACING) != newState.getValue(FACING);
 		if ((!state.is(newState.getBlock()) || turned) && level.getBlockEntity(pos) instanceof GeothermalControllerBlockEntity be)
 			be.unform();
+		// broken: no longer a generator its line can reach from afar
+		if (!state.is(newState.getBlock()) && level instanceof net.minecraft.server.level.ServerLevel server)
+			com.comedymonkey.createaddons.content.line.PowerGrid.of(server).forget(pos);
 		super.onRemove(state, level, pos, newState, movedByPiston);
 	}
 

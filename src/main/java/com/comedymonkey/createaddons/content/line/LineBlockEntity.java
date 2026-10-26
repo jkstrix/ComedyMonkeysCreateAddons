@@ -89,6 +89,16 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 	/** Where things flow changed: the network of this line (and its neighbours') must be found again. */
 	protected abstract void networkChanged(ServerLevel level);
 
+	/** It loaded: by default, its network is worked out again. */
+	protected void networkLoaded(ServerLevel level) {
+		networkChanged(level);
+	}
+
+	/** Its chunk unloaded: by default, its network is worked out again without it. */
+	protected void networkUnloaded(ServerLevel level) {
+		networkChanged(level);
+	}
+
 	// ---------- reading ----------
 
 	@Nullable
@@ -214,12 +224,20 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 	 * colour unless a wrench joined them.
 	 */
 	public static boolean joins(LineBlockEntity a, Direction d, LineBlockEntity b) {
-		if (a.tier() != b.tier())
-			return false;
 		Joint here = a.joint(d), there = b.joint(d.getOpposite());
 		if (here == Joint.CUT || there == Joint.CUT)
 			return false;
+		// brass and copper: only at a Breaker, and only once that joint is wrenched
+		if (a.tier() != b.tier())
+			return breakerJoin(a, d, b) && here == Joint.JOINED && there == Joint.JOINED;
 		return (here == Joint.JOINED && there == Joint.JOINED) || a.dye == b.dye;
+	}
+
+	/** Brass and copper Power Lines can join only at a Breaker, along its run (brass feeds copper through it), when wrenched. */
+	static boolean breakerJoin(LineBlockEntity a, Direction d, LineBlockEntity b) {
+		return a instanceof PowerLineBlockEntity && b instanceof PowerLineBlockEntity
+			&& (a.fitting() == Fitting.BREAKER && a.fittingSide().getAxis() == d.getAxis()
+				|| b.fitting() == Fitting.BREAKER && b.fittingSide().getAxis() == d.getAxis());
 	}
 
 	// ---------- changes ----------
@@ -242,7 +260,9 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 		Joint next;
 		if (joinedNow)
 			next = Joint.CUT;
-		else if (level.getBlockEntity(worldPosition.relative(d)) instanceof LineBlockEntity other && other.dye != dye)
+		// different colours, or brass and copper at a Breaker: joined by the wrench
+		else if (level.getBlockEntity(worldPosition.relative(d)) instanceof LineBlockEntity other
+			&& (other.dye != dye || other.tier() != tier() && breakerJoin(this, d, other)))
 			next = Joint.JOINED;
 		else
 			next = Joint.AUTO;
@@ -377,6 +397,9 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
 	}
 
+	/** Client: its fitting went on or off, or its encasing changed (its Flywheel visual is made again); set by the client setup. */
+	public static java.util.function.Consumer<LineBlockEntity> clientRefitted = be -> {};
+
 	/** The block model shows the dye and the encasing, so the chunk is drawn again on the client. */
 	private void rerender() {
 		requestModelDataUpdate();
@@ -427,6 +450,9 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 		meterLevel = tag.getFloat("MeterLevel");
 		if (level != null && level.isClientSide && (oldEncasing != encasing || oldDye != dye || oldFitting != fitting))
 			rerender();
+		// a fitting on or off, or the line encased: its parts' visual is made again (a plain line has one that does nothing)
+		if (level != null && level.isClientSide && (oldEncasing != encasing || oldFitting != fitting))
+			clientRefitted.accept(this);
 		// new data on a line already in the world (a command, a schematic): its sides and network are worked out again
 		if (level instanceof ServerLevel server) {
 			server.scheduleTick(worldPosition, getBlockState().getBlock(), 1);
@@ -510,17 +536,22 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 	public void onLoad() {
 		super.onLoad();
 		if (level instanceof ServerLevel server)
-			networkChanged(server);
+			networkLoaded(server);
 	}
 
 	@Override
 	public void onChunkUnloaded() {
 		super.onChunkUnloaded();
 		if (level instanceof ServerLevel server)
-			networkChanged(server);
+			networkUnloaded(server);
 	}
 
 	// ---------- goggles ----------
+
+	/** What the goggles say a Splitter does (a Power Line's says how it ranks its branches). */
+	protected Component splitterLine() {
+		return Component.translatable(key("splitter_" + splitMode.key()));
+	}
 
 	@Override
 	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
@@ -542,7 +573,7 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 			line(tooltip, Component.translatable(key("holding_back")));
 		switch (fitting) {
 			case BREAKER -> line(tooltip, Component.translatable(key(powered ? "breaker_redstone" : leverOn ? "breaker_on" : "breaker_off")));
-			case SPLITTER -> line(tooltip, Component.translatable(key("splitter_" + splitMode.key())));
+			case SPLITTER -> line(tooltip, splitterLine());
 			case METER -> line(tooltip, Component.translatable(key(meterUnitKey()), meterFlow));
 			default -> {}
 		}

@@ -26,6 +26,8 @@ public final class ShotRunner {
 
 	private static String label;
 	private static int step = -1, wait, ticks;
+	/** A label starting "gui-": one shot with the HUD showing (the goggles' overlay), on the backend as it is. */
+	private static boolean gui;
 	/** What it changes, to put back afterwards. */
 	private static String backendBefore;
 	private static boolean vsyncBefore, hideGuiBefore;
@@ -50,21 +52,23 @@ public final class ShotRunner {
 			}
 			step = 0;
 			wait = 0;
+			gui = label.startsWith("gui-");
 			backendBefore = Backend.REGISTRY.getIdOrThrow(BackendManager.currentBackend()).toString();
 			vsyncBefore = mc.options.enableVsync().get();
 			frameLimitBefore = mc.options.framerateLimit().get();
 			hideGuiBefore = mc.options.hideGui;
 		}
 		if (wait == 0) {
-			ClientCommandHandler.runCommand("flywheel backend " + BACKENDS[step]);
-			mc.options.hideGui = true; // no chat, hand or hotbar in the shots
+			if (!gui)
+				ClientCommandHandler.runCommand("flywheel backend " + BACKENDS[step]);
+			mc.options.hideGui = !gui; // no chat, hand or hotbar in the shots (unless the HUD is what's being looked at)
 			// uncapped, so the frame rates measure the renderer, not the limit
 			setVsync(mc, false);
 			setFrameLimit(mc, 260);
 		}
 		if (++wait < SETTLE_TICKS)
 			return;
-		String name = "cmca/" + label + "-" + BACKENDS[step].substring("flywheel:".length()) + ".png";
+		String name = gui ? "cmca/" + label + ".png" : "cmca/" + label + "-" + BACKENDS[step].substring("flywheel:".length()) + ".png";
 		Screenshot.grab(mc.gameDirectory, name, mc.getMainRenderTarget(), message -> {});
 		try {
 			Files.writeString(mc.gameDirectory.toPath().resolve("cmca-shots.fps"), label + " " + BACKENDS[step] + " " + mc.getFps() + " fps\n",
@@ -72,7 +76,7 @@ public final class ShotRunner {
 		} catch (IOException ignored) {
 		}
 		wait = 0;
-		if (++step == BACKENDS.length) {
+		if (++step == BACKENDS.length || gui) {
 			step = -1;
 			ClientCommandHandler.runCommand("flywheel backend " + backendBefore);
 			mc.options.hideGui = hideGuiBefore;

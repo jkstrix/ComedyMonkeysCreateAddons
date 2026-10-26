@@ -11,6 +11,7 @@ import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.SaveMark;
+import com.comedymonkey.createaddons.content.line.PowerGrid;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModSounds;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
@@ -38,10 +39,11 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 
 /**
  * Runs the Geothermal Turbine: checks the 3x3x3 behind it once a second, and while it's formed and has both lava and
- * water, burns them (lava heats water to steam, the steam turns the turbine) for a lot of FE. Pipes and energy pipes
+ * water, burns them (lava heats water to steam, the steam turns the turbine) for a lot of FE, always at the power level
+ * set on it (what its store can't hold is lost). While its chunk isn't running, its line runs it on paper. Pipes and energy pipes
  * reach it through any casing; it pushes power into anything that takes it touching the outside of the turbine.
  */
-public class GeothermalControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+public class GeothermalControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, PowerGrid.Generator, com.comedymonkey.createaddons.content.line.NetworkReading.Shown {
 	public static final int TANK = 16000;
 	private static final int BUFFER = 4_000_000;
 
@@ -49,10 +51,17 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 	private final FluidTank water = tank(stack -> stack.getFluid().isSame(Fluids.WATER));
 	private final EnergyBuffer energy = new EnergyBuffer(BUFFER, 0, BUFFER, () -> SaveMark.mark(this));
 	private final IFluidHandler fluids = new Inlets();
-	private final IEnergyStorage energyOut = energy.extractOnly();
+	/** Its power can't be taken from the block while it's on paper (its record is what runs it then). */
+	private final IEnergyStorage energyOut = energy.extractOnly(() -> PowerGrid.givesHere(level, worldPosition));
 	private boolean formed;
 	private boolean running;
 	private boolean checkQueued = true;
+	/** The power level set on it, in tenths of full output. */
+	private int outputTenths = 10;
+	/** Its Power Line network's figures, for the goggles. */
+	private final com.comedymonkey.createaddons.content.line.NetworkReading reading = new com.comedymonkey.createaddons.content.line.NetworkReading();
+	/** Server: the lava and water the Fluid Lines bring it, from each source, for its record. */
+	private final PowerGrid.Feeds feeds = new PowerGrid.Feeds(2);
 	/** Lava and water owed, in twentieths of a millibucket: both are used in proportion to what's made. */
 	private double lavaProgress;
 	private double waterProgress;
@@ -96,6 +105,79 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 		return fluids;
 	}
 
+	// ---------- its power level ----------
+
+	/** Tenths of full output it's set to, 1 to 10 (full unless turned down); lava and water use go with it. */
+	public int outputTenths() {
+		return Math.clamp(outputTenths, 1, 10);
+	}
+
+	/** FE a tick it makes at its level, from the config's full output. */
+	public int outputSetting() {
+		return (int) Math.round(Math.max(0, CMConfig.SERVER.turbineFePerTick()) * outputTenths() / 10.0);
+	}
+
+	/** From its settings screen, checked on the server. */
+	public void applyOutput(int tenths) {
+		if (Math.clamp(tenths, 1, 10) == outputTenths)
+			return;
+		outputTenths = Math.clamp(tenths, 1, 10);
+		syncQueued = true;
+		SaveMark.mark(this);
+	}
+
+	/** How much of full output it's set to, 0 to 1: what its lava and water use scale by. */
+	private double setShare() {
+		return outputTenths() / 10.0;
+	}
+
+	// ---------- its record, for running on paper while its chunk isn't running ----------
+
+	@Override
+	public PowerGrid.Paper newPaper() {
+		return new PowerGrid.Paper("geothermal_turbine", 2);
+	}
+
+	@Override
+	public void record(PowerGrid.Paper p, boolean refresh) {
+		p.set(formed ? outputSetting() : 0, energy.getEnergyStored(), BUFFER);
+		p.fuel(0).set(lava.getFluidAmount(), TANK, CMConfig.SERVER.turbineLavaPerSecond() / 20.0 * setShare());
+		p.fuel(1).set(water.getFluidAmount(), TANK, CMConfig.SERVER.turbineWaterPerSecond() / 20.0 * setShare());
+		if (refresh) {
+			feeds.into(p.fuel(0), 0, level);
+			feeds.into(p.fuel(1), 1, level);
+		}
+	}
+
+	/** Back from paper: its store, lava and water move by as much as its record's did (anything else that reached it stays). */
+	@Override
+	public void resume(double storeChange, double[] fuelChange) {
+		energy.setEnergy((int) Math.max(0, Math.min(BUFFER, energy.getEnergyStored() + Math.round(storeChange))));
+		move(lava, Fluids.LAVA, fuelChange[0]);
+		move(water, Fluids.WATER, fuelChange[1]);
+		SaveMark.mark(this);
+	}
+
+	private static void move(FluidTank tank, net.minecraft.world.level.material.Fluid fluid, double change) {
+		int mb = (int) Math.round(change);
+		if (mb > 0)
+			tank.fill(new FluidStack(fluid, mb), IFluidHandler.FluidAction.EXECUTE);
+		else if (mb < 0)
+			tank.drain(-mb, IFluidHandler.FluidAction.EXECUTE);
+	}
+
+	@Override
+	public void networkReading(int makes, int uses) {
+		if (level != null && reading.set(makes, uses, level.getGameTime()))
+			syncQueued = true;
+	}
+
+	/** Lava and water the Fluid Lines bring its port casings, from each source, for its record. */
+	@Override
+	public void fed(BlockPos source, net.minecraft.world.level.material.Fluid fluid, int amount) {
+		feeds.add(source, fluid.isSame(Fluids.LAVA) ? 0 : fluid.isSame(Fluids.WATER) ? 1 : -1, amount);
+	}
+
 	public IEnergyStorage getEnergyOut() {
 		return energyOut;
 	}
@@ -112,9 +194,9 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 		return running;
 	}
 
-	/** Formed with both lava and water, but not running: the power isn't being taken ("Full"). */
+	/** Running with its store full: what it makes now is lost (its stall lamp and sound). */
 	public boolean isStalled() {
-		return formed && !running && !lava.isEmpty() && !water.isEmpty();
+		return formed && running && energy.getEnergyStored() >= BUFFER * 0.99;
 	}
 
 	/** How hard it's working, 0 to 1, from the smoothed output. */
@@ -161,6 +243,9 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 			clientTicker.accept(this);
 			return;
 		}
+		// running again after being on paper: it takes on what its record came to
+		if (level instanceof ServerLevel server)
+			PowerGrid.of(server).back(this, server);
 		if (checkQueued || level.getGameTime() % 20 == 0) {
 			checkQueued = false;
 			setFormed(structureIsWhole());
@@ -170,11 +255,11 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 			// Out to everything touching it first, then make up what was taken (up to full output)
 			for (int i = 0; i < neighbours.size() && energy.getEnergyStored() > 0; i++)
 				energy.pushTo(neighbours.get(i), energy.getEnergyStored());
-			int fe = CMConfig.SERVER.turbineFePerTick();
+			// always at its set level while it has both: what the store can't hold is lost
 			if (!lava.isEmpty() && !water.isEmpty())
-				make = Math.min(fe, energy.getMaxEnergyStored() - energy.getEnergyStored());
+				make = outputSetting();
 			if (make > 0) {
-				double share = (double) make / fe;
+				double share = setShare();
 				lavaProgress += CMConfig.SERVER.turbineLavaPerSecond() * share;
 				waterProgress += CMConfig.SERVER.turbineWaterPerSecond() * share;
 				int lavaBurn = (int) (lavaProgress / 20), waterBurn = (int) (waterProgress / 20);
@@ -182,7 +267,7 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 				water.drain(waterBurn, IFluidHandler.FluidAction.EXECUTE);
 				lavaProgress -= lavaBurn * 20;
 				waterProgress -= waterBurn * 20;
-				energy.generate(make);
+				energy.generate(Math.min(make, energy.getMaxEnergyStored() - energy.getEnergyStored()));
 				activeTicks = 40;
 			}
 		}
@@ -203,6 +288,11 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 			syncQueued = false;
 			syncedEnergy = energy.getEnergyStored();
 			sendData();
+		}
+		if (level instanceof ServerLevel server) {
+			if (Math.floorMod(worldPosition.hashCode() + server.getGameTime(), 20) == 0)
+				feeds.update(server.getGameTime());
+			PowerGrid.of(server).note(this, server);
 		}
 	}
 
@@ -312,9 +402,11 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 		fluidLine(tooltip, water, Fluids.WATER.getFluidType().getDescription().copy());
 		lang().text(String.format(Locale.ROOT, "%,d / %,d FE", energy.getEnergyStored(), BUFFER)).style(ChatFormatting.AQUA)
 			.forGoggles(tooltip, 1);
-		String key = running ? "running" : lava.isEmpty() ? "no_lava" : water.isEmpty() ? "no_water" : "full";
+		String key = isStalled() ? "full" : running ? "running" : lava.isEmpty() ? "no_lava" : "no_water";
 		lang().translate("gui.goggles.geothermal_turbine." + key, String.format(Locale.ROOT, "%,.0f", output))
-			.style(running ? ChatFormatting.GREEN : ChatFormatting.RED).forGoggles(tooltip, 1);
+			.style(running && !isStalled() ? ChatFormatting.GREEN : ChatFormatting.RED).forGoggles(tooltip, 1);
+		lang().translate("gui.goggles.geothermal_turbine.level", outputTenths() * 10).style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
+		reading.addTo(tooltip, level, 1);
 		return true;
 	}
 
@@ -339,6 +431,8 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 		tag.putDouble("WaterProgress", waterProgress);
 		tag.putInt("ActiveTicks", activeTicks);
 		tag.putFloat("Output", output);
+		tag.putInt("OutputTenths", outputTenths);
+		reading.write(tag);
 	}
 
 	@Override
@@ -355,6 +449,8 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 		waterProgress = tag.getDouble("WaterProgress");
 		activeTicks = tag.getInt("ActiveTicks");
 		output = tag.getFloat("Output");
+		outputTenths = tag.contains("OutputTenths") ? tag.getInt("OutputTenths") : 10;
+		reading.read(tag);
 		checkQueued = true;
 	}
 

@@ -46,11 +46,54 @@ public final class MachineVisuals {
 		visual(ModBlockEntities.CUCKOO_CLOCK, CuckooClockRenderer::parts, false);
 		// the lines' fittings; a Fluid Line's fluid stays with its renderer, a Power Line has nothing else
 		// (most pieces carry no fitting: their visuals do nothing a frame)
-		visual(ModBlockEntities.FLUID_LINE, FluidLineRenderer::parts, false, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
-		visual(ModBlockEntities.POWER_LINE, PowerLineRenderer::parts, true, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
+		// (most pieces carry no fitting: theirs is an idle visual, made again when a fitting goes on)
+		visualWhen(ModBlockEntities.FLUID_LINE, FluidLineRenderer::parts, false, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
+		visualWhen(ModBlockEntities.POWER_LINE, PowerLineRenderer::parts, true, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
+		// an Upgraded Chest's lid, only while it's open (closed, it's part of the block model)
+		visualWhen(ModBlockEntities.UPGRADED_CHEST, com.comedymonkey.createaddons.client.UpgradedChestRenderer::parts, true,
+			com.comedymonkey.createaddons.client.UpgradedChestRenderer::open);
+		// Trade Bot's winding station
+		SimpleBlockEntityVisualizer.builder(ModBlockEntities.TRADE_BOT_STATION.get())
+			.factory(com.comedymonkey.createaddons.client.tradebot.TradeBotStationVisual::new)
+			.skipVanillaRender(be -> true)
+			.apply();
+		// the spans between Line Posts: laid out once, as instances
+		SimpleBlockEntityVisualizer.builder(ModBlockEntities.LINE_POST.get())
+			.factory(com.comedymonkey.createaddons.client.line.LinePostVisual::new)
+			.skipVanillaRender(be -> true)
+			.apply();
 		// the Compact Gyroscope and Torque Rotor only exist with Sable
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerVisuals();
+	}
+
+	/**
+	 * A visual that's only needed some of the time: its parts while {@code active} (a line's fitting, a chest's open
+	 * lid), else an idle visual that does nothing a frame. The client makes it again when that changes.
+	 */
+	public static <T extends BlockEntity> void visualWhen(Supplier<BlockEntityType<T>> type, PartsVisual.Parts<T> parts, boolean partsOnly,
+															java.util.function.Predicate<T> active) {
+		SimpleBlockEntityVisualizer.builder(type.get())
+			.factory((context, be, partialTick) -> active.test(be) ? new PartsVisual<>(context, be, partialTick, parts, active)
+				: new IdleVisual<>(context, be, partialTick))
+			.skipVanillaRender(be -> partsOnly)
+			.apply();
+	}
+
+	/** A block entity with nothing for Flywheel to draw (a plain line). */
+	private static final class IdleVisual<T extends BlockEntity> extends dev.engine_room.flywheel.lib.visual.AbstractBlockEntityVisual<T> {
+		IdleVisual(dev.engine_room.flywheel.api.visualization.VisualizationContext context, T be, float partialTick) {
+			super(context, be, partialTick);
+		}
+
+		@Override
+		public void updateLight(float partialTick) {}
+
+		@Override
+		public void collectCrumblingInstances(java.util.function.Consumer<dev.engine_room.flywheel.api.instance.Instance> consumer) {}
+
+		@Override
+		protected void _delete() {}
 	}
 
 	/** {@code partsOnly}: the renderer draws nothing else, so it needn't run while the visual draws. */

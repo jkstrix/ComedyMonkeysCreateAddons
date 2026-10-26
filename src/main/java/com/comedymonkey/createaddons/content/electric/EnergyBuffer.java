@@ -96,6 +96,11 @@ public class EnergyBuffer extends EnergyStorage {
 
 	/** A view others can only take from. */
 	public IEnergyStorage extractOnly() {
+		return extractOnly(() -> true);
+	}
+
+	/** The same, giving nothing while {@code allowed} says no (a generator whose chunk isn't running is on paper). */
+	public IEnergyStorage extractOnly(java.util.function.BooleanSupplier allowed) {
 		return new IEnergyStorage() {
 			@Override
 			public int receiveEnergy(int toReceive, boolean simulate) {
@@ -104,7 +109,7 @@ public class EnergyBuffer extends EnergyStorage {
 
 			@Override
 			public int extractEnergy(int toExtract, boolean simulate) {
-				return EnergyBuffer.this.extractEnergy(toExtract, simulate);
+				return allowed.getAsBoolean() ? EnergyBuffer.this.extractEnergy(toExtract, simulate) : 0;
 			}
 
 			@Override

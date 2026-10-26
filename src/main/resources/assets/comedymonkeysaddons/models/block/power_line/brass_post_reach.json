@@ -1,0 +1,66 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/brass",
+    "body_twin": "comedymonkeysaddons:block/fluid_line/body_twin"
+  },
+  "elements": [
+    {
+      "name": "reach",
+      "from": [
+        7.25,
+        0,
+        -8
+      ],
+      "to": [
+        8.75,
+        0.75,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.25,
+            15.25,
+            8.75,
+            16
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            15.25,
+            8,
+            16
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            8,
+            15.25,
+            16,
+            16
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            7.25,
+            8,
+            8.75,
+            16
+          ],
+          "texture": "#body_twin",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

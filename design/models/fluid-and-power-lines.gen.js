@@ -368,6 +368,12 @@ function meterWire() {
   const needle = [C('wneedle', [7.75, 1.75, 6], [8.25, 1.75, 8.25], { up: 'red', all: null }, { uv: { up: [0, 0, 1, 2] } })];
   return { parts, needle, pivot: [8, 1.75, 8] };
 }
+// On a Power Line junction: a plain dial with a light pointer out over the housing, pointing (along +x) at the branch
+// served first
+function splitterFirstDial() {
+  return [C('wdial', [6.5, 1.75, 6.5], [9.5, 2.25, 9.5], { all: 'steel', up: 'steel_dark', down: null }),
+    C('wpointer', [8, 2.25, 7.5], [11, 2.75, 8.5], { all: 'ceramic', down: null })];
+}
 function splitterWire(mode) {
   const parts = [C('wsplit_a', [5.5, 0, 6.5], [10.5, 1.75, 9.5], { all: 'steel', down: null }), C('wsplit_b', [6.5, 0, 5.5], [9.5, 1.75, 10.5], { all: 'steel', down: null })];
   const dial = [C('wdial', [6.5, 1.75, 6.5], [9.5, 2.25, 9.5], { all: 'steel', up: 'dial_' + mode, down: null })];
@@ -695,6 +701,88 @@ const ICONS = [
   outliner.push(group('icons', [8, 0, 8], row, ICONS.map(([name, parts], i) => blockOf('icon_' + name, parts, i * 2, 0, 0, row))));
 }
 
+// ---------- power rules (2026-10-26) ----------
+// The Splitter on a Power Line sits on a junction and gives one branch priority: its dial shows a fork (shared evenly)
+// or a pointer at the branch served first when power is short. And a Breaker joins brass to copper (brass feeds copper): the cable
+// changes under its housing.
+{
+  const row = [0, 0, 624], kids = [];
+  const floor = (bx, bz) => kids.push(blockOf(`pr_floor_${bx}_${bz}`, [C('floor', [0, -2, 0], [16, 0, 16], { all: 'minecraft:block/smooth_stone' })], bx, 0, bz, row));
+  const cu = wireSpec('copper'), br = wireSpec('brass');
+  const lugW = (tier) => C('lug', [0, 0, 6.5], [1, 3, 9.5], { all: CLIP[tier], west: null });
+  const lugE = (tier) => C('lug_e', [15, 0, 6.5], [16, 3, 9.5], { all: CLIP[tier], east: null });
+  // the Splitter sits on a junction (three or four ways): power comes in one way, and its pointer picks the branch served
+  // first when it's short. A T shared evenly (no pointer), a T with the east branch first, a cross with the south first
+  const lugN = (tier) => C('lug_n', [6.5, 0, 0], [9.5, 3, 1], { all: CLIP[tier], north: null });
+  const lugS = (tier) => C('lug_s', [6.5, 0, 15], [9.5, 3, 16], { all: CLIP[tier], south: null });
+  [[false, null, 2], [false, 0, 7], [true, -90, 12]].forEach(([cross, turn, z], i) => {
+    const name = `pr_split_${i}`;
+    for (let x = 0; x <= 4; x++) floor(x, z);
+    floor(2, z + 1); floor(2, z + 2);
+    if (cross) { floor(2, z - 1); floor(2, z - 2); }
+    kids.push(stand(`${name}_machine_w`, 'minecraft:block/polished_andesite', 0, 0, z, row));
+    kids.push(blockOf(`${name}_w1`, [lugW('copper'), floorRun('x', 1, 16, cu), floorClip('x', 8, cu, 'copper')], 1, 0, z, row));
+    const sw = splitterWire('even');
+    if (turn !== null)
+      sw.dial = splitterFirstDial();
+    const dial = mover(`${name}_dial`, sw.dial, [8, 2, 8], 2, 0, z, row);
+    dial.rotation = [0, turn || 0, 0];
+    const junction = [floorRun('x', 0, 16, cu), floorRun('z', 8 + cu.w / 2, 16, cu, 'wire_south'), ...sw.parts];
+    if (cross)
+      junction.push(floorRun('z', 0, 8 - cu.w / 2, cu, 'wire_north'));
+    kids.push(blockOf(`${name}_splitter`, junction, 2, 0, z, row, [dial]));
+    kids.push(blockOf(`${name}_e`, [floorRun('x', 0, 15, cu), lugE('copper'), floorClip('x', 8, cu, 'copper')], 3, 0, z, row));
+    kids.push(stand(`${name}_machine_e`, 'minecraft:block/polished_andesite', 4, 0, z, row));
+    kids.push(blockOf(`${name}_s`, [floorRun('z', 0, 15, cu), lugS('copper'), floorClip('z', 8, cu, 'copper')], 2, 0, z + 1, row));
+    kids.push(stand(`${name}_machine_s`, 'minecraft:block/polished_andesite', 2, 0, z + 2, row));
+    if (cross) {
+      kids.push(blockOf(`${name}_n`, [floorRun('z', 1, 16, cu), lugN('copper'), floorClip('z', 8, cu, 'copper')], 2, 0, z - 1, row));
+      kids.push(stand(`${name}_machine_n`, 'minecraft:block/polished_andesite', 2, 0, z - 2, row));
+    }
+  });
+  // and on a wall and a ceiling: the same pieces built on the floor, turned onto the face they lie on (x +90: the floor
+  // becomes the north wall, its north branch runs up; x 180: the ceiling)
+  const onFace = (name, list, bx, by, bz, rot, extra = []) => {
+    const g = group(name, [8, 8, 8], [bx * 16 + row[0], by * 16 + row[1], bz * 16 + row[2]], [...placed(list, bx, by, bz, row), ...extra]);
+    g.rotation = rot;
+    kids.push(g);
+  };
+  const pointerDial = (name, turn, bx, by, bz) => {
+    const d = mover(name, splitterFirstDial(), [8, 2, 8], bx, by, bz, row);
+    d.rotation = [0, turn, 0];
+    return d;
+  };
+  const split = splitterWire('even').parts;
+  // the wall: stone at z 1, the wires on its south face (the blocks at z 2), a run along x with a branch up, pointer up
+  for (let x = 7; x <= 9; x++) for (let y = 0; y <= 2; y++) kids.push(stand(`pr_wall_${x}_${y}`, 'minecraft:block/stone_bricks', x, y, 1, row));
+  const WALL = [90, 0, 0];
+  onFace('pr_wall_junction', [floorRun('x', 0, 16, cu), floorRun('z', 0, 8 - cu.w / 2, cu, 'wire_up'), ...split], 8, 1, 2, WALL, [pointerDial('pr_wall_dial', 90, 8, 1, 2)]);
+  onFace('pr_wall_w', [floorRun('x', 0, 16, cu), floorClip('x', 8, cu, 'copper')], 7, 1, 2, WALL);
+  onFace('pr_wall_e', [floorRun('x', 0, 16, cu), floorClip('x', 8, cu, 'copper')], 9, 1, 2, WALL);
+  onFace('pr_wall_up', [floorRun('z', 0, 16, cu), floorClip('z', 8, cu, 'copper')], 8, 2, 2, WALL);
+  // the ceiling: stone overhead at y 3, a cross under it, pointer east
+  for (let x = 11; x <= 13; x++) for (let zz = 1; zz <= 3; zz++) kids.push(stand(`pr_ceiling_${x}_${zz}`, 'minecraft:block/stone_bricks', x, 3, zz, row));
+  const CEILING = [180, 0, 0];
+  onFace('pr_ceiling_junction', [floorRun('x', 0, 16, cu), floorRun('z', 0, 8 - cu.w / 2, cu, 'wire_n'), floorRun('z', 8 + cu.w / 2, 16, cu, 'wire_s'), ...split],
+    12, 2, 2, CEILING, [pointerDial('pr_ceiling_dial', 0, 12, 2, 2)]);
+  for (const [x, zz, axis] of [[11, 2, 'x'], [13, 2, 'x'], [12, 1, 'z'], [12, 3, 'z']])
+    onFace(`pr_ceiling_${x}_${zz}_wire`, [floorRun(axis, 0, 16, cu), floorClip(axis, 8, cu, 'copper')], x, 2, zz, CEILING);
+
+  // brass into a Breaker, copper out of it
+  const z = 17;
+  for (let x = 0; x <= 5; x++) floor(x, z);
+  kids.push(stand('pr_gen', 'minecraft:block/polished_andesite', 0, 0, z, row));
+  kids.push(blockOf('pr_brass', [lugW('brass'), floorRun('x', 1, 16, br), floorClip('x', 8, br, 'brass')], 1, 0, z, row));
+  const b = breaker(cu);
+  const lever = mover('pr_breaker_lever', b.lever, b.pivot, 2, 0, z, row);
+  lever.rotation = [0, 0, 35];
+  kids.push(blockOf('pr_breaker', [floorRun('x', 0, 8, br, 'wire_brass'), floorRun('x', 8, 16, cu, 'wire_copper'), ...b.parts], 2, 0, z, row, [lever]));
+  kids.push(blockOf('pr_copper', [floorRun('x', 0, 16, cu), floorClip('x', 8, cu, 'copper')], 3, 0, z, row));
+  kids.push(blockOf('pr_copper2', [floorRun('x', 0, 15, cu), lugE('copper')], 4, 0, z, row));
+  kids.push(stand('pr_motor', 'minecraft:block/polished_andesite', 5, 0, z, row));
+  outliner.push(group('power_rules', [8, 0, 8], row, kids));
+}
+
 // ---------- clip: the moving parts ----------
 const spring = (t, t0, v0, v1, f = 2.2, d = 0.45) => {
   if (t < t0) return v0;
@@ -722,4 +810,4 @@ fs.writeFileSync(OUT, JSON.stringify(bb));
 console.error('dyes:', JSON.stringify(DYES));
 
 module.exports = { T, DYES, C, glass, flag, grommet, grommetBack, flatGrommet, rod, hub, pipeArm, straight, junction, flange, intake, valve, filter, meterPipe, splitterPipe, wireSpec, floorRun, wallRun, sideRun,
-  floorClip, wallClip, splice, breaker, meterWire, splitterWire, postBlock, insulator, branch, headTie, branchTie, coil, ICONS, CLIP };
+  floorClip, wallClip, splice, breaker, meterWire, splitterWire, splitterFirstDial, postBlock, insulator, branch, headTie, branchTie, coil, ICONS, CLIP };

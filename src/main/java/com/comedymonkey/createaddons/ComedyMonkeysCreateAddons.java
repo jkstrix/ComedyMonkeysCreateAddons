@@ -53,6 +53,9 @@ import com.comedymonkey.createaddons.compat.pipez.cover.PipeCoverEvents;
 import com.comedymonkey.createaddons.compat.pipez.cover.client.PipeCoverClient;
 import com.comedymonkey.createaddons.network.PipeCoverPayload;
 import com.comedymonkey.createaddons.network.MotorSettingsPayload;
+import com.comedymonkey.createaddons.network.TurbineSettingsPayload;
+import com.comedymonkey.createaddons.network.SplitterInfoPayload;
+import com.comedymonkey.createaddons.network.SplitterSettingsPayload;
 import com.comedymonkey.createaddons.network.TradeBotStationPayload;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlock;
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlock;
@@ -179,9 +182,9 @@ public class ComedyMonkeysCreateAddons {
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.ELECTRIC_MOTOR.get(),
 			(be, side) -> side == null || ElectricMotorBlock.isInput(be.getBlockState(), side) ? be.getEnergy() : null);
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),
-			(be, side) -> side == null || side == LavaGeneratorBlock.inlet(be.getBlockState()) ? be.getTank() : null);
+			(be, side) -> side == null || side == LavaGeneratorBlock.inlet(be.getBlockState()) ? be.getFluidsOut() : null);
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),
-			(be, side) -> side == null || LavaGeneratorBlock.isTerminal(be.getBlockState(), side) ? be.getEnergy().extractOnly() : null);
+			(be, side) -> side == null || LavaGeneratorBlock.isTerminal(be.getBlockState(), side) ? be.getEnergyOut() : null);
 		// The turbine connects only through the port flanges under its base (the bottom faces of its bottom casings);
 		// the controller, in the middle of the front, offers nothing to a side
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.GEOTHERMAL_CONTROLLER.get(),
@@ -212,6 +215,9 @@ public class ComedyMonkeysCreateAddons {
 			QuickTransferPayload::handle);
 		// The Electric Motor's settings screen
 		event.registrar("1").playToServer(MotorSettingsPayload.TYPE, MotorSettingsPayload.STREAM_CODEC, MotorSettingsPayload::handle);
+		event.registrar("1").playToServer(TurbineSettingsPayload.TYPE, TurbineSettingsPayload.STREAM_CODEC, TurbineSettingsPayload::handle);
+		event.registrar("1").playToServer(SplitterSettingsPayload.TYPE, SplitterSettingsPayload.STREAM_CODEC, SplitterSettingsPayload::handle);
+		event.registrar("1").playToClient(SplitterInfoPayload.TYPE, SplitterInfoPayload.STREAM_CODEC, SplitterInfoPayload::handle);
 		event.registrar("1").playToServer(TradeBotStationPayload.TYPE, TradeBotStationPayload.STREAM_CODEC, TradeBotStationPayload::handle);
 		// Covers on Pipez pipes
 		event.registrar("1").playToClient(PipeCoverPayload.TYPE, PipeCoverPayload.STREAM_CODEC,

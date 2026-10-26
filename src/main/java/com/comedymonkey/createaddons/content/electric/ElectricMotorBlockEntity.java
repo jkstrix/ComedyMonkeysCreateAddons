@@ -30,7 +30,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
  * quarter of its buffer if that's less (a few seconds at high stress). Each start and stop jolts the whole kinetic
  * network, so a weak supply makes it pause now and then rather than stutter.
  */
-public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity {
+public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity implements com.comedymonkey.createaddons.content.line.NetworkReading.Shown {
 	/** Ticks of running it waits to have stored before it starts again after running short. */
 	private static final int RESTART_TICKS = 600;
 	public static final int MIN_SPEED = 1;
@@ -49,10 +49,19 @@ public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity {
 	/** Client: run every client tick (the motor's sounds); set by the client setup. */
 	public static Consumer<ElectricMotorBlockEntity> clientTicker = be -> {};
 
+	/** Its Power Line network's figures, for the goggles. */
+	private final com.comedymonkey.createaddons.content.line.NetworkReading reading = new com.comedymonkey.createaddons.content.line.NetworkReading();
+
+	@Override
+	public void networkReading(int makes, int uses) {
+		if (level != null && reading.set(makes, uses, level.getGameTime()))
+			sendData();
+	}
+
 	public ElectricMotorBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.ELECTRIC_MOTOR.get(), pos, state);
-		// A second's worth at full stress, so a little gap in supply doesn't stall it
-		int buffer = Math.max(100_000, (int) Math.ceil(CMConfig.SERVER.motorMaxStress() * CMConfig.SERVER.motorFePerStress() * 20));
+		// Two seconds' worth at full stress: Power Lines top it up once a second, and a little gap doesn't stall it
+		int buffer = Math.max(100_000, (int) Math.ceil(CMConfig.SERVER.motorMaxStress() * CMConfig.SERVER.motorFePerStress() * 40));
 		// No comparator output: its store changing every tick only needs a save, not a comparator update
 		energy = new EnergyBuffer(buffer, buffer, 0, () -> SaveMark.mark(this));
 	}
@@ -177,6 +186,7 @@ public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity {
 		else
 			lang().translate("gui.goggles.electric_motor.no_power", String.format(Locale.ROOT, "%,.0f", usagePerTick()))
 				.style(ChatFormatting.RED).forGoggles(tooltip, 1);
+		reading.addTo(tooltip, level, 1);
 		super.addToGoggleTooltip(tooltip, isPlayerSneaking);
 		return true;
 	}
@@ -193,6 +203,7 @@ public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity {
 		tag.putInt("StressSetting", stress);
 		tag.putBoolean("Reversed", reversed);
 		tag.putBoolean("Running", running);
+		reading.write(tag);
 	}
 
 	@Override
@@ -207,5 +218,6 @@ public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity {
 		}
 		reversed = tag.getBoolean("Reversed");
 		running = tag.getBoolean("Running");
+		reading.read(tag);
 	}
 }

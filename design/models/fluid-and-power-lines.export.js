@@ -153,6 +153,8 @@ for (const [style, [w, h, tex]] of Object.entries(STYLES)) {
   wire('centre', [G.C('centre', [a, 0, a], [b, h, b], { all: tex, down: null })]);
   // to the north edge, and (inner) only as far as a wire up the north face of the same block
   wire('arm', [G.C('arm', [a, 0, 0], [b, h, a], { all: tex, down: null, north: null, south: null })]);
+  // on into a Line Post's block, to the middle under its foot (as the showcase's wire under pole A)
+  wire('post_reach', [G.C('reach', [a, 0, -8], [b, h, 0], { all: tex, down: null, south: null })]);
   wire('arm_inner', [G.C('arm', [a, 0, h], [b, h, a], { all: tex, down: null, south: null })]);
   // folding over the edge, down the far side of the block it lies on (an outside corner)
   wire('fold', [G.C('fold', [a, 0, -h], [b, h, 0], { all: tex, down: null, south: null })]);
@@ -195,6 +197,7 @@ for (const [style, [w, h, tex]] of Object.entries(STYLES)) {
   fit('wire_meter_needle', m.needle, 'red');
   fit('wire_splitter', G.splitterWire('even').parts);
   for (const mode of ['even', 'nearest', 'robin']) fit('wire_splitter_dial_' + mode, G.splitterWire(mode).dial);
+  fit('wire_splitter_dial_first', G.splitterFirstDial());
 }
 
 // ---------- Line Posts: wooden, no tier; authored standing on the floor ----------

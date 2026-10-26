@@ -1,0 +1,133 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fluid_line/steel",
+    "steel": "comedymonkeysaddons:block/fluid_line/steel",
+    "steel_dark": "comedymonkeysaddons:block/fluid_line/steel_dark",
+    "ceramic": "comedymonkeysaddons:block/fluid_line/ceramic"
+  },
+  "elements": [
+    {
+      "name": "wdial",
+      "from": [
+        6.5,
+        1.75,
+        6.5
+      ],
+      "to": [
+        9.5,
+        2.25,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            13.75,
+            9.5,
+            14.25
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            13.75,
+            9.5,
+            14.25
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            13.75,
+            9.5,
+            14.25
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            13.75,
+            9.5,
+            14.25
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#steel_dark"
+        }
+      }
+    },
+    {
+      "name": "wpointer",
+      "from": [
+        8,
+        2.25,
+        7.5
+      ],
+      "to": [
+        11,
+        2.75,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            13.25,
+            8,
+            13.75
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            13.25,
+            8.5,
+            13.75
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            8,
+            13.25,
+            11,
+            13.75
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            13.25,
+            8.5,
+            13.75
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            8,
+            7.5,
+            11,
+            8.5
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    }
+  ]
+}

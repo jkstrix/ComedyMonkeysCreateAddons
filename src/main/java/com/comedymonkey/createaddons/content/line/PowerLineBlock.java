@@ -103,6 +103,24 @@ public class PowerLineBlock extends BaseEntityBlock implements IWrenchable, Simp
 	/** A single wire running straight across its face: the run's direction. */
 	@Nullable
 	@Override
+	public Direction sideFor(Fitting fitting, Level level, BlockPos pos, BlockState state) {
+		return fitting == Fitting.SPLITTER ? junctionSide(level, pos, state) : straightSide(level, pos, state);
+	}
+
+	/** A Splitter sits on a junction: three or four ways on one face; its first branch, or null if it isn't one. */
+	@Nullable
+	public Direction junctionSide(Level level, BlockPos pos, BlockState state) {
+		if (faceCount(state) != 1 || !(level.getBlockEntity(pos) instanceof PowerLineBlockEntity be))
+			return null;
+		for (Direction face : Direction.values())
+			if (hasFace(state, face)) {
+				java.util.List<Direction> branches = be.branches();
+				return (be.links(face) & WireLink.RISE) == 0 && branches.size() >= 3 ? branches.get(0) : null;
+			}
+		return null;
+	}
+
+	@Override
 	public Direction straightSide(Level level, BlockPos pos, BlockState state) {
 		if (faceCount(state) != 1 || !(level.getBlockEntity(pos) instanceof PowerLineBlockEntity be))
 			return null;
@@ -370,18 +388,30 @@ public class PowerLineBlock extends BaseEntityBlock implements IWrenchable, Simp
 		return LineInteractions.useEmpty(be, level, pos, player);
 	}
 
+	/** A wrench opens a Splitter's priorities; otherwise it takes a fitting off, or works a joint. */
 	@Override
 	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
 		if (!(context.getLevel().getBlockEntity(context.getClickedPos()) instanceof LineBlockEntity be))
 			return InteractionResult.PASS;
+		if (be instanceof PowerLineBlockEntity wire && wire.fitting() == Fitting.SPLITTER) {
+			if (context.getLevel() instanceof net.minecraft.server.level.ServerLevel server && context.getPlayer() instanceof net.minecraft.server.level.ServerPlayer player)
+				com.comedymonkey.createaddons.network.SplitterInfoPayload.send(server, player, wire);
+			return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
+		}
 		Direction side = FluidLineBlock.nearestSide(context.getClickedPos(), context.getClickLocation(), context.getClickedFace());
 		return LineInteractions.wrench(be, context.getLevel(), context.getPlayer(), side, false);
 	}
 
+	/** Sneaking: the encasing comes off, or a Splitter (its wrench opens its screen), or else the wire is picked up. */
 	@Override
 	public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
 		if (context.getLevel().getBlockEntity(context.getClickedPos()) instanceof LineBlockEntity be && be.encasing() != null)
 			return LineInteractions.wrench(be, context.getLevel(), context.getPlayer(), context.getClickedFace(), true);
+		if (context.getLevel().getBlockEntity(context.getClickedPos()) instanceof LineBlockEntity be && be.fitting() == Fitting.SPLITTER) {
+			if (!context.getLevel().isClientSide)
+				be.removeFitting(context.getPlayer());
+			return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
+		}
 		return IWrenchable.super.onSneakWrenched(state, context);
 	}
 

@@ -18,6 +18,12 @@ public interface LineBlock {
 	@Nullable
 	Direction straightSide(Level level, BlockPos pos, BlockState state);
 
+	/** Where that fitting would sit here (the way it turns), or null if it can't: by default, on a straight run. */
+	@Nullable
+	default Direction sideFor(Fitting fitting, Level level, BlockPos pos, BlockState state) {
+		return straightSide(level, pos, state);
+	}
+
 	/** The line's own outline, encased or not (the goggles draw it through the encasing). */
 	VoxelShape lineShape(BlockState state, BlockGetter level, BlockPos pos);
 }

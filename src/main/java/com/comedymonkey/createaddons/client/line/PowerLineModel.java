@@ -40,12 +40,13 @@ import net.neoforged.neoforge.client.model.data.ModelProperty;
  * a clip on a straight run and a splice at a junction. Where it's threaded through a drilled wall, a surround round the
  * hole on the cable's free sides. The parts are authored once, lying on the floor and running
  * north, and turned to each face and direction. Bare copper and brass twin flex, or the thicker covered cable a dyed wire
- * becomes; the body is tinted by tier or dye.
+ * becomes; the body is tinted by tier or dye. At a Breaker joining brass to copper, its arm towards the other tier is drawn
+ * as that tier's, so the cable changes under the Breaker.
  */
 public class PowerLineModel extends EncasedLineModel {
 	private static final ModelProperty<String> WIRES = new ModelProperty<>();
 	private static final String[] STYLES = {"copper", "brass", "copper_covered", "brass_covered"};
-	private static final String[] PARTS = {"centre", "arm", "arm_inner", "fold", "clip", "splice", "rise", "socket", "riser", "grommet", "hole_edge", "hole",
+	private static final String[] PARTS = {"centre", "arm", "arm_inner", "post_reach", "fold", "clip", "splice", "rise", "socket", "riser", "grommet", "hole_edge", "hole",
 		"hole_bar_long", "hole_bar_short"};
 	private static final Map<String, List<BakedQuad>> CACHE = new ConcurrentHashMap<>();
 
@@ -77,6 +78,14 @@ public class PowerLineModel extends EncasedLineModel {
 		key.append(be.fitting() != Fitting.NONE ? ";f" : ";-");
 		for (Direction face : Direction.values())
 			key.append(';').append(PowerLineBlock.hasFace(state, face) ? Integer.toString(be.links(face)) : "x");
+		// a Breaker's arms towards a wire of the other tier along its run: drawn as that tier's, so the cable changes under it
+		int cross = 0;
+		if (be.fitting() == Fitting.BREAKER)
+			for (Direction d : Direction.values())
+				if (d.getAxis() == be.fittingSide().getAxis() && level.getBlockEntity(pos.relative(d)) instanceof PowerLineBlockEntity o
+					&& o.tier() != be.tier())
+					cross |= 1 << d.ordinal();
+		key.append(';').append(cross);
 		return data.derive().with(WIRES, key.toString()).build();
 	}
 
@@ -97,6 +106,8 @@ public class PowerLineModel extends EncasedLineModel {
 		String[] parts = key.split(";");
 		String style = parts[0];
 		boolean fitted = parts[1].equals("f");
+		int cross = Integer.parseInt(parts[8]);
+		String other = (style.startsWith("brass") ? "copper" : "brass") + (style.endsWith("_covered") ? "_covered" : "");
 		List<BakedQuad> out = new ArrayList<>();
 		for (Direction face : Direction.values()) {
 			String packed = parts[2 + face.ordinal()];
@@ -125,10 +136,18 @@ public class PowerLineModel extends EncasedLineModel {
 					run = d;
 				else if (d == run.getOpposite())
 					straight = true;
+				// towards a wire of the other tier, at a Breaker: that tier's arm
+				if (link == WireLink.LINE && (cross & 1 << d.ordinal()) != 0) {
+					addOther(out, other, "arm", face, d);
+					continue;
+				}
 				// into a machine: up its face to the middle and into a socket there
 				add(out, style, link == WireLink.INSIDE || link == WireLink.TERMINAL ? "arm_inner" : "arm", face, d);
 				if (link == WireLink.OUTSIDE)
 					add(out, style, "fold", face, d);
+				// on into a Line Post's block, under its foot, so it meets the pole
+				if (link == WireLink.POST)
+					add(out, style, "post_reach", face, d);
 				if (link == WireLink.TERMINAL) {
 					add(out, style, "rise", face, d);
 					add(out, style, "socket", face, d);
@@ -156,6 +175,14 @@ public class PowerLineModel extends EncasedLineModel {
 				add(out, style, "clip", face, run == null ? across.get(0) : run);
 		}
 		return out;
+	}
+
+	/** A part in the other tier's style, tinted with the other tier's colour (tint 1). */
+	private static void addOther(List<BakedQuad> out, String style, String part, Direction face, Direction d) {
+		List<BakedQuad> mine = new ArrayList<>();
+		add(mine, style, part, face, d);
+		for (BakedQuad q : mine)
+			out.add(q.getTintIndex() == 0 ? new BakedQuad(q.getVertices(), 1, q.getDirection(), q.getSprite(), q.isShade(), q.hasAmbientOcclusion()) : q);
 	}
 
 	/** A part's quads, turned from lying on the floor running north to lying on {@code face} running {@code d}. */

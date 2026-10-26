@@ -37,19 +37,31 @@ public class TradeBotStationRenderer extends SafeBlockEntityRenderer<TradeBotSta
 
 	@Override
 	protected void renderSafe(TradeBotStationBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffers, int light, int overlay) {
+		// with Flywheel on, its visual draws it (TradeBotStationVisual)
+		if (com.comedymonkey.createaddons.client.parts.PartSink.instanced(be))
+			return;
+		pose(parts, root, be, partialTicks, null);
+		render(ms, buffers, light, overlay, be.facing(), root, glow);
+	}
+
+	/**
+	 * Poses the station's bones for this frame: following Trade Bot's clip (through {@code playback}, or his own if null),
+	 * its winder turning while it charges him.
+	 */
+	static void pose(Map<String, ModelPart> parts, ModelPart root, TradeBotStationBlockEntity be, float partialTicks,
+					 @org.jetbrains.annotations.Nullable com.comedymonkey.createaddons.content.tradebot.clip.ClipPlayback playback) {
 		root.getAllParts().forEach(ModelPart::resetPose);
 		TradeBotEntity bot = be.clientBot();
 		if (bot != null && be.getLevel() != null) {
-			TradeBotModel.pose(parts, bot, bot.clipNow(partialTicks));
+			TradeBotModel.pose(parts, bot, playback != null ? playback : bot.playback, bot.clipNow(partialTicks));
 			float spin = bot.windSpin(partialTicks);
-			turn("winder_head", 0, 0, -spin);
-			turn("post_cog", spin, 0, 0);
+			turn(parts, "winder_head", 0, 0, -spin);
+			turn(parts, "post_cog", spin, 0, 0);
 		} else if (!be.isBotDocked()) {
 			ModelPart glow = parts.get("station_glow");
 			if (glow != null)
 				glow.xScale = glow.yScale = glow.zScale = 0;
 		}
-		render(ms, buffers, light, overlay, be.facing(), root, glow);
 	}
 
 	/**
@@ -70,7 +82,7 @@ public class TradeBotStationRenderer extends SafeBlockEntityRenderer<TradeBotSta
 	}
 
 	/** Adds a turn in Blockbench degrees to one of the station's parts. */
-	private void turn(String bone, float x, float y, float z) {
+	private static void turn(Map<String, ModelPart> parts, String bone, float x, float y, float z) {
 		ModelPart part = parts.get(bone);
 		if (part == null)
 			return;

@@ -62,7 +62,7 @@ public final class ElectricScenes {
 
 		scene.world().modifyBlock(gen, s -> s.setValue(LavaGeneratorBlock.LIT, true), false);
 		scene.overlay().showText(80)
-			.text("It burns 20 mB a second, and its turbine wheel spins behind the window: the more power is taken, the faster it turns")
+			.text("It burns 20 mB a second, flat out whenever it has lava, and its turbine wheel spins behind the window")
 			.pointAt(util.vector().of(2.5, 1.72, 2.15))
 			.placeNearTarget()
 			.attachKeyFrame();
@@ -81,7 +81,7 @@ public final class ElectricScenes {
 		scene.idle(100);
 
 		scene.overlay().showText(80)
-			.text("Pipez energy pipes take its power anywhere. It only burns what's taken, so a light load saves lava")
+			.text("Power Lines take its power anywhere, even from far off while its chunk isn't loaded. What its store can't hold is lost, so give it something to power")
 			.pointAt(util.vector().blockSurface(gen, Direction.WEST))
 			.placeNearTarget()
 			.attachKeyFrame();
@@ -270,7 +270,7 @@ public final class ElectricScenes {
 		scene.idle(100);
 
 		scene.overlay().showText(80)
-			.text("It uses 90 mB of lava and 250 mB of water a second: two fully upgraded Lava Wellsprings keep it going")
+			.text("At full power it uses 90 mB of lava and 250 mB of water a second: two fully upgraded Lava Wellsprings keep it going. Turn it down with a wrench on the controller to use less")
 			.pointAt(util.vector().topOf(util.grid().at(0, 1, 3)))
 			.placeNearTarget()
 			.attachKeyFrame();

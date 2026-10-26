@@ -72,6 +72,16 @@ public class ComedyMonkeysCreateAddonsClient {
 		com.comedymonkey.createaddons.content.electric.GeothermalControllerBlockEntity.clientTicker = GeothermalTurbineSounds::tick;
 		// The Lava Generator's and the Electric Motor's sounds run from their client ticks
 		com.comedymonkey.createaddons.content.electric.LavaGeneratorBlockEntity.clientTicker = ElectricSounds::tickGenerator;
+		// Flywheel: a line's visual made again when its fitting changes; a post's spans laid out again (and its partners')
+		com.comedymonkey.createaddons.content.line.LineBlockEntity.clientRefitted = ComedyMonkeysCreateAddonsClient::revisualize;
+		com.comedymonkey.createaddons.content.line.LinePostBlockEntity.clientSpansChanged = be -> {
+			if (be.getLevel() == null || !dev.engine_room.flywheel.api.visualization.VisualizationManager.supportsVisualization(be.getLevel()))
+				return;
+			dev.engine_room.flywheel.lib.visualization.VisualizationHelper.queueUpdate(be);
+			for (com.comedymonkey.createaddons.content.line.Span s : be.spans())
+				if (!s.owner() && be.getLevel().getBlockEntity(be.getBlockPos().offset(s.offset())) instanceof com.comedymonkey.createaddons.content.line.LinePostBlockEntity owner)
+					dev.engine_room.flywheel.lib.visualization.VisualizationHelper.queueUpdate(owner);
+		};
 		com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity.clientTicker = ElectricSounds::tickMotor;
 		// The Magma Engines' sounds and exhaust puffs run from their client ticks
 		com.comedymonkey.createaddons.content.engine.MagmaEngineBlockEntity.clientTicker = MagmaEngineSounds::tick;
@@ -159,6 +169,15 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.TRADE_BOT_STATION.get(), TradeBotStationRenderer::new);
 	}
 
+	/** A block entity's Flywheel visual made again (it needs a different one now: a fitting went on, a chest opened). */
+	private static void revisualize(net.minecraft.world.level.block.entity.BlockEntity be) {
+		if (be.getLevel() != null && dev.engine_room.flywheel.api.visualization.VisualizationManager.supportsVisualization(be.getLevel())) {
+			var visuals = dev.engine_room.flywheel.api.visualization.VisualizationManager.get(be.getLevel()).blockEntities();
+			visuals.queueRemove(be);
+			visuals.queueAdd(be);
+		}
+	}
+
 	/** The upgraded chest lids and the crucible's parts aren't referenced by any blockstate, so they're loaded explicitly. */
 	private void registerModels(ModelEvent.RegisterAdditional event) {
 		for (ChestTier tier : ChestTier.values())
@@ -168,6 +187,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		FluidLineRenderer.registerModels(event);
 		com.comedymonkey.createaddons.client.line.PowerLineModel.registerModels(event);
 		com.comedymonkey.createaddons.client.line.PowerLineRenderer.registerModels(event);
+		event.register(com.comedymonkey.createaddons.client.line.LinePostVisual.SEGMENT);
 		PressureCrucibleRenderer.registerModels(event);
 		CobbleGeneratorRenderer.registerModels(event);
 		MachineRenderers.registerModels(event);
@@ -207,6 +227,7 @@ public class ComedyMonkeysCreateAddonsClient {
 	private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(TradeBotGeometry.BOT_LAYER, TradeBotGeometry::botLayer);
 		event.registerLayerDefinition(TradeBotGeometry.STATION_LAYER, TradeBotGeometry::stationLayer);
+		event.registerLayerDefinition(TradeBotGeometry.STATION_GLOW_LAYER, TradeBotGeometry::stationGlowLayer);
 		// The goggles renderer is a Curios one, so its class can't even be loaded without Curios
 		if (ModList.get().isLoaded(ComedyMonkeysCreateAddons.AERONAUTICS_ID)
 			&& ModList.get().isLoaded(ComedyMonkeysCreateAddons.CURIOS_ID))

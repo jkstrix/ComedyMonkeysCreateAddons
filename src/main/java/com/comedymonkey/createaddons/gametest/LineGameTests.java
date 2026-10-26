@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.line.FluidLineBlock;
+import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.line.FluidLineBlockEntity;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlock;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity;
@@ -17,6 +18,7 @@ import com.comedymonkey.createaddons.content.line.LineSide;
 import com.comedymonkey.createaddons.content.line.LineTier;
 import com.comedymonkey.createaddons.content.line.PostRole;
 import com.comedymonkey.createaddons.content.line.PowerLineBlock;
+import com.comedymonkey.createaddons.content.line.PowerGridTesting;
 import com.comedymonkey.createaddons.content.line.PowerLineBlockEntity;
 import com.comedymonkey.createaddons.content.line.Span;
 import com.comedymonkey.createaddons.content.line.SplitMode;
@@ -714,6 +716,388 @@ public final class LineGameTests {
 		helper.runAtTickTime(80, () -> {
 			if (stored(helper, m) <= 0)
 				helper.fail("no power across the span");
+			helper.succeed();
+		});
+	}
+
+	/** Generator, wire of one tier, a pole, a span of another, wire, motor: whether power gets from the one to the other. */
+	private static void acrossAPole(GameTestHelper helper, Block from, LineTier span, Block to, boolean expected, String fail) {
+		BlockPos gen = new BlockPos(1, 1, 14), w1 = gen.east(), postA = gen.east(2), postB = gen.east(8), w2 = postB.east(), m = postB.east(2);
+		generator(helper, gen);
+		motor(helper, m);
+		wire(helper, from, w1, Direction.DOWN);
+		wire(helper, to, w2, Direction.DOWN);
+		helper.setBlock(postA, ModBlocks.LINE_POST.get().defaultBlockState());
+		helper.setBlock(postB, ModBlocks.LINE_POST.get().defaultBlockState());
+		helper.runAtTickTime(2, () -> {
+			relink(helper, w1, w2);
+			if (!(helper.getBlockEntity(postA) instanceof LinePostBlockEntity a) || !(helper.getBlockEntity(postB) instanceof LinePostBlockEntity b)) {
+				helper.fail("no posts");
+				return;
+			}
+			Span s = new Span(0, postB.subtract(postA), 0, span, null, true, 2);
+			a.addSpan(s);
+			b.addSpan(s.reversed());
+		});
+		helper.runAtTickTime(80, () -> {
+			if ((stored(helper, m) > 0) != expected)
+				helper.fail(fail);
+			helper.succeed();
+		});
+	}
+
+	/** A whole pole joins: brass wire into a pole feeds a copper span out of it. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void brassFeedsCopperAtAPole(GameTestHelper helper) {
+		acrossAPole(helper, ModBlocks.BRASS_POWER_LINE.get(), LineTier.COPPER, ModBlocks.COPPER_POWER_LINE.get(), true,
+			"brass didn't feed copper at the pole");
+	}
+
+	/** Copper never feeds brass, even on one pole. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void copperNeverFeedsBrass(GameTestHelper helper) {
+		acrossAPole(helper, ModBlocks.COPPER_POWER_LINE.get(), LineTier.BRASS, ModBlocks.BRASS_POWER_LINE.get(), false,
+			"copper fed brass at the pole");
+	}
+
+	/** One generator, two motors on the same line: both get a share. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void powerIsShared(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 2), m1 = gen.east(4), m2 = m1.south();
+		generator(helper, gen);
+		motor(helper, m1);
+		motor(helper, m2);
+		for (int i = 1; i <= 3; i++)
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(3).south(), Direction.DOWN);
+		helper.runAtTickTime(2, () -> relink(helper, gen.east(1), gen.east(3), gen.east(3).south()));
+		helper.runAtTickTime(80, () -> {
+			if (stored(helper, m1) <= 0 || stored(helper, m2) <= 0)
+				helper.fail("a motor got no share: " + stored(helper, m1) + " and " + stored(helper, m2));
+			helper.succeed();
+		});
+	}
+
+	/** A Power Line Splitter goes on a junction, not a straight piece. */
+	@GameTest(template = COURSE, timeoutTicks = 30)
+	public static void splitterGoesOnAJunction(GameTestHelper helper) {
+		BlockPos a = new BlockPos(2, 1, 2), t = a.east(), b = t.east(), c = t.south(), s1 = new BlockPos(2, 1, 8), s2 = s1.east();
+		for (BlockPos p : new BlockPos[] {a, t, b, c, s1, s2})
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), p, Direction.DOWN);
+		helper.runAtTickTime(2, () -> relink(helper, a, t, b, c, s1, s2));
+		helper.runAtTickTime(5, () -> {
+			PowerLineBlock line = (PowerLineBlock) ModBlocks.COPPER_POWER_LINE.get();
+			if (line.sideFor(Fitting.SPLITTER, helper.getLevel(), helper.absolutePos(t), helper.getBlockState(t)) == null)
+				helper.fail("a Splitter doesn't fit the junction");
+			if (line.sideFor(Fitting.SPLITTER, helper.getLevel(), helper.absolutePos(s1), helper.getBlockState(s1)) != null)
+				helper.fail("a Splitter fits a straight piece");
+			helper.succeed();
+		});
+	}
+
+	/** One generator, a Splitter on a T: the branch set First gets the power, the one set Last none while it's short. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void splitterServesTheFirstBranchFirst(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 2), t = gen.east(2), first = t.east(2), last = t.south(2);
+		generator(helper, gen);
+		helper.setBlock(first, ModBlocks.ELECTRIC_MOTOR.get().defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST));
+		for (BlockPos p : new BlockPos[] {gen.east(), t, t.east(), t.south()})
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), p, Direction.DOWN);
+		// fitted in the same step as the wires join, so no update can share the power out before it's set
+		helper.runAtTickTime(2, () -> {
+			relink(helper, gen.east(), t, t.east(), t.south());
+			if (!(helper.getBlockEntity(t) instanceof PowerLineBlockEntity s)) {
+				helper.fail("no junction");
+				return;
+			}
+			s.setFitting(Fitting.SPLITTER, Direction.EAST);
+			byte[] levels = {1, 1, 1, 1, 1, 1};
+			levels[Direction.EAST.ordinal()] = 0;
+			levels[Direction.SOUTH.ordinal()] = 2;
+			s.setPriorities(levels);
+		});
+		// the Last branch's motor only once the Splitter is set, so no update before it can share the power out evenly
+		helper.runAtTickTime(4, () -> {
+			helper.setBlock(last, ModBlocks.ELECTRIC_MOTOR.get().defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.SOUTH));
+			relink(helper, t.south());
+		});
+		helper.runAtTickTime(90, () -> {
+			if (stored(helper, first) <= 0)
+				helper.fail("the First branch got no power");
+			if (stored(helper, last) > 0)
+				helper.fail("the Last branch got power while the First wanted more: " + stored(helper, last));
+			helper.succeed();
+		});
+	}
+
+	/** Generator, wire of one tier, a Breaker, wire of the other, motor: whether power gets through the Breaker. */
+	private static void acrossABreaker(GameTestHelper helper, Block from, Block to, boolean expected, String fail) {
+		BlockPos gen = new BlockPos(1, 1, 5), m = gen.east(4);
+		generator(helper, gen);
+		motor(helper, m);
+		wire(helper, from, gen.east(1), Direction.DOWN);
+		wire(helper, from, gen.east(2), Direction.DOWN);
+		wire(helper, to, gen.east(3), Direction.DOWN);
+		helper.runAtTickTime(2, () -> {
+			relink(helper, gen.east(1), gen.east(2), gen.east(3));
+			if (helper.getBlockEntity(gen.east(2)) instanceof LineBlockEntity b)
+				b.setFitting(Fitting.BREAKER, Direction.EAST);
+			// the other tier joins it only once that joint is wrenched
+			if (helper.getBlockEntity(gen.east(3)) instanceof LineBlockEntity w)
+				w.wrenchJoint(Direction.WEST);
+		});
+		helper.runAtTickTime(80, () -> {
+			if ((stored(helper, m) > 0) != expected)
+				helper.fail(fail);
+			helper.succeed();
+		});
+	}
+
+	/** A Breaker beside a wire of the other tier doesn't join it until that joint is wrenched. */
+	@GameTest(template = COURSE, timeoutTicks = 30)
+	public static void breakerJoinsTiersOnlyWhenWrenched(GameTestHelper helper) {
+		BlockPos b = new BlockPos(2, 1, 8), c = b.east();
+		wire(helper, ModBlocks.BRASS_POWER_LINE.get(), b.west(), Direction.DOWN);
+		wire(helper, ModBlocks.BRASS_POWER_LINE.get(), b, Direction.DOWN);
+		wire(helper, ModBlocks.COPPER_POWER_LINE.get(), c, Direction.DOWN);
+		helper.runAtTickTime(2, () -> {
+			relink(helper, b.west(), b, c);
+			if (helper.getBlockEntity(b) instanceof LineBlockEntity be)
+				be.setFitting(Fitting.BREAKER, Direction.EAST);
+		});
+		helper.runAtTickTime(5, () -> {
+			if (helper.getBlockEntity(b) instanceof PowerLineBlockEntity w && w.link(Direction.DOWN, Direction.EAST).connected())
+				helper.fail("the Breaker joined copper before the joint was wrenched");
+			if (helper.getBlockEntity(c) instanceof LineBlockEntity w)
+				w.wrenchJoint(Direction.WEST);
+		});
+		helper.runAtTickTime(8, () -> {
+			if (!(helper.getBlockEntity(b) instanceof PowerLineBlockEntity w) || w.link(Direction.DOWN, Direction.EAST) != WireLink.LINE)
+				helper.fail("the wrenched joint didn't join brass to copper at the Breaker");
+			helper.succeed();
+		});
+	}
+
+	/** One network meeting a generator at both its terminals, a motor at each end: counted once, both motors get an even share. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void generatorMetTwiceCountsOnce(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(3, 1, 2), west = gen.west(2), east = gen.east(2);
+		generator(helper, gen);
+		helper.setBlock(west, ModBlocks.ELECTRIC_MOTOR.get().defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.WEST));
+		helper.setBlock(east, ModBlocks.ELECTRIC_MOTOR.get().defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST));
+		// one network: the two wires joined round the back of the generator
+		BlockPos[] run = {gen.west(), gen.west().south(), gen.south(), gen.east().south(), gen.east()};
+		for (BlockPos p : run)
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), p, Direction.DOWN);
+		helper.runAtTickTime(2, () -> relink(helper, run));
+		helper.runAtTickTime(90, () -> {
+			int a = stored(helper, west), b = stored(helper, east);
+			if (a <= 0 || b <= 0 || Math.min(a, b) < Math.max(a, b) / 2)
+				helper.fail("the two motors didn't share evenly: " + a + " and " + b);
+			helper.succeed();
+		});
+	}
+
+	/** Brass feeds copper through a Breaker. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void brassFeedsCopperThroughABreaker(GameTestHelper helper) {
+		acrossABreaker(helper, ModBlocks.BRASS_POWER_LINE.get(), ModBlocks.COPPER_POWER_LINE.get(), true, "brass didn't feed copper through the Breaker");
+	}
+
+	/** Copper never feeds brass, even through a Breaker. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void copperNeverFeedsBrassThroughABreaker(GameTestHelper helper) {
+		acrossABreaker(helper, ModBlocks.COPPER_POWER_LINE.get(), ModBlocks.BRASS_POWER_LINE.get(), false, "copper fed brass through the Breaker");
+	}
+
+	/** A full motor using less than the generator makes stays full, tick after tick (no once-a-second dips). */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void motorWithEnoughPowerStaysFull(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 2), m = gen.east(4);
+		generator(helper, gen);
+		motor(helper, m);
+		for (int i = 1; i <= 3; i++)
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		helper.runAtTickTime(2, () -> {
+			relink(helper, gen.east(1), gen.east(3));
+			if (helper.getBlockEntity(m) instanceof ElectricMotorBlockEntity motor) {
+				// half a generator's output, starting full
+				motor.applySettings(64, ElectricMotorBlockEntity.STRESS_STEP * Math.max(1,
+					(int) (CMConfig.SERVER.generatorFePerTick() / 2 / CMConfig.SERVER.motorFePerStress()) / ElectricMotorBlockEntity.STRESS_STEP), false);
+				motor.getEnergy().receiveEnergy(motor.getEnergy().getMaxEnergyStored(), false);
+			}
+		});
+		int[] lowest = {Integer.MAX_VALUE};
+		for (int t = 60; t <= 140; t++)
+			helper.runAtTickTime(t, () -> {
+				if (helper.getBlockEntity(m) instanceof ElectricMotorBlockEntity motor)
+					lowest[0] = Math.min(lowest[0], motor.getEnergy().getEnergyStored() * 100 / Math.max(1, motor.getEnergy().getMaxEnergyStored()));
+			});
+		helper.runAtTickTime(150, () -> {
+			if (lowest[0] < 99)
+				helper.fail("the motor's store dipped to " + lowest[0] + "% with more than enough power coming in");
+			helper.succeed();
+		});
+	}
+
+	/** A generator powering a motor that takes all it makes: its store stays level from tick to tick. */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void generatorStoreStaysLevel(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 2), m = gen.east(4);
+		generator(helper, gen);
+		motor(helper, m);
+		for (int i = 1; i <= 3; i++)
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		helper.runAtTickTime(2, () -> relink(helper, gen.east(1), gen.east(3)));
+		int[] range = {Integer.MAX_VALUE, Integer.MIN_VALUE};
+		for (int t = 80; t <= 140; t++)
+			helper.runAtTickTime(t, () -> {
+				int e = generated(helper, gen);
+				range[0] = Math.min(range[0], e);
+				range[1] = Math.max(range[1], e);
+			});
+		helper.runAtTickTime(150, () -> {
+			if (range[1] - range[0] > 3 * CMConfig.SERVER.generatorFePerTick())
+				helper.fail("the generator's store swung from " + range[0] + " to " + range[1] + " FE");
+			helper.succeed();
+		});
+	}
+
+	/** A draw from a generator's record (on paper) marks the grid to be saved, and the record comes back from a save as it was. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void paperDrawsAreSaved(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 2), m = gen.east(4);
+		generator(helper, gen);
+		motor(helper, m);
+		for (int i = 1; i <= 3; i++)
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		helper.runAtTickTime(2, () -> relink(helper, gen.east(1), gen.east(3)));
+		helper.runAtTickTime(80, () -> {
+			BlockPos key = helper.absolutePos(gen);
+			if (PowerGridTesting.store(helper.getLevel(), key) < 0)
+				helper.fail("the generator a line meets has no record");
+			if (!PowerGridTesting.drawMarksDirty(helper.getLevel(), key))
+				helper.fail("a draw from the record didn't mark the grid to be saved");
+			double now = PowerGridTesting.store(helper.getLevel(), key), back = PowerGridTesting.storeAfterReload(helper.getLevel(), key);
+			if (Math.abs(now - back) > 1)
+				helper.fail("the record came back from a save at " + back + " FE, not " + now);
+			helper.succeed();
+		});
+	}
+
+	/** A generator keeps a record only while a line meets it: take the wire away and the record goes. */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void recordGoesWithItsLine(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 2), m = gen.east(4);
+		generator(helper, gen);
+		motor(helper, m);
+		for (int i = 1; i <= 3; i++)
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		helper.runAtTickTime(2, () -> relink(helper, gen.east(1), gen.east(3)));
+		BlockPos key = helper.absolutePos(gen);
+		helper.runAtTickTime(80, () -> {
+			if (PowerGridTesting.store(helper.getLevel(), key) < 0)
+				helper.fail("the generator a line meets has no record");
+			helper.setBlock(gen.east(1), Blocks.AIR);
+		});
+		helper.runAtTickTime(140, () -> {
+			if (PowerGridTesting.store(helper.getLevel(), key) >= 0)
+				helper.fail("the generator kept its record with no line meeting it");
+			helper.succeed();
+		});
+	}
+
+	/** Two touching Lava Generators, a cable on one, both on paper: the line draws on both of them. */
+	@GameTest(template = COURSE, timeoutTicks = 240)
+	public static void touchingGeneratorsShareOnPaper(GameTestHelper helper) {
+		BlockPos a = new BlockPos(1, 1, 2), b = a.east(), m = b.east(4);
+		generator(helper, a);
+		generator(helper, b);
+		motor(helper, m);
+		for (int i = 1; i <= 3; i++)
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), b.east(i), Direction.DOWN);
+		helper.runAtTickTime(2, () -> relink(helper, b.east(1), b.east(3)));
+		BlockPos ka = helper.absolutePos(a), kb = helper.absolutePos(b);
+		int[] start = {0};
+		// both stores empty, then both away: what the motor gets is what their records make
+		helper.runAtTickTime(78, () -> {
+			for (BlockPos g : new BlockPos[] {a, b})
+				if (helper.getBlockEntity(g) instanceof LavaGeneratorBlockEntity be)
+					be.getEnergy().setEnergy(0);
+		});
+		helper.runAtTickTime(80, () -> {
+			if (PowerGridTesting.store(helper.getLevel(), ka) < 0)
+				helper.fail("the generator in the row (no cable of its own) has no record");
+			PowerGridTesting.away(ka, true);
+			PowerGridTesting.away(kb, true);
+			start[0] = stored(helper, m);
+		});
+		helper.runAtTickTime(200, () -> {
+			PowerGridTesting.away(ka, false);
+			PowerGridTesting.away(kb, false);
+			int got = stored(helper, m) - start[0], one = CMConfig.SERVER.generatorFePerTick() * 120;
+			// one generator's records make about 120 ticks' worth here; two make twice that
+			if (got < one * 1.15)
+				helper.fail("on paper the line only drew " + got + " FE from the pair: about one generator's worth (" + one + ")");
+			helper.succeed();
+		});
+	}
+
+	/** A copper line fed by two brass lines through two poles, one with nothing on it: the other gives copper all it wants. */
+	@GameTest(template = COURSE, timeoutTicks = 80)
+	public static void copperFedByTwoBrassLines(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 14), p1 = gen.east(2), t = gen.east(4), p2 = gen.east(6), m = t.south(2);
+		generator(helper, gen);
+		helper.setBlock(m, ModBlocks.ELECTRIC_MOTOR.get().defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.SOUTH));
+		wire(helper, ModBlocks.BRASS_POWER_LINE.get(), gen.east(1), Direction.DOWN);
+		// (posts need something solid under them; the course's floor isn't everywhere)
+		helper.setBlock(p1.below(), Blocks.STONE);
+		helper.setBlock(p2.below(), Blocks.STONE);
+		helper.setBlock(p1, ModBlocks.LINE_POST.get().defaultBlockState());
+		for (int i = 3; i <= 5; i++)
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		wire(helper, ModBlocks.COPPER_POWER_LINE.get(), t.south(), Direction.DOWN);
+		helper.setBlock(p2, ModBlocks.LINE_POST.get().defaultBlockState());
+		wire(helper, ModBlocks.BRASS_POWER_LINE.get(), p2.east(), Direction.DOWN);
+		helper.runAtTickTime(2, () -> {
+			if (helper.getBlockEntity(gen) instanceof LavaGeneratorBlockEntity be)
+				be.getEnergy().setEnergy(100_000);
+			relink(helper, gen.east(1), gen.east(3), t, gen.east(5), t.south(), p2.east());
+		});
+		// the most it moves into the motor in a tick, after the first update
+		int[] last = {-1}, most = {0};
+		for (int tick = 3; tick <= 30; tick++)
+			helper.runAtTickTime(tick, () -> {
+				int e = stored(helper, m);
+				if (last[0] >= 0)
+					most[0] = Math.max(most[0], e - last[0]);
+				last[0] = e;
+			});
+		helper.runAtTickTime(32, () -> {
+			int rate = CMConfig.SERVER.powerLineCopperFePerTick();
+			if (most[0] < rate * 3 / 4) {
+				StringBuilder why = new StringBuilder();
+				for (BlockPos p : new BlockPos[] {gen.east(1), gen.east(3), t, gen.east(5), t.south(), p2.east()})
+					if (helper.getBlockEntity(p) instanceof PowerLineBlockEntity w) {
+						why.append(' ').append(p.getX()).append(':');
+						for (Direction d : WireLink.across(Direction.DOWN))
+							why.append(d.getName().charAt(0)).append('=').append(w.link(Direction.DOWN, d).name().charAt(0));
+					}
+				helper.fail("copper got at most " + most[0] + " FE a tick from the brass, not its " + rate  + "; generator " + generated(helper, gen)
+					+ ", motor " + stored(helper, m) + ";" + why);
+			}
+			helper.succeed();
+		});
+	}
+
+	/** A Lava Generator burns flat out while it has lava, even with nothing taking its power. */
+	@GameTest(template = COURSE, timeoutTicks = 80)
+	public static void lavaGeneratorAlwaysRuns(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 2);
+		generator(helper, gen);
+		helper.runAtTickTime(60, () -> {
+			if (amount(helper, gen) >= 8000)
+				helper.fail("the generator didn't burn with nothing taking its power");
 			helper.succeed();
 		});
 	}

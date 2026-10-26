@@ -72,7 +72,7 @@ final class GlowModel {
 	 * Which cubes have any pixel that isn't clear on the glow texture, anywhere in their box-UV layout (the whole
 	 * rectangle its six faces are laid out in, so never fewer than the faces really cover).
 	 */
-	private static Predicate<TradeBotGeometry.Cube> glowing(TradeBotGeometry geometry) {
+	static Predicate<TradeBotGeometry.Cube> glowing(TradeBotGeometry geometry) {
 		Optional<Resource> resource = Minecraft.getInstance().getResourceManager().getResource(TradeBotRenderer.GLOW);
 		if (resource.isEmpty())
 			return cube -> true;

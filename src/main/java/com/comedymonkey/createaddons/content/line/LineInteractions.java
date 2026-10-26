@@ -105,7 +105,13 @@ public final class LineInteractions {
 				}
 			}
 			case SPLITTER -> {
-				if (!level.isClientSide) {
+				// a Power Line Splitter's priorities are set with a wrench, in its screen (encased: the block's own use)
+				if (be instanceof PowerLineBlockEntity && be.encasing() != null)
+					return InteractionResult.PASS;
+				if (be instanceof PowerLineBlockEntity) {
+					if (!level.isClientSide)
+						tell(player, "splitter_use_wrench");
+				} else if (!level.isClientSide) {
 					be.nextSplitMode();
 					tell(player, "splitter_" + be.splitMode().key());
 					level.playSound(null, pos, SoundEvents.COPPER_HIT, SoundSource.BLOCKS, 0.6f, 1.2f);

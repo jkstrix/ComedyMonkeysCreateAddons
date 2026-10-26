@@ -216,7 +216,7 @@ public final class LineScenes {
 		scene.world().modifyBlockEntityNBT(util.select().position(breaker), PowerLineBlockEntity.class, nbt -> nbt.putBoolean("LeverOff", true));
 		scene.world().modifyBlock(motor, s -> s.setValue(ElectricMotorBlock.POWERED, false), false);
 		scene.overlay().showText(90)
-			.text("A Breaker cuts the power, with its lever or a redstone signal")
+			.text("A Breaker cuts the power, with its lever or a redstone signal. Wrench a brass wire's joint with a copper one at a Breaker, and brass feeds copper through it")
 			.pointAt(util.vector().topOf(breaker))
 			.placeNearTarget()
 			.attachKeyFrame();
