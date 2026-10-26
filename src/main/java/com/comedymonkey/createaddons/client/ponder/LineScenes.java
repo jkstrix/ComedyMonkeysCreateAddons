@@ -11,8 +11,10 @@ import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -88,7 +90,7 @@ public final class LineScenes {
 		scene.world().showSection(util.select().fromTo(2, 1, 4, 3, 1, 4), Direction.DOWN);
 		scene.idle(15);
 		scene.overlay().showText(90)
-			.text("Copper and brass never join, so lines can run side by side. Dyed lines only join a different colour when wrenched together")
+			.text("Copper and brass never join, and nor do two colours (plain is one), so lines can run side by side. Dye lines before you place them, eight around a dye")
 			.pointAt(util.vector().topOf(util.grid().at(2, 1, 4)))
 			.placeNearTarget()
 			.attachKeyFrame();
@@ -160,7 +162,7 @@ public final class LineScenes {
 		scene.overlay().showControls(util.vector().topOf(splitter), Pointing.DOWN, 60).rightClick();
 		scene.world().modifyBlockEntityNBT(util.select().position(splitter), FluidLineBlockEntity.class, nbt -> nbt.putInt("SplitMode", 1));
 		scene.overlay().showText(100)
-			.text("A Splitter decides how the ends beyond it share: evenly, nearest first, or one at a time in turn. Right-click to switch")
+			.text("On a Fluid Line, a Splitter decides how the ends beyond it share: evenly, nearest first, or one at a time in turn. Right-click to switch")
 			.pointAt(util.vector().topOf(splitter))
 			.placeNearTarget()
 			.attachKeyFrame();
@@ -212,23 +214,99 @@ public final class LineScenes {
 			.attachKeyFrame();
 		scene.idle(100);
 
+		scene.overlay().showText(100)
+			.text("A whole pole is one junction: every cable tied to it joins. Brass feeds copper there, never the other way. Each insulator holds one tier and colour of cable")
+			.pointAt(util.vector().topOf(postA))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(110);
+
 		scene.overlay().showControls(util.vector().topOf(breaker), Pointing.DOWN, 60).rightClick();
 		scene.world().modifyBlockEntityNBT(util.select().position(breaker), PowerLineBlockEntity.class, nbt -> nbt.putBoolean("LeverOff", true));
 		scene.world().modifyBlock(motor, s -> s.setValue(ElectricMotorBlock.POWERED, false), false);
 		scene.overlay().showText(90)
-			.text("A Breaker cuts the power, with its lever or a redstone signal. Wrench a brass wire's joint with a copper one at a Breaker, and brass feeds copper through it")
+			.text("A Breaker cuts the power, with its lever or a redstone signal. Wrench a brass wire's joint with a copper one of the same colour at a Breaker, and brass feeds copper through it")
 			.pointAt(util.vector().topOf(breaker))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(100);
 
-		scene.overlay().showControls(util.vector().topOf(util.grid().at(9, 1, 2)), Pointing.DOWN, 60).rightClick().withItem(new ItemStack(Items.RED_DYE));
 		scene.overlay().showText(90)
-			.text("Dye a Power Line and it becomes a slightly thicker covered cable. Lines of different colours only join when wrenched together")
+			.text("Dye Power Lines before you place them, eight around a dye: a dyed line is a slightly thicker covered cable. Two colours never join (plain is one), so cables can run side by side")
 			.pointAt(util.vector().topOf(util.grid().at(9, 1, 2)))
 			.placeNearTarget()
 			.attachKeyFrame();
 		scene.idle(100);
+		scene.markAsFinished();
+	}
+
+	private static ItemStack create(String item) {
+		return new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("create", item)));
+	}
+
+	public static void powerNetworks(SceneBuilder builder, SceneBuildingUtil util) {
+		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+		scene.title("power_networks", "Power Networks");
+		scene.configureBasePlate(0, 0, 9);
+		scene.showBasePlate();
+		scene.idle(5);
+
+		BlockPos gen = util.grid().at(4, 1, 2), splitter = util.grid().at(6, 1, 2), drilled = util.grid().at(6, 1, 3);
+		scene.world().showSection(util.select().fromTo(1, 1, 2, 8, 1, 2), Direction.DOWN);
+		scene.idle(15);
+		scene.overlay().showText(100)
+			.text("Everything a Power Line reaches is one network. Lines on a generator's sides are one network too, brass and copper alike: it powers them all")
+			.pointAt(util.vector().topOf(gen))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(110);
+
+		scene.overlay().showControls(util.vector().topOf(gen), Pointing.DOWN, 60).withItem(create("goggles"));
+		scene.overlay().showText(90)
+			.text("Engineer's Goggles on a generator, a machine or a wire show the whole network: what its generators make, and what its machines use")
+			.pointAt(util.vector().topOf(gen))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(100);
+
+		scene.overlay().showText(80)
+			.text("Short of power, every machine gets an even share, as if they were wired up by hand")
+			.pointAt(util.vector().topOf(util.grid().at(8, 1, 2)))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(90);
+
+		scene.world().showSection(util.select().fromTo(5, 1, 3, 7, 1, 6), Direction.DOWN);
+		scene.idle(15);
+		scene.overlay().showControls(util.vector().topOf(splitter), Pointing.DOWN, 60).rightClick().withItem(create("wrench"));
+		scene.overlay().showText(100)
+			.text("A Power Splitter goes on a junction of three or four ways, on a floor, wall or ceiling. Wrench it to open its screen")
+			.pointAt(util.vector().topOf(splitter))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(110);
+
+		scene.overlay().showText(100)
+			.text("Set each branch First, Second or Last: when power runs short, the First branches are served before the rest. Its dial points at the First branch")
+			.pointAt(util.vector().topOf(splitter))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(110);
+
+		scene.overlay().showControls(util.vector().topOf(drilled), Pointing.DOWN, 60).rightClick().withItem(create("wrench"));
+		scene.overlay().showText(100)
+			.text("To take a cable through a wall, run it up to a solid block on each side, in the same tier and colour, and wrench one end: it drills through and joins the two")
+			.pointAt(util.vector().topOf(drilled))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(110);
+
+		scene.overlay().showText(100)
+			.text("A network keeps going with nobody nearby: far generators run on paper, their chunks never load, and their power still arrives")
+			.pointAt(util.vector().topOf(gen))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(110);
 		scene.markAsFinished();
 	}
 }

@@ -62,6 +62,15 @@ public class LinePostBlockEntity extends BlockEntity {
 		return null;
 	}
 
+	/** The colour of cable on an insulator (null: plain, or none tied yet; see {@link #tierAt}). */
+	@Nullable
+	public net.minecraft.world.item.DyeColor dyeAt(int insulator) {
+		for (Span s : spans)
+			if (s.from() == insulator)
+				return s.dye();
+		return null;
+	}
+
 	/** Where a span ties onto an insulator, in the world. */
 	public Vec3 tie(int insulator) {
 		return LinePostBlock.tie(getBlockState(), worldPosition, insulator);

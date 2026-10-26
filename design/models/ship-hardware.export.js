@@ -5,7 +5,7 @@
 // Usage: node design/models/ship-hardware.export.js
 const fs = require('fs');
 const path = require('path');
-const { ASSETS, fitUv, DIRS, C } = require('./process-box.lib.js');
+const { ASSETS, fitUv, DIRS, C, fitGui } = require('./process-box.lib.js');
 const H = require('./ship-hardware.gen.js');
 
 const NS = 'comedymonkeysaddons';
@@ -48,7 +48,10 @@ function blockModel(cubes, particle, extra = {}) {
   if (particle.slice(0, 3) in PREFIX) used.add(particle);
   const textures = { particle: ref(particle) };
   for (const [r, name] of vars) textures[name] = r;
-  return { parent: 'block/block', render_type: 'minecraft:cutout', ambientocclusion: false, textures, elements, ...extra };
+  const model = { parent: 'block/block', render_type: 'minecraft:cutout', ambientocclusion: false, textures, elements, ...extra };
+  if (model.display && model.display.gui === 'fit')
+    model.display = { ...model.display, gui: fitGui(elements) };
+  return model;
 }
 const write = (kind, name, cubes, particle, extra) => {
   fs.writeFileSync(path.join(ASSETS, 'models', kind, name + '.json'), JSON.stringify(blockModel(cubes, particle, extra), null, 2) + '\n');
@@ -78,8 +81,9 @@ write('block', 'torque_rotor_blade', H.rotorBlade(), 'tr:blade');
 // the item: two of the blades, opposite each other (a static model can't turn one by 120 degrees)
 const opposite = H.rotorBlade().map((c) => ({ ...c, name: c.name + '_b', from: [16 - c.to[0], c.from[1], 16 - c.to[2]], to: [16 - c.from[0], c.to[1], 16 - c.from[2]],
   rot: c.rot && [c.rot[0], -c.rot[1], [16 - c.rot[2][0], c.rot[2][1], 16 - c.rot[2][2]]] }));
+// its inventory view fitted to the slot (the blades reach well past the block, so block/block's view spills out)
 write('item', 'torque_rotor', [...H.rotorBase(), ...H.rotorHub(), ...H.rotorBlade(), ...opposite], 'tr:plate', { display: {
-  gui: { rotation: [30, 225, 0], translation: [0, -1, 0], scale: [0.45, 0.45, 0.45] }, ground: { translation: [0, 3, 0], scale: [0.25, 0.25, 0.25] },
+  gui: 'fit', ground: { translation: [0, 3, 0], scale: [0.25, 0.25, 0.25] },
   fixed: { scale: [0.5, 0.5, 0.5] }, thirdperson_righthand: { rotation: [75, 45, 0], translation: [0, 2.5, 0], scale: [0.375, 0.375, 0.375] },
   firstperson_righthand: { rotation: [0, 45, 0], translation: [0, 2, 0], scale: [0.4, 0.4, 0.4] }, firstperson_lefthand: { rotation: [0, 225, 0], translation: [0, 2, 0], scale: [0.4, 0.4, 0.4] } } });
 

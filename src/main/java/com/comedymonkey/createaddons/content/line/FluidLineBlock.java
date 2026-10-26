@@ -156,7 +156,7 @@ public class FluidLineBlock extends BaseEntityBlock implements IWrenchable, Simp
 			if (line.tier != tier)
 				return LineSide.NONE;
 			LineBlockEntity o = level.getBlockEntity(next) instanceof LineBlockEntity l ? l : null;
-			// no block entities yet (while being placed): joined as plain undyed line
+			// no block entities yet (while being placed): joined as plain line (worked out again once its colour is in)
 			if (be == null || o == null)
 				return (be == null || be.dye() == null) && (o == null || o.dye() == null) ? LineSide.LINE : LineSide.NONE;
 			return LineBlockEntity.joins(be, d, o) ? LineSide.LINE : LineSide.NONE;
@@ -354,6 +354,13 @@ public class FluidLineBlock extends BaseEntityBlock implements IWrenchable, Simp
 	@Override
 	protected void tick(BlockState state, ServerLevel level, BlockPos pos, net.minecraft.util.RandomSource random) {
 		refresh(level, pos);
+	}
+
+	/** Picked, a line of its colour. */
+	@Override
+	public ItemStack getCloneItemStack(BlockState state, net.minecraft.world.phys.HitResult target, net.minecraft.world.level.LevelReader level, BlockPos pos,
+		Player player) {
+		return LineItem.of(this, level, pos);
 	}
 
 	@Override

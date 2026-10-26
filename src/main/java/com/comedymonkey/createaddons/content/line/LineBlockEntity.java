@@ -220,17 +220,17 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 	}
 
 	/**
-	 * Whether this piece and the line next to it through side d join: the same tier, neither joint cut, and the same
-	 * colour unless a wrench joined them.
+	 * Whether this piece and the line next to it through side d join: neither joint cut, the same colour (plain is a
+	 * colour of its own: two colours never join, so different lines can run side by side), and the same tier.
 	 */
 	public static boolean joins(LineBlockEntity a, Direction d, LineBlockEntity b) {
 		Joint here = a.joint(d), there = b.joint(d.getOpposite());
-		if (here == Joint.CUT || there == Joint.CUT)
+		if (here == Joint.CUT || there == Joint.CUT || a.dye != b.dye)
 			return false;
 		// brass and copper: only at a Breaker, and only once that joint is wrenched
 		if (a.tier() != b.tier())
 			return breakerJoin(a, d, b) && here == Joint.JOINED && there == Joint.JOINED;
-		return (here == Joint.JOINED && there == Joint.JOINED) || a.dye == b.dye;
+		return true;
 	}
 
 	/** Brass and copper Power Lines can join only at a Breaker, along its run (brass feeds copper through it), when wrenched. */
@@ -242,17 +242,16 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 
 	// ---------- changes ----------
 
+	/** Its colour (a line is dyed as an item, before it's placed: this is for its saved data and tests). */
 	public void setDye(@Nullable DyeColor color) {
 		if (dye == color)
 			return;
 		dye = color;
-		// a new colour starts from fresh joints: the old wrenched ones belonged to the old colour
-		joints.values().removeIf(j -> j == Joint.JOINED);
 		changed(true);
 		rerender();
 	}
 
-	/** The wrench on side d: cut a joined joint; join a cut one, or one between colours, to the line next to it. */
+	/** The wrench on side d: cut a joined joint; join a cut one to the line next to it (brass to copper at a Breaker). */
 	public void wrenchJoint(Direction d) {
 		if (level == null)
 			return;
@@ -260,9 +259,9 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 		Joint next;
 		if (joinedNow)
 			next = Joint.CUT;
-		// different colours, or brass and copper at a Breaker: joined by the wrench
+		// brass and copper at a Breaker: joined by the wrench (two colours never join)
 		else if (level.getBlockEntity(worldPosition.relative(d)) instanceof LineBlockEntity other
-			&& (other.dye != dye || other.tier() != tier() && breakerJoin(this, d, other)))
+			&& other.tier() != tier() && other.dye == dye && breakerJoin(this, d, other))
 			next = Joint.JOINED;
 		else
 			next = Joint.AUTO;
@@ -433,8 +432,15 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 		joints.clear();
 		CompoundTag j = tag.getCompound("Joints");
 		for (Direction d : Direction.values())
-			if (j.contains(d.getSerializedName()))
-				joints.put(d, Joint.values()[Math.clamp(j.getInt(d.getSerializedName()), 0, Joint.values().length - 1)]);
+			if (j.contains(d.getSerializedName())) {
+				Joint joint = Joint.values()[Math.clamp(j.getInt(d.getSerializedName()), 0, Joint.values().length - 1)];
+				// a wrenched join is only brass to copper at a Breaker now: one between two colours (saved before) goes
+				if (joint == Joint.JOINED && !(this instanceof PowerLineBlockEntity)) {
+					staleJoins = true;
+					continue;
+				}
+				joints.put(d, joint);
+			}
 		// older lines saved the Intake on its own
 		fitting = tag.contains("Fitting") ? Fitting.byName(tag.getString("Fitting")) : tag.contains("Intake") ? Fitting.INTAKE : Fitting.NONE;
 		fittingSide = Direction.from3DDataValue(tag.contains("FittingSide") ? tag.getInt("FittingSide") : tag.getInt("Intake"));
@@ -532,11 +538,20 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 
 	// ---------- lifecycle ----------
 
+	/** A join between two colours was read from the save and dropped: the sides are worked out again once it's loaded. */
+	private boolean staleJoins;
+
 	@Override
 	public void onLoad() {
 		super.onLoad();
-		if (level instanceof ServerLevel server)
+		if (level instanceof ServerLevel server) {
 			networkLoaded(server);
+			if (staleJoins) {
+				staleJoins = false;
+				setChanged();
+				server.scheduleTick(worldPosition, getBlockState().getBlock(), 1);
+			}
+		}
 	}
 
 	@Override
@@ -555,10 +570,7 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 
 	@Override
 	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-		LangBuilder title = new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).add(getBlockState().getBlock().getName());
-		if (dye != null)
-			title.text(" (").add(Component.translatable("color.minecraft." + dye.getName())).text(")");
-		title.forGoggles(tooltip);
+		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).add(LineItem.named(dye, getBlockState().getBlock().getName())).forGoggles(tooltip);
 		addLineTooltip(tooltip);
 		switch (fitting) {
 			case INTAKE -> line(tooltip, filter.isEmpty() ? Component.translatable(key("intake_any"))

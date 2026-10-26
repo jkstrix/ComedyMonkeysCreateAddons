@@ -82,7 +82,7 @@ public final class MachineScenes {
 		state(scene, machine, new ItemStack(Items.STRING, 12), new ItemStack(Items.SLIME_BALL, 3), ItemStack.EMPTY,
 			new ItemStack(Items.COBWEB), 400);
 		scene.overlay().showText(90)
-			.text("Watch the strands spin, tangle and knot themselves up into a web")
+			.text("Watch the whisk wind the string off its spools and ball it up into a web")
 			.pointAt(util.vector().blockSurface(machine, Direction.NORTH))
 			.placeNearTarget()
 			.attachKeyFrame();

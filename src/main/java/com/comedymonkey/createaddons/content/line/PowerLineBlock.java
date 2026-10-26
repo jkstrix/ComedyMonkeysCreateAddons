@@ -174,6 +174,10 @@ public class PowerLineBlock extends BaseEntityBlock implements IWrenchable, Simp
 	protected boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
 		if (!context.getItemInHand().is(asItem()))
 			return false;
+		// one block holds one colour of wire: another colour isn't added to it (it would take the block's colour over)
+		if (!(context.getLevel().getBlockEntity(context.getClickedPos()) instanceof LineBlockEntity be)
+			|| be.dye() != context.getItemInHand().get(com.comedymonkey.createaddons.registry.ModDataComponents.LINE_DYE.get()))
+			return false;
 		for (Direction face : Direction.values())
 			if (!hasFace(state, face) && supports(context.getLevel(), context.getClickedPos(), face))
 				return true;
@@ -189,10 +193,13 @@ public class PowerLineBlock extends BaseEntityBlock implements IWrenchable, Simp
 
 	/** One wire of this block as an item, with its dye. */
 	private ItemStack wireItem(Level level, BlockPos pos) {
-		ItemStack stack = new ItemStack(asItem());
-		if (level.getBlockEntity(pos) instanceof LineBlockEntity be && be.dye() != null)
-			stack.set(com.comedymonkey.createaddons.registry.ModDataComponents.LINE_DYE.get(), be.dye());
-		return stack;
+		return LineItem.of(this, level, pos);
+	}
+
+	/** Picked, a wire of its colour. */
+	@Override
+	public ItemStack getCloneItemStack(BlockState state, net.minecraft.world.phys.HitResult target, LevelReader level, BlockPos pos, Player player) {
+		return LineItem.of(this, level, pos);
 	}
 
 	@Override

@@ -1,0 +1,127 @@
+{
+  "type": "create:splashing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "children": [
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "white"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "orange"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "magenta"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "light_blue"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "yellow"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "lime"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "pink"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "gray"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "light_gray"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "cyan"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "purple"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "blue"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "brown"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "green"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "red"
+          }
+        },
+        {
+          "type": "neoforge:components",
+          "items": "comedymonkeysaddons:brass_power_line",
+          "components": {
+            "comedymonkeysaddons:line_dye": "black"
+          }
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": "comedymonkeysaddons:brass_power_line"
+    }
+  ]
+}

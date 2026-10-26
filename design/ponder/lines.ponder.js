@@ -1,4 +1,4 @@
-// The Fluid and Power Lines' Ponder structures -> src/main/resources/assets/comedymonkeysaddons/ponder/{fluid_lines,line_fittings,power_lines}.nbt
+// The Fluid and Power Lines' Ponder structures -> src/main/resources/assets/comedymonkeysaddons/ponder/{fluid_lines,line_fittings,power_lines,power_networks}.nbt
 //   node design/ponder/lines.ponder.js
 // A white/light-grey checker plate (y 0) like the mod's other scenes, with the lines on top, their sides and fittings
 // written out (the Ponder world doesn't run the lines' networks); the scenes switch the flow on themselves
@@ -99,4 +99,29 @@ structure('power_lines', 11, 5, 5, (set) => {
   set(8, 1, 2, ...POST, { id: T.str(MOD + ':line_post'), Spans: span(-4, false) });
   set(9, 1, 2, ...WIRE, links(5, 4));
   set(10, 1, 2, `${MOD}:electric_motor`, { facing: 'east', powered: true });
+});
+
+// 4. Power networks: a Lava Generator with a brass wire to a motor on one side and copper on the other, to a Power
+// Splitter on a T: one branch on to a motor, the other through a drilled wall to a third motor
+const wires = (north, south, west, east) => ({ id: T.str(MOD + ':power_line'), Links: { t: 'intArray', v: [north | (south << 3) | (west << 6) | (east << 9), 0, 0, 0, 0, 0] } });
+const LINE = 1, TERMINAL = 4, THROUGH = 6;
+const BRASS_WIRE = [`${MOD}:brass_power_line`, WIRE[1]];
+// the Splitter's levels by direction (down, up, north, south, west, east): 0 first, 1 second, 2 last
+const priority = (levels) => ({ Priority: { t: 'byteArray', v: levels } });
+structure('power_networks', 9, 4, 9, (set) => {
+  set(1, 1, 2, `${MOD}:electric_motor`, { facing: 'west', powered: true });
+  set(2, 1, 2, ...BRASS_WIRE, wires(0, 0, TERMINAL, LINE));
+  set(3, 1, 2, ...BRASS_WIRE, wires(0, 0, LINE, TERMINAL));
+  set(4, 1, 2, `${MOD}:lava_generator`, { facing: 'north', fuelled: true, lit: true });
+  set(5, 1, 2, ...WIRE, wires(0, 0, TERMINAL, LINE));
+  // the Splitter: its fitting's side is its first branch round the face (north, south, west, east): south here
+  set(6, 1, 2, ...WIRE, { ...wires(0, LINE, LINE, LINE), ...fitting('splitter', 3), ...priority([1, 1, 1, 2, 1, 0]) });
+  set(7, 1, 2, ...WIRE, wires(0, 0, LINE, TERMINAL));
+  set(8, 1, 2, `${MOD}:electric_motor`, { facing: 'east', powered: true });
+  set(6, 1, 3, ...WIRE, wires(LINE, THROUGH, 0, 0));
+  // a low wall, so the motor beyond it shows
+  for (let x = 5; x <= 7; x++)
+    set(x, 1, 4, 'minecraft:stone_bricks');
+  set(6, 1, 5, ...WIRE, wires(THROUGH, TERMINAL, 0, 0));
+  set(6, 1, 6, `${MOD}:electric_motor`, { facing: 'south', powered: true });
 });

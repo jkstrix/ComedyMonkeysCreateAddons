@@ -75,7 +75,7 @@ public final class WellspringScenes {
 		scene.world().modifyBlock(wellspring, state -> state.setValue(WellspringBlock.UPGRADES, 3), false);
 		// text_3
 		scene.overlay().showText(90)
-			.text("Up to three upgrades of one kind can be installed. Each lamp on top is one upgrade, and each one speeds up generation")
+			.text("Up to three upgrades of one kind can be installed. Each one plugs into a socket on the lid, and each one speeds up generation")
 			.pointAt(top)
 			.placeNearTarget()
 			.attachKeyFrame();
@@ -86,7 +86,7 @@ public final class WellspringScenes {
 		scene.overlay().showOutline(PonderPalette.WHITE, "window", util.select().position(wellspring), 80);
 		// text_4
 		scene.overlay().showText(80)
-			.text("The glass windows show the fill level. The notches on the frame mark 25%%, 50%% and 75%%")
+			.text("The glass windows show the fill level. The ticks on the corner posts mark 25%%, 50%% and 75%%")
 			.pointAt(northFace)
 			.placeNearTarget()
 			.attachKeyFrame();

@@ -40,7 +40,11 @@ public class CMPonderPlugin implements PonderPlugin {
 		helper.forComponents(ModItems.VALVE.getId(), ModItems.FILTER.getId(), ModItems.METER.getId(), ModItems.SPLITTER.getId())
 			.addStoryBoard("line_fittings", LineScenes::fittings);
 		helper.forComponents(ModItems.COPPER_POWER_LINE.getId(), ModItems.BRASS_POWER_LINE.getId(), ModItems.LINE_POST.getId(), ModItems.BREAKER.getId())
-			.addStoryBoard("power_lines", LineScenes::powerLines);
+			.addStoryBoard("power_lines", LineScenes::powerLines)
+			.addStoryBoard("power_networks", LineScenes::powerNetworks);
+		// the Splitter fits both kinds of line: on a Power Line, its branch priority
+		helper.forComponents(ModItems.SPLITTER.getId())
+			.addStoryBoard("power_networks", LineScenes::powerNetworks);
 
 		// One scene shared by the template and every tier
 		helper.forComponents(

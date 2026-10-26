@@ -32,6 +32,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
@@ -444,27 +445,111 @@ public final class LineGameTests {
 		});
 	}
 
-	/** Different colours don't join until a wrench joins them; then the fluid crosses. */
+	/** Two colours never join, not even wrenched, so no fluid crosses. */
 	@GameTest(template = COURSE, timeoutTicks = 100)
-	public static void coloursJoinOnlyWhenWrenched(GameTestHelper helper) {
+	public static void twoColoursNeverJoin(GameTestHelper helper) {
 		BlockPos[] t = tankToTank(helper, ModBlocks.COPPER_FLUID_LINE.get(), new FluidStack(Fluids.WATER, 8000), 4);
-		// the last piece, beside tank B: cut off from the rest of the run on one side only
+		// the last piece, beside tank B, red; the rest blue
 		BlockPos red = t[0].east(4);
 		line(helper, red).setDye(DyeColor.RED);
+		for (int i = 1; i <= 3; i++)
+			line(helper, t[0].east(i)).setDye(DyeColor.BLUE);
 		helper.runAtTickTime(5, () -> {
 			if (FluidLineBlock.side(helper.getBlockState(red), Direction.WEST) != LineSide.NONE)
-				helper.fail("a red line joined an undyed one");
-		});
-		helper.runAtTickTime(20, () -> {
-			if (amount(helper, t[1]) != 0)
-				helper.fail("fluid crossed between colours");
+				helper.fail("a red line joined a blue one");
+			if (FluidLineBlock.side(helper.getBlockState(t[0].east(2)), Direction.EAST) != LineSide.LINE)
+				helper.fail("blue lines stopped joining each other");
+			// the wrench doesn't join them either
 			line(helper, red).wrenchJoint(Direction.WEST);
 		});
-		helper.runAtTickTime(45, () -> {
-			if (amount(helper, t[1]) <= 0)
-				helper.fail("no flow once wrenched together");
+		helper.runAtTickTime(40, () -> {
+			if (FluidLineBlock.side(helper.getBlockState(red), Direction.WEST) != LineSide.NONE)
+				helper.fail("the wrench joined red to blue");
+			if (amount(helper, t[1]) != 0)
+				helper.fail("fluid crossed between colours");
 			helper.succeed();
 		});
+	}
+
+	/** A red Power Line laid beside plain ones doesn't join them: plain is a colour of its own. */
+	@GameTest(template = COURSE, timeoutTicks = 40)
+	public static void plainAndDyedNeverJoin(GameTestHelper helper) {
+		BlockPos a = new BlockPos(1, 1, 2);
+		for (int i = 0; i < 4; i++)
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), a.east(i), Direction.DOWN);
+		helper.runAtTickTime(2, () -> {
+			if (helper.getBlockEntity(a.east(3)) instanceof PowerLineBlockEntity be)
+				be.setDye(DyeColor.RED);
+			relink(helper, a, a.east(3));
+		});
+		helper.runAtTickTime(10, () -> {
+			if (!(helper.getBlockEntity(a.east(2)) instanceof PowerLineBlockEntity plain) || !(helper.getBlockEntity(a.east(3)) instanceof PowerLineBlockEntity red))
+				throw new IllegalStateException("wires missing");
+			if (plain.link(Direction.DOWN, Direction.EAST).connected() || red.link(Direction.DOWN, Direction.WEST).connected())
+				helper.fail("a red wire joined a plain one");
+			if (plain.dye() != null || red.dye() != DyeColor.RED)
+				helper.fail("a colour changed: " + plain.dye() + " and " + red.dye());
+			if (!(helper.getBlockEntity(a.east(1)) instanceof PowerLineBlockEntity next) || !next.link(Direction.DOWN, Direction.EAST).connected())
+				helper.fail("plain wires stopped joining each other");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * With Create: Dragons Plus, its Bulk Coloring (a fan through dye fluid) dyes every kind of line, plain or another
+	 * colour, and a dyed line's name says its colour.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void bulkColoringDyesLines(GameTestHelper helper) {
+		var red = com.simibubi.create.api.registry.CreateBuiltInRegistries.FAN_PROCESSING_TYPE.get(
+			net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create_dragons_plus", "coloring_red"));
+		for (Block line : new Block[] {ModBlocks.COPPER_FLUID_LINE.get(), ModBlocks.BRASS_FLUID_LINE.get(), ModBlocks.COPPER_POWER_LINE.get(), ModBlocks.BRASS_POWER_LINE.get()}) {
+			ItemStack plain = new ItemStack(line), blue = new ItemStack(line);
+			blue.set(com.comedymonkey.createaddons.registry.ModDataComponents.LINE_DYE.get(), DyeColor.BLUE);
+			if (!(blue.getHoverName().getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t)
+				|| !t.getKey().equals("item.comedymonkeysaddons.dyed_line"))
+				helper.fail("a blue " + line.getName().getString() + " doesn't say its colour");
+			// Dragons Plus isn't installed: nothing more to check
+			if (red == null) {
+				if (net.neoforged.fml.ModList.get().isLoaded("create_dragons_plus"))
+					helper.fail("Dragons Plus is installed but its red Bulk Coloring wasn't found");
+				continue;
+			}
+			for (ItemStack in : new ItemStack[] {plain, blue}) {
+				List<ItemStack> out = red.canProcess(in, helper.getLevel()) ? red.process(in, helper.getLevel()) : null;
+				if (out == null || out.isEmpty() || !out.get(0).is(line.asItem())
+					|| out.get(0).get(com.comedymonkey.createaddons.registry.ModDataComponents.LINE_DYE.get()) != DyeColor.RED)
+					helper.fail("Bulk Coloring in red dye didn't make a " + (in == plain ? "plain " : "blue ") + line.getName().getString() + " red: " + out);
+			}
+		}
+		helper.succeed();
+	}
+
+	/** Bulk washing (a fan through water) takes the dye off every kind of line. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void bulkWashingTakesTheDyeOff(GameTestHelper helper) {
+		net.minecraft.world.item.crafting.RecipeType<?> splashing = net.minecraft.core.registries.BuiltInRegistries.RECIPE_TYPE.get(
+			net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create", "splashing"));
+		for (Block line : new Block[] {ModBlocks.COPPER_FLUID_LINE.get(), ModBlocks.BRASS_FLUID_LINE.get(), ModBlocks.COPPER_POWER_LINE.get(), ModBlocks.BRASS_POWER_LINE.get()}) {
+			ItemStack dyed = new ItemStack(line);
+			dyed.set(com.comedymonkey.createaddons.registry.ModDataComponents.LINE_DYE.get(), DyeColor.RED);
+			boolean washed = false;
+			for (var h : helper.getLevel().getRecipeManager().getRecipes()) {
+				var r = h.value();
+				if (r.getType() != splashing || r.getIngredients().isEmpty())
+					continue;
+				// a plain line passes a washing fan untouched
+				if (r.getIngredients().get(0).test(new ItemStack(line)))
+					helper.fail("bulk washing takes plain " + line.getName().getString() + " too");
+				if (!r.getIngredients().get(0).test(dyed))
+					continue;
+				ItemStack out = r.getResultItem(helper.getLevel().registryAccess());
+				washed = out.is(line.asItem()) && out.get(com.comedymonkey.createaddons.registry.ModDataComponents.LINE_DYE.get()) == null;
+			}
+			if (!washed)
+				helper.fail("no bulk washing makes a dyed " + line.getName().getString() + " plain");
+		}
+		helper.succeed();
 	}
 
 	/** An encased line keeps working. */
@@ -940,6 +1025,47 @@ public final class LineGameTests {
 		});
 	}
 
+	/**
+	 * A generator with a brass line on one side and a copper line on the other, a motor on each: one network through the
+	 * generator, so all three show the same use, both motors' together, and both motors run.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void linesMeetingAGeneratorAreOneNetwork(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(5, 1, 2), east = gen.east(4), west = gen.west(4);
+		generator(helper, gen);
+		motor(helper, east);
+		helper.setBlock(west, ModBlocks.ELECTRIC_MOTOR.get().defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.WEST));
+		for (int i = 1; i <= 3; i++) {
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+			wire(helper, ModBlocks.BRASS_POWER_LINE.get(), gen.west(i), Direction.DOWN);
+		}
+		// each motor uses an eighth of what the generator makes, starting full (so it takes only what it uses)
+		int stress = ElectricMotorBlockEntity.STRESS_STEP * Math.max(1,
+			(int) (CMConfig.SERVER.generatorFePerTick() / 8 / CMConfig.SERVER.motorFePerStress()) / ElectricMotorBlockEntity.STRESS_STEP);
+		helper.runAtTickTime(2, () -> {
+			relink(helper, gen.east(1), gen.east(3), gen.west(1), gen.west(3));
+			for (BlockPos m : new BlockPos[] {east, west})
+				if (helper.getBlockEntity(m) instanceof ElectricMotorBlockEntity motor) {
+					motor.applySettings(64, stress, false);
+					motor.getEnergy().receiveEnergy(motor.getEnergy().getMaxEnergyStored(), false);
+				}
+		});
+		helper.runAtTickTime(140, () -> {
+			double both = 2 * ElectricMotorBlockEntity.usageFor(stress);
+			for (BlockPos p : new BlockPos[] {gen, east, west}) {
+				int uses = helper.getBlockEntity(p).saveWithoutMetadata(helper.getLevel().registryAccess()).getInt("NetUses");
+				if (Math.abs(uses - both) > both / 10)
+					helper.fail("the network reads " + uses + " FE a tick used at " + p.toShortString() + ", not both motors' " + (int) both);
+			}
+			// both started full: without power each would be down by over 17,000 FE by now
+			for (BlockPos m : new BlockPos[] {east, west})
+				if (helper.getBlockEntity(m) instanceof ElectricMotorBlockEntity motor
+					&& motor.getEnergy().getEnergyStored() < motor.getEnergy().getMaxEnergyStored() - 40 * both)
+					helper.fail("the motor at " + m.toShortString() + " isn't being kept full: " + motor.getEnergy().getEnergyStored());
+			helper.succeed();
+		});
+	}
+
 	/** A generator powering a motor that takes all it makes: its store stays level from tick to tick. */
 	@GameTest(template = COURSE, timeoutTicks = 160)
 	public static void generatorStoreStaysLevel(GameTestHelper helper) {
@@ -1016,7 +1142,12 @@ public final class LineGameTests {
 		motor(helper, m);
 		for (int i = 1; i <= 3; i++)
 			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), b.east(i), Direction.DOWN);
-		helper.runAtTickTime(2, () -> relink(helper, b.east(1), b.east(3)));
+		helper.runAtTickTime(2, () -> {
+			relink(helper, b.east(1), b.east(3));
+			// at its lowest stress it uses next to nothing, so what it gains is what it's given
+			if (helper.getBlockEntity(m) instanceof ElectricMotorBlockEntity motor)
+				motor.applySettings(64, ElectricMotorBlockEntity.STRESS_STEP, false);
+		});
 		BlockPos ka = helper.absolutePos(a), kb = helper.absolutePos(b);
 		int[] start = {0};
 		// both stores empty, then both away: what the motor gets is what their records make
@@ -1028,16 +1159,16 @@ public final class LineGameTests {
 		helper.runAtTickTime(80, () -> {
 			if (PowerGridTesting.store(helper.getLevel(), ka) < 0)
 				helper.fail("the generator in the row (no cable of its own) has no record");
-			PowerGridTesting.away(ka, true);
-			PowerGridTesting.away(kb, true);
+			PowerGridTesting.away(helper.getLevel(), ka, true, 140);
+			PowerGridTesting.away(helper.getLevel(), kb, true, 140);
 			start[0] = stored(helper, m);
 		});
 		helper.runAtTickTime(200, () -> {
-			PowerGridTesting.away(ka, false);
-			PowerGridTesting.away(kb, false);
+			PowerGridTesting.away(helper.getLevel(), ka, false, 0);
+			PowerGridTesting.away(helper.getLevel(), kb, false, 0);
 			int got = stored(helper, m) - start[0], one = CMConfig.SERVER.generatorFePerTick() * 120;
-			// one generator's records make about 120 ticks' worth here; two make twice that
-			if (got < one * 1.15)
+			// one generator's records make about 120 ticks' worth here (less the wait for the next plan); two make twice that
+			if (got < one * 1.4)
 				helper.fail("on paper the line only drew " + got + " FE from the pair: about one generator's worth (" + one + ")");
 			helper.succeed();
 		});

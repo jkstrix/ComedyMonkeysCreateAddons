@@ -99,7 +99,9 @@ public class SplitterScreen extends AbstractSimiScreen {
 			SplitterInfoPayload.Row r = info.rows().get(i);
 			int rowY = y + TOP + i * ROW;
 			graphics.drawString(font, tr("dir_" + r.dir().getName()), x + 12, rowY + 3, TEXT, true);
-			graphics.drawString(font, contents(r), x + 12, rowY + 13, DIM, true);
+			// a branch that comes round to another (a ring): its level is the nearest way round's, so the screen says so
+			Component what = r.loops() ? tr("loops", contents(r)) : contents(r);
+			graphics.drawString(font, !r.loops() || font.width(what) <= 124 ? what : tr("loops_short"), x + 12, rowY + 13, DIM, true);
 			if (powerIn(r))
 				graphics.drawString(font, tr("power_in"), x + 150, rowY + 8, DIM, true);
 		}

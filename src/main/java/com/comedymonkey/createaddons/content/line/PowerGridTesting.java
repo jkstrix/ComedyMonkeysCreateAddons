@@ -8,10 +8,13 @@ import net.minecraft.server.level.ServerLevel;
 public final class PowerGridTesting {
 	private PowerGridTesting() {}
 
-	/** Treats the generator recorded at key as away (as if its chunk weren't running), or as back. */
-	public static void away(BlockPos key, boolean away) {
+	/**
+	 * Treats the generator at key as away (as if its chunk weren't running: it doesn't run, its line runs it on paper), or
+	 * as back. A mark lasts at most {@code ticks}, so a test that fails half way leaves nothing behind for long.
+	 */
+	public static void away(ServerLevel level, BlockPos key, boolean away, int ticks) {
 		if (away)
-			PowerGrid.AWAY.add(key.immutable());
+			PowerGrid.AWAY.put(key.immutable(), level.getGameTime() + ticks);
 		else
 			PowerGrid.AWAY.remove(key);
 	}

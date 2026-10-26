@@ -345,3 +345,62 @@ Three fresh reviewers (network core and flow; generators, feeds and screens; Fly
 - The idle visuals for plain lines and closed chests. Returning no visual relies on Flywheel accepting null, which its API doesn't promise.
 
 **Tests:** 87 game tests pass, and the unloaded-chunk server test passes ("Wellspring away too" −20 mB over 13 s).
+
+## Third round (2026-10-26)
+
+What the second review left, now done:
+- **Splitter screen:** a branch that reaches back round to its own Splitter says "loops back" on its row.
+- **Flow:** each tick reuses the second's working arrays, and each circuit keeps its own list of takers, so a tick makes nothing new and doesn't go through every taker for every circuit.
+- **Networks with only generators** don't update: nothing on them takes power.
+- **After a rebuild** the network plans at once, so there's no gap of up to a second.
+- **A broken Wellspring** stops counting for a generator away as soon as its chunk is loaded, rather than lingering on paper.
+- **The test hook** expires by itself, so a failed test can't leave a generator marked away.
+- **Generators marked away** by the test hook skip their own tick, so tests of rows on paper count only the records.
+- **Breaker arm:** with no block entity to ask, it takes the other tier's colour.
+- **Screenshots:** the frame-rate log names the right backend for `gui-` shots.
+
+Not changed:
+- **The wire's reach to the pole** is drawn from the wire's block, so it's culled with the wire's chunk section. The section next to it is almost always drawn too, and moving the part to the pole would split one wire's model over two blocks.
+
+**Server test** (`design/tests/line-paper-test.js`, on the dedicated server with no player, so chunks really unload): two touching Lava Generators, a cable on one only, and a motor 128 blocks away.
+- **Row on paper:** with the generators' chunks unloaded, the motor got 406,481 FE in 10 s. Both generators make 409,600, less the motor's own use.
+- **After a restart, still away:** both again (441,632 FE: the extra came out of their stores).
+- **Back:** each one's lava was 7,227 mB, exactly 8,000 less one millibucket for each tick since they were filled.
+- An earlier run read half: the test motor ran at full stress, because a motor only reads its stress when its speed is in the tag too. The test sets both now.
+
+**Tests:** 87 game tests pass.
+
+**In game afterwards:** a Geothermal Turbine with a brass line on one port and a copper line on another flipped between two "uses" figures each second: they were two networks, each telling it its own. Lines that meet one generator are now one network, whatever their tier (the user: "that should be just one network"). The generator serves each circuit it meets, its output shared by what each wants. Test: `linesMeetingAGeneratorAreOneNetwork`. 88 game tests pass.
+
+**Colours (the user, 2026-10-26):** lines are dyed as items before they're placed, and two colours never join (plain is one), so lines can run side by side; dyed names say the colour; bulk washing takes the dye off and Create: Dragons Plus's Bulk Coloring dyes them. New Ponder scene "Power Networks". 91 game tests pass.
+
+## Third review (2026-10-26)
+
+Three fresh reviewers again (network core; colours, items and recipes; client, Ponder and tests). Fixed:
+
+**Network core**
+- A rebuilt network was planned once for each of its terminal wires in the same tick. The second plan saw no use and stopped the flow for a second; each plan also cost a full pass over the devices. Each network is now planned once, and replans asked for meanwhile wait for the next tick.
+- A generator on a brass and a copper circuit was split by each circuit's own machines only, so brass that only feeds copper through a pole got none of it. The split now counts the copper each brass circuit feeds.
+- Touching generators on paper: a running one could be skipped altogether (it was marked seen before the running check), and a row member's own lines got none of the row's output. Both fixed.
+- A network of only generators looks again each second, in case one was replaced by a machine without its wire changing.
+
+**Colours**
+- Adding a wire face to a Power Line block in another colour took the whole block over to that colour (and dyed or washed placed wires that way). It's refused now: one block holds one colour.
+- Drilling through a wall joined two colours. It needs the same tier and colour now (spec, Ponder and tooltips say so).
+- Old worlds' wrenched joins between two colours on Fluid Lines are dropped when the line loads, and its sides worked out again.
+- Pick-block gives a line of the colour picked.
+- Bulk washing takes only dyed lines (JEI shows dyed to plain; plain lines pass a washing fan untouched).
+
+**Client and tests**
+- The Splitter screen showed "Loops back round" on any branch with a long name. Only looping branches get it now.
+- `linesMeetingAGeneratorAreOneNetwork` checks the motors are kept full (its "got power" check couldn't fail); `touchingGeneratorsShareOnPaper` sets the motor to its lowest stress, so timing can't swing it; `twoColoursNeverJoin` checks blue still joins blue.
+- The server test measures 15 seconds of game ticks, long enough that full stores can't pass for a second generator: row on paper 730,538 FE in 300 ticks (one makes 307,200); after a restart 730,979; back, both at 6,448 mB, exactly what 1,552 ticks flat out leave.
+- A Ponder screenshot that can't be taken says why in the log and the done file, and closes the screen.
+
+**Not changed**
+- A whole pole still joins every cable tied to it, whatever its colour (decision for the user).
+- The Splitter screen's "loops back" doesn't see a ring that closes through a generator.
+- A wire running round an outside corner doesn't check a cut joint on the far wire (from before this batch).
+- The network packets' version is still "1": nothing has shipped since they changed.
+
+**Tests:** 91 game tests pass.

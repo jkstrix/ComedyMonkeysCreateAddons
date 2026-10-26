@@ -82,9 +82,9 @@ class ElectricMotorBlockEntityTest {
 	// ---------------------------------------------------------------- energy store
 
 	@Test
-	void bufferHoldsASecondAtFullStress() {
-		// 294,912 SU x 0.0625 FE x 20 ticks
-		assertEquals(368_640, motor().getEnergy().getMaxEnergyStored());
+	void bufferHoldsTwoSecondsAtFullStress() {
+		// 294,912 SU x 0.0625 FE x 40 ticks: Power Lines top it up once a second, and a little gap doesn't stall it
+		assertEquals(737_280, motor().getEnergy().getMaxEnergyStored());
 	}
 
 	@Test

@@ -110,7 +110,7 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 	}
 
 	/**
-	 * The way through the solid block on side d, if it's been drilled (both ends wrenched) to a wire of the same tier
+	 * The way through the solid block on side d, if it's been drilled (both ends wrenched) to a wire of the same tier and colour
 	 * behind it. One straight hole, at the same spot on both sides: at the edge where a floor (or other) wire on either
 	 * side meets the wall, or in the middle of the wall when both wires lie on it. A floor wire runs into the hole
 	 * ({@link WireLink#THROUGH}); a wire lying on the wall goes into it where it lies, or runs along to it at the edge.
@@ -126,7 +126,7 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 			return;
 		}
 		if (joint(d) != Joint.DRILLED || !PowerLineBlock.drillable(level, wall, d) || !(level.getBlockEntity(far) instanceof PowerLineBlockEntity o)
-			|| o.tier() != tier() || o.joint(d.getOpposite()) != Joint.DRILLED)
+			|| o.tier() != tier() || o.dye() != dye() || o.joint(d.getOpposite()) != Joint.DRILLED)
 			return;
 		BlockState there = o.getBlockState();
 		boolean onWall = PowerLineBlock.hasFace(state, d), onWallThere = PowerLineBlock.hasFace(there, d.getOpposite());
@@ -186,7 +186,7 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 	}
 
 	/**
-	 * The wrench on side d, against a solid block with a wire of the same tier behind it: drills through and threads the
+	 * The wrench on side d, against a solid block with a wire of the same tier and colour behind it: drills through and threads the
 	 * cable, or pulls it back out. Elsewhere, the joint as usual.
 	 */
 	@Override
@@ -195,7 +195,7 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 			return;
 		BlockPos wall = worldPosition.relative(d);
 		if (!level.isLoaded(wall.relative(d)) || !PowerLineBlock.drillable(level, wall, d) || !(level.getBlockEntity(wall.relative(d)) instanceof PowerLineBlockEntity o)
-			|| o.tier() != tier()) {
+			|| o.tier() != tier() || o.dye() != dye()) {
 			super.wrenchJoint(d);
 			return;
 		}
@@ -233,7 +233,7 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 			BlockState below = level.getBlockState(round);
 			if (below.getBlock() instanceof PowerLineBlock && PowerLineBlock.hasFace(below, d.getOpposite())
 				&& level.getBlockEntity(round) instanceof PowerLineBlockEntity o && o.tier() == tier()
-				&& (o.dye() == dye() || joint(d) == Joint.JOINED))
+				&& o.dye() == dye())
 				return WireLink.OUTSIDE;
 		}
 		return WireLink.NONE;

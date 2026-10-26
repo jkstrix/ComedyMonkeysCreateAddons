@@ -253,4 +253,37 @@ const lerp = (a, b, f) => a + (b - a) * f;
 const trayItem = (n, cx, tex) => [C(`item_${n}`, [cx - 1.5, 2.5, 2.2], [cx + 1.5, 5.5, 2.2], { north: tex, south: tex, all: null },
   { uv: { north: [0, 0, 16, 16], south: [0, 0, 16, 16] }, rot: ['x', 60, [cx, 2.5, 2.2]], shade: false })];
 
-module.exports = { REPO, ASSETS, P, SEAM, RIVET, HI, LO, hash, mot, edge, FIELD, png, textureSet, painters, borrowed, DIRS, C, defaultUv, fitUv, shaftStub, preview, SHOW, HIDE, smooth, lerp, trayItem };
+// An inventory view that fits a model in the slot: block/block's angle, scaled so the model (its elements, turned by their
+// own rotations) fills ICON_FILL of the slot, and centred. For parts much smaller or larger than a block, whose
+// block/block view would be a speck in the slot or spill out of it.
+const ICON_FILL = 14.7 / 16;
+function fitGui(elements) {
+  const rot = [30, 225, 0], rad = (d) => (d * Math.PI) / 180;
+  // a corner of an element, turned by its own rotation, then by the view (z, then y, then x, as the game does)
+  const view = ([x0, y0, z0]) => {
+    let x = x0 - 8, y = y0 - 8, z = z0 - 8, t;
+    const [rx, ry, rz] = rot.map(rad);
+    t = x * Math.cos(rz) - y * Math.sin(rz); y = x * Math.sin(rz) + y * Math.cos(rz); x = t;
+    t = x * Math.cos(ry) + z * Math.sin(ry); z = -x * Math.sin(ry) + z * Math.cos(ry); x = t;
+    t = y * Math.cos(rx) - z * Math.sin(rx); z = y * Math.sin(rx) + z * Math.cos(rx); y = t;
+    return [x, y];
+  };
+  const turn = (p, r) => {
+    if (!r) return p;
+    const a = rad(r.angle), o = r.origin, q = p.map((n, i) => n - o[i]);
+    const [i, j] = r.axis === 'x' ? [1, 2] : r.axis === 'y' ? [2, 0] : [0, 1];
+    const u = q[i] * Math.cos(a) - q[j] * Math.sin(a), w = q[i] * Math.sin(a) + q[j] * Math.cos(a);
+    q[i] = u; q[j] = w;
+    return q.map((n, k) => n + o[k]);
+  };
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (const e of elements)
+    for (const x of [e.from[0], e.to[0]]) for (const y of [e.from[1], e.to[1]]) for (const z of [e.from[2], e.to[2]]) {
+      const [px, py] = view(turn([x, y, z], e.rotation));
+      minX = Math.min(minX, px); maxX = Math.max(maxX, px); minY = Math.min(minY, py); maxY = Math.max(maxY, py);
+    }
+  const s = Math.min(1.6, (16 * ICON_FILL) / Math.max(maxX - minX, maxY - minY));
+  const r3 = (n) => Math.round(n * 1000) / 1000;
+  return { rotation: rot, translation: [r3((-(minX + maxX) / 2) * s), r3((-(minY + maxY) / 2) * s), 0], scale: [r3(s), r3(s), r3(s)] };
+}
+module.exports = { REPO, ASSETS, P, SEAM, RIVET, HI, LO, hash, mot, edge, FIELD, png, textureSet, painters, borrowed, DIRS, C, defaultUv, fitUv, shaftStub, preview, SHOW, HIDE, smooth, lerp, trayItem, fitGui };

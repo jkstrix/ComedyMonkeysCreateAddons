@@ -9,7 +9,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -21,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
  * Power Lines in hand: placed against a face, they lie on it as wire. Used on a Line Post's insulator, then another's,
  * they hang a span between the two: one Power Line for every four blocks, the line between clear when it's hung.
  */
-public class PowerLineItem extends BlockItem {
+public class PowerLineItem extends LineItem {
 	private final LineTier tier;
 
 	public PowerLineItem(Block block, LineTier tier, Properties properties) {
@@ -49,7 +48,7 @@ public class PowerLineItem extends BlockItem {
 		if (level.isClientSide)
 			return InteractionResult.SUCCESS;
 		if (start == null || !level.isLoaded(start.pos())) {
-			String problem = canTie(post, insulator);
+			String problem = canTie(post, insulator, stack.get(ModDataComponents.LINE_DYE.get()));
 			if (problem != null) {
 				tell(player, problem);
 				return InteractionResult.FAIL;
@@ -73,14 +72,16 @@ public class PowerLineItem extends BlockItem {
 		return InteractionResult.SUCCESS;
 	}
 
-	/** Why a span of this tier can't be tied to an insulator, or null if it can. */
+	/** Why a span of this tier and colour can't be tied to an insulator, or null if it can. */
 	@Nullable
-	private String canTie(LinePostBlockEntity post, int insulator) {
+	private String canTie(LinePostBlockEntity post, int insulator, @Nullable net.minecraft.world.item.DyeColor dye) {
 		if (post.spansAt(insulator).size() >= LinePostBlockEntity.SPANS_PER_INSULATOR)
 			return "span_insulator_full";
 		LineTier there = post.tierAt(insulator);
 		if (there != null && there != tier)
 			return "span_other_tier";
+		if (there != null && post.dyeAt(insulator) != dye)
+			return "span_other_colour";
 		return null;
 	}
 
@@ -93,9 +94,10 @@ public class PowerLineItem extends BlockItem {
 			return "span_start_gone";
 		if (start.pos().equals(pos))
 			return "span_same_post";
-		String problem = canTie(from, start.insulator());
+		net.minecraft.world.item.DyeColor dye = stack.get(ModDataComponents.LINE_DYE.get());
+		String problem = canTie(from, start.insulator(), dye);
 		if (problem == null)
-			problem = canTie(far, to);
+			problem = canTie(far, to, dye);
 		if (problem != null)
 			return problem;
 		Vec3 a = from.tie(start.insulator()), b = far.tie(to);
@@ -109,7 +111,7 @@ public class PowerLineItem extends BlockItem {
 		if (!creative && stack.getCount() < cost)
 			return "span_needs_more";
 		BlockPos offset = pos.subtract(start.pos());
-		Span span = new Span(start.insulator(), offset, to, tier, stack.get(ModDataComponents.LINE_DYE.get()), true, cost);
+		Span span = new Span(start.insulator(), offset, to, tier, dye, true, cost);
 		from.addSpan(span);
 		far.addSpan(span.reversed());
 		if (!creative)

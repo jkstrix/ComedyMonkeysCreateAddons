@@ -150,7 +150,7 @@ public final class ElectricScenes {
 		scene.world().modifyBlock(motor, s -> s.setValue(ElectricMotorBlock.POWERED, false), false);
 		scene.world().setKineticSpeed(kinetics, 0);
 		scene.overlay().showText(80)
-			.text("Short of power, it stops, and starts again once it has half a second's worth stored")
+			.text("Short of power, it stops, and starts again once it has a good reserve stored")
 			.pointAt(util.vector().topOf(motor))
 			.placeNearTarget()
 			.attachKeyFrame();

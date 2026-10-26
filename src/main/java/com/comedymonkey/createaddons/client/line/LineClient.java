@@ -43,8 +43,13 @@ public final class LineClient {
 	/** The line's body is tinted its tier's colour or its dye; an encased line takes its block's colours instead. */
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
 		event.register((state, level, pos, tint) -> {
-			if (level == null || pos == null || !(level.getBlockEntity(pos) instanceof LineBlockEntity be))
-				return state.getBlock() instanceof LineBlock ? LineColors.tier(tierOf(state.getBlock())) : -1;
+			if (level == null || pos == null || !(level.getBlockEntity(pos) instanceof LineBlockEntity be)) {
+				if (!(state.getBlock() instanceof LineBlock))
+					return -1;
+				LineTier tier = tierOf(state.getBlock());
+				// (1: a Breaker's arm towards the other tier, even without its block entity to hand)
+				return LineColors.tier(tint == 1 ? (tier == LineTier.BRASS ? LineTier.COPPER : LineTier.BRASS) : tier);
+			}
 			if (be.encasing() != null)
 				return event.getBlockColors().getColor(be.encasing(), level, pos, tint);
 			// (1: a Breaker's arm towards a wire of the other tier, drawn in that tier's colour)

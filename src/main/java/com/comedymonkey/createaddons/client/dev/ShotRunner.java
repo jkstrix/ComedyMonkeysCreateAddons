@@ -35,11 +35,24 @@ public final class ShotRunner {
 
 	private ShotRunner() {}
 
+	/**
+	 * A label "ponder-&lt;item&gt;-&lt;scene&gt;-&lt;keyframe&gt;" (an item of this mod; scenes from 0, keyframes from 1, 0 the start): that item's Ponder,
+	 * at that scene's keyframe once its text is up, as {@code screenshots/cmca/<label>.png}.
+	 */
+	private static boolean ponder;
+	private static int ponderScene, ponderKeyframe;
+	@javax.annotation.Nullable
+	private static net.createmod.ponder.foundation.ui.PonderUI ponderUi;
+
 	public static void onClientTick(ClientTickEvent.Post event) {
 		Minecraft mc = Minecraft.getInstance();
 		if (FMLEnvironment.production || mc.level == null || mc.player == null)
 			return;
 		Path request = mc.gameDirectory.toPath().resolve("cmca-shots.txt");
+		if (ponder) {
+			ponderTick(mc);
+			return;
+		}
 		if (step < 0) {
 			// its own count: game time stands still while the world is frozen for the shots
 			if (++ticks % 10 != 0 || !Files.exists(request))
@@ -48,6 +61,10 @@ public final class ShotRunner {
 				label = Files.readString(request).trim();
 				Files.delete(request);
 			} catch (IOException e) {
+				return;
+			}
+			if (label.startsWith("ponder-")) {
+				openPonder(mc);
 				return;
 			}
 			step = 0;
@@ -71,7 +88,7 @@ public final class ShotRunner {
 		String name = gui ? "cmca/" + label + ".png" : "cmca/" + label + "-" + BACKENDS[step].substring("flywheel:".length()) + ".png";
 		Screenshot.grab(mc.gameDirectory, name, mc.getMainRenderTarget(), message -> {});
 		try {
-			Files.writeString(mc.gameDirectory.toPath().resolve("cmca-shots.fps"), label + " " + BACKENDS[step] + " " + mc.getFps() + " fps\n",
+			Files.writeString(mc.gameDirectory.toPath().resolve("cmca-shots.fps"), label + " " + (gui ? backendBefore : BACKENDS[step]) + " " + mc.getFps() + " fps\n",
 				StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 		} catch (IOException ignored) {
 		}
@@ -86,6 +103,74 @@ public final class ShotRunner {
 				Files.writeString(mc.gameDirectory.toPath().resolve("cmca-shots.done"), label);
 			} catch (IOException ignored) {
 			}
+		}
+	}
+
+	private static void openPonder(Minecraft mc) {
+		try {
+			String[] p = label.substring("ponder-".length()).split("-");
+			ponderScene = Integer.parseInt(p[1]);
+			ponderKeyframe = Integer.parseInt(p[2]);
+			ponderUi = net.createmod.ponder.foundation.ui.PonderUI.of(new net.minecraft.world.item.ItemStack(
+				net.minecraft.core.registries.BuiltInRegistries.ITEM.get(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("comedymonkeysaddons", p[0]))));
+			mc.setScreen(ponderUi);
+			ponder = true;
+			wait = 0;
+		} catch (RuntimeException e) {
+			ponderFailed(mc, "the label isn't ponder-<item>-<scene>-<keyframe>: " + e);
+		}
+	}
+
+	/** Through the Ponder: to the scene (scrolled to, as the arrows do), then the keyframe, then the shot once its text is up. */
+	private static void ponderTick(Minecraft mc) {
+		var ui = ponderUi;
+		wait++;
+		try {
+			if (ui == null || mc.screen != ui) {
+				ponderFailed(mc, "the Ponder screen closed");
+				return;
+			}
+			if (wait == 10 && ponderScene > 0) {
+				java.lang.reflect.Method scroll = net.createmod.ponder.foundation.ui.PonderUI.class.getDeclaredMethod("scroll", boolean.class);
+				scroll.setAccessible(true);
+				for (int i = 0; i < ponderScene; i++)
+					scroll.invoke(ui, true);
+			}
+			// the scroll eases over to the next scene: then the keyframe
+			if (wait == 40) {
+				java.lang.reflect.Field index = net.createmod.ponder.foundation.ui.PonderUI.class.getDeclaredField("index");
+				index.setAccessible(true);
+				if (index.getInt(ui) != ponderScene) {
+					ponderFailed(mc, "it has no scene " + ponderScene);
+					return;
+				}
+				var scene = ui.getActiveScene();
+				if (ponderKeyframe < 0 || ponderKeyframe > scene.getKeyframeCount()) {
+					ponderFailed(mc, "its scene has no keyframe " + ponderKeyframe);
+					return;
+				}
+				ui.seekToTime(ponderKeyframe == 0 ? 0 : scene.getKeyframeTime(ponderKeyframe - 1));
+			}
+			if (wait == 80) {
+				Screenshot.grab(mc.gameDirectory, "cmca/" + label + ".png", mc.getMainRenderTarget(), message -> {});
+				Files.writeString(mc.gameDirectory.toPath().resolve("cmca-shots.done"), label);
+				mc.setScreen(null);
+				ponder = false;
+			}
+		} catch (ReflectiveOperationException | IOException | RuntimeException e) {
+			ponderFailed(mc, e.toString());
+		}
+	}
+
+	/** A Ponder shot that couldn't be taken: said in the log and in the done file, and the screen closed. */
+	private static void ponderFailed(Minecraft mc, String why) {
+		ponder = false;
+		com.mojang.logging.LogUtils.getLogger().warn("Ponder shot {} failed: {}", label, why);
+		if (mc.screen == ponderUi)
+			mc.setScreen(null);
+		try {
+			Files.writeString(mc.gameDirectory.toPath().resolve("cmca-shots.done"), "FAILED " + label + ": " + why);
+		} catch (IOException ignored) {
 		}
 	}
 

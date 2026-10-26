@@ -198,7 +198,7 @@ public final class NewBlockScenes {
 		scene.idle(80);
 
 		scene.overlay().showText(70)
-			.text("It stays lit for a few seconds after the last thing burns...")
+			.text("It takes ten things to get it hot, and it cools off within ten seconds once you stop feeding it...")
 			.pointAt(util.vector().blockSurface(fed, Direction.SOUTH))
 			.placeNearTarget();
 		scene.idle(60);

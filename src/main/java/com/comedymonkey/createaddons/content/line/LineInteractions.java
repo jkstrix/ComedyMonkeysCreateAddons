@@ -18,12 +18,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 
 /**
- * What a player's clicks do to a piece of line, fluid or power alike: dye it, wash the dye off, set a filter, turn a
+ * What a player's clicks do to a piece of line, fluid or power alike: a hint that lines are dyed before placing, set a filter, turn a
  * Valve, flip a Breaker, switch a Splitter's mode, encase it in a block, and the wrench's jobs.
  */
 public final class LineInteractions {
@@ -33,15 +32,10 @@ public final class LineInteractions {
 		// skip the empty-hand use, so the wrench's own use (onWrenched) runs
 		if (Wrenches.isWrench(stack))
 			return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
-		if (stack.getItem() instanceof DyeItem dye) {
-			if (be.dye() == dye.getDyeColor())
-				return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
-			if (!level.isClientSide) {
-				be.setDye(dye.getDyeColor());
-				if (!player.getAbilities().instabuild)
-					stack.shrink(1);
-				level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1f, 1f);
-			}
+		// lines are dyed before they're placed (eight around a dye), so two colours laid side by side never join
+		if (stack.getItem() instanceof DyeItem) {
+			if (!level.isClientSide)
+				tell(player, "dye_before_placing");
 			return ItemInteractionResult.sidedSuccess(level.isClientSide);
 		}
 		FluidStack fluid = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
@@ -51,14 +45,6 @@ public final class LineInteractions {
 					be.setFilter(fluid);
 					tell(player, be.fitting() == Fitting.INTAKE ? "intake_filter_set" : "filter_set", fluid.getHoverName());
 					level.playSound(null, pos, SoundEvents.COPPER_HIT, SoundSource.BLOCKS, 0.6f, 1.4f);
-				}
-				return ItemInteractionResult.sidedSuccess(level.isClientSide);
-			}
-			// water washes the dye off
-			if (fluid.getFluid().isSame(Fluids.WATER) && be.dye() != null) {
-				if (!level.isClientSide) {
-					be.setDye(null);
-					level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 0.6f, 1.2f);
 				}
 				return ItemInteractionResult.sidedSuccess(level.isClientSide);
 			}

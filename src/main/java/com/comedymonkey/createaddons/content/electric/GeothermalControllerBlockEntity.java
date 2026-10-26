@@ -243,6 +243,9 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 			clientTicker.accept(this);
 			return;
 		}
+		// (game tests: marked away, it stands still as if its chunk weren't running)
+		if (PowerGrid.away(level, worldPosition))
+			return;
 		// running again after being on paper: it takes on what its record came to
 		if (level instanceof ServerLevel server)
 			PowerGrid.of(server).back(this, server);

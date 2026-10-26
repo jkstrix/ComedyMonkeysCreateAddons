@@ -44,6 +44,7 @@ function write(root) {
       case 'float': b.writeFloatBE(tag.v); parts.push(b.subarray(0, 4)); break;
       case 'double': b.writeDoubleBE(tag.v); parts.push(b); break;
       case 'string': str(tag.v); break;
+      case 'byteArray': { const l = Buffer.alloc(4); l.writeInt32BE(tag.v.length); parts.push(l, Buffer.from(tag.v.map((x) => x & 255))); break; }
       case 'intArray': { const l = Buffer.alloc(4); l.writeInt32BE(tag.v.length); parts.push(l); for (const x of tag.v) { const e = Buffer.alloc(4); e.writeInt32BE(x); parts.push(e); } break; }
       case 'list': { u8(tag.v.length ? IDS[tag.v[0].t] : IDS[tag.of || 'end']); const l = Buffer.alloc(4); l.writeInt32BE(tag.v.length); parts.push(l); tag.v.forEach(payload); break; }
       case 'compound': for (const [k, t] of Object.entries(tag.v)) { u8(IDS[t.t]); str(k); payload(t); } u8(0); break;

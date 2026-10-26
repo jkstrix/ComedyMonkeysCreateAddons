@@ -265,17 +265,35 @@ public final class PowerGrid extends SavedData {
 
 	/** A block is running: loaded, and its chunk ticking. Never loads a chunk to ask. */
 	static boolean running(ServerLevel level, BlockPos pos) {
-		return !AWAY.contains(pos) && level.isLoaded(pos) && level.shouldTickBlocksAt(pos);
+		return !away(level, pos) && level.isLoaded(pos) && level.shouldTickBlocksAt(pos);
 	}
 
-	/** Game tests only: generators treated as away (on paper) without unloading their chunks. See {@link PowerGridTesting}. */
-	static final Set<BlockPos> AWAY = new HashSet<>();
+	/**
+	 * Game tests only: generators treated as away (on paper) without unloading their chunks, until the tick each maps to
+	 * (so a test that fails half way leaves nothing behind for long). See {@link PowerGridTesting}.
+	 */
+	static final Map<BlockPos, Long> AWAY = new HashMap<>();
+
+	/** Game tests only: a generator marked away (it doesn't run, as if its chunk weren't). */
+	public static boolean away(net.minecraft.world.level.Level level, BlockPos pos) {
+		if (AWAY.isEmpty())
+			return false;
+		Long until = AWAY.get(pos);
+		if (until == null)
+			return false;
+		if (level.getGameTime() < until)
+			return true;
+		AWAY.remove(pos);
+		return false;
+	}
 
 	final Map<Node, Piece> pieces = new HashMap<>();
 	/** Who links to each piece (the other way round from its own links). Not saved: worked out from the pieces. */
 	private final Map<Node, Set<Node>> linkedFrom = new HashMap<>();
 	/** How many pieces' ends meet each block (a face is dropped when none does). Not saved: worked out from the pieces. */
 	private final Map<BlockPos, Integer> endRefs = new HashMap<>();
+	/** The pieces whose ends meet each block. Not saved: worked out from the pieces. */
+	private final Map<BlockPos, Set<Node>> endsAt = new HashMap<>();
 	/** The generators' records, saved on their own (they change every second; the pieces hardly ever). */
 	private Records records = new Records();
 	private Map<BlockPos, Paper> generators = records.generators;
@@ -283,6 +301,8 @@ public final class PowerGrid extends SavedData {
 	private final Map<BlockPos, BlockPos> faces = new HashMap<>();
 	/** How many faces each generator has: only generators a line meets keep a record (and those in a row with one). */
 	private final Map<BlockPos, Integer> faceCount = new HashMap<>();
+	/** Each generator's faces (the other way round from {@link #faces}). Not saved: worked out from the faces. */
+	private final Map<BlockPos, Set<BlockPos>> facesOf = new HashMap<>();
 	/** Generators in a recorded generator's row (they share its store, so they keep a record too). Not saved. */
 	private final Set<BlockPos> rowMembers = new HashSet<>();
 
@@ -401,8 +421,25 @@ public final class PowerGrid extends SavedData {
 		if (piece != null)
 			for (Link l : piece.links)
 				linkedFrom.computeIfAbsent(l.to(), k -> new HashSet<>()).add(node);
+		if (old != null)
+			for (End e : old.ends) {
+				Set<Node> s = endsAt.get(e.target());
+				if (s != null && s.remove(node) && s.isEmpty())
+					endsAt.remove(e.target());
+			}
+		if (piece != null)
+			for (End e : piece.ends)
+				endsAt.computeIfAbsent(e.target(), k -> new HashSet<>()).add(node);
 		if (old != null || piece != null)
 			setDirty();
+	}
+
+	/** The pieces that meet the generator recorded at key, on any of its faces (through it, they're one network). */
+	Set<Node> meeting(BlockPos key) {
+		Set<Node> out = new HashSet<>();
+		for (BlockPos f : facesOf.getOrDefault(key, Set.of()))
+			out.addAll(endsAt.getOrDefault(f, Set.of()));
+		return out;
 	}
 
 	private void unlink(Node from, Node to) {
@@ -447,7 +484,7 @@ public final class PowerGrid extends SavedData {
 		BlockPos key = g.generatorKey();
 		Paper p = generators.get(key);
 		long now = level.getGameTime();
-		if (p == null || p.seenAt >= now - 1 || AWAY.contains(key))
+		if (p == null || p.seenAt >= now - 1 || away(level, key))
 			return;
 		Paper fresh = g.newPaper();
 		// a record of some other kind of generator that stood here: not this one's
@@ -478,17 +515,26 @@ public final class PowerGrid extends SavedData {
 
 	/** Records of generators that are away worked forward (about once a second), so a fuel source that comes back with them still counted for the time away. */
 	void tickAway(ServerLevel level, long now) {
-		for (Map.Entry<BlockPos, Paper> e : generators.entrySet())
-			if (!running(level, e.getKey()) && now - e.getValue().at >= 20) {
-				e.getValue().advance(now, level);
+		for (Map.Entry<BlockPos, Paper> e : generators.entrySet()) {
+			if (running(level, e.getKey()))
+				continue;
+			Paper p = e.getValue();
+			// a source that's loaded and no Wellspring now (broken) stops counting
+			for (Fuel f : p.fuels)
+				if (f.income.keySet().removeIf(src -> level.isLoaded(src)
+					&& !(level.getBlockEntity(src) instanceof com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity)))
+					records.setDirty();
+			if (now - p.at >= 20) {
+				p.advance(now, level);
 				records.setDirty();
 			}
+		}
 	}
 
 	/** A generator has run this tick: its record as it now stands (only if a line meets it). */
 	public void note(Generator g, ServerLevel level) {
 		BlockPos key = g.generatorKey();
-		if (AWAY.contains(key))
+		if (away(level, key))
 			return;
 		if (!needsRecord(key)) {
 			if (generators.remove(key) != null)
@@ -520,10 +566,19 @@ public final class PowerGrid extends SavedData {
 		BlockPos old = faces.put(face.immutable(), key.immutable());
 		if (key.equals(old))
 			return;
-		if (old != null)
+		if (old != null) {
 			faceCount.computeIfPresent(old, (k, n) -> n <= 1 ? null : n - 1);
+			unface(old, face);
+		}
 		faceCount.merge(key.immutable(), 1, Integer::sum);
+		facesOf.computeIfAbsent(key.immutable(), k -> new HashSet<>()).add(face.immutable());
 		setDirty();
+	}
+
+	private void unface(BlockPos key, BlockPos face) {
+		Set<BlockPos> s = facesOf.get(key);
+		if (s != null && s.remove(face) && s.isEmpty())
+			facesOf.remove(key);
 	}
 
 	@Nullable
@@ -537,6 +592,7 @@ public final class PowerGrid extends SavedData {
 		if (key == null)
 			return;
 		faceCount.computeIfPresent(key, (k, n) -> n <= 1 ? null : n - 1);
+		unface(key, face);
 		if (!needsRecord(key))
 			generators.remove(key);
 		setDirty();
@@ -594,6 +650,7 @@ public final class PowerGrid extends SavedData {
 			records.setDirty();
 		boolean changed = faces.values().removeIf(key::equals);
 		changed |= faceCount.remove(key) != null;
+		facesOf.remove(key);
 		rowMembers.remove(key);
 		if (changed)
 			setDirty();

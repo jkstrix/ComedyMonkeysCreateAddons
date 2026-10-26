@@ -4,7 +4,7 @@
 // Usage: node design/models/fluid-and-power-lines.export.js
 const fs = require('fs');
 const path = require('path');
-const { ASSETS, fitUv, DIRS } = require('./process-box.lib.js');
+const { ASSETS, fitUv, DIRS, fitGui } = require('./process-box.lib.js');
 const G = require('./fluid-and-power-lines.gen.js');
 
 const NS = 'comedymonkeysaddons';
@@ -57,6 +57,13 @@ function blockModel(cubes, particle, { tintBody = false } = {}) {
   for (const [r, name] of vars) textures[name] = r;
   const translucent = cubes.some((c) => c.glass);
   return { parent: 'block/block', render_type: translucent ? 'minecraft:translucent' : 'minecraft:cutout', ambientocclusion: false, textures, elements };
+}
+// An item model: the block model, with an inventory view that fits the part in the slot (lines and fittings are far
+// smaller than a block, so block/block's view left them a speck in the corner of the slot).
+function itemModel(cubes, particle, opts) {
+  const m = blockModel(cubes, particle, opts);
+  m.display = { gui: fitGui(m.elements) };
+  return m;
 }
 const solid = (cubes) => cubes.filter((c) => !c.glass), glassOf = (cubes) => cubes.filter((c) => c.glass);
 function writeJson(rel, obj) {
@@ -138,9 +145,9 @@ for (const tier of TIERS) {
 
 // ---------- item models ----------
 const icon = (name) => G.ICONS.find(([n]) => n === name)[1];
-for (const tier of TIERS) writeJson(`models/item/${tier}_fluid_line.json`, blockModel(icon(tier + '_fluid_line'), tier, { tintBody: true }));
-for (const f of ['valve', 'filter', 'meter', 'splitter', 'breaker']) writeJson(`models/item/${f}.json`, blockModel(icon(f), 'steel'));
-writeJson('models/item/intake.json', blockModel(icon('intake'), 'steel'));
+for (const tier of TIERS) writeJson(`models/item/${tier}_fluid_line.json`, itemModel(icon(tier + '_fluid_line'), tier, { tintBody: true }));
+for (const f of ['valve', 'filter', 'meter', 'splitter', 'breaker']) writeJson(`models/item/${f}.json`, itemModel(icon(f), 'steel'));
+writeJson('models/item/intake.json', itemModel(icon('intake'), 'steel'));
 
 
 // ---------- Power Lines: wire parts, authored lying on the floor and running north from the middle ----------
@@ -227,8 +234,8 @@ post('head', G.postBlock('head', 'steel_dark'));
 for (const tier of TIERS) writeJson(`blockstates/${tier}_power_line.json`, { variants: { '': { model: `${NS}:block/power_line/${tier}_centre` } } });
 
 // ---------- Power Line and Line Post items ----------
-for (const tier of TIERS) writeJson(`models/item/${tier}_power_line.json`, blockModel(icon(tier + '_power_line'), tier, { tintBody: true }));
-writeJson('models/item/line_post.json', blockModel(icon('line_post'), 'wood'));
+for (const tier of TIERS) writeJson(`models/item/${tier}_power_line.json`, itemModel(icon(tier + '_power_line'), tier, { tintBody: true }));
+writeJson('models/item/line_post.json', itemModel(icon('line_post'), 'wood'));
 
 // ---------- textures ----------
 fs.mkdirSync(TEXTURES, { recursive: true });

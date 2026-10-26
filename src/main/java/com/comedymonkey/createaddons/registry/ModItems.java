@@ -9,6 +9,7 @@ import com.comedymonkey.createaddons.content.line.Fitting;
 import com.comedymonkey.createaddons.content.line.FittingItem;
 import com.comedymonkey.createaddons.content.line.IntakeItem;
 import com.comedymonkey.createaddons.content.line.LineTier;
+import com.comedymonkey.createaddons.content.line.LineItem;
 import com.comedymonkey.createaddons.content.line.PowerLineItem;
 import com.comedymonkey.createaddons.content.pen.BottledAnimalItem;
 import com.comedymonkey.createaddons.content.wellspring.WellspringUpgrade;
@@ -68,8 +69,10 @@ public final class ModItems {
 		() -> new BottledAnimalItem(new Item.Properties().stacksTo(1)));
 
 	public static final DeferredItem<BlockItem> INCINERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.INCINERATOR);
-	public static final DeferredItem<BlockItem> COPPER_FLUID_LINE = ITEMS.registerSimpleBlockItem(ModBlocks.COPPER_FLUID_LINE);
-	public static final DeferredItem<BlockItem> BRASS_FLUID_LINE = ITEMS.registerSimpleBlockItem(ModBlocks.BRASS_FLUID_LINE);
+	public static final DeferredItem<LineItem> COPPER_FLUID_LINE = ITEMS.register("copper_fluid_line",
+		() -> new LineItem(ModBlocks.COPPER_FLUID_LINE.get(), new Item.Properties()));
+	public static final DeferredItem<LineItem> BRASS_FLUID_LINE = ITEMS.register("brass_fluid_line",
+		() -> new LineItem(ModBlocks.BRASS_FLUID_LINE.get(), new Item.Properties()));
 	/** Clipped onto a Fluid Line's side facing a tank, it draws the tank's fluid into the line. */
 	public static final DeferredItem<IntakeItem> INTAKE = ITEMS.register("intake", () -> new IntakeItem(new Item.Properties()));
 	/** Placed, a wire on the face; on a Line Post's insulators, a hanging span. */

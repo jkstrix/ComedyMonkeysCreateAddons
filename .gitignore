@@ -33,3 +33,6 @@ design/sound/magma-engine/real/lava_pop*.ogg
 
 # Epidemic Sound downloads: their licence doesn't cover shipping them in the mod; never commit them or sounds made from them
 design/sound/sources/epidemic/
+
+# the server paper test's state between runs
+design/tests/.line-paper-test.json

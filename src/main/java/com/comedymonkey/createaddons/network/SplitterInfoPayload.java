@@ -29,7 +29,8 @@ public record SplitterInfoPayload(BlockPos pos, List<Row> rows, int has, int wan
 	public static final Type<SplitterInfoPayload> TYPE = new Type<>(ComedyMonkeysCreateAddons.asResource("splitter_info"));
 
 	/** One branch: its direction, the machines and generators down it (named if all one kind), and its priority. */
-	public record Row(Direction dir, int devices, @Nullable Component deviceName, int generators, @Nullable Component generatorName, int priority) {}
+	public record Row(Direction dir, int devices, @Nullable Component deviceName, int generators, @Nullable Component generatorName, int priority,
+					  boolean loops) {}
 
 	public static final StreamCodec<RegistryFriendlyByteBuf, SplitterInfoPayload> STREAM_CODEC = StreamCodec.of(SplitterInfoPayload::write, SplitterInfoPayload::read);
 
@@ -37,7 +38,7 @@ public record SplitterInfoPayload(BlockPos pos, List<Row> rows, int has, int wan
 		PowerLines.SplitterView view = PowerLines.of(level).splitter(be);
 		List<Row> rows = new ArrayList<>();
 		for (PowerLines.Branch b : view.branches())
-			rows.add(new Row(b.dir(), b.devices(), b.deviceName(), b.generators(), b.generatorName(), be.priority(b.dir())));
+			rows.add(new Row(b.dir(), b.devices(), b.deviceName(), b.generators(), b.generatorName(), be.priority(b.dir()), b.loops()));
 		PacketDistributor.sendToPlayer(player, new SplitterInfoPayload(be.getBlockPos(), rows, (int) Math.round(view.has()), (int) Math.round(view.wanted()),
 			(int) Math.round(view.took()), view.known()));
 	}
@@ -52,6 +53,7 @@ public record SplitterInfoPayload(BlockPos pos, List<Row> rows, int has, int wan
 			buf.writeVarInt(r.generators);
 			name(buf, r.generatorName);
 			buf.writeByte(r.priority);
+			buf.writeBoolean(r.loops);
 		}
 		buf.writeVarInt(p.has);
 		buf.writeVarInt(p.wanted);
@@ -80,7 +82,8 @@ public record SplitterInfoPayload(BlockPos pos, List<Row> rows, int has, int wan
 			Component deviceName = name(buf);
 			int generators = buf.readVarInt();
 			Component generatorName = name(buf);
-			rows.add(new Row(dir, devices, deviceName, generators, generatorName, buf.readByte()));
+			int priority = buf.readByte();
+			rows.add(new Row(dir, devices, deviceName, generators, generatorName, priority, buf.readBoolean()));
 		}
 		return new SplitterInfoPayload(pos, rows, buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readBoolean());
 	}

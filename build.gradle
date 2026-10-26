@@ -119,6 +119,8 @@ dependencies {
     runtimeOnly("maven.modrinth:sable:${sable_version}")
     // Create: Liquid Fuel, to check it coexists with the Pipez Blaze Burner feeding
     runtimeOnly("maven.modrinth:create-liquid-fuel:${liquid_fuel_version}")
+    // Create: Dragons Plus: its Bulk Coloring (a fan through dye fluid) dyes Fluid and Power Lines
+    runtimeOnly("maven.modrinth:create-dragons-plus:${dragons_plus_version}") { transitive = false }
     // Carry On: picking up and placing upgraded chests and Wellsprings
     runtimeOnly("maven.modrinth:carry-on:${carry_on_version}")
     // Supplementaries (+ its Moonlight library): modded crops such as flax in the Auto Harvester
