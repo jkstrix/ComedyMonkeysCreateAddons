@@ -807,6 +807,12 @@ public final class LineGameTests {
 
 	/** Generator, wire of one tier, a pole, a span of another, wire, motor: whether power gets from the one to the other. */
 	private static void acrossAPole(GameTestHelper helper, Block from, LineTier span, Block to, boolean expected, String fail) {
+		acrossAPole(helper, from, span, to, null, null, expected, fail);
+	}
+
+	/** The same, with the wires in one colour and the span in another (null: plain). */
+	private static void acrossAPole(GameTestHelper helper, Block from, LineTier span, Block to, @org.jetbrains.annotations.Nullable DyeColor wires,
+		@org.jetbrains.annotations.Nullable DyeColor spanDye, boolean expected, String fail) {
 		BlockPos gen = new BlockPos(1, 1, 14), w1 = gen.east(), postA = gen.east(2), postB = gen.east(8), w2 = postB.east(), m = postB.east(2);
 		generator(helper, gen);
 		motor(helper, m);
@@ -815,12 +821,15 @@ public final class LineGameTests {
 		helper.setBlock(postA, ModBlocks.LINE_POST.get().defaultBlockState());
 		helper.setBlock(postB, ModBlocks.LINE_POST.get().defaultBlockState());
 		helper.runAtTickTime(2, () -> {
+			for (BlockPos w : new BlockPos[] {w1, w2})
+				if (wires != null && helper.getBlockEntity(w) instanceof PowerLineBlockEntity be)
+					be.setDye(wires);
 			relink(helper, w1, w2);
 			if (!(helper.getBlockEntity(postA) instanceof LinePostBlockEntity a) || !(helper.getBlockEntity(postB) instanceof LinePostBlockEntity b)) {
 				helper.fail("no posts");
 				return;
 			}
-			Span s = new Span(0, postB.subtract(postA), 0, span, null, true, 2);
+			Span s = new Span(0, postB.subtract(postA), 0, span, spanDye, true, 2);
 			a.addSpan(s);
 			b.addSpan(s.reversed());
 		});
@@ -831,11 +840,53 @@ public final class LineGameTests {
 		});
 	}
 
+	/** A red line, two pieces of it as a save from before colours left them (no colour, not read again yet): it still carries. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void oldSaveLinesStillJoin(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 18), m = gen.east(5);
+		generator(helper, gen);
+		motor(helper, m);
+		for (int i = 1; i <= 4; i++)
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		helper.runAtTickTime(2, () -> {
+			for (int i = 1; i <= 4; i++)
+				if (helper.getBlockEntity(gen.east(i)) instanceof PowerLineBlockEntity be)
+					be.setDye(DyeColor.RED);
+			relink(helper, gen.east(1), gen.east(2), gen.east(3), gen.east(4));
+		});
+		helper.runAtTickTime(6, () -> {
+			com.comedymonkey.createaddons.content.line.PowerGridTesting.asOldSave(helper.getLevel(), helper.absolutePos(gen.east(2)));
+			com.comedymonkey.createaddons.content.line.PowerGridTesting.asOldSave(helper.getLevel(), helper.absolutePos(gen.east(3)));
+			// from here only the line, through those pieces, can fill it
+			if (helper.getBlockEntity(m) instanceof ElectricMotorBlockEntity motor)
+				((com.comedymonkey.createaddons.content.electric.EnergyBuffer) motor.getEnergy()).setEnergy(0);
+		});
+		helper.runAtTickTime(90, () -> {
+			if (stored(helper, m) <= 0)
+				helper.fail("the line stopped at the pieces from an old save");
+			helper.succeed();
+		});
+	}
+
 	/** A whole pole joins: brass wire into a pole feeds a copper span out of it. */
 	@GameTest(template = COURSE, timeoutTicks = 120)
 	public static void brassFeedsCopperAtAPole(GameTestHelper helper) {
 		acrossAPole(helper, ModBlocks.BRASS_POWER_LINE.get(), LineTier.COPPER, ModBlocks.COPPER_POWER_LINE.get(), true,
 			"brass didn't feed copper at the pole");
+	}
+
+	/** A pole joins only cables of one colour: a red span between plain wires carries nothing. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void poleJoinsOnlyOneColour(GameTestHelper helper) {
+		acrossAPole(helper, ModBlocks.COPPER_POWER_LINE.get(), LineTier.COPPER, ModBlocks.COPPER_POWER_LINE.get(), null, DyeColor.RED, false,
+			"a pole joined plain wires to a red span");
+	}
+
+	/** Red wires and a red span join at the poles. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void poleJoinsItsOwnColour(GameTestHelper helper) {
+		acrossAPole(helper, ModBlocks.COPPER_POWER_LINE.get(), LineTier.COPPER, ModBlocks.COPPER_POWER_LINE.get(), DyeColor.RED, DyeColor.RED, true,
+			"red wires didn't join a red span at the poles");
 	}
 
 	/** Copper never feeds brass, even on one pole. */

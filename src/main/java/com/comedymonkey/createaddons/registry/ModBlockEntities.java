@@ -12,6 +12,7 @@ import com.comedymonkey.createaddons.content.pen.AnimalPenBlockEntity;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity;
 import com.comedymonkey.createaddons.content.electric.GeothermalCasingBlockEntity;
 import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlockEntity;
+import com.comedymonkey.createaddons.content.electric.BatteryBlockEntity;
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlockEntity;
 import com.comedymonkey.createaddons.content.incinerator.IncineratorBlockEntity;
 import com.comedymonkey.createaddons.content.machine.MachineKind;
@@ -132,6 +133,11 @@ public final class ModBlockEntities {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LavaGeneratorBlockEntity>> LAVA_GENERATOR =
 		BLOCK_ENTITY_TYPES.register("lava_generator",
 			() -> BlockEntityType.Builder.of(LavaGeneratorBlockEntity::new, ModBlocks.LAVA_GENERATOR.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BatteryBlockEntity>> BATTERY =
+		BLOCK_ENTITY_TYPES.register("battery",
+			() -> BlockEntityType.Builder.of(BatteryBlockEntity::new, ModBlocks.BATTERY.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GeothermalCasingBlockEntity>> GEOTHERMAL_CASING =

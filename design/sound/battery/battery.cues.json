@@ -1,0 +1,246 @@
+{
+  "namespace": "industrial_battery",
+  "events": {
+    "hum": {
+      "group": "Signature sounds",
+      "subtitle": "Industrial Battery hums",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.2,
+          "f": 100,
+          "dur": 3
+        },
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.07,
+          "f": 200,
+          "dur": 3
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.038,
+        "post": {
+          "lowpass": 4000
+        },
+        "layers": [
+          {
+            "src": "sa3_battery_hum_v3_loop",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "form": {
+      "group": "Forming",
+      "subtitle": "Industrial Battery switches in",
+      "layers": [
+        {
+          "type": "thud",
+          "at": 0,
+          "gain": 0.7,
+          "f": 70,
+          "dur": 0.25
+        },
+        {
+          "type": "clink",
+          "at": 0.04,
+          "gain": 0.18,
+          "f": 700,
+          "dur": 0.35
+        },
+        {
+          "type": "swell",
+          "at": 0.15,
+          "gain": 0.22,
+          "f": 70,
+          "f2": 100,
+          "dur": 1.05
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.56,
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "sa3_battery_contactor_close_v2_clean",
+            "trim": [
+              0,
+              0.9
+            ],
+            "fadeOut": 0.2,
+            "gain": 1
+          },
+          {
+            "src": "sa3_battery_hum_v3_loop",
+            "at": 0.15,
+            "trim": [
+              0,
+              1.2
+            ],
+            "fadeIn": 0.8,
+            "fadeOut": 0.3,
+            "gain": 0.35
+          }
+        ]
+      }
+    },
+    "unform": {
+      "group": "Forming",
+      "subtitle": "Industrial Battery switches out",
+      "layers": [
+        {
+          "type": "clack",
+          "at": 0,
+          "gain": 0.5,
+          "f": 320,
+          "dur": 0.15
+        },
+        {
+          "type": "swell",
+          "at": 0.05,
+          "gain": 0.18,
+          "f": 100,
+          "f2": 55,
+          "dur": 0.75
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.56,
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "sa3_battery_contactor_open_v2_clean",
+            "trim": [
+              0,
+              0.55
+            ],
+            "fadeOut": 0.1,
+            "gain": 1
+          },
+          {
+            "src": "sa3_battery_hum_v3_loop",
+            "at": 0.05,
+            "trim": [
+              0,
+              0.8
+            ],
+            "pitch": 0.85,
+            "fadeOut": 0.75,
+            "gain": 0.3
+          }
+        ]
+      }
+    },
+    "strike": {
+      "group": "Lightning",
+      "subtitle": "Lightning charges the Industrial Battery",
+      "layers": [
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.45,
+          "f": 7000,
+          "dur": 0.06
+        },
+        {
+          "type": "noise",
+          "at": 0.07,
+          "gain": 0.3,
+          "f": 6000,
+          "dur": 0.05
+        },
+        {
+          "type": "noise",
+          "at": 0.13,
+          "gain": 0.2,
+          "f": 5000,
+          "dur": 0.08
+        },
+        {
+          "type": "bump",
+          "at": 0.02,
+          "gain": 0.5,
+          "f": 80,
+          "f2": 45,
+          "dur": 0.28
+        },
+        {
+          "type": "rustle",
+          "at": 0.2,
+          "gain": 0.06,
+          "density": 10,
+          "dur": 0.4
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.39,
+        "vary": {
+          "pitch": 0.05,
+          "gain": 0.05
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "sa3_battery_arc_v2_clean",
+              "sa3_battery_arc_v3_clean"
+            ],
+            "trim": [
+              0,
+              0.45
+            ],
+            "fadeOut": 0.12,
+            "gain": 1
+          },
+          {
+            "type": "bump",
+            "at": 0.02,
+            "f": 80,
+            "f2": 45,
+            "dur": 0.3,
+            "gain": 0.35
+          }
+        ]
+      }
+    }
+  },
+  "clips": {
+    "charging": [
+      [
+        0,
+        "hum"
+      ]
+    ],
+    "giving": [
+      [
+        0,
+        "hum"
+      ]
+    ],
+    "forming": [
+      [
+        0.4,
+        "form"
+      ]
+    ],
+    "lightning": [
+      [
+        0.3,
+        "strike"
+      ]
+    ]
+  }
+}

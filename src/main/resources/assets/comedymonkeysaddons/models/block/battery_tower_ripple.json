@@ -1,0 +1,38 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_plate",
+    "pulse": "comedymonkeysaddons:block/battery_pulse"
+  },
+  "elements": [
+    {
+      "name": "ripple",
+      "from": [
+        5,
+        0,
+        0.45
+      ],
+      "to": [
+        11,
+        8,
+        0.45
+      ],
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            8,
+            11,
+            16
+          ],
+          "texture": "#pulse"
+        }
+      }
+    }
+  ]
+}

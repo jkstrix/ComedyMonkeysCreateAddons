@@ -47,11 +47,10 @@ public class LinePostRenderer implements BlockEntityRenderer<LinePostBlockEntity
 		for (Span s : be.spans()) {
 			if (!s.owner())
 				continue;
-			BlockPos farPos = pos.offset(s.offset());
-			BlockState far = level.getBlockState(farPos);
-			if (!(far.getBlock() instanceof LinePostBlock))
+			Vec3 farTie = com.comedymonkey.createaddons.content.line.SpanHolder.farTie(level, pos.offset(s.offset()), s.to());
+			if (farTie == null)
 				continue;
-			Vec3 a = be.tie(s.from()).subtract(origin), b = LinePostBlock.tie(far, farPos, s.to()).subtract(origin);
+			Vec3 a = be.tie(s.from()).subtract(origin), b = farTie.subtract(origin);
 			boolean covered = s.dye() != null, brass = s.tier() == LineTier.BRASS;
 			float w = (covered ? (brass ? 1.35f : 1.05f) : (brass ? 0.9f : 0.6f)) / 16, h = (covered ? 1.05f : brass ? 0.5f : 0.6f) / 16;
 			cable(vc, ms, body, a, b, w, h, LineColors.of(s.tier(), s.dye()) | 0xFF000000, level, origin);

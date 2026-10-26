@@ -1,0 +1,316 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_tower",
+    "tower": "comedymonkeysaddons:block/battery_tower",
+    "andesite": "comedymonkeysaddons:block/battery_andesite",
+    "dark": "comedymonkeysaddons:block/battery_dark",
+    "backing": "comedymonkeysaddons:block/battery_backing",
+    "glass": "comedymonkeysaddons:block/battery_glass",
+    "brass": "comedymonkeysaddons:block/battery_brass"
+  },
+  "elements": [
+    {
+      "name": "skin_l",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        4,
+        16,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            0,
+            16,
+            16
+          ],
+          "texture": "#tower"
+        }
+      }
+    },
+    {
+      "name": "skin_r",
+      "from": [
+        12,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            4,
+            16
+          ],
+          "texture": "#tower"
+        }
+      }
+    },
+    {
+      "name": "rail_l",
+      "from": [
+        4,
+        0,
+        -0.5
+      ],
+      "to": [
+        5,
+        16,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            0,
+            12,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "west": {
+          "uv": [
+            14.5,
+            0,
+            16,
+            16
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "rail_r",
+      "from": [
+        11,
+        0,
+        -0.5
+      ],
+      "to": [
+        12,
+        16,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            0,
+            5,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            14.5,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        }
+      }
+    },
+    {
+      "name": "channel_back",
+      "from": [
+        5,
+        0,
+        1
+      ],
+      "to": [
+        11,
+        16,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            0,
+            11,
+            16
+          ],
+          "texture": "#backing"
+        }
+      }
+    },
+    {
+      "name": "channel_glass",
+      "from": [
+        5,
+        0,
+        0.25
+      ],
+      "to": [
+        11,
+        16,
+        0.25
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            0,
+            11,
+            16
+          ],
+          "texture": "#glass"
+        }
+      }
+    },
+    {
+      "name": "tick_l",
+      "from": [
+        3.5,
+        0,
+        -0.75
+      ],
+      "to": [
+        5,
+        0.75,
+        -0.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            15.25,
+            12.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0.5,
+            15.25,
+            0.75,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            15.25,
+            15.25,
+            15.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            3.5,
+            15.25,
+            5,
+            15.5
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            3.5,
+            0.5,
+            5,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "tick_r",
+      "from": [
+        11,
+        0,
+        -0.75
+      ],
+      "to": [
+        12.5,
+        0.75,
+        -0.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            15.25,
+            5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0.5,
+            15.25,
+            0.75,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            15.25,
+            15.25,
+            15.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            11,
+            15.25,
+            12.5,
+            15.5
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            11,
+            0.5,
+            12.5,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    }
+  ]
+}

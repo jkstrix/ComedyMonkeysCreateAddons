@@ -53,6 +53,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::registerBlockColors);
 		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::registerItemColors);
 		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::wrapModels);
+		// A formed Battery draws its tile of the Industrial Battery
+		modBus.addListener(BatteryTowerModel::wrap);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.line.LineClient::drawHiddenLines);
 		// Cached sprites are looked up again once the block atlas is restitched, and what was read from models once
 		// they're baked again
@@ -82,7 +84,17 @@ public class ComedyMonkeysCreateAddonsClient {
 				if (!s.owner() && be.getLevel().getBlockEntity(be.getBlockPos().offset(s.offset())) instanceof com.comedymonkey.createaddons.content.line.LinePostBlockEntity owner)
 					dev.engine_room.flywheel.lib.visualization.VisualizationHelper.queueUpdate(owner);
 		};
+		// an Industrial Battery's tower or spans changed: the posts its spans hang from lay them out again
+		com.comedymonkey.createaddons.content.electric.BatteryBlockEntity.clientTowerChanged = be -> {
+			if (be.getLevel() == null || !dev.engine_room.flywheel.api.visualization.VisualizationManager.supportsVisualization(be.getLevel()))
+				return;
+			for (com.comedymonkey.createaddons.content.line.Span s : be.spans())
+				if (be.getLevel().getBlockEntity(be.getBlockPos().offset(s.offset())) instanceof com.comedymonkey.createaddons.content.line.LinePostBlockEntity post)
+					dev.engine_room.flywheel.lib.visualization.VisualizationHelper.queueUpdate(post);
+		};
 		com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity.clientTicker = ElectricSounds::tickMotor;
+		// The Industrial Battery's hum runs from its master's client tick
+		com.comedymonkey.createaddons.content.electric.BatteryBlockEntity.clientTicker = ElectricSounds::tickBattery;
 		// The Magma Engines' sounds and exhaust puffs run from their client ticks
 		com.comedymonkey.createaddons.content.engine.MagmaEngineBlockEntity.clientTicker = MagmaEngineSounds::tick;
 		// The Pressure Crucible's sounds run from its client tick
@@ -120,6 +132,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		RealPlants.forget();
 		com.comedymonkey.createaddons.client.parts.PartModels.forget();
 		com.comedymonkey.createaddons.client.line.PowerLineModel.forget();
+		BatteryTowerModel.forget();
 	}
 
 	/**
@@ -160,6 +173,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.MAGMA_ENGINE.get(), MagmaEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ELECTRIC_MOTOR.get(), ElectricRenderers.Motor::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.BATTERY.get(), BatteryRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.GEOTHERMAL_CONTROLLER.get(), ElectricRenderers.Turbine::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.STRING_TANGLER.get(), MachineRenderers.Tangler::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.STONE_INFUSER.get(), MachineRenderers.Infuser::new);
@@ -196,6 +210,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		CuckooClockRenderer.registerModels(event);
 		MagmaEngineRenderer.registerModels(event);
 		ElectricRenderers.registerModels(event);
+		BatteryRenderer.registerModels(event);
+		BatteryTowerModel.registerModels(event);
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerModels(event);
 	}
@@ -241,6 +257,9 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.enqueueWork(() -> ItemProperties.register(ModItems.UPGRADED_CHEST.get(),
 			ComedyMonkeysCreateAddons.asResource("tier"),
 			(stack, level, entity, seed) -> UpgradedChestItem.tierOf(stack).ordinal() / 10f));
+		// a Battery's item lights its tubes to its charge, in quarters
+		event.enqueueWork(() -> ItemProperties.register(ModItems.BATTERY.get(), ComedyMonkeysCreateAddons.asResource("charge"),
+			(stack, level, entity, seed) -> com.comedymonkey.createaddons.content.electric.BatteryItem.fill(stack)));
 		event.enqueueWork(() -> ItemProperties.register(ModItems.UPGRADED_BARREL.get(),
 			ComedyMonkeysCreateAddons.asResource("tier"),
 			(stack, level, entity, seed) -> UpgradedBarrelItem.tierOf(stack).ordinal() / 10f));

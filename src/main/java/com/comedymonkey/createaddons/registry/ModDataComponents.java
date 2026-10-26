@@ -28,5 +28,9 @@ public final class ModDataComponents {
 	public static final Supplier<DataComponentType<SpanStart>> SPAN_START = DATA_COMPONENTS.registerComponentType("span_start",
 		builder -> builder.persistent(SpanStart.CODEC).networkSynchronized(SpanStart.STREAM_CODEC));
 
+	/** On a Battery: the FE it holds. */
+	public static final Supplier<DataComponentType<Integer>> BATTERY_CHARGE = DATA_COMPONENTS.registerComponentType("battery_charge",
+		builder -> builder.persistent(com.mojang.serialization.Codec.INT).networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
+
 	private ModDataComponents() {}
 }

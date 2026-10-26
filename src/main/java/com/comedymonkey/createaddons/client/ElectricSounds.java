@@ -7,6 +7,7 @@ import java.util.function.DoubleSupplier;
 
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlock;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity;
+import com.comedymonkey.createaddons.content.electric.BatteryBlockEntity;
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlockEntity;
 import com.comedymonkey.createaddons.registry.ModSounds;
 
@@ -31,6 +32,7 @@ public final class ElectricSounds {
 	private static final int POP_CHANCE = 300;
 	private static final Map<LavaGeneratorBlockEntity, Generator> GENERATORS = new WeakHashMap<>();
 	private static final Map<ElectricMotorBlockEntity, Motor> MOTORS = new WeakHashMap<>();
+	private static final Map<BatteryBlockEntity, Battery> BATTERIES = new WeakHashMap<>();
 
 	private ElectricSounds() {}
 
@@ -38,12 +40,17 @@ public final class ElectricSounds {
 	public static void forget() {
 		GENERATORS.clear();
 		MOTORS.clear();
+		BATTERIES.clear();
 	}
 
 	private static final class Generator {
 		boolean lit;
 		int cooling;
 		Loop whir, burn;
+	}
+
+	private static final class Battery {
+		Loop hum;
 	}
 
 	private static final class Motor {
@@ -98,6 +105,31 @@ public final class ElectricSounds {
 			if (random.nextInt(COOL_CHANCE) == 0)
 				play(pos, ModSounds.generator("cool_tick"), 0.8f, 0.9f + 0.2f * random.nextFloat());
 		}
+	}
+
+	/**
+	 * The Industrial Battery's hum (design/sound/battery/battery.md), from its master while power flows in or out: a touch
+	 * louder and higher the more is moving (up to a Brass Power Line's worth). Plain Batteries are silent.
+	 */
+	public static void tickBattery(BatteryBlockEntity be) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.level == null || be.getLevel() != mc.level || !be.isMaster())
+			return;
+		Battery s = BATTERIES.get(be);
+		if (s == null) {
+			s = new Battery();
+			BATTERIES.keySet().removeIf(b -> b.isRemoved() || !b.isMaster());
+			BATTERIES.put(be, s);
+		}
+		BlockPos pos = be.getBlockPos();
+		if (MachineLoop.ended(s.hum) && be.shownFlow() != 0 && Loop.canStart(ModSounds.battery("hum"), pos))
+			mc.getSoundManager().play(s.hum = new Loop(ModSounds.battery("hum"), pos, () -> be.isRemoved() || !be.isMaster(),
+				() -> be.shownFlow() == 0 ? 0 : 0.7 + 0.3 * batteryLoad(be), () -> 0.97 + 0.06 * batteryLoad(be)));
+	}
+
+	/** How much is moving through a battery, 0 to 1 of a Brass Power Line's rate. */
+	private static float batteryLoad(BatteryBlockEntity be) {
+		return Mth.clamp(be.shownRate() / com.comedymonkey.createaddons.config.CMConfig.SERVER.powerLineBrassFePerTick(), 0, 1);
 	}
 
 	public static void tickMotor(ElectricMotorBlockEntity be) {

@@ -1,0 +1,187 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_tower",
+    "tower": "comedymonkeysaddons:block/battery_tower",
+    "plate": "comedymonkeysaddons:block/battery_plate",
+    "andesite": "comedymonkeysaddons:block/battery_andesite",
+    "sign": "comedymonkeysaddons:block/battery_sign"
+  },
+  "elements": [
+    {
+      "name": "body",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#tower"
+        }
+      }
+    },
+    {
+      "name": "chamber_e",
+      "from": [
+        16,
+        3,
+        0
+      ],
+      "to": [
+        20,
+        13,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            3,
+            16,
+            13
+          ],
+          "texture": "#plate"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            4,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            4,
+            16
+          ],
+          "texture": "#plate"
+        }
+      }
+    },
+    {
+      "name": "chamber_flange_t_e",
+      "from": [
+        20,
+        12.5,
+        0
+      ],
+      "to": [
+        20.5,
+        13,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            3,
+            16,
+            3.5
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            4,
+            0,
+            4.5,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "down": {
+          "uv": [
+            4,
+            0,
+            4.5,
+            16
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "chamber_flange_b_e",
+      "from": [
+        20,
+        3,
+        0
+      ],
+      "to": [
+        20.5,
+        3.5,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            12.5,
+            16,
+            13
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            4,
+            0,
+            4.5,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "down": {
+          "uv": [
+            4,
+            0,
+            4.5,
+            16
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "chamber_sign_e",
+      "from": [
+        20,
+        5.5,
+        5
+      ],
+      "to": [
+        20.25,
+        10.5,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            5.5,
+            11,
+            10.5
+          ],
+          "texture": "#sign"
+        }
+      }
+    }
+  ]
+}

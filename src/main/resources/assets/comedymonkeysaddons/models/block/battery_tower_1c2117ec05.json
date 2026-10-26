@@ -1,0 +1,3048 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_tower",
+    "tower": "comedymonkeysaddons:block/battery_tower",
+    "crown": "comedymonkeysaddons:block/battery_crown",
+    "crowntop": "comedymonkeysaddons:block/battery_crowntop",
+    "andesite": "comedymonkeysaddons:block/battery_andesite",
+    "fin": "comedymonkeysaddons:block/battery_fin",
+    "ceramic": "comedymonkeysaddons:block/battery_ceramic",
+    "cap_copper": "comedymonkeysaddons:block/battery_cap_copper",
+    "plate": "comedymonkeysaddons:block/battery_plate",
+    "sign": "comedymonkeysaddons:block/battery_sign",
+    "steel_light": "comedymonkeysaddons:block/battery_steel_light",
+    "grating": "comedymonkeysaddons:block/battery_grating",
+    "safety": "comedymonkeysaddons:block/battery_safety",
+    "hazard": "comedymonkeysaddons:block/battery_hazard",
+    "tankside": "comedymonkeysaddons:block/battery_tankside",
+    "steel": "comedymonkeysaddons:block/battery_steel"
+  },
+  "elements": [
+    {
+      "name": "body",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        13,
+        16
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            3,
+            16,
+            16
+          ],
+          "texture": "#tower"
+        },
+        "west": {
+          "uv": [
+            0,
+            3,
+            16,
+            16
+          ],
+          "texture": "#tower"
+        }
+      }
+    },
+    {
+      "name": "crown",
+      "from": [
+        -0.5,
+        13,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            3
+          ],
+          "texture": "#crown"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            3
+          ],
+          "texture": "#crown"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#crowntop"
+        }
+      }
+    },
+    {
+      "name": "pilaster",
+      "from": [
+        -0.5,
+        0,
+        14.5
+      ],
+      "to": [
+        1.5,
+        13,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            14,
+            3,
+            16,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            14,
+            3,
+            16,
+            16
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "fin_south_2.5",
+      "from": [
+        2.5,
+        0,
+        16
+      ],
+      "to": [
+        3.5,
+        13,
+        17
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            15,
+            3,
+            16,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            3,
+            3.5,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "west": {
+          "uv": [
+            0,
+            3,
+            1,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            0,
+            3.5,
+            1
+          ],
+          "texture": "#fin"
+        }
+      }
+    },
+    {
+      "name": "fin_south_5.5",
+      "from": [
+        5.5,
+        0,
+        16
+      ],
+      "to": [
+        6.5,
+        13,
+        17
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            15,
+            3,
+            16,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            3,
+            6.5,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "west": {
+          "uv": [
+            0,
+            3,
+            1,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            0,
+            6.5,
+            1
+          ],
+          "texture": "#fin"
+        }
+      }
+    },
+    {
+      "name": "fin_south_8.5",
+      "from": [
+        8.5,
+        0,
+        16
+      ],
+      "to": [
+        9.5,
+        13,
+        17
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            15,
+            3,
+            16,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "south": {
+          "uv": [
+            8.5,
+            3,
+            9.5,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "west": {
+          "uv": [
+            0,
+            3,
+            1,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "up": {
+          "uv": [
+            8.5,
+            0,
+            9.5,
+            1
+          ],
+          "texture": "#fin"
+        }
+      }
+    },
+    {
+      "name": "fin_south_11.5",
+      "from": [
+        11.5,
+        0,
+        16
+      ],
+      "to": [
+        12.5,
+        13,
+        17
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            15,
+            3,
+            16,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "south": {
+          "uv": [
+            11.5,
+            3,
+            12.5,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "west": {
+          "uv": [
+            0,
+            3,
+            1,
+            16
+          ],
+          "texture": "#fin"
+        },
+        "up": {
+          "uv": [
+            11.5,
+            0,
+            12.5,
+            1
+          ],
+          "texture": "#fin"
+        }
+      }
+    },
+    {
+      "name": "lip_s",
+      "from": [
+        -0.5,
+        16,
+        15.5
+      ],
+      "to": [
+        16,
+        17,
+        16.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            15,
+            15,
+            16,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "lip_w",
+      "from": [
+        -0.5,
+        16,
+        0
+      ],
+      "to": [
+        0.5,
+        17,
+        15.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.5,
+            15,
+            16,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            0,
+            15,
+            15.5,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            15,
+            0,
+            16,
+            15.5
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "bushing_collar_a",
+      "from": [
+        1.15,
+        16,
+        7.15
+      ],
+      "to": [
+        9.85,
+        17,
+        13.85
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.15,
+            15,
+            14.85,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "east": {
+          "uv": [
+            2.15,
+            15,
+            8.85,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            1.15,
+            15,
+            9.85,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            7.15,
+            15,
+            13.85,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            1.15,
+            7.15,
+            9.85,
+            13.85
+          ],
+          "texture": "#andesite"
+        },
+        "down": {
+          "uv": [
+            1.15,
+            2.15,
+            9.85,
+            8.85
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "bushing_collar_b",
+      "from": [
+        2.15,
+        16,
+        6.15
+      ],
+      "to": [
+        8.85,
+        17,
+        7.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.15,
+            15,
+            13.85,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "east": {
+          "uv": [
+            8.85,
+            15,
+            9.85,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            6.15,
+            15,
+            7.15,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            2.15,
+            6.15,
+            8.85,
+            7.15
+          ],
+          "texture": "#andesite"
+        },
+        "down": {
+          "uv": [
+            2.15,
+            8.85,
+            8.85,
+            9.85
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "bushing_collar_c",
+      "from": [
+        2.15,
+        16,
+        13.85
+      ],
+      "to": [
+        8.85,
+        17,
+        14.85
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1.15,
+            15,
+            2.15,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            2.15,
+            15,
+            8.85,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            13.85,
+            15,
+            14.85,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            2.15,
+            13.85,
+            8.85,
+            14.85
+          ],
+          "texture": "#andesite"
+        },
+        "down": {
+          "uv": [
+            2.15,
+            1.15,
+            8.85,
+            2.15
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "bushing_0_a",
+      "from": [
+        1.875,
+        17,
+        7.875
+      ],
+      "to": [
+        9.125,
+        19.175,
+        13.125
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.875,
+            12.825,
+            14.125,
+            15
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            2.875,
+            12.825,
+            8.125,
+            15
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            1.875,
+            12.825,
+            9.125,
+            15
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            7.875,
+            12.825,
+            13.125,
+            15
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            1.875,
+            7.875,
+            9.125,
+            13.125
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            1.875,
+            2.875,
+            9.125,
+            8.125
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_0_b",
+      "from": [
+        2.875,
+        17,
+        6.875
+      ],
+      "to": [
+        8.125,
+        19.175,
+        7.875
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.875,
+            12.825,
+            13.125,
+            15
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            8.125,
+            12.825,
+            9.125,
+            15
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            6.875,
+            12.825,
+            7.875,
+            15
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            2.875,
+            6.875,
+            8.125,
+            7.875
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            2.875,
+            8.125,
+            8.125,
+            9.125
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_0_c",
+      "from": [
+        2.875,
+        17,
+        13.125
+      ],
+      "to": [
+        8.125,
+        19.175,
+        14.125
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1.875,
+            12.825,
+            2.875,
+            15
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            2.875,
+            12.825,
+            8.125,
+            15
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            13.125,
+            12.825,
+            14.125,
+            15
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            2.875,
+            13.125,
+            8.125,
+            14.125
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            2.875,
+            1.875,
+            8.125,
+            2.875
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_1_a",
+      "from": [
+        3.325,
+        19.175,
+        9.325
+      ],
+      "to": [
+        7.675,
+        20.625,
+        11.675
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.325,
+            11.375,
+            12.675,
+            12.825
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            4.325,
+            11.375,
+            6.675,
+            12.825
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            3.325,
+            11.375,
+            7.675,
+            12.825
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            9.325,
+            11.375,
+            11.675,
+            12.825
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            3.325,
+            9.325,
+            7.675,
+            11.675
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            3.325,
+            4.325,
+            7.675,
+            6.675
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_1_b",
+      "from": [
+        4.325,
+        19.175,
+        8.325
+      ],
+      "to": [
+        6.675,
+        20.625,
+        9.325
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.325,
+            11.375,
+            11.675,
+            12.825
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            6.675,
+            11.375,
+            7.675,
+            12.825
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            8.325,
+            11.375,
+            9.325,
+            12.825
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            4.325,
+            8.325,
+            6.675,
+            9.325
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            4.325,
+            6.675,
+            6.675,
+            7.675
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_1_c",
+      "from": [
+        4.325,
+        19.175,
+        11.675
+      ],
+      "to": [
+        6.675,
+        20.625,
+        12.675
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            3.325,
+            11.375,
+            4.325,
+            12.825
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            4.325,
+            11.375,
+            6.675,
+            12.825
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            11.675,
+            11.375,
+            12.675,
+            12.825
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            4.325,
+            11.675,
+            6.675,
+            12.675
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            4.325,
+            3.325,
+            6.675,
+            4.325
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_2_a",
+      "from": [
+        2.238,
+        20.625,
+        8.238
+      ],
+      "to": [
+        8.763,
+        22.8,
+        12.763
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.238,
+            9.2,
+            13.763,
+            11.375
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            3.238,
+            9.2,
+            7.762,
+            11.375
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            2.238,
+            9.2,
+            8.763,
+            11.375
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            8.238,
+            9.2,
+            12.763,
+            11.375
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            2.238,
+            8.238,
+            8.763,
+            12.763
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            2.238,
+            3.238,
+            8.763,
+            7.762
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_2_b",
+      "from": [
+        3.238,
+        20.625,
+        7.238
+      ],
+      "to": [
+        7.762,
+        22.8,
+        8.238
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.238,
+            9.2,
+            12.763,
+            11.375
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            7.762,
+            9.2,
+            8.763,
+            11.375
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            7.238,
+            9.2,
+            8.238,
+            11.375
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            3.238,
+            7.238,
+            7.762,
+            8.238
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            3.238,
+            7.762,
+            7.762,
+            8.763
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_2_c",
+      "from": [
+        3.238,
+        20.625,
+        12.763
+      ],
+      "to": [
+        7.762,
+        22.8,
+        13.763
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2.238,
+            9.2,
+            3.238,
+            11.375
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            3.238,
+            9.2,
+            7.762,
+            11.375
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            12.763,
+            9.2,
+            13.763,
+            11.375
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            3.238,
+            12.763,
+            7.762,
+            13.763
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            3.238,
+            2.238,
+            7.762,
+            3.238
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_3_a",
+      "from": [
+        3.325,
+        22.8,
+        9.325
+      ],
+      "to": [
+        7.675,
+        24.25,
+        11.675
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.325,
+            7.75,
+            12.675,
+            9.2
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            4.325,
+            7.75,
+            6.675,
+            9.2
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            3.325,
+            7.75,
+            7.675,
+            9.2
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            9.325,
+            7.75,
+            11.675,
+            9.2
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            3.325,
+            9.325,
+            7.675,
+            11.675
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            3.325,
+            4.325,
+            7.675,
+            6.675
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_3_b",
+      "from": [
+        4.325,
+        22.8,
+        8.325
+      ],
+      "to": [
+        6.675,
+        24.25,
+        9.325
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.325,
+            7.75,
+            11.675,
+            9.2
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            6.675,
+            7.75,
+            7.675,
+            9.2
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            8.325,
+            7.75,
+            9.325,
+            9.2
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            4.325,
+            8.325,
+            6.675,
+            9.325
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            4.325,
+            6.675,
+            6.675,
+            7.675
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_3_c",
+      "from": [
+        4.325,
+        22.8,
+        11.675
+      ],
+      "to": [
+        6.675,
+        24.25,
+        12.675
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            3.325,
+            7.75,
+            4.325,
+            9.2
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            4.325,
+            7.75,
+            6.675,
+            9.2
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            11.675,
+            7.75,
+            12.675,
+            9.2
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            4.325,
+            11.675,
+            6.675,
+            12.675
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            4.325,
+            3.325,
+            6.675,
+            4.325
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_4_a",
+      "from": [
+        2.6,
+        24.25,
+        8.6
+      ],
+      "to": [
+        8.4,
+        26.425,
+        12.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.6,
+            5.575,
+            13.4,
+            7.75
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            3.6,
+            5.575,
+            7.4,
+            7.75
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            2.6,
+            5.575,
+            8.4,
+            7.75
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            8.6,
+            5.575,
+            12.4,
+            7.75
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            2.6,
+            8.6,
+            8.4,
+            12.4
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            2.6,
+            3.6,
+            8.4,
+            7.4
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_4_b",
+      "from": [
+        3.6,
+        24.25,
+        7.6
+      ],
+      "to": [
+        7.4,
+        26.425,
+        8.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.6,
+            5.575,
+            12.4,
+            7.75
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            7.4,
+            5.575,
+            8.4,
+            7.75
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            7.6,
+            5.575,
+            8.6,
+            7.75
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            3.6,
+            7.6,
+            7.4,
+            8.6
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            3.6,
+            7.4,
+            7.4,
+            8.4
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_4_c",
+      "from": [
+        3.6,
+        24.25,
+        12.4
+      ],
+      "to": [
+        7.4,
+        26.425,
+        13.4
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2.6,
+            5.575,
+            3.6,
+            7.75
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            3.6,
+            5.575,
+            7.4,
+            7.75
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            12.4,
+            5.575,
+            13.4,
+            7.75
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            3.6,
+            12.4,
+            7.4,
+            13.4
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            3.6,
+            2.6,
+            7.4,
+            3.6
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_5_a",
+      "from": [
+        3.688,
+        26.425,
+        9.188
+      ],
+      "to": [
+        7.313,
+        27.875,
+        11.813
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.688,
+            4.125,
+            12.313,
+            5.575
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            4.188,
+            4.125,
+            6.813,
+            5.575
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            3.688,
+            4.125,
+            7.313,
+            5.575
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            9.188,
+            4.125,
+            11.813,
+            5.575
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            3.688,
+            9.188,
+            7.313,
+            11.813
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            3.688,
+            4.188,
+            7.313,
+            6.813
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_5_b",
+      "from": [
+        4.188,
+        26.425,
+        8.688
+      ],
+      "to": [
+        6.813,
+        27.875,
+        9.188
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.188,
+            4.125,
+            11.813,
+            5.575
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            6.813,
+            4.125,
+            7.313,
+            5.575
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            8.688,
+            4.125,
+            9.188,
+            5.575
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            4.188,
+            8.688,
+            6.813,
+            9.188
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            4.188,
+            6.813,
+            6.813,
+            7.313
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_5_c",
+      "from": [
+        4.188,
+        26.425,
+        11.813
+      ],
+      "to": [
+        6.813,
+        27.875,
+        12.313
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            3.688,
+            4.125,
+            4.188,
+            5.575
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            4.188,
+            4.125,
+            6.813,
+            5.575
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            11.813,
+            4.125,
+            12.313,
+            5.575
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            4.188,
+            11.813,
+            6.813,
+            12.313
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            4.188,
+            3.688,
+            6.813,
+            4.188
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_6_a",
+      "from": [
+        2.963,
+        27.875,
+        8.963
+      ],
+      "to": [
+        8.038,
+        30.05,
+        12.038
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.963,
+            1.95,
+            13.038,
+            4.125
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            3.963,
+            1.95,
+            7.038,
+            4.125
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            2.963,
+            1.95,
+            8.038,
+            4.125
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            8.963,
+            1.95,
+            12.038,
+            4.125
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            2.963,
+            8.963,
+            8.038,
+            12.038
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            2.963,
+            3.963,
+            8.038,
+            7.038
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_6_b",
+      "from": [
+        3.963,
+        27.875,
+        7.963
+      ],
+      "to": [
+        7.038,
+        30.05,
+        8.963
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.963,
+            1.95,
+            12.038,
+            4.125
+          ],
+          "texture": "#ceramic"
+        },
+        "east": {
+          "uv": [
+            7.038,
+            1.95,
+            8.038,
+            4.125
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            7.963,
+            1.95,
+            8.963,
+            4.125
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            3.963,
+            7.963,
+            7.038,
+            8.963
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            3.963,
+            7.038,
+            7.038,
+            8.038
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_6_c",
+      "from": [
+        3.963,
+        27.875,
+        12.038
+      ],
+      "to": [
+        7.038,
+        30.05,
+        13.038
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2.963,
+            1.95,
+            3.963,
+            4.125
+          ],
+          "texture": "#ceramic"
+        },
+        "south": {
+          "uv": [
+            3.963,
+            1.95,
+            7.038,
+            4.125
+          ],
+          "texture": "#ceramic"
+        },
+        "west": {
+          "uv": [
+            12.038,
+            1.95,
+            13.038,
+            4.125
+          ],
+          "texture": "#ceramic"
+        },
+        "up": {
+          "uv": [
+            3.963,
+            12.038,
+            7.038,
+            13.038
+          ],
+          "texture": "#ceramic"
+        },
+        "down": {
+          "uv": [
+            3.963,
+            2.963,
+            7.038,
+            3.963
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "bushing_cap",
+      "from": [
+        4.05,
+        30.05,
+        9.05
+      ],
+      "to": [
+        6.95,
+        31.55,
+        11.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.05,
+            0.45,
+            11.95,
+            1.95
+          ],
+          "texture": "#cap_copper"
+        },
+        "east": {
+          "uv": [
+            4.05,
+            0.45,
+            6.95,
+            1.95
+          ],
+          "texture": "#cap_copper"
+        },
+        "south": {
+          "uv": [
+            4.05,
+            0.45,
+            6.95,
+            1.95
+          ],
+          "texture": "#cap_copper"
+        },
+        "west": {
+          "uv": [
+            9.05,
+            0.45,
+            11.95,
+            1.95
+          ],
+          "texture": "#cap_copper"
+        },
+        "up": {
+          "uv": [
+            4.05,
+            9.05,
+            6.95,
+            11.95
+          ],
+          "texture": "#cap_copper"
+        }
+      }
+    },
+    {
+      "name": "top_box",
+      "from": [
+        -3.5,
+        7.5,
+        11.5
+      ],
+      "to": [
+        -0.5,
+        12.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            3.5,
+            3.5,
+            8.5
+          ],
+          "texture": "#plate"
+        },
+        "south": {
+          "uv": [
+            12.5,
+            3.5,
+            15.5,
+            8.5
+          ],
+          "texture": "#plate"
+        },
+        "west": {
+          "uv": [
+            11.5,
+            3.5,
+            16,
+            8.5
+          ],
+          "texture": "#plate"
+        },
+        "up": {
+          "uv": [
+            12.5,
+            11.5,
+            15.5,
+            16
+          ],
+          "texture": "#plate"
+        },
+        "down": {
+          "uv": [
+            12.5,
+            0,
+            15.5,
+            4.5
+          ],
+          "texture": "#plate"
+        }
+      }
+    },
+    {
+      "name": "top_box_sign",
+      "from": [
+        -3.75,
+        8.5,
+        12.5
+      ],
+      "to": [
+        -3.5,
+        11.5,
+        15
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#sign"
+        }
+      }
+    },
+    {
+      "name": "conduit_a",
+      "from": [
+        -2.5,
+        0,
+        13.5
+      ],
+      "to": [
+        -0.5,
+        7.5,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            8.5,
+            2.5,
+            16
+          ],
+          "texture": "#steel_light"
+        },
+        "east": {
+          "uv": [
+            1.5,
+            8.5,
+            2.5,
+            16
+          ],
+          "texture": "#steel_light"
+        },
+        "south": {
+          "uv": [
+            13.5,
+            8.5,
+            15.5,
+            16
+          ],
+          "texture": "#steel_light"
+        },
+        "west": {
+          "uv": [
+            13.5,
+            8.5,
+            14.5,
+            16
+          ],
+          "texture": "#steel_light"
+        }
+      }
+    },
+    {
+      "name": "conduit_b",
+      "from": [
+        -2,
+        0,
+        13
+      ],
+      "to": [
+        -1,
+        7.5,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            8.5,
+            2,
+            16
+          ],
+          "texture": "#steel_light"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            8.5,
+            3,
+            16
+          ],
+          "texture": "#steel_light"
+        },
+        "west": {
+          "uv": [
+            13,
+            8.5,
+            13.5,
+            16
+          ],
+          "texture": "#steel_light"
+        }
+      }
+    },
+    {
+      "name": "conduit_c",
+      "from": [
+        -2,
+        0,
+        14.5
+      ],
+      "to": [
+        -1,
+        7.5,
+        15
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1,
+            8.5,
+            1.5,
+            16
+          ],
+          "texture": "#steel_light"
+        },
+        "south": {
+          "uv": [
+            14,
+            8.5,
+            15,
+            16
+          ],
+          "texture": "#steel_light"
+        },
+        "west": {
+          "uv": [
+            14.5,
+            8.5,
+            15,
+            16
+          ],
+          "texture": "#steel_light"
+        }
+      }
+    },
+    {
+      "name": "clamp_3",
+      "from": [
+        -3,
+        2,
+        12.5
+      ],
+      "to": [
+        -0.5,
+        3,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            13,
+            3,
+            14
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            13,
+            13,
+            15.5,
+            14
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            12.5,
+            13,
+            15.5,
+            14
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            13,
+            12.5,
+            15.5,
+            15.5
+          ],
+          "texture": "#andesite"
+        },
+        "down": {
+          "uv": [
+            13,
+            0.5,
+            15.5,
+            3.5
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "catwalk_l",
+      "from": [
+        -0.5,
+        11,
+        16.5
+      ],
+      "to": [
+        16,
+        12,
+        24.5
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            4,
+            16,
+            5
+          ],
+          "texture": "#steel_light"
+        },
+        "west": {
+          "uv": [
+            0.5,
+            4,
+            8.5,
+            5
+          ],
+          "texture": "#steel_light"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.5,
+            16,
+            8.5
+          ],
+          "texture": "#grating"
+        },
+        "down": {
+          "uv": [
+            0,
+            7.5,
+            16,
+            15.5
+          ],
+          "texture": "#grating"
+        }
+      }
+    },
+    {
+      "name": "toe_board",
+      "from": [
+        -0.5,
+        12,
+        24
+      ],
+      "to": [
+        16,
+        13.5,
+        24.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2.5,
+            16,
+            4
+          ],
+          "texture": "#safety"
+        },
+        "south": {
+          "uv": [
+            0,
+            2.5,
+            16,
+            4
+          ],
+          "texture": "#hazard"
+        },
+        "west": {
+          "uv": [
+            8,
+            2.5,
+            8.5,
+            4
+          ],
+          "texture": "#safety"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            16,
+            8.5
+          ],
+          "texture": "#safety"
+        }
+      }
+    },
+    {
+      "name": "toe_board_w",
+      "from": [
+        -0.5,
+        12,
+        16.5
+      ],
+      "to": [
+        0,
+        13.5,
+        24
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2.5,
+            0.5,
+            4
+          ],
+          "texture": "#safety"
+        },
+        "east": {
+          "uv": [
+            8,
+            2.5,
+            15.5,
+            4
+          ],
+          "texture": "#safety"
+        },
+        "west": {
+          "uv": [
+            0.5,
+            2.5,
+            8,
+            4
+          ],
+          "texture": "#hazard"
+        },
+        "up": {
+          "uv": [
+            15.5,
+            0.5,
+            16,
+            8
+          ],
+          "texture": "#safety"
+        }
+      }
+    },
+    {
+      "name": "post_0",
+      "from": [
+        0,
+        13.5,
+        23.25
+      ],
+      "to": [
+        0.75,
+        20.75,
+        24
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.25,
+            0,
+            16,
+            7.25
+          ],
+          "texture": "#safety"
+        },
+        "east": {
+          "uv": [
+            8,
+            0,
+            8.75,
+            7.25
+          ],
+          "texture": "#safety"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.75,
+            7.25
+          ],
+          "texture": "#safety"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            0,
+            8,
+            7.25
+          ],
+          "texture": "#safety"
+        }
+      }
+    },
+    {
+      "name": "post_12",
+      "from": [
+        12,
+        13.5,
+        23.25
+      ],
+      "to": [
+        12.75,
+        20.75,
+        24
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.25,
+            0,
+            4,
+            7.25
+          ],
+          "texture": "#safety"
+        },
+        "east": {
+          "uv": [
+            8,
+            0,
+            8.75,
+            7.25
+          ],
+          "texture": "#safety"
+        },
+        "south": {
+          "uv": [
+            12,
+            0,
+            12.75,
+            7.25
+          ],
+          "texture": "#safety"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            0,
+            8,
+            7.25
+          ],
+          "texture": "#safety"
+        }
+      }
+    },
+    {
+      "name": "handrail_top",
+      "from": [
+        0,
+        20.75,
+        23.5
+      ],
+      "to": [
+        16,
+        21.5,
+        24.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10.5,
+            16,
+            11.25
+          ],
+          "texture": "#safety"
+        },
+        "south": {
+          "uv": [
+            0,
+            10.5,
+            16,
+            11.25
+          ],
+          "texture": "#safety"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            10.5,
+            8.25,
+            11.25
+          ],
+          "texture": "#safety"
+        },
+        "up": {
+          "uv": [
+            0,
+            7.5,
+            16,
+            8.25
+          ],
+          "texture": "#safety"
+        },
+        "down": {
+          "uv": [
+            0,
+            7.75,
+            16,
+            8.5
+          ],
+          "texture": "#safety"
+        }
+      }
+    },
+    {
+      "name": "handrail_mid",
+      "from": [
+        0.25,
+        17,
+        23.5
+      ],
+      "to": [
+        16,
+        17.75,
+        24.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14.25,
+            15.75,
+            15
+          ],
+          "texture": "#safety"
+        },
+        "south": {
+          "uv": [
+            0.25,
+            14.25,
+            16,
+            15
+          ],
+          "texture": "#safety"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            14.25,
+            8.25,
+            15
+          ],
+          "texture": "#safety"
+        },
+        "up": {
+          "uv": [
+            0.25,
+            7.5,
+            16,
+            8.25
+          ],
+          "texture": "#safety"
+        },
+        "down": {
+          "uv": [
+            0.25,
+            7.75,
+            16,
+            8.5
+          ],
+          "texture": "#safety"
+        }
+      }
+    },
+    {
+      "name": "handrail_side_w",
+      "from": [
+        0,
+        20.75,
+        16.5
+      ],
+      "to": [
+        0.75,
+        21.5,
+        23.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.25,
+            10.5,
+            16,
+            11.25
+          ],
+          "texture": "#safety"
+        },
+        "east": {
+          "uv": [
+            8.5,
+            10.5,
+            15.5,
+            11.25
+          ],
+          "texture": "#safety"
+        },
+        "west": {
+          "uv": [
+            0.5,
+            10.5,
+            7.5,
+            11.25
+          ],
+          "texture": "#safety"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.5,
+            0.75,
+            7.5
+          ],
+          "texture": "#safety"
+        },
+        "down": {
+          "uv": [
+            0,
+            8.5,
+            0.75,
+            15.5
+          ],
+          "texture": "#safety"
+        }
+      }
+    },
+    {
+      "name": "tank",
+      "from": [
+        12,
+        20.5,
+        5
+      ],
+      "to": [
+        16,
+        25.5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            6.5,
+            4,
+            11.5
+          ],
+          "texture": "#tankside"
+        },
+        "south": {
+          "uv": [
+            12,
+            6.5,
+            16,
+            11.5
+          ],
+          "texture": "#tankside"
+        },
+        "west": {
+          "uv": [
+            5,
+            6.5,
+            11,
+            11.5
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            12,
+            5,
+            16,
+            11
+          ],
+          "texture": "#tankside"
+        },
+        "down": {
+          "uv": [
+            12,
+            5,
+            16,
+            11
+          ],
+          "texture": "#tankside"
+        }
+      }
+    },
+    {
+      "name": "tank_top",
+      "from": [
+        12,
+        25.5,
+        6
+      ],
+      "to": [
+        16,
+        26.5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            5.5,
+            4,
+            6.5
+          ],
+          "texture": "#tankside"
+        },
+        "south": {
+          "uv": [
+            12,
+            5.5,
+            16,
+            6.5
+          ],
+          "texture": "#tankside"
+        },
+        "west": {
+          "uv": [
+            6,
+            5.5,
+            10,
+            6.5
+          ],
+          "texture": "#tankside"
+        },
+        "up": {
+          "uv": [
+            12,
+            6,
+            16,
+            10
+          ],
+          "texture": "#tankside"
+        }
+      }
+    },
+    {
+      "name": "tank_bottom",
+      "from": [
+        12,
+        19.5,
+        6
+      ],
+      "to": [
+        16,
+        20.5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            11.5,
+            4,
+            12.5
+          ],
+          "texture": "#tankside"
+        },
+        "south": {
+          "uv": [
+            12,
+            11.5,
+            16,
+            12.5
+          ],
+          "texture": "#tankside"
+        },
+        "west": {
+          "uv": [
+            6,
+            11.5,
+            10,
+            12.5
+          ],
+          "texture": "#tankside"
+        },
+        "down": {
+          "uv": [
+            12,
+            6,
+            16,
+            10
+          ],
+          "texture": "#tankside"
+        }
+      }
+    },
+    {
+      "name": "tank_end_w",
+      "from": [
+        11,
+        21.5,
+        6
+      ],
+      "to": [
+        12,
+        24.5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            7.5,
+            5,
+            10.5
+          ],
+          "texture": "#andesite"
+        },
+        "east": {
+          "uv": [
+            6,
+            7.5,
+            10,
+            10.5
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            11,
+            7.5,
+            12,
+            10.5
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            6,
+            7.5,
+            10,
+            10.5
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            11,
+            6,
+            12,
+            10
+          ],
+          "texture": "#andesite"
+        },
+        "down": {
+          "uv": [
+            11,
+            6,
+            12,
+            10
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "tank_leg_14.5",
+      "from": [
+        14.5,
+        16,
+        7.25
+      ],
+      "to": [
+        16,
+        19.5,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12.5,
+            1.5,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            12.5,
+            8.75,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            14.5,
+            12.5,
+            16,
+            16
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            12.5,
+            8.75,
+            16
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "tank_saddle_14.5",
+      "from": [
+        14,
+        19,
+        6.5
+      ],
+      "to": [
+        16,
+        19.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12.5,
+            2,
+            13
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            14,
+            12.5,
+            16,
+            13
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            12.5,
+            9.5,
+            13
+          ],
+          "texture": "#andesite"
+        },
+        "down": {
+          "uv": [
+            14,
+            6.5,
+            16,
+            9.5
+          ],
+          "texture": "#andesite"
+        }
+      }
+    }
+  ]
+}

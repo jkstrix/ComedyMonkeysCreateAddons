@@ -1,0 +1,131 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_tower",
+    "tower": "comedymonkeysaddons:block/battery_tower",
+    "hazard": "comedymonkeysaddons:block/battery_hazard",
+    "plinth": "comedymonkeysaddons:block/battery_plinth",
+    "dark": "comedymonkeysaddons:block/battery_dark",
+    "sign": "comedymonkeysaddons:block/battery_sign"
+  },
+  "elements": [
+    {
+      "name": "body",
+      "from": [
+        0,
+        3,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            13
+          ],
+          "texture": "#tower"
+        }
+      }
+    },
+    {
+      "name": "plinth",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16.5,
+        3,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            13,
+            16,
+            16
+          ],
+          "texture": "#hazard"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#plinth"
+        }
+      }
+    },
+    {
+      "name": "base_sign_e",
+      "from": [
+        16,
+        5.5,
+        4.5
+      ],
+      "to": [
+        16.75,
+        11.5,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.25,
+            4.5,
+            16,
+            10.5
+          ],
+          "texture": "#dark"
+        },
+        "east": {
+          "uv": [
+            4.5,
+            4.5,
+            11.5,
+            10.5
+          ],
+          "texture": "#sign"
+        },
+        "south": {
+          "uv": [
+            0,
+            4.5,
+            0.75,
+            10.5
+          ],
+          "texture": "#dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            4.5,
+            0.75,
+            11.5
+          ],
+          "texture": "#dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            4.5,
+            0.75,
+            11.5
+          ],
+          "texture": "#dark"
+        }
+      }
+    }
+  ]
+}

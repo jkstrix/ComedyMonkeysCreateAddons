@@ -1,0 +1,60 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_plate",
+    "tubeglass": "comedymonkeysaddons:block/battery_tubeglass"
+  },
+  "elements": [
+    {
+      "name": "tube_glass_l",
+      "from": [
+        3,
+        3.5,
+        1.25
+      ],
+      "to": [
+        5.5,
+        12.5,
+        1.25
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#tubeglass"
+        }
+      }
+    },
+    {
+      "name": "tube_glass_r",
+      "from": [
+        10.5,
+        3.5,
+        1.25
+      ],
+      "to": [
+        13,
+        12.5,
+        1.25
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#tubeglass"
+        }
+      }
+    }
+  ]
+}

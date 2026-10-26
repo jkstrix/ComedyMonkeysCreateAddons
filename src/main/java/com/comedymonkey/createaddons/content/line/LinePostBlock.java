@@ -53,7 +53,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * A Line Post: a wooden post with a ceramic insulator on top, for hanging Power Line spans. It has no tier. Posts stack
  * into a pole of any height, pointing out of whatever face they stand on; the top block (the head) carries the
  * insulator and up to four branches, each a crossarm with an insulator of its own. A wire running under the foot joins
- * the head's top insulator.
+ * the head's top insulator. A pole joins the cables on it of one colour (brass feeding copper of its colour).
  */
 public class LinePostBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock {
 	public static final MapCodec<LinePostBlock> CODEC = simpleCodec(LinePostBlock::new);

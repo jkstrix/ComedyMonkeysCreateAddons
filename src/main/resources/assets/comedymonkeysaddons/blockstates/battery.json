@@ -1,0 +1,356 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "formed": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_formed"
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_glass",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "north",
+        "left": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_left_terminal",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "north",
+        "left": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_left_bus",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "north",
+        "right": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_right_terminal",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "north",
+        "right": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_right_bus",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "north",
+        "back": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_back_terminal",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "north",
+        "back": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_back_bus",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_glass",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "east",
+        "left": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_left_terminal",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "east",
+        "left": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_left_bus",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "east",
+        "right": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_right_terminal",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "east",
+        "right": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_right_bus",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "east",
+        "back": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_back_terminal",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "east",
+        "back": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_back_bus",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_glass",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "south",
+        "left": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_left_terminal",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "south",
+        "left": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_left_bus",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "south",
+        "right": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_right_terminal",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "south",
+        "right": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_right_bus",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "south",
+        "back": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_back_terminal",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "south",
+        "back": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_back_bus",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_glass",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "west",
+        "left": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_left_terminal",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "west",
+        "left": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_left_bus",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "west",
+        "right": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_right_terminal",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "west",
+        "right": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_right_bus",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "west",
+        "back": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_back_terminal",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "formed": "false",
+        "facing": "west",
+        "back": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/battery_back_bus",
+        "y": 270
+      }
+    }
+  ]
+}

@@ -18,6 +18,7 @@ import com.comedymonkey.createaddons.content.line.PowerGrid.Piece;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -62,6 +63,8 @@ public final class PowerLines {
 	private final Set<Network> flowing = new LinkedHashSet<>();
 	/** Where something changed, or loaded, since the last tick: read once, at the start of the next. */
 	private final Set<BlockPos> changedAt = new LinkedHashSet<>(), loadedAt = new LinkedHashSet<>();
+	/** Blocks of shared stores worked out anew since the last tick (not while a network is being built: next tick). */
+	private final Set<BlockPos> storesChanged = new LinkedHashSet<>();
 
 	private PowerLines(ServerLevel level) {
 		this.level = level;
@@ -93,6 +96,16 @@ public final class PowerLines {
 	/** Something at pos changed: it and the blocks round it (corners, and through a wall) are read again. */
 	public void changed(BlockPos pos) {
 		changedAt.add(pos.immutable());
+	}
+
+	/** Game tests only: the network a piece is in is worked out again (without reading the piece again). */
+	void rebuildAt(Node node) {
+		forget(node);
+	}
+
+	/** A shared store was worked out anew from these blocks: the networks meeting them are worked out again next tick. */
+	public void storeChanged(java.util.Collection<BlockPos> blocks) {
+		storesChanged.addAll(blocks);
 	}
 
 	/** A piece at pos loaded: read only if the grid hasn't got it (it can't have changed while it was unloaded). */
@@ -274,6 +287,14 @@ public final class PowerLines {
 	// ---------- reading the pieces ----------
 
 	private void readChanges() {
+		if (!storesChanged.isEmpty()) {
+			Set<Node> meeting = new HashSet<>();
+			for (BlockPos b : storesChanged)
+				meeting.addAll(grid.endsAt(b));
+			storesChanged.clear();
+			for (Node n : meeting)
+				forget(n);
+		}
 		if (changedAt.isEmpty() && loadedAt.isEmpty())
 			return;
 		// every block to read, each once: what changed, the blocks round it and through a wall beside it
@@ -307,18 +328,22 @@ public final class PowerLines {
 		BlockState state = level.getBlockState(p);
 		Node wire = new Node(p, Node.WIRE);
 		if (state.getBlock() instanceof PowerLineBlock && level.getBlockEntity(p) instanceof PowerLineBlockEntity be) {
-			if (force || grid.piece(wire) == null)
+			if (force || grid.piece(wire) == null || grid.piece(wire).stale)
 				set(wire, readWire(be), touched);
 		} else if (grid.piece(wire) != null) {
 			set(wire, null, touched);
 		}
-		BlockPos head = state.getBlock() instanceof LinePostBlock ? LinePostBlock.head(level, p) : null;
+		BlockPos head = state.getBlock() instanceof LinePostBlock ? LinePostBlock.head(level, p) : towerAt(p);
 		Node pole = new Node(p, Node.POLE);
 		if (!p.equals(head) && grid.piece(pole) != null)
 			set(pole, null, touched);
 		if (head != null) {
 			Node h = new Node(head, Node.POLE);
-			if (force || grid.piece(h) == null) {
+			if (force || grid.piece(h) == null || grid.piece(h).stale) {
+				if (!(state.getBlock() instanceof LinePostBlock)) {
+					set(h, readTower(head), touched);
+					return;
+				}
 				set(h, readPole(head), touched);
 				// and the wires at its foot, which join it
 				BlockPos foot = LinePostBlock.foot(level, head);
@@ -343,7 +368,9 @@ public final class PowerLines {
 
 	private Piece readWire(PowerLineBlockEntity be) {
 		LineTier tier = be.tier();
+		DyeColor dye = be.dye();
 		Piece p = new Piece(tier, be.fitting(), be.fitting() != Fitting.BREAKER || be.passes() > 0);
+		p.dye = dye;
 		if (be.fitting() == Fitting.SPLITTER)
 			p.priority = be.priorities();
 		BlockPos pos = be.getBlockPos();
@@ -359,17 +386,17 @@ public final class PowerLines {
 				p.ends.add(new End(pos.relative(face.getOpposite()), face));
 			// through the wall it lies on, to the wire behind
 			if (WireLink.hole(links) != 0)
-				link(p, new Node(pos.relative(face, 2), Node.WIRE), tier, face);
+				link(p, new Node(pos.relative(face, 2), Node.WIRE), tier, dye, face);
 			for (Direction d : WireLink.across(face)) {
 				BlockPos to = pos.relative(d);
 				switch (be.link(face, d)) {
-					case LINE -> link(p, new Node(to, Node.WIRE), tier, d);
-					case THROUGH -> link(p, new Node(to.relative(d), Node.WIRE), tier, d);
-					case OUTSIDE -> link(p, new Node(to.relative(face), Node.WIRE), tier, d);
+					case LINE -> link(p, new Node(to, Node.WIRE), tier, dye, d);
+					case THROUGH -> link(p, new Node(to.relative(d), Node.WIRE), tier, dye, d);
+					case OUTSIDE -> link(p, new Node(to.relative(face), Node.WIRE), tier, dye, d);
 					case POST -> {
 						BlockPos head = level.isLoaded(to) ? LinePostBlock.head(level, to) : null;
 						if (head != null)
-							link(p, new Node(head, Node.POLE), tier, d);
+							link(p, new Node(head, Node.POLE), tier, dye, d);
 					}
 					case TERMINAL -> p.ends.add(new End(to, d.getOpposite()));
 					default -> {}
@@ -384,7 +411,7 @@ public final class PowerLines {
 		Piece p = new Piece(null, Fitting.NONE, true);
 		if (level.getBlockEntity(head) instanceof LinePostBlockEntity post)
 			for (Span s : post.spans())
-				link(p, new Node(head.offset(s.offset()), Node.POLE), s.tier(), null);
+				link(p, new Node(head.offset(s.offset()), Node.POLE), s.tier(), s.dye(), null);
 		BlockPos foot = LinePostBlock.foot(level, head);
 		if (foot == null)
 			return p;
@@ -395,13 +422,31 @@ public final class PowerLines {
 			BlockPos w = foot.relative(d);
 			if (level.isLoaded(w) && level.getBlockEntity(w) instanceof PowerLineBlockEntity be
 				&& be.link(facing.getOpposite(), d.getOpposite()) == WireLink.POST)
-				link(p, new Node(w, Node.WIRE), be.tier(), null);
+				link(p, new Node(w, Node.WIRE), be.tier(), be.dye(), null);
 		}
 		return p;
 	}
 
-	private static void link(Piece p, Node to, LineTier tier, @Nullable Direction via) {
-		PowerGrid.Link l = new PowerGrid.Link(to, tier, via);
+	/** The master of the Industrial Battery a block is part of (a junction like a pole's), if it's loaded. */
+	@Nullable
+	private BlockPos towerAt(BlockPos p) {
+		SpanHolder h = level.getBlockEntity(p) instanceof SpanHolder.Part part ? part.spanHolder() : null;
+		return h != null && h.isBattery() ? h.holderPos() : null;
+	}
+
+	/** An Industrial Battery: the spans on its insulators, joined like a pole's, and its store at the junction. */
+	private Piece readTower(BlockPos master) {
+		Piece p = new Piece(null, Fitting.NONE, true);
+		SpanHolder h = SpanHolder.at(level, master);
+		if (h != null)
+			for (Span s : h.spans())
+				link(p, new Node(master.offset(s.offset()), Node.POLE), s.tier(), s.dye(), null);
+		p.ends.add(new End(master, Direction.UP));
+		return p;
+	}
+
+	private static void link(Piece p, Node to, LineTier tier, @Nullable DyeColor dye, @Nullable Direction via) {
+		PowerGrid.Link l = new PowerGrid.Link(to, tier, dye, via);
 		if (!p.links.contains(l))
 			p.links.add(l);
 	}
@@ -442,8 +487,50 @@ public final class PowerLines {
 		return out;
 	}
 
+	/** The other pieces that meet a store this one meets (another Battery of its bank, say). Loaded stores only. */
+	private Set<Node> throughStores(Node node) {
+		Piece p = grid.piece(node);
+		if (p == null || p.ends.isEmpty())
+			return Set.of();
+		Set<Node> out = new HashSet<>();
+		for (End e : p.ends) {
+			BlockPos t = e.target();
+			if (PowerGrid.running(level, t)) {
+				if (level.getBlockEntity(t) instanceof PowerGrid.Store s)
+					for (BlockPos b : s.storeBlocks())
+						out.addAll(grid.endsAt(b));
+				continue;
+			}
+			// away: through where lines met it when it last ran
+			BlockPos key = grid.storeKeyFor(t);
+			if (key != null)
+				for (BlockPos f : grid.storeFacesOf(key))
+					out.addAll(grid.endsAt(f));
+		}
+		out.remove(node);
+		return out;
+	}
+
+	/** A shared store's key at block t, if it's one (loaded). */
+	@Nullable
+	private BlockPos storeKeyAt(BlockPos t) {
+		return level.getBlockEntity(t) instanceof PowerGrid.Store s ? s.storeKey() : null;
+	}
+
+	/** A shared store on a network this second: how to reach it, the circuits that meet it, and its Splitter rank. */
+	private static final class StoreAt {
+		final java.util.function.Supplier<IEnergyStorage> energy;
+		final int[] key;
+		final List<Integer> circuits = new ArrayList<>();
+
+		StoreAt(java.util.function.Supplier<IEnergyStorage> energy, int[] key) {
+			this.energy = energy;
+			this.key = key;
+		}
+	}
+
 	/** One tier of line at a node: a wire's own, or one of the tiers of cable tied to a pole. */
-	private record Sub(Node node, LineTier tier) {}
+	private record Sub(Node node, LineTier tier, @Nullable DyeColor dye) {}
 
 	/**
 	 * Everything joined to start, sorted into segments (each one tier; every Breaker a segment of its own, switched in
@@ -462,8 +549,12 @@ public final class PowerLines {
 			for (Node m : grid.neighbours(q))
 				if (n.nodes.add(m))
 					queue.add(m);
-			// lines that meet one generator are one network, whatever their tier: through the generator
+			// lines that meet one generator, or one store (a bank of Batteries), are one network, whatever their tier and
+			// colour: through it
 			for (Node m : throughGenerators(q))
+				if (n.nodes.add(m))
+					queue.add(m);
+			for (Node m : throughStores(q))
 				if (n.nodes.add(m))
 					queue.add(m);
 		}
@@ -478,8 +569,9 @@ public final class PowerLines {
 		Map<Sub, Integer> seg = new HashMap<>();
 		List<LineTier> tiers = new ArrayList<>();
 		for (Node m : n.nodes)
-			for (LineTier t : tiersAt(m)) {
-				Sub first = new Sub(m, t);
+			for (Sub first : subsAt(m)) {
+				LineTier t = first.tier();
+				DyeColor dye = first.dye();
 				if (seg.containsKey(first))
 					continue;
 				int id = tiers.size();
@@ -493,9 +585,19 @@ public final class PowerLines {
 					Sub s = walk.poll();
 					for (Node o : grid.neighbours(s.node())) {
 						Piece op = grid.piece(o);
-						if (grid.linkTier(s.node(), o) != t || (op.tier != null && op.tier != t) || op.fitting == Fitting.BREAKER)
+						// a cable of this tier and colour between them (there may be others beside it). A piece from a save
+						// made before lines had colours (not read again yet, its chunk not loaded since) joins any colour,
+						// and a wire of it takes the colour of the line it's on
+						boolean anyColour = grid.piece(s.node()).stale || op.stale;
+						boolean joined = false;
+						for (PowerGrid.Link l : grid.linksTo(s.node(), o))
+							if (l.tier() == t && (anyColour || l.dye() == dye))
+								joined = true;
+						if (!joined || (op.tier != null && (op.tier != t || !op.stale && op.dye != dye)) || op.fitting == Fitting.BREAKER)
 							continue;
-						Sub next = new Sub(o, t);
+						if (op.stale && op.tier != null && op.dye == null)
+							op.dye = dye;
+						Sub next = new Sub(o, t, dye);
 						if (seg.putIfAbsent(next, id) == null)
 							walk.add(next);
 					}
@@ -507,26 +609,44 @@ public final class PowerLines {
 			Piece p = grid.piece(m);
 			// brass feeds copper where both are tied to one pole
 			if (m.isPole()) {
-				Integer brass = seg.get(new Sub(m, LineTier.BRASS)), copper = seg.get(new Sub(m, LineTier.COPPER));
-				if (brass != null && copper != null)
-					n.feeds.add(new Feed(brass, copper, keys.get(m), null));
+				// brass feeds copper of its own colour
+				for (Sub sub : subsAt(m)) {
+					if (sub.tier() != LineTier.BRASS)
+						continue;
+					Integer brass = seg.get(sub), copper = seg.get(new Sub(m, LineTier.COPPER, sub.dye()));
+					if (brass != null && copper != null)
+						n.feeds.add(new Feed(brass, copper, keys.get(m), null));
+				}
+				// an Industrial Battery's store, at its junction: on every tier and colour tied to it (one store, shared
+				// between them when the plan is made)
+				for (End e : p.ends) {
+					BlockCapabilityCache<IEnergyStorage, Direction> cache = null;
+					for (Sub sub : subsAt(m)) {
+						Integer s = seg.get(sub);
+						if (s == null)
+							continue;
+						if (cache == null)
+							cache = BlockCapabilityCache.create(Capabilities.EnergyStorage.BLOCK, level, e.target(), e.side());
+						n.ends.add(new Device(e, s, cache, keys.get(m)));
+					}
+				}
 				continue;
 			}
-			int s = seg.get(new Sub(m, p.tier));
+			int s = seg.get(new Sub(m, p.tier, p.dye));
 			n.segOf.put(m, s);
 			if (p.fitting == Fitting.BREAKER) {
 				n.breakers.add(m);
 				for (Node o : grid.neighbours(m)) {
 					Piece op = grid.piece(o);
 					if (o.isPole()) {
-						Integer pole = seg.get(new Sub(o, p.tier));
+						Integer pole = seg.get(new Sub(o, p.tier, p.dye));
 						if (pole != null)
 							n.switches.add(new int[] {s, pole, n.breakers.size() - 1});
 						continue;
 					}
 					if (op.tier == null)
 						continue;
-					Integer other = seg.get(new Sub(o, op.tier));
+					Integer other = seg.get(new Sub(o, op.tier, op.dye));
 					if (other == null)
 						continue;
 					if (op.tier == p.tier)
@@ -566,17 +686,18 @@ public final class PowerLines {
 		return n;
 	}
 
-	/** The tiers of line at a piece: a wire's own, or each tier of cable tied to a pole. */
-	private List<LineTier> tiersAt(Node m) {
+	/** The tiers and colours of line at a piece: a wire's own, or each tier and colour of cable tied to a pole. */
+	private List<Sub> subsAt(Node m) {
 		Piece p = grid.piece(m);
 		if (p.tier != null)
-			return List.of(p.tier);
-		List<LineTier> out = new ArrayList<>();
-		for (Node o : grid.neighbours(m)) {
-			LineTier t = grid.linkTier(m, o);
-			if (t != null && !out.contains(t))
-				out.add(t);
-		}
+			return List.of(new Sub(m, p.tier, p.dye));
+		List<Sub> out = new ArrayList<>();
+		for (Node o : grid.neighbours(m))
+			for (PowerGrid.Link l : grid.linksTo(m, o)) {
+				Sub sub = new Sub(m, l.tier(), l.dye());
+				if (!out.contains(sub))
+					out.add(sub);
+			}
 		return out;
 	}
 
@@ -590,11 +711,11 @@ public final class PowerLines {
 	private record Feed(int from, int to, int[] key, @Nullable Node breaker) {}
 
 	/** Something giving power this second: a running block (looked up each tick), or a generator on paper. */
-	private record Source(int circuit, @Nullable BlockCapabilityCache<IEnergyStorage, Direction> energy, @Nullable PowerGrid.Paper paper, int offer, boolean store,
+	private record Source(int circuit, @Nullable java.util.function.Supplier<IEnergyStorage> energy, @Nullable PowerGrid.Paper paper, int offer, boolean store,
 						  @Nullable BlockPos generator) {}
 
 	/** Something taking power this second: what it wants of the second (room to fill, and its use). */
-	private record Taker(int circuit, BlockCapabilityCache<IEnergyStorage, Direction> energy, BlockPos pos, int want, boolean store, int[] key) {}
+	private record Taker(int circuit, java.util.function.Supplier<IEnergyStorage> energy, BlockPos pos, int want, boolean store, int[] key) {}
 
 	/** A network's plan for the next second, handed out a twentieth each tick. */
 	private static final class Schedule {
@@ -841,8 +962,9 @@ public final class PowerLines {
 			List<Source> sources = new ArrayList<>();
 			List<Taker> takers = new ArrayList<>();
 			double[] gen = new double[count], stored = new double[count], want = new double[count], room = new double[count];
-			// one share a machine, however many wires meet it: by its block (a generator by its key)
+			// one share a machine, however many wires meet it: by its block (a generator by its key, a store by its own)
 			Set<BlockPos> seen = new HashSet<>();
+			Map<BlockPos, StoreAt> stores = new LinkedHashMap<>();
 			Map<BlockPos, double[]> nextUse = new HashMap<>();
 			boolean live = false;
 			double makes = 0;
@@ -858,7 +980,31 @@ public final class PowerLines {
 						cs.add(c);
 					continue;
 				}
-				if (!PowerGrid.running(level, t) || !seen.add(t))
+				if (!PowerGrid.running(level, t)) {
+					// a shared store all of which is away: on paper, from its record
+					BlockPos rk = grid.storeKeyFor(t);
+					PowerGrid.StorePaper rec = rk == null ? null : grid.storePaper(rk);
+					if (rec != null && grid.allAway(rec, level)) {
+						// looked up each time: once any of it runs again the record is taken back, and gives nothing more
+						StoreAt s = stores.computeIfAbsent(rk, k -> new StoreAt(() -> {
+							PowerGrid.StorePaper r = grid.storePaper(k);
+							return r != null && grid.allAway(r, level) ? grid.paperStore(r, level) : null;
+						}, d.key()));
+						if (!s.circuits.contains(c))
+							s.circuits.add(c);
+					}
+					continue;
+				}
+				// a store shared between blocks or circuits: once, below
+				BlockPos sk = storeKeyAt(t);
+				if (sk != null) {
+					grid.storeFace(t, sk);
+					StoreAt s = stores.computeIfAbsent(sk.immutable(), k -> new StoreAt(d.energy()::getCapability, d.key()));
+					if (!s.circuits.contains(c))
+						s.circuits.add(c);
+					continue;
+				}
+				if (!seen.add(t))
 					continue;
 				IEnergyStorage e = d.energy().getCapability();
 				if (e == null)
@@ -867,7 +1013,7 @@ public final class PowerLines {
 				if (out) {
 					int offer = e.extractEnergy(rate, true);
 					if (offer > 0) {
-						sources.add(new Source(c, d.energy(), null, offer, in, null));
+						sources.add(new Source(c, d.energy()::getCapability, null, offer, in, null));
 						(in ? stored : gen)[c] += offer;
 						// another mod's generator: what it could give this second, as a rate
 						if (!in)
@@ -886,8 +1032,39 @@ public final class PowerLines {
 					nextUse.put(t.immutable(), new double[] {e.getEnergyStored(), 0});
 					int w = (int) Math.min(rate, roomNow + used);
 					if (w > 0) {
-						takers.add(new Taker(c, d.energy(), t.immutable(), w, out, d.key()));
+						takers.add(new Taker(c, d.energy()::getCapability, t.immutable(), w, out, d.key()));
 						(out ? room : want)[c] += w;
+						live = true;
+					}
+				}
+			}
+			// each shared store: what it can give goes to its circuits by what their machines want, its room by which of them
+			// have generators (each up to that circuit's rate)
+			boolean[] generating = new boolean[count];
+			for (List<Integer> cs : generators.values())
+				for (int c : cs)
+					generating[c] = true;
+			double[] haveGen = new double[count];
+			for (int c = 0; c < count; c++)
+				haveGen[c] = generating[c] || gen[c] > 0 ? 1 : 0;
+			for (Map.Entry<BlockPos, StoreAt> st : stores.entrySet()) {
+				StoreAt s = st.getValue();
+				IEnergyStorage e = s.energy.get();
+				if (e == null)
+					continue;
+				int all = rate(tiers, s.circuits);
+				int offer = e.canExtract() ? e.extractEnergy(all, true) : 0, roomNow = e.canReceive() ? e.receiveEnergy(all, true) : 0;
+				double[] byNeed = parts(s.circuits, want), byGen = parts(s.circuits, haveGen);
+				for (int i = 0; i < s.circuits.size(); i++) {
+					int c = s.circuits.get(i), cap = tiers[c].powerPerTick() * INTERVAL;
+					int o = (int) Math.min(cap, Math.floor(offer * byNeed[i])), w = (int) Math.min(cap, Math.floor(roomNow * byGen[i]));
+					if (o > 0) {
+						sources.add(new Source(c, s.energy, null, o, true, null));
+						stored[c] += o;
+					}
+					if (w > 0) {
+						takers.add(new Taker(c, s.energy, st.getKey(), w, true, s.key));
+						room[c] += w;
 						live = true;
 					}
 				}
@@ -920,7 +1097,7 @@ public final class PowerLines {
 					int offer = e == null || !e.canExtract() ? 0 : e.extractEnergy(rate, true);
 					PowerGrid.Paper rec = grid.paper(key);
 					makes += rec != null ? rec.making(level) : offer / (double) INTERVAL;
-					share(sources, gen, tiers, cs, part, offer, cache, null, key);
+					share(sources, gen, tiers, cs, part, offer, cache::getCapability, null, key);
 					continue;
 				}
 				// on paper, with the touching generators it shares its store with (one running gives as itself, from its own
@@ -1008,7 +1185,7 @@ public final class PowerLines {
 			java.util.Arrays.fill(took, 0);
 			for (int i = 0; i < accept.length; i++) {
 				Taker t = f.takers.get(i);
-				IEnergyStorage e = t.energy().getCapability();
+				IEnergyStorage e = t.energy().get();
 				taker[i] = e;
 				accept[i] = 0;
 				if (e == null)
@@ -1053,7 +1230,7 @@ public final class PowerLines {
 				if (s.paper() != null) {
 					took[i] = grid.draw(s.paper(), take, now, false, level);
 				} else {
-					IEnergyStorage e = s.energy().getCapability();
+					IEnergyStorage e = s.energy().get();
 					took[i] = e == null ? 0 : e.extractEnergy(take, false);
 				}
 				pool[c] += took[i];
@@ -1082,7 +1259,7 @@ public final class PowerLines {
 				if (s.paper() != null) {
 					pool[c] -= grid.giveBack(s.paper(), back);
 				} else {
-					IEnergyStorage e = s.energy().getCapability();
+					IEnergyStorage e = s.energy().get();
 					if (e != null && e.canReceive())
 						pool[c] -= e.receiveEnergy((int) back, false);
 				}
@@ -1153,7 +1330,7 @@ public final class PowerLines {
 
 		/** A generator's offer as a source on each circuit it meets, each its part (up to that circuit's rate). */
 		private static void share(List<Source> sources, double[] gen, LineTier[] tiers, List<Integer> cs, double[] part, int offer,
-								  @Nullable BlockCapabilityCache<IEnergyStorage, Direction> energy, @Nullable PowerGrid.Paper paper, BlockPos key) {
+								  @Nullable java.util.function.Supplier<IEnergyStorage> energy, @Nullable PowerGrid.Paper paper, BlockPos key) {
 			for (int i = 0; i < cs.size(); i++) {
 				int c = cs.get(i), o = (int) Math.min((long) tiers[c].powerPerTick() * INTERVAL, (long) Math.floor(offer * part[i]));
 				if (o > 0) {

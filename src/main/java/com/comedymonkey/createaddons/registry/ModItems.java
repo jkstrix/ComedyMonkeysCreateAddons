@@ -96,6 +96,8 @@ public final class ModItems {
 		ITEMS.registerSimpleBlockItem(ModBlocks.SUPERCHARGED_MAGMA_ENGINE);
 	public static final DeferredItem<BlockItem> ELECTRIC_MOTOR = ITEMS.registerSimpleBlockItem(ModBlocks.ELECTRIC_MOTOR);
 	public static final DeferredItem<BlockItem> LAVA_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.LAVA_GENERATOR);
+	public static final DeferredItem<com.comedymonkey.createaddons.content.electric.BatteryItem> BATTERY = ITEMS.register("battery",
+		() -> new com.comedymonkey.createaddons.content.electric.BatteryItem(ModBlocks.BATTERY.get(), new Item.Properties()));
 	public static final DeferredItem<BlockItem> GEOTHERMAL_CASING = ITEMS.registerSimpleBlockItem(ModBlocks.GEOTHERMAL_CASING);
 	public static final DeferredItem<BlockItem> GEOTHERMAL_CORE = ITEMS.registerSimpleBlockItem(ModBlocks.GEOTHERMAL_CORE);
 	public static final DeferredItem<BlockItem> GEOTHERMAL_CONTROLLER =

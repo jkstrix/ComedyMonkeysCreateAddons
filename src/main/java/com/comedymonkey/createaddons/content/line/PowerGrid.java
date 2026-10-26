@@ -12,6 +12,7 @@ import java.util.Set;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -47,8 +48,12 @@ public final class PowerGrid extends SavedData {
 		}
 	}
 
-	/** A join to another piece, by a cable of this tier, leaving a wire block {@code via} this side (null on a pole). */
-	record Link(Node to, LineTier tier, @Nullable Direction via) {}
+	/**
+	 * A join to another piece, by a cable of this tier and colour (null: plain), leaving a wire block {@code via} this
+	 * side (null on a pole). On a pole, only cables of one tier and colour join each other (brass feeding copper of its
+	 * colour).
+	 */
+	record Link(Node to, LineTier tier, @Nullable net.minecraft.world.item.DyeColor dye, @Nullable Direction via) {}
 
 	/** A machine a piece meets: the block, and the side of it the wire meets. */
 	record End(BlockPos target, Direction side) {}
@@ -58,6 +63,11 @@ public final class PowerGrid extends SavedData {
 		/** Its tier; a pole has none (each cable tied to it has its own). */
 		@Nullable
 		final LineTier tier;
+		/** A wire's colour (null: plain, or a pole). */
+		@Nullable
+		net.minecraft.world.item.DyeColor dye;
+		/** Read from a save made before pieces had colours: read again from the world once it's loaded. */
+		boolean stale;
 		final Fitting fitting;
 		/** A Breaker's state as last seen (read again whenever its chunk is loaded). */
 		boolean closed;
@@ -71,6 +81,40 @@ public final class PowerGrid extends SavedData {
 			this.tier = tier;
 			this.fitting = fitting;
 			this.closed = closed;
+		}
+	}
+
+	/**
+	 * A store several blocks share (a bank of Batteries, an Industrial Battery): lines meeting any of its blocks are one
+	 * network through it, as through a generator, and it's one store in that network's plan, shared by every circuit
+	 * (tier and colour) that meets it.
+	 */
+	public interface Store {
+		/** The same for every block of it while it holds (null: it can't be worked out now). */
+		@Nullable
+		BlockPos storeKey();
+
+		/** Every block of it a line can meet. */
+		java.util.Collection<BlockPos> storeBlocks();
+	}
+
+	/**
+	 * A shared store's record, for running it on paper while none of it is running: what it holds, what it can hold, its
+	 * rate a tick, and its blocks. While it runs it writes its state here every tick; once all of it is away the network
+	 * fills and draws the record instead, and when it runs again it takes on how far the record moved, once.
+	 */
+	public static final class StorePaper {
+		double energy, seen;
+		long cap, perTick;
+		List<BlockPos> members = List.of();
+		/** This tick's moves, against its rate (not saved). */
+		private long tick = Long.MIN_VALUE;
+		private double inNow, outNow;
+		@Nullable
+		private IEnergyStorage view;
+
+		public double energy() {
+			return energy;
 		}
 	}
 
@@ -305,6 +349,10 @@ public final class PowerGrid extends SavedData {
 	private final Map<BlockPos, Set<BlockPos>> facesOf = new HashMap<>();
 	/** Generators in a recorded generator's row (they share its store, so they keep a record too). Not saved. */
 	private final Set<BlockPos> rowMembers = new HashSet<>();
+	/** Each block of a recorded store, to the store's key. Not saved: worked out from the records. */
+	private final Map<BlockPos, BlockPos> storeMembers = new HashMap<>();
+	/** Where lines meet each store, by its key (the other way round from the store faces). Not saved. */
+	private final Map<BlockPos, Set<BlockPos>> storeFacesByKey = new HashMap<>();
 
 	public static PowerGrid of(ServerLevel level) {
 		PowerGrid grid = level.getDataStorage().computeIfAbsent(new SavedData.Factory<>(PowerGrid::new, PowerGrid::load, null), NAME);
@@ -314,6 +362,11 @@ public final class PowerGrid extends SavedData {
 			grid.generators = grid.records.generators;
 			for (Paper p : grid.generators.values())
 				grid.rowMembers.addAll(p.row);
+			for (Map.Entry<BlockPos, StorePaper> e : grid.records.stores.entrySet())
+				for (BlockPos m : e.getValue().members)
+					grid.storeMembers.put(m, e.getKey());
+			for (Map.Entry<BlockPos, BlockPos> e : grid.records.storeFaces.entrySet())
+				grid.storeFacesByKey.computeIfAbsent(e.getValue(), k -> new HashSet<>()).add(e.getKey());
 		}
 		return grid;
 	}
@@ -328,6 +381,9 @@ public final class PowerGrid extends SavedData {
 	/** The generators' records, as their own saved data. */
 	static final class Records extends SavedData {
 		final Map<BlockPos, Paper> generators = new HashMap<>();
+		/** Shared stores' records by their key, and where lines meet them (a block of one, to its key). */
+		final Map<BlockPos, StorePaper> stores = new HashMap<>();
+		final Map<BlockPos, BlockPos> storeFaces = new HashMap<>();
 
 		static Records load(CompoundTag tag, HolderLookup.Provider registries) {
 			Records r = new Records();
@@ -353,6 +409,21 @@ public final class PowerGrid extends SavedData {
 				}
 				r.generators.put(BlockPos.of(c.getLong("Pos")), p);
 			}
+			for (Tag t : tag.getList("Stores", Tag.TAG_COMPOUND)) {
+				CompoundTag c = (CompoundTag) t;
+				StorePaper p = new StorePaper();
+				p.energy = c.getDouble("Energy");
+				p.seen = c.getDouble("Seen");
+				p.cap = c.getLong("Cap");
+				p.perTick = c.getLong("PerTick");
+				List<BlockPos> members = new ArrayList<>();
+				for (long mp : c.getLongArray("Members"))
+					members.add(BlockPos.of(mp));
+				p.members = members;
+				r.stores.put(BlockPos.of(c.getLong("Pos")), p);
+			}
+			for (Tag t : tag.getList("StoreFaces", Tag.TAG_COMPOUND))
+				r.storeFaces.put(BlockPos.of(((CompoundTag) t).getLong("Face")), BlockPos.of(((CompoundTag) t).getLong("Key")));
 			return r;
 		}
 
@@ -392,6 +463,27 @@ public final class PowerGrid extends SavedData {
 				gens.add(c);
 			}
 			tag.put("Generators", gens);
+			ListTag stores = new ListTag();
+			for (Map.Entry<BlockPos, StorePaper> e : this.stores.entrySet()) {
+				StorePaper p = e.getValue();
+				CompoundTag c = new CompoundTag();
+				c.putLong("Pos", e.getKey().asLong());
+				c.putDouble("Energy", p.energy);
+				c.putDouble("Seen", p.seen);
+				c.putLong("Cap", p.cap);
+				c.putLong("PerTick", p.perTick);
+				c.put("Members", new LongArrayTag(p.members.stream().mapToLong(BlockPos::asLong).toArray()));
+				stores.add(c);
+			}
+			tag.put("Stores", stores);
+			ListTag faces = new ListTag();
+			for (Map.Entry<BlockPos, BlockPos> e : storeFaces.entrySet()) {
+				CompoundTag c = new CompoundTag();
+				c.putLong("Face", e.getKey().asLong());
+				c.putLong("Key", e.getValue().asLong());
+				faces.add(c);
+			}
+			tag.put("StoreFaces", faces);
 			return tag;
 		}
 	}
@@ -416,6 +508,7 @@ public final class PowerGrid extends SavedData {
 				if (endRefs.merge(e.target(), -1, Integer::sum) <= 0) {
 					endRefs.remove(e.target());
 					dropFace(e.target());
+					dropStoreFace(e.target());
 				}
 		}
 		if (piece != null)
@@ -432,6 +525,11 @@ public final class PowerGrid extends SavedData {
 				endsAt.computeIfAbsent(e.target(), k -> new HashSet<>()).add(node);
 		if (old != null || piece != null)
 			setDirty();
+	}
+
+	/** The pieces whose ends meet a block. */
+	Set<Node> endsAt(BlockPos pos) {
+		return endsAt.getOrDefault(pos, Set.of());
 	}
 
 	/** The pieces that meet the generator recorded at key, on any of its faces (through it, they're one network). */
@@ -469,11 +567,30 @@ public final class PowerGrid extends SavedData {
 	/** The tier of the cable joining a and b, from a's link (each end's link carries its own tier). */
 	@Nullable
 	LineTier linkTier(Node a, Node b) {
+		Link l = linkTo(a, b);
+		return l == null ? null : l.tier();
+	}
+
+	/** Every link from a to b: spans of several tiers and colours can run between one pair of poles. */
+	List<Link> linksTo(Node a, Node b) {
+		Piece pa = pieces.get(a);
+		if (pa == null)
+			return List.of();
+		List<Link> out = new ArrayList<>(1);
+		for (Link l : pa.links)
+			if (l.to().equals(b))
+				out.add(l);
+		return out;
+	}
+
+	/** a's link to b, if it has one. */
+	@Nullable
+	Link linkTo(Node a, Node b) {
 		Piece pa = pieces.get(a);
 		if (pa != null)
 			for (Link l : pa.links)
 				if (l.to().equals(b))
-					return l.tier();
+					return l;
 		return null;
 	}
 
@@ -623,6 +740,230 @@ public final class PowerGrid extends SavedData {
 		return out;
 	}
 
+	// ---------- shared stores ----------
+
+	/** A line meets the shared store keyed key at block face. */
+	void storeFace(BlockPos face, BlockPos key) {
+		BlockPos old = records.storeFaces.put(face.immutable(), key.immutable());
+		if (key.equals(old))
+			return;
+		if (old != null)
+			unStoreFace(old, face);
+		storeFacesByKey.computeIfAbsent(key.immutable(), k -> new HashSet<>()).add(face.immutable());
+		records.setDirty();
+	}
+
+	private void unStoreFace(BlockPos key, BlockPos face) {
+		Set<BlockPos> s = storeFacesByKey.get(key);
+		if (s != null && s.remove(face) && s.isEmpty())
+			storeFacesByKey.remove(key);
+	}
+
+	/** The key of the shared store a line meets at block face, as last seen running. */
+	@Nullable
+	BlockPos storeKeyFor(BlockPos face) {
+		return records.storeFaces.get(face);
+	}
+
+	/** Every block where a line meets the store keyed key. */
+	Set<BlockPos> storeFacesOf(BlockPos key) {
+		return storeFacesByKey.getOrDefault(key, Set.of());
+	}
+
+	/** No line meets a store at this block now: once none meets it anywhere, its record goes (unless it's owed). */
+	private void dropStoreFace(BlockPos face) {
+		BlockPos key = records.storeFaces.remove(face);
+		if (key == null)
+			return;
+		unStoreFace(key, face);
+		StorePaper p = records.stores.get(key);
+		// a record that moved on paper is kept until the store takes it back, line or no line
+		if (!storeFacesByKey.containsKey(key) && (p == null || Math.abs(p.energy - p.seen) < 0.5))
+			removeStore(key);
+		records.setDirty();
+	}
+
+	@Nullable
+	public StorePaper storePaper(BlockPos key) {
+		return records.stores.get(key);
+	}
+
+	private void removeStore(BlockPos key) {
+		StorePaper p = records.stores.remove(key);
+		if (p != null) {
+			for (BlockPos m : p.members)
+				storeMembers.remove(m, key);
+			records.setDirty();
+		}
+	}
+
+	/**
+	 * A shared store has run this tick: its record as it stands, if a line meets any block of it ({@code members} is
+	 * read only when {@code refresh}, or the record is new). Records of other stores its blocks were in go.
+	 */
+	public void noteStore(BlockPos key, java.util.function.Supplier<List<BlockPos>> members, long energy, long cap, long perTick, boolean refresh) {
+		StorePaper p = records.stores.get(key);
+		// a new record only on a refresh (once a second): a store no line meets isn't looked at every tick
+		if (p == null && !refresh)
+			return;
+		if (p == null || refresh) {
+			List<BlockPos> list = members.get();
+			boolean met = false;
+			for (BlockPos m : list)
+				if (records.storeFaces.containsKey(m)) {
+					met = true;
+					break;
+				}
+			if (!met) {
+				removeStore(key);
+				return;
+			}
+			if (p == null) {
+				p = new StorePaper();
+				records.stores.put(key.immutable(), p);
+			}
+			for (BlockPos m : p.members)
+				storeMembers.remove(m, key);
+			p.members = List.copyOf(list);
+			for (BlockPos m : list) {
+				BlockPos old = storeMembers.put(m.immutable(), key.immutable());
+				if (old != null && !old.equals(key))
+					removeStore(old);
+			}
+			records.setDirty();
+		}
+		p.energy = p.seen = energy;
+		p.cap = cap;
+		p.perTick = perTick;
+	}
+
+	/**
+	 * A shared store made of these blocks is running again (or was worked out anew): how far the records its blocks were
+	 * in moved while it was away, taken on once (the records go; it writes a fresh one as it runs).
+	 */
+	public long storeBack(java.util.Collection<BlockPos> members) {
+		Set<BlockPos> keys = new HashSet<>(), here = new HashSet<>(members);
+		for (BlockPos m : members) {
+			BlockPos k = storeMembers.get(m);
+			if (k != null)
+				keys.add(k);
+		}
+		double delta = 0;
+		for (BlockPos k : keys) {
+			StorePaper p = records.stores.get(k);
+			if (p == null)
+				continue;
+			List<BlockPos> back = new ArrayList<>(), still = new ArrayList<>();
+			for (BlockPos m : p.members)
+				(here.contains(m) ? back : still).add(m);
+			if (still.isEmpty()) {
+				delta += p.energy - p.seen;
+				removeStore(k);
+				continue;
+			}
+			// only some of it is back: they take their part, and the record goes on for the rest, re-keyed if its key came back
+			double part = back.size() / (double) p.members.size();
+			delta += (p.energy - p.seen) * part;
+			p.energy *= 1 - part;
+			p.seen *= 1 - part;
+			p.cap = Math.round(p.cap * (1 - part));
+			p.perTick = Math.max(1, Math.round(p.perTick * (1 - part)));
+			for (BlockPos m : back)
+				storeMembers.remove(m, k);
+			p.members = List.copyOf(still);
+			if (here.contains(k))
+				rekey(k, still.get(0));
+			records.setDirty();
+		}
+		return Math.round(delta);
+	}
+
+	/** A record's key changes (its old key's block came back on its own): its members and the faces at them follow. */
+	private void rekey(BlockPos from, BlockPos to) {
+		StorePaper p = records.stores.remove(from);
+		if (p == null)
+			return;
+		records.stores.put(to.immutable(), p);
+		Set<BlockPos> members = new HashSet<>(p.members);
+		for (BlockPos m : p.members)
+			storeMembers.put(m, to.immutable());
+		for (BlockPos face : new ArrayList<>(storeFacesOf(from)))
+			if (members.contains(face)) {
+				records.storeFaces.put(face, to.immutable());
+				unStoreFace(from, face);
+				storeFacesByKey.computeIfAbsent(to.immutable(), k -> new HashSet<>()).add(face);
+			}
+	}
+
+	/** Every block of a store's record is away: it runs on paper. */
+	boolean allAway(StorePaper p, ServerLevel level) {
+		for (BlockPos m : p.members)
+			if (running(level, m))
+				return false;
+		return !p.members.isEmpty();
+	}
+
+	/** A record as something the network fills and draws, at the store's rate a tick (a second's worth when only asked). */
+	IEnergyStorage paperStore(StorePaper p, ServerLevel level) {
+		if (p.view == null)
+			p.view = new IEnergyStorage() {
+				private void roll() {
+					long now = level.getGameTime();
+					if (p.tick != now) {
+						p.tick = now;
+						p.inNow = p.outNow = 0;
+					}
+				}
+
+				@Override
+				public int receiveEnergy(int max, boolean simulate) {
+					roll();
+					double limit = simulate ? p.perTick * 20.0 : p.perTick - p.inNow;
+					int got = (int) Math.max(0, Math.min(max, Math.min(Math.floor(p.cap - p.energy), limit)));
+					if (!simulate && got > 0) {
+						p.energy += got;
+						p.inNow += got;
+						records.setDirty();
+					}
+					return got;
+				}
+
+				@Override
+				public int extractEnergy(int max, boolean simulate) {
+					roll();
+					double limit = simulate ? p.perTick * 20.0 : p.perTick - p.outNow;
+					int got = (int) Math.max(0, Math.min(max, Math.min(Math.floor(p.energy), limit)));
+					if (!simulate && got > 0) {
+						p.energy -= got;
+						p.outNow += got;
+						records.setDirty();
+					}
+					return got;
+				}
+
+				@Override
+				public int getEnergyStored() {
+					return (int) Math.min(Integer.MAX_VALUE, p.energy);
+				}
+
+				@Override
+				public int getMaxEnergyStored() {
+					return (int) Math.min(Integer.MAX_VALUE, Math.max(p.cap, p.energy));
+				}
+
+				@Override
+				public boolean canExtract() {
+					return true;
+				}
+
+				@Override
+				public boolean canReceive() {
+					return true;
+				}
+			};
+		return p.view;
+	}
+
 	/** Takes up to max FE from a record's store this tick (or only says what it would). */
 	int draw(Paper p, int max, long now, boolean simulate, ServerLevel level) {
 		p.advance(now, level);
@@ -658,19 +999,26 @@ public final class PowerGrid extends SavedData {
 
 	// ---------- saving ----------
 
+	/** 2: pieces and links have colours. */
+	private static final int VERSION = 2;
+
 	static PowerGrid load(CompoundTag tag, HolderLookup.Provider registries) {
 		PowerGrid g = new PowerGrid();
+		boolean old = tag.getInt("Version") < VERSION;
 		for (Tag t : tag.getList("Pieces", Tag.TAG_COMPOUND)) {
 			CompoundTag c = (CompoundTag) t;
 			Node node = node(c);
 			String tier = c.getString("Tier");
 			Piece p = new Piece(tier.isEmpty() ? null : tier(tier), fitting(c), c.getBoolean("Closed"));
+			p.dye = dye(c);
+			// still waiting to be read again since colours came in (kept across saves until its chunk loads)
+			p.stale = old || c.getBoolean("Stale");
 			if (c.contains("Priority"))
 				p.priority = c.getByteArray("Priority");
 			for (Tag lt : c.getList("Links", Tag.TAG_COMPOUND)) {
 				CompoundTag l = (CompoundTag) lt;
 				int via = l.contains("Via") ? l.getByte("Via") : -1;
-				p.links.add(new Link(node(l), tier(l.getString("Tier")), via < 0 ? null : Direction.from3DDataValue(via)));
+				p.links.add(new Link(node(l), tier(l.getString("Tier")), dye(l), via < 0 ? null : Direction.from3DDataValue(via)));
 			}
 			for (Tag et : c.getList("Ends", Tag.TAG_COMPOUND))
 				p.ends.add(new End(BlockPos.of(((CompoundTag) et).getLong("Pos")), Direction.from3DDataValue(((CompoundTag) et).getInt("Side"))));
@@ -688,6 +1036,11 @@ public final class PowerGrid extends SavedData {
 				if (f.name().equals(c.getString("Fitting")))
 					return f;
 		return Fitting.values()[Math.clamp(c.getInt("Fitting"), 0, Fitting.values().length - 1)];
+	}
+
+	@Nullable
+	private static net.minecraft.world.item.DyeColor dye(CompoundTag c) {
+		return c.contains("Dye") ? net.minecraft.world.item.DyeColor.byId(c.getByte("Dye")) : null;
 	}
 
 	private static LineTier tier(String name) {
@@ -712,14 +1065,20 @@ public final class PowerGrid extends SavedData {
 			CompoundTag c = save(e.getKey(), new CompoundTag());
 			if (p.tier != null)
 				c.putString("Tier", p.tier.getSerializedName());
+			if (p.dye != null)
+				c.putByte("Dye", (byte) p.dye.getId());
 			c.putString("Fitting", p.fitting.name());
 			c.putBoolean("Closed", p.closed);
+			if (p.stale)
+				c.putBoolean("Stale", true);
 			if (p.priority != null)
 				c.putByteArray("Priority", p.priority);
 			ListTag links = new ListTag();
 			for (Link l : p.links) {
 				CompoundTag lc = save(l.to(), new CompoundTag());
 				lc.putString("Tier", l.tier().getSerializedName());
+				if (l.dye() != null)
+					lc.putByte("Dye", (byte) l.dye().getId());
 				if (l.via() != null)
 					lc.putByte("Via", (byte) l.via().get3DDataValue());
 				links.add(lc);
@@ -736,6 +1095,7 @@ public final class PowerGrid extends SavedData {
 			pieceList.add(c);
 		}
 		tag.put("Pieces", pieceList);
+		tag.putInt("Version", VERSION);
 		ListTag faceList = new ListTag();
 		for (Map.Entry<BlockPos, BlockPos> e : faces.entrySet()) {
 			CompoundTag c = new CompoundTag();

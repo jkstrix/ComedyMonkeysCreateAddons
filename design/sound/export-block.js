@@ -1,5 +1,5 @@
 // Copies a block's approved real sounds into the mod and writes their sounds.json entries and subtitles.
-// Usage: node design/sound/export-block.js <lava-generator|electric-motor|magma-engine|pressure-crucible>   (run that folder's make-loops.js first)
+// Usage: node design/sound/export-block.js <lava-generator|electric-motor|magma-engine|pressure-crucible|battery>   (run that folder's make-loops.js first)
 // Every cue-file event becomes comedymonkeysaddons:<namespace>.<id> with all its variants; loops use their seamless
 // _loop files; the running sounds carry only 8 blocks (they run all day); an event marked "vanilla" points at
 // Minecraft's own sound event instead of a file. Only <namespace>.* entries are touched in sounds.json and the lang file.
@@ -13,6 +13,8 @@ const BLOCKS = {
   'magma-engine': { loops: ['firebox', 'blower'], quiet: ['chug', 'firebox', 'blower', 'cool_tick'] },
   // every press creaks and crunches, all day, so those carry only 8 blocks too
   'pressure-crucible': { loops: ['whirr', 'fire', 'fire_soul'], quiet: ['whirr', 'creak', 'crunch', 'fire', 'fire_soul'] },
+  // the Industrial Battery is a multiblock: its hum carries 12 blocks, the switching and the strike 16
+  battery: { loops: ['hum'], quiet: [], range: { hum: 12, form: 16, unform: 16, strike: 16 } },
 };
 const slug = process.argv[2];
 const conf = BLOCKS[slug];
@@ -50,7 +52,8 @@ for (const [id, ev] of Object.entries(cues.events)) {
     files++;
   }
   const name = (t) => `${MOD}:${ns}/${t}`;
-  sounds[ns + '.' + id] = { subtitle, sounds: takes.map((t) => (conf.quiet.includes(id) ? { name: name(t), attenuation_distance: 8 } : name(t))) };
+  const range = conf.quiet.includes(id) ? 8 : conf.range && conf.range[id];
+  sounds[ns + '.' + id] = { subtitle, sounds: takes.map((t) => (range ? { name: name(t), attenuation_distance: range } : name(t))) };
 }
 fs.writeFileSync(soundsPath, JSON.stringify(sounds, null, 2) + '\n');
 fs.writeFileSync(langPath, JSON.stringify(lang, null, 2) + '\n');

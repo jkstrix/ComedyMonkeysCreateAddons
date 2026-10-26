@@ -97,6 +97,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.StorageGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.MachineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LineGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.BatteryGameTests::register);
 		if (SableCompat.LOADED)
 			modBus.addListener(com.comedymonkey.createaddons.gametest.SableGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
@@ -185,6 +186,8 @@ public class ComedyMonkeysCreateAddons {
 			(be, side) -> side == null || side == LavaGeneratorBlock.inlet(be.getBlockState()) ? be.getFluidsOut() : null);
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),
 			(be, side) -> side == null || LavaGeneratorBlock.isTerminal(be.getBlockState(), side) ? be.getEnergyOut() : null);
+		// A Battery takes and gives on its four sides; an Industrial Battery only through its insulators, to the network
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.BATTERY.get(), (be, side) -> be.energy(side));
 		// The turbine connects only through the port flanges under its base (the bottom faces of its bottom casings);
 		// the controller, in the middle of the front, offers nothing to a side
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.GEOTHERMAL_CONTROLLER.get(),
@@ -284,6 +287,7 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.SUPERCHARGED_MAGMA_ENGINE.get());
 			registerCreateTooltip(ModItems.ELECTRIC_MOTOR.get());
 			registerCreateTooltip(ModItems.LAVA_GENERATOR.get());
+			registerCreateTooltip(ModItems.BATTERY.get());
 			registerCreateTooltip(ModItems.GEOTHERMAL_CONTROLLER.get());
 			registerCreateTooltip(ModItems.GEOTHERMAL_CASING.get());
 			registerCreateTooltip(ModItems.GEOTHERMAL_CORE.get());

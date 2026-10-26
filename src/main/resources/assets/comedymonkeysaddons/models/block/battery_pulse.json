@@ -1,0 +1,66 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_plate",
+    "pulse": "comedymonkeysaddons:block/battery_pulse"
+  },
+  "elements": [
+    {
+      "name": "pulse_l",
+      "from": [
+        3,
+        0,
+        1.5
+      ],
+      "to": [
+        5.5,
+        1,
+        1.5
+      ],
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            10.5,
+            15,
+            13,
+            16
+          ],
+          "texture": "#pulse"
+        }
+      }
+    },
+    {
+      "name": "pulse_r",
+      "from": [
+        10.5,
+        0,
+        1.5
+      ],
+      "to": [
+        13,
+        1,
+        1.5
+      ],
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            15,
+            5.5,
+            16
+          ],
+          "texture": "#pulse"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_tower",
+    "crowntop": "comedymonkeysaddons:block/battery_crowntop",
+    "copper": "comedymonkeysaddons:block/battery_copper",
+    "strike": "comedymonkeysaddons:block/battery_strike"
+  },
+  "elements": [
+    {
+      "name": "crown",
+      "from": [
+        0,
+        13,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#crowntop"
+        }
+      }
+    },
+    {
+      "name": "lug",
+      "from": [
+        4.5,
+        16,
+        4.5
+      ],
+      "to": [
+        11.5,
+        16.5,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.5,
+            15.5,
+            11.5,
+            16
+          ],
+          "texture": "#copper"
+        },
+        "east": {
+          "uv": [
+            4.5,
+            15.5,
+            11.5,
+            16
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            4.5,
+            15.5,
+            11.5,
+            16
+          ],
+          "texture": "#copper"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            15.5,
+            11.5,
+            16
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            4.5,
+            4.5,
+            11.5,
+            11.5
+          ],
+          "texture": "#strike"
+        }
+      }
+    }
+  ]
+}

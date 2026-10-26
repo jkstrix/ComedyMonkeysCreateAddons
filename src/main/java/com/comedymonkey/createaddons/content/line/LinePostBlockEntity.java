@@ -29,7 +29,7 @@ import net.minecraft.world.phys.Vec3;
  * A Line Post block: on the head of a pole, the spans hung from its insulators (the top one, 0, and one on each
  * branch, 1 to 4 for north, east, south and west in the post's own frame). Each insulator is its own connection.
  */
-public class LinePostBlockEntity extends BlockEntity {
+public class LinePostBlockEntity extends BlockEntity implements SpanHolder {
 	/** Spans an insulator can hold. */
 	public static final int SPANS_PER_INSULATOR = 2;
 	/** Blocks of span one Power Line item hangs. */
@@ -41,44 +41,43 @@ public class LinePostBlockEntity extends BlockEntity {
 		super(ModBlockEntities.LINE_POST.get(), pos, state);
 	}
 
+	@Override
 	public List<Span> spans() {
 		return spans;
 	}
 
-	public List<Span> spansAt(int insulator) {
-		List<Span> out = new ArrayList<>();
-		for (Span s : spans)
-			if (s.from() == insulator)
-				out.add(s);
-		return out;
+	@Override
+	public BlockPos holderPos() {
+		return worldPosition;
 	}
 
-	/** The tier of the cable tied to an insulator, or null if none is. */
-	@Nullable
-	public LineTier tierAt(int insulator) {
-		for (Span s : spans)
-			if (s.from() == insulator)
-				return s.tier();
-		return null;
-	}
-
-	/** The colour of cable on an insulator (null: plain, or none tied yet; see {@link #tierAt}). */
-	@Nullable
-	public net.minecraft.world.item.DyeColor dyeAt(int insulator) {
-		for (Span s : spans)
-			if (s.from() == insulator)
-				return s.dye();
-		return null;
-	}
-
-	/** Where a span ties onto an insulator, in the world. */
+	@Override
 	public Vec3 tie(int insulator) {
 		return LinePostBlock.tie(getBlockState(), worldPosition, insulator);
 	}
 
+	@Override
+	public boolean hasInsulator(int insulator) {
+		return LinePostBlock.hasInsulator(getBlockState(), insulator);
+	}
+
+	@Override
+	public int nearestInsulator(Vec3 at) {
+		return LinePostBlock.nearestInsulator(getBlockState(), worldPosition, at);
+	}
+
+	@Override
 	public void addSpan(Span span) {
 		spans.add(span);
 		changed();
+	}
+
+	@Override
+	public boolean removeSpan(Span span) {
+		boolean held = spans.remove(span);
+		if (held)
+			changed();
+		return held;
 	}
 
 	/** Takes down every span on an insulator (here and at its far end); returns the Power Lines they hung. */
@@ -102,10 +101,9 @@ public class LinePostBlockEntity extends BlockEntity {
 		changed();
 		boolean farHeld = false;
 		BlockPos farPos = worldPosition.offset(s.offset());
-		if (level != null && level.isLoaded(farPos) && level.getBlockEntity(farPos) instanceof LinePostBlockEntity far) {
-			farHeld = far.spans.remove(s.reversed());
-			far.changed();
-		}
+		SpanHolder far = level != null && level.isLoaded(farPos) ? SpanHolder.at(level, farPos) : null;
+		if (far != null)
+			farHeld = far.removeSpan(s.reversed());
 		// a span pays back once: here when the far end still held it (and now doesn't), or when this end owns it (the far
 		// end, gone or unloaded, then drops it without paying when it finds out)
 		return farHeld || s.owner() ? wireFor(s) : ItemStack.EMPTY;
@@ -114,8 +112,8 @@ public class LinePostBlockEntity extends BlockEntity {
 	public double length(Span s) {
 		if (level == null)
 			return 0;
-		BlockState farState = level.getBlockState(worldPosition.offset(s.offset()));
-		return tie(s.from()).distanceTo(LinePostBlock.tie(farState, worldPosition.offset(s.offset()), s.to()));
+		Vec3 far = SpanHolder.farTie(level, worldPosition.offset(s.offset()), s.to());
+		return far == null ? 0 : tie(s.from()).distanceTo(far);
 	}
 
 	/** The Power Lines a span of this length takes: one for every four blocks, rounded up. */
@@ -133,8 +131,8 @@ public class LinePostBlockEntity extends BlockEntity {
 	}
 
 	/**
-	 * Spans whose far post is gone (moved away on a ship, say) come down. Only the owning end drops their wire, so a
-	 * span pays back once however its two ends find out.
+	 * Spans whose far end is gone (a post moved away on a ship, say, or a battery that came apart) come down. Only the
+	 * owning end drops their wire, so a span pays back once however its two ends find out.
 	 */
 	public void dropBrokenSpans() {
 		if (level == null || level.isClientSide)
@@ -143,7 +141,8 @@ public class LinePostBlockEntity extends BlockEntity {
 			BlockPos far = worldPosition.offset(s.offset());
 			if (!level.isLoaded(far))
 				continue;
-			if (!(level.getBlockEntity(far) instanceof LinePostBlockEntity post) || !post.spans.contains(s.reversed())) {
+			SpanHolder holder = SpanHolder.at(level, far);
+			if (holder == null || !holder.spans().contains(s.reversed())) {
 				spans.remove(s);
 				if (s.owner())
 					Block.popResource(level, worldPosition, wireFor(s));
@@ -219,8 +218,13 @@ public class LinePostBlockEntity extends BlockEntity {
 	public AABB renderBox() {
 		AABB box = new AABB(worldPosition).inflate(1);
 		for (Span s : spans)
-			if (s.owner())
+			if (s.owner()) {
 				box = box.minmax(new AABB(worldPosition.offset(s.offset())).inflate(1));
+				// a battery's insulators stand well above its foot
+				Vec3 far = level == null ? null : SpanHolder.farTie(level, worldPosition.offset(s.offset()), s.to());
+				if (far != null)
+					box = box.minmax(new AABB(far, far).inflate(1));
+			}
 		return box;
 	}
 

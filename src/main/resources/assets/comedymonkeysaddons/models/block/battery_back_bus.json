@@ -1,0 +1,61 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_plate",
+    "copper": "comedymonkeysaddons:block/battery_copper"
+  },
+  "elements": [
+    {
+      "name": "bus_south",
+      "from": [
+        2.5,
+        5,
+        15
+      ],
+      "to": [
+        13.5,
+        11,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            5,
+            1,
+            11
+          ],
+          "texture": "#copper"
+        },
+        "west": {
+          "uv": [
+            15,
+            5,
+            16,
+            11
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            15,
+            13.5,
+            16
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            2.5,
+            0,
+            13.5,
+            1
+          ],
+          "texture": "#copper"
+        }
+      }
+    }
+  ]
+}

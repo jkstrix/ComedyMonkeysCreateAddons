@@ -94,6 +94,10 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue turbineFePerTick;
 		public final ModConfigSpec.IntValue turbineLavaPerSecond;
 		public final ModConfigSpec.IntValue turbineWaterPerSecond;
+		public final ModConfigSpec.IntValue batteryCapacity;
+		public final ModConfigSpec.IntValue batteryFePerTick;
+		public final ModConfigSpec.IntValue industrialBatteryCapacity;
+		public final ModConfigSpec.IntValue lightningStrikeFe;
 		public final ModConfigSpec.IntValue fluidLineCopperMbPerTick;
 		public final ModConfigSpec.IntValue fluidLineBrassMbPerTick;
 		public final ModConfigSpec.IntValue powerLineCopperFePerTick;
@@ -368,6 +372,23 @@ public final class CMConfig {
 				.comment("Water a Geothermal Turbine boils off, in millibuckets per second.")
 				.translation("comedymonkeysaddons.configuration.turbineWaterPerSecond")
 				.defineInRange("turbineWaterPerSecond", 250, 0, 10000);
+			batteryCapacity = builder
+				.comment("FE a Battery holds.")
+				.translation("comedymonkeysaddons.configuration.batteryCapacity")
+				.defineInRange("batteryCapacity", 10000000, 1000, 25000000);
+			batteryFePerTick = builder
+				.comment("FE a Battery takes or gives per tick; touching Batteries share one store, and move this much each.")
+				.translation("comedymonkeysaddons.configuration.batteryFePerTick")
+				.defineInRange("batteryFePerTick", 2048, 1, 1000000);
+			industrialBatteryCapacity = builder
+				.comment("FE each block of an Industrial Battery holds (a 3x3 tower, 3 to 9 high). It moves as much as its cables carry.",
+					"At most 25,000,000, so a 9-high tower fits in what Forge Energy can count.")
+				.translation("comedymonkeysaddons.configuration.industrialBatteryCapacity")
+				.defineInRange("industrialBatteryCapacity", 20000000, 1000, 25000000);
+			lightningStrikeFe = builder
+				.comment("FE a lightning strike adds to a Battery or Industrial Battery with a Lightning Rod on top.")
+				.translation("comedymonkeysaddons.configuration.lightningStrikeFe")
+				.defineInRange("lightningStrikeFe", 250000, 0, 100000000);
 			builder.pop();
 
 			builder.comment("Fluid Lines: pump-free pipes. Fluid only moves from an Intake, shared by every Intake on a line.").push("fluidLines");
@@ -662,6 +683,22 @@ public final class CMConfig {
 
 		public int turbineWaterPerSecond() {
 			return get(turbineWaterPerSecond);
+		}
+
+		public int batteryCapacity() {
+			return get(batteryCapacity);
+		}
+
+		public int batteryFePerTick() {
+			return get(batteryFePerTick);
+		}
+
+		public int industrialBatteryCapacity() {
+			return get(industrialBatteryCapacity);
+		}
+
+		public int lightningStrikeFe() {
+			return get(lightningStrikeFe);
 		}
 
 		public int fluidLineCopperMbPerTick() {

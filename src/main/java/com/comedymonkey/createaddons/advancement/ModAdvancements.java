@@ -31,6 +31,8 @@ public final class ModAdvancements {
 	public static final String PIPED_BLAZE_BURNER = "piped_blaze_burner";
 	public static final String PIPED_ENGINE_FUEL = "piped_engine_fuel";
 	public static final String TURBINE_FORMED = "turbine_formed";
+	/** Value: the tower's height. */
+	public static final String INDUSTRIAL_BATTERY_FORMED = "industrial_battery_formed";
 	public static final String MOTOR_FULL_POWER = "motor_full_power";
 	public static final String HARVESTER_HARVEST = "harvester_harvest";
 	public static final String PEN_CULL = "pen_cull";

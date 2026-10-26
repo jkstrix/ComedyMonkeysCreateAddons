@@ -1,0 +1,38 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_plate",
+    "lamp_in_on": "comedymonkeysaddons:block/battery_lamp_in_on"
+  },
+  "elements": [
+    {
+      "name": "lamp_in",
+      "from": [
+        6,
+        11,
+        0.5
+      ],
+      "to": [
+        7.8,
+        12.75,
+        0.5
+      ],
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#lamp_in_on"
+        }
+      }
+    }
+  ]
+}

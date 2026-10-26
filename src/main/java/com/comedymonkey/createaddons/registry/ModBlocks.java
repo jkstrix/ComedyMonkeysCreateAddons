@@ -13,6 +13,7 @@ import com.comedymonkey.createaddons.content.pen.AnimalPenBlock;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlock;
 import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlock;
 import com.comedymonkey.createaddons.content.electric.GeothermalPartBlock;
+import com.comedymonkey.createaddons.content.electric.BatteryBlock;
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlock;
 import com.comedymonkey.createaddons.content.incinerator.IncineratorBlock;
 import com.comedymonkey.createaddons.content.line.FluidLineBlock;
@@ -289,6 +290,10 @@ public final class ModBlocks {
 		() -> new GeothermalPartBlock(machine(), false));
 	public static final DeferredBlock<GeothermalControllerBlock> GEOTHERMAL_CONTROLLER = BLOCKS.register("geothermal_controller",
 		() -> new GeothermalControllerBlock(machine().lightLevel(state -> state.getValue(GeothermalControllerBlock.LIT) ? 12 : 0)));
+
+	/** Battery: the plain metal block sounds (it's silent in use); blown up, it always drops with its charge (D21). */
+	public static final DeferredBlock<BatteryBlock> BATTERY = BLOCKS.register("battery",
+		() -> new BatteryBlock(machine().sound(SoundType.METAL)));
 
 	/** Trade Bot's winding station: unbreakable except by its owner's wrench (D51), which packs it up with him. */
 	public static final DeferredBlock<TradeBotStationBlock> TRADE_BOT = BLOCKS.register("trade_bot",

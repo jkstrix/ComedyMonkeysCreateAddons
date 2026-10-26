@@ -4,6 +4,7 @@
   "package": "com.comedymonkey.createaddons.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "LightningRodBlockMixin",
     "PipeBlockMixin",
     "PipeLogicTileEntityMixin",
     "PipeTileEntityMixin",

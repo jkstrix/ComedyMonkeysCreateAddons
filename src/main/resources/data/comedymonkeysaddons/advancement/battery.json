@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:lava_generator",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:battery"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.battery"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.battery.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "crafted": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:battery"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafted"
+    ]
+  ]
+}

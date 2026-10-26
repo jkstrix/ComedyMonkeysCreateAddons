@@ -1,0 +1,312 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_plate",
+    "insulator": "comedymonkeysaddons:block/battery_insulator",
+    "copper": "comedymonkeysaddons:block/battery_copper",
+    "andesite": "comedymonkeysaddons:block/battery_andesite"
+  },
+  "elements": [
+    {
+      "name": "terminal_back",
+      "from": [
+        5.5,
+        5.5,
+        15
+      ],
+      "to": [
+        10.5,
+        10.5,
+        15.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.5,
+            5.5,
+            1,
+            10.5
+          ],
+          "texture": "#insulator"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#insulator"
+        },
+        "west": {
+          "uv": [
+            15,
+            5.5,
+            15.5,
+            10.5
+          ],
+          "texture": "#insulator"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            15,
+            10.5,
+            15.5
+          ],
+          "texture": "#insulator"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            0.5,
+            10.5,
+            1
+          ],
+          "texture": "#insulator"
+        }
+      }
+    },
+    {
+      "name": "post_back_0",
+      "from": [
+        6,
+        7,
+        15.5
+      ],
+      "to": [
+        7.5,
+        9,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            7,
+            0.5,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            6,
+            7,
+            7.5,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "west": {
+          "uv": [
+            15.5,
+            7,
+            16,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            6,
+            15.5,
+            7.5,
+            16
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            6,
+            0,
+            7.5,
+            0.5
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "collar_back_0",
+      "from": [
+        5.6,
+        6.6,
+        15.5
+      ],
+      "to": [
+        7.9,
+        9.4,
+        15.75
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.25,
+            6.6,
+            0.5,
+            9.4
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            5.6,
+            6.6,
+            7.9,
+            9.4
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            15.5,
+            6.6,
+            15.75,
+            9.4
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            5.6,
+            15.5,
+            7.9,
+            15.75
+          ],
+          "texture": "#andesite"
+        },
+        "down": {
+          "uv": [
+            5.6,
+            0.25,
+            7.9,
+            0.5
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "post_back_1",
+      "from": [
+        8.5,
+        7,
+        15.5
+      ],
+      "to": [
+        10,
+        9,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            7,
+            0.5,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            8.5,
+            7,
+            10,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "west": {
+          "uv": [
+            15.5,
+            7,
+            16,
+            9
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            8.5,
+            15.5,
+            10,
+            16
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            8.5,
+            0,
+            10,
+            0.5
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "collar_back_1",
+      "from": [
+        8.1,
+        6.6,
+        15.5
+      ],
+      "to": [
+        10.4,
+        9.4,
+        15.75
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.25,
+            6.6,
+            0.5,
+            9.4
+          ],
+          "texture": "#andesite"
+        },
+        "south": {
+          "uv": [
+            8.1,
+            6.6,
+            10.4,
+            9.4
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            15.5,
+            6.6,
+            15.75,
+            9.4
+          ],
+          "texture": "#andesite"
+        },
+        "up": {
+          "uv": [
+            8.1,
+            15.5,
+            10.4,
+            15.75
+          ],
+          "texture": "#andesite"
+        },
+        "down": {
+          "uv": [
+            8.1,
+            0.25,
+            10.4,
+            0.5
+          ],
+          "texture": "#andesite"
+        }
+      }
+    }
+  ]
+}

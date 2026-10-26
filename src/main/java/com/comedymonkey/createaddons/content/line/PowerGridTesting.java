@@ -42,4 +42,37 @@ public final class PowerGridTesting {
 		PowerGrid.Paper p = copy.generators.get(key);
 		return p == null ? -1 : p.store;
 	}
+
+	/** The FE in the record of the shared store keyed key (a Battery bank, an Industrial Battery), or -1 if it has none. */
+	public static double storeRecord(ServerLevel level, BlockPos key) {
+		PowerGrid.StorePaper p = PowerGrid.of(level).storePaper(key);
+		return p == null ? -1 : p.energy();
+	}
+
+	/** The same once the grid has been saved and loaded back. */
+	public static double storeRecordAfterReload(ServerLevel level, BlockPos key) {
+		PowerGrid.Records records = PowerGrid.of(level).records();
+		PowerGrid.Records copy = PowerGrid.Records.load(records.save(new CompoundTag(), level.registryAccess()), level.registryAccess());
+		PowerGrid.StorePaper p = copy.stores.get(key);
+		return p == null ? -1 : p.energy();
+	}
+
+	/**
+	 * A wire as a save from before lines had colours left it: no colour on it or its links, waiting to be read again
+	 * when its chunk next loads. Its network is worked out again with it like that.
+	 */
+	public static void asOldSave(ServerLevel level, BlockPos pos) {
+		PowerGrid grid = PowerGrid.of(level);
+		PowerGrid.Node node = new PowerGrid.Node(pos.immutable(), PowerGrid.Node.WIRE);
+		PowerGrid.Piece p = grid.piece(node);
+		if (p == null)
+			return;
+		p.dye = null;
+		p.stale = true;
+		java.util.List<PowerGrid.Link> links = new java.util.ArrayList<>(p.links);
+		p.links.clear();
+		for (PowerGrid.Link l : links)
+			p.links.add(new PowerGrid.Link(l.to(), l.tier(), null, l.via()));
+		PowerLines.of(level).rebuildAt(node);
+	}
 }

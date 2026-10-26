@@ -1,0 +1,230 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_tower",
+    "hazard": "comedymonkeysaddons:block/battery_hazard",
+    "plinth": "comedymonkeysaddons:block/battery_plinth",
+    "tower": "comedymonkeysaddons:block/battery_tower",
+    "andesite": "comedymonkeysaddons:block/battery_andesite",
+    "dark": "comedymonkeysaddons:block/battery_dark",
+    "backing": "comedymonkeysaddons:block/battery_backing",
+    "glass": "comedymonkeysaddons:block/battery_glass"
+  },
+  "elements": [
+    {
+      "name": "plinth",
+      "from": [
+        0,
+        0,
+        -0.5
+      ],
+      "to": [
+        16,
+        3,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            13,
+            16,
+            16
+          ],
+          "texture": "#hazard"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#plinth"
+        }
+      }
+    },
+    {
+      "name": "skin_l",
+      "from": [
+        0,
+        3,
+        0
+      ],
+      "to": [
+        4,
+        16,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            0,
+            16,
+            13
+          ],
+          "texture": "#tower"
+        }
+      }
+    },
+    {
+      "name": "skin_r",
+      "from": [
+        12,
+        3,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            4,
+            13
+          ],
+          "texture": "#tower"
+        }
+      }
+    },
+    {
+      "name": "rail_l",
+      "from": [
+        4,
+        3,
+        -0.5
+      ],
+      "to": [
+        5,
+        16,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            0,
+            12,
+            13
+          ],
+          "texture": "#andesite"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            13
+          ],
+          "texture": "#dark"
+        },
+        "west": {
+          "uv": [
+            14.5,
+            0,
+            16,
+            13
+          ],
+          "texture": "#andesite"
+        }
+      }
+    },
+    {
+      "name": "rail_r",
+      "from": [
+        11,
+        3,
+        -0.5
+      ],
+      "to": [
+        12,
+        16,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            0,
+            5,
+            13
+          ],
+          "texture": "#andesite"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            13
+          ],
+          "texture": "#andesite"
+        },
+        "west": {
+          "uv": [
+            14.5,
+            0,
+            16,
+            13
+          ],
+          "texture": "#dark"
+        }
+      }
+    },
+    {
+      "name": "channel_back",
+      "from": [
+        5,
+        3,
+        1
+      ],
+      "to": [
+        11,
+        16,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            0,
+            11,
+            13
+          ],
+          "texture": "#backing"
+        }
+      }
+    },
+    {
+      "name": "channel_glass",
+      "from": [
+        5,
+        3,
+        0.25
+      ],
+      "to": [
+        11,
+        16,
+        0.25
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            0,
+            11,
+            13
+          ],
+          "texture": "#glass"
+        }
+      }
+    }
+  ]
+}

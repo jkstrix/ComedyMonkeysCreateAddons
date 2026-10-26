@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:battery",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:battery"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.industrial_battery"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.industrial_battery.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "industrial_battery_formed"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

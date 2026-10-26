@@ -1,0 +1,35 @@
+{
+ "hum": {
+  "variants": 1,
+  "sources": [
+   "generated/sa3_battery_hum_v3_loop.wav"
+  ],
+  "synth": []
+ },
+ "form": {
+  "variants": 1,
+  "sources": [
+   "generated/sa3_battery_contactor_close_v2_clean.wav",
+   "generated/sa3_battery_hum_v3_loop.wav"
+  ],
+  "synth": []
+ },
+ "unform": {
+  "variants": 1,
+  "sources": [
+   "generated/sa3_battery_contactor_open_v2_clean.wav",
+   "generated/sa3_battery_hum_v3_loop.wav"
+  ],
+  "synth": []
+ },
+ "strike": {
+  "variants": 2,
+  "sources": [
+   "generated/sa3_battery_arc_v2_clean.wav",
+   "generated/sa3_battery_arc_v3_clean.wav"
+  ],
+  "synth": [
+   "bump"
+  ]
+ }
+}

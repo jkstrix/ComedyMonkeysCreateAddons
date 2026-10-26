@@ -215,7 +215,7 @@ public final class LineScenes {
 		scene.idle(100);
 
 		scene.overlay().showText(100)
-			.text("A whole pole is one junction: every cable tied to it joins. Brass feeds copper there, never the other way. Each insulator holds one tier and colour of cable")
+			.text("A pole joins the cables tied to it that share a colour, so lines of different colours can share poles. Brass feeds copper of its colour there, never the other way")
 			.pointAt(util.vector().topOf(postA))
 			.placeNearTarget()
 			.attachKeyFrame();

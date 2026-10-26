@@ -1,0 +1,38 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/battery_plate",
+    "ember": "comedymonkeysaddons:block/battery_ember"
+  },
+  "elements": [
+    {
+      "name": "level_ember",
+      "from": [
+        5,
+        3,
+        0.75
+      ],
+      "to": [
+        11,
+        4.5,
+        0.75
+      ],
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            11.5,
+            11,
+            13
+          ],
+          "texture": "#ember"
+        }
+      }
+    }
+  ]
+}

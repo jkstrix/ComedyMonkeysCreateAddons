@@ -37,6 +37,13 @@ public final class MachineVisuals {
 		visual(ModBlockEntities.ELECTRIC_MOTOR, ElectricRenderers.Motor::parts, true);
 		visual(ModBlockEntities.LAVA_GENERATOR, ElectricRenderers.Generator::parts, true);
 		visual(ModBlockEntities.GEOTHERMAL_CONTROLLER, ElectricRenderers.Turbine::parts, true);
+		// a Battery's tubes and lamps; formed, only the master draws (a 9-high tower's column and arcs, 11 blocks up)
+		SimpleBlockEntityVisualizer.builder(ModBlockEntities.BATTERY.get())
+			.factory((context, be, partialTick) -> new PartsVisual<>(context, be, partialTick,
+				com.comedymonkey.createaddons.client.BatteryRenderer::parts, b -> !b.getBlockState().getValue(
+					com.comedymonkey.createaddons.content.electric.BatteryBlock.FORMED) || b.isMaster()).reaching(11))
+			.skipVanillaRender(be -> true)
+			.apply();
 		visual(ModBlockEntities.PRESSURE_CRUCIBLE, PressureCrucibleRenderer::parts, false);
 		visual(ModBlockEntities.STRING_TANGLER, MachineRenderers.Tangler::parts, false);
 		visual(ModBlockEntities.STONE_INFUSER, MachineRenderers.Infuser::parts, false);

@@ -84,6 +84,9 @@ public class CMPonderPlugin implements PonderPlugin {
 			.addStoryBoard("stone_infuser", MachineScenes::infuser);
 		helper.forComponents(ModBlocks.TUFF_GENERATOR.getId(), ModBlocks.WIRELESS_TUFF_GENERATOR.getId())
 			.addStoryBoard("tuff_generator", MachineScenes::tuff);
+		helper.forComponents(ModItems.BATTERY.getId())
+			.addStoryBoard("battery", BatteryScenes::battery)
+			.addStoryBoard("industrial_battery", BatteryScenes::industrialBattery);
 		helper.forComponents(ModBlocks.LAVA_GENERATOR.getId())
 			.addStoryBoard("electric_power", ElectricScenes::lavaGenerator);
 		helper.forComponents(ModBlocks.ELECTRIC_MOTOR.getId())

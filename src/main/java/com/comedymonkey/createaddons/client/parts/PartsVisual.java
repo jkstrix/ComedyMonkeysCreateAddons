@@ -65,6 +65,8 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 	private volatile boolean relit;
 	private boolean hidden;
 	private int next;
+	/** Blocks above its own that its parts can reach (a tall tower's column and arcs): it moves while they're in view. */
+	private int above = 3;
 
 	public PartsVisual(VisualizationContext context, T be, float partialTick, Parts<T> parts) {
 		this(context, be, partialTick, parts, b -> true);
@@ -89,7 +91,13 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 	@Override
 	public boolean isVisible(FrustumIntersection frustum) {
 		float x = visualPos.getX(), y = visualPos.getY(), z = visualPos.getZ();
-		return frustum.testAab(x - 2, y - 2, z - 2, x + 3, y + 3, z + 3);
+		return frustum.testAab(x - 2, y - 2, z - 2, x + 3, y + above, z + 3);
+	}
+
+	/** Its parts reach this many blocks up (3 unless set). */
+	public PartsVisual<T> reaching(int above) {
+		this.above = above;
+		return this;
 	}
 
 	@Override

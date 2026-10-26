@@ -1,0 +1,271 @@
+<title>Battery &amp; Industrial Battery</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single column of short blocks, like the Fluid & Power Lines quick read: material band, a live tower diagram as the centrepiece */
+:root {
+  --bg: #e6e6e1; --surface: #f2f2ee; --fg: #22231f; --muted: #5f6058; --line: #c9c8c0;
+  --accent: #8a6626; --accent-soft: #e9dcc0; --charge: #3f7d84; --charge-soft: #cfe1e2; --casing: #4a4d50; --casing-hi: #5d6164;
+  --ok: #4c7a46; --warn: #a3712a; --wood: #6b4a32; --ceramic: #d8d4c8;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --charge: #6cbfc3; --charge-soft: #1f3537; --casing: #3a3c3e; --casing-hi: #4b4e51;
+  --ok: #84b07c; --warn: #d4a35a; --wood: #7d5a40; --ceramic: #bdb8ab; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --charge: #6cbfc3; --charge-soft: #1f3537; --casing: #3a3c3e; --casing-hi: #4b4e51;
+  --ok: #84b07c; --warn: #d4a35a; --wood: #7d5a40; --ceramic: #bdb8ab; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.15rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+
+header { display: grid; gap: 14px }
+.band { height: 10px; border-radius: 2px; background: linear-gradient(90deg, var(--casing) 0 62%, var(--bg) 62% 64%, var(--charge) 64% 100%) }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { padding: 8px 0 8px 14px; border-left: 3px solid var(--charge); font-weight: 500 }
+
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; counter-reset: step }
+.loop li { counter-increment: step; display: grid; gap: 6px; align-content: start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.loop li::before { content: counter(step); font: 600 1.4rem/1 var(--display); color: var(--accent) }
+
+.tower { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; display: grid }
+.tower-bar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--line) }
+.tower-bar label { font: 500 .82rem/1 var(--mono); display: flex; gap: 10px; align-items: center }
+.tower-bar input[type="range"] { accent-color: var(--charge); width: 180px; max-width: 50vw }
+.readout { font: 500 .9rem/1.3 var(--mono); font-variant-numeric: tabular-nums; color: var(--charge) }
+.scene { overflow-x: auto; padding: 8px 4px }
+.scene svg { display: block; width: 100%; min-width: 520px; height: auto }
+.caption { padding: 10px 16px 14px; color: var(--muted); font-size: .88rem; border-top: 1px solid var(--line) }
+.lbl { font: 500 11px var(--mono); fill: var(--fg) }
+.lbl.dim { fill: var(--muted) }
+
+.numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px }
+.num { padding: 12px 14px; border-top: 3px solid var(--accent); background: var(--surface); display: grid; gap: 2px }
+.num b { font: 600 1.5rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.num span { color: var(--muted); font-size: .85rem }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.pairs ul { margin: 0; padding: 14px 16px 14px 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 6px }
+.pairs h3 { margin-bottom: 4px }
+.does h3 { color: var(--ok) }
+.doesnt h3 { color: var(--warn) }
+
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 24px }
+.qa div { display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.qa b { font-weight: 600 }
+.qa span { color: var(--muted) }
+
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center }
+.score .track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden }
+.score .fill { height: 100%; background: var(--ok) }
+.score .why { grid-column: 2 / -1; color: var(--muted); font-size: .85rem; margin-top: -6px }
+.score b { font-variant-numeric: tabular-nums; text-align: right; font: 500 .85rem var(--mono) }
+@media (max-width: 520px) { .score { grid-template-columns: 1fr 44px } .score .track { grid-column: 1 / -1; order: 3 } .score .why { grid-column: 1 / -1; margin-top: 0 } }
+
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px }
+code { font: .85em var(--mono) }
+@media (prefers-reduced-motion: no-preference) { #level { transition: y .4s ease, height .4s ease } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="band" aria-hidden="true"></div>
+    <p class="eyebrow">ComedyMonkey's Create Addons · Power Lines</p>
+    <h1>Battery &amp; Industrial Battery</h1>
+    <p class="pitch">Store your spare power. Batteries fill from what your generators make beyond what's used, and give it back when they fall short. Fill a 3×3 column with them and they become one Industrial Battery for your pole network.</p>
+    <div class="chips">
+      <span class="chip ready">Design ready: 90%</span>
+      <span class="chip">Mid game · Industrial: late game</span>
+      <span class="chip">Look: brief next</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>In ten lines</h2>
+    <ul class="idiot">
+      <li>A Battery stores spare power from your lines.</li>
+      <li>It gives power back when generators fall short.</li>
+      <li>Touching Batteries side to side share one store.</li>
+      <li>Stacked Batteries don't share until they form.</li>
+      <li>Fill a 3×3 column, 3–9 high: Industrial Battery.</li>
+      <li>The Industrial Battery only connects to Line Posts.</li>
+      <li>Cables tie to its four top insulators.</li>
+      <li>Charge is never lost: breaking one shares it out.</li>
+      <li>Lightning Rod on top: storms charge it.</li>
+      <li>Far away, batteries keep working on paper.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>How you use it</h2>
+    <ol class="loop">
+      <li><h3>Put one on a line</h3><p>Spare power fills it instead of being lost.</p></li>
+      <li><h3>Ride out the gaps</h3><p>Fuel runs dry, a turbine's turned down: it carries the machines.</p></li>
+      <li><h3>Grow a bank</h3><p>Side by side, Batteries share one store and move more at once.</p></li>
+      <li><h3>Build the big one</h3><p>Fill a 3×3 column; hang brass from its insulators to your poles.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>The Industrial Battery</h2>
+    <p class="sub">A 3×3 footprint, 3 to 9 Batteries tall. Every block holds twice what a loose Battery does. Slide the height and the charge.</p>
+    <div class="tower">
+      <div class="tower-bar">
+        <label for="height">Height <input id="height" type="range" min="3" max="9" value="6"> <span id="hval">6</span></label>
+        <label for="charge">Charge <input id="charge" type="range" min="0" max="100" value="60"> <span id="cval">60%</span></label>
+        <span class="readout" id="cap">54,000,000 FE · 54 Batteries</span>
+      </div>
+      <div class="scene">
+        <svg id="svg" viewBox="0 0 640 400" role="img" aria-label="Front view: a Line Post, a span to the Industrial Battery's insulators, and its level column">
+          <rect x="0" y="372" width="640" height="28" fill="var(--line)"></rect>
+          <g id="tower"></g>
+          <!-- a pole to the left -->
+          <rect x="70" y="150" width="10" height="222" fill="var(--wood)"></rect>
+          <rect x="64" y="140" width="22" height="12" rx="2" fill="var(--ceramic)"></rect>
+          <path id="span" fill="none" stroke="var(--accent)" stroke-width="2"></path>
+          <text x="75" y="130" text-anchor="middle" class="lbl dim">Line Post</text>
+          <!-- loose batteries to the right -->
+          <g id="bank"></g>
+          <text x="545" y="300" text-anchor="middle" class="lbl dim">a bank of three</text>
+          <text x="545" y="314" text-anchor="middle" class="lbl dim">(one shared store)</text>
+        </svg>
+      </div>
+      <p class="caption">Cables only reach it from poles, tied to its four top insulators. Its level column rises and falls with the charge; the cells on a loose Battery's front do the same.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Numbers</h2>
+    <div class="numbers">
+      <div class="num"><b>10,000,000 FE</b><span>a Battery</span></div>
+      <div class="num"><b>2,048 FE/t</b><span>in or out, per Battery in a bank</span></div>
+      <div class="num"><b>20,000,000 FE</b><span>per block of an Industrial Battery</span></div>
+      <div class="num"><b>540M – 1.62B FE</b><span>Industrial, 3 to 9 high</span></div>
+      <div class="num"><b>250,000 FE</b><span>a lightning strike on its rod</span></div>
+    </div>
+    <p class="sub">For scale: a Lava Generator makes 1,024 FE/t; an Electric Motor at full stress uses 18,432 FE/t. All of these are in the server config.</p>
+  </section>
+
+  <section>
+    <h2>Rules</h2>
+    <div class="pairs">
+      <div class="does"><h3>Does</h3><ul>
+        <li>Connect on its sides, front and back</li>
+        <li>Share one store with Batteries it touches</li>
+        <li>Form from plain Batteries, no extra parts</li>
+        <li>Keep every bit of charge when it forms or comes apart</li>
+        <li>Re-form smaller when you break a block, if it can</li>
+        <li>Keep its charge as an item when broken or picked up</li>
+        <li>Keep working far away, on paper</li>
+        <li>Catch lightning with a rod on top</li>
+      </ul></div>
+      <div class="doesnt"><h3>Doesn't</h3><ul>
+        <li>Connect on its top or bottom</li>
+        <li>Let wires or machines touch the Industrial Battery</li>
+        <li>Join plain Batteries beside an Industrial one</li>
+        <li>Make power: it only stores it</li>
+        <li>Explode, or load chunks</li>
+        <li>Charge or drain while moving on a contraption</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What if…?</h2>
+    <div class="qa">
+      <div><b>…the column is 10 high?</b><span>The bottom 9 form; the top layer stays plain Batteries.</span></div>
+      <div><b>…one block is missing?</b><span>It doesn't form until the 3×3 is full.</span></div>
+      <div><b>…I break a formed block?</b><span>What's left re-forms if it can: the tallest run of 3+ layers. The broken one drops with its share.</span></div>
+      <div><b>…I break the top layer?</b><span>It's one layer shorter.</span></div>
+      <div><b>…two towers stand side by side?</b><span>Each is its own battery; they don't join. Link them through poles.</span></div>
+      <div><b>…the Batteries cover 3×6, or 4×4?</b><span>Every full 3×3 forms; overlapping ones: one, from the lowest corner.</span></div>
+      <div><b>…which way does it face?</b><span>The way the last Battery you placed faces: you pick the front as you finish it.</span></div>
+      <div><b>…lightning hits a full one?</b><span>It still arcs and crackles; the extra is lost.</span></div>
+      <div><b>…its chunk unloads mid-charge?</b><span>Its record carries on, and it takes the record on once loaded again.</span></div>
+      <div><b>…it's blown up?</b><span>It drops with its charge.</span></div>
+      <div><b>…I tie a copper span to an insulator?</b><span>That insulator then takes only copper of that colour, like a pole's.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ready to build?</h2>
+    <div class="scores">
+      <div class="score"><span>Gameplay</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">How the cells and column read is the brief's job.</span></div>
+      <div class="score"><span>World integration</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><span class="why">The Industrial Battery's pole node in the network needs a short technical design.</span></div>
+      <div class="score"><span>Balance</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><span class="why">Numbers set and in the config; tune after play.</span></div>
+      <div class="score"><span>Progression</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><span class="why">Recipe set; the Industrial costs only its Batteries and cable.</span></div>
+      <div class="score"><span>Automation</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">Nothing to do by hand.</span></div>
+      <div class="score"><span>Edge cases</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><span class="why">Listed, with tests planned.</span></div>
+    </div>
+  </section>
+
+  <footer>Full record: <code>design/specs/battery.md</code> · Next: the look brief, <code>design/briefs/battery.md</code></footer>
+</div>
+
+<script>
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+  const tower = document.getElementById('tower'), bank = document.getElementById('bank'), span = document.getElementById('span');
+  const height = document.getElementById('height'), charge = document.getElementById('charge');
+  const U = 28, X = 230, BASE = 372;
+  // three loose Batteries, each with four cells lit to the charge
+  function drawBank(c) {
+    bank.textContent = '';
+    for (let i = 0; i < 3; i++) {
+      const x = 503 + i * U, y = BASE - U;
+      el('rect', { x, y, width: U, height: U, fill: 'var(--casing)', stroke: 'var(--bg)', 'stroke-width': 1 }, bank);
+      for (let k = 0; k < 4; k++)
+        el('rect', { x: x + 6 + k * 4.5, y: y + 9, width: 3, height: 10, fill: k < Math.round(c * 4) ? 'var(--charge)' : 'var(--casing-hi)' }, bank);
+    }
+  }
+  function draw() {
+    const h = +height.value, c = +charge.value / 100;
+    document.getElementById('hval').textContent = h;
+    document.getElementById('cval').textContent = Math.round(c * 100) + '%';
+    document.getElementById('cap').textContent = (h * 9 * 1e6).toLocaleString('en-GB') + ' FE · ' + (h * 9) + ' Batteries';
+    tower.textContent = '';
+    const top = BASE - h * U;
+    for (let r = 0; r < h; r++)
+      for (let col = 0; col < 3; col++)
+        el('rect', { x: X + col * U, y: top + r * U, width: U, height: U, fill: 'var(--casing)', stroke: 'var(--casing-hi)', 'stroke-width': 1 }, tower);
+    // the level column on the front, through the middle
+    el('rect', { x: X + U + 8, y: top + 6, width: U - 16, height: h * U - 12, fill: 'var(--charge-soft)' }, tower);
+    const lh = (h * U - 12) * c;
+    el('rect', { id: 'level', x: X + U + 8, y: top + 6 + (h * U - 12 - lh), width: U - 16, height: lh, fill: 'var(--charge)' }, tower);
+    // four insulators on the top corners (two shown from the front)
+    for (const ix of [X + 2, X + 3 * U - 14])
+      el('rect', { x: ix, y: top - 10, width: 12, height: 10, rx: 2, fill: 'var(--ceramic)' }, tower);
+    el('text', { x: X + 1.5 * U, y: top - 18, 'text-anchor': 'middle', class: 'lbl' }, tower).textContent = 'Industrial Battery';
+    // a span from the pole to the nearer insulator, sagging a little
+    const ax = 86, ay = 146, bx = X + 8, by = top - 6, mx = (ax + bx) / 2, my = Math.max(ay, by) + 22;
+    span.setAttribute('d', `M${ax} ${ay} Q${mx} ${my} ${bx} ${by}`);
+    drawBank(c);
+  }
+  height.addEventListener('input', draw);
+  charge.addEventListener('input', draw);
+  draw();
+})();
+</script>

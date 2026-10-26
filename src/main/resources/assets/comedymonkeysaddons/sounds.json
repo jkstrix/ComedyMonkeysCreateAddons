@@ -1014,5 +1014,45 @@
         "attenuation_distance": 8
       }
     ]
+  },
+  "industrial_battery.hum": {
+    "subtitle": "subtitles.comedymonkeysaddons.industrial_battery.hum",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:industrial_battery/hum_loop",
+        "attenuation_distance": 12
+      }
+    ]
+  },
+  "industrial_battery.form": {
+    "subtitle": "subtitles.comedymonkeysaddons.industrial_battery.form",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:industrial_battery/form",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "industrial_battery.unform": {
+    "subtitle": "subtitles.comedymonkeysaddons.industrial_battery.unform",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:industrial_battery/unform",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "industrial_battery.strike": {
+    "subtitle": "subtitles.comedymonkeysaddons.industrial_battery.strike",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:industrial_battery/strike_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "comedymonkeysaddons:industrial_battery/strike_2",
+        "attenuation_distance": 16
+      }
+    ]
   }
 }
