@@ -1,0 +1,4218 @@
+[
+  {
+    "id": "fluid-wellspring",
+    "name": "Fluid Wellspring",
+    "registry": [
+      "comedymonkeysaddons:wellspring"
+    ],
+    "summary": "A riveted copper tank that makes its own water, lava, honey or chocolate once you plug upgrades into its lid.",
+    "tags": [
+      "fluids",
+      "upgrades",
+      "lava",
+      "water"
+    ],
+    "stage": "mid",
+    "requires": [
+      "upgrade-template"
+    ],
+    "teach": {
+      "what": "A tank that holds water or lava and, fitted with generation upgrades, fills itself forever. With Honey or Chocolate Upgrades it makes Create's honey or chocolate instead.",
+      "why": "It replaces infinite water pools, lava farms and honey bees with one block. Every lava-burning machine in the mod can run off it with no fuel run at all.",
+      "when": "As soon as you can make an [[upgrade-template]] on a sequenced assembly line. A Water Upgrade is the cheapest start; Lava Upgrades are where it really pays off.",
+      "interacts": "Pipes, pumps, buckets and [[fluid-lines]] (through an [[intake]]) draw from any side. It feeds the [[magma-engine]], [[lava-generator]], [[geothermal-turbine]], [[flooded-monster-cage]] and [[fish-tank]]. It keeps generating on Create contraptions and Aeronautics ships.",
+      "mistakes": [
+        "Water and Lava Upgrades can't be mixed: a Wellspring makes one fluid. Build a second one for the other.",
+        "More than three generation upgrades of one kind won't fit, and a fourth doesn't make it faster.",
+        "A full tank stops generating, so a Wellspring with nothing drawing from it is wasting its upgrades.",
+        "Sneak + empty hand is Carry On's pickup, so open the upgrade screen with a Wrench instead."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Lava, 3 upgrades",
+        "value": "50",
+        "unit": "mB/s",
+        "gauge": 0.5
+      },
+      {
+        "label": "Water, 3 upgrades",
+        "value": "500",
+        "unit": "mB/s",
+        "gauge": 1
+      },
+      {
+        "label": "Max tank",
+        "value": "56,000",
+        "unit": "mB",
+        "gauge": 0.9
+      }
+    ],
+    "specs": [
+      [
+        "Base tank",
+        "8,000 mB"
+      ],
+      [
+        "Per Capacity Upgrade",
+        "+16,000 mB (up to 3)"
+      ],
+      [
+        "Generation upgrades",
+        "Up to 3 of one kind"
+      ],
+      [
+        "Water",
+        "100 / 250 / 500 mB/s"
+      ],
+      [
+        "Lava",
+        "10 / 25 / 50 mB/s"
+      ],
+      [
+        "Honey or chocolate",
+        "10 / 25 / 50 mB/s"
+      ],
+      [
+        "Fluid in and out",
+        "Any side"
+      ],
+      [
+        "Power",
+        "None"
+      ]
+    ],
+    "power": {
+      "kind": "none",
+      "makes": "Fluid, with no power at all"
+    },
+    "inputs": [
+      "Generation upgrades: [[water-upgrade]], [[lava-upgrade]], [[honey-upgrade]] or [[chocolate-upgrade]], right-clicked on or added in the upgrade screen.",
+      "[[capacity-upgrade]]: up to three, each a copper canister in the lid's back row.",
+      "Any water or lava you pour or pipe in, from any side."
+    ],
+    "outputs": [
+      "Its fluid, drawn from any side by pipes, pumps, [[fluid-lines]] or a bucket.",
+      "A comparator signal for the fill level, and Display Link readings for the stored fluid, fill level (percentage or bar) and generation rate."
+    ],
+    "throughput": [
+      "Water: 100, 250 or 500 mB a second with 1, 2 or 3 Water Upgrades.",
+      "Lava: 10, 25 or 50 mB a second with 1, 2 or 3 Lava Upgrades.",
+      "Honey and chocolate: 10, 25 or 50 mB a second. All rates are in the config."
+    ],
+    "rules": [
+      "Up to 3 generation upgrades, all of one kind, each in a lid socket with a lens in its fluid's colour.",
+      "Up to 3 Capacity Upgrades, which have their own slots.",
+      "Right-click with an upgrade to install it; a Wrench (or sneak + right-click) opens the upgrade screen to add or remove them.",
+      "Generation stops while the tank is full."
+    ],
+    "efficiency": [
+      "Three Lava Upgrades (50 mB/s) run five [[magma-engine|Magma Engines]], two and a half Lava Generators, or most of a [[geothermal-turbine]] (it wants 90 mB/s).",
+      "Two fully upgraded lava Wellsprings cover a Geothermal Turbine with lava to spare."
+    ],
+    "setups": [
+      {
+        "title": "Endless limestone or scoria",
+        "body": [
+          "Honey and chocolate meet lava as limestone and scoria, Create's own fluid interactions. Put a Honey or Chocolate Wellspring beside a lava one and let the two fluids meet: you have a source of the stone that never runs dry.",
+          {
+            "tip": "Mine it with a Mechanical Drill on a rotating shaft and you never touch it."
+          }
+        ]
+      },
+      {
+        "title": "A fuel-free engine room",
+        "body": [
+          {
+            "list": [
+              "Fit a Wellspring with three Lava Upgrades.",
+              "Pipe it into a [[magma-engine]] on any side but the engine's front.",
+              "The engine burns 10 mB a second; the Wellspring makes 50, so one Wellspring runs five engines."
+            ],
+            "ordered": true
+          }
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Lava into rotation",
+        "steps": [
+          {
+            "ref": "lava-upgrade",
+            "kind": "item",
+            "note": "×3"
+          },
+          {
+            "ref": "fluid-wellspring",
+            "kind": "machine",
+            "via": "installed"
+          },
+          {
+            "ref": "magma-engine",
+            "kind": "machine",
+            "via": "10 mB/s"
+          },
+          {
+            "label": "8,192 SU at 64 RPM",
+            "kind": "result"
+          }
+        ]
+      },
+      {
+        "title": "Limestone forever",
+        "steps": [
+          {
+            "ref": "honey-upgrade",
+            "kind": "item"
+          },
+          {
+            "ref": "fluid-wellspring",
+            "kind": "machine",
+            "note": "honey"
+          },
+          {
+            "label": "Meets lava from a second Wellspring",
+            "kind": "machine"
+          },
+          {
+            "item": "create:limestone",
+            "label": "Limestone",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Engineer's Goggles show the upgrades, the generation rate and how full it is.",
+      "The ticks on the corner posts mark 25%, 50% and 75%, so you can read the level from across the room.",
+      "Picked up with Carry On, or moved on a contraption, it keeps its fluid and upgrades."
+    ],
+    "facts": [
+      "The advancement for a fully upgraded Wellspring is called \"Maximum Overdrip\"."
+    ],
+    "related": [
+      "upgrade-template",
+      "water-upgrade",
+      "lava-upgrade",
+      "capacity-upgrade",
+      "honey-upgrade",
+      "chocolate-upgrade",
+      "magma-engine",
+      "fluid-lines",
+      "upgrades"
+    ]
+  },
+  {
+    "id": "pressure-crucible",
+    "name": "Pressure Crucible",
+    "registry": [
+      "comedymonkeysaddons:pressure_crucible"
+    ],
+    "summary": "A square screw press on a Blaze Burner that squeezes rare dusts into emeralds, netherite scrap and quartz, and makes glass, stone, obsidian, amethyst and diamonds.",
+    "tags": [
+      "processing",
+      "dust",
+      "heat",
+      "netherite"
+    ],
+    "stage": "mid",
+    "requires": [],
+    "teach": {
+      "what": "A heavy press that sits on a Blaze Burner and presses 9 [[emerald-dust]] into an Emerald, 9 [[netherite-dust]] into Netherite Scrap and 4 [[quartz-dust]] into Nether Quartz. It also turns sand into glass, gravel into stone, cobblestone into obsidian, quartz into amethyst and coal into diamonds.",
+      "why": "It's the end of the mod's dust lines: fully automatic emeralds and netherite from nothing but stone, netherrack and rotation.",
+      "when": "Once you have brass and a Blaze Burner. Emeralds need only a heated burner; netherite, obsidian, amethyst and diamonds need Blaze Cakes for superheat.",
+      "interacts": "Crushing Wheels and Millstones make the dusts from cobblestone, netherrack and blackstone, so a [[cobblestone-generator]] or [[blackstone-generator]] feeds it. Funnels, hoppers and pipes load it and empty it from any side. It works on Aeronautics ships but only rides along on a Create contraption.",
+      "mistakes": [
+        "Netherite Dust, obsidian, amethyst and diamonds need a superheated burner; on plain heat they wait.",
+        "Its stress is heavy: 12 SU per RPM, so 3,072 SU at 256 RPM. Check your network before you speed it up.",
+        "The shaft goes into the gearbox on its back (it faces away from you when placed). A shaft into any other side does nothing.",
+        "On a moving Create contraption it doesn't press; it just keeps its contents."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress",
+        "value": "12",
+        "unit": "SU per RPM",
+        "gauge": 0.75
+      },
+      {
+        "label": "Emerald at 64 RPM",
+        "value": "2.5",
+        "unit": "s"
+      },
+      {
+        "label": "Netherite Scrap at 64 RPM",
+        "value": "10",
+        "unit": "s"
+      }
+    ],
+    "specs": [
+      [
+        "Base speed",
+        "16 RPM (256 RPM is 16x)"
+      ],
+      [
+        "Stress",
+        "12 SU per RPM (config)"
+      ],
+      [
+        "Shaft",
+        "Gearbox on the back"
+      ],
+      [
+        "Heat",
+        "None, heated or superheated, per recipe"
+      ],
+      [
+        "Items in and out",
+        "Any side"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "12 SU per RPM",
+      "speed": "16 RPM base; faster presses faster"
+    },
+    "inputs": [
+      "Rotation through the gearbox on its back.",
+      "Heat from a Blaze Burner underneath: heated, or superheated with a Blaze Cake.",
+      "Dust, sand, gravel, cobblestone, quartz or coal, by right-click or by funnel, hopper or pipe from any side."
+    ],
+    "outputs": [
+      "The pressed results, taken out empty-handed or by automation from any side."
+    ],
+    "throughput": [
+      "At 64 RPM: an Emerald in 2.5 seconds, a Netherite Scrap in 10, glass or stone in half a second.",
+      "Diamonds are the slow one: 64 coal each, on a superheated burner.",
+      "Time scales with speed: 256 RPM presses 16 times as fast as 16 RPM."
+    ],
+    "rules": [
+      "Heated burner: 9 Emerald Dust to an Emerald, 4 Quartz Dust to Nether Quartz, 1 sand to glass.",
+      "No heat: 1 gravel to stone.",
+      "Superheated burner: 9 Netherite Dust to Netherite Scrap, 4 Nether Quartz to 2 Amethyst Shards, 4 cobblestone to obsidian, 64 coal to a diamond.",
+      "Right-click with dust to load it; right-click empty-handed to take the results out (or the dust, if nothing has been pressed).",
+      "All its recipes are ordinary data-pack recipes, so a pack can change the counts, heat and times."
+    ],
+    "setups": [
+      {
+        "title": "Netherite from cobblestone",
+        "body": [
+          {
+            "list": [
+              "Mix cobblestone with 50 mB of lava in a Mixer over a heated Blaze Burner to make netherrack.",
+              "Crush the netherrack: cinder flour as usual, plus a 1% chance of [[netherite-dust]] and a 5% chance of [[quartz-dust]].",
+              "Funnel the dust into a Crucible over a superheated burner: 9 dust make one Netherite Scrap."
+            ],
+            "ordered": true
+          },
+          {
+            "warning": "Superheat burns Blaze Cakes. Keep the burner fed, or the Crucible sits there with a bowl full of dust."
+          }
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Emeralds from cobblestone",
+        "steps": [
+          {
+            "ref": "cobblestone-generator",
+            "kind": "source"
+          },
+          {
+            "item": "create:crushing_wheel",
+            "label": "Crushing Wheels",
+            "kind": "machine"
+          },
+          {
+            "ref": "emerald-dust",
+            "kind": "item",
+            "via": "5%"
+          },
+          {
+            "ref": "pressure-crucible",
+            "kind": "machine",
+            "note": "heated",
+            "via": "×9"
+          },
+          {
+            "item": "minecraft:emerald",
+            "label": "Emerald",
+            "kind": "result"
+          }
+        ]
+      },
+      {
+        "title": "Netherite Scrap from netherrack",
+        "steps": [
+          {
+            "item": "minecraft:netherrack",
+            "label": "Netherrack",
+            "kind": "source",
+            "note": "cobblestone + lava in a Mixer"
+          },
+          {
+            "item": "create:crushing_wheel",
+            "label": "Crushing Wheels",
+            "kind": "machine"
+          },
+          {
+            "ref": "netherite-dust",
+            "kind": "item",
+            "via": "1%"
+          },
+          {
+            "ref": "pressure-crucible",
+            "kind": "machine",
+            "note": "superheated",
+            "via": "×9"
+          },
+          {
+            "item": "minecraft:netherite_scrap",
+            "label": "Netherite Scrap",
+            "kind": "result"
+          }
+        ]
+      },
+      {
+        "title": "Amethyst from blackstone",
+        "steps": [
+          {
+            "ref": "blackstone-generator",
+            "kind": "source"
+          },
+          {
+            "item": "create:crushing_wheel",
+            "label": "Crushing Wheels",
+            "kind": "machine"
+          },
+          {
+            "ref": "quartz-dust",
+            "kind": "item",
+            "via": "10%"
+          },
+          {
+            "ref": "pressure-crucible",
+            "kind": "machine",
+            "note": "heated",
+            "via": "×4"
+          },
+          {
+            "item": "minecraft:quartz",
+            "label": "Nether Quartz",
+            "kind": "item"
+          },
+          {
+            "ref": "pressure-crucible",
+            "kind": "machine",
+            "note": "superheated",
+            "via": "×4"
+          },
+          {
+            "item": "minecraft:amethyst_shard",
+            "label": "Amethyst Shard ×2",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Gravel into stone needs no heat at all, so a Crucible with no burner is a fast gravel-to-stone press.",
+      "Engineer's Goggles show the contents, the heat it needs, its progress and what's holding it up.",
+      "JEI shows every Crucible recipe; Create's crushing and mixing pages show the dust chances and the netherrack recipe."
+    ],
+    "facts": [
+      "The bowl glows with the burner's heat: a faint red when smouldering, amber when heated and soul blue when superheated.",
+      "The platen rides down the screw over exactly the pressing time, while the front gauge climbs to the red, then lands with a crunch."
+    ],
+    "related": [
+      "emerald-dust",
+      "netherite-dust",
+      "quartz-dust",
+      "precious-dusts",
+      "cobblestone-generator",
+      "blackstone-generator"
+    ]
+  },
+  {
+    "id": "cobblestone-generator",
+    "name": "Cobblestone Generator",
+    "registry": [
+      "comedymonkeysaddons:andesite_cobble_generator",
+      "comedymonkeysaddons:brass_cobble_generator",
+      "comedymonkeysaddons:wireless_andesite_cobble_generator",
+      "comedymonkeysaddons:wireless_brass_cobble_generator"
+    ],
+    "summary": "A whole lava-and-water cobblestone farm in one block, making cobblestone exactly as fast as a Mechanical Drill could mine it.",
+    "tags": [
+      "stone",
+      "cobblestone",
+      "redstone"
+    ],
+    "stage": "early",
+    "requires": [],
+    "teach": {
+      "what": "A sealed block where water and lava pour into a basin, a block of cobblestone rises and a drill above it mines it. The Andesite one makes 1 per cycle, the Brass one 16.",
+      "why": "No more lava-and-water rigs with a drill and a mess of fluid. It's the clean, compact start of every stone-based line: gravel, sand, dusts and ore-bearing stone.",
+      "when": "Right away. The Andesite one only needs Andesite Alloy, two Mechanical Drills, Andesite Casing and a bucket each of water and lava (you get the buckets back).",
+      "interacts": "Crushing Wheels turn its cobblestone into gravel and [[emerald-dust]] for the [[pressure-crucible]]; the [[stone-infuser]] turns it into ore-bearing stone. Store the overflow in an [[upgraded-chest]] or burn it in the [[incinerator]].",
+      "mistakes": [
+        "It only takes rotation through the shaft hole in its back. A shaft into any other side does nothing.",
+        "It never pushes cobblestone out: hoppers, chutes, funnels, pipes or arms have to pull it. Nothing pulling, and it fills up and stops.",
+        "A redstone signal switches it off. If it sits idle with the lamp dark red, look for a stray signal (or, on a Wireless one, its frequency).",
+        "Breaking it drops what it holds, so empty it first if you don't want a pile on the floor."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress (Andesite)",
+        "value": "4",
+        "unit": "SU per RPM",
+        "gauge": 0.25
+      },
+      {
+        "label": "Stress (Brass)",
+        "value": "16",
+        "unit": "SU per RPM",
+        "gauge": 1
+      },
+      {
+        "label": "Cycle at 256 RPM",
+        "value": "10",
+        "unit": "ticks"
+      }
+    ],
+    "specs": [
+      [
+        "Andesite per cycle",
+        "1 cobblestone (holds 64)"
+      ],
+      [
+        "Brass per cycle",
+        "16 cobblestone (holds 256)"
+      ],
+      [
+        "Cycle",
+        "10 ticks at 256 RPM, 130 at 16 RPM"
+      ],
+      [
+        "Shaft",
+        "Back only"
+      ],
+      [
+        "Output",
+        "Any side, pulled by item transport"
+      ],
+      [
+        "Idle stress",
+        "None (full or switched off)"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM (Andesite), 16 SU per RPM (Brass); none when idle",
+      "speed": "Any; faster is quicker, paced like a Mechanical Drill"
+    },
+    "inputs": [
+      "Rotation through the shaft hole on the back. Nothing else: the water and lava are built in."
+    ],
+    "outputs": [
+      "Cobblestone, pulled from any side by hoppers, chutes, funnels, Pipez, arms or other item transport."
+    ],
+    "throughput": [
+      "Andesite: 120 cobblestone a minute at 256 RPM; about 9 a minute at 16 RPM.",
+      "Brass: 16 times that, about 1,900 a minute at 256 RPM."
+    ],
+    "rules": [
+      "A cycle takes as long as a Mechanical Drill at the same speed takes to mine cobblestone.",
+      "Full, or switched off by a redstone signal, it stops and puts no stress on the network until it's emptied or the signal goes.",
+      "Wireless versions are made by crafting either one with a Transmitter (shapeless). It's permanent.",
+      "A Wireless generator's antenna has two frequency slots set like a Redstone Link: a signal on that frequency switches it off."
+    ],
+    "efficiency": [
+      "The Brass generator gives 16 times the cobblestone for 4 times the stress, so it's four times as efficient per SU."
+    ],
+    "variants": [
+      {
+        "id": "andesite",
+        "name": "Andesite Cobblestone Generator",
+        "registry": [
+          "comedymonkeysaddons:andesite_cobble_generator"
+        ],
+        "summary": "One cobblestone per cycle, holds a stack.",
+        "specs": [
+          [
+            "Per cycle",
+            "1 cobblestone"
+          ],
+          [
+            "Holds",
+            "64"
+          ],
+          [
+            "Stress",
+            "4 SU per RPM"
+          ],
+          [
+            "Recipe",
+            "Crafting: Andesite Alloy, 2 Mechanical Drills, Andesite Casing, water and lava buckets"
+          ]
+        ]
+      },
+      {
+        "id": "brass",
+        "name": "Brass Cobblestone Generator",
+        "registry": [
+          "comedymonkeysaddons:brass_cobble_generator"
+        ],
+        "summary": "Sixteen smaller blocks per cycle under a four-bit drill head.",
+        "specs": [
+          [
+            "Per cycle",
+            "16 cobblestone"
+          ],
+          [
+            "Holds",
+            "256"
+          ],
+          [
+            "Stress",
+            "16 SU per RPM"
+          ],
+          [
+            "Recipe",
+            "5x5 Mechanical Crafting around an Andesite one"
+          ]
+        ]
+      },
+      {
+        "id": "wireless-andesite",
+        "name": "Wireless Andesite Cobblestone Generator",
+        "registry": [
+          "comedymonkeysaddons:wireless_andesite_cobble_generator"
+        ],
+        "summary": "The Andesite one with an antenna: switch it off on a Redstone Link frequency.",
+        "specs": [
+          [
+            "Per cycle",
+            "1 cobblestone"
+          ],
+          [
+            "Holds",
+            "64"
+          ],
+          [
+            "Recipe",
+            "Andesite one + a Transmitter"
+          ]
+        ]
+      },
+      {
+        "id": "wireless-brass",
+        "name": "Wireless Brass Cobblestone Generator",
+        "registry": [
+          "comedymonkeysaddons:wireless_brass_cobble_generator"
+        ],
+        "summary": "The Brass one with an antenna, made from a Brass one plus a Transmitter or by Mechanical Crafting around a Wireless Andesite one.",
+        "specs": [
+          [
+            "Per cycle",
+            "16 cobblestone"
+          ],
+          [
+            "Holds",
+            "256"
+          ],
+          [
+            "Recipe",
+            "Brass one + a Transmitter"
+          ]
+        ]
+      }
+    ],
+    "setups": [
+      {
+        "title": "Switch a whole quarry off from one lever",
+        "body": [
+          "Make every generator Wireless and set them all to the same frequency. One Redstone Link anywhere in range now stops the lot, and while they're off they put no stress on your network."
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Emeralds from cobblestone",
+        "steps": [
+          {
+            "ref": "cobblestone-generator",
+            "kind": "source"
+          },
+          {
+            "item": "create:crushing_wheel",
+            "label": "Crushing Wheels",
+            "kind": "machine"
+          },
+          {
+            "ref": "emerald-dust",
+            "kind": "item",
+            "via": "5%"
+          },
+          {
+            "ref": "pressure-crucible",
+            "kind": "machine",
+            "note": "heated",
+            "via": "×9"
+          },
+          {
+            "item": "minecraft:emerald",
+            "label": "Emerald",
+            "kind": "result"
+          }
+        ]
+      },
+      {
+        "title": "Ore-bearing stone",
+        "steps": [
+          {
+            "ref": "cobblestone-generator",
+            "kind": "source"
+          },
+          {
+            "ref": "stone-infuser",
+            "kind": "machine",
+            "note": "+ 9 nuggets"
+          },
+          {
+            "item": "create:veridium",
+            "label": "Asurine, crimsite, ochrum or veridium",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "The lamp on the front tells you everything: cyan running, amber full, dark red switched off by redstone, unlit with no rotation.",
+      "Engineer's Goggles show how much it holds and its output per minute.",
+      "Stress impacts are in the config, and the Basalt and Blackstone generators use the same settings."
+    ],
+    "facts": [
+      "You can watch it work through the glass: the pours, puffs of steam, and the drill jabbing down on every hit.",
+      "The Ponder scene calls the Wireless version \"Rocks, now with Wi-Fi\"."
+    ],
+    "related": [
+      "basalt-generator",
+      "blackstone-generator",
+      "tuff-generator",
+      "stone-generation",
+      "pressure-crucible",
+      "stone-infuser"
+    ]
+  },
+  {
+    "id": "basalt-generator",
+    "name": "Basalt Generator",
+    "registry": [
+      "comedymonkeysaddons:andesite_basalt_generator",
+      "comedymonkeysaddons:brass_basalt_generator",
+      "comedymonkeysaddons:wireless_andesite_basalt_generator",
+      "comedymonkeysaddons:wireless_brass_basalt_generator"
+    ],
+    "summary": "A one-block basalt farm where lava meets blue ice, twice as quick as cobblestone at full speed.",
+    "tags": [
+      "stone",
+      "basalt",
+      "redstone"
+    ],
+    "stage": "mid",
+    "requires": [],
+    "teach": {
+      "what": "The Cobblestone Generator's sister: inside, lava meets a block of blue ice, and a drill mines the basalt that forms. Andesite makes 1 per cycle, Brass 16.",
+      "why": "Basalt normally means a trip to the Nether and a fiddly soul-soil-and-blue-ice rig. This is the whole thing in a box you can put anywhere.",
+      "when": "Once you have Blue Ice and Soul Soil for the recipe; the rest matches the Cobblestone Generator.",
+      "interacts": "It shares the cobblestone generators' rules, stress settings, lamp and wireless antenna. Pull the basalt with any item transport into an [[upgraded-chest]] or onwards to your builds.",
+      "mistakes": [
+        "Like every generator here, it takes power only through the back.",
+        "It needs something pulling basalt out, or it fills and stops.",
+        "Making it Wireless is permanent: a wireless generator stays wireless."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress (Andesite)",
+        "value": "4",
+        "unit": "SU per RPM",
+        "gauge": 0.25
+      },
+      {
+        "label": "Stress (Brass)",
+        "value": "16",
+        "unit": "SU per RPM",
+        "gauge": 1
+      },
+      {
+        "label": "Cycle at 256 RPM",
+        "value": "5",
+        "unit": "ticks"
+      }
+    ],
+    "specs": [
+      [
+        "Andesite per cycle",
+        "1 basalt (holds 64)"
+      ],
+      [
+        "Brass per cycle",
+        "16 basalt (holds 256)"
+      ],
+      [
+        "Cycle",
+        "5 ticks at 256 RPM (basalt is soft)"
+      ],
+      [
+        "Shaft",
+        "Back only"
+      ],
+      [
+        "Output",
+        "Any side, pulled by item transport"
+      ],
+      [
+        "Looks",
+        "Ice-blue trim, smooth basalt chamber"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM (Andesite), 16 SU per RPM (Brass); none when idle",
+      "speed": "Any; faster is quicker, paced like a Mechanical Drill"
+    },
+    "inputs": [
+      "Rotation through the back. The lava and blue ice are built in."
+    ],
+    "outputs": [
+      "Basalt, pulled from any side by hoppers, chutes, funnels, pipes or arms."
+    ],
+    "throughput": [
+      "Andesite: 240 basalt a minute at 256 RPM, twice cobblestone's rate.",
+      "Brass: 16 per cycle, about 3,800 a minute at 256 RPM."
+    ],
+    "rules": [
+      "Its cycle follows Mechanical Drill timing for basalt, which is softer than cobblestone.",
+      "Full or switched off by redstone, it stops and puts no load on the network.",
+      "Brass and Wireless versions are made exactly like the cobblestone ones."
+    ],
+    "variants": [
+      {
+        "id": "andesite",
+        "name": "Andesite Basalt Generator",
+        "registry": [
+          "comedymonkeysaddons:andesite_basalt_generator"
+        ],
+        "summary": "One basalt per cycle.",
+        "specs": [
+          [
+            "Per cycle",
+            "1 basalt"
+          ],
+          [
+            "Holds",
+            "64"
+          ],
+          [
+            "Recipe",
+            "Blue Ice, a lava bucket, 2 Mechanical Drills, Andesite Casing, Andesite Alloy and Soul Soil"
+          ]
+        ]
+      },
+      {
+        "id": "brass",
+        "name": "Brass Basalt Generator",
+        "registry": [
+          "comedymonkeysaddons:brass_basalt_generator"
+        ],
+        "summary": "Sixteen per cycle.",
+        "specs": [
+          [
+            "Per cycle",
+            "16 basalt"
+          ],
+          [
+            "Holds",
+            "256"
+          ],
+          [
+            "Recipe",
+            "Mechanical Crafting around the Andesite one"
+          ]
+        ]
+      },
+      {
+        "id": "wireless-andesite",
+        "name": "Wireless Andesite Basalt Generator",
+        "registry": [
+          "comedymonkeysaddons:wireless_andesite_basalt_generator"
+        ],
+        "summary": "Switch it off on a Redstone Link frequency.",
+        "specs": [
+          [
+            "Per cycle",
+            "1 basalt"
+          ],
+          [
+            "Recipe",
+            "Andesite one + a Transmitter"
+          ]
+        ]
+      },
+      {
+        "id": "wireless-brass",
+        "name": "Wireless Brass Basalt Generator",
+        "registry": [
+          "comedymonkeysaddons:wireless_brass_basalt_generator"
+        ],
+        "summary": "Sixteen per cycle, with an antenna.",
+        "specs": [
+          [
+            "Per cycle",
+            "16 basalt"
+          ],
+          [
+            "Recipe",
+            "Brass one + a Transmitter"
+          ]
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Basalt into storage",
+        "steps": [
+          {
+            "ref": "basalt-generator",
+            "kind": "source"
+          },
+          {
+            "item": "create:andesite_funnel",
+            "label": "Funnel",
+            "kind": "machine"
+          },
+          {
+            "ref": "upgraded-chest",
+            "kind": "result",
+            "note": "up to 1,024 a slot"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "It's the fastest generator in the family at full speed, so a Brass one fills chests quickly: plan the storage first.",
+      "Engineer's Goggles show its stock and output per minute."
+    ],
+    "facts": [
+      "Its advancement is called \"Basalt-ically Perfect\"."
+    ],
+    "related": [
+      "cobblestone-generator",
+      "blackstone-generator",
+      "tuff-generator",
+      "stone-generation"
+    ]
+  },
+  {
+    "id": "blackstone-generator",
+    "name": "Blackstone Generator",
+    "registry": [
+      "comedymonkeysaddons:andesite_blackstone_generator",
+      "comedymonkeysaddons:brass_blackstone_generator",
+      "comedymonkeysaddons:wireless_andesite_blackstone_generator",
+      "comedymonkeysaddons:wireless_brass_blackstone_generator"
+    ],
+    "summary": "A one-block blackstone farm where lava meets blue ice, and the best source of Quartz Dust.",
+    "tags": [
+      "stone",
+      "blackstone",
+      "redstone"
+    ],
+    "stage": "mid",
+    "requires": [],
+    "teach": {
+      "what": "A generator in black-and-gold panels with a polished blackstone chamber, where lava meets blue ice and a drill mines the blackstone. Andesite makes 1 per cycle, Brass 16.",
+      "why": "Crushed blackstone gives a 10% chance of [[quartz-dust]], twice netherrack's chance, so this is your quartz and amethyst engine. It's also a quick source of Gilded Blackstone with a Mixer.",
+      "when": "Once you have Blue Ice and a block of Blackstone for the recipe.",
+      "interacts": "Crushing Wheels make gravel and [[quartz-dust]] from it for the [[pressure-crucible]]. A Mixer over a heated burner turns blackstone and 20 gold nuggets into Gilded Blackstone.",
+      "mistakes": [
+        "Power goes in at the back only.",
+        "It won't push its blackstone out; give it a funnel or hopper.",
+        "Quartz Dust into Nether Quartz needs a heated burner; Nether Quartz into amethyst needs superheat."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress (Andesite)",
+        "value": "4",
+        "unit": "SU per RPM",
+        "gauge": 0.25
+      },
+      {
+        "label": "Stress (Brass)",
+        "value": "16",
+        "unit": "SU per RPM",
+        "gauge": 1
+      },
+      {
+        "label": "Cycle at 16 RPM",
+        "value": "100",
+        "unit": "ticks"
+      }
+    ],
+    "specs": [
+      [
+        "Andesite per cycle",
+        "1 blackstone (holds 64)"
+      ],
+      [
+        "Brass per cycle",
+        "16 blackstone (holds 256)"
+      ],
+      [
+        "Cycle",
+        "10 ticks at 256 RPM, 100 at 16 RPM"
+      ],
+      [
+        "Shaft",
+        "Back only"
+      ],
+      [
+        "Looks",
+        "Black-and-gold panels, polished blackstone chamber"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM (Andesite), 16 SU per RPM (Brass); none when idle",
+      "speed": "Any; faster is quicker, paced like a Mechanical Drill"
+    },
+    "inputs": [
+      "Rotation through the back."
+    ],
+    "outputs": [
+      "Blackstone, pulled from any side by item transport."
+    ],
+    "throughput": [
+      "Andesite: 120 a minute at 256 RPM, the same as cobblestone, and a little quicker at low speed (100 ticks at 16 RPM against 130).",
+      "Brass: 16 per cycle."
+    ],
+    "rules": [
+      "Same rules as the Cobblestone Generator: back-only shaft, pulled output, stops and rests when full or switched off by redstone.",
+      "Brass and Wireless versions are made exactly like the cobblestone ones."
+    ],
+    "variants": [
+      {
+        "id": "andesite",
+        "name": "Andesite Blackstone Generator",
+        "registry": [
+          "comedymonkeysaddons:andesite_blackstone_generator"
+        ],
+        "summary": "One blackstone per cycle.",
+        "specs": [
+          [
+            "Per cycle",
+            "1 blackstone"
+          ],
+          [
+            "Holds",
+            "64"
+          ],
+          [
+            "Recipe",
+            "Blue Ice, a lava bucket, 2 Mechanical Drills, Andesite Casing, Andesite Alloy and Blackstone"
+          ]
+        ]
+      },
+      {
+        "id": "brass",
+        "name": "Brass Blackstone Generator",
+        "registry": [
+          "comedymonkeysaddons:brass_blackstone_generator"
+        ],
+        "summary": "Sixteen per cycle.",
+        "specs": [
+          [
+            "Per cycle",
+            "16 blackstone"
+          ],
+          [
+            "Holds",
+            "256"
+          ],
+          [
+            "Recipe",
+            "Mechanical Crafting around the Andesite one"
+          ]
+        ]
+      },
+      {
+        "id": "wireless-andesite",
+        "name": "Wireless Andesite Blackstone Generator",
+        "registry": [
+          "comedymonkeysaddons:wireless_andesite_blackstone_generator"
+        ],
+        "summary": "Switch it off on a Redstone Link frequency.",
+        "specs": [
+          [
+            "Per cycle",
+            "1 blackstone"
+          ],
+          [
+            "Recipe",
+            "Andesite one + a Transmitter"
+          ]
+        ]
+      },
+      {
+        "id": "wireless-brass",
+        "name": "Wireless Brass Blackstone Generator",
+        "registry": [
+          "comedymonkeysaddons:wireless_brass_blackstone_generator"
+        ],
+        "summary": "Sixteen per cycle, with an antenna.",
+        "specs": [
+          [
+            "Per cycle",
+            "16 blackstone"
+          ],
+          [
+            "Recipe",
+            "Brass one + a Transmitter"
+          ]
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Nether Quartz from blackstone",
+        "steps": [
+          {
+            "ref": "blackstone-generator",
+            "kind": "source"
+          },
+          {
+            "item": "create:crushing_wheel",
+            "label": "Crushing Wheels",
+            "kind": "machine"
+          },
+          {
+            "ref": "quartz-dust",
+            "kind": "item",
+            "via": "10%"
+          },
+          {
+            "ref": "pressure-crucible",
+            "kind": "machine",
+            "note": "heated",
+            "via": "×4"
+          },
+          {
+            "item": "minecraft:quartz",
+            "label": "Nether Quartz",
+            "kind": "result"
+          }
+        ]
+      },
+      {
+        "title": "Gilded Blackstone",
+        "steps": [
+          {
+            "ref": "blackstone-generator",
+            "kind": "source"
+          },
+          {
+            "item": "create:mechanical_mixer",
+            "label": "Mixer",
+            "kind": "machine",
+            "note": "heated, + 20 gold nuggets"
+          },
+          {
+            "item": "minecraft:gilded_blackstone",
+            "label": "Gilded Blackstone",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Crushing Gilded Blackstone gives 18 gold nuggets back, so it's a way to store gold, not to make it.",
+      "Blackstone crushes to gravel, which the Crucible packs back into stone with no heat."
+    ],
+    "facts": [
+      "Its advancement is called \"Back in Black\"."
+    ],
+    "related": [
+      "cobblestone-generator",
+      "basalt-generator",
+      "quartz-dust",
+      "pressure-crucible",
+      "stone-generation"
+    ]
+  },
+  {
+    "id": "tuff-generator",
+    "name": "Tuff Generator",
+    "registry": [
+      "comedymonkeysaddons:tuff_generator",
+      "comedymonkeysaddons:wireless_tuff_generator"
+    ],
+    "summary": "A one-block tuff farm where lava meets water over gravel, and the feed for the Stone Infuser's nuggets.",
+    "tags": [
+      "stone",
+      "tuff",
+      "redstone"
+    ],
+    "stage": "early",
+    "requires": [],
+    "teach": {
+      "what": "A grey-green generator with a tuff brick chamber: lava meets water over a bed of gravel, and a drill mines the tuff. It works like the Andesite generators and holds a stack.",
+      "why": "Crushing tuff gives a few zinc, iron, gold and copper nuggets, so a Tuff Generator is a small, steady source of all four metals, and the natural partner of the [[stone-infuser]].",
+      "when": "Early: it needs Andesite Alloy, a lava bucket, 2 Mechanical Drills, Andesite Casing, a water bucket and 2 gravel.",
+      "interacts": "Crushing Wheels turn its tuff into nuggets; the [[stone-infuser]] turns 9 nuggets and a cobblestone (from a [[cobblestone-generator]]) into Create's ore-bearing stones.",
+      "mistakes": [
+        "There's no Brass Tuff Generator: for more tuff, build more of them.",
+        "Power through the back only, and pull the tuff out or it stops.",
+        "Ore-bearing stones crush back to fewer than 9 nuggets, so you can't loop them into free metal."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress",
+        "value": "4",
+        "unit": "SU per RPM",
+        "gauge": 0.25
+      },
+      {
+        "label": "Cycle at 256 RPM",
+        "value": "10",
+        "unit": "ticks"
+      },
+      {
+        "label": "Holds",
+        "value": "64",
+        "unit": "tuff"
+      }
+    ],
+    "specs": [
+      [
+        "Per cycle",
+        "1 tuff"
+      ],
+      [
+        "Cycle",
+        "10 ticks at 256 RPM (tuff is as soft as blackstone)"
+      ],
+      [
+        "Stress",
+        "4 SU per RPM, none when idle"
+      ],
+      [
+        "Shaft",
+        "Back only"
+      ],
+      [
+        "Looks",
+        "Grey-green trim, tuff brick chamber"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM; none when idle",
+      "speed": "Any; paced like a Mechanical Drill"
+    },
+    "inputs": [
+      "Rotation through the back."
+    ],
+    "outputs": [
+      "Tuff, pulled from any side by item transport."
+    ],
+    "throughput": [
+      "120 tuff a minute at 256 RPM."
+    ],
+    "rules": [
+      "Same rules as the Andesite Cobblestone Generator: stops when full or switched off by redstone, with no stress while idle.",
+      "Craft it with a Transmitter (shapeless) for the Wireless one."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "name": "Tuff Generator",
+        "registry": [
+          "comedymonkeysaddons:tuff_generator"
+        ],
+        "summary": "One tuff per cycle, holds a stack.",
+        "specs": [
+          [
+            "Recipe",
+            "Andesite Alloy, lava bucket, 2 Mechanical Drills, Andesite Casing, water bucket, 2 gravel"
+          ]
+        ]
+      },
+      {
+        "id": "wireless",
+        "name": "Wireless Tuff Generator",
+        "registry": [
+          "comedymonkeysaddons:wireless_tuff_generator"
+        ],
+        "summary": "Switch it off from anywhere on its frequency.",
+        "specs": [
+          [
+            "Recipe",
+            "Tuff Generator + a Transmitter"
+          ]
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Tuff into ore-bearing stone",
+        "steps": [
+          {
+            "ref": "tuff-generator",
+            "kind": "source"
+          },
+          {
+            "item": "create:crushing_wheel",
+            "label": "Crushing Wheels",
+            "kind": "machine"
+          },
+          {
+            "label": "Zinc, iron, gold and copper nuggets",
+            "kind": "item"
+          },
+          {
+            "ref": "stone-infuser",
+            "kind": "machine",
+            "note": "+ cobblestone",
+            "via": "×9"
+          },
+          {
+            "item": "create:asurine",
+            "label": "Asurine, crimsite, ochrum, veridium",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Sort the crushed nuggets with filtered funnels so each kind goes to its own Stone Infuser, or one Infuser handles them in turn.",
+      "The Ponder scene is called \"When the Going Gets Tuff\"."
+    ],
+    "facts": [],
+    "related": [
+      "stone-infuser",
+      "cobblestone-generator",
+      "stone-generation"
+    ]
+  },
+  {
+    "id": "auto-harvester",
+    "name": "Auto Harvester",
+    "registry": [
+      "comedymonkeysaddons:auto_harvester"
+    ],
+    "summary": "A Create-style botany pot that grows any crop or sapling behind glass and harvests it again and again, without using up the plant.",
+    "tags": [
+      "farming",
+      "crops",
+      "trees",
+      "enchantable"
+    ],
+    "stage": "early",
+    "requires": [],
+    "teach": {
+      "what": "A box with a planter behind the glass. Plant a crop, flower, mushroom, sapling or nether fungus once, and it grows and harvests it forever: crops give their full-grown drops, trees 4 to 6 logs plus their leaves' drops.",
+      "why": "It replaces whole fields and tree farms with one block at a fixed, small stress, and it takes modded crops built on vanilla's crop or bush blocks too.",
+      "when": "Early. It's made from andesite alloy, a Mechanical Harvester, a Mechanical Saw, dirt and Andesite Casing.",
+      "interacts": "Enchant it with [[bountiful]] for faster growth. Its wheat, kelp and sugar cane feed the Mixer recipes for [[monster-chow]] and [[fish-food]]. Its output comes out of any side to hoppers, chutes, funnels, pipes or arms.",
+      "mistakes": [
+        "More speed doesn't make it faster. It always uses 512 SU; the only speed-up is Bountiful.",
+        "Grass, ferns, dead bushes, roots, sprouts, seagrass and lily pads are refused.",
+        "It holds nine stacks of harvest and stops when full, so give it a way out.",
+        "Sneak-wrench picks it up; to open the screen, use the wrench without sneaking."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress",
+        "value": "512",
+        "unit": "SU at any speed",
+        "gauge": 0.125
+      },
+      {
+        "label": "Crop grows in",
+        "value": "40",
+        "unit": "s"
+      },
+      {
+        "label": "Tree grows in",
+        "value": "80",
+        "unit": "s"
+      }
+    ],
+    "specs": [
+      [
+        "Stress",
+        "512 SU at any speed (config)"
+      ],
+      [
+        "Crop",
+        "40 s, scaled by its vanilla growth rate"
+      ],
+      [
+        "Tree",
+        "80 s"
+      ],
+      [
+        "Each harvest",
+        "4 s"
+      ],
+      [
+        "Output",
+        "9 stacks, any side"
+      ],
+      [
+        "Enchantment",
+        "Bountiful I to III"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "512 SU, at any speed",
+      "speed": "Any; it runs no faster for more"
+    },
+    "inputs": [
+      "A shaft into the back.",
+      "One seed, crop or sapling: used on it, put in the planter slot in the wrench screen, or inserted by funnels and arms while it's empty."
+    ],
+    "outputs": [
+      "A crop's full-grown drops (wheat and the odd seed, a melon's slices).",
+      "A tree's 4 to 6 logs plus a few rolls of its leaves' drops (saplings, sticks, apples); a nether fungus gives stems, wart blocks and the odd shroomlight."
+    ],
+    "throughput": [
+      "A crop grows in 40 seconds, scaled by how fast it grows in vanilla: sweet berries and sugar cane about three times as fast, beetroot a little slower.",
+      "A tree grows in 80 seconds. Each harvest then takes 4 seconds.",
+      "Bountiful I, II and III make it grow 1.5, 2 and 2.5 times as fast."
+    ],
+    "rules": [
+      "Empty-handed use takes the harvest out; sneak-use takes the plant back.",
+      "While empty or full it puts no stress on the network.",
+      "Item tags `comedymonkeysaddons:auto_harvester_plantable` and `auto_harvester_blacklist` add or forbid plants.",
+      "Bountiful goes on with an anvil and stays when it's broken and placed again."
+    ],
+    "setups": [
+      {
+        "title": "Feed for your cages",
+        "body": [
+          "Plant wheat, mill it into Wheat Flour, and mix it with Cinder Flour and Bone Meal: that's [[monster-chow]] for your [[monster-cage|Monster Cages]]. Swap the Cinder Flour for Dried Kelp (kelp grows in a harvester too) and you have [[fish-food]]."
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Wheat into Monster Chow",
+        "steps": [
+          {
+            "ref": "auto-harvester",
+            "kind": "source",
+            "note": "wheat"
+          },
+          {
+            "item": "create:millstone",
+            "label": "Millstone",
+            "kind": "machine"
+          },
+          {
+            "item": "create:wheat_flour",
+            "label": "Wheat Flour",
+            "kind": "item"
+          },
+          {
+            "item": "create:mechanical_mixer",
+            "label": "Mixer",
+            "kind": "machine",
+            "note": "+ Cinder Flour, Bone Meal"
+          },
+          {
+            "ref": "monster-chow",
+            "kind": "result",
+            "note": "3 at a time"
+          }
+        ]
+      },
+      {
+        "title": "A tree farm in a box",
+        "steps": [
+          {
+            "label": "Any sapling",
+            "kind": "source"
+          },
+          {
+            "ref": "auto-harvester",
+            "kind": "machine",
+            "via": "80 s"
+          },
+          {
+            "label": "4 to 6 logs, saplings, sticks, apples",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "The wrench screen shows the plant, the harvest and a growth gauge with the time per harvest and the Bountiful level.",
+      "Buy Bountiful books from a Librarian: enchanting tables never offer it.",
+      "Fast growers like sugar cane and sweet berries harvest about three times as often as wheat."
+    ],
+    "facts": [
+      "The window shows the real plant at its growth stage, and a sapling grows into a little tree of its own wood.",
+      "Two-block modded crops like Supplementaries' flax show both halves once they're tall enough."
+    ],
+    "related": [
+      "bountiful",
+      "enchantments",
+      "one-block-farming",
+      "monster-chow",
+      "fish-food",
+      "animal-pen"
+    ]
+  },
+  {
+    "id": "animal-pen",
+    "name": "Animal Pen",
+    "registry": [
+      "comedymonkeysaddons:animal_pen",
+      "comedymonkeysaddons:brass_animal_pen"
+    ],
+    "summary": "One block that keeps a whole herd of one kind of animal, breeding at vanilla pace, for drops, wool, eggs and milk.",
+    "tags": [
+      "farming",
+      "animals",
+      "enchantable"
+    ],
+    "stage": "early",
+    "requires": [
+      "capture-bottle"
+    ],
+    "teach": {
+      "what": "Catch one animal in a [[capture-bottle]] and put it in the pen. Fed its breeding food, every adult has a baby every five minutes, and babies grow up in twenty. The Animal Pen holds 128, the Brass one 512.",
+      "why": "No more sprawling fenced pens and lag from hundreds of cows. You get the same drops, wool, eggs and milk from one block.",
+      "when": "Early: andesite alloy, wooden fences, Andesite Casing and a hay bale. The Brass pen comes with Mechanical Crafting.",
+      "interacts": "Deployers with swords, shears and buckets run it for you; pipes draw out the milk; [[fruitful]] speeds it up. Fish, squid and axolotls go in a [[fish-tank]] instead.",
+      "mistakes": [
+        "Only adults count: only they breed, drop loot, grow wool, lay eggs or give milk. A sword leaves the young to grow up.",
+        "It only breeds, grows and produces while its shaft turns. Speed doesn't matter, but stopping does.",
+        "Taking the bottle out in the wrench screen empties the pen: the other adults are butchered into the output.",
+        "Water creatures are refused, with a hint: use a Fish Tank."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress (Pen)",
+        "value": "256",
+        "unit": "SU at any speed",
+        "gauge": 0.0625
+      },
+      {
+        "label": "Stress (Brass)",
+        "value": "1,024",
+        "unit": "SU at any speed",
+        "gauge": 0.25
+      },
+      {
+        "label": "Herd (Brass)",
+        "value": "512",
+        "unit": "animals"
+      }
+    ],
+    "specs": [
+      [
+        "Breeding",
+        "Every 5 minutes, each adult"
+      ],
+      [
+        "Growing up",
+        "20 minutes"
+      ],
+      [
+        "Capacity",
+        "128 (Brass 512)"
+      ],
+      [
+        "Trough",
+        "2 slots (Brass 8)"
+      ],
+      [
+        "Output",
+        "9 slots (Brass 18)"
+      ],
+      [
+        "Wool regrows",
+        "1 minute"
+      ],
+      [
+        "Milk",
+        "125 mB a minute per cow or goat"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "256 SU (Brass 1,024 SU) at any speed; none while empty",
+      "speed": "Any; it only needs to turn"
+    },
+    "inputs": [
+      "A Bottled Animal (one is enough) used on the pen.",
+      "Its breeding food in the trough, by hand or with a funnel. The empty trough shows which food it eats.",
+      "A shaft turning in the back."
+    ],
+    "outputs": [
+      "Drops and XP from a sword cull (half the adults, always leaving one); Looting and Fire Aspect count.",
+      "Wool from shears, milk from a bucket or pipes, stew from a bowl on mooshrooms.",
+      "Eggs and armadillo scutes by themselves, into the output buffer."
+    ],
+    "throughput": [
+      "Every 5 minutes each adult eats one food and has a baby; babies grow up in 20 minutes and then breed too.",
+      "Fruitful I, II and III make breeding and growing up 1.5, 2 and 2.5 times as fast."
+    ],
+    "rules": [
+      "A Capture Bottle takes any animal that breeds (modded ones too), but not someone else's tamed pet.",
+      "A comparator reads how full of animals it is.",
+      "Deployers can use swords, shears and buckets on it.",
+      "Fruitful goes on with an anvil and stays when the pen is broken."
+    ],
+    "variants": [
+      {
+        "id": "andesite",
+        "name": "Animal Pen",
+        "registry": [
+          "comedymonkeysaddons:animal_pen"
+        ],
+        "summary": "Holds 128 animals.",
+        "specs": [
+          [
+            "Holds",
+            "128"
+          ],
+          [
+            "Stress",
+            "256 SU"
+          ],
+          [
+            "Trough",
+            "2 slots"
+          ],
+          [
+            "Output",
+            "9 slots"
+          ],
+          [
+            "Recipe",
+            "Andesite alloy, wooden fences, Andesite Casing, a hay bale"
+          ]
+        ]
+      },
+      {
+        "id": "brass",
+        "name": "Brass Animal Pen",
+        "registry": [
+          "comedymonkeysaddons:brass_animal_pen"
+        ],
+        "summary": "Holds 512, with twice the room for what they make.",
+        "specs": [
+          [
+            "Holds",
+            "512"
+          ],
+          [
+            "Stress",
+            "1,024 SU"
+          ],
+          [
+            "Trough",
+            "8 slots"
+          ],
+          [
+            "Output",
+            "18 slots"
+          ],
+          [
+            "Recipe",
+            "Mechanical Crafting around an Animal Pen"
+          ]
+        ]
+      }
+    ],
+    "setups": [
+      {
+        "title": "A wool farm that runs itself",
+        "body": [
+          {
+            "list": [
+              "Bottle a sheep and put it in a pen.",
+              "Funnel wheat into the trough.",
+              "Point a Deployer holding shears at the pen.",
+              "Funnel the wool out of the output."
+            ],
+            "ordered": true
+          },
+          {
+            "tip": "Wool grows back in a minute, so the Deployer has something to do every time."
+          }
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Milk on tap",
+        "steps": [
+          {
+            "ref": "capture-bottle",
+            "kind": "source",
+            "note": "a cow"
+          },
+          {
+            "ref": "animal-pen",
+            "kind": "machine",
+            "note": "wheat in the trough"
+          },
+          {
+            "label": "Fluid pipe",
+            "kind": "machine",
+            "via": "125 mB/min per cow"
+          },
+          {
+            "label": "Milk",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "The wrench screen shows the trough, a breeding gauge with the time until the next litter grows up, a milk gauge, the output, and how many adults and young there are.",
+      "Fill the herd before you cull: a sword takes half the adults, so let them breed up first.",
+      "Buy Fruitful books from a Librarian."
+    ],
+    "facts": [
+      "The bottle shows the animal standing inside it, and keeps its colour, name and variant.",
+      "Filling a Brass Animal Pen to 512 earns the advancement \"Cattle Baron\"."
+    ],
+    "related": [
+      "capture-bottle",
+      "fruitful",
+      "fish-tank",
+      "monster-cage",
+      "one-block-farming",
+      "enchantments"
+    ]
+  },
+  {
+    "id": "monster-cage",
+    "name": "Monster Cage",
+    "registry": [
+      "comedymonkeysaddons:monster_cage",
+      "comedymonkeysaddons:brass_monster_cage"
+    ],
+    "summary": "The Animal Pen for monsters: one barred block that keeps a horde of one kind and brings in more, for their real drops.",
+    "tags": [
+      "farming",
+      "monsters",
+      "enchantable"
+    ],
+    "stage": "early",
+    "requires": [
+      "iron-jar",
+      "monster-chow"
+    ],
+    "teach": {
+      "what": "Catch one monster in an [[iron-jar]] and put it in the cage. Fed [[monster-chow]] and turning, it brings in a new one of the same kind every 20 seconds at 64 RPM (10 in the Brass cage), up to 64 (Brass 256).",
+      "why": "Real loot-table drops (bones, string, gunpowder, blaze rods, ender pearls) with none of a mob farm's spawning rules, dark rooms or lag.",
+      "when": "Early to mid. The Andesite cage takes common Overworld monsters; the Brass one also takes Nether, End and rare monsters like evokers, ravagers and shulkers.",
+      "interacts": "Its string and slime feed the [[string-tangler]]; its bones become bone meal for more chow. [[monstrous]] makes it faster. Display Links, comparators, Deployers and funnels all work on it.",
+      "mistakes": [
+        "Faster shafts eat chow faster too: each new monster costs 1, 2 or 4 Monster Chow, whatever the speed.",
+        "The Andesite cage refuses Nether, End and rare monsters. The hint tells you which cage you need.",
+        "A Deployer's cull gives no XP; only your own sword does.",
+        "Taking the jar out in the wrench screen culls the rest into the output, so don't do it by accident."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress (Andesite)",
+        "value": "4",
+        "unit": "SU per RPM",
+        "gauge": 0.25
+      },
+      {
+        "label": "Stress (Brass)",
+        "value": "16",
+        "unit": "SU per RPM",
+        "gauge": 1
+      },
+      {
+        "label": "Arrival at 64 RPM",
+        "value": "20",
+        "unit": "s (Brass 10)"
+      }
+    ],
+    "specs": [
+      [
+        "Holds",
+        "64 (Brass 256)"
+      ],
+      [
+        "Arrival at 64 RPM",
+        "20 s (Brass 10 s), times its chow cost"
+      ],
+      [
+        "Chow per monster",
+        "1 Overworld, 2 Nether, End, ocean, pillager and modded, 4 rare"
+      ],
+      [
+        "Chow slots",
+        "2 (Brass 8)"
+      ],
+      [
+        "Output",
+        "9 slots (Brass 18)"
+      ],
+      [
+        "Stress",
+        "4 SU per RPM (Brass 16) while it works"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM (Brass 16); none while empty, full, out of chow or overstressed",
+      "speed": "Any; faster brings monsters in sooner"
+    },
+    "inputs": [
+      "A full Iron Jar used on the cage. The jar goes in with the monster and comes back out with it.",
+      "Monster Chow, by hand or with a funnel.",
+      "A shaft turning in the back."
+    ],
+    "outputs": [
+      "A sword culls half the horde (always leaving one) for the monster's real loot, with Looting, Fire Aspect and XP.",
+      "Drops land in the output, emptied from any side by funnels, chutes or arms."
+    ],
+    "throughput": [
+      "Andesite: a common monster every 20 seconds at 64 RPM, 5 seconds at 256 RPM.",
+      "Brass: every 10 seconds at 64 RPM, times the chow cost (so a rare monster takes four times as long).",
+      "Monstrous I, II and III make it 1.5, 2 and 2.5 times as fast; the chow per monster stays the same."
+    ],
+    "rules": [
+      "An Iron Jar catches any monster a cage takes, at any health, but not ridden ones or the Wither.",
+      "New monsters arrive bare: no armour or weapons, only loot-table drops. Slimes and magma cubes stay small.",
+      "Nothing grows while the chunk is unloaded. On Peaceful the cage holds but doesn't grow.",
+      "Only empty cages can be upgraded to Brass or Flooded."
+    ],
+    "variants": [
+      {
+        "id": "andesite",
+        "name": "Monster Cage",
+        "registry": [
+          "comedymonkeysaddons:monster_cage"
+        ],
+        "summary": "Holds 64 common Overworld monsters.",
+        "specs": [
+          [
+            "Holds",
+            "64"
+          ],
+          [
+            "Arrival",
+            "20 s at 64 RPM"
+          ],
+          [
+            "Stress",
+            "4 SU per RPM"
+          ],
+          [
+            "Recipe",
+            "Andesite alloy corners, iron bars, a chain, Andesite Casing"
+          ]
+        ]
+      },
+      {
+        "id": "brass",
+        "name": "Brass Monster Cage",
+        "registry": [
+          "comedymonkeysaddons:brass_monster_cage"
+        ],
+        "summary": "Holds 256, and takes Nether, End and rare monsters too.",
+        "specs": [
+          [
+            "Holds",
+            "256"
+          ],
+          [
+            "Arrival",
+            "10 s at 64 RPM"
+          ],
+          [
+            "Stress",
+            "16 SU per RPM"
+          ],
+          [
+            "Recipe",
+            "Mechanical Crafting around a Monster Cage"
+          ]
+        ]
+      }
+    ],
+    "setups": [
+      {
+        "title": "A cage that feeds itself",
+        "body": [
+          "Cage skeletons and crush their bones into bone meal. Mix that with Wheat Flour (from an [[auto-harvester]]) and Cinder Flour (crushed netherrack) to make [[monster-chow]], and funnel it back into the cage.",
+          {
+            "tip": "Each Mixer batch makes 3 Monster Chow, enough for three common monsters."
+          }
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Cobwebs from spiders and slimes",
+        "steps": [
+          {
+            "ref": "monster-cage",
+            "kind": "source",
+            "note": "spiders and slimes"
+          },
+          {
+            "item": "minecraft:string",
+            "label": "String and slime balls",
+            "kind": "item"
+          },
+          {
+            "ref": "string-tangler",
+            "kind": "machine",
+            "via": "4 + 1"
+          },
+          {
+            "item": "minecraft:cobweb",
+            "label": "Cobweb",
+            "kind": "result"
+          }
+        ]
+      },
+      {
+        "title": "Monster drops on a Deployer",
+        "steps": [
+          {
+            "ref": "iron-jar",
+            "kind": "source"
+          },
+          {
+            "ref": "monster-cage",
+            "kind": "machine",
+            "note": "Monster Chow in"
+          },
+          {
+            "item": "create:deployer",
+            "label": "Deployer with a sword",
+            "kind": "machine"
+          },
+          {
+            "label": "Real loot-table drops",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Goggles and the wrench screen show the horde, the chow cost and the time per monster at your speed.",
+      "A comparator reads how full of monsters it is.",
+      "Dispensers catch with an empty jar and let monsters out with a full one; Deployers can catch, release and cull."
+    ],
+    "facts": [
+      "The monsters eat from a big dented steel dog bowl under a chow chute.",
+      "Monster Chow is edible, badly: like rotten flesh, with a chance of a Monster Belch or Chow Breath."
+    ],
+    "related": [
+      "iron-jar",
+      "monster-chow",
+      "monstrous",
+      "flooded-monster-cage",
+      "netherite-monster-cage",
+      "animal-pen",
+      "one-block-farming"
+    ]
+  },
+  {
+    "id": "flooded-monster-cage",
+    "name": "Flooded Monster Cage",
+    "registry": [
+      "comedymonkeysaddons:flooded_monster_cage",
+      "comedymonkeysaddons:brass_flooded_monster_cage"
+    ],
+    "summary": "A Monster Cage full of water for drowned, and in the Brass one guardians and elder guardians, that throws tridents if a drowned comes armed.",
+    "tags": [
+      "farming",
+      "monsters",
+      "water",
+      "enchantable"
+    ],
+    "stage": "mid",
+    "requires": [
+      "monster-cage"
+    ],
+    "teach": {
+      "what": "A cage of the same tier with a flooded cell. It farms drowned (the Brass one guardians and elder guardians too), using 250 mB of water for each new monster along with its chow.",
+      "why": "Drowned give copper and the odd trident; guardians give prismarine and sponges. No ocean monument or underwater farm needed.",
+      "when": "Once you have a dry cage and a water supply: it's the dry cage, a Fluid Tank and two Framed Glass.",
+      "interacts": "Water comes in from pipes, [[fluid-lines]] or a bucket, ideally from a [[fluid-wellspring]] with a [[water-upgrade]]. A zombie or husk put in drowns into a drowned.",
+      "mistakes": [
+        "Now and then a drowned arrives armed, and the cage throws a real trident out of its front at the nearest player within 16 blocks, every 3 seconds at most. Stand behind it, or cull: armed ones go first.",
+        "Water can't go in through the back, where the shaft is.",
+        "Short of water, nothing new arrives.",
+        "Only an empty cage can be upgraded into a Flooded one."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Water per monster",
+        "value": "250",
+        "unit": "mB"
+      },
+      {
+        "label": "Tank (Brass)",
+        "value": "16,000",
+        "unit": "mB"
+      },
+      {
+        "label": "Stress (Brass)",
+        "value": "16",
+        "unit": "SU per RPM",
+        "gauge": 1
+      }
+    ],
+    "specs": [
+      [
+        "Holds",
+        "64 (Brass 256), as the dry cages"
+      ],
+      [
+        "Water tank",
+        "4,000 mB (Brass 16,000 mB)"
+      ],
+      [
+        "Water per monster",
+        "250 mB"
+      ],
+      [
+        "Water in",
+        "Any side but the back"
+      ],
+      [
+        "Trident throw",
+        "16 blocks, every 3 s at most"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM (Brass 16) while it works",
+      "speed": "Any; faster is quicker"
+    },
+    "inputs": [
+      "A jarred drowned (or zombie, or husk), or in the Brass one a guardian or elder guardian.",
+      "Monster Chow.",
+      "Water on any side but the back.",
+      "A shaft in the back."
+    ],
+    "outputs": [
+      "The monsters' real drops from a sword cull: copper, rotten flesh and the occasional trident from drowned; prismarine and sponges from guardians."
+    ],
+    "throughput": [
+      "Same pace as the dry cage of its tier, as long as the water keeps up: 250 mB a monster."
+    ],
+    "rules": [
+      "Each new drowned has vanilla's 6.25% chance of holding a trident; a culled one drops it at vanilla's 8.5% (more with Looting).",
+      "A zombie or husk put in drowns into a drowned, and the cage becomes a drowned cage.",
+      "Shields block a thrown trident, and it vanishes like a vanilla drowned's."
+    ],
+    "variants": [
+      {
+        "id": "andesite",
+        "name": "Flooded Monster Cage",
+        "registry": [
+          "comedymonkeysaddons:flooded_monster_cage"
+        ],
+        "summary": "For drowned.",
+        "specs": [
+          [
+            "Holds",
+            "64"
+          ],
+          [
+            "Tank",
+            "4,000 mB"
+          ],
+          [
+            "Recipe",
+            "Monster Cage + Fluid Tank + 2 Framed Glass"
+          ]
+        ]
+      },
+      {
+        "id": "brass",
+        "name": "Flooded Brass Monster Cage",
+        "registry": [
+          "comedymonkeysaddons:brass_flooded_monster_cage"
+        ],
+        "summary": "For drowned, guardians and elder guardians.",
+        "specs": [
+          [
+            "Holds",
+            "256"
+          ],
+          [
+            "Tank",
+            "16,000 mB"
+          ],
+          [
+            "Recipe",
+            "Brass Monster Cage + Fluid Tank + 2 Framed Glass, or Mechanical Crafting around a Flooded one"
+          ]
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Copper from drowned",
+        "steps": [
+          {
+            "ref": "fluid-wellspring",
+            "kind": "source",
+            "note": "Water Upgrade"
+          },
+          {
+            "ref": "fluid-lines",
+            "kind": "machine",
+            "via": "water"
+          },
+          {
+            "ref": "flooded-monster-cage",
+            "kind": "machine",
+            "note": "drowned",
+            "via": "250 mB each"
+          },
+          {
+            "item": "minecraft:copper_ingot",
+            "label": "Copper, rotten flesh, tridents",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Put the cage's front against a wall, or work from behind it, while it holds armed drowned.",
+      "Display Links can show the horde, what it's doing and the water level."
+    ],
+    "facts": [
+      "About 1 trident in 160 to 190 culled drowned, matching vanilla's odds."
+    ],
+    "related": [
+      "monster-cage",
+      "armed-drowned",
+      "fluid-wellspring",
+      "netherite-monster-cage",
+      "monstrous"
+    ]
+  },
+  {
+    "id": "netherite-monster-cage",
+    "name": "Netherite Monster Cage",
+    "registry": [
+      "comedymonkeysaddons:netherite_monster_cage"
+    ],
+    "summary": "A blast-proof containment cage that holds up to three Withers in a blue FE field and farms them for Nether Stars.",
+    "tags": [
+      "farming",
+      "monsters",
+      "wither",
+      "fe"
+    ],
+    "stage": "end",
+    "requires": [
+      "monster-cage",
+      "netherite-jar",
+      "fe-coil",
+      "lava-generator"
+    ],
+    "teach": {
+      "what": "A cage that holds Withers caught in a [[netherite-jar]]. 2,048 FE/t holds them in a containment field; up to 1,024 FE/t more brings in a new Wither every 20 minutes at 256 RPM, eating 64 Monster Chow each. Cull them for Nether Stars.",
+      "why": "Nether Stars without the boss fight, as many as you can keep powered.",
+      "when": "Late. It takes netherite ingots, Precision Mechanisms, [[fe-coil|FE Coils]] and obsidian around a Brass cage, and a real power grid: Lava Generators or a [[geothermal-turbine]] on [[power-lines]], ideally with a [[battery]].",
+      "interacts": "FE comes in on any side but the back, from [[power-lines]] or any FE source. [[monstrous]] works on it too. Display Links show the containment state and escape clock.",
+      "mistakes": [
+        "If the power fails, every player within 128 blocks gets 5 minutes of warning, then one Wither breaks out, and another every game day until the power is back.",
+        "You can't break or empty it while its field is down, so you can't 'rescue' it by picking it up.",
+        "Short of FE, the farming draw is shed first: it stops bringing Withers in before the field fails.",
+        "Only its owner (and their team) can open or break it. Carry On can't move it."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Field draw",
+        "value": "2,048",
+        "unit": "FE/t",
+        "gauge": 0.67
+      },
+      {
+        "label": "Flat out",
+        "value": "3,072",
+        "unit": "FE/t",
+        "gauge": 1
+      },
+      {
+        "label": "New Wither at 256 RPM",
+        "value": "20",
+        "unit": "min"
+      }
+    ],
+    "specs": [
+      [
+        "Holds",
+        "3 Withers"
+      ],
+      [
+        "Containment",
+        "2,048 FE/t whenever it holds a Wither"
+      ],
+      [
+        "Farming",
+        "Up to +1,024 FE/t at 256 RPM"
+      ],
+      [
+        "FE store",
+        "200,000 FE"
+      ],
+      [
+        "Chow per Wither",
+        "64 Monster Chow"
+      ],
+      [
+        "Stress",
+        "16 SU per RPM"
+      ],
+      [
+        "Blast-proof",
+        "Yes"
+      ]
+    ],
+    "power": {
+      "kind": "fe",
+      "stress": "16 SU per RPM while it works",
+      "speed": "Times are at 256 RPM (80 minutes at 64)",
+      "draws": "2,048 FE/t to hold, up to 3,072 FE/t while farming"
+    },
+    "inputs": [
+      "A Wither in a Netherite Jar.",
+      "FE on any side but the back.",
+      "64 Monster Chow per new Wither.",
+      "A shaft in the back."
+    ],
+    "outputs": [
+      "Nether Stars and the Wither's other drops from a sword cull."
+    ],
+    "throughput": [
+      "A new Wither every 20 minutes at 256 RPM, 80 minutes at 64 RPM.",
+      "With Monstrous III at 256 RPM, up to 7.5 Nether Stars an hour."
+    ],
+    "rules": [
+      "The countdown and escape clock stop whenever no player is within 128 blocks, even if the chunk stays loaded, and resume where they stopped.",
+      "FE back at any point during the countdown cancels it.",
+      "An escaping Wither comes out at the nearest open space around the cage, with vanilla's charge-up and blast.",
+      "A config option, `escapes`, makes the cage just stop instead.",
+      "A comparator reads 15 during a countdown."
+    ],
+    "setups": [
+      {
+        "title": "Never let the field drop",
+        "body": [
+          {
+            "list": [
+              "Run it from more generation than it needs: a Lava Generator makes 1,024 FE/t, so it takes three to farm flat out.",
+              "Put a [[battery]] on the same line, so a gap in supply is carried through.",
+              "Use a [[splitter|Power Splitter]] to serve the cage's branch First when power runs short."
+            ]
+          },
+          {
+            "warning": "Breaking its power line, or letting the lava run dry, starts the 5-minute countdown. A klaxon sounds and the chat tells everyone nearby."
+          }
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Nether Stars from lava",
+        "steps": [
+          {
+            "ref": "fluid-wellspring",
+            "kind": "source",
+            "note": "Lava Upgrades"
+          },
+          {
+            "ref": "lava-generator",
+            "kind": "machine",
+            "via": "20 mB/s"
+          },
+          {
+            "ref": "power-lines",
+            "kind": "machine",
+            "via": "FE"
+          },
+          {
+            "ref": "netherite-monster-cage",
+            "kind": "machine",
+            "via": "2,048 to 3,072 FE/t"
+          },
+          {
+            "item": "minecraft:nether_star",
+            "label": "Nether Star",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Goggles show FE stored, the draw and the containment state; in a countdown, the time left.",
+      "On an Aeronautics ship it works with real rotation and FE, but if the ship's power fails the Withers escape in mid-air."
+    ],
+    "facts": [
+      "While the field is up a blue shield glows round the whole block; it flickers and cracks when short of FE.",
+      "Catching your first Wither earns the advancement \"Contained\"."
+    ],
+    "related": [
+      "contained-wither",
+      "netherite-jar",
+      "monster-cage",
+      "battery",
+      "lava-generator",
+      "power-lines",
+      "electricity"
+    ]
+  },
+  {
+    "id": "fish-tank",
+    "name": "Fish Tank",
+    "registry": [
+      "comedymonkeysaddons:fish_tank",
+      "comedymonkeysaddons:brass_fish_tank"
+    ],
+    "summary": "The Animal Pen for fish, squid and axolotls: one glazed tank that breeds a whole school underwater, with the rare blue axolotl.",
+    "tags": [
+      "farming",
+      "fish",
+      "water",
+      "enchantable"
+    ],
+    "stage": "early",
+    "requires": [
+      "capture-bottle",
+      "fish-food"
+    ],
+    "teach": {
+      "what": "Catch a cod, salmon, tropical fish, pufferfish, squid, glow squid or axolotl in a [[capture-bottle]] and use it on the tank. With water, [[fish-food]] and a turning shaft, every adult has young every five minutes at 64 RPM. It holds 128 (Brass 512).",
+      "why": "Fish, ink sacs, glow ink sacs, pufferfish and axolotls without fishing or an ocean farm.",
+      "when": "Early to mid: andesite alloy, three Framed Glass, a Fluid Tank and Andesite Casing, plus a Mixer for Fish Food.",
+      "interacts": "Water comes from pipes, [[fluid-lines]] or buckets, best from a [[fluid-wellspring]]. [[fruitful]] speeds it up, as on the pens. Tropical fish young copy their pattern; axolotl young copy their colour.",
+      "mistakes": [
+        "No water, no births: each one uses 250 mB, and the window shows the level dropping.",
+        "Faster shafts breed faster but cost more stress (4 SU per RPM, Brass 16).",
+        "Tadpoles and dolphins can't be caught, and squid can't be scooped out with a bucket.",
+        "Water can't go in through the back."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress (Tank)",
+        "value": "4",
+        "unit": "SU per RPM",
+        "gauge": 0.25
+      },
+      {
+        "label": "Stress (Brass)",
+        "value": "16",
+        "unit": "SU per RPM",
+        "gauge": 1
+      },
+      {
+        "label": "Blue axolotl",
+        "value": "1 in 1,200",
+        "unit": "births"
+      }
+    ],
+    "specs": [
+      [
+        "Holds",
+        "128 (Brass 512)"
+      ],
+      [
+        "Breeding",
+        "Every 5 minutes at 64 RPM"
+      ],
+      [
+        "Water per birth",
+        "250 mB"
+      ],
+      [
+        "Water tank",
+        "4,000 mB (Brass 16,000 mB)"
+      ],
+      [
+        "Food slots",
+        "2 (Brass 8)"
+      ],
+      [
+        "Output",
+        "9 slots (Brass 18)"
+      ],
+      [
+        "Light",
+        "Level 6 with glow squid"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM (Brass 16); none while empty, full, or out of food or water",
+      "speed": "Any; faster breeds sooner"
+    },
+    "inputs": [
+      "A bottled fish, squid or axolotl.",
+      "Water on any side but the back, by pipe or bucket.",
+      "Fish Food.",
+      "A shaft in the back."
+    ],
+    "outputs": [
+      "Sword culls (half, always leaving one): cod, salmon, pufferfish, ink sacs, glow ink sacs, bone meal.",
+      "A water bucket scoops one adult out alive as a Bucket of Fish, a blue axolotl first."
+    ],
+    "throughput": [
+      "Every 5 minutes at 64 RPM each adult eats one Fish Food and has young; four times as fast at 256 RPM.",
+      "Fish and squid young arrive grown; axolotl young grow up in twenty minutes."
+    ],
+    "rules": [
+      "Fish Food is mixed from Wheat Flour, Dried Kelp and Bone Meal, 4 at a time.",
+      "Pufferfish don't puff or sting from inside a tank.",
+      "Only an empty Fish Tank can be upgraded to a Brass one."
+    ],
+    "variants": [
+      {
+        "id": "andesite",
+        "name": "Fish Tank",
+        "registry": [
+          "comedymonkeysaddons:fish_tank"
+        ],
+        "summary": "Holds 128.",
+        "specs": [
+          [
+            "Holds",
+            "128"
+          ],
+          [
+            "Tank",
+            "4,000 mB"
+          ],
+          [
+            "Stress",
+            "4 SU per RPM"
+          ],
+          [
+            "Recipe",
+            "Andesite alloy corners, 3 Framed Glass, a Fluid Tank, Andesite Casing"
+          ]
+        ]
+      },
+      {
+        "id": "brass",
+        "name": "Brass Fish Tank",
+        "registry": [
+          "comedymonkeysaddons:brass_fish_tank"
+        ],
+        "summary": "Holds 512, with room for more food, water and catch.",
+        "specs": [
+          [
+            "Holds",
+            "512"
+          ],
+          [
+            "Tank",
+            "16,000 mB"
+          ],
+          [
+            "Stress",
+            "16 SU per RPM"
+          ],
+          [
+            "Recipe",
+            "Mechanical Crafting around a Fish Tank"
+          ]
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Hunting for a blue axolotl",
+        "steps": [
+          {
+            "ref": "capture-bottle",
+            "kind": "source",
+            "note": "an axolotl"
+          },
+          {
+            "ref": "fish-tank",
+            "kind": "machine",
+            "note": "water + Fish Food",
+            "via": "1 in 1,200"
+          },
+          {
+            "label": "Water bucket scoops the blue one first",
+            "kind": "machine"
+          },
+          {
+            "ref": "blue-axolotl",
+            "kind": "result"
+          }
+        ]
+      },
+      {
+        "title": "Ink without squid hunting",
+        "steps": [
+          {
+            "ref": "fluid-wellspring",
+            "kind": "source",
+            "note": "water"
+          },
+          {
+            "ref": "fish-tank",
+            "kind": "machine",
+            "note": "squid"
+          },
+          {
+            "item": "minecraft:ink_sac",
+            "label": "Ink Sacs",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Fish Food also breeds axolotls in the world, and fish swim after you while you hold it.",
+      "A tank of glow squid gives light level 6, so it doubles as a lamp.",
+      "Goggles show the school, its status, the water level and Fruitful."
+    ],
+    "facts": [
+      "Create's own cogwheel lies half sunk in the gravel as the tank ornament, and the air pump bobs with the shaft.",
+      "Breeding a blue axolotl earns the advancement \"Once in a Blue Moon\"."
+    ],
+    "related": [
+      "capture-bottle",
+      "fish-food",
+      "blue-axolotl",
+      "fruitful",
+      "animal-pen",
+      "fluid-wellspring"
+    ]
+  },
+  {
+    "id": "cuckoo-clock",
+    "name": "Cuckoo Clock",
+    "registry": [
+      "comedymonkeysaddons:cuckoo_clock",
+      "comedymonkeysaddons:cuckoo_clock_weights"
+    ],
+    "summary": "A Black Forest wall clock that sets every villager within 64 blocks to restock at 8:00 and 12:00, and chimes the hour with a cuckoo.",
+    "tags": [
+      "villagers",
+      "trading",
+      "clock"
+    ],
+    "stage": "mid",
+    "requires": [],
+    "teach": {
+      "what": "A two-block wall clock in dark walnut and brass. While its shaft turns, villagers within 64 blocks restock at 8:00 and 12:00 game time instead of vanilla's times, on their first trip to their workstation after the hour.",
+      "why": "Predictable restocks: you know exactly when your traders are full again, which suits big trading halls and the [[trade-bot]].",
+      "when": "Once you have brass sheets and a Precision Mechanism, and a trading hall worth timing.",
+      "interacts": "It works with any village and with the [[trade-bot]], who buys at the villagers' real stock. It needs a steady 1,024 SU, about a 16-sail windmill.",
+      "mistakes": [
+        "It needs the block below free for its pendulum and weights.",
+        "Stopped, it does nothing: villagers near a stopped clock go back to vanilla's rules.",
+        "Villagers still have to reach their workstation to restock, so blocked paths still stop them.",
+        "It runs only as a placed block, never on a contraption."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress",
+        "value": "1,024",
+        "unit": "SU at any speed",
+        "gauge": 0.25
+      },
+      {
+        "label": "Reach",
+        "value": "64",
+        "unit": "blocks"
+      },
+      {
+        "label": "Restocks",
+        "value": "8:00 and 12:00"
+      }
+    ],
+    "specs": [
+      [
+        "Size",
+        "Two blocks tall, hangs on a wall"
+      ],
+      [
+        "Shaft",
+        "Middle of its back, usually through the wall"
+      ],
+      [
+        "Stress",
+        "1,024 SU at any speed (config)"
+      ],
+      [
+        "Reach",
+        "64 blocks across the ground, and as far up and down (config)"
+      ],
+      [
+        "Restock times",
+        "8:00 and 12:00 game time"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "1,024 SU at any speed",
+      "speed": "Any; it only needs to turn"
+    },
+    "inputs": [
+      "A shaft into the middle of its back."
+    ],
+    "outputs": [
+      "Restocks for every villager in reach, twice a day, and a show on the hour."
+    ],
+    "rules": [
+      "It hangs on the wall you click, facing out from it.",
+      "Villagers out of reach, or near a clock that has stopped, keep the vanilla rules.",
+      "At 8:00 and 12:00 it chimes, the doors open, a carved villager rolls out with a workstation picked from those nearby, and the cuckoo calls the hour: eight times, or twelve."
+    ],
+    "flows": [
+      {
+        "title": "Timed trading",
+        "steps": [
+          {
+            "item": "create:windmill_bearing",
+            "label": "Windmill, about 16 sails",
+            "kind": "source"
+          },
+          {
+            "ref": "cuckoo-clock",
+            "kind": "machine",
+            "via": "1,024 SU"
+          },
+          {
+            "label": "Villagers restock at 8:00 and 12:00",
+            "kind": "item"
+          },
+          {
+            "ref": "trade-bot",
+            "kind": "machine"
+          },
+          {
+            "item": "minecraft:emerald",
+            "label": "Emeralds",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Engineer's Goggles show the time, the next restock and how long until it, and how many traders it reaches.",
+      "Only grown villagers with a job count as traders."
+    ],
+    "facts": [
+      "The carved villager brings out a little workstation with its profession's work sound.",
+      "A sun and moon disc turns once a game day in the window above the dial."
+    ],
+    "related": [
+      "trade-bot"
+    ]
+  },
+  {
+    "id": "magma-engine",
+    "name": "Magma Engine",
+    "registry": [
+      "comedymonkeysaddons:magma_engine"
+    ],
+    "summary": "A lava-burning V-twin that turns its shaft at 64 RPM with 8,192 SU, four Portable Engines' worth, for 10 mB of lava a second.",
+    "tags": [
+      "power",
+      "lava",
+      "rotation"
+    ],
+    "stage": "mid",
+    "requires": [],
+    "teach": {
+      "what": "A single-block engine that burns 10 mB of lava a second and turns the shaft in the middle of its front at 64 RPM with 8,192 SU.",
+      "why": "Big, steady rotation from one block, with no boiler to build. Fed from a lava [[fluid-wellspring]] it never stops.",
+      "when": "Mid game. Its recipe is a Portable Engine's with an Engine Assembly (Create Aeronautics); without Aeronautics it's brass sheets, a Steam Engine, 2 Fluid Tanks, Brass Casing and a Blaze Burner.",
+      "interacts": "Pipes and [[fluid-lines]] fill it on any side but the front. Display Links read its lava level and output. Rebuild it with a Precision Mechanism for the [[supercharged-magma-engine]].",
+      "mistakes": [
+        "Pipes can't fill it through the front: that's where the shaft is.",
+        "With no lava it sputters to a stop, and so does everything on its shaft.",
+        "It places with the shaft pointing at you; sneak to point it away."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Output",
+        "value": "8,192",
+        "unit": "SU",
+        "gauge": 0.3
+      },
+      {
+        "label": "Speed",
+        "value": "64",
+        "unit": "RPM",
+        "gauge": 0.25
+      },
+      {
+        "label": "Lava",
+        "value": "10",
+        "unit": "mB/s",
+        "gauge": 0.11
+      }
+    ],
+    "specs": [
+      [
+        "Speed",
+        "64 RPM (config)"
+      ],
+      [
+        "Stress capacity",
+        "8,192 SU (128 per RPM)"
+      ],
+      [
+        "Lava burned",
+        "10 mB a second"
+      ],
+      [
+        "Tank",
+        "4 buckets"
+      ],
+      [
+        "Lava in",
+        "Any side but the front"
+      ],
+      [
+        "Facing",
+        "Any way up, sideways, up or down"
+      ]
+    ],
+    "power": {
+      "kind": "lava",
+      "makes": "8,192 SU at 64 RPM",
+      "draws": "10 mB of lava a second"
+    },
+    "inputs": [
+      "Lava by pipe on any side but the front, or a lava bucket from any side."
+    ],
+    "outputs": [
+      "Rotation from the shaft in the middle of its front."
+    ],
+    "throughput": [
+      "One full tank (4 buckets) lasts 400 seconds, nearly 7 minutes."
+    ],
+    "rules": [
+      "The value box on top of the drum at the back sets the shaft turning clockwise or counter-clockwise.",
+      "Speed, capacity and lava use are configurable."
+    ],
+    "efficiency": [
+      "A Wellspring with three Lava Upgrades makes 50 mB/s: enough for five Magma Engines.",
+      "Per mB of lava it gives the same stress as the Supercharged engine; the bigger one just packs it into one block."
+    ],
+    "flows": [
+      {
+        "title": "Rotation forever",
+        "steps": [
+          {
+            "ref": "fluid-wellspring",
+            "kind": "source",
+            "note": "Lava Upgrades"
+          },
+          {
+            "label": "Pipe or Fluid Line",
+            "kind": "machine",
+            "via": "10 mB/s"
+          },
+          {
+            "ref": "magma-engine",
+            "kind": "machine"
+          },
+          {
+            "label": "8,192 SU at 64 RPM",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Engineer's Goggles show how much lava is left.",
+      "With Pipez and Create Aeronautics, Portable Engines take lava by pipe too; the Magma Engine just does it four times as hard."
+    ],
+    "facts": [
+      "Its two pistons pump in and out of their finned cylinders, the spoked flywheel turns, and each exhaust chugs a puff of smoke in time.",
+      "Its advancement is called \"Hot Rod\"."
+    ],
+    "related": [
+      "supercharged-magma-engine",
+      "fluid-wellspring",
+      "lava-upgrade",
+      "lava-generator"
+    ]
+  },
+  {
+    "id": "supercharged-magma-engine",
+    "name": "Supercharged Magma Engine",
+    "registry": [
+      "comedymonkeysaddons:supercharged_magma_engine"
+    ],
+    "summary": "Twice a Magma Engine in every way: 128 RPM and 16,384 SU for 20 mB of lava a second.",
+    "tags": [
+      "power",
+      "lava",
+      "rotation"
+    ],
+    "stage": "advanced",
+    "requires": [
+      "magma-engine"
+    ],
+    "teach": {
+      "what": "A Magma Engine rebuilt with a Precision Mechanism and a belt-driven supercharger: 128 RPM and 16,384 SU, burning 20 mB of lava a second, with an 8-bucket tank.",
+      "why": "Twice the speed and power in the same block, for when one shaft has to drive a lot.",
+      "when": "After your first Magma Engine: it's a Precision Mechanism over a Magma Engine over Brass Casing.",
+      "interacts": "It works exactly like the [[magma-engine]]: pipes on any side but the front, Display Links, a direction box on top. Feed it from a lava [[fluid-wellspring]].",
+      "mistakes": [
+        "It burns twice the lava: one fully upgraded Wellspring runs two and a half of them, not five.",
+        "Pipes can't fill it through the front.",
+        "It has its own config section; changing the Magma Engine's settings doesn't change this one."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Output",
+        "value": "16,384",
+        "unit": "SU",
+        "gauge": 0.5
+      },
+      {
+        "label": "Speed",
+        "value": "128",
+        "unit": "RPM",
+        "gauge": 0.5
+      },
+      {
+        "label": "Lava",
+        "value": "20",
+        "unit": "mB/s",
+        "gauge": 0.22
+      }
+    ],
+    "specs": [
+      [
+        "Speed",
+        "128 RPM (config)"
+      ],
+      [
+        "Stress capacity",
+        "16,384 SU (128 per RPM)"
+      ],
+      [
+        "Lava burned",
+        "20 mB a second"
+      ],
+      [
+        "Tank",
+        "8 buckets"
+      ],
+      [
+        "Lava in",
+        "Any side but the front"
+      ]
+    ],
+    "power": {
+      "kind": "lava",
+      "makes": "16,384 SU at 128 RPM",
+      "draws": "20 mB of lava a second"
+    },
+    "inputs": [
+      "Lava by pipe on any side but the front, or a lava bucket."
+    ],
+    "outputs": [
+      "Rotation from the shaft in the middle of its front."
+    ],
+    "throughput": [
+      "A full tank (8 buckets) lasts 400 seconds, the same as a Magma Engine's."
+    ],
+    "rules": [
+      "Placement, pipes and the direction value box work as on the Magma Engine."
+    ],
+    "efficiency": [
+      "Same stress per mB of lava as the Magma Engine: you pay for the speed and the single block, not for more power per lava."
+    ],
+    "flows": [
+      {
+        "title": "Two and a half per Wellspring",
+        "steps": [
+          {
+            "ref": "fluid-wellspring",
+            "kind": "source",
+            "note": "3 Lava Upgrades"
+          },
+          {
+            "label": "50 mB/s",
+            "kind": "item"
+          },
+          {
+            "ref": "supercharged-magma-engine",
+            "kind": "machine",
+            "via": "20 mB/s each"
+          },
+          {
+            "label": "16,384 SU at 128 RPM",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "128 RPM is a standard Create speed, so it drives fast machines without a speed controller."
+    ],
+    "facts": [
+      "The supercharger's pulley spins visibly faster than the flywheel, and you can hear it whine.",
+      "Its advancement is called \"Twin Turbo\"."
+    ],
+    "related": [
+      "magma-engine",
+      "fluid-wellspring",
+      "lava-upgrade"
+    ]
+  },
+  {
+    "id": "string-tangler",
+    "name": "String Tangler",
+    "registry": [
+      "comedymonkeysaddons:string_tangler"
+    ],
+    "summary": "A copper-trimmed machine whose Create whisk tangles 4 string and a slime ball into a cobweb.",
+    "tags": [
+      "processing",
+      "cobweb"
+    ],
+    "stage": "early",
+    "requires": [],
+    "teach": {
+      "what": "Every 4 string and 1 slime ball become a cobweb. The string pays out from two spools onto a spinning whisk, and the web balls up until it drops into the tray.",
+      "why": "Cobwebs can't be crafted in vanilla, and shears on a spider web is slow. This makes them on demand.",
+      "when": "Early: 4 Copper Casing, 3 Framed Glass, a Whisk and a shaft.",
+      "interacts": "A [[monster-cage]] of spiders and one of slimes give it both ingredients. Hoppers, funnels and pipes load it and take the cobwebs from any side.",
+      "mistakes": [
+        "Power goes in through the back; the glass front faces you when placed.",
+        "It needs both ingredients: string alone just sits on the spools.",
+        "At 16 RPM a web takes 8 seconds; speed it up if you need many."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress",
+        "value": "4",
+        "unit": "SU per RPM",
+        "gauge": 0.25
+      },
+      {
+        "label": "At 16 RPM",
+        "value": "160",
+        "unit": "ticks"
+      },
+      {
+        "label": "At 256 RPM",
+        "value": "0.5",
+        "unit": "s"
+      }
+    ],
+    "specs": [
+      [
+        "Recipe",
+        "4 string + 1 slime ball to 1 cobweb"
+      ],
+      [
+        "Time",
+        "160 ticks at 16 RPM, half a second at 256"
+      ],
+      [
+        "Stress",
+        "4 SU per RPM (config)"
+      ],
+      [
+        "Shaft",
+        "Back"
+      ],
+      [
+        "Items in and out",
+        "Any side"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM",
+      "speed": "Faster tangles faster"
+    },
+    "inputs": [
+      "String and slime balls, by right-click or by hopper, funnel or pipe."
+    ],
+    "outputs": [
+      "Cobwebs, empty-handed or by automation from any side."
+    ],
+    "throughput": [
+      "120 cobwebs a minute at 256 RPM, if you can feed it 480 string."
+    ],
+    "rules": [
+      "Its recipe type, `comedymonkeysaddons:tangling`, is data-driven, so packs can add their own; JEI shows them."
+    ],
+    "flows": [
+      {
+        "title": "Cobwebs from caged monsters",
+        "steps": [
+          {
+            "ref": "monster-cage",
+            "kind": "source",
+            "note": "spiders"
+          },
+          {
+            "item": "minecraft:string",
+            "label": "String",
+            "kind": "item",
+            "via": "×4"
+          },
+          {
+            "ref": "string-tangler",
+            "kind": "machine",
+            "note": "+ 1 slime ball"
+          },
+          {
+            "item": "minecraft:cobweb",
+            "label": "Cobweb",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "The spools' winding shows how much string is loaded, and the slime sits in a little pot you can see."
+    ],
+    "facts": [
+      "Its advancement is called \"Web Developer\".",
+      "The Ponder scene promises cobwebs \"spider-free, guaranteed\"."
+    ],
+    "related": [
+      "monster-cage",
+      "stone-infuser"
+    ]
+  },
+  {
+    "id": "stone-infuser",
+    "name": "Stone Infuser",
+    "registry": [
+      "comedymonkeysaddons:stone_infuser"
+    ],
+    "summary": "Turns cobblestone and 9 metal nuggets into Create's ore-bearing stones: asurine, crimsite, ochrum and veridium.",
+    "tags": [
+      "processing",
+      "stone",
+      "ores"
+    ],
+    "stage": "early",
+    "requires": [],
+    "teach": {
+      "what": "A turntable in a sealed box: a cobblestone turns while a feeder sprinkles metal dust over it, and the new stone creeps up it. 9 zinc nuggets make asurine, 9 iron crimsite, 9 gold ochrum and 9 copper veridium.",
+      "why": "Create's decorative ore stones on demand, without hunting for veins.",
+      "when": "Early: Andesite Casing, Framed Glass, iron sheets, a Basin and a shaft.",
+      "interacts": "A [[cobblestone-generator]] gives it cobblestone, and a [[tuff-generator]] with Crushing Wheels gives it all four nuggets.",
+      "mistakes": [
+        "Crushing these stones gives fewer than 9 nuggets back (veridium about 8, the others 2 to 4), so it isn't a metal duplicator.",
+        "Power goes in through the back.",
+        "It needs exactly 9 nuggets of one metal per stone; mixed nuggets don't make anything."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress",
+        "value": "8",
+        "unit": "SU per RPM",
+        "gauge": 0.5
+      },
+      {
+        "label": "At 16 RPM",
+        "value": "200",
+        "unit": "ticks"
+      },
+      {
+        "label": "Nuggets per stone",
+        "value": "9"
+      }
+    ],
+    "specs": [
+      [
+        "Zinc nuggets",
+        "Asurine"
+      ],
+      [
+        "Iron nuggets",
+        "Crimsite"
+      ],
+      [
+        "Gold nuggets",
+        "Ochrum"
+      ],
+      [
+        "Copper nuggets",
+        "Veridium"
+      ],
+      [
+        "Time",
+        "200 ticks at 16 RPM"
+      ],
+      [
+        "Stress",
+        "8 SU per RPM (config)"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "8 SU per RPM",
+      "speed": "Faster infuses faster"
+    },
+    "inputs": [
+      "1 cobblestone and 9 nuggets of one metal, by right-click or by hopper, funnel or pipe from any side.",
+      "A shaft into the back."
+    ],
+    "outputs": [
+      "The ore-bearing stone, waiting in the tray at the front, taken empty-handed or by automation."
+    ],
+    "rules": [
+      "Its recipe type, `comedymonkeysaddons:infusing`, is data-driven; JEI shows it."
+    ],
+    "flows": [
+      {
+        "title": "Tuff into ore stones",
+        "steps": [
+          {
+            "ref": "tuff-generator",
+            "kind": "source"
+          },
+          {
+            "item": "create:crushing_wheel",
+            "label": "Crushing Wheels",
+            "kind": "machine"
+          },
+          {
+            "label": "A few of all four nuggets",
+            "kind": "item"
+          },
+          {
+            "ref": "stone-infuser",
+            "kind": "machine",
+            "note": "+ cobblestone",
+            "via": "×9"
+          },
+          {
+            "item": "create:crimsite",
+            "label": "Ore-bearing stone",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Feed it from a cobblestone generator on one side and a nugget line on another; funnels work from any side."
+    ],
+    "facts": [
+      "Its Ponder scene is called \"Cobblestone with Ambition\"."
+    ],
+    "related": [
+      "tuff-generator",
+      "cobblestone-generator",
+      "string-tangler",
+      "stone-generation"
+    ]
+  },
+  {
+    "id": "incinerator",
+    "name": "Incinerator",
+    "registry": [
+      "comedymonkeysaddons:incinerator"
+    ],
+    "summary": "A bottomless steel furnace that destroys any item or fluid from any side, and heats a Steam Engine boiler while it burns.",
+    "tags": [
+      "disposal",
+      "boiler",
+      "heat"
+    ],
+    "stage": "early",
+    "requires": [],
+    "teach": {
+      "what": "Anything that goes in is gone: items from funnels, chutes, hoppers or pipes, and any fluid from pipes. It never fills up. While lit, it heats a boiler above it like a lit Blaze Burner.",
+      "why": "A safe end for overflow lines, so a full chest never backs up a whole factory. And your rubbish becomes boiler heat.",
+      "when": "Early: Andesite Alloy, a Magma Block, a Furnace and Andesite Casing.",
+      "interacts": "Put it at the end of any overflow: a [[cobblestone-generator]]'s extra stone, a [[fluid-wellspring]]'s extra water, unwanted mob drops. Under a Steam Engine boiler it counts as heat while lit.",
+      "mistakes": [
+        "It destroys everything, with no filter. Anything you route into it by mistake is gone for good.",
+        "It takes 10 points of heat to light (an item, or a tenth of a bucket, is a point) and loses a point a second, so the odd item now and then never lights it.",
+        "Stop feeding it and it's cold within 10 seconds, and a cold Incinerator gives a boiler no heat at all."
+      ]
+    },
+    "stats": [
+      {
+        "label": "To light",
+        "value": "10",
+        "unit": "items"
+      },
+      {
+        "label": "Keep lit",
+        "value": "1",
+        "unit": "item a second"
+      },
+      {
+        "label": "Capacity",
+        "value": "No limit"
+      }
+    ],
+    "specs": [
+      [
+        "Takes",
+        "Any item or fluid"
+      ],
+      [
+        "Sides",
+        "All six"
+      ],
+      [
+        "Heat per point",
+        "1 item or 100 mB of fluid"
+      ],
+      [
+        "Cooling",
+        "1 point a second"
+      ],
+      [
+        "Lit at",
+        "10 points, until it cools right down"
+      ],
+      [
+        "Boiler heat",
+        "Like a lit Blaze Burner, while lit"
+      ],
+      [
+        "Power",
+        "None"
+      ]
+    ],
+    "power": {
+      "kind": "none",
+      "makes": "Boiler heat while lit"
+    },
+    "inputs": [
+      "Items from funnels, chutes, hoppers, arms or pipes, and any fluid from pipes, on any side."
+    ],
+    "outputs": [
+      "Nothing, except heat for a Steam Engine boiler above it while it's lit."
+    ],
+    "rules": [
+      "Everything burns, water too.",
+      "Each item, or each tenth of a bucket, adds a point of heat; it loses a point a second.",
+      "At 10 points it's lit, and it stays lit until it has cooled right down.",
+      "Goggles show how much it has burned."
+    ],
+    "setups": [
+      {
+        "title": "Overflow you never think about",
+        "body": [
+          "Put a Create funnel or a pipe from the back of your storage into the Incinerator. When the storage fills, the extra goes into the fire instead of jamming the line.",
+          {
+            "tip": "Under a boiler, a steady stream of overflow becomes free steam."
+          }
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Rubbish into steam",
+        "steps": [
+          {
+            "ref": "cobblestone-generator",
+            "kind": "source",
+            "note": "overflow"
+          },
+          {
+            "ref": "incinerator",
+            "kind": "machine",
+            "via": "1 a second or more"
+          },
+          {
+            "item": "create:steam_engine",
+            "label": "Steam Engine boiler above it",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Water counts as fuel too: a steady stream of more than 100 mB a second lights it, and 100 mB a second keeps it lit.",
+      "Lit, its embers glow behind the grate and its hot plate glows from the middle out, so you can see at a glance whether it's heating."
+    ],
+    "facts": [
+      "Its advancement is \"Burn After Reading\", and its Ponder scene \"Gone, Reduced to Atoms\"."
+    ],
+    "related": [
+      "cobblestone-generator",
+      "fluid-wellspring",
+      "upgraded-chest"
+    ]
+  },
+  {
+    "id": "lava-generator",
+    "name": "Lava Generator",
+    "registry": [
+      "comedymonkeysaddons:lava_generator"
+    ],
+    "summary": "A small lava-fired turbine that burns 20 mB of lava a second for 1,024 FE a tick, enough for an Electric Motor at 16,384 SU.",
+    "tags": [
+      "power",
+      "fe",
+      "lava"
+    ],
+    "stage": "mid",
+    "requires": [],
+    "teach": {
+      "what": "Your first source of Forge Energy. It burns 20 mB of lava a second, flat out whenever it has lava, and pushes 1,024 FE a tick out of the terminals in the middle of each side.",
+      "why": "FE travels where shafts can't: down [[power-lines]], to an [[electric-motor]] anywhere, even from a generator in an unloaded chunk far away.",
+      "when": "Mid game: brass sheets, an electron tube, 2 Fluid Tanks, a Propeller, Industrial Iron and a Blaze Burner.",
+      "interacts": "Lava goes in at the middle of the back from a pipe, a bucket or a lava [[fluid-wellspring]]. Its power goes to an [[electric-motor]], a [[battery]], a [[netherite-monster-cage]] or a Pipez energy pipe. Generators whose terminals touch share their stores.",
+      "mistakes": [
+        "It runs flat out whenever it has lava. What nothing takes and its store can't hold is lost, so give it something to power, or a Battery.",
+        "Lava only goes in at the back; power only comes out of the sides.",
+        "It's ten times less efficient with lava than a Geothermal Turbine, so don't build a wall of them once you can build a turbine."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Output",
+        "value": "1,024",
+        "unit": "FE/t",
+        "gauge": 0.2
+      },
+      {
+        "label": "Lava",
+        "value": "20",
+        "unit": "mB/s",
+        "gauge": 0.22
+      },
+      {
+        "label": "Motor it runs",
+        "value": "16,384",
+        "unit": "SU"
+      }
+    ],
+    "specs": [
+      [
+        "Makes",
+        "1,024 FE a tick (config)"
+      ],
+      [
+        "Burns",
+        "20 mB of lava a second (config)"
+      ],
+      [
+        "Lava in",
+        "Middle of the back"
+      ],
+      [
+        "Power out",
+        "Terminals in the middle of each side"
+      ],
+      [
+        "Store",
+        "100,000 FE"
+      ],
+      [
+        "Setting",
+        "None: always flat out"
+      ]
+    ],
+    "power": {
+      "kind": "lava",
+      "makes": "1,024 FE/t",
+      "draws": "20 mB of lava a second"
+    },
+    "inputs": [
+      "Lava at the middle of its back, by pipe, [[fluid-lines]] or bucket."
+    ],
+    "outputs": [
+      "1,024 FE a tick out of the side terminals, into whatever is there: an Electric Motor, a Power Line, a Pipez energy pipe."
+    ],
+    "rules": [
+      "It pushes power into whatever touches its side terminals.",
+      "Generators whose terminals touch share their stores.",
+      "Far from any player, Power Lines still carry its power: it runs on paper and its chunk never loads."
+    ],
+    "efficiency": [
+      "1,024 FE per mB of lava. The [[geothermal-turbine]] gets 10,240 FE per mB, ten times as much.",
+      "One generator matches an Electric Motor set to 16,384 SU, the same stress two [[magma-engine|Magma Engines]] give for the same 20 mB a second."
+    ],
+    "flows": [
+      {
+        "title": "Lava into rotation, anywhere",
+        "steps": [
+          {
+            "ref": "fluid-wellspring",
+            "kind": "source",
+            "note": "Lava Upgrades"
+          },
+          {
+            "ref": "lava-generator",
+            "kind": "machine",
+            "via": "20 mB/s"
+          },
+          {
+            "ref": "power-lines",
+            "kind": "machine",
+            "via": "1,024 FE/t"
+          },
+          {
+            "ref": "electric-motor",
+            "kind": "machine"
+          },
+          {
+            "label": "16,384 SU",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Place it right against an Electric Motor's base and you need no wire at all.",
+      "Goggles say \"Store full: the extra is lost\" when nothing is taking its power."
+    ],
+    "facts": [
+      "Its wheel spins behind the brass-ringed window, and the lava glows behind the glass while it burns.",
+      "Its advancement is called \"Hot Wired\"."
+    ],
+    "related": [
+      "electric-motor",
+      "geothermal-turbine",
+      "battery",
+      "power-lines",
+      "electricity",
+      "fluid-wellspring"
+    ]
+  },
+  {
+    "id": "geothermal-turbine",
+    "name": "Geothermal Turbine",
+    "registry": [
+      "comedymonkeysaddons:geothermal_controller",
+      "comedymonkeysaddons:geothermal_core",
+      "comedymonkeysaddons:geothermal_casing"
+    ],
+    "summary": "A 3x3x3 power station that boils water with lava for 46,080 FE a tick, ten times as efficient with lava as the Lava Generator.",
+    "tags": [
+      "power",
+      "fe",
+      "multiblock",
+      "lava"
+    ],
+    "stage": "advanced",
+    "requires": [
+      "fluid-wellspring",
+      "lava-upgrade"
+    ],
+    "teach": {
+      "what": "Geothermal Casings in a 3x3x3 with a Turbine Core in the very middle and the Controller in the middle of the front. Lava boils water to steam that turns the turbine, for 46,080 FE a tick.",
+      "why": "It's the big one: two and a half [[electric-motor|Electric Motors]] flat out from one machine, and ten times as much power per bucket of lava as a [[lava-generator]].",
+      "when": "Once you have a real lava supply: two fully upgraded lava [[fluid-wellspring|Wellsprings]] and a water supply run it.",
+      "interacts": "Lava, water and power connect only through the ports under its base. It powers anything under it, or [[power-lines]] at the ports there. A Wrench on the formed Controller sets its power level.",
+      "mistakes": [
+        "Nothing connects on its sides or top: pipe lava and water in from below, and take power from below.",
+        "It needs both lava and water. Out of either, it stops.",
+        "It runs at its set level whenever it has fuel. What its store can't hold is lost, so turn it down if you don't need it all.",
+        "Two turbines can't share casings: build them apart."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Output",
+        "value": "46,080",
+        "unit": "FE/t",
+        "gauge": 1
+      },
+      {
+        "label": "Lava",
+        "value": "90",
+        "unit": "mB/s",
+        "gauge": 1
+      },
+      {
+        "label": "Water",
+        "value": "250",
+        "unit": "mB/s",
+        "gauge": 0.5
+      }
+    ],
+    "specs": [
+      [
+        "Size",
+        "3x3x3"
+      ],
+      [
+        "Makes",
+        "46,080 FE a tick at full power (config)"
+      ],
+      [
+        "Burns",
+        "90 mB/s lava and 250 mB/s water at full power"
+      ],
+      [
+        "Ports",
+        "Under its base: lava, water and power"
+      ],
+      [
+        "Power level",
+        "Set in 10% steps with a Wrench"
+      ],
+      [
+        "Store",
+        "4,000,000 FE"
+      ]
+    ],
+    "power": {
+      "kind": "lava",
+      "makes": "46,080 FE/t at full power",
+      "draws": "90 mB/s lava and 250 mB/s water, in proportion to its power level"
+    },
+    "inputs": [
+      "Lava and water through the ports under its base."
+    ],
+    "outputs": [
+      "FE into anything under its base, or energy cables and Power Lines at the ports there."
+    ],
+    "rules": [
+      "It forms into one big machine within a second of the last block going in.",
+      "Its gauges show the lava and water it holds.",
+      "Lava and water use scale with the power level you set; it always runs at that level while it has both."
+    ],
+    "efficiency": [
+      "10,240 FE per mB of lava, against the Lava Generator's 1,024.",
+      "At full power it's worth 45 Lava Generators, on less lava than five of them burn."
+    ],
+    "variants": [
+      {
+        "id": "controller",
+        "name": "Geothermal Turbine Controller",
+        "registry": [
+          "comedymonkeysaddons:geothermal_controller"
+        ],
+        "summary": "Goes in the middle of the front, facing you. Forms and runs the turbine.",
+        "specs": [
+          [
+            "Place",
+            "Middle of the front face"
+          ],
+          [
+            "Recipe",
+            "Brass sheets, electron tubes, Precision Mechanisms and a casing"
+          ]
+        ]
+      },
+      {
+        "id": "core",
+        "name": "Turbine Core",
+        "registry": [
+          "comedymonkeysaddons:geothermal_core"
+        ],
+        "summary": "The heart of the turbine, in the very middle.",
+        "specs": [
+          [
+            "Place",
+            "Centre of the 3x3x3"
+          ],
+          [
+            "Recipe",
+            "4 Precision Mechanisms, 4 Propellers and a Flywheel"
+          ]
+        ]
+      },
+      {
+        "id": "casing",
+        "name": "Geothermal Casing",
+        "registry": [
+          "comedymonkeysaddons:geothermal_casing"
+        ],
+        "summary": "The shell: every other block of the 3x3x3.",
+        "specs": [
+          [
+            "Needed",
+            "25"
+          ],
+          [
+            "Recipe",
+            "Iron sheets, Industrial Iron and Copper Casing (makes 4)"
+          ]
+        ]
+      }
+    ],
+    "setups": [
+      {
+        "title": "Building it",
+        "body": [
+          {
+            "list": [
+              "Lay a 3x3 floor of Geothermal Casings.",
+              "Build the middle layer with the Turbine Core in the centre and casings round it.",
+              "Finish the top layer of casings, leaving the middle of the front for the Controller.",
+              "Place the Controller there, facing you. Within a second it forms.",
+              "Pipe lava and water in from below, and run power out from below."
+            ],
+            "ordered": true
+          },
+          {
+            "tip": "Raise it on a floor with room underneath for its pipes and cables."
+          }
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "A power station on Wellsprings",
+        "steps": [
+          {
+            "ref": "fluid-wellspring",
+            "kind": "source",
+            "note": "2× with 3 Lava Upgrades"
+          },
+          {
+            "ref": "geothermal-turbine",
+            "kind": "machine",
+            "note": "+ 250 mB/s water",
+            "via": "90 mB/s"
+          },
+          {
+            "ref": "power-lines",
+            "kind": "machine",
+            "note": "brass",
+            "via": "46,080 FE/t"
+          },
+          {
+            "ref": "electric-motor",
+            "kind": "result",
+            "note": "2.5 flat out"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Turn it down with a Wrench when you don't need it all; it burns lava and water in proportion.",
+      "Brass Power Lines carry 65,536 FE a tick, copper only 4,096, so use brass for a turbine's output."
+    ],
+    "facts": [
+      "While it runs it steams, and its vents flicker with flame.",
+      "Forming one earns the advancement \"Full Steam Ahead\"."
+    ],
+    "related": [
+      "lava-generator",
+      "electric-motor",
+      "battery",
+      "fluid-wellspring",
+      "power-lines",
+      "electricity"
+    ]
+  },
+  {
+    "id": "electric-motor",
+    "name": "Electric Motor",
+    "registry": [
+      "comedymonkeysaddons:electric_motor"
+    ],
+    "summary": "A flange-mounted motor that turns Forge Energy back into rotation, up to 294,912 SU, a full superheated boiler's worth.",
+    "tags": [
+      "power",
+      "fe",
+      "rotation"
+    ],
+    "stage": "mid",
+    "requires": [
+      "lava-generator"
+    ],
+    "teach": {
+      "what": "It turns FE into rotation at the speed and stress you set with a Wrench, drawing 1 FE a tick for every 16 SU. Power goes in through its base, the flange opposite the shaft.",
+      "why": "With [[power-lines]], one generator room can drive machines anywhere, with no shafts to run. And at full stress it rivals a full steam boiler.",
+      "when": "As soon as you have a [[lava-generator]]: brass sheets, an electron tube, copper, a Precision Mechanism, Industrial Iron and Brass Casing.",
+      "interacts": "It takes power from a [[lava-generator]], a [[geothermal-turbine]], a [[battery]] or [[power-lines]] at its base. Speed snaps to Create's standard speeds; stress snaps to what the generators make.",
+      "mistakes": [
+        "Power only goes in through the base. A line to its side does nothing.",
+        "Setting more stress than your supply can feed makes it stop now and then: it waits for a reserve before it starts again.",
+        "Each start and stop jolts the whole kinetic network, so match its stress to its supply."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Max stress",
+        "value": "294,912",
+        "unit": "SU",
+        "gauge": 1
+      },
+      {
+        "label": "Draw",
+        "value": "1",
+        "unit": "FE/t per 16 SU"
+      },
+      {
+        "label": "Speed",
+        "value": "1 to 256",
+        "unit": "RPM"
+      }
+    ],
+    "specs": [
+      [
+        "Speed",
+        "Create's standard speeds, 1 to 256 RPM"
+      ],
+      [
+        "Stress",
+        "Up to 294,912 SU (config)"
+      ],
+      [
+        "Draw",
+        "1 FE a tick per 16 SU"
+      ],
+      [
+        "At full stress",
+        "18,432 FE a tick"
+      ],
+      [
+        "Power in",
+        "Its base, opposite the shaft"
+      ],
+      [
+        "Facing",
+        "Any"
+      ]
+    ],
+    "power": {
+      "kind": "fe",
+      "makes": "Up to 294,912 SU at 1 to 256 RPM",
+      "draws": "1 FE/t per 16 SU it's set to give"
+    },
+    "inputs": [
+      "FE through its base, from a generator, battery or Power Line."
+    ],
+    "outputs": [
+      "Rotation at the set speed, direction and stress capacity."
+    ],
+    "rules": [
+      "Right-click it with a Wrench for its settings: speed, stress and direction.",
+      "Stress snaps to steps of what the generators make: a quarter or half of a Lava Generator, whole generators, and on up; the screen shows the power it will draw.",
+      "Short of power it stops, and restarts once it has a reserve stored: 30 seconds' worth, or a few seconds' at high stress.",
+      "Its lamp is cyan while it runs and red when it's short of power."
+    ],
+    "efficiency": [
+      "One Lava Generator (1,024 FE/t) runs it at 16,384 SU.",
+      "Full stress needs 18,432 FE a tick: 18 Lava Generators, or 40% of a Geothermal Turbine, which runs two and a half motors flat out."
+    ],
+    "flows": [
+      {
+        "title": "Power where shafts can't go",
+        "steps": [
+          {
+            "ref": "lava-generator",
+            "kind": "source"
+          },
+          {
+            "ref": "power-lines",
+            "kind": "machine",
+            "via": "FE"
+          },
+          {
+            "ref": "electric-motor",
+            "kind": "machine",
+            "note": "set to 16,384 SU"
+          },
+          {
+            "ref": "pressure-crucible",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Set the stress to match your supply exactly and it never pauses; the settings screen tells you how many Lava Generators that is.",
+      "A Lava Generator's side terminal pressed against the motor's base needs no wire."
+    ],
+    "facts": [
+      "Through the slotted band round its middle you can see its copper windings.",
+      "Setting it to full power earns \"Unlimited Power\"."
+    ],
+    "related": [
+      "lava-generator",
+      "geothermal-turbine",
+      "battery",
+      "power-lines",
+      "electricity"
+    ]
+  },
+  {
+    "id": "battery",
+    "name": "Battery",
+    "registry": [
+      "comedymonkeysaddons:battery"
+    ],
+    "summary": "A steel accumulator that stores 10,000,000 FE from spare power and gives it back when your generators fall short; fill a 3x3 column with them for an Industrial Battery.",
+    "tags": [
+      "power",
+      "fe",
+      "storage",
+      "multiblock"
+    ],
+    "stage": "mid",
+    "requires": [
+      "lava-generator",
+      "power-lines"
+    ],
+    "teach": {
+      "what": "A block that stores FE on your power network. What the generators make beyond what's used fills it; when they fall short, it gives it back. Batteries that touch side to side share one store, and a 3x3 column of them, 3 to 9 high, becomes one Industrial Battery.",
+      "why": "Without one, spare power is simply lost, and a gap in supply stops your machines. A Battery fixes both: it carries you through fuel running out, a turbine turned down or a night.",
+      "when": "Mid game, once you have a generator and a line: Brass Casing, 4 Copper Sheets, 2 Redstone and an Electron Tube. The Industrial Battery is a late-game grid project.",
+      "interacts": "Plain Batteries connect to [[power-lines]] and machines on their sides, front and back. The Industrial Battery connects only through cables hung from its four top insulators to a [[line-post]]. A Lightning Rod on top catches storms.",
+      "mistakes": [
+        "Stacked Batteries don't join: only touching sides, fronts and backs share a store, until a full 3x3 column forms.",
+        "An Industrial Battery ignores wires and machines beside it, and the plain Batteries beside it too. Hang Power Lines from its insulators to Line Posts.",
+        "A bank under 3 high never forms, and a 3x3 with one block missing doesn't either.",
+        "It stores power; it doesn't make any. You still need generators."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Capacity",
+        "value": "10,000,000",
+        "unit": "FE"
+      },
+      {
+        "label": "Rate",
+        "value": "2,048",
+        "unit": "FE/t"
+      },
+      {
+        "label": "Industrial, 9 high",
+        "value": "1.62",
+        "unit": "billion FE"
+      }
+    ],
+    "specs": [
+      [
+        "Capacity",
+        "10,000,000 FE (config)"
+      ],
+      [
+        "Rate",
+        "2,048 FE a tick, per Battery in a bank"
+      ],
+      [
+        "Connectors",
+        "Sides, front and back"
+      ],
+      [
+        "Industrial Battery",
+        "20,000,000 FE a block"
+      ],
+      [
+        "Lightning",
+        "+250,000 FE a strike"
+      ],
+      [
+        "Keeps charge",
+        "When broken or picked up"
+      ]
+    ],
+    "power": {
+      "kind": "fe",
+      "draws": "Up to 2,048 FE/t per Battery while charging",
+      "makes": "Up to 2,048 FE/t per Battery while giving"
+    },
+    "inputs": [
+      "Spare FE from any generator on its network or on a connector.",
+      "Lightning, through a Lightning Rod on top."
+    ],
+    "outputs": [
+      "FE to whatever is short on its network or connectors."
+    ],
+    "throughput": [
+      "A bank moves up to 2,048 FE a tick for every Battery in it.",
+      "An Industrial Battery's rate is limited only by the cables hung on it: a brass Power Line carries 65,536 FE a tick."
+    ],
+    "rules": [
+      "Touching Batteries (connector to connector) are one bank with one store.",
+      "A 3x3 footprint filled 3 to 9 high forms an Industrial Battery from the bottom up; layers above 9 stay plain.",
+      "Its front is the way the Battery that completed it faces, and its level column is on that face.",
+      "Once a tower stands, a Battery placed on top (or under it) fills the whole 3x3 layer, taking nine from your hand.",
+      "Breaking a block re-forms the tallest run of 3 or more layers left; the rest go back to plain Batteries, each with its share. Charge is never lost or made.",
+      "Far from any player it keeps charging and giving on paper, and never loads a chunk.",
+      "On a contraption it keeps its charge but does nothing until it's placed again. It never explodes."
+    ],
+    "efficiency": [
+      "One Battery holds about 8 minutes of a Lava Generator's output, or about 27 seconds of a full-stress Electric Motor.",
+      "A 9-high Industrial Battery (81 Batteries) holds 1.62 billion FE: a full motor for over an hour. Each block holds twice what it does as a plain Battery."
+    ],
+    "variants": [
+      {
+        "id": "battery",
+        "name": "Battery",
+        "registry": [
+          "comedymonkeysaddons:battery"
+        ],
+        "summary": "One block, connectors on four sides.",
+        "specs": [
+          [
+            "Capacity",
+            "10,000,000 FE"
+          ],
+          [
+            "Rate",
+            "2,048 FE/t"
+          ],
+          [
+            "Connects",
+            "Sides, front and back"
+          ],
+          [
+            "Recipe",
+            "Brass Casing, 4 Copper Sheets, 2 Redstone, an Electron Tube"
+          ]
+        ]
+      },
+      {
+        "id": "industrial",
+        "name": "Industrial Battery",
+        "registry": [
+          "comedymonkeysaddons:battery"
+        ],
+        "summary": "A 3x3 column of Batteries, 3 to 9 high, formed into one grid store that hangs off the pole network.",
+        "specs": [
+          [
+            "Size",
+            "3x3, 3 to 9 high (27 to 81 Batteries)"
+          ],
+          [
+            "Capacity",
+            "20,000,000 FE a block: 540M at 3 high, 1.62B at 9"
+          ],
+          [
+            "Connects",
+            "Four insulators on its top corners, to Line Posts only"
+          ],
+          [
+            "Spans",
+            "Up to 2 per insulator, one tier and colour each"
+          ]
+        ]
+      }
+    ],
+    "setups": [
+      {
+        "title": "Forming an Industrial Battery",
+        "body": [
+          {
+            "list": [
+              "Fill a 3x3 footprint with Batteries, three layers high.",
+              "The Battery that completes it sets its front, so face the way you want the level column.",
+              "Hang Power Lines from its four top insulators to Line Posts.",
+              "To grow it, place a Battery on top: the whole layer fills, nine at a time, up to 9 high."
+            ],
+            "ordered": true
+          },
+          {
+            "tip": "Put a Lightning Rod on top: every natural strike in a storm adds 250,000 FE."
+          }
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Smoothing out supply",
+        "steps": [
+          {
+            "ref": "lava-generator",
+            "kind": "source"
+          },
+          {
+            "ref": "power-lines",
+            "kind": "machine",
+            "via": "spare FE"
+          },
+          {
+            "ref": "battery",
+            "kind": "machine",
+            "note": "fills, then gives"
+          },
+          {
+            "ref": "electric-motor",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Goggles show the charge, the FE a tick in or out, and how long until it's full or empty.",
+      "Two Industrial Batteries that touch stay separate: link them through poles.",
+      "A Battery that powers a machine on its connector runs it like a generator would."
+    ],
+    "facts": [
+      "Its two glass cell tubes fill with cyan light as it charges; the left lamp shows charging, the right one giving.",
+      "Forming an Industrial Battery earns the advancement \"Substation\"."
+    ],
+    "related": [
+      "power-lines",
+      "line-post",
+      "lava-generator",
+      "geothermal-turbine",
+      "electric-motor",
+      "electricity",
+      "lines-and-networks"
+    ]
+  },
+  {
+    "id": "compact-gyroscope",
+    "name": "Compact Gyroscope",
+    "registry": [
+      "comedymonkeysaddons:compact_gyroscope"
+    ],
+    "summary": "A whole Gyroscope Stabilizer in one block: a flywheel in a brass gimbal that pushes your Aeronautics ship back upright.",
+    "tags": [
+      "aeronautics",
+      "ships",
+      "redstone"
+    ],
+    "stage": "mid",
+    "requires": [],
+    "requiresMods": [
+      "Create Aeronautics"
+    ],
+    "teach": {
+      "what": "On a Create Aeronautics ship it pushes the ship back upright and calms its wobble, with the Gyroscope Stabilizers' controller and default strength. It reaches full strength at 256 RPM.",
+      "why": "Ships tilt when you load them unevenly or turn hard. This keeps them level from a single framed glass block.",
+      "when": "When you start building ships: a Flywheel, a Precision Mechanism, a shaft, 4 Brass Casing and 2 Framed Glass.",
+      "interacts": "It takes a shaft from above or below. A redstone signal brakes it. With Gyroscope Stabilizers installed you can convert its Gyroscope into one by crafting it on its own, and back.",
+      "mistakes": [
+        "It only takes a shaft from above or below, not the sides.",
+        "Slow shafts give weak correction: it's at full strength only at 256 RPM.",
+        "A redstone signal brakes it, and a full-strength signal stops it holding the ship at all. Check for stray signals before blaming the ship."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress",
+        "value": "16",
+        "unit": "SU per RPM",
+        "gauge": 1
+      },
+      {
+        "label": "Full strength",
+        "value": "256",
+        "unit": "RPM"
+      }
+    ],
+    "specs": [
+      [
+        "Stress",
+        "16 SU per RPM (config)"
+      ],
+      [
+        "Full strength at",
+        "256 RPM (config)"
+      ],
+      [
+        "Shaft",
+        "Above or below"
+      ],
+      [
+        "Redstone",
+        "Brakes it, in proportion"
+      ],
+      [
+        "Needs",
+        "Create Aeronautics (Sable)"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "16 SU per RPM",
+      "speed": "Stronger the faster it spins, full at 256 RPM"
+    },
+    "inputs": [
+      "A shaft from above or below.",
+      "An optional redstone signal to brake it."
+    ],
+    "outputs": [
+      "A restoring push that levels the ship and damps its wobble."
+    ],
+    "rules": [
+      "The stronger the redstone signal, the slower the flywheel spins and the less it holds the ship; the shaft keeps turning.",
+      "Strength, damping, lean correction, full-strength speed and stress are all in the config."
+    ],
+    "flows": [
+      {
+        "title": "A level ship",
+        "steps": [
+          {
+            "ref": "magma-engine",
+            "kind": "source"
+          },
+          {
+            "ref": "compact-gyroscope",
+            "kind": "machine",
+            "via": "256 RPM"
+          },
+          {
+            "label": "Ship sits level",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Goggles show its spin, how hard it's correcting and the ship's tilt.",
+      "Use a redstone signal to let the ship bank on purpose, then release it to level out."
+    ],
+    "facts": [
+      "The gimbal's rings swing so the flywheel stays level with the world while the ship tilts round it.",
+      "Brake calipers close on the flywheel's rim as the redstone signal rises."
+    ],
+    "related": [
+      "torque-rotor",
+      "flight-instruments",
+      "aeronautics"
+    ]
+  },
+  {
+    "id": "torque-rotor",
+    "name": "Torque Rotor",
+    "registry": [
+      "comedymonkeysaddons:torque_rotor"
+    ],
+    "summary": "A three-bladed tail rotor that turns your Aeronautics ship like a propeller in its place would, without pushing it sideways.",
+    "tags": [
+      "aeronautics",
+      "ships"
+    ],
+    "stage": "mid",
+    "requires": [],
+    "requiresMods": [
+      "Create Aeronautics"
+    ],
+    "teach": {
+      "what": "Its blades push the way they face (or pull, with the shaft reversed) exactly as hard as an Andesite Propeller at the same speed, and the ship turns about its centre of mass, but isn't pushed. No sideways drift.",
+      "why": "A propeller mounted sideways to yaw a ship also shoves it sideways. This gives you the turn without the shove: the tail rotor a helicopter wants.",
+      "when": "When your ships need steering: iron sheets, Andesite Casing, 2 shafts and a Precision Mechanism.",
+      "interacts": "It mounts on the face you click with the shaft into its base, and blows wind like a propeller. Pair it with a [[compact-gyroscope]] and [[flight-instruments]].",
+      "mistakes": [
+        "Mounted near the middle of the ship it barely turns it: the further from the centre, the harder it turns.",
+        "Face it sideways to yaw; facing forwards it just pushes against itself.",
+        "Reverse the shaft, not the rotor, to turn the other way."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress",
+        "value": "4",
+        "unit": "SU per RPM",
+        "gauge": 0.25
+      },
+      {
+        "label": "Thrust",
+        "value": "1",
+        "unit": "per RPM (an Andesite Propeller)"
+      }
+    ],
+    "specs": [
+      [
+        "Stress",
+        "4 SU per RPM (config)"
+      ],
+      [
+        "Thrust",
+        "1 per RPM, as an Andesite Propeller (config)"
+      ],
+      [
+        "Mounting",
+        "Face you click; shaft into its base"
+      ],
+      [
+        "Needs",
+        "Create Aeronautics (Sable)"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM",
+      "speed": "Faster turns harder"
+    },
+    "inputs": [
+      "A shaft into its base."
+    ],
+    "outputs": [
+      "A turning force about the ship's centre of mass, and wind like a propeller."
+    ],
+    "rules": [
+      "It turns the ship just as a propeller in that spot would, but the ship itself is not pushed."
+    ],
+    "flows": [
+      {
+        "title": "Yaw without drift",
+        "steps": [
+          {
+            "ref": "electric-motor",
+            "kind": "source"
+          },
+          {
+            "ref": "torque-rotor",
+            "kind": "machine",
+            "note": "on the tail, facing sideways"
+          },
+          {
+            "label": "Ship turns on the spot",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Put it on the tail, like a helicopter's, as far from the middle as you can."
+    ],
+    "facts": [
+      "Its blades are laminated walnut with brass leading edges, on a riveted steel nacelle.",
+      "Its advancement is called \"Spin Doctor\"."
+    ],
+    "related": [
+      "compact-gyroscope",
+      "flight-instruments",
+      "aeronautics"
+    ]
+  }
+]

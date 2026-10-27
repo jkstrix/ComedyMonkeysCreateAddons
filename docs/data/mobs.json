@@ -1,0 +1,623 @@
+[
+  {
+    "id": "trade-bot",
+    "name": "Trade Bot",
+    "registry": [
+      "comedymonkeysaddons:trade_bot"
+    ],
+    "summary": "A cheerful one-wheeled clockwork shopkeeper who sells the goods in your chests to seated villagers, brings home the emeralds and XP, and lives in an FE-charged winding station.",
+    "tags": [
+      "robot",
+      "trading",
+      "automation"
+    ],
+    "stage": "advanced",
+    "requires": [
+      "fe-coil",
+      "lava-generator"
+    ],
+    "kind": "Mod creature",
+    "threat": 0,
+    "rarity": 1,
+    "teach": {
+      "what": "A clockwork robot, a block and a half tall, with big binocular eyes. You link him to up to four input containers and one output. By day, when a villager sitting on a Create seat within 64 blocks buys something in his inputs, he loads up, rolls to each buyer, makes every trade he can at the villager's real prices, and brings the emeralds home.",
+      "why": "Nothing in Create automates villager trading. He turns the surplus of your farms and mines into emeralds, and the trades' XP into Nuggets of Experience, with nobody at the counter.",
+      "when": "Mid to late game. His 5x5 Mechanical Crafting recipe needs brass, Precision Mechanisms, Electron Tubes, an Emerald Block and an [[fe-coil]], and his station needs a steady FE supply such as a [[lava-generator]].",
+      "interacts": "He trades only with villagers (and wandering traders) sitting on Create seats. The [[cuckoo-clock]] makes villagers near it restock at 8:00 and 12:00, which sets the pace of his income. Any item container can be an input or output, including an [[upgraded-chest]]; a belt can only be an output.",
+      "mistakes": [
+        "Standing villagers. He only trades with villagers sitting on a Create seat.",
+        "Feeding the station power from the side. FE goes in from underneath.",
+        "Putting his inputs or buyers more than 64 blocks from his station: he won't go.",
+        "Expecting his output to fill with unsold goods. It only ever gets emeralds and Nuggets of Experience; what didn't sell goes back to the input it came from."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Health",
+        "value": "20",
+        "unit": "HP",
+        "gauge": 0.2
+      },
+      {
+        "label": "Full charge",
+        "value": "100,000",
+        "unit": "FE",
+        "gauge": 1
+      },
+      {
+        "label": "Range",
+        "value": "64",
+        "unit": "blocks",
+        "gauge": 0.25
+      }
+    ],
+    "specs": [
+      [
+        "Load",
+        "27 stacks, mixed, plus an unlimited emerald pouch"
+      ],
+      [
+        "Inputs / output",
+        "Up to 4 / 1, within 64 blocks"
+      ],
+      [
+        "Charging",
+        "64 FE a tick while docked; station holds 100,000 FE"
+      ],
+      [
+        "Running cost",
+        "4 FE a block, 50 FE a trade (about 25,000 blocks a charge)"
+      ],
+      [
+        "Per player",
+        "4"
+      ],
+      [
+        "Comparator",
+        "5 docked, 10 out working, 15 needs you"
+      ]
+    ],
+    "behaviour": [
+      "*Eager, nosy, a bit clumsy*: a born salesman who never stops trying, gets distracted by anything new, and is crushed for exactly one second when you walk away.",
+      "He greets you with a wave, glares if you hit him, and bounces after a good day's trading.",
+      "He's scared of monsters. They ignore him, but he doesn't know that: he flees to a corner, hides, shakes until it's safe and recovers.",
+      "His eyes do the talking: lid plates that tilt like eyebrows, irises that dilate when he's curious, and a copper aerial that lags every move and bends into a question mark when he's confused.",
+      "Docked, his lights go out and his station glows instead, breathing slowly while its winder turns the key on his back."
+    ],
+    "spawning": [
+      "He never spawns in the world. You craft him already docked in his winding station, as one item, and place it.",
+      "The placer owns him; only you and your team can open his station or change his jobs. You can have 4 at once (config).",
+      "Sneak + Wrench on the station packs both back into the item, jobs and all, once he's home. Nothing else can break the station."
+    ],
+    "ai": [
+      "He leaves only by day, when he isn't paused, has enough charge for the round trip and a trade, an input holds something a seated buyer in range wants, and the output has room. He cycles through his inputs in turn.",
+      "He takes only whole lots of what they'll buy, and visits buyers nearest first, re-planning after each.",
+      "He trades from two blocks away, across the villager's workstation: one animation per visit in which he makes every trade he can pay for, at real prices and stock. Villagers gain XP and level up as usual, and he sells any new trades that opens on the same trip.",
+      "His own reputation with each villager grows with every trade and earns him a discount, up to vanilla's cap. Your reputation and Hero of the Village don't count.",
+      "Players come first: if someone is trading with his villager he waits, and if the villager stands up or goes he shrugs and tries someone else. Two bots never share one villager at once.",
+      "He rolls over anything up to 4 pixels high, hops slabs, stairs and full blocks, opens doors and fence gates (and shuts the ones he opened). He can't climb ladders or use bubble columns, and keeps out of water and lava.",
+      "He goes home at night, in thunderstorms, on a redstone signal, or when there's nothing to sell, and charges there.",
+      "He works whenever his area is loaded, chunk loaders included, with or without players near."
+    ],
+    "attacks": [
+      "None. He never fights, and monsters never target him."
+    ],
+    "weaknesses": [
+      "Explosions and stray projectiles hurt him. At no health he **winds down** instead of dying; wind him back up with a Wrench.",
+      "Pushed into water, he winds down until he's out and dry.",
+      "Wound down in lava, or fallen out of the world, he's put back at his station, still wound down.",
+      "A monster within 12 blocks that he can see sends him into hiding (config)."
+    ],
+    "loot": [
+      "He drops nothing and never loses his load.",
+      "His output gets his earnings: **emeralds**, and **Nuggets of Experience** for the XP the trades would have dropped (1 per 3 XP, the rest kept for next time)."
+    ],
+    "farming": [
+      "Seat villagers on Create seats within 64 blocks of his station, ideally each beside its workstation so he can trade across it.",
+      "Fill his inputs with what they buy: farm crops for Farmers, paper for Librarians, coal or iron for Armorers and Toolsmiths, and so on.",
+      "A [[cuckoo-clock]] nearby gives every villager two restocks a day at 8:00 and 12:00, so his income scales with the number of seated villagers.",
+      "Funnel the output into an [[upgraded-chest]] so he never waits beside a full one."
+    ],
+    "strategies": [
+      "Power the station from underneath with a [[power-lines|Power Line]] or a generator that outputs upward. One [[lava-generator]] (1,024 FE a tick) runs a station's 64 FE a tick many times over.",
+      "Light and wall in the trading hall. He hides from any monster he sees, which costs you trades.",
+      "Keep water out of his paths, and give him doors or gates rather than ladders.",
+      "Watch the comparator on his station: 15 means he needs you (low on charge, or wound down).",
+      "`/tradebot trade` (operators) sends him out now, which helps when you're testing a hall."
+    ],
+    "tips": [
+      "Engineer's Goggles on the station show his charge, what he's doing, his containers and today's trades.",
+      "Link each input to one kind of goods. He cycles through inputs in turn, so a mixed chest makes his trips slower to plan."
+    ],
+    "facts": [
+      "His advancements include Haggle Bot (first sale), Employee of the Month (64 trades in a day), Stacks on Stacks (a stack of emeralds in one trip) and Have You Tried Winding It Up Again?",
+      "He carries his goods as a little Create cardboard package in his right claw, and lobs it across the workstation on the trade beat."
+    ],
+    "related": [
+      "cuckoo-clock",
+      "fe-coil",
+      "lava-generator",
+      "power-lines",
+      "upgraded-chest",
+      "electricity"
+    ]
+  },
+  {
+    "id": "helper-bot",
+    "name": "Helper Bot",
+    "registry": [
+      "comedymonkeysaddons:helper_bot"
+    ],
+    "summary": "[[trade-bot|Trade Bot]]'s cousin, bolted to a swivel post: a cheap, dyeable robot who drives your Create trains and keeps shop at a Stock Ticker, by exactly the Blaze Burner's rules.",
+    "tags": [
+      "robot",
+      "trains",
+      "shops"
+    ],
+    "stage": "early",
+    "kind": "Mod creature (a block)",
+    "threat": 0,
+    "rarity": 1,
+    "glow": "rgba(98,182,177,.18)",
+    "teach": {
+      "what": "A robot block that does a Blaze Burner's two Create jobs. Put him **directly behind a train's Train Controls**, with the controls facing him, and hand him a Schedule: he drives. Stand him **beside a Stock Ticker** and he keeps shop. He never leaves his block, so he can't fall off.",
+      "why": "He's the Nether-free conductor and shopkeeper: no blaze to catch, a little cheaper than a Blaze Burner, and a character worth watching. He works the throttle and the brake, checks his pocket watch at stations, toots as he pulls out and waves at you on the platform.",
+      "when": "As soon as you build trains. He's andesite tier: an Andesite Casing, an Electron Tube, two Iron Sheets and a Cogwheel at a crafting table.",
+      "interacts": "Everything about schedules is Create's own: one conductor per direction, a Schedule handed over by hand and taken back with an empty hand, and the schedule returned at the station when the train is disassembled. He gives a train or a shop exactly what a Blaze Burner does, nothing more. Dye him to match your train; Bulk Washing makes him plain again.",
+      "mistakes": [
+        "He must sit directly behind the Train Controls, with the controls facing him, when the train is assembled. Anywhere else he just rides along as a passenger, looking out of the window.",
+        "One conductor drives each way: a second Helper Bot facing the same direction is a passenger. A train that runs both ways needs one at each end.",
+        "Assemble the train first, then hand him the Schedule.",
+        "A placed Helper Bot can't be dyed. Dye him as an item at a crafting table, one dye per bot."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Height",
+        "value": "1.5",
+        "unit": "blocks (ducks to 1)"
+      },
+      {
+        "label": "Upkeep",
+        "value": "None",
+        "unit": "no power, no fuel"
+      }
+    ],
+    "specs": [
+      [
+        "Jobs",
+        "Train conductor, Stock Keeper"
+      ],
+      [
+        "Rules",
+        "Exactly a Blaze Burner's"
+      ],
+      [
+        "Colours",
+        "Plain or any of 16 dyes"
+      ],
+      [
+        "Power",
+        "None"
+      ],
+      [
+        "Mining",
+        "Pickaxe; stacks to 64 per colour"
+      ]
+    ],
+    "behaviour": [
+      "On a train he plays every part: he pushes the throttle forward pulling out, hauls on the brake coming in, checks his pocket watch while the train waits at a station, toots as it leaves and pulls the whistle cord when it honks.",
+      "When the schedule can't find a path he looks lost; after a crash or a derailment he jolts, goes dizzy, then sulks until the train is back on the rails.",
+      "While a player drives by hand he lets go and folds his arms. When they get up he taps the glass and points at the schedule until someone right-clicks him to resume: Create keeps a schedule paused after manual driving.",
+      "Off duty he watches the players nearby, and waves if you right-click him."
+    ],
+    "spawning": [
+      "He doesn't spawn: craft him and place him like any block. He faces you when placed, then turns to face Train Controls or a Stock Ticker beside him. A Wrench turns him; sneak with a Wrench to pick him up."
+    ],
+    "ai": [
+      "Under anything solid he ducks: his body slides down his post to fit in one block, and he works just the same.",
+      "Hostile mobs nearby make his eyes widen and his neck shrink in, but he never leaves his spot, and they ignore him.",
+      "In the rain he wipes his lenses now and then, and thunder makes him flinch."
+    ],
+    "attacks": [
+      "None. He's a block: nothing can hurt him but a pickaxe."
+    ],
+    "strategies": [
+      "Dye each line's drivers their own colour and you can tell your trains apart at a glance.",
+      "At a Stock Ticker, use him to open the shop. He's drawn in the shop screen and nods when an order is placed."
+    ],
+    "tips": [
+      "He's a cheaper conductor than a Blaze Burner and needs no Nether trip, so he's the easy choice for your first train.",
+      "Engineer's Goggles on him show whether he's driving, the schedule's name and what the train is doing.",
+      "His colour is kept when you break and place him, and when the train is disassembled."
+    ],
+    "facts": [
+      "He's the same robot as the Trade Bot, full size: the wheel swapped for a swivel post, a brass whisker-grille moustache and cyan irises."
+    ],
+    "related": [
+      "trade-bot",
+      "cuckoo-clock"
+    ],
+    "gallery": [
+      {
+        "src": "renders/helper-bot--white.png",
+        "caption": "White Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--orange.png",
+        "caption": "Orange Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--magenta.png",
+        "caption": "Magenta Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--light-blue.png",
+        "caption": "Light Blue Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--yellow.png",
+        "caption": "Yellow Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--lime.png",
+        "caption": "Lime Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--pink.png",
+        "caption": "Pink Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--gray.png",
+        "caption": "Gray Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--light-gray.png",
+        "caption": "Light Gray Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--cyan.png",
+        "caption": "Cyan Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--purple.png",
+        "caption": "Purple Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--blue.png",
+        "caption": "Blue Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--brown.png",
+        "caption": "Brown Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--green.png",
+        "caption": "Green Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--red.png",
+        "caption": "Red Helper Bot"
+      },
+      {
+        "src": "renders/helper-bot--black.png",
+        "caption": "Black Helper Bot"
+      }
+    ]
+  },
+  {
+    "id": "contained-wither",
+    "name": "Contained Wither",
+    "registry": [],
+    "summary": "Withers held in a Netherite Monster Cage's FE containment field, farmed for Nether Stars. Let the power fail and they break out, one a day.",
+    "tags": [
+      "boss",
+      "caged"
+    ],
+    "stage": "end",
+    "requires": [
+      "netherite-monster-cage",
+      "netherite-jar"
+    ],
+    "kind": "Vanilla mob, caged",
+    "threat": 5,
+    "rarity": 4,
+    "teach": {
+      "what": "A vanilla Wither caught in a [[netherite-jar]] and put in a [[netherite-monster-cage]]. While its blue containment field is powered, up to 3 Withers stay inside and a new one arrives every 20 minutes at 256 RPM, eating 64 Monster Chow. Cull them with a sword for Nether Stars.",
+      "why": "Nether Stars without a boss fight each time: for beacons and Create's end-game recipes. At 256 RPM that's 3 an hour, 7.5 with [[monstrous|Monstrous III]].",
+      "when": "End game. You need netherite (the [[pressure-crucible]]'s [[netherite-dust]] line is the natural source), FE Coils, and a power grid that never sleeps.",
+      "interacts": "The field draws a flat 2,048 FE a tick whenever a Wither is inside, plus up to 1,024 FE a tick more while it brings new ones in, scaled by speed. Feed it from [[power-lines|Power Lines]] backed by [[battery|Batteries]].",
+      "mistakes": [
+        "Relying on the cage's own buffer. It holds 200,000 FE: under five seconds of field at 2,048 FE a tick. Put Batteries on its line.",
+        "Cutting the power to fix something. The field goes down below its cost, and the countdown starts.",
+        "Trying to break or empty the cage to dodge an escape. It can't be broken or emptied while its field is down.",
+        "Walking away from a countdown. It only pauses: it resumes where it stopped when you come back within 128 blocks."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Held",
+        "value": "3",
+        "unit": "Withers",
+        "gauge": 0.6
+      },
+      {
+        "label": "Field",
+        "value": "2,048",
+        "unit": "FE a tick",
+        "gauge": 0.67
+      },
+      {
+        "label": "Field + farming",
+        "value": "3,072",
+        "unit": "FE a tick",
+        "gauge": 1
+      }
+    ],
+    "specs": [
+      [
+        "New Wither",
+        "Every 20 min at 256 RPM (80 min at 64), 64 Monster Chow"
+      ],
+      [
+        "Cage buffer",
+        "200,000 FE"
+      ],
+      [
+        "Warning",
+        "5 minutes to everyone within 128 blocks"
+      ],
+      [
+        "Further escapes",
+        "One a game day while the field stays down"
+      ],
+      [
+        "Nether Stars an hour",
+        "3 at 256 RPM, 7.5 with Monstrous III"
+      ]
+    ],
+    "behaviour": [
+      "Inside the cage it is part of the cage's count, not a loose mob, so it can't hurt anyone while the field holds. The cage shows a blue glowing shield around the whole block.",
+      "Short of FE, the shield flickers and cracks; the farming draw is shed first, so the cage stops bringing in Withers before the field itself is at risk.",
+      "Below the field's cost, the field is down. It's all or nothing."
+    ],
+    "spawning": [
+      "It never spawns in a cage on its own: you summon a Wither as usual, catch it with a [[netherite-jar]] at any health, and use the jar on the cage.",
+      "After that, more arrive inside the cage while it has chow, rotation and FE: up to 3.",
+      "A jarred Wither can only be let out into a Netherite Monster Cage, never into the world."
+    ],
+    "ai": [
+      "**Power failure:** every player within 128 blocks gets a chat warning (\"Containment failing at x, y, z! A Wither breaks out in 5:00\"), reminders at 4, 3, 2 and 1 minutes and at 30 seconds, and a live action-bar countdown in the last 30 seconds. A klaxon sounds in bursts that speed up.",
+      "Power back at any point cancels it, with \"Containment restored\".",
+      "At zero, **one Wither breaks out** of the front (or the nearest open space big enough), with the vanilla charge-up and blast, at full health. The rest stay in.",
+      "While the field stays down, another breaks out a game day after the last, its 5-minute warning being the last 5 minutes of that day, until the cage is empty.",
+      "The countdown and the escape clock stop whenever no player is within 128 blocks, even if the chunk stays loaded, and while the chunk is unloaded. They resume where they stopped."
+    ],
+    "attacks": [
+      "Caged: none. Escaped: a full-health vanilla Wither, with its blasts, wither skulls and the wither effect."
+    ],
+    "weaknesses": [
+      "Caged, a sword culls half (always leaving one), with the real loot table: a Nether Star each.",
+      "An escaped Wither fights as in vanilla."
+    ],
+    "loot": [
+      "A Nether Star from each culled Wither.",
+      "Breaking the cage (when its field is up) culls the extras into Nether Stars and drops the jar with one Wither."
+    ],
+    "farming": [
+      "Turn the shaft at 256 RPM for one Wither every 20 minutes; slower saves FE but never drops the field.",
+      "Keep 64 [[monster-chow|Monster Chow]] per Wither in its slots, by funnel.",
+      "Cull with a sword yourself for XP, or a Deployer with a sword (no XP).",
+      "Add [[monstrous|Monstrous]] for up to 7.5 Nether Stars an hour."
+    ],
+    "strategies": [
+      "Back the cage with [[battery|Batteries]] on its line, so a generator running out of lava never reaches the field.",
+      "Put it on a First branch of a power [[splitter]], so other machines go without before the field does.",
+      "Wire a comparator: it reads 15 during a countdown. Display Links can show the containment state and the escape clock in your control room.",
+      "Build it where an escape won't wreck the base, with open space in front. The cage itself is blast-proof.",
+      "On an Aeronautics airship it works with real rotation and FE, and if the ship's power fails, Withers escape in mid-air. Think twice.",
+      "Servers can turn escapes off in the config (the cage just stops). On Peaceful nothing escapes."
+    ],
+    "tips": [
+      "Only the cage's owner (or their team) can wrench or break it, and nobody can during an alarm.",
+      "The cage can't be carried with Carry On, and on a moving contraption it doesn't count down."
+    ],
+    "facts": [
+      "Putting a Wither in the cage earns Contained: \"Keep the power on\"."
+    ],
+    "related": [
+      "netherite-monster-cage",
+      "netherite-jar",
+      "monster-chow",
+      "battery",
+      "monstrous",
+      "one-block-farming"
+    ]
+  },
+  {
+    "id": "armed-drowned",
+    "name": "Armed Drowned",
+    "registry": [],
+    "summary": "Now and then a drowned arrives in a Flooded Monster Cage holding a trident, and the cage throws real tridents out of its front at you.",
+    "tags": [
+      "undead",
+      "caged"
+    ],
+    "stage": "mid",
+    "requires": [
+      "flooded-monster-cage"
+    ],
+    "kind": "Vanilla mob, caged",
+    "threat": 2,
+    "rarity": 3,
+    "teach": {
+      "what": "Each new drowned in a [[flooded-monster-cage]] has vanilla's 6.25% chance of arriving armed. While a cage holds at least one, it throws a real trident out of its front at the nearest player in sight within 16 blocks, at most every 3 seconds however many are armed.",
+      "why": "They're the cage's only source of tridents: each armed drowned culled drops one 8.5% of the time, plus 1% per Looting level.",
+      "when": "As soon as you run a drowned cage. Expect about one trident per 160 to 190 drowned culled.",
+      "interacts": "A cull takes armed drowned first. Goggles and the cage's horde line show how many are armed. Deployers are never targeted.",
+      "mistakes": [
+        "Standing in front of a drowned cage to admire it. The throws come out of the front only; behind or beside it is safe.",
+        "Leaving the armed ones in. Cull as soon as goggles show any armed: they go first.",
+        "Trying to pick up a thrown trident. It can't be picked up and vanishes, as vanilla drowned tridents do."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Armed chance",
+        "value": "6.25",
+        "unit": "%",
+        "gauge": 0.0625
+      },
+      {
+        "label": "Trident drop",
+        "value": "8.5",
+        "unit": "% + 1% per Looting",
+        "gauge": 0.085
+      }
+    ],
+    "specs": [
+      [
+        "Throw range",
+        "16 blocks, in line of sight, out of the front"
+      ],
+      [
+        "Cooldown",
+        "3 seconds"
+      ],
+      [
+        "Damage",
+        "Vanilla trident (about 4 hearts); shields block it"
+      ]
+    ],
+    "behaviour": [
+      "Goggles count it in the horde line, as Drowned: n / cap (n armed).",
+      "The hatch flaps open, a trident flies, and it clanks shut."
+    ],
+    "spawning": [
+      "Only inside a Flooded Monster Cage (Andesite or Brass) holding drowned: each new arrival rolls the vanilla 6.25% trident chance.",
+      "A zombie or husk put in a Flooded cage drowns into a drowned first (a husk by way of a zombie), and the cage then grows drowned."
+    ],
+    "ai": [
+      "It targets the nearest survival player within 16 blocks in front of the cage with a clear line from the hatch. Creative and spectator players are ignored.",
+      "Nothing is thrown on Peaceful."
+    ],
+    "attacks": [
+      "A thrown trident: vanilla damage, about 4 hearts. Shields block it."
+    ],
+    "weaknesses": [
+      "A sword cull takes armed drowned first.",
+      "It can't aim anywhere but out of the cage's front."
+    ],
+    "loot": [
+      "A drowned's usual drops (rotten flesh, and copper now and then) at vanilla rates.",
+      "A trident (damaged, as in vanilla) 8.5% of the time, plus 1% per Looting level."
+    ],
+    "farming": [
+      "Cull with a Looting III sword to push the trident chance to 11.5%.",
+      "A Deployer with a sword in front of the cage culls safely: it isn't a target."
+    ],
+    "strategies": [
+      "Put the cage's front against a wall or glass you don't walk past, and work it from the side.",
+      "Keep a shield up when you check the front.",
+      "Cull often. Fewer armed drowned waiting means fewer throws."
+    ],
+    "facts": [
+      "Thrown tridents vanish like a wild drowned's, so the only tridents you keep are the ones culls drop."
+    ],
+    "related": [
+      "flooded-monster-cage",
+      "monster-cage",
+      "iron-jar",
+      "one-block-farming"
+    ],
+    "tips": [
+      "Goggles show \"(n armed)\" on the horde line. When that number is above zero, cull before you walk past the front."
+    ]
+  },
+  {
+    "id": "blue-axolotl",
+    "name": "Blue Axolotl",
+    "registry": [],
+    "summary": "The rare blue axolotl: one in 1,200 axolotl births in a Fish Tank, as in vanilla. Scooped first, culled last.",
+    "tags": [
+      "aquatic",
+      "bred"
+    ],
+    "stage": "mid",
+    "requires": [
+      "fish-tank"
+    ],
+    "kind": "Vanilla mob, bred",
+    "threat": 0,
+    "rarity": 5,
+    "teach": {
+      "what": "A vanilla axolotl in its rarest colour. In a [[fish-tank]] of axolotls, every birth has vanilla's 1 in 1,200 chance of being blue.",
+      "why": "It's the one rare result in the tank family, and a trophy: the advancement Once in a Blue Moon.",
+      "when": "Once you have an axolotl tank breeding steadily. A big tank breeding often is the fastest way to roll the odds.",
+      "interacts": "A water bucket scoops one live adult as a Bucket of Axolotl, a blue one first. A sword cull takes blue ones last. Goggles show how many blue axolotls the tank holds.",
+      "mistakes": [
+        "Starting a tank with a blue axolotl and expecting blue young. A caught blue axolotl's young are a common colour; blues only come from the 1 in 1,200 roll.",
+        "Culling a tank you hope to scoop a blue from. Culls leave blues till last, but a big cull can still reach them."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Birth chance",
+        "value": "1 in 1,200",
+        "unit": "",
+        "gauge": 0.05
+      }
+    ],
+    "specs": [
+      [
+        "Where",
+        "Fish Tank or Brass Fish Tank, axolotl school"
+      ],
+      [
+        "Grows up",
+        "20 minutes (faster with speed and Fruitful)"
+      ]
+    ],
+    "behaviour": [
+      "It swims with the rest of the school behind the glass; the window shows it in its own colour."
+    ],
+    "spawning": [
+      "Born in a Fish Tank: each axolotl birth rolls 1 in 1,200. Axolotl young grow up in twenty minutes at 64 RPM, sooner with speed and [[fruitful|Fruitful]].",
+      "Fish Food also breeds axolotls in the world, at vanilla's odds."
+    ],
+    "ai": [
+      "Inside the tank it does nothing but swim. Scooped out, it's a vanilla axolotl."
+    ],
+    "attacks": [
+      "None in the tank. Let out, it fights alongside you as any axolotl does."
+    ],
+    "weaknesses": [
+      "None: it's safe in the tank. The last adult can never be culled or scooped."
+    ],
+    "loot": [
+      "None of its own. Scoop it with a water bucket to keep it."
+    ],
+    "farming": [
+      "A Brass Fish Tank holds 512, so far more births an interval than the plain one's 128.",
+      "Turn the shaft faster and add [[fruitful|Fruitful]] for more births an hour.",
+      "Keep Fish Food and water topped up: no food or water, no births."
+    ],
+    "strategies": [
+      "Watch for the advancement, or the goggles line \"Blue axolotls: n\", then scoop it with a water bucket straight away.",
+      "Axolotls drop nothing worth culling for, so leave an axolotl tank to breed while you hunt a blue."
+    ],
+    "facts": [
+      "The advancement reads: \"Have a blue axolotl born in a Fish Tank: one in 1,200\"."
+    ],
+    "related": [
+      "fish-tank",
+      "fish-food",
+      "capture-bottle",
+      "fruitful",
+      "one-block-farming"
+    ],
+    "tips": [
+      "Fruitful III and a fast shaft on a Brass Fish Tank roll the 1 in 1,200 odds the most often per hour."
+    ]
+  }
+]

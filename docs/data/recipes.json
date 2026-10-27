@@ -1,0 +1,4890 @@
+[
+ {
+  "id": "comedymonkeysaddons:andesite_basalt_generator",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "minecraft:blue_ice",
+     "count": 1
+    },
+    {
+     "item": "minecraft:lava_bucket",
+     "count": 1
+    },
+    {
+     "item": "minecraft:blue_ice",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "minecraft:soul_soil",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:andesite_basalt_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:andesite_blackstone_generator",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "minecraft:blue_ice",
+     "count": 1
+    },
+    {
+     "item": "minecraft:lava_bucket",
+     "count": 1
+    },
+    {
+     "item": "minecraft:blue_ice",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "minecraft:blackstone",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:andesite_blackstone_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:andesite_cobble_generator",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "minecraft:lava_bucket",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "minecraft:water_bucket",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:andesite_cobble_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:animal_pen",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "minecraft:oak_fence",
+     "tag": "minecraft:wooden_fences",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:oak_fence",
+     "tag": "minecraft:wooden_fences",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "minecraft:oak_fence",
+     "tag": "minecraft:wooden_fences",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "minecraft:hay_block",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:animal_pen",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:auto_harvester",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_harvester",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:dirt",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "minecraft:dirt",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_saw",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:auto_harvester",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:battery",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:redstone",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "minecraft:redstone",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    },
+    null,
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:battery",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:brass_flooded_monster_cage",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:brass_monster_cage",
+    "count": 1
+   },
+   {
+    "item": "create:fluid_tank",
+    "count": 1
+   },
+   {
+    "item": "create:framed_glass",
+    "count": 2
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_flooded_monster_cage",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:brass_fluid_line",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:copper_sheet",
+     "count": 1
+    },
+    {
+     "item": "minecraft:glass",
+     "count": 1
+    },
+    {
+     "item": "create:copper_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_fluid_line",
+    "count": 8
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:brass_power_line",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "minecraft:dried_kelp",
+     "count": 1
+    },
+    {
+     "item": "create:copper_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "minecraft:dried_kelp",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_power_line",
+    "count": 8
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:breaker",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "minecraft:lever",
+    "count": 1
+   },
+   {
+    "item": "create:electron_tube",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:breaker",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:capture_bottle",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:copper_nugget",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:glass_bottle",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:capture_bottle",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:compact_gyroscope",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "gyro:gyroscope",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:compact_gyroscope",
+    "count": 1
+   }
+  ],
+  "requiresMods": [
+   "Create Aeronautics"
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:compact_gyroscope_crafting",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:shaft",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    },
+    {
+     "item": "create:flywheel",
+     "count": 1
+    },
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:compact_gyroscope",
+    "count": 1
+   }
+  ],
+  "requiresMods": [
+   "Create Aeronautics"
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:copper_fluid_line",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    null,
+    {
+     "item": "minecraft:glass",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:copper_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:copper_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:copper_sheet",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:copper_fluid_line",
+    "count": 8
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:copper_power_line",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "minecraft:copper_ingot",
+     "count": 1
+    },
+    {
+     "item": "minecraft:dried_kelp",
+     "count": 1
+    },
+    {
+     "item": "minecraft:copper_ingot",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:copper_power_line",
+    "count": 8
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:cuckoo_clock",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "minecraft:dark_oak_planks",
+     "count": 1
+    },
+    {
+     "item": "minecraft:dark_oak_planks",
+     "count": 1
+    },
+    {
+     "item": "minecraft:dark_oak_planks",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "minecraft:clock",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:chain",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "minecraft:chain",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:cuckoo_clock",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:deploying/iron_jar",
+  "type": "deploying",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "minecraft:glass_bottle",
+    "count": 1
+   },
+   {
+    "item": "create:iron_sheet",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:iron_jar",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:dyed/brass_fluid_line",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "comedymonkeysaddons:brass_fluid_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:brass_fluid_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:brass_fluid_line",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "comedymonkeysaddons:brass_fluid_line",
+     "count": 1
+    },
+    {
+     "item": "minecraft:red_dye",
+     "tag": "c:dyes",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:brass_fluid_line",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "comedymonkeysaddons:brass_fluid_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:brass_fluid_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:brass_fluid_line",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_fluid_line",
+    "count": 8,
+    "dyed": true
+   }
+  ],
+  "note": "Any of the 16 dyes: it takes that colour."
+ },
+ {
+  "id": "comedymonkeysaddons:dyed/brass_power_line",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "comedymonkeysaddons:brass_power_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:brass_power_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:brass_power_line",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "comedymonkeysaddons:brass_power_line",
+     "count": 1
+    },
+    {
+     "item": "minecraft:red_dye",
+     "tag": "c:dyes",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:brass_power_line",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "comedymonkeysaddons:brass_power_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:brass_power_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:brass_power_line",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_power_line",
+    "count": 8,
+    "dyed": true
+   }
+  ],
+  "note": "Any of the 16 dyes: it takes that colour."
+ },
+ {
+  "id": "comedymonkeysaddons:dyed/copper_fluid_line",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "comedymonkeysaddons:copper_fluid_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:copper_fluid_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:copper_fluid_line",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "comedymonkeysaddons:copper_fluid_line",
+     "count": 1
+    },
+    {
+     "item": "minecraft:red_dye",
+     "tag": "c:dyes",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:copper_fluid_line",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "comedymonkeysaddons:copper_fluid_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:copper_fluid_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:copper_fluid_line",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:copper_fluid_line",
+    "count": 8,
+    "dyed": true
+   }
+  ],
+  "note": "Any of the 16 dyes: it takes that colour."
+ },
+ {
+  "id": "comedymonkeysaddons:dyed/copper_power_line",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "comedymonkeysaddons:copper_power_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:copper_power_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:copper_power_line",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "comedymonkeysaddons:copper_power_line",
+     "count": 1
+    },
+    {
+     "item": "minecraft:red_dye",
+     "tag": "c:dyes",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:copper_power_line",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "comedymonkeysaddons:copper_power_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:copper_power_line",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:copper_power_line",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:copper_power_line",
+    "count": 8,
+    "dyed": true
+   }
+  ],
+  "note": "Any of the 16 dyes: it takes that colour."
+ },
+ {
+  "id": "comedymonkeysaddons:dyed/helper_bot",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:helper_bot",
+    "count": 1
+   },
+   {
+    "item": "minecraft:red_dye",
+    "tag": "c:dyes",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:helper_bot",
+    "count": 1
+   }
+  ],
+  "note": "Any of the 16 dyes: it takes that colour."
+ },
+ {
+  "id": "comedymonkeysaddons:electric_motor",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:copper_ingot",
+     "tag": "c:ingots/copper",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "minecraft:copper_ingot",
+     "tag": "c:ingots/copper",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:industrial_iron_block",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:industrial_iron_block",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:electric_motor",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:fe_coil",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    },
+    {
+     "item": "minecraft:redstone",
+     "count": 1
+    },
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:fe_coil",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:filling/dripstone_upgrade",
+  "type": "filling",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:drip_template",
+    "count": 1
+   },
+   {
+    "fluid": "minecraft:lava",
+    "amount": 250,
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:dripstone_upgrade",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:filling/water_upgrade",
+  "type": "filling",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:drip_template",
+    "count": 1
+   },
+   {
+    "fluid": "minecraft:water",
+    "amount": 250,
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:water_upgrade",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:filter",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "create:copper_sheet",
+    "count": 1
+   },
+   {
+    "item": "minecraft:paper",
+    "count": 1
+   },
+   {
+    "item": "minecraft:iron_bars",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:filter",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:fish_tank",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    },
+    {
+     "item": "create:fluid_tank",
+     "count": 1
+    },
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:fish_tank",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:flight_instruments",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    },
+    {
+     "item": "minecraft:compass",
+     "count": 1
+    },
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:clock",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "minecraft:clock",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:flight_instruments",
+    "count": 1
+   }
+  ],
+  "requiresMods": [
+   "Create Aeronautics"
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:flooded_monster_cage",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:monster_cage",
+    "count": 1
+   },
+   {
+    "item": "create:fluid_tank",
+    "count": 1
+   },
+   {
+    "item": "create:framed_glass",
+    "count": 2
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:flooded_monster_cage",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:geothermal_casing",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:iron_sheet",
+     "tag": "c:plates/iron",
+     "count": 1
+    },
+    {
+     "item": "create:industrial_iron_block",
+     "count": 1
+    },
+    {
+     "item": "create:iron_sheet",
+     "tag": "c:plates/iron",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:industrial_iron_block",
+     "count": 1
+    },
+    {
+     "item": "create:copper_casing",
+     "count": 1
+    },
+    {
+     "item": "create:industrial_iron_block",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:iron_sheet",
+     "tag": "c:plates/iron",
+     "count": 1
+    },
+    {
+     "item": "create:industrial_iron_block",
+     "count": 1
+    },
+    {
+     "item": "create:iron_sheet",
+     "tag": "c:plates/iron",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:geothermal_casing",
+    "count": 4
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:geothermal_controller",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:geothermal_casing",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:geothermal_controller",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:geothermal_core",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:propeller",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:propeller",
+     "count": 1
+    },
+    {
+     "item": "create:flywheel",
+     "count": 1
+    },
+    {
+     "item": "create:propeller",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:propeller",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:geothermal_core",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:gyroscope_from_compact_gyroscope",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:compact_gyroscope",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "gyro:gyroscope",
+    "count": 1
+   }
+  ],
+  "requiresMods": [
+   "Create Aeronautics"
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:helper_bot",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:cogwheel",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:helper_bot",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:incinerator",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "minecraft:magma_block",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "minecraft:furnace",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:incinerator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:infusing/asurine",
+  "type": "infusing",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "minecraft:cobblestone",
+    "count": 1
+   },
+   {
+    "item": "create:zinc_nugget",
+    "tag": "c:nuggets/zinc",
+    "count": 9
+   }
+  ],
+  "outputs": [
+   {
+    "item": "create:asurine",
+    "count": 1
+   }
+  ],
+  "time": 200
+ },
+ {
+  "id": "comedymonkeysaddons:infusing/crimsite",
+  "type": "infusing",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "minecraft:cobblestone",
+    "count": 1
+   },
+   {
+    "item": "minecraft:iron_nugget",
+    "tag": "c:nuggets/iron",
+    "count": 9
+   }
+  ],
+  "outputs": [
+   {
+    "item": "create:crimsite",
+    "count": 1
+   }
+  ],
+  "time": 200
+ },
+ {
+  "id": "comedymonkeysaddons:infusing/ochrum",
+  "type": "infusing",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "minecraft:cobblestone",
+    "count": 1
+   },
+   {
+    "item": "minecraft:gold_nugget",
+    "tag": "c:nuggets/gold",
+    "count": 9
+   }
+  ],
+  "outputs": [
+   {
+    "item": "create:ochrum",
+    "count": 1
+   }
+  ],
+  "time": 200
+ },
+ {
+  "id": "comedymonkeysaddons:infusing/veridium",
+  "type": "infusing",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "minecraft:cobblestone",
+    "count": 1
+   },
+   {
+    "item": "create:copper_nugget",
+    "tag": "c:nuggets/copper",
+    "count": 9
+   }
+  ],
+  "outputs": [
+   {
+    "item": "create:veridium",
+    "count": 1
+   }
+  ],
+  "time": 200
+ },
+ {
+  "id": "comedymonkeysaddons:intake",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "create:fluid_valve",
+    "count": 1
+   },
+   {
+    "item": "create:iron_sheet",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:intake",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:lava_generator",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:fluid_tank",
+     "count": 1
+    },
+    {
+     "item": "create:propeller",
+     "count": 1
+    },
+    {
+     "item": "create:fluid_tank",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:industrial_iron_block",
+     "count": 1
+    },
+    {
+     "item": "create:blaze_burner",
+     "count": 1
+    },
+    {
+     "item": "create:industrial_iron_block",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:lava_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:line_post",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "minecraft:terracotta",
+     "count": 1
+    },
+    {
+     "item": "minecraft:iron_nugget",
+     "count": 1
+    },
+    {
+     "item": "minecraft:terracotta",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "minecraft:oak_log",
+     "tag": "minecraft:logs",
+     "count": 1
+    },
+    null
+   ],
+   [
+    null,
+    {
+     "item": "minecraft:oak_log",
+     "tag": "minecraft:logs",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:line_post",
+    "count": 4
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:magma_engine",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:iron_sheet",
+     "tag": "c:plates/iron",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "simulated:engine_assembly",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:blaze_burner",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:magma_engine",
+    "count": 1
+   }
+  ],
+  "requiresMods": [
+   "Create Aeronautics"
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:magma_engine_without_simulated",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:steam_engine",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:fluid_tank",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:fluid_tank",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:blaze_burner",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:magma_engine",
+    "count": 1
+   }
+  ],
+  "unlessMods": [
+   "Create Aeronautics"
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/brass_animal_pen",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "minecraft:hay_block",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "minecraft:hay_block",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:animal_pen",
+     "count": 1
+    },
+    {
+     "item": "minecraft:hay_block",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "minecraft:hay_block",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_animal_pen",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/brass_basalt_generator",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:andesite_basalt_generator",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_basalt_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/brass_blackstone_generator",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:andesite_blackstone_generator",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_blackstone_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/brass_cobble_generator",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:andesite_cobble_generator",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_cobble_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/brass_fish_tank",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:fish_tank",
+     "count": 1
+    },
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_fish_tank",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/brass_flooded_monster_cage",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "minecraft:iron_bars",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "minecraft:iron_bars",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:flooded_monster_cage",
+     "count": 1
+    },
+    {
+     "item": "minecraft:iron_bars",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "minecraft:iron_bars",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_flooded_monster_cage",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/brass_monster_cage",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "minecraft:iron_bars",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "minecraft:iron_bars",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:monster_cage",
+     "count": 1
+    },
+    {
+     "item": "minecraft:iron_bars",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "minecraft:iron_bars",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_monster_cage",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/netherite_monster_cage",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    {
+     "item": "minecraft:netherite_ingot",
+     "count": 1
+    },
+    null,
+    {
+     "item": "minecraft:obsidian",
+     "count": 1
+    },
+    null,
+    {
+     "item": "minecraft:netherite_ingot",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:fe_coil",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "minecraft:obsidian",
+     "count": 1
+    },
+    null,
+    {
+     "item": "comedymonkeysaddons:brass_monster_cage",
+     "count": 1
+    },
+    null,
+    {
+     "item": "minecraft:obsidian",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:fe_coil",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "minecraft:netherite_ingot",
+     "count": 1
+    },
+    null,
+    {
+     "item": "minecraft:obsidian",
+     "count": 1
+    },
+    null,
+    {
+     "item": "minecraft:netherite_ingot",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:netherite_monster_cage",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/trade_bot",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "minecraft:emerald_block",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:cogwheel",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:fe_coil",
+     "count": 1
+    },
+    {
+     "item": "create:cogwheel",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:cogwheel",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:cogwheel",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:trade_bot",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/wireless_brass_basalt_generator",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:wireless_andesite_basalt_generator",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wireless_brass_basalt_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/wireless_brass_blackstone_generator",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:wireless_andesite_blackstone_generator",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wireless_brass_blackstone_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/wireless_brass_cobble_generator",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:wireless_andesite_cobble_generator",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wireless_brass_cobble_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:meter",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "minecraft:copper_ingot",
+    "count": 1
+   },
+   {
+    "item": "create:electron_tube",
+    "count": 1
+   },
+   {
+    "item": "minecraft:glass",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:meter",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mixing/calcite",
+  "type": "mixing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "minecraft:diorite",
+    "count": 1
+   },
+   {
+    "item": "minecraft:bone_meal",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:calcite",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mixing/fish_food",
+  "type": "mixing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "create:wheat_flour",
+    "count": 1
+   },
+   {
+    "item": "minecraft:dried_kelp",
+    "count": 1
+   },
+   {
+    "item": "minecraft:bone_meal",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:fish_food",
+    "count": 4
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mixing/gilded_blackstone",
+  "type": "mixing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "minecraft:blackstone",
+    "count": 1
+   },
+   {
+    "item": "minecraft:gold_nugget",
+    "tag": "c:nuggets/gold",
+    "count": 20
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:gilded_blackstone",
+    "count": 1
+   }
+  ],
+  "heat": "heated"
+ },
+ {
+  "id": "comedymonkeysaddons:mixing/monster_chow",
+  "type": "mixing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "create:wheat_flour",
+    "count": 1
+   },
+   {
+    "item": "minecraft:bone_meal",
+    "count": 1
+   },
+   {
+    "item": "create:cinder_flour",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:monster_chow",
+    "count": 3
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mixing/netherrack",
+  "type": "mixing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "minecraft:cobblestone",
+    "count": 1
+   },
+   {
+    "fluid": "minecraft:lava",
+    "amount": 50,
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:netherrack",
+    "count": 1
+   }
+  ],
+  "heat": "heated"
+ },
+ {
+  "id": "comedymonkeysaddons:monster_cage",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "minecraft:chain",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:iron_bars",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "minecraft:iron_bars",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "minecraft:iron_bars",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:monster_cage",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:netherite_chest_upgrade",
+  "type": "smithing_transform",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "minecraft:netherite_upgrade_smithing_template",
+    "count": 1
+   },
+   {
+    "item": "comedymonkeysaddons:diamond_chest_upgrade",
+    "count": 1
+   },
+   {
+    "item": "minecraft:netherite_ingot",
+    "tag": "c:ingots/netherite",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:netherite_chest_upgrade",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:netherite_jar",
+  "type": "smithing_transform",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "minecraft:netherite_upgrade_smithing_template",
+    "count": 1
+   },
+   {
+    "item": "comedymonkeysaddons:iron_jar",
+    "count": 1
+   },
+   {
+    "item": "minecraft:netherite_ingot",
+    "tag": "c:ingots/netherite",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:netherite_jar",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:pressure_crucible",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "minecraft:obsidian",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_press",
+     "count": 1
+    },
+    {
+     "item": "minecraft:obsidian",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:cogwheel",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:obsidian",
+     "count": 1
+    },
+    {
+     "item": "create:basin",
+     "count": 1
+    },
+    {
+     "item": "minecraft:obsidian",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:pressure_crucible",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:pressure_crucible/amethyst_shard",
+  "type": "pressure_crucible",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "minecraft:quartz",
+    "count": 4
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:amethyst_shard",
+    "count": 2
+   }
+  ],
+  "heat": "superheated",
+  "time": 800
+ },
+ {
+  "id": "comedymonkeysaddons:pressure_crucible/diamond",
+  "type": "pressure_crucible",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "minecraft:coal",
+    "count": 64
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:diamond",
+    "count": 1
+   }
+  ],
+  "heat": "superheated",
+  "time": 3200
+ },
+ {
+  "id": "comedymonkeysaddons:pressure_crucible/emerald",
+  "type": "pressure_crucible",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:emerald_dust",
+    "count": 9
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:emerald",
+    "count": 1
+   }
+  ],
+  "heat": "heated",
+  "time": 200
+ },
+ {
+  "id": "comedymonkeysaddons:pressure_crucible/glass",
+  "type": "pressure_crucible",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "minecraft:sand",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:glass",
+    "count": 1
+   }
+  ],
+  "heat": "heated",
+  "time": 40
+ },
+ {
+  "id": "comedymonkeysaddons:pressure_crucible/nether_quartz",
+  "type": "pressure_crucible",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:quartz_dust",
+    "count": 4
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:quartz",
+    "count": 1
+   }
+  ],
+  "heat": "heated",
+  "time": 200
+ },
+ {
+  "id": "comedymonkeysaddons:pressure_crucible/netherite_scrap",
+  "type": "pressure_crucible",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:netherite_dust",
+    "count": 9
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:netherite_scrap",
+    "count": 1
+   }
+  ],
+  "heat": "superheated",
+  "time": 800
+ },
+ {
+  "id": "comedymonkeysaddons:pressure_crucible/obsidian",
+  "type": "pressure_crucible",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "minecraft:cobblestone",
+    "count": 4
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:obsidian",
+    "count": 1
+   }
+  ],
+  "heat": "superheated",
+  "time": 400
+ },
+ {
+  "id": "comedymonkeysaddons:pressure_crucible/stone",
+  "type": "pressure_crucible",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "minecraft:gravel",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:stone",
+    "count": 1
+   }
+  ],
+  "heat": "none",
+  "time": 40
+ },
+ {
+  "id": "comedymonkeysaddons:sequenced_assembly/capacity_upgrade",
+  "type": "sequenced_assembly",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:upgrade_template",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:capacity_upgrade",
+    "count": 1
+   }
+  ],
+  "loops": 1,
+  "transitional": "comedymonkeysaddons:incomplete_capacity_upgrade",
+  "sequence": [
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:fluid_tank",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:fluid_tank",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:fluid_tank",
+      "count": 1
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:sequenced_assembly/chest_upgrade_template",
+  "type": "sequenced_assembly",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:upgrade_template",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:chest_upgrade_template",
+    "count": 1
+   }
+  ],
+  "loops": 1,
+  "transitional": "comedymonkeysaddons:incomplete_chest_upgrade_template",
+  "sequence": [
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "minecraft:chest",
+      "tag": "c:chests/wooden",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:andesite_alloy",
+      "count": 1
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:sequenced_assembly/chocolate_upgrade",
+  "type": "sequenced_assembly",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:drip_template",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:chocolate_upgrade",
+    "count": 1
+   }
+  ],
+  "loops": 3,
+  "transitional": "comedymonkeysaddons:incomplete_chocolate_upgrade",
+  "sequence": [
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "minecraft:cocoa_beans",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "filling",
+    "inputs": [
+     {
+      "fluid": "create:chocolate",
+      "amount": 1000,
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:precision_mechanism",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "pressing",
+    "inputs": []
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:sequenced_assembly/copper_chest_upgrade",
+  "type": "sequenced_assembly",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:chest_upgrade_template",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:copper_chest_upgrade",
+    "count": 1
+   }
+  ],
+  "loops": 1,
+  "transitional": "comedymonkeysaddons:incomplete_copper_chest_upgrade",
+  "sequence": [
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:copper_sheet",
+      "tag": "c:plates/copper",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:copper_sheet",
+      "tag": "c:plates/copper",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "pressing",
+    "inputs": []
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:sequenced_assembly/diamond_chest_upgrade",
+  "type": "sequenced_assembly",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:gold_chest_upgrade",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:diamond_chest_upgrade",
+    "count": 1
+   }
+  ],
+  "loops": 1,
+  "transitional": "comedymonkeysaddons:incomplete_diamond_chest_upgrade",
+  "sequence": [
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "minecraft:diamond",
+      "tag": "c:gems/diamond",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "minecraft:diamond",
+      "tag": "c:gems/diamond",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "pressing",
+    "inputs": []
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:sequenced_assembly/drip_template",
+  "type": "sequenced_assembly",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:upgrade_template",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:drip_template",
+    "count": 1
+   }
+  ],
+  "loops": 1,
+  "transitional": "comedymonkeysaddons:incomplete_drip_template",
+  "sequence": [
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "minecraft:pointed_dripstone",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "minecraft:pointed_dripstone",
+      "count": 1
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:sequenced_assembly/gold_chest_upgrade",
+  "type": "sequenced_assembly",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:iron_chest_upgrade",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:gold_chest_upgrade",
+    "count": 1
+   }
+  ],
+  "loops": 1,
+  "transitional": "comedymonkeysaddons:incomplete_gold_chest_upgrade",
+  "sequence": [
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:golden_sheet",
+      "tag": "c:plates/gold",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:golden_sheet",
+      "tag": "c:plates/gold",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "pressing",
+    "inputs": []
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:sequenced_assembly/honey_upgrade",
+  "type": "sequenced_assembly",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:drip_template",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:honey_upgrade",
+    "count": 1
+   }
+  ],
+  "loops": 3,
+  "transitional": "comedymonkeysaddons:incomplete_honey_upgrade",
+  "sequence": [
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "minecraft:honeycomb_block",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "filling",
+    "inputs": [
+     {
+      "fluid": "create:honey",
+      "amount": 1000,
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:precision_mechanism",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "pressing",
+    "inputs": []
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:sequenced_assembly/iron_chest_upgrade",
+  "type": "sequenced_assembly",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:copper_chest_upgrade",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:iron_chest_upgrade",
+    "count": 1
+   }
+  ],
+  "loops": 1,
+  "transitional": "comedymonkeysaddons:incomplete_iron_chest_upgrade",
+  "sequence": [
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:iron_sheet",
+      "tag": "c:plates/iron",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:iron_sheet",
+      "tag": "c:plates/iron",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "pressing",
+    "inputs": []
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:sequenced_assembly/upgrade_template",
+  "type": "sequenced_assembly",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "create:copper_sheet",
+    "tag": "c:plates/copper",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:upgrade_template",
+    "count": 1
+   }
+  ],
+  "loops": 1,
+  "transitional": "comedymonkeysaddons:incomplete_upgrade_template",
+  "sequence": [
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:cogwheel",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "minecraft:glass",
+      "tag": "c:glass_blocks",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "type": "deploying",
+    "inputs": [
+     {
+      "item": "create:electron_tube",
+      "count": 1
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:splitter",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "create:electron_tube",
+    "count": 1
+   },
+   {
+    "item": "create:brass_sheet",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:splitter",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:stone_infuser",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:basin",
+     "count": 1
+    },
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:shaft",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:stone_infuser",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:string_tangler",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:copper_casing",
+     "count": 1
+    },
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    },
+    {
+     "item": "create:copper_casing",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    },
+    {
+     "item": "create:whisk",
+     "count": 1
+    },
+    {
+     "item": "create:framed_glass",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:copper_casing",
+     "count": 1
+    },
+    {
+     "item": "create:shaft",
+     "count": 1
+    },
+    {
+     "item": "create:copper_casing",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:string_tangler",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:supercharged_magma_engine",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "comedymonkeysaddons:magma_engine",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:supercharged_magma_engine",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:tangling/cobweb",
+  "type": "tangling",
+  "machine": "comedymonkeysaddons",
+  "inputs": [
+   {
+    "item": "minecraft:string",
+    "count": 4
+   },
+   {
+    "item": "minecraft:slime_ball",
+    "tag": "c:slime_balls",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:cobweb",
+    "count": 1
+   }
+  ],
+  "time": 160
+ },
+ {
+  "id": "comedymonkeysaddons:torque_rotor",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:shaft",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:shaft",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:iron_sheet",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:torque_rotor",
+    "count": 1
+   }
+  ],
+  "requiresMods": [
+   "Create Aeronautics"
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:tuff_generator",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "minecraft:lava_bucket",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:gravel",
+     "count": 1
+    },
+    {
+     "item": "minecraft:water_bucket",
+     "count": 1
+    },
+    {
+     "item": "minecraft:gravel",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:tuff_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:valve",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "create:fluid_valve",
+    "count": 1
+   },
+   {
+    "item": "create:copper_sheet",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:valve",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:washing/brass_fluid_line",
+  "type": "splashing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:brass_fluid_line",
+    "count": 1,
+    "dyed": true
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_fluid_line",
+    "count": 1
+   }
+  ],
+  "note": "Washes the dye out of a dyed line."
+ },
+ {
+  "id": "comedymonkeysaddons:washing/brass_power_line",
+  "type": "splashing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:brass_power_line",
+    "count": 1,
+    "dyed": true
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_power_line",
+    "count": 1
+   }
+  ],
+  "note": "Washes the dye out of a dyed line."
+ },
+ {
+  "id": "comedymonkeysaddons:washing/copper_fluid_line",
+  "type": "splashing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:copper_fluid_line",
+    "count": 1,
+    "dyed": true
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:copper_fluid_line",
+    "count": 1
+   }
+  ],
+  "note": "Washes the dye out of a dyed line."
+ },
+ {
+  "id": "comedymonkeysaddons:washing/copper_power_line",
+  "type": "splashing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:copper_power_line",
+    "count": 1,
+    "dyed": true
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:copper_power_line",
+    "count": 1
+   }
+  ],
+  "note": "Washes the dye out of a dyed line."
+ },
+ {
+  "id": "comedymonkeysaddons:washing/helper_bot",
+  "type": "splashing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:helper_bot",
+    "count": 1,
+    "dyed": true
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:helper_bot",
+    "count": 1
+   }
+  ],
+  "note": "Washes the dye out of a dyed line."
+ },
+ {
+  "id": "comedymonkeysaddons:wellspring",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_pump",
+     "count": 1
+    },
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:glass",
+     "tag": "c:glass_blocks",
+     "count": 1
+    },
+    {
+     "item": "create:fluid_tank",
+     "count": 1
+    },
+    {
+     "item": "minecraft:glass",
+     "tag": "c:glass_blocks",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    },
+    {
+     "item": "create:copper_casing",
+     "count": 1
+    },
+    {
+     "item": "create:copper_sheet",
+     "tag": "c:plates/copper",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wellspring",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:wireless_andesite_basalt_generator",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:andesite_basalt_generator",
+    "count": 1
+   },
+   {
+    "item": "create:transmitter",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wireless_andesite_basalt_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:wireless_andesite_blackstone_generator",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:andesite_blackstone_generator",
+    "count": 1
+   },
+   {
+    "item": "create:transmitter",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wireless_andesite_blackstone_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:wireless_andesite_cobble_generator",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:andesite_cobble_generator",
+    "count": 1
+   },
+   {
+    "item": "create:transmitter",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wireless_andesite_cobble_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:wireless_brass_basalt_generator",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:brass_basalt_generator",
+    "count": 1
+   },
+   {
+    "item": "create:transmitter",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wireless_brass_basalt_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:wireless_brass_blackstone_generator",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:brass_blackstone_generator",
+    "count": 1
+   },
+   {
+    "item": "create:transmitter",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wireless_brass_blackstone_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:wireless_brass_cobble_generator",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:brass_cobble_generator",
+    "count": 1
+   },
+   {
+    "item": "create:transmitter",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wireless_brass_cobble_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:wireless_tuff_generator",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:tuff_generator",
+    "count": 1
+   },
+   {
+    "item": "create:transmitter",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wireless_tuff_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "create:crushing/blackstone",
+  "type": "crushing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "minecraft:blackstone",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:gravel",
+    "count": 1
+   },
+   {
+    "item": "comedymonkeysaddons:quartz_dust",
+    "count": 1,
+    "chance": 0.1
+   }
+  ],
+  "time": 250
+ },
+ {
+  "id": "create:crushing/cobblestone",
+  "type": "crushing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "minecraft:cobblestone",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:gravel",
+    "count": 1
+   },
+   {
+    "item": "comedymonkeysaddons:emerald_dust",
+    "count": 1,
+    "chance": 0.05
+   }
+  ],
+  "time": 250
+ },
+ {
+  "id": "create:crushing/netherrack",
+  "type": "crushing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "minecraft:netherrack",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "create:cinder_flour",
+    "count": 1
+   },
+   {
+    "item": "create:cinder_flour",
+    "count": 1,
+    "chance": 0.5
+   },
+   {
+    "item": "comedymonkeysaddons:netherite_dust",
+    "count": 1,
+    "chance": 0.01
+   },
+   {
+    "item": "comedymonkeysaddons:quartz_dust",
+    "count": 1,
+    "chance": 0.05
+   }
+  ],
+  "time": 250,
+  "unlessMods": [
+   "Ex Nihilo"
+  ]
+ },
+ {
+  "id": "create:crushing/stone",
+  "type": "crushing",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "minecraft:stone",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:gravel",
+    "count": 1
+   },
+   {
+    "item": "comedymonkeysaddons:emerald_dust",
+    "count": 1,
+    "chance": 0.05
+   }
+  ],
+  "time": 250
+ },
+ {
+  "id": "create:milling/cobblestone",
+  "type": "milling",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "minecraft:cobblestone",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:gravel",
+    "count": 1
+   },
+   {
+    "item": "comedymonkeysaddons:emerald_dust",
+    "count": 1,
+    "chance": 0.025
+   }
+  ],
+  "time": 250
+ },
+ {
+  "id": "create:milling/stone",
+  "type": "milling",
+  "machine": "create",
+  "inputs": [
+   {
+    "item": "minecraft:stone",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "minecraft:gravel",
+    "count": 1
+   },
+   {
+    "item": "comedymonkeysaddons:emerald_dust",
+    "count": 1,
+    "chance": 0.025
+   }
+  ],
+  "time": 250
+ }
+]

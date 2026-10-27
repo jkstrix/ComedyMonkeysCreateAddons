@@ -1,0 +1,19 @@
+/* Printing an entry (or any page): just the content, dark ink on white */
+@media print {
+  :root { --bg: #fff; --bg-2: #fff; --panel: #fff; --panel-2: #f2f2f2; --line: #ccc; --line-2: #bbb; --text: #111; --text-2: #222; --muted: #444; --dim: #666; color-scheme: light; }
+  @page { margin: 14mm; }
+  body { background: #fff; color: #111; font-size: 11pt; padding: 0 !important; }
+  .rail, .topbar, .tabbar, .codex .list, .toc, .thumbs, .zoom, .actions, .toolbar, .star-btn, .foot, .lightbox, .sheet, .gear-bg { display: none !important; }
+  .app, .codex { display: block; }
+  .detail { border: 0; }
+  .readout { position: static; max-height: none; display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid #ccc; }
+  .d-hero { height: 70mm; background: none; border: 0; }
+  .d-hero .thumb img { filter: none; animation: none; }
+  .js .reveal { opacity: 1 !important; transform: none !important; }
+  .d-sec, .callout, .recipe, .qa > div, .gauge, .variant { break-inside: avoid; }
+  .fa { background: #999; animation: none; }
+  .fa::after { border-left-color: #999; }
+  a { color: #111; }
+  .mc-panel { box-shadow: none; border: 1px solid #999; }
+  .hero-render img, .card .pic img { filter: none; }
+}

@@ -39,6 +39,15 @@ neoForge {
             // its own folder, so the courses can run while a dev client has run/ open
             gameDirectory = project.file('run-gametest')
         }
+        // the website's pictures, drawn by the game: makes a world, renders tools/website/renders.json into
+        // docs/assets, and quits (-Dcmaddons.renders.only=<regex> limits it to matching scene ids)
+        renders {
+            client()
+            gameDirectory = project.file('run-renders')
+            systemProperty 'cmaddons.renders', project.rootDir.absolutePath
+            if (project.hasProperty('only')) systemProperty 'cmaddons.renders.only', project.property('only')
+            if (project.hasProperty('stay')) systemProperty 'cmaddons.renders.stay', 'true'
+        }
         configureEach {
             // the mod's game tests are available in every run (/test in a dev world)
             systemProperty 'neoforge.enabledGameTestNamespaces', mod_id

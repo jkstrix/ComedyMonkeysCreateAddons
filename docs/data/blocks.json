@@ -1,0 +1,816 @@
+[
+  {
+    "id": "upgraded-chest",
+    "name": "Upgraded Chest",
+    "registry": [
+      "comedymonkeysaddons:upgraded_chest"
+    ],
+    "summary": "A vanilla chest fitted with a chest upgrade: bigger stacks in every slot, more slots at Diamond and Netherite, and a sort button.",
+    "tags": [
+      "storage",
+      "chest upgrades"
+    ],
+    "stage": "early",
+    "requires": [
+      "chest-upgrades"
+    ],
+    "teach": {
+      "what": "It's an ordinary chest that holds more. Right-click a chest with a [[chest-upgrades|chest upgrade]] and it keeps its items but each slot now takes 2, 4, 8 or 16 times a normal stack. Diamond and Netherite also double the slots.",
+      "why": "A Create base fills chests fast: crushed ore, cobblestone, farm drops. One upgraded chest replaces a wall of vanilla ones, so your storage stays small enough to reach with one funnel or one arm.",
+      "when": "As soon as you can run a sequenced assembly line. The first [[upgrade-template]] leads straight to the [[chest-upgrade-template]] and a Copper Chest Upgrade.",
+      "interacts": "Hoppers, Create funnels, arms and Pipez fill slots to the full upgraded limit. Contraptions keep the bigger stacks while they move, Carry On carries the chest with everything in it, and [[trade-bot|Trade Bot]] can use one as an input or output like any container.",
+      "mistakes": [
+        "Sneak + empty hand is Carry On's pickup, so it won't open the upgrade screen. Use a Wrench (or sneak + right-click with an upgrade).",
+        "Taking an upgrade out, or swapping in a lower one, is refused while any stack is too big for the smaller limit. Empty the big stacks first.",
+        "A double chest needs only one upgrade for both halves. Don't buy two.",
+        "Tools, armour and other unstackable items are never multiplied: a slot still holds one."
+      ]
+    },
+    "specs": [
+      [
+        "Tiers",
+        "Copper, Iron, Gold, Diamond, Netherite"
+      ],
+      [
+        "Slots",
+        "27, or 54 from Diamond up (108 as a double chest)"
+      ],
+      [
+        "Opens upgrade screen",
+        "Wrench, or sneak + right-click with an upgrade"
+      ],
+      [
+        "Blast-proof",
+        "Netherite tier only"
+      ]
+    ],
+    "variants": [
+      {
+        "id": "copper",
+        "name": "Copper Chest",
+        "summary": "Upgrade a chest with a Copper Chest Upgrade: the first big step, from 64 to 128 a slot.",
+        "specs": [
+          [
+            "Items per slot (64-stack items)",
+            "128 per slot (x2)"
+          ],
+          [
+            "Slots",
+            "27"
+          ]
+        ]
+      },
+      {
+        "id": "iron",
+        "name": "Iron Chest",
+        "summary": "Four times the vanilla stack in every slot.",
+        "specs": [
+          [
+            "Items per slot (64-stack items)",
+            "256 per slot (x4)"
+          ],
+          [
+            "Slots",
+            "27"
+          ]
+        ]
+      },
+      {
+        "id": "gold",
+        "name": "Gold Chest",
+        "summary": "Eight times the vanilla stack in every slot.",
+        "specs": [
+          [
+            "Items per slot (64-stack items)",
+            "512 per slot (x8)"
+          ],
+          [
+            "Slots",
+            "27"
+          ]
+        ]
+      },
+      {
+        "id": "diamond",
+        "name": "Diamond Chest",
+        "summary": "Gold's stack size with twice the slots.",
+        "specs": [
+          [
+            "Items per slot (64-stack items)",
+            "512 per slot (x8)"
+          ],
+          [
+            "Slots",
+            "54 (108 as a double chest)"
+          ]
+        ]
+      },
+      {
+        "id": "netherite",
+        "name": "Netherite Chest",
+        "summary": "Diamond's slots, sixteen times the stack, and blast-proof.",
+        "specs": [
+          [
+            "Items per slot (64-stack items)",
+            "1,024 per slot (x16)"
+          ],
+          [
+            "Slots",
+            "54 (108 as a double chest)"
+          ]
+        ]
+      }
+    ],
+    "uses": [
+      "Bulk storage at the end of a Create line: a Gold chest swallows 13,824 items in 27 slots.",
+      "A compact buffer for one-block farms, so the [[auto-harvester]], [[animal-pen]] or [[monster-cage]] never stops because its output filled up.",
+      "Blast-proof storage near creepers, Withers or your own TNT tests, at the Netherite tier.",
+      "An input or output container for [[trade-bot|Trade Bot]]."
+    ],
+    "mechanics": [
+      "Right-click a chest with an upgrade to turn it into an upgraded one; it keeps its items. Using a higher tier upgrades it again and hands back the old upgrade.",
+      "**Sneak + right-click the side of a single upgraded chest with a chest** to extend it into a double chest of the same tier, sharing its one upgrade.",
+      "The Wrench screen swaps the upgrade, or takes it out to turn it back into a vanilla chest. Downgrades that would leave stacks or slots that don't fit are refused.",
+      "The **sort button** in the band at the top of the screen merges stacks up to the slot's real limit and orders them by item.",
+      "Quick moves use the real stack sizes. Four buttons by the Inventory label put everything in, put in only what the chest already holds, take everything out, or take out only what you carry.",
+      "The mouse wheel over a slot moves one item at a time, and shift + drag shift-clicks every slot you sweep. Inventory Profiles Next is kept off these screens, because it simulates vanilla stacks.",
+      "Counts from 1,000 up are shortened to fit the slot (4,096 reads 4.0k); the tooltip gives the exact number.",
+      "Breaking it drops a vanilla chest and its upgrade. Breaking half of a double chest leaves the upgrade in the remaining half."
+    ],
+    "automation": [
+      "Funnels, chutes, hoppers, arms and Pipez fill every slot to its full upgraded limit, and pull from it the same way.",
+      "On a Create contraption it keeps its stack sizes: drills, harvesters and portable interfaces fill it, and it opens as a chest on the contraption.",
+      "You can upgrade a chest while it rides a moving contraption: right-click it with a chest upgrade.",
+      "With Carry On, place a carried upgraded chest against the side of a matching single one to join them into a double. Picking up half of a double moves the upgrade to whichever half needs it."
+    ],
+    "tips": [
+      "Plan your first upgrades around what fills fastest. Cobblestone and crushed stone want Gold or better long before your tools do.",
+      "Go straight to Diamond for a storage hub: twice the slots means twice as many different items before it's full.",
+      "The Netherite upgrade item itself survives fire and lava, so it's safe to carry through the Nether."
+    ],
+    "facts": [
+      "A Gold double chest holds 27,648 items of a 64-stack item; a Netherite double chest holds 110,592."
+    ],
+    "related": [
+      "chest-upgrades",
+      "upgraded-barrel",
+      "chest-upgrade-template",
+      "upgrades",
+      "compatibility"
+    ]
+  },
+  {
+    "id": "upgraded-barrel",
+    "name": "Upgraded Barrel",
+    "registry": [
+      "comedymonkeysaddons:upgraded_barrel"
+    ],
+    "summary": "A barrel fitted with a chest upgrade: the same tiers, stack sizes and rules as the chests, in a full block that faces any way.",
+    "tags": [
+      "storage",
+      "chest upgrades"
+    ],
+    "stage": "early",
+    "requires": [
+      "chest-upgrades"
+    ],
+    "teach": {
+      "what": "A vanilla barrel that takes the same [[chest-upgrades]] as a chest, with the same tiers: Copper x2, Iron x4, Gold x8, Diamond x8 with double the slots, Netherite x16 with double the slots and blast-proofing.",
+      "why": "Barrels are full blocks that open from any face, so they tuck into walls, floors and ceilings where a chest won't fit, and nothing can block their lid.",
+      "when": "Alongside your first upgraded chests: the upgrades are the same items.",
+      "interacts": "Funnels, hoppers, arms and Pipez fill it to its upgraded limit. It rides contraptions and Aeronautics physics objects with its contents, and Carry On carries it.",
+      "mistakes": [
+        "There are no double barrels. If you need more room in one block, go to Diamond or Netherite for 54 slots.",
+        "Opening the upgrade screen needs a Wrench: sneak + empty hand is Carry On's pickup.",
+        "Downgrading is refused while stacks are too big for the lower tier."
+      ]
+    },
+    "specs": [
+      [
+        "Tiers",
+        "Copper, Iron, Gold, Diamond, Netherite"
+      ],
+      [
+        "Slots",
+        "27, or 54 from Diamond up"
+      ],
+      [
+        "Facing",
+        "Any of six directions"
+      ],
+      [
+        "Breaks into",
+        "A vanilla barrel and its upgrade"
+      ]
+    ],
+    "variants": [
+      {
+        "id": "copper",
+        "name": "Copper Barrel",
+        "summary": "The Copper tier of chest upgrade on a barrel.",
+        "specs": [
+          [
+            "Items per slot (64-stack items)",
+            "128 per slot (x2)"
+          ],
+          [
+            "Slots",
+            "27"
+          ]
+        ]
+      },
+      {
+        "id": "iron",
+        "name": "Iron Barrel",
+        "summary": "The Iron tier of chest upgrade on a barrel.",
+        "specs": [
+          [
+            "Items per slot (64-stack items)",
+            "256 per slot (x4)"
+          ],
+          [
+            "Slots",
+            "27"
+          ]
+        ]
+      },
+      {
+        "id": "gold",
+        "name": "Gold Barrel",
+        "summary": "The Gold tier of chest upgrade on a barrel.",
+        "specs": [
+          [
+            "Items per slot (64-stack items)",
+            "512 per slot (x8)"
+          ],
+          [
+            "Slots",
+            "27"
+          ]
+        ]
+      },
+      {
+        "id": "diamond",
+        "name": "Diamond Barrel",
+        "summary": "The Diamond tier of chest upgrade on a barrel.",
+        "specs": [
+          [
+            "Items per slot (64-stack items)",
+            "512 per slot (x8)"
+          ],
+          [
+            "Slots",
+            "54"
+          ]
+        ]
+      },
+      {
+        "id": "netherite",
+        "name": "Netherite Barrel",
+        "summary": "The Netherite tier of chest upgrade on a barrel.",
+        "specs": [
+          [
+            "Items per slot (64-stack items)",
+            "1,024 per slot (x16)"
+          ],
+          [
+            "Slots",
+            "54"
+          ]
+        ]
+      }
+    ],
+    "uses": [
+      "Storage built into walls and floors, fed by a funnel on any face.",
+      "A dense buffer under a machine, where a chest's lid would be in the way.",
+      "Blast-proof storage at the Netherite tier."
+    ],
+    "mechanics": [
+      "Right-click a barrel with a chest upgrade to upgrade it, keeping its items; a higher tier replaces the lower one and hands it back.",
+      "Same sort button, quick-move buttons, mouse-wheel moves and shortened big counts as the [[upgraded-chest]].",
+      "Breaking it drops a vanilla barrel and its upgrade."
+    ],
+    "automation": [
+      "Hoppers, Create funnels, arms and Pipez fill slots to the full upgraded limit.",
+      "Keeps its contents on Create contraptions and Aeronautics physics objects, and can be upgraded while on a moving contraption."
+    ],
+    "tips": [
+      "A Diamond barrel holds as many slots as a vanilla double chest in a single block."
+    ],
+    "related": [
+      "upgraded-chest",
+      "chest-upgrades",
+      "upgrades"
+    ]
+  },
+  {
+    "id": "fluid-lines",
+    "name": "Fluid Lines",
+    "registry": [
+      "comedymonkeysaddons:copper_fluid_line",
+      "comedymonkeysaddons:brass_fluid_line"
+    ],
+    "summary": "Slim, pump-free copper and brass pipes: fluid moves only from an Intake at the source, at a fixed rate you can watch through the window on top.",
+    "tags": [
+      "logistics",
+      "fluids",
+      "lines"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "A pipe that needs no pump and no power. Clip an [[intake]] onto the side that faces a tank and it draws that tank's fluid into the line, then delivers it at once to every tank or machine the line reaches. Copper moves 100 mB a tick, brass 1,000. Nothing stays in the line.",
+      "why": "Create's pipes need a pump and stress for every run. Fluid Lines are cheap, tidy, unlimited in range and lose nothing, so they're the easy way to feed a [[fluid-wellspring]]'s water or lava to engines, generators, cages and tanks across a base.",
+      "when": "Copper with your first copper sheets, at the same moment as Create's first fluid pipes. Brass once you have brass, when a line needs more than 100 mB a tick.",
+      "interacts": "Lines connect to any block that holds fluid: Create tanks, basins, spouts and item drains, the [[fluid-wellspring]], the [[magma-engine]], the [[lava-generator]], the [[geothermal-turbine]], [[flooded-monster-cage|Flooded cages]], [[fish-tank|Fish Tanks]] and other mods' tanks. Clip-on fittings ([[valve]], [[filter]], [[meter]], [[splitter]]) control the flow. They never join Create's Fluid Pipes.",
+      "mistakes": [
+        "Forgetting the [[intake]]: without one nothing moves, however the line is laid.",
+        "Expecting it to pull from a lake or a lava pool. Intakes only draw from containers; use Create's pump or Hose Pulley for world fluid.",
+        "Laying two colours, or copper beside brass, and expecting them to join. Two colours never join, plain counts as a colour, and tiers never join.",
+        "Right-clicking a placed line with dye. Lines are dyed as items, before they're placed: craft eight around a dye."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Copper",
+        "value": "100",
+        "unit": "mB a tick",
+        "gauge": 0.1
+      },
+      {
+        "label": "Brass",
+        "value": "1,000",
+        "unit": "mB a tick",
+        "gauge": 1
+      }
+    ],
+    "specs": [
+      [
+        "Power or pump",
+        "None"
+      ],
+      [
+        "Range",
+        "Unlimited, no loss"
+      ],
+      [
+        "Stores",
+        "Nothing: one fluid at a time, delivered at once"
+      ],
+      [
+        "Recipe",
+        "8 per craft"
+      ],
+      [
+        "Colours",
+        "16 dyes, or plain"
+      ],
+      [
+        "Fittings",
+        "One per block, on a straight piece"
+      ]
+    ],
+    "variants": [
+      {
+        "id": "copper",
+        "name": "Copper Fluid Line",
+        "registry": [
+          "comedymonkeysaddons:copper_fluid_line"
+        ],
+        "summary": "The early tier: 3 copper sheets under a block of glass make 8.",
+        "specs": [
+          [
+            "Throughput",
+            "100 mB a tick (2,000 mB a second)"
+          ],
+          [
+            "Recipe",
+            "3 copper sheets + glass, makes 8"
+          ]
+        ]
+      },
+      {
+        "id": "brass",
+        "name": "Brass Fluid Line",
+        "registry": [
+          "comedymonkeysaddons:brass_fluid_line"
+        ],
+        "summary": "Ten times copper's flow, for fast Wellsprings and the Geothermal Turbine.",
+        "specs": [
+          [
+            "Throughput",
+            "1,000 mB a tick (20,000 mB a second)"
+          ],
+          [
+            "Recipe",
+            "3 brass sheets + 2 copper sheets + glass, makes 8"
+          ]
+        ]
+      }
+    ],
+    "uses": [
+      "Water from a Water [[fluid-wellspring|Wellspring]] to [[fish-tank|Fish Tanks]], [[flooded-monster-cage|Flooded cages]] and the [[geothermal-turbine]].",
+      "Lava from Lava Wellsprings to [[magma-engine|Magma Engines]] and [[lava-generator|Lava Generators]].",
+      "Overflow into an [[incinerator]], which never fills up.",
+      "Several fluids side by side in one wall, each in its own colour."
+    ],
+    "mechanics": [
+      "A line is every connected piece of the same tier and colour. Any face that touches a block with a fluid handler is an end.",
+      "Each tick every [[intake]] on the line draws from its block, up to the line's throughput shared between Intakes, and only a fluid some end can accept. An Intake never feeds back into the block it draws from.",
+      "Without a [[splitter]], the line shares **evenly** between the ends that can take more.",
+      "One fluid per line at a time. If two could flow, the first Intake in turn wins that tick; set each Intake's filter, or use a [[filter]], to keep fluids apart.",
+      "The window shows the fluid creeping out from the Intake (a block every 8 ticks on copper, every 3 on brass) and draining back when the supply stops. That's only the look: the line still stores nothing, so breaking it never spills or duplicates fluid.",
+      "**Encase** a line by right-clicking it with any plain, solid full block (not glass or anything with a block entity). It keeps working; sneak + Wrench gives the block back. With Engineer's Goggles on, hidden lines within 16 blocks show as a faint outline.",
+      "The Wrench takes off a fitting, or cuts or rejoins the joint on the side you hit. It can never join two colours.",
+      "Copper lines don't oxidise, so there's nothing to wax.",
+      "Parts of a line in unloaded chunks are skipped: ends there get nothing, and nothing is lost or queued.",
+      "On a moving Create contraption a line does nothing until it's placed again. On Create Aeronautics physics objects it works."
+    ],
+    "automation": [
+      "A [[valve]] shuts on redstone and throttles in 10% steps; a [[meter]] gives a comparator signal and Display Link readings.",
+      "Deployers can place lines and clip fittings on, because they use items.",
+      "Bulk washing (an Encased Fan through water) takes the dye off line items."
+    ],
+    "tips": [
+      "One Intake per source keeps things simple. Two Intakes on one line share its throughput.",
+      "A copper line already moves 2,000 mB a second: more than a fully upgraded Water Wellspring makes. Save brass for trunks that really need it.",
+      "Put a [[meter]] near the source while you build: its needle tells you at a glance whether anything is moving."
+    ],
+    "facts": [
+      "The advancements Look, No Pump, Drinking Straw and Out of Sight follow your first line, first Intake and first encased line."
+    ],
+    "related": [
+      "intake",
+      "valve",
+      "filter",
+      "meter",
+      "splitter",
+      "power-lines",
+      "lines-and-networks",
+      "fluid-wellspring"
+    ]
+  },
+  {
+    "id": "power-lines",
+    "name": "Power Lines",
+    "registry": [
+      "comedymonkeysaddons:copper_power_line",
+      "comedymonkeysaddons:brass_power_line"
+    ],
+    "summary": "Thin FE cable in copper and brass that lies flat on floors, walls and ceilings, hangs in spans between Line Posts, and carries power from any generator to any machine.",
+    "tags": [
+      "logistics",
+      "power",
+      "lines"
+    ],
+    "stage": "mid",
+    "requires": [
+      "lava-generator"
+    ],
+    "teach": {
+      "what": "Cable for Forge Energy. Power flows by itself from anything that gives FE to anything that takes it, with no Intake. Copper carries 4,096 FE a tick, brass 65,536. Laid on a surface it clips flat to the face you placed it on; between [[line-post|Line Posts]] it hangs in spans.",
+      "why": "Your [[lava-generator|Lava Generators]], [[geothermal-turbine]] and [[battery|Batteries]] need to reach [[electric-motor|Electric Motors]], [[trade-bot|Trade Bot]]'s station and the [[netherite-monster-cage]]. Power Lines do it over any distance, without loss, and keep working when the far end's chunk isn't loaded.",
+      "when": "Copper as soon as you have your first generator. Brass when a run carries more than four Lava Generators' worth, such as a turbine or a motor above 65,536 SU.",
+      "interacts": "Machines on a line share what its generators make; [[battery|Batteries]] fill from the spare and give it back when generators fall short. A [[breaker]] cuts power, a [[meter]] measures it, and a [[splitter]] on a junction decides which branches come first when power is short.",
+      "mistakes": [
+        "Running copper into a big load. A copper line tops out at 4,096 FE a tick, so a motor set above 65,536 SU (4,096 FE a tick) starves on it. Use brass.",
+        "Expecting copper and brass to join where they touch. Tiers join only on a [[line-post|pole]] or at a [[breaker]], and only one way: brass feeds copper, never the reverse.",
+        "Laying cables of two colours side by side and expecting one network. Two colours never join, plain counts as one.",
+        "Leaving a generator with nothing to power. Generators always run flat out; what isn't used fills stores, and the rest is lost."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Copper",
+        "value": "4,096",
+        "unit": "FE a tick",
+        "gauge": 0.0625
+      },
+      {
+        "label": "Brass",
+        "value": "65,536",
+        "unit": "FE a tick",
+        "gauge": 1
+      }
+    ],
+    "specs": [
+      [
+        "Span reach",
+        "16 blocks (copper), 32 (brass)"
+      ],
+      [
+        "Span cost",
+        "1 Power Line per 4 blocks, rounded up, refunded when it comes down"
+      ],
+      [
+        "Range",
+        "Unlimited, no loss"
+      ],
+      [
+        "Recipe",
+        "8 per craft"
+      ],
+      [
+        "Colours",
+        "16 dyes, or plain (a dyed line is a slightly thicker covered cable)"
+      ],
+      [
+        "Updates",
+        "At most once a second"
+      ]
+    ],
+    "variants": [
+      {
+        "id": "copper",
+        "name": "Copper Power Line",
+        "registry": [
+          "comedymonkeysaddons:copper_power_line"
+        ],
+        "summary": "Two copper ingots either side of dried kelp make 8: enough for four Lava Generators.",
+        "specs": [
+          [
+            "Throughput",
+            "4,096 FE a tick"
+          ],
+          [
+            "Span reach",
+            "16 blocks"
+          ]
+        ]
+      },
+      {
+        "id": "brass",
+        "name": "Brass Power Line",
+        "registry": [
+          "comedymonkeysaddons:brass_power_line"
+        ],
+        "summary": "A brass sheet, a copper sheet and two dried kelp make 8: trunk cable for turbines and big motors.",
+        "specs": [
+          [
+            "Throughput",
+            "65,536 FE a tick"
+          ],
+          [
+            "Span reach",
+            "32 blocks"
+          ]
+        ]
+      }
+    ],
+    "uses": [
+      "Generator to [[electric-motor]] in a machine room, laid along the floor.",
+      "Long outdoor runs on poles from a far [[geothermal-turbine]] to the base.",
+      "A brass trunk on poles feeding copper branches into each area.",
+      "Power for [[trade-bot|Trade Bot]]'s station (from underneath) and the [[netherite-monster-cage]]'s field."
+    ],
+    "mechanics": [
+      "Placed wires attach to the face you place them on, floor, wall or ceiling, and follow it round inside and outside corners. A cable meeting a machine runs to a socket in the middle of its face.",
+      "**Spans:** right-click one Line Post's insulator with Power Lines, then another's. The way between must be clear when you hang it; after that blocks never cut it. Spans sag, have no collision and never hurt anyone. Shears or the Wrench take them down.",
+      "Each insulator holds up to 2 spans, of one tier and one colour.",
+      "**Mixing tiers:** a pole is one junction per colour. Brass feeds copper of its colour there, one way, and copper takes at most its own rate. A [[breaker]] can join them too, once you wrench the joint.",
+      "**Through a wall:** run the cable to a solid block on each side, same tier and colour, and wrench one end. It drills through and joins the two.",
+      "Generators always run flat out while fuelled. Machines share their output evenly; spare power fills the generators' own stores and any Batteries; the rest is lost.",
+      "**Far away:** a network reaches past unloaded chunks to generators on its far side, which run on paper from their record. No chunk is ever loaded for it.",
+      "A span whose two ends move apart (a piston, a contraption, a ship flying off) comes down and drops its wire. Spans with both ends on the same ship stay up."
+    ],
+    "automation": [
+      "A [[breaker]] cuts power on a redstone signal.",
+      "A [[meter]] gives a comparator signal from 0 to 15 by how much of the line's throughput is flowing, and feeds Display Links.",
+      "Engineer's Goggles on a generator, machine or wire show the whole network: what its generators make and what its machines use."
+    ],
+    "tips": [
+      "Lava Generators whose side terminals touch share their stored FE, so a cable on any one of them draws on the whole row.",
+      "Colour-code your grid: one colour per circuit means you can run them side by side and share the same poles.",
+      "A span of 30 blocks or more earns Long Distance Call. Only brass reaches that far."
+    ],
+    "related": [
+      "line-post",
+      "breaker",
+      "meter",
+      "splitter",
+      "battery",
+      "lava-generator",
+      "electricity",
+      "lines-and-networks"
+    ]
+  },
+  {
+    "id": "line-post",
+    "name": "Line Post",
+    "registry": [
+      "comedymonkeysaddons:line_post"
+    ],
+    "summary": "A plain wooden pole with a ceramic insulator: stack them to any height, add up to four crossarms, and hang Power Line spans between them.",
+    "tags": [
+      "logistics",
+      "power",
+      "lines"
+    ],
+    "stage": "mid",
+    "requires": [
+      "power-lines"
+    ],
+    "teach": {
+      "what": "The pole that carries [[power-lines|Power Line]] spans. Posts stack into a pole of any height, and the top one is the head. The head has an insulator on top and can take up to four branches, each with its own insulator.",
+      "why": "Spans cross gaps, rivers and fields without laying cable on every block, and one pole can carry several circuits in different colours.",
+      "when": "When your first generator is too far from the machine it powers to lay cable comfortably, or when you plan a grid.",
+      "interacts": "Spans tie to insulators; the [[battery|Industrial Battery]] has four insulators of its own that tie only to Line Posts. A pole joins the cables of each colour on it, and brass there feeds copper of the same colour.",
+      "mistakes": [
+        "Hanging a span through blocks. The way must be clear when you hang it (after that, nothing cuts it).",
+        "Tying a second tier or colour to an insulator that already holds one. Each insulator takes the tier and colour of its first cable; use another insulator or branch.",
+        "Hanging further than the cable reaches: 16 blocks for copper, 32 for brass."
+      ]
+    },
+    "specs": [
+      [
+        "Recipe",
+        "2 logs, 2 terracotta and an iron nugget make 4"
+      ],
+      [
+        "Tier",
+        "None: the insulator's cap shows the tier of the cable tied to it"
+      ],
+      [
+        "Branches",
+        "Up to 4 on the head, one per side"
+      ],
+      [
+        "Spans per insulator",
+        "Up to 2"
+      ]
+    ],
+    "uses": [
+      "Long runs of [[power-lines|Power Line]] outdoors.",
+      "A junction where a brass trunk feeds copper branches.",
+      "The tie-off points for an [[battery|Industrial Battery]]'s cables."
+    ],
+    "mechanics": [
+      "Stack posts to make a pole; the top one is the **head**.",
+      "Right-click the side of a head with a Line Post to add a branch there (the post is used up). Sneak to place a separate post instead.",
+      "A wire placed against the pole's foot joins the head's top insulator.",
+      "Shears take down the spans on the nearest insulator; the Wrench takes a branch off and gives the post back.",
+      "Each insulator is its own connection, but the pole is one junction per colour: same-tier cables of a colour join freely, and brass feeds copper of its colour, never the other way.",
+      "Posts can't be encased."
+    ],
+    "automation": [
+      "Nothing to automate: posts and spans are passive. Goggles on a post show its spans and network."
+    ],
+    "tips": [
+      "Build poles tall enough that spans clear your walkways. They never hurt anyone, but they're easier to see from below.",
+      "Give each circuit its own colour so several can share one row of poles."
+    ],
+    "related": [
+      "power-lines",
+      "battery",
+      "breaker",
+      "lines-and-networks"
+    ]
+  },
+  {
+    "id": "flight-instruments",
+    "name": "Flight Instruments",
+    "registry": [
+      "comedymonkeysaddons:flight_instruments"
+    ],
+    "summary": "A sloping cockpit console with four live dials for Create Aeronautics ships: altimeter, airspeed, artificial horizon and heading.",
+    "tags": [
+      "aeronautics",
+      "readouts"
+    ],
+    "stage": "mid",
+    "requiresMods": [
+      "Create Aeronautics"
+    ],
+    "teach": {
+      "what": "A riveted steel console with walnut trim and a glare hood. Its four brass-ringed dials read the ship it's on: altitude, airspeed, attitude (pitch and roll) and heading.",
+      "why": "Flying by eye is fine until you're in cloud, at night, or trying to hold a level cruise. The dials, goggles readings and Display Links tell you exactly what the ship is doing.",
+      "when": "Once you're building Aeronautics ships and have Precision Mechanisms.",
+      "interacts": "Engineer's Goggles show every reading. Display Links put altitude, airspeed, climb rate, heading or pitch and roll on Display Boards and Nixie Tubes, refreshed every second. Pair it with a [[compact-gyroscope]] to see how well the ship is being held level.",
+      "mistakes": [
+        "Placing it facing the wrong way. The way you face the panel when you place it is taken as the ship's forward, for heading and pitch.",
+        "Expecting readings on the ground: off a ship, goggles show \"Not on a ship\".",
+        "Looking for it without Sable. It only exists when Create Aeronautics (Sable) is installed."
+      ]
+    },
+    "specs": [
+      [
+        "Altimeter",
+        "Long hand per 100 m, short hand per 1,000 m"
+      ],
+      [
+        "Airspeed dial",
+        "0 to 60 m/s"
+      ],
+      [
+        "Horizon",
+        "Tilts with roll, drops with pitch"
+      ],
+      [
+        "Display Link sources",
+        "Altitude, Airspeed, Climb Rate, Heading, Pitch and Roll"
+      ],
+      [
+        "Recipe",
+        "Iron sheets, a compass, 2 clocks, a Precision Mechanism and an electron tube"
+      ]
+    ],
+    "uses": [
+      "A cockpit you can fly from at night or in fog.",
+      "An altitude board for passengers, through a Display Link.",
+      "Checking a [[torque-rotor]] or [[compact-gyroscope]] setup: watch heading and attitude while you test."
+    ],
+    "mechanics": [
+      "Place it facing you in the cockpit; that way is the ship's forward.",
+      "The dials move live with the ship; Display Links refresh every second."
+    ],
+    "automation": [
+      "Display Links read any one of its five values onto Display Boards or Nixie Tubes."
+    ],
+    "tips": [
+      "Put a Nixie Tube altitude readout on the outside of the cockpit so the crew can see it from the deck."
+    ],
+    "facts": [
+      "Crafting it earns Instrument Rated: \"Now you know exactly how lost you are\"."
+    ],
+    "related": [
+      "compact-gyroscope",
+      "torque-rotor",
+      "aeronautics",
+      "readouts"
+    ]
+  },
+  {
+    "id": "pipez-covers",
+    "name": "Pipez Covers (legacy)",
+    "registry": [
+      "comedymonkeysaddons:snug_pipez_cover",
+      "comedymonkeysaddons:full_pipez_cover",
+      "comedymonkeysaddons:pipe_cover_blank"
+    ],
+    "summary": "Retired copycat covers that hid Pipez pipes inside walls. Placed covers keep working in old worlds, but they can't be crafted any more: use Fluid Lines and Power Lines.",
+    "tags": [
+      "legacy",
+      "compatibility"
+    ],
+    "stage": "early",
+    "requiresMods": [
+      "Pipez"
+    ],
+    "teach": {
+      "what": "Copycat-style covers for Pipez pipes. The Snug cover hugs the pipe a pixel proud all round; the Full cover fills the whole block. Either could be dressed in any full block to hide the pipe, which kept working underneath.",
+      "why": "They were a stop-gap while Pipez pipes looked out of place. The mod's own [[fluid-lines|Fluid Lines]] and [[power-lines|Power Lines]] now do the same job properly: they can be encased in any block and goggles still show where they run.",
+      "when": "Only if you're keeping an old world that already has them. New builds should use the lines.",
+      "interacts": "Covered Pipez pipes still feed Blaze Burners and Portable Engines as before. Goggles on a covered pipe show what kind of pipe it is and its cover.",
+      "mistakes": [
+        "Looking for the recipe: it's been removed, and the items are hidden from the creative tab and JEI.",
+        "Breaking the pipe to get the cover back: that drops both, so take the block off with sneak + Wrench first if you want to keep the dressing block."
+      ]
+    },
+    "specs": [
+      [
+        "Status",
+        "Retired: placed covers keep working, no recipe"
+      ],
+      [
+        "Kinds",
+        "Snug and Full"
+      ]
+    ],
+    "variants": [
+      {
+        "id": "snug",
+        "name": "Snug Pipez Cover",
+        "registry": [
+          "comedymonkeysaddons:snug_pipez_cover"
+        ],
+        "summary": "Hugs the pipe a pixel proud all round, following its core, every arm and the collars on extracting sides."
+      },
+      {
+        "id": "full",
+        "name": "Full Pipez Cover",
+        "registry": [
+          "comedymonkeysaddons:full_pipez_cover"
+        ],
+        "summary": "Fills the whole block, which becomes solid to stand on and build against."
+      }
+    ],
+    "uses": [
+      "Keeping old covered pipework running in an existing world."
+    ],
+    "mechanics": [
+      "Right-click a covered pipe with any full block to dress the cover in it: one block is used, and given back when you change it. Tinted blocks keep their colours; see-through blocks still show the pipe.",
+      "Sneak + right-click with a Wrench takes the block off, then the cover.",
+      "Clicking the face where a pipe meets the cover still opens Pipez's settings for that side."
+    ],
+    "automation": [
+      "None: the pipe underneath does the work."
+    ],
+    "tips": [
+      "When you rebuild an area, swap covered Pipez runs for [[fluid-lines|Fluid Lines]] or [[power-lines|Power Lines]] and encase those instead."
+    ],
+    "related": [
+      "fluid-lines",
+      "power-lines",
+      "compatibility"
+    ]
+  }
+]

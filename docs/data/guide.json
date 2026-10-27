@@ -1,0 +1,652 @@
+[
+  {
+    "id": "getting-started",
+    "name": "Getting Started: Your First Upgrade Template",
+    "chapter": 1,
+    "stage": "early",
+    "summary": "Set up a sequenced assembly line, make your first Upgrade Template, and turn it into an endless water supply and a bigger chest.",
+    "image": "icons/comedymonkeysaddons/upgrade_template.png",
+    "sections": [
+      {
+        "id": "before",
+        "title": "Before you start",
+        "body": [
+          "This mod builds on Create, so it starts where Create's own early game ends. You need:",
+          {
+            "list": [
+              "Copper sheets (a Mechanical Press on copper ingots).",
+              "Electron Tubes (Create's polished rose quartz on an iron sheet).",
+              "A **sequenced assembly** line: a belt or depot with Deployers, and a Press or Spout where a recipe asks.",
+              "Engineer's Goggles. Every block in the mod tells you what it's doing through them."
+            ]
+          },
+          {
+            "tip": "Hold **W** over any item from this mod to watch its Ponder scene. Most blocks have one."
+          }
+        ]
+      },
+      {
+        "id": "template",
+        "title": "The Upgrade Template",
+        "body": [
+          "Every upgrade in the mod starts as an [[upgrade-template]]. Put a copper sheet on your sequenced assembly line and deploy, in order:",
+          {
+            "list": [
+              "A Cogwheel.",
+              "Any glass block.",
+              "An Electron Tube."
+            ],
+            "ordered": true
+          },
+          {
+            "flow": {
+              "title": "Your first template",
+              "steps": [
+                {
+                  "item": "create:copper_sheet",
+                  "label": "Copper Sheet",
+                  "kind": "source"
+                },
+                {
+                  "label": "Deploy Cogwheel, Glass, Electron Tube",
+                  "kind": "machine"
+                },
+                {
+                  "ref": "upgrade-template",
+                  "kind": "result"
+                }
+              ]
+            }
+          },
+          "It's one pass, no loops. Make a stack: you'll want them for everything in this chapter."
+        ]
+      },
+      {
+        "id": "water",
+        "title": "Endless water",
+        "body": [
+          "Craft a [[fluid-wellspring]] (copper sheets, a Mechanical Pump, glass, a Fluid Tank and Copper Casing). On its own it's just a tank.",
+          {
+            "list": [
+              "Deploy two Pointed Dripstone onto an Upgrade Template: a [[drip-template]].",
+              "Spout 250 mB of water onto it: a [[water-upgrade]].",
+              "Right-click the Wellspring with it."
+            ],
+            "ordered": true
+          },
+          "It now fills itself with 100 mB of water a second, forever. Two upgrades make 250, three make 500. Draw from it with pipes or a bucket on any side.",
+          {
+            "warning": "A Wellspring takes one kind of generation upgrade at a time. Decide whether this one is for water or lava before you fit it."
+          }
+        ]
+      },
+      {
+        "id": "chest",
+        "title": "A bigger chest",
+        "body": [
+          "Deploy a wooden chest and then Andesite Alloy onto an Upgrade Template to make a [[chest-upgrade-template]]. Deploy two copper sheets onto that and press it: a Copper [[chest-upgrades|Chest Upgrade]].",
+          "Right-click any chest with it. The chest keeps its items and now holds 128 to a slot. Later tiers (Iron, Gold, Diamond, Netherite) are each built on the one before, and climbing a tier hands the old upgrade back.",
+          {
+            "tip": "Open an upgraded chest's upgrade screen with a **Wrench**, not sneak + empty hand (that's Carry On's pickup)."
+          }
+        ]
+      },
+      {
+        "id": "next",
+        "title": "What to build next",
+        "body": [
+          "Build an [[cobblestone-generator|Andesite Cobblestone Generator]] and put Crushing Wheels after it. Within a few minutes you'll find your first [[emerald-dust]], and that's the next chapter.",
+          {
+            "entries": [
+              "cobblestone-generator",
+              "emerald-dust",
+              "upgraded-chest"
+            ]
+          }
+        ]
+      }
+    ],
+    "related": [
+      "upgrade-template",
+      "fluid-wellspring",
+      "water-upgrade",
+      "chest-upgrades",
+      "upgrades"
+    ]
+  },
+  {
+    "id": "stone-and-dust",
+    "name": "Stone and Dust",
+    "chapter": 2,
+    "stage": "early",
+    "summary": "Generate stone in one block, crush it for rare dusts, and press the dust into emeralds, quartz and netherite in the Pressure Crucible.",
+    "image": "renders/pressure-crucible--superheated.png",
+    "sections": [
+      {
+        "id": "generator",
+        "title": "A stone generator",
+        "body": [
+          "The [[cobblestone-generator|Andesite Cobblestone Generator]] is Andesite Alloy, two Mechanical Drills, Andesite Casing and a bucket each of water and lava (you get the buckets back). Put a shaft into the hole in its back: it makes one cobblestone per cycle, exactly as fast as a drill at that speed would mine one.",
+          {
+            "list": [
+              "It only gives stone to item transport: a funnel, chute, hopper or arm on any side.",
+              "Full, or switched off with redstone, it stops and costs no stress.",
+              "The lamp on the front tells you why: cyan running, amber full, dark red switched off."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "crushing",
+        "title": "Crushing for dust",
+        "body": [
+          "Send the cobblestone through Crushing Wheels. As well as gravel, each block has a **5%** chance of [[emerald-dust]] (2.5% with a Millstone). Nine of them make an Emerald.",
+          {
+            "tip": "On average that's one Emerald for every 180 cobblestone. Start saving the dust now; you'll press it once the Crucible is built."
+          }
+        ]
+      },
+      {
+        "id": "crucible",
+        "title": "The Pressure Crucible",
+        "body": [
+          "The [[pressure-crucible]] (4 obsidian, a Mechanical Press, 2 brass sheets, a cogwheel and a Basin) sits on a Blaze Burner and takes a shaft into its back. It's heavy: 12 SU per RPM.",
+          {
+            "table": {
+              "head": [
+                "Press",
+                "Heat",
+                "For"
+              ],
+              "rows": [
+                [
+                  "9 Emerald Dust",
+                  "Heated",
+                  "1 Emerald"
+                ],
+                [
+                  "1 Gravel",
+                  "None",
+                  "1 Stone"
+                ],
+                [
+                  "1 Sand",
+                  "Heated",
+                  "1 Glass"
+                ],
+                [
+                  "4 Quartz Dust",
+                  "Heated",
+                  "1 Nether Quartz"
+                ],
+                [
+                  "9 Netherite Dust",
+                  "Superheated",
+                  "1 Netherite Scrap"
+                ]
+              ]
+            }
+          },
+          "Funnels load dust and take results from any side."
+        ]
+      },
+      {
+        "id": "lava",
+        "title": "Lava, netherrack and the rarer dusts",
+        "body": [
+          "Make a second Wellspring with a [[lava-upgrade]] (spout lava onto a Drip Template). Now mix cobblestone with 50 mB of lava in a Mixer over a heated Blaze Burner: netherrack.",
+          "Crush the netherrack. Besides cinder flour, it gives [[quartz-dust]] at 5% and [[netherite-dust]] at 1%. A [[blackstone-generator]] gives quartz dust at 10%, if you'd rather.",
+          {
+            "warning": "Netherite Scrap needs a **superheated** burner: feed it Blaze Cakes. It's a long road (about 900 netherrack a scrap), so treat it as a project that runs in the background."
+          }
+        ]
+      },
+      {
+        "id": "next",
+        "title": "What to build next",
+        "body": [
+          "Keep the cinder flour: it's half of the food for your first Monster Cage. Next, build the one-block farms.",
+          {
+            "entries": [
+              "auto-harvester",
+              "animal-pen",
+              "monster-cage",
+              "fish-tank"
+            ]
+          }
+        ]
+      }
+    ],
+    "related": [
+      "stone-generation",
+      "precious-dusts",
+      "pressure-crucible",
+      "emerald-dust",
+      "netherite-dust",
+      "quartz-dust"
+    ]
+  },
+  {
+    "id": "farms-in-a-box",
+    "name": "Farms in a Box",
+    "chapter": 3,
+    "stage": "early",
+    "summary": "Replace sprawling farms with one block each: the Auto Harvester, the Animal Pen, the Monster Cage and the Fish Tank.",
+    "image": "renders/auto-harvester.png",
+    "sections": [
+      {
+        "id": "harvester",
+        "title": "The Auto Harvester",
+        "body": [
+          "Plant any crop or sapling in an [[auto-harvester]] and it grows and harvests it forever; the plant is never used up. It always uses 512 SU, at any speed. A crop takes about 40 seconds, a tree 80.",
+          {
+            "tip": "Start with wheat. Milled, it's Wheat Flour: half of both [[monster-chow|Monster Chow]] and [[fish-food|Fish Food]]."
+          }
+        ]
+      },
+      {
+        "id": "pens",
+        "title": "Animal Pens",
+        "body": [
+          "Craft a [[capture-bottle]] (a copper nugget on a glass bottle) and catch one animal. Use the bottle on an [[animal-pen]], fill its trough with that animal's breeding food, and turn the shaft: every five minutes each adult has a baby, and babies grow up in twenty, as in vanilla. It holds 128.",
+          {
+            "list": [
+              "A **sword** takes half the adults with their drops (Looting and Fire Aspect count).",
+              "**Shears** take the wool; a **bucket** takes milk; chickens lay eggs by themselves.",
+              "Deployers can do all of it."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cages",
+        "title": "Monster Cages",
+        "body": [
+          "Deploy an Iron Sheet onto a Glass Bottle for an [[iron-jar]] and catch a monster at any health. Use the jar on a [[monster-cage]] and feed it [[monster-chow|Monster Chow]] (Wheat Flour, Cinder Flour and Bone Meal in a Mixer, three at a time).",
+          "A new monster arrives every 20 seconds at 64 RPM, sooner the faster it turns, each eating its chow. Cull half with a sword for real drops: string and slime for a [[string-tangler]], bones, gunpowder and arrows.",
+          {
+            "warning": "Faster shafts eat chow faster. Size the Mixer line before you speed the cage up."
+          }
+        ]
+      },
+      {
+        "id": "tanks",
+        "title": "Fish Tanks",
+        "body": [
+          "Catch a fish, squid or axolotl in a Capture Bottle and use it on a [[fish-tank]]. Pipe water in (a Water Wellspring is perfect) and feed it [[fish-food|Fish Food]]. Every adult has young every five minutes at 64 RPM, each birth using 250 mB of water.",
+          "Cull for cod, salmon and ink, or scoop a live one with a water bucket. One axolotl birth in 1,200 is a [[blue-axolotl]]."
+        ]
+      },
+      {
+        "id": "books",
+        "title": "Speeding them up",
+        "body": [
+          "Find a Librarian. Its book trades can include [[bountiful]] (the Harvester), [[fruitful]] (pens and tanks) and [[monstrous]] (cages), each I to III and 50% faster a level. Put them on with an anvil."
+        ]
+      },
+      {
+        "id": "next",
+        "title": "What to build next",
+        "body": [
+          "Your tanks want water and your cages want automation. Next, learn the mod's pump-free Fluid Lines and put lava to work in a Magma Engine.",
+          {
+            "entries": [
+              "fluid-lines",
+              "intake",
+              "magma-engine"
+            ]
+          }
+        ]
+      }
+    ],
+    "related": [
+      "one-block-farming",
+      "auto-harvester",
+      "animal-pen",
+      "monster-cage",
+      "fish-tank",
+      "enchantments"
+    ]
+  },
+  {
+    "id": "fluids-and-engines",
+    "name": "Fluids and Engines",
+    "chapter": 4,
+    "stage": "mid",
+    "summary": "Move fluid with no pump on Fluid Lines, run a Magma Engine on Wellspring lava, and give your farms' drops somewhere to go.",
+    "image": "renders/magma-engine.png",
+    "sections": [
+      {
+        "id": "lines",
+        "title": "Pump-free pipes",
+        "body": [
+          "Eight [[fluid-lines|Copper Fluid Lines]] come from three copper sheets and a glass block. Lay a line from a Wellspring to where the fluid is needed, then clip an [[intake]] (a Fluid Valve and an Iron Sheet) onto the side that faces the Wellspring. That's it: no pump, no stress. Copper moves 100 mB a tick.",
+          {
+            "list": [
+              "Nothing moves without an Intake.",
+              "Intakes only draw from containers, never from the world.",
+              "Two colours never join, so dye lines (before placing) to run water and lava side by side."
+            ]
+          },
+          {
+            "tip": "Right-click a line with any plain full block to hide it in your walls. Goggles still show where it runs."
+          }
+        ]
+      },
+      {
+        "id": "engine",
+        "title": "The Magma Engine",
+        "body": [
+          "A [[magma-engine]] gives 64 RPM and 8,192 SU, four Portable Engines' worth, for 10 mB of lava a second. One Lava Wellspring with a single upgrade runs it forever. Pipe lava in on any side but the front; the shaft comes out of the front.",
+          "Later, a Precision Mechanism and Brass Casing make it a [[supercharged-magma-engine]]: 128 RPM and 16,384 SU for 20 mB a second."
+        ]
+      },
+      {
+        "id": "drops",
+        "title": "Somewhere for the drops to go",
+        "body": [
+          {
+            "list": [
+              "A [[string-tangler]] turns 4 string and a slime ball from a spider or slime cage into a cobweb.",
+              "A [[tuff-generator]] and Crushing Wheels give nuggets of all four metals for a [[stone-infuser]], which makes Create's ore-bearing stones.",
+              "An [[incinerator]] destroys any overflow, items or fluid, and heats a boiler while it burns."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "next",
+        "title": "What to build next",
+        "body": [
+          "With lava flowing, you're ready for electricity: a Lava Generator, Power Lines and an Electric Motor.",
+          {
+            "entries": [
+              "lava-generator",
+              "power-lines",
+              "electric-motor"
+            ]
+          }
+        ]
+      }
+    ],
+    "related": [
+      "fluid-lines",
+      "intake",
+      "magma-engine",
+      "lines-and-networks"
+    ]
+  },
+  {
+    "id": "first-power",
+    "name": "Your First Power",
+    "chapter": 5,
+    "stage": "mid",
+    "summary": "Burn lava for Forge Energy in a Lava Generator, carry it on Power Lines, store it in a Battery and turn it back into rotation.",
+    "image": "renders/lava-generator.png",
+    "sections": [
+      {
+        "id": "generator",
+        "title": "The Lava Generator",
+        "body": [
+          "A [[lava-generator]] burns 20 mB of lava a second, fed in at the middle of its back, and makes 1,024 FE a tick out of each side's terminal. It runs flat out whenever it has lava. One Lava Wellspring with two upgrades keeps it going.",
+          {
+            "warning": "What it can't store or deliver is lost. Always give it something to power."
+          }
+        ]
+      },
+      {
+        "id": "lines",
+        "title": "Power Lines",
+        "body": [
+          "Two copper ingots either side of dried kelp make eight [[power-lines|Copper Power Lines]]. They clip flat to whatever floor, wall or ceiling you place them on, and power flows by itself from generator to machine, up to 4,096 FE a tick.",
+          "For a longer run, craft [[line-post|Line Posts]], stack them into poles, and hang spans between their insulators: up to 16 blocks for copper."
+        ]
+      },
+      {
+        "id": "motor",
+        "title": "The Electric Motor",
+        "body": [
+          "An [[electric-motor]] takes FE through its base and turns its shaft at the speed and stress you set with a Wrench. It draws 1 FE a tick for every 16 SU, so one Lava Generator runs it at 16,384 SU. Short of power it stops, then restarts once it has a reserve.",
+          {
+            "strategy": {
+              "title": "Power where rotation can't reach",
+              "body": "Put the generators by the lava and the motor by the machine. A thin cable replaces a long chain of shafts, and it never needs gearing."
+            }
+          }
+        ]
+      },
+      {
+        "id": "battery",
+        "title": "A Battery",
+        "body": [
+          "Brass Casing, four copper sheets, two redstone and an Electron Tube make a [[battery]]: 10,000,000 FE. Put one on the line and the generator's spare fills it; when the lava runs low, it carries the motor. Batteries side by side share one store.",
+          {
+            "tip": "Add a [[meter]] and a [[breaker]] to your first line: the Meter shows how much flows, the Breaker switches the circuit off."
+          }
+        ]
+      },
+      {
+        "id": "next",
+        "title": "What to build next",
+        "body": [
+          "Your base runs on its own now. Put that power to use: a Cuckoo Clock for the village, and Trade Bot to sell your surplus.",
+          {
+            "entries": [
+              "cuckoo-clock",
+              "trade-bot"
+            ]
+          }
+        ]
+      }
+    ],
+    "related": [
+      "electricity",
+      "lava-generator",
+      "power-lines",
+      "electric-motor",
+      "battery"
+    ]
+  },
+  {
+    "id": "villagers-and-trade",
+    "name": "Villagers and Trade",
+    "chapter": 6,
+    "stage": "advanced",
+    "summary": "Set village time with the Cuckoo Clock and hire Trade Bot to sell your farms' surplus to seated villagers for emeralds.",
+    "image": "renders/trade-bot.png",
+    "sections": [
+      {
+        "id": "clock",
+        "title": "The Cuckoo Clock",
+        "body": [
+          "Hang a [[cuckoo-clock]] on a wall with the block below it free for its weights, and turn a shaft into the middle of its back (it always takes 1,024 SU). While it turns, every villager within 64 blocks restocks at **8:00** and **12:00**, as soon as it gets to its workstation after the hour. On each hour it chimes and the cuckoo calls."
+        ]
+      },
+      {
+        "id": "seats",
+        "title": "Seating the village",
+        "body": [
+          "[[trade-bot|Trade Bot]] only trades with villagers sitting on Create seats (and wandering traders). With this mod, they sit properly, legs bent. Put each seat beside its villager's workstation: he trades from two blocks away, across it."
+        ]
+      },
+      {
+        "id": "bot",
+        "title": "Trade Bot",
+        "body": [
+          "His 5x5 Mechanical Crafting recipe needs brass sheets, Electron Tubes, Precision Mechanisms, an Emerald Block, Andesite and Brass Casing, Cogwheels and an [[fe-coil]]. He comes docked in his winding station.",
+          {
+            "list": [
+              "Feed FE into the station **from underneath**: a Power Line, or a generator that outputs upward.",
+              "Right-click the station, **Select containers**, and right-click up to four inputs and one output within 64 blocks.",
+              "Fill the inputs with what the seated villagers buy."
+            ],
+            "ordered": true
+          },
+          "By day he rolls out, sells at real prices and stock, and brings the emeralds (and Nuggets of Experience for the XP) back to his output. What didn't sell goes back where it came from.",
+          {
+            "warning": "Keep monsters and water away from his routes. Monsters scare him into hiding, and water winds him down until he's dry."
+          }
+        ]
+      },
+      {
+        "id": "next",
+        "title": "What to build next",
+        "body": [
+          "Emeralds and power are flowing. Time to build a proper grid: the Geothermal Turbine, brass on poles and the Industrial Battery.",
+          {
+            "entries": [
+              "geothermal-turbine",
+              "battery",
+              "line-post"
+            ]
+          }
+        ]
+      }
+    ],
+    "related": [
+      "trade-bot",
+      "cuckoo-clock",
+      "fe-coil"
+    ]
+  },
+  {
+    "id": "the-grid",
+    "name": "The Grid",
+    "chapter": 7,
+    "stage": "advanced",
+    "summary": "Build the Geothermal Turbine, carry its power on brass spans, rank your circuits, store it in an Industrial Battery, and let far generators run on paper.",
+    "image": "renders/battery--industrial.png",
+    "sections": [
+      {
+        "id": "turbine",
+        "title": "The Geothermal Turbine",
+        "body": [
+          "Build a 3x3x3 of Geothermal Casings with a Turbine Core in the very middle and the Controller in the middle of the front. The [[geothermal-turbine]] forms within a second and makes 46,080 FE a tick: forty-five Lava Generators' worth, for a tenth of their lava.",
+          {
+            "list": [
+              "It takes 90 mB of lava and 250 mB of water a second at full power, through the ports under its base: two maxed Lava Wellsprings and a Water Wellspring with two upgrades.",
+              "A Wrench on the Controller sets its power level in 10% steps; fuel use scales with it."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "brass",
+        "title": "Brass on poles",
+        "body": [
+          "A turbine's output is far beyond copper's 4,096 FE a tick. Run [[power-lines|Brass Power Lines]] (65,536 FE a tick, spans up to 32 blocks) on [[line-post|Line Posts]] as a trunk, and tie copper branches of the same colour at the poles: brass feeds copper there, one way.",
+          {
+            "tip": "Put a power [[splitter]] on a junction and rank its branches First, Second or Last. When power runs short, your most important machines keep running."
+          }
+        ]
+      },
+      {
+        "id": "industrial",
+        "title": "The Industrial Battery",
+        "body": [
+          "Fill a 3x3 footprint, 3 to 9 high, with [[battery|Batteries]] and they become one Industrial Battery: 20,000,000 FE a block, up to 1.62 billion. It connects only by spans from its four top insulators to Line Posts. Put a Lightning Rod on top for 250,000 FE a strike in a storm."
+        ]
+      },
+      {
+        "id": "paper",
+        "title": "Generators on paper",
+        "body": [
+          "Power networks never load chunks. A generator whose chunk isn't running carries on **on paper** from its record, fuel and Wellsprings included, and its power still arrives. So you can build the turbine far away, by its lava, and run brass home."
+        ]
+      },
+      {
+        "id": "skies",
+        "title": "A side trip to the skies",
+        "body": [
+          "If you fly Create Aeronautics ships, now's the time for the [[compact-gyroscope]], [[torque-rotor]] and [[flight-instruments]]. See [[aeronautics]]."
+        ]
+      },
+      {
+        "id": "next",
+        "title": "What to build next",
+        "body": [
+          "With a grid behind you, the end game is open: Netherite storage, a netherite line, and Withers on a leash.",
+          {
+            "entries": [
+              "netherite-monster-cage",
+              "contained-wither",
+              "chest-upgrades"
+            ]
+          }
+        ]
+      }
+    ],
+    "related": [
+      "electricity",
+      "geothermal-turbine",
+      "battery",
+      "power-lines",
+      "line-post",
+      "splitter",
+      "lines-and-networks"
+    ]
+  },
+  {
+    "id": "end-game",
+    "name": "The End Game",
+    "chapter": 8,
+    "stage": "end",
+    "summary": "Netherite chests, a full-power motor, and Withers farmed for Nether Stars in the Netherite Monster Cage.",
+    "image": "renders/netherite-monster-cage.png",
+    "sections": [
+      {
+        "id": "netherite",
+        "title": "Netherite, the long way round",
+        "body": [
+          "Your [[netherite-dust]] line should have a few scrap by now. Netherite ingots go into a [[chest-upgrades|Netherite Chest Upgrade]] (smithed onto a Diamond one: 1,024 a slot, 54 slots, blast-proof) and the Netherite cage."
+        ]
+      },
+      {
+        "id": "full-power",
+        "title": "Unlimited Power",
+        "body": [
+          "Set an [[electric-motor]] to its full 294,912 SU: a whole superheated steam boiler from one block. It draws 18,432 FE a tick, so it needs brass cable and a turbine (or eighteen Lava Generators) behind it."
+        ]
+      },
+      {
+        "id": "wither",
+        "title": "Containing the Wither",
+        "body": [
+          "The [[netherite-monster-cage]] is Mechanical Crafting around a Brass Monster Cage with netherite ingots, Precision Mechanisms, FE Coils and obsidian. Smith an Iron Jar into a [[netherite-jar]], summon a Wither, catch it at any health and put it in.",
+          {
+            "list": [
+              "The field takes **2,048 FE a tick** whenever a Wither is inside, plus up to 1,024 more while it brings new ones in.",
+              "At 256 RPM a new Wither arrives every 20 minutes, eating 64 Monster Chow, up to 3.",
+              "Cull them with a sword for Nether Stars: 3 an hour, 7.5 with Monstrous III."
+            ]
+          },
+          {
+            "warning": "If the field fails, everyone within 128 blocks gets five minutes' warning, then one Wither breaks out, and another every game day until the power is back. Back the cage with Batteries, put it on a First branch, and never leave it on generators alone."
+          }
+        ]
+      },
+      {
+        "id": "next",
+        "title": "What to build next",
+        "body": [
+          "There's no single last block. Chase the advancements you haven't got (a Brass Animal Pen of 512, a blue axolotl, 64 trades in a day), take a Supercharged Magma Engine into the sky, or build a grid that runs a whole city on paper.",
+          {
+            "entries": [
+              "contained-wither",
+              "blue-axolotl",
+              "supercharged-magma-engine",
+              "aeronautics"
+            ]
+          }
+        ]
+      }
+    ],
+    "related": [
+      "netherite-monster-cage",
+      "contained-wither",
+      "netherite-jar",
+      "electric-motor",
+      "chest-upgrades"
+    ]
+  }
+]

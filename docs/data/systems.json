@@ -1,0 +1,2114 @@
+[
+  {
+    "id": "electricity",
+    "name": "Electricity",
+    "summary": "Burn lava for Forge Energy, carry it on Power Lines, store it in Batteries and turn it back into rotation with Electric Motors.",
+    "image": "renders/geothermal-turbine.png",
+    "tags": [
+      "power"
+    ],
+    "stage": "advanced",
+    "teach": {
+      "what": "A complete FE grid inside the mod: the [[lava-generator]] and [[geothermal-turbine]] make Forge Energy, [[power-lines|Power Lines]] carry it, [[battery|Batteries]] store it, and the [[electric-motor]] turns it into Create rotation of up to 294,912 SU.",
+      "why": "Rotation is hard to move long distances and hard to make in huge amounts. FE travels any distance on a thin cable, and one motor can match a full superheated steam boiler. It also powers [[trade-bot|Trade Bot]] and the [[netherite-monster-cage]].",
+      "when": "Once you have brass, Industrial Iron and a lava supply (a [[lava-upgrade|Lava Wellspring]]). The turbine and Industrial Battery come later, as grid projects.",
+      "interacts": "Fuel comes from the [[fluid-wellspring]] on [[fluid-lines|Fluid Lines]]. Pipez energy pipes and other mods' FE blocks connect too: anything that gives or takes FE through a face works.",
+      "mistakes": [
+        "Leaving generators with nothing to power. They always run flat out while fuelled; what isn't used fills stores and the rest is lost.",
+        "Running a big motor on copper cable. Copper carries 4,096 FE a tick: enough for 65,536 SU of motor at most.",
+        "Feeding a Lava Generator from its side. Lava goes in at the middle of its back; power comes out of its sides.",
+        "Expecting a motor to limp along when short of power. It stops, then restarts once it has a reserve stored."
+      ]
+    },
+    "sections": [
+      {
+        "id": "making-fe",
+        "title": "Making FE",
+        "body": [
+          "Two generators burn lava. Both run **flat out** whenever they have fuel: there's no throttle on the Lava Generator, and the Geothermal Turbine runs at whatever power level you set on it with a Wrench, in 10% steps.",
+          {
+            "table": {
+              "head": [
+                "",
+                "Takes",
+                "Gives",
+                "FE per mB of lava"
+              ],
+              "rows": [
+                [
+                  "[[lava-generator]]",
+                  "20 mB/s lava, in at the middle of the back",
+                  "1,024 FE a tick, out of each side's terminal",
+                  "1,024"
+                ],
+                [
+                  "[[geothermal-turbine]] (3x3x3)",
+                  "90 mB/s lava and 250 mB/s water, through the ports under its base",
+                  "46,080 FE a tick, through the ports under its base",
+                  "10,240"
+                ]
+              ]
+            }
+          },
+          "The turbine is ten times as efficient with lava. Build it as a 3x3x3 of Geothermal Casings with a Turbine Core in the very middle and the Controller in the middle of the front, facing you; it forms within a second.",
+          {
+            "tip": "Lava Generators whose side terminals touch share their stored FE, so a cable on any one of them draws on the whole row."
+          },
+          {
+            "warning": "What a generator's own store can't hold is lost. Give it a machine or a Battery to fill."
+          }
+        ]
+      },
+      {
+        "id": "using-fe",
+        "title": "Turning FE into rotation",
+        "body": [
+          "The [[electric-motor]] takes FE through its base (the flange opposite the shaft) and turns its shaft at the speed and stress you set with a Wrench. Speed snaps to Create's standard speeds from 1 to 256 RPM; stress snaps to what the generators make (a quarter or half of a Lava Generator, whole generators, up to one turbine), and the screen shows the power it will draw.",
+          {
+            "table": {
+              "head": [
+                "Motor set to",
+                "Draws",
+                "Lava Generators' worth"
+              ],
+              "rows": [
+                [
+                  "16,384 SU",
+                  "1,024 FE a tick",
+                  "1"
+                ],
+                [
+                  "65,536 SU",
+                  "4,096 FE a tick",
+                  "4"
+                ],
+                [
+                  "294,912 SU (its maximum: a full superheated boiler)",
+                  "18,432 FE a tick",
+                  "18"
+                ]
+              ]
+            }
+          },
+          "The rule is simple: **1 FE a tick for every 16 SU**.",
+          "Short of power, a motor stops, and starts again once it has a reserve stored (30 seconds' worth, or a few seconds' at high stress). A weak supply makes it pause now and then rather than stutter the whole network.",
+          {
+            "fact": "Running a motor at its full 294,912 SU earns Unlimited Power: \"A whole steam boiler, from one block\"."
+          }
+        ]
+      },
+      {
+        "id": "storing-fe",
+        "title": "Storing FE",
+        "body": [
+          "A [[battery]] stores 10,000,000 FE, in or out at 2,048 FE a tick. On a network it fills from what the generators make beyond what's used, and gives it back when they fall short. That's about 8 minutes of one Lava Generator's output, or a full-power motor for about 27 seconds: storage evens out supply, it doesn't replace generation.",
+          {
+            "list": [
+              "Its connectors are its sides, front and back. Batteries that touch there are one **bank** with one store, moving 2,048 FE a tick each. Stacked ones don't join.",
+              "Fill a 3x3 footprint, 3 to 9 high, and they form one **Industrial Battery**: 20,000,000 FE a block (540 million at 3 high, 1.62 billion at 9). It connects only through the four insulators on its top corners, by spans to [[line-post|Line Posts]].",
+              "A Lightning Rod on top adds 250,000 FE a strike.",
+              "Broken or picked up, a Battery keeps its charge. Breaking a tower block re-forms the tallest run of 3 or more full layers left; nothing is lost."
+            ]
+          },
+          {
+            "tip": "Once a tower stands, a Battery placed on its top fills the whole 3x3 layer from your stack (nine at once), so it grows like a Create vault."
+          }
+        ]
+      },
+      {
+        "id": "on-paper",
+        "title": "Far away: generators on paper",
+        "body": [
+          "A Power Line network is a lasting record of its generators and devices. A device is **live** while its chunk is running, and each tick the network sets live devices' use against its generators' output.",
+          "A generator whose chunk isn't running carries on **on paper** from its record: its output, store, fuel, and what its Wellsprings bring in through Fluid Lines. Batteries far away charge and give on paper too. When the chunk runs again, it takes on how far its record moved meanwhile.",
+          {
+            "strategy": {
+              "title": "One big generator far out",
+              "body": "Build a [[geothermal-turbine]] beside its Wellsprings far from home and run brass on poles back to base. It powers the base without ever loading its own chunk, as long as its lava and water come in on paper too."
+            }
+          },
+          {
+            "warning": "No chunk is ever loaded for a network. A machine in an unloaded chunk isn't running, so it draws nothing; only generators and Batteries work on paper."
+          },
+          "Networks update at most once a second, a second's worth at a time, and only while a device on them is live. Generators never wake a network on their own."
+        ]
+      },
+      {
+        "id": "sizing",
+        "title": "Sizing a grid",
+        "body": [
+          "Work out what your machines draw, add a margin, and pick enough generation and the right cable.",
+          {
+            "table": {
+              "head": [
+                "Load",
+                "FE a tick",
+                "Cable"
+              ],
+              "rows": [
+                [
+                  "[[trade-bot|Trade Bot]]'s station, charging",
+                  "64",
+                  "Copper"
+                ],
+                [
+                  "[[netherite-monster-cage]] field (farming)",
+                  "2,048 (3,072)",
+                  "Copper"
+                ],
+                [
+                  "Electric Motor at 16,384 SU",
+                  "1,024",
+                  "Copper"
+                ],
+                [
+                  "Electric Motor at 65,536 SU",
+                  "4,096",
+                  "Copper, at its limit"
+                ],
+                [
+                  "Electric Motor at 294,912 SU",
+                  "18,432",
+                  "Brass"
+                ],
+                [
+                  "A whole Geothermal Turbine's output",
+                  "46,080",
+                  "Brass (65,536)"
+                ]
+              ]
+            }
+          },
+          {
+            "table": {
+              "head": [
+                "Fuel for",
+                "Lava",
+                "Wellsprings"
+              ],
+              "rows": [
+                [
+                  "One Lava Generator",
+                  "20 mB/s",
+                  "One Lava Wellspring with two upgrades (25 mB/s)"
+                ],
+                [
+                  "Two and a half Lava Generators",
+                  "50 mB/s",
+                  "One Lava Wellspring with three upgrades"
+                ],
+                [
+                  "A Geothermal Turbine at full power",
+                  "90 mB/s lava, 250 mB/s water",
+                  "Two maxed Lava Wellsprings, and a Water Wellspring with two upgrades"
+                ]
+              ]
+            }
+          },
+          {
+            "strategy": {
+              "title": "A first machine room",
+              "body": "One maxed Lava Wellspring, two Lava Generators side by side (terminals touching), a copper Power Line to an Electric Motor set to 32,768 SU, and one Battery on the line. The generators make 2,048 FE a tick, the motor takes exactly that, and the Battery carries you through a refill."
+            }
+          },
+          {
+            "strategy": {
+              "title": "The grid",
+              "body": "A turbine's 46,080 FE a tick runs two and a half full-power motors. Run a brass trunk on poles, feed copper branches off it at the poles, rank the branches with a power [[splitter]] so the important ones come first, and hang an Industrial Battery off the trunk to cover the gaps."
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      "lava-generator",
+      "geothermal-turbine",
+      "electric-motor",
+      "battery",
+      "power-lines",
+      "line-post",
+      "lines-and-networks"
+    ]
+  },
+  {
+    "id": "lines-and-networks",
+    "name": "Lines and Networks",
+    "summary": "How Fluid Lines and Power Lines work: pump-free fluid, FE cable, clip-on fittings, colours, spans on poles, hiding them in walls, and what happens far away.",
+    "image": "renders/fluid-lines.png",
+    "tags": [
+      "logistics"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "The mod's own pipes and cables. [[fluid-lines|Fluid Lines]] move fluid with no pump; [[power-lines|Power Lines]] carry FE and hang between [[line-post|Line Posts]]. Both come in copper and brass with fixed throughput, both take clip-on fittings, and both hide inside any block.",
+      "why": "They replace Pipez in this mod: cheaper and tidier than Create's pumps, with limits you can see and upgrades you can hold.",
+      "when": "Copper Fluid Lines from your first copper sheets; Power Lines with your first generator; brass once a run needs more.",
+      "interacts": "They connect to anything that holds fluid or FE: Create's tanks, basins and spouts, the [[fluid-wellspring]], the generators, motor and [[battery]], cages, tanks and other mods' blocks. They never join Create's Fluid Pipes.",
+      "mistakes": [
+        "A Fluid Line without an [[intake]] moves nothing.",
+        "Copper and brass never join each other except at poles and Breakers, and only brass into copper.",
+        "Two colours never join; plain is a colour. Dye lines before you place them.",
+        "Lines on a moving contraption do nothing until they're placed again."
+      ]
+    },
+    "sections": [
+      {
+        "id": "two-kinds",
+        "title": "Two kinds of line",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "",
+                "Fluid Line",
+                "Power Line"
+              ],
+              "rows": [
+                [
+                  "Moves",
+                  "Fluid, only from an Intake",
+                  "FE, by itself, from anything that gives it to anything that takes it"
+                ],
+                [
+                  "Copper",
+                  "100 mB a tick",
+                  "4,096 FE a tick"
+                ],
+                [
+                  "Brass",
+                  "1,000 mB a tick",
+                  "65,536 FE a tick"
+                ],
+                [
+                  "Shape",
+                  "A slim round pipe with a glass window on top",
+                  "A thin cable clipped flat to the floor, wall or ceiling"
+                ],
+                [
+                  "Over a gap",
+                  "Lay it",
+                  "Hang a span between Line Posts (16 or 32 blocks)"
+                ],
+                [
+                  "Stores",
+                  "Nothing",
+                  "Nothing (generators and Batteries store)"
+                ]
+              ]
+            }
+          },
+          "Neither needs rotation, power or a pump, neither has a range limit, and neither loses anything along the way. Both come 8 to a craft.",
+          {
+            "fact": "The fluid you see in a Fluid Line's window creeps out from the Intake and drains back when the supply stops, but that's only the look: breaking a line never spills a drop."
+          }
+        ]
+      },
+      {
+        "id": "fittings",
+        "title": "Fittings",
+        "body": [
+          "Upgrades aren't menu slots: they're parts you clip onto a straight piece of line, one per block. Breaking the block drops both; the Wrench takes off just the fitting.",
+          {
+            "table": {
+              "head": [
+                "Fitting",
+                "Line",
+                "What it does",
+                "Made from"
+              ],
+              "rows": [
+                [
+                  "[[intake]]",
+                  "Fluid",
+                  "Draws a tank's fluid into the line; its own filter picks one fluid",
+                  "Fluid Valve, Iron Sheet"
+                ],
+                [
+                  "[[valve]]",
+                  "Fluid",
+                  "Shuts on redstone; throttles in 10% steps",
+                  "Fluid Valve, Copper Sheet"
+                ],
+                [
+                  "[[filter]]",
+                  "Fluid",
+                  "Lets one fluid past",
+                  "Copper Sheet, Paper, Iron Bars"
+                ],
+                [
+                  "[[meter]]",
+                  "Both",
+                  "Shows live flow; comparator and Display Link source",
+                  "Copper Ingot, Electron Tube, Glass"
+                ],
+                [
+                  "[[splitter]]",
+                  "Both",
+                  "Fluid: Even, Nearest first or Round robin. Power (on a junction): First, Second or Last per branch",
+                  "Electron Tube, Brass Sheet"
+                ],
+                [
+                  "[[breaker]]",
+                  "Power",
+                  "Cuts power by lever or redstone; joins brass to copper",
+                  "Lever, Electron Tube"
+                ]
+              ]
+            }
+          },
+          {
+            "tip": "The Intake is the one costly part, because it replaces a pump. One per source keeps a base honest without punishing long runs."
+          }
+        ]
+      },
+      {
+        "id": "colours-tiers",
+        "title": "Colours and tiers",
+        "body": [
+          "Craft eight lines around a dye to colour them (16 dyes), before you place them. A dyed line is its colour all over; a dyed Power Line becomes a slightly thicker covered cable. A placed line can't be dyed; bulk washing (an Encased Fan through water) takes the dye off line items.",
+          {
+            "list": [
+              "**Two colours never join**, and plain counts as a colour, so different lines can run side by side through one wall.",
+              "**Tiers never join** along a run. Copper and brass Power Lines meet only on a pole or at a [[breaker]], and there **brass feeds copper, never the other way**: the copper line takes at most its own rate.",
+              "A pole is one junction per colour, so several colours can share one row of poles.",
+              "A generator or [[battery]] joins every line that meets it into one network, whatever their colours, and serves them all."
+            ]
+          },
+          {
+            "strategy": {
+              "title": "Trunk and branches",
+              "body": "Run a brass trunk between poles, and at each area's pole tie copper of the same colour: brass feeds each copper branch, and each branch takes up to its 4,096 FE a tick."
+            }
+          }
+        ]
+      },
+      {
+        "id": "spans",
+        "title": "Spans and poles",
+        "body": [
+          {
+            "list": [
+              "Right-click a [[line-post|Line Post]]'s insulator with Power Lines, then another post's: a span hangs between them. It uses one Power Line for every four blocks, rounded up, given back when it comes down.",
+              "Copper reaches 16 blocks, brass 32. The way between must be clear when you hang it; after that, blocks never cut it.",
+              "Spans sag gently, have no collision and never hurt anyone. Shears or the Wrench take them down.",
+              "Stack posts into a pole of any height. Right-click the top one's side with a post to add a crossarm with its own insulator, up to four.",
+              "Each insulator holds up to 2 spans, of one tier and colour.",
+              "An [[battery|Industrial Battery]]'s four corner insulators tie only to Line Posts."
+            ],
+            "ordered": false
+          },
+          {
+            "warning": "A span whose two ends move apart (a piston, a contraption, a ship flying off) comes down and drops its wire. A span with both ends on the same ship stays up and works."
+          }
+        ]
+      },
+      {
+        "id": "hiding",
+        "title": "Hiding lines",
+        "body": [
+          "Right-click any line with a plain, solid full block (stone, planks, casing; not glass or anything with a block entity) to encase it. The line works exactly as before, fittings and all. The block is used up from your hand, and sneak + Wrench gives it back.",
+          "With Engineer's Goggles on, hidden lines within 16 blocks show as a faint outline, and the Wrench reaches the hidden fitting first.",
+          {
+            "heading": "Through a wall"
+          },
+          "Run a Power Line to a solid block on each side, in the same tier and colour, and wrench one end on the side facing the block. It drills through and joins the two cable ends. Wrench again to pull it out; breaking the block fills the hole.",
+          {
+            "fact": "Encasing your first line earns Out of Sight: \"Engineer's Goggles still know where it is\"."
+          }
+        ]
+      },
+      {
+        "id": "far-and-moving",
+        "title": "Far away, and on the move",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Situation",
+                "Fluid Line",
+                "Power Line"
+              ],
+              "rows": [
+                [
+                  "Part of the line unloaded",
+                  "Skipped: ends there get nothing; nothing is lost or queued",
+                  "Reaches past it to generators beyond, which run on paper"
+                ],
+                [
+                  "Source unloaded",
+                  "Nothing flows",
+                  "The generator's full output still arrives, on paper"
+                ],
+                [
+                  "On a moving Create contraption",
+                  "Does nothing until placed again",
+                  "Does nothing until placed again"
+                ],
+                [
+                  "On a Create Aeronautics physics object",
+                  "Works",
+                  "Works; spans within the ship stay up"
+                ]
+              ]
+            }
+          },
+          "Nothing is ever chunk-loaded by a line. Power networks update at most once a second, and only while a device on them is live."
+        ]
+      }
+    ],
+    "related": [
+      "fluid-lines",
+      "power-lines",
+      "line-post",
+      "intake",
+      "valve",
+      "filter",
+      "meter",
+      "splitter",
+      "breaker",
+      "electricity"
+    ]
+  },
+  {
+    "id": "upgrades",
+    "name": "The Upgrade Tree",
+    "summary": "Every upgrade in the mod grows from one sequenced-assembly part, the Upgrade Template: Wellspring generation and capacity upgrades on one branch, chest upgrades on the other.",
+    "image": "renders/fluid-wellspring.png",
+    "tags": [
+      "progression"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "A tree of crafted parts. The [[upgrade-template]] becomes a [[drip-template]] (for the four generation upgrades), a [[capacity-upgrade]], or a [[chest-upgrade-template]] (for the five chest tiers).",
+      "why": "It gives you two of the most useful things early on: endless fluid from one block, and storage that holds many times more.",
+      "when": "From the moment you can run a sequenced assembly line with Deployers and have Electron Tubes.",
+      "interacts": "The [[fluid-wellspring]] takes the fluid upgrades; chests and barrels take the chest upgrades and become [[upgraded-chest|Upgraded Chests]] and [[upgraded-barrel|Barrels]].",
+      "mistakes": [
+        "Mixing generation upgrades. A Wellspring takes one kind at a time (water, lava, honey or chocolate).",
+        "Installing more than three of a kind: three generation and three capacity upgrades is the maximum.",
+        "Trying to skip a chest tier: each one is built on the last."
+      ]
+    },
+    "sections": [
+      {
+        "id": "tree",
+        "title": "The tree",
+        "body": [
+          {
+            "flow": {
+              "title": "Upgrade Template to Water Upgrade",
+              "steps": [
+                {
+                  "item": "create:copper_sheet",
+                  "label": "Copper Sheet",
+                  "kind": "source"
+                },
+                {
+                  "ref": "upgrade-template",
+                  "kind": "item",
+                  "via": "Cogwheel, Glass, Electron Tube"
+                },
+                {
+                  "ref": "drip-template",
+                  "kind": "item",
+                  "via": "2 Pointed Dripstone"
+                },
+                {
+                  "ref": "water-upgrade",
+                  "kind": "result",
+                  "via": "spout 250 mB water"
+                }
+              ]
+            }
+          },
+          {
+            "table": {
+              "head": [
+                "From",
+                "Add (sequenced assembly)",
+                "Makes"
+              ],
+              "rows": [
+                [
+                  "Copper sheet",
+                  "Cogwheel, glass, Electron Tube",
+                  "[[upgrade-template]]"
+                ],
+                [
+                  "Upgrade Template",
+                  "2 Pointed Dripstone",
+                  "[[drip-template]]"
+                ],
+                [
+                  "Drip Template",
+                  "Spout 250 mB water",
+                  "[[water-upgrade]]"
+                ],
+                [
+                  "Drip Template",
+                  "Spout 250 mB lava",
+                  "[[lava-upgrade]]"
+                ],
+                [
+                  "Drip Template",
+                  "3 loops: Honeycomb Block, 1,000 mB honey, Precision Mechanism, press",
+                  "[[honey-upgrade]]"
+                ],
+                [
+                  "Drip Template",
+                  "3 loops: Cocoa Beans, 1,000 mB chocolate, Precision Mechanism, press",
+                  "[[chocolate-upgrade]]"
+                ],
+                [
+                  "Upgrade Template",
+                  "3 Fluid Tanks",
+                  "[[capacity-upgrade]]"
+                ],
+                [
+                  "Upgrade Template",
+                  "A wooden chest, Andesite Alloy",
+                  "[[chest-upgrade-template]]"
+                ],
+                [
+                  "Chest Upgrade Template",
+                  "2 copper sheets, press",
+                  "Copper [[chest-upgrades|Chest Upgrade]]"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "wellspring",
+        "title": "Wellspring upgrades",
+        "body": [
+          "Right-click a [[fluid-wellspring]] with an upgrade to install it; a Wrench opens its upgrade screen to add or remove them. Each generation upgrade plugs into a socket on the lid; each Capacity Upgrade is a canister in the lid's back row.",
+          {
+            "table": {
+              "head": [
+                "Upgrades",
+                "Water",
+                "Lava",
+                "Honey",
+                "Chocolate"
+              ],
+              "rows": [
+                [
+                  "1",
+                  "100 mB/s",
+                  "10 mB/s",
+                  "10 mB/s",
+                  "10 mB/s"
+                ],
+                [
+                  "2",
+                  "250 mB/s",
+                  "25 mB/s",
+                  "25 mB/s",
+                  "25 mB/s"
+                ],
+                [
+                  "3",
+                  "500 mB/s",
+                  "50 mB/s",
+                  "50 mB/s",
+                  "50 mB/s"
+                ]
+              ]
+            }
+          },
+          "The tank holds 8,000 mB, plus 16,000 mB for each Capacity Upgrade (56,000 mB with three).",
+          {
+            "tip": "Honey and chocolate meet lava as limestone and scoria (Create's own fluid interactions), so a Honey or Chocolate Wellspring beside a Lava one is an endless source of either stone."
+          },
+          {
+            "warning": "To switch a Wellspring to another fluid, empty it of the old one first. A Capacity Upgrade can't come out until the tank is drained to what the smaller tank holds."
+          },
+          {
+            "fact": "Three generation upgrades in one Wellspring earn Maximum Overdrip: \"Turn it up to eleven! (Well, three)\"."
+          }
+        ]
+      },
+      {
+        "id": "chests",
+        "title": "Chest upgrades",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Tier",
+                "Made from",
+                "Items per slot",
+                "Slots"
+              ],
+              "rows": [
+                [
+                  "Copper",
+                  "Chest Upgrade Template + 2 copper sheets, pressed",
+                  "128",
+                  "27"
+                ],
+                [
+                  "Iron",
+                  "Copper upgrade + 2 iron sheets, pressed",
+                  "256",
+                  "27"
+                ],
+                [
+                  "Gold",
+                  "Iron upgrade + 2 golden sheets, pressed",
+                  "512",
+                  "27"
+                ],
+                [
+                  "Diamond",
+                  "Gold upgrade + 2 diamonds, pressed",
+                  "512",
+                  "54 (108 double)"
+                ],
+                [
+                  "Netherite",
+                  "Smithing: Netherite Upgrade template + Diamond upgrade + netherite ingot",
+                  "1,024",
+                  "54 (108 double), blast-proof"
+                ]
+              ]
+            }
+          },
+          "Using a higher tier on an upgraded chest hands back the old upgrade, so climbing the ladder never wastes one. Counts are for 64-stack items; unstackable items stay at one a slot."
+        ]
+      },
+      {
+        "id": "automating",
+        "title": "Automating it",
+        "body": [
+          {
+            "strategy": {
+              "title": "One template line, many finishers",
+              "body": "Run a sequenced assembly line that only makes Upgrade Templates, and send them to short second lines: one with two Pointed Dripstone deployers and a Spout for water or lava, one with three Fluid Tank deployers, one with a chest and Andesite Alloy. Each finisher is a few Deployers on a belt."
+            }
+          },
+          {
+            "tip": "The honey and chocolate upgrades eat three Precision Mechanisms each. Make those on their own line first, or the upgrade line will stall."
+          }
+        ]
+      }
+    ],
+    "related": [
+      "upgrade-template",
+      "drip-template",
+      "chest-upgrade-template",
+      "chest-upgrades",
+      "fluid-wellspring",
+      "upgraded-chest"
+    ]
+  },
+  {
+    "id": "one-block-farming",
+    "name": "One-Block Farming",
+    "summary": "The Auto Harvester, Animal Pens, Monster Cages and Fish Tanks: whole farms in one block, sharing one set of rules for power, culling, output and automation.",
+    "image": "renders/animal-pen.png",
+    "tags": [
+      "farming"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Four families of farm block. The [[auto-harvester]] grows and harvests one plant; the [[animal-pen]] breeds a herd from one bottled animal; the [[monster-cage]] brings in a horde of one jarred monster; the [[fish-tank]] breeds a school underwater. Each is a Create-style box with the real creatures or plant behind the glass.",
+      "why": "They replace sprawling farms with one block each, safely, with vanilla drops and vanilla rates, and every step can be automated with Create parts.",
+      "when": "The Harvester, Animal Pen, Monster Cage and Fish Tank are all early to mid game (andesite alloy and Andesite Casing); their Brass versions follow with Mechanical Crafting.",
+      "interacts": "Their drops feed the rest of the base: string and slime for the [[string-tangler]], wheat for [[monster-chow|Monster Chow]] and [[fish-food|Fish Food]], milk, wool, eggs, ink and fish. Enchantments speed them up: [[bountiful]], [[fruitful]] and [[monstrous]].",
+      "mistakes": [
+        "Expecting more speed to help the Harvester or the pens. They use a fixed stress and run no faster; only the cages and tanks scale with RPM.",
+        "Forgetting the food. Pens, cages and tanks only grow while they have food (and water, for tanks and Flooded cages).",
+        "Using the wrong catcher. Animals and water creatures go in a [[capture-bottle]], monsters in an [[iron-jar]], the Wither in a [[netherite-jar]].",
+        "Taking the bottle or jar out to tidy up. That empties the block: the rest are culled into the output."
+      ]
+    },
+    "sections": [
+      {
+        "id": "family",
+        "title": "The family",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Block",
+                "Holds",
+                "Start with",
+                "Feed",
+                "Power",
+                "Enchantment"
+              ],
+              "rows": [
+                [
+                  "[[auto-harvester]]",
+                  "One plant; 9 stacks of harvest",
+                  "A seed, crop or sapling",
+                  "Nothing",
+                  "512 SU at any speed",
+                  "[[bountiful]]"
+                ],
+                [
+                  "[[animal-pen]] / Brass",
+                  "128 / 512 animals",
+                  "A Bottled Animal",
+                  "Its breeding food",
+                  "256 / 1,024 SU at any speed",
+                  "[[fruitful]]"
+                ],
+                [
+                  "[[monster-cage]] / Brass",
+                  "64 / 256 monsters",
+                  "A jarred monster",
+                  "[[monster-chow]]",
+                  "4 / 16 SU per RPM while working",
+                  "[[monstrous]]"
+                ],
+                [
+                  "[[flooded-monster-cage]] / Brass",
+                  "64 / 256 water monsters",
+                  "A jarred drowned or guardian",
+                  "Monster Chow and water",
+                  "4 / 16 SU per RPM",
+                  "[[monstrous]]"
+                ],
+                [
+                  "[[netherite-monster-cage]]",
+                  "3 Withers",
+                  "A [[netherite-jar]]",
+                  "64 Monster Chow a Wither",
+                  "16 SU per RPM and FE",
+                  "[[monstrous]]"
+                ],
+                [
+                  "[[fish-tank]] / Brass",
+                  "128 / 512 creatures",
+                  "A bottled fish, squid or axolotl",
+                  "[[fish-food]] and water",
+                  "4 / 16 SU per RPM while working",
+                  "[[fruitful]]"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "shared-rules",
+        "title": "Shared rules",
+        "body": [
+          {
+            "list": [
+              "Power goes into a shaft in the **back**.",
+              "**No stress while idle**: empty, full, out of food or water, or overstressed, the block puts no load on the network.",
+              "Output goes into slots (9, or 18 on the Brass blocks; nine stacks on the Harvester) that hoppers, chutes, funnels and arms empty from any side, or you empty by hand. A full Harvester stops; a cage or tank throws what doesn't fit out of its front.",
+              "A **Wrench** opens the screen: the plant, bottle or jar, the food, gauges, the output and the count, with quick-move buttons and the mouse wheel on the output.",
+              "Taking the bottle or jar out empties the block: the others are culled into the output.",
+              "Pens, cages and tanks grow nothing while their chunk is unloaded. On a contraption they ride along with their contents, without working.",
+              "Only empty cages and tanks can be upgraded (Andesite to Brass, dry to Flooded, Fish Tank to Brass Fish Tank)."
+            ]
+          },
+          {
+            "heading": "Speed"
+          },
+          "The Auto Harvester and the Animal Pens use a **fixed stress** and run no faster for more speed: a crop takes 40 seconds (scaled by its vanilla growth rate), a tree 80, and pens breed every five minutes, as in vanilla. The Monster Cages and Fish Tanks **scale with speed**: 64 RPM is the base, faster shafts are linearly quicker, and stress and food use rise with them."
+        ]
+      },
+      {
+        "id": "culling",
+        "title": "Culling with swords",
+        "body": [
+          "Use a sword on a pen, cage or tank to cull **half** the adults (rounded), always leaving one. The drops come from the creature's own loot table as if you'd killed it, so **Looting** and **Fire Aspect** count, and you get its XP.",
+          {
+            "list": [
+              "A **Deployer** with a sword culls the same way, but gives no XP.",
+              "The young are left to grow up; only adults breed and give drops, wool, eggs or milk.",
+              "Culling with one left does nothing.",
+              "Armed drowned are culled first; blue axolotls last."
+            ]
+          },
+          {
+            "tip": "A Fire Aspect sword cooks the meat from a pen of cows or pigs as it culls."
+          },
+          {
+            "fact": "Taking a sword to a pen earns Thinning the Herd."
+          }
+        ]
+      },
+      {
+        "id": "automation",
+        "title": "Automating a farm",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Job",
+                "Create part"
+              ],
+              "rows": [
+                [
+                  "Cull",
+                  "A Deployer with a sword"
+                ],
+                [
+                  "Shear sheep, take milk, scoop fish",
+                  "A Deployer with shears, a bucket or a water bucket"
+                ],
+                [
+                  "Catch and release",
+                  "Deployers and Dispensers with Capture Bottles and Iron Jars (a Dispenser never releases a Wither)"
+                ],
+                [
+                  "Feed",
+                  "Funnels, chutes or arms into any side"
+                ],
+                [
+                  "Empty",
+                  "Funnels, chutes, hoppers or arms from any side"
+                ],
+                [
+                  "Water (tanks and Flooded cages)",
+                  "Pipes or [[fluid-lines|Fluid Lines]] on any side but the back"
+                ],
+                [
+                  "Watch it",
+                  "A comparator reads how full of creatures it is; on cages and tanks, Display Links show count, status and water"
+                ]
+              ]
+            }
+          },
+          {
+            "strategy": {
+              "title": "A self-running cage",
+              "body": "A Deployer with a sword on a clock in front of a [[monster-cage]], a funnel pulling the drops into an [[upgraded-chest]], and a second funnel pushing Monster Chow in from a Mixer line. A comparator on the cage can trigger the Deployer only when the horde is nearly full."
+            }
+          }
+        ]
+      },
+      {
+        "id": "balance",
+        "title": "Balanced against vanilla",
+        "body": [
+          "Every cull rolls the vanilla loot table at vanilla rates, evokers' Totems included. The blocks change how often creatures come, never what they drop. Pens breed and grow on vanilla's own clock.",
+          "What limits them is cost: food for every birth, Monster Chow for every arrival (1, 2, 4 or 64 depending on the monster), water, stress, and the price of the Brass and Netherite tiers.",
+          {
+            "fact": "A good vanilla mob farm still out-produces a Monster Cage. The cage wins on space, safety and automation: it replaces a farm, not a resource."
+          }
+        ]
+      }
+    ],
+    "related": [
+      "auto-harvester",
+      "animal-pen",
+      "monster-cage",
+      "fish-tank",
+      "capture-bottle",
+      "iron-jar",
+      "monster-chow",
+      "fish-food",
+      "enchantments"
+    ]
+  },
+  {
+    "id": "enchantments",
+    "name": "Farm Enchantments",
+    "summary": "Bountiful, Fruitful and Monstrous: three anvil-only enchantments, bought from Librarians, that speed up the one-block farms by 50% a level.",
+    "image": "icons/minecraft/enchanted_book.png",
+    "tags": [
+      "farming",
+      "enchanting"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "Three enchantments, each I to III, each for its own machines: [[bountiful]] on the [[auto-harvester]], [[fruitful]] on the Animal Pens and Fish Tanks, [[monstrous]] on every Monster Cage. Each level adds 50% speed: 1.5x, 2x, 2.5x.",
+      "why": "The Harvester and pens run no faster for more rotation, so these are their only speed-up. On cages and tanks they're extra speed without extra stress.",
+      "when": "As soon as you have a farm block and a village with a Librarian.",
+      "interacts": "They go on the machine's item with an anvil and stay on it when the block is broken and placed again. Faster farms eat their food or chow faster.",
+      "mistakes": [
+        "Looking in an enchanting table. They're never offered there.",
+        "Putting one on the wrong machine. The anvil refuses: each fits only its own family.",
+        "Forgetting the food bill. Fruitful and Monstrous speed up eating as well as breeding."
+      ]
+    },
+    "sections": [
+      {
+        "id": "three",
+        "title": "The three enchantments",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Enchantment",
+                "Goes on",
+                "Speeds up",
+                "Advancement"
+              ],
+              "rows": [
+                [
+                  "[[bountiful]]",
+                  "Auto Harvester",
+                  "The plant's growth (the 4-second harvest stays the same)",
+                  "Overgrown (Bountiful III)"
+                ],
+                [
+                  "[[fruitful]]",
+                  "Animal Pen, Brass Animal Pen, Fish Tank, Brass Fish Tank",
+                  "Breeding and growing up",
+                  "Be Fruitful and Multiply (a pen with Fruitful III)"
+                ],
+                [
+                  "[[monstrous]]",
+                  "Every Monster Cage, the Netherite one included",
+                  "Monsters arriving",
+                  "None"
+                ]
+              ]
+            }
+          },
+          {
+            "table": {
+              "head": [
+                "Level",
+                "Speed"
+              ],
+              "rows": [
+                [
+                  "I",
+                  "1.5x"
+                ],
+                [
+                  "II",
+                  "2x"
+                ],
+                [
+                  "III",
+                  "2.5x"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "books",
+        "title": "Getting the books",
+        "body": [
+          "Librarians sell them, two ways:",
+          {
+            "list": [
+              "In their **usual random enchanted-book trades**, alongside vanilla's books.",
+              "As **extra Apprentice trades**: a book of each of the three joins the Apprentice trade pool, at a random level from I to III, for emeralds and a book, priced like the Librarian's own enchanted books. A Librarian reaching Apprentice may draw one of them."
+            ]
+          },
+          "Two books of the same level combine on an anvil into the next level, as vanilla books do.",
+          {
+            "tip": "Trade with a Librarian until it reaches Apprentice and check its new offers. If it hasn't got the one you want, another Librarian might."
+          }
+        ]
+      },
+      {
+        "id": "applying",
+        "title": "Putting them on",
+        "body": [
+          {
+            "list": [
+              "Combine the book with the machine's item on an anvil.",
+              "Break the block and place it again: the enchantment stays.",
+              "The machine's screen (and on tanks, goggles) shows its level."
+            ],
+            "ordered": true
+          },
+          {
+            "warning": "Speed costs food. A Fruitful III pen eats 2.5 times as fast, and a Monstrous III cage of blazes eats Monster Chow 2.5 times as fast. Keep the feed line ahead of it."
+          },
+          "The bonus per level is in the server config for each family."
+        ]
+      }
+    ],
+    "related": [
+      "bountiful",
+      "fruitful",
+      "monstrous",
+      "auto-harvester",
+      "animal-pen",
+      "monster-cage",
+      "fish-tank",
+      "one-block-farming"
+    ]
+  },
+  {
+    "id": "stone-generation",
+    "name": "Stone Generation",
+    "summary": "One-block cobblestone, basalt, blackstone and tuff generators, paced like a Mechanical Drill, and what each stone feeds in the rest of the mod.",
+    "image": "renders/cobblestone-generator--brass.png",
+    "tags": [
+      "resources"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Shaft-driven boxes where water or ice meets lava and a drill mines the stone that forms. The [[cobblestone-generator]], [[basalt-generator]] and [[blackstone-generator]] come in Andesite, Brass and Wireless versions; the [[tuff-generator]] in plain and Wireless.",
+      "why": "Stone is the raw material of the dust lines: crushed cobblestone gives [[emerald-dust]], netherrack made from it gives [[netherite-dust]], blackstone gives [[quartz-dust]], tuff gives metal nuggets for the [[stone-infuser]].",
+      "when": "Very early: the Andesite generator needs only Andesite Alloy, two drills, casing and a bucket of each fluid (the buckets come back).",
+      "interacts": "Output leaves only through item transport (hoppers, chutes, funnels, Pipez, arms) from any side. A redstone signal (or a Redstone Link frequency on a Wireless one) switches it off with no stress.",
+      "mistakes": [
+        "Putting the shaft in the side. Power only goes in through the shaft hole on the back.",
+        "Waiting for it to drop stone on the floor. It only gives stone to item transport; full, it stops.",
+        "Building a Brass generator with no crusher behind it: 16 a cycle fills a slow line fast."
+      ]
+    },
+    "sections": [
+      {
+        "id": "families",
+        "title": "The generators",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Generator",
+                "Makes",
+                "Per cycle",
+                "Holds",
+                "Stress",
+                "Cycle at 256 RPM"
+              ],
+              "rows": [
+                [
+                  "[[cobblestone-generator|Andesite Cobblestone]]",
+                  "Cobblestone",
+                  "1",
+                  "64",
+                  "4 SU per RPM",
+                  "10 ticks (130 at 16 RPM)"
+                ],
+                [
+                  "[[cobblestone-generator|Brass Cobblestone]]",
+                  "Cobblestone",
+                  "16",
+                  "256",
+                  "16 SU per RPM",
+                  "10 ticks"
+                ],
+                [
+                  "[[basalt-generator|Basalt]] (Andesite / Brass)",
+                  "Basalt",
+                  "1 / 16",
+                  "64 / 256",
+                  "4 / 16 SU per RPM",
+                  "5 ticks"
+                ],
+                [
+                  "[[blackstone-generator|Blackstone]] (Andesite / Brass)",
+                  "Blackstone",
+                  "1 / 16",
+                  "64 / 256",
+                  "4 / 16 SU per RPM",
+                  "10 ticks (100 at 16 RPM)"
+                ],
+                [
+                  "[[tuff-generator|Tuff]]",
+                  "Tuff",
+                  "1",
+                  "64",
+                  "As the Andesite ones",
+                  "10 ticks"
+                ]
+              ]
+            }
+          },
+          "A cycle takes exactly as long as a Mechanical Drill at the same speed takes to mine that block, so softer stones come faster.",
+          "Each has a **Wireless** version: craft it with a Transmitter. It gets an antenna with two frequency slots, set like a Redstone Link; a signal on that frequency switches it off. It's permanent."
+        ]
+      },
+      {
+        "id": "running",
+        "title": "Running one",
+        "body": [
+          {
+            "list": [
+              "A shaft into the back hole is its only power input.",
+              "A lamp on the front frame shows its state: cyan running, amber full, dark red switched off by redstone, unlit with no rotation.",
+              "Full or switched off, it stops and puts no stress on the network.",
+              "Breaking it drops what it holds.",
+              "Goggles show how much it holds and its output per minute."
+            ]
+          },
+          {
+            "tip": "Use a redstone signal, or a Wireless frequency, to stop a generator when its storage is full instead of letting it back up: it then costs nothing."
+          }
+        ]
+      },
+      {
+        "id": "what-feeds-what",
+        "title": "What each stone feeds",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Stone",
+                "Into",
+                "Gives"
+              ],
+              "rows": [
+                [
+                  "Cobblestone",
+                  "Crushing Wheels (or a Millstone)",
+                  "Gravel, and [[emerald-dust]] at 5% (2.5% milled)"
+                ],
+                [
+                  "Cobblestone",
+                  "A Mixer over a heated burner, with 50 mB lava",
+                  "Netherrack, for [[netherite-dust]], [[quartz-dust]] and cinder flour"
+                ],
+                [
+                  "Cobblestone",
+                  "[[pressure-crucible]], superheated",
+                  "Obsidian, from 4"
+                ],
+                [
+                  "Cobblestone",
+                  "[[stone-infuser]], with 9 metal nuggets",
+                  "Asurine, Crimsite, Ochrum or Veridium"
+                ],
+                [
+                  "Blackstone",
+                  "Crushing Wheels",
+                  "Gravel, and [[quartz-dust]] at 10%"
+                ],
+                [
+                  "Blackstone",
+                  "A Mixer, heated, with 20 gold nuggets",
+                  "Gilded Blackstone (crushing it gives 18 nuggets back)"
+                ],
+                [
+                  "Tuff",
+                  "Crushing Wheels (Create's own recipe)",
+                  "A few of all four nuggets, to feed the Stone Infuser"
+                ],
+                [
+                  "Gravel (from crushing)",
+                  "[[pressure-crucible]], no heat",
+                  "Stone again"
+                ],
+                [
+                  "Basalt",
+                  "None of this mod's recipes",
+                  "A building stone"
+                ]
+              ]
+            }
+          },
+          {
+            "flow": {
+              "title": "Cobblestone to emeralds",
+              "steps": [
+                {
+                  "ref": "cobblestone-generator",
+                  "kind": "source"
+                },
+                {
+                  "item": "create:crushing_wheel",
+                  "label": "Crushing Wheels",
+                  "kind": "machine"
+                },
+                {
+                  "ref": "emerald-dust",
+                  "kind": "item",
+                  "via": "5%"
+                },
+                {
+                  "ref": "pressure-crucible",
+                  "kind": "machine",
+                  "note": "heated",
+                  "via": "x9"
+                },
+                {
+                  "item": "minecraft:emerald",
+                  "label": "Emerald",
+                  "kind": "result"
+                }
+              ]
+            }
+          },
+          {
+            "warning": "The Stone Infuser can't loop into free metal: crushing its stones always gives back fewer than the 9 nuggets they took."
+          }
+        ]
+      },
+      {
+        "id": "recipes",
+        "title": "Building them",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Generator",
+                "Recipe"
+              ],
+              "rows": [
+                [
+                  "Andesite Cobblestone",
+                  "Andesite Alloy, 2 Mechanical Drills, Andesite Casing, a water bucket and a lava bucket (buckets returned)"
+                ],
+                [
+                  "Brass (any stone)",
+                  "5x5 Mechanical Crafting around the Andesite one, with 4 Mechanical Drills, Brass Casing, brass sheets and electron tubes"
+                ],
+                [
+                  "Andesite Basalt",
+                  "Blue Ice, a lava bucket, 2 Mechanical Drills, Andesite Casing, Andesite Alloy and Soul Soil"
+                ],
+                [
+                  "Andesite Blackstone",
+                  "As the Basalt one, with Blackstone in place of the Soul Soil"
+                ],
+                [
+                  "Tuff",
+                  "Andesite Alloy, a lava bucket, 2 Mechanical Drills, Andesite Casing, a water bucket and 2 gravel"
+                ],
+                [
+                  "Wireless (any)",
+                  "The generator and a Transmitter, shapeless"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      "cobblestone-generator",
+      "basalt-generator",
+      "blackstone-generator",
+      "tuff-generator",
+      "precious-dusts",
+      "stone-infuser",
+      "pressure-crucible"
+    ]
+  },
+  {
+    "id": "precious-dusts",
+    "name": "Precious Dusts",
+    "summary": "Emerald, Netherite and Quartz Dust from crushing stone, pressed in the Pressure Crucible into Emeralds, Netherite Scrap and Nether Quartz.",
+    "image": "renders/pressure-crucible.png",
+    "tags": [
+      "resources",
+      "processing"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "Create's Crushing Wheels and Millstones now leave rare dusts behind: [[emerald-dust]] from cobblestone and stone, [[netherite-dust]] and [[quartz-dust]] from netherrack, and more quartz from blackstone. The [[pressure-crucible]] presses them into gems and scrap over a Blaze Burner.",
+      "why": "Fully automatable emeralds, netherite and quartz from cobblestone and lava, with no villagers, no ancient debris and no Nether trips.",
+      "when": "Emerald Dust from your first Crushing Wheels; the Crucible once you have brass and obsidian; netherite once you can keep a burner superheated with Blaze Cakes.",
+      "interacts": "[[stone-generation|Stone generators]] supply the stone; a [[lava-upgrade|Lava Wellspring]] supplies the lava for netherrack. The same netherrack crushing gives cinder flour for [[monster-chow|Monster Chow]].",
+      "mistakes": [
+        "Pressing over the wrong heat. Emeralds and Nether Quartz need heated; Netherite Scrap, amethyst, obsidian and diamonds need superheated.",
+        "Under-sizing the crushers. The chances are small; it's a volume game.",
+        "Starving the Crucible of stress. It takes 12 SU per RPM, so 3,072 SU at 256 RPM."
+      ]
+    },
+    "sections": [
+      {
+        "id": "sources",
+        "title": "Where dust comes from",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Crushed",
+                "Machine",
+                "Main output",
+                "Dust"
+              ],
+              "rows": [
+                [
+                  "Cobblestone or stone",
+                  "Crushing Wheels",
+                  "Gravel",
+                  "[[emerald-dust]] 5%"
+                ],
+                [
+                  "Cobblestone or stone",
+                  "Millstone",
+                  "Gravel",
+                  "[[emerald-dust]] 2.5%"
+                ],
+                [
+                  "Netherrack",
+                  "Crushing Wheels",
+                  "Cinder flour (1, plus 50% for a second)",
+                  "[[netherite-dust]] 1%, [[quartz-dust]] 5%"
+                ],
+                [
+                  "Blackstone",
+                  "Crushing Wheels",
+                  "Gravel",
+                  "[[quartz-dust]] 10%"
+                ]
+              ]
+            }
+          },
+          "Netherrack comes from a Mixer over a **heated** Blaze Burner: cobblestone and 50 mB of lava.",
+          {
+            "fact": "These are ordinary data-pack recipes, so pack makers can change every chance, count and time. JEI and Create's own recipe pages show them."
+          }
+        ]
+      },
+      {
+        "id": "crucible",
+        "title": "Pressing it",
+        "body": [
+          "The [[pressure-crucible]] sits on a Blaze Burner and takes rotation through a shaft into its back. Right-click with dust to load it, with an empty hand to take results out; funnels, hoppers and pipes do both from any side.",
+          {
+            "table": {
+              "head": [
+                "In",
+                "Heat",
+                "Out"
+              ],
+              "rows": [
+                [
+                  "9 Emerald Dust",
+                  "Heated",
+                  "1 Emerald"
+                ],
+                [
+                  "9 Netherite Dust",
+                  "Superheated (Blaze Cake)",
+                  "1 Netherite Scrap"
+                ],
+                [
+                  "4 Quartz Dust",
+                  "Heated",
+                  "1 Nether Quartz"
+                ],
+                [
+                  "4 Nether Quartz",
+                  "Superheated",
+                  "2 Amethyst Shards"
+                ],
+                [
+                  "1 Sand",
+                  "Heated",
+                  "1 Glass"
+                ],
+                [
+                  "1 Gravel",
+                  "None",
+                  "1 Stone"
+                ],
+                [
+                  "4 Cobblestone",
+                  "Superheated",
+                  "1 Obsidian"
+                ],
+                [
+                  "64 Coal",
+                  "Superheated",
+                  "1 Diamond"
+                ]
+              ]
+            }
+          },
+          "At 64 RPM an Emerald takes 2.5 seconds and a Netherite Scrap 10; glass and stone take half a second each, and diamonds are slow.",
+          "It presses faster at higher speeds: 16 RPM is the base, 256 RPM is 16 times as fast. Goggles show the contents, the heat needed, progress and what's holding it up."
+        ]
+      },
+      {
+        "id": "averages",
+        "title": "What to expect",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Result",
+                "On average, it takes"
+              ],
+              "rows": [
+                [
+                  "1 Emerald",
+                  "About 180 cobblestone crushed"
+                ],
+                [
+                  "1 Nether Quartz from blackstone",
+                  "About 40 blackstone crushed"
+                ],
+                [
+                  "1 Netherite Scrap",
+                  "About 900 netherrack crushed: 900 cobblestone and 45,000 mB of lava"
+                ]
+              ]
+            }
+          },
+          {
+            "strategy": {
+              "title": "Feeding a netherite line",
+              "body": "A Brass [[cobblestone-generator]] makes 16 cobblestone a cycle. Split it: some to Crushing Wheels for Emerald Dust, the rest to a heated Mixer fed lava from a maxed [[lava-upgrade|Lava Wellspring]] (50 mB/s is lava for one netherrack a second), then on to a second pair of Crushing Wheels. Netherite, quartz and cinder flour all come off that one crusher."
+            }
+          }
+        ]
+      },
+      {
+        "id": "chain",
+        "title": "The full chain",
+        "body": [
+          {
+            "flow": {
+              "title": "Netherite from cobblestone and lava",
+              "steps": [
+                {
+                  "ref": "cobblestone-generator",
+                  "kind": "source"
+                },
+                {
+                  "item": "create:mechanical_mixer",
+                  "label": "Mixer",
+                  "kind": "machine",
+                  "note": "heated, 50 mB lava"
+                },
+                {
+                  "item": "minecraft:netherrack",
+                  "label": "Netherrack",
+                  "kind": "item"
+                },
+                {
+                  "item": "create:crushing_wheel",
+                  "label": "Crushing Wheels",
+                  "kind": "machine"
+                },
+                {
+                  "ref": "netherite-dust",
+                  "kind": "item",
+                  "via": "1%"
+                },
+                {
+                  "ref": "pressure-crucible",
+                  "kind": "machine",
+                  "note": "superheated",
+                  "via": "x9"
+                },
+                {
+                  "item": "minecraft:netherite_scrap",
+                  "label": "Netherite Scrap",
+                  "kind": "result"
+                }
+              ]
+            }
+          },
+          {
+            "entries": [
+              "emerald-dust",
+              "netherite-dust",
+              "quartz-dust",
+              "pressure-crucible"
+            ]
+          }
+        ]
+      }
+    ],
+    "related": [
+      "emerald-dust",
+      "netherite-dust",
+      "quartz-dust",
+      "pressure-crucible",
+      "stone-generation"
+    ]
+  },
+  {
+    "id": "aeronautics",
+    "name": "Create Aeronautics",
+    "summary": "What the mod adds for Create Aeronautics ships: the Compact Gyroscope, Torque Rotor and Flight Instruments, Aviator's Goggles in the Curios slot, and Pipez feeding Portable Engines.",
+    "image": "renders/compact-gyroscope.png",
+    "tags": [
+      "compatibility",
+      "aeronautics"
+    ],
+    "stage": "advanced",
+    "requiresMods": [
+      "Create Aeronautics"
+    ],
+    "teach": {
+      "what": "Three ship blocks (only present with Sable, Create Aeronautics' physics): the [[compact-gyroscope]] keeps a ship level, the [[torque-rotor]] turns it without sideways drift, and [[flight-instruments]] read altitude, airspeed, attitude and heading. Plus goggles in the Curios head slot and pipe-fed Portable Engines.",
+      "why": "Ships drift, wobble and need refuelling. These make them steadier, easier to steer and easier to keep running.",
+      "when": "Once you're flying, and have Precision Mechanisms.",
+      "interacts": "Most of the mod keeps working on Aeronautics physics objects: Wellsprings, upgraded chests and barrels, the generators, the [[magma-engine]], the [[pressure-crucible]], Fluid and Power Lines, and the Monster Cages.",
+      "mistakes": [
+        "Looking for the gyroscope, rotor or instruments without Sable installed. They only exist with it.",
+        "Expecting the Torque Rotor to push the ship along. It turns it; use propellers to move.",
+        "Placing the Flight Instruments facing the wrong way. The way you face it counts as forward."
+      ]
+    },
+    "sections": [
+      {
+        "id": "blocks",
+        "title": "The ship blocks",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Block",
+                "Does",
+                "Power",
+                "Recipe"
+              ],
+              "rows": [
+                [
+                  "[[compact-gyroscope]]",
+                  "Pushes the ship back upright and calms its wobble",
+                  "A shaft from above or below; full strength at 256 RPM; 16 SU per RPM",
+                  "A Flywheel, a Precision Mechanism, a shaft, 4 Brass Casing and 2 Framed Glass"
+                ],
+                [
+                  "[[torque-rotor]]",
+                  "Turns the ship about its centre of mass, without pushing it",
+                  "A shaft into its base; 4 SU per RPM",
+                  "Iron sheets, Andesite Casing, 2 shafts and a Precision Mechanism"
+                ],
+                [
+                  "[[flight-instruments]]",
+                  "Altitude, airspeed, attitude and heading on four dials",
+                  "None",
+                  "Iron sheets, a compass, 2 clocks, a Precision Mechanism and an electron tube"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "gyroscope",
+        "title": "Staying level",
+        "body": [
+          "The [[compact-gyroscope]] is the Gyroscope Stabilizers' Gyroscope in one block, running the same controller with the same default strength, damping and lean correction. Its gimbal swings so the flywheel stays level with the world while the ship tilts round it.",
+          {
+            "list": [
+              "It reaches full strength at 256 RPM.",
+              "A redstone signal brakes it: the stronger the signal, the slower it spins and the less it holds the ship; a full signal stops it (the shaft keeps turning).",
+              "With Gyroscope Stabilizers installed, craft their Gyroscope on its own to convert it, and turn a Compact one back the same way.",
+              "Goggles show its spin, how hard it's correcting and the ship's tilt."
+            ]
+          },
+          {
+            "tip": "A lever on the gyroscope is an easy off switch for when you want the ship free to tilt; flip it back and the ship levels out again."
+          }
+        ]
+      },
+      {
+        "id": "steering",
+        "title": "Steering without drift",
+        "body": [
+          "The [[torque-rotor]] pushes the way its blades face (or pulls, with the shaft reversed), exactly as hard as an Andesite Propeller at the same speed. The ship turns just as it would from a propeller in that spot, but it isn't pushed along, so there's no sideways drift.",
+          {
+            "strategy": {
+              "title": "A tail rotor",
+              "body": "Mount it on the tail, facing sideways, to yaw the ship. The further from the middle, the harder it turns. Reverse the shaft to turn the other way."
+            }
+          },
+          "It mounts on the face you click, with the shaft going into its base, and blows wind like a propeller."
+        ]
+      },
+      {
+        "id": "instruments",
+        "title": "Knowing where you are",
+        "body": [
+          "[[flight-instruments|Flight Instruments]] have an altimeter (long hand per 100 m, short per 1,000 m), airspeed (0 to 60 m/s), an artificial horizon that tilts with roll and drops with pitch, and heading. Goggles show every reading, and Display Links can put altitude, airspeed, climb rate, heading or pitch and roll on Display Boards and Nixie Tubes, refreshed every second."
+        ]
+      },
+      {
+        "id": "crew",
+        "title": "Goggles and fuel",
+        "body": [
+          {
+            "heading": "Aviator's Goggles in the Curios slot"
+          },
+          "With Curios installed, wear Aviator's Goggles in the head slot, over a helmet if you like. They still count as goggles for Create's overlays. Client settings choose whether they show in the slot and over helmets.",
+          {
+            "heading": "Feeding Portable Engines"
+          },
+          "With Pipez, item pipes feed coal and other burnable items into Portable Engines, and fluid pipes feed lava and other fuel fluids (any fluid whose bucket burns). 1,000 mB gives the same burn time as a bucket, and engines are topped up to one bucket's worth at a time.",
+          {
+            "tip": "A [[magma-engine]] on the ship, fed by a Lava Wellspring, gives four Portable Engines' worth of power without refuelling. Its recipe uses Aeronautics' Engine Assembly."
+          },
+          {
+            "warning": "A [[netherite-monster-cage]] works on an airship with real rotation and FE, and if the ship's power fails, Withers escape in mid-air."
+          },
+          {
+            "fact": "Wearing the goggles in the Curios slot earns Goggle-Eyed Ace: \"Your helmet's free and you look fabulous\"."
+          }
+        ]
+      }
+    ],
+    "related": [
+      "compact-gyroscope",
+      "torque-rotor",
+      "flight-instruments",
+      "magma-engine",
+      "compatibility"
+    ]
+  },
+  {
+    "id": "readouts",
+    "name": "Readouts",
+    "summary": "How to see what every block is doing: Engineer's Goggles, Display Links, comparators, Ponder scenes and JEI.",
+    "image": "icons/create/goggles.png",
+    "tags": [
+      "information"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Every block in the mod reports its state the Create way. Engineer's Goggles show live details, Display Links put numbers on boards, comparators turn fill levels into redstone, and Ponder scenes (hold **W** over an item) teach how each block works.",
+      "why": "Long lines, far generators and sealed farms are hard to check by eye. Readouts tell you what's wrong before it stops your base.",
+      "when": "From day one: Engineer's Goggles are cheap, and Ponder is free.",
+      "interacts": "Comparator outputs drive Create's redstone (Valves, Breakers, clutches, Deployers); Display Links feed Display Boards and Nixie Tubes.",
+      "mistakes": [
+        "Flying blind on power. Goggles on any generator, machine or wire show the whole network's supply and demand.",
+        "Forgetting that a Meter's comparator signal is a fraction of the line's own throughput, not an amount."
+      ]
+    },
+    "sections": [
+      {
+        "id": "goggles",
+        "title": "Engineer's Goggles",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Block",
+                "Goggles show"
+              ],
+              "rows": [
+                [
+                  "[[fluid-wellspring]]",
+                  "Upgrades, generation rate, fill level as a percentage"
+                ],
+                [
+                  "[[upgraded-chest]] and barrel",
+                  "Stack size, items per slot, slots"
+                ],
+                [
+                  "[[pressure-crucible]]",
+                  "Contents, heat needed, progress, what's holding it up"
+                ],
+                [
+                  "Stone generators",
+                  "How much they hold, output per minute"
+                ],
+                [
+                  "[[fluid-lines|Fluid Lines]] and fittings",
+                  "Throughput, what's moving, Intake and Filter settings, Valve opening, Meter flow; hidden lines within 16 blocks as an outline"
+                ],
+                [
+                  "[[power-lines|Power Lines]], generators, machines",
+                  "The whole network: what its generators make and its machines use"
+                ],
+                [
+                  "[[battery]]",
+                  "Charge, FE in or out, time to full or empty"
+                ],
+                [
+                  "Pens, cages, tanks",
+                  "Count, status (needs rotation, food, water, full, progress), chow cost and time, armed drowned, blue axolotls, Netherite containment and escape clock"
+                ],
+                [
+                  "[[trade-bot|Trade Bot]]'s station",
+                  "Charge, what he's doing, his containers, today's trades"
+                ],
+                [
+                  "[[cuckoo-clock]]",
+                  "The time, the next restock and how long until it, how many traders it reaches"
+                ],
+                [
+                  "[[flight-instruments]]",
+                  "Every reading"
+                ]
+              ]
+            }
+          },
+          "Aviator's Goggles count too, worn on the head or in the Curios head slot."
+        ]
+      },
+      {
+        "id": "display-links",
+        "title": "Display Links",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Source",
+                "Can show"
+              ],
+              "rows": [
+                [
+                  "[[fluid-wellspring]]",
+                  "Stored fluid (name and mB), fill level (percentage or bar), generation rate (mB/s, Full or No upgrades)"
+                ],
+                [
+                  "[[magma-engine]] (both)",
+                  "Lava level (mB and %), output (RPM and SU, or Out of lava)"
+                ],
+                [
+                  "[[meter]]",
+                  "Meter Flow, Meter Load, Meter Load Bar"
+                ],
+                [
+                  "Pens, cages and tanks",
+                  "Count, Farm Status (\"Blaze: 112 / 256 · next in 14 s\"), water"
+                ],
+                [
+                  "[[netherite-monster-cage]]",
+                  "Containment state and the escape clock"
+                ],
+                [
+                  "[[flight-instruments]]",
+                  "Altitude, airspeed, climb rate, heading, pitch and roll"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "comparators",
+        "title": "Comparators",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Block",
+                "Comparator reads"
+              ],
+              "rows": [
+                [
+                  "[[fluid-wellspring]]",
+                  "Fill level"
+                ],
+                [
+                  "Animal Pens, Monster Cages, Fish Tanks",
+                  "How full of creatures (1 to 15)"
+                ],
+                [
+                  "[[netherite-monster-cage]]",
+                  "15 during a containment countdown"
+                ],
+                [
+                  "[[meter]]",
+                  "0 to 15 by the share of the line's throughput flowing"
+                ],
+                [
+                  "[[trade-bot|Trade Bot]]'s station",
+                  "5 docked, 10 out working, 15 needs you"
+                ]
+              ]
+            }
+          },
+          {
+            "tip": "A comparator on a cage into a Deployer's redstone makes it cull only when the horde is nearly full, saving sword durability."
+          }
+        ]
+      },
+      {
+        "id": "ponder",
+        "title": "Ponder and JEI",
+        "body": [
+          "Hold **W** over an item for its Ponder scene. Scenes cover the Wellspring, chest and barrel upgrades, Pressure Crucible, every stone generator, both Magma Engines, Incinerator, String Tangler, Stone Infuser, Fluid Lines, fittings, Power Lines and Power Networks, the Lava Generator, Electric Motor, Geothermal Turbine, Battery and Industrial Battery, the Auto Harvester, Animal Pens, Monster Cages (dry, Flooded and Containment), Fish Tanks, the Cuckoo Clock, and Trade Bot (his station, linking and trading). With Sable: the Compact Gyroscope, Torque Rotor and Flight Instruments.",
+          "JEI shows the Crucible, tangling and infusing recipes and the dust chances on Create's crushing and milling pages, with info pages for the Fluid and Power Lines, the Line Post and every fitting."
+        ]
+      }
+    ],
+    "related": [
+      "meter",
+      "flight-instruments",
+      "electricity",
+      "one-block-farming",
+      "configuration"
+    ]
+  },
+  {
+    "id": "compatibility",
+    "name": "Compatibility",
+    "summary": "How the mod behaves on Create contraptions and Aeronautics ships, and with Carry On, Pipez, Curios and modded crops.",
+    "image": "renders/upgraded-chest--netherite.png",
+    "tags": [
+      "compatibility"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "Almost everything in the mod survives being moved: on Create contraptions, on Create Aeronautics physics objects, and in Carry On's hands. It also works with Pipez, Curios and modded crops.",
+      "why": "Create bases move. Knowing what keeps working on a train or a ship, and what only rides along, saves you from losing a farm or a tank of lava.",
+      "when": "Whenever you put a block on something that moves, or add another mod.",
+      "interacts": "Contraptions carry blocks and their contents; Aeronautics ships run them for real, with real rotation and FE.",
+      "mistakes": [
+        "Expecting a Pressure Crucible to press on a Create contraption. It needs real rotation, so on a contraption it just rides along; on an Aeronautics ship it works.",
+        "Trying to carry Trade Bot's station or the Netherite Monster Cage with Carry On. Both are blocked.",
+        "Expecting Fluid and Power Lines to work on a moving contraption. They pause until placed again."
+      ]
+    },
+    "sections": [
+      {
+        "id": "contraptions",
+        "title": "Create contraptions",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Block",
+                "On a moving contraption"
+              ],
+              "rows": [
+                [
+                  "[[upgraded-chest|Upgraded chests]] and barrels",
+                  "Keep their stack sizes; drills, harvesters and portable interfaces fill them; they open as chests; you can upgrade them there"
+                ],
+                [
+                  "[[fluid-wellspring]]",
+                  "Keeps generating; contraption pumps, spouts and portable fluid interfaces use its tank"
+                ],
+                [
+                  "[[pressure-crucible]]",
+                  "Rides along, keeping its contents"
+                ],
+                [
+                  "Pens, cages and tanks",
+                  "Ride along with their contents, without working; the Netherite cage doesn't count down"
+                ],
+                [
+                  "[[battery]]",
+                  "Keeps its charge; doesn't charge or discharge"
+                ],
+                [
+                  "Fluid and Power Lines",
+                  "Do nothing until placed again; spans to the world come down"
+                ],
+                [
+                  "[[cuckoo-clock]]",
+                  "Works only as a placed block"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "ships",
+        "title": "Create Aeronautics physics objects",
+        "body": [
+          "The Wellspring, upgraded chests and barrels, the stone generators, the Magma Engines, the Pressure Crucible, the Monster Cages and Fluid and Power Lines keep working and keep their contents when a ship is assembled and disassembled. Spans with both ends on the same ship stay up.",
+          {
+            "warning": "A Netherite Monster Cage on a ship needs its FE in flight. If the ship's power fails, Withers escape in mid-air."
+          }
+        ]
+      },
+      {
+        "id": "carry-on",
+        "title": "Carry On",
+        "body": [
+          "Wellsprings, upgraded chests and barrels, Batteries (with their charge), and the Andesite and Brass cages, pens and tanks can be carried and placed back with their contents.",
+          {
+            "list": [
+              "Sneak + empty hand is Carry On's pickup, which is why the mod's upgrade screens open with a Wrench.",
+              "Place a carried upgraded chest against the side of a matching single one to join them into a double. Picking up half of a double moves the upgrade to whichever half needs it, and is refused if neither half would fit a vanilla chest.",
+              "Trade Bot (and his station), the Netherite Monster Cage and the Cuckoo Clock's weights are on Carry On's blacklist."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "pipez",
+        "title": "Pipez",
+        "body": [
+          {
+            "list": [
+              "Item pipes can feed fuel into Blaze Burners (works alongside Create: Liquid Fuel). By default hoppers and funnels can too; a config option limits it to Pipez only.",
+              "With Create Aeronautics, item pipes feed coal and other burnables into Portable Engines, and fluid pipes feed lava and other fuel fluids (1,000 mB burns as long as a bucket; engines top up to one bucket's worth).",
+              "Pipez energy pipes connect to the generators, motor and Trade Bot's station like any FE cable.",
+              "[[pipez-covers|Pipez Covers]] are retired: placed ones keep working, but they can't be crafted. Use [[fluid-lines|Fluid Lines]] and [[power-lines|Power Lines]], which encase in any block."
+            ]
+          },
+          {
+            "fact": "Feeding a Blaze Burner through a Pipez pipe earns Pipe Dreams; piping lava into a Portable Engine earns Liquid Courage."
+          }
+        ]
+      },
+      {
+        "id": "others",
+        "title": "Curios, crops and the rest",
+        "body": [
+          {
+            "list": [
+              "**Curios**: Aviator's Goggles go in the head slot, over a helmet if you like, and still count as goggles for Create's overlays.",
+              "**Modded crops**: any crop built on vanilla's crop or bush blocks grows in the [[auto-harvester]] with its own drops, stages and model (Supplementaries' flax, Farmer's Delight's cabbages and onions). Two-block crops show both halves.",
+              "**Modded animals and monsters**: the [[capture-bottle]] takes any animal that breeds; modded monsters go in the Brass cage at 2 Monster Chow each.",
+              "**Inventory Profiles Next** is kept off upgraded chest screens, because it simulates vanilla stack sizes; the mod's own quick moves replace it there.",
+              "**Create Seats**: villagers and wandering traders sit on them properly, legs bent, also on moving contraptions. That's what [[trade-bot|Trade Bot]] looks for."
+            ]
+          }
+        ]
+      }
+    ],
+    "related": [
+      "aeronautics",
+      "upgraded-chest",
+      "pipez-covers",
+      "configuration",
+      "fluid-lines"
+    ]
+  },
+  {
+    "id": "configuration",
+    "name": "Configuration",
+    "summary": "What you can change, and where: the in-game config screen, its server and client sections, and the data-pack recipes and tags behind the mod.",
+    "image": "icons/create/wrench.png",
+    "tags": [
+      "reference"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Nearly every number on this site is a default. Server settings cover rates, capacities, stress, FE and the Wither escapes; client settings cover how goggles look in the Curios slot. Recipes and the lists of what goes where are data packs and tags.",
+      "why": "So a server or modpack can tune the mod to its own balance without code.",
+      "when": "When you run a server, build a pack, or find a number that doesn't suit your world.",
+      "interacts": "Server settings apply to everyone in the world and can be edited while in it. Data packs change recipes, dust chances and which monsters go in which cage.",
+      "mistakes": [
+        "Changing client settings and expecting other players to see it: they're yours alone.",
+        "Reading this site's numbers on a modded server. A pack may have changed them: Engineer's Goggles and JEI show the real values."
+      ]
+    },
+    "sections": [
+      {
+        "id": "where",
+        "title": "Where to find it",
+        "body": [
+          "In game: **Mods, Create, Config, Access configs of other mods, ComedyMonkey's Create Addons**. Server settings can be edited while you're in a world.",
+          "On disk they're NeoForge config files: the server file lives with the world, the client file in your game's config folder."
+        ]
+      },
+      {
+        "id": "server",
+        "title": "Server settings",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Section",
+                "What you can set"
+              ],
+              "rows": [
+                [
+                  "Fluid Wellspring",
+                  "Base tank capacity, capacity per upgrade, max upgrades, water, lava, honey and chocolate rates"
+                ],
+                [
+                  "Chest Upgrades",
+                  "Copper, Iron, Gold and Netherite stack multipliers (Diamond uses Gold's)"
+                ],
+                [
+                  "Pressure Crucible",
+                  "Stress impact per RPM"
+                ],
+                [
+                  "Cobblestone Generators",
+                  "Andesite and Brass stress impacts (also used by the Basalt and Blackstone ones)"
+                ],
+                [
+                  "Machines",
+                  "String Tangler and Stone Infuser stress impacts"
+                ],
+                [
+                  "Auto Harvester",
+                  "Stress, crop and tree grow times, Bountiful's bonus, logs per tree, leaf drop rolls"
+                ],
+                [
+                  "Animal Pens",
+                  "Stress and max animals per pen, breeding and growing-up times, Fruitful's bonus, wool regrowth, egg time, milk per animal"
+                ],
+                [
+                  "Monster Cages",
+                  "Capacity and seconds per monster per tier, stress per RPM, chow per kind of monster, Monstrous's bonus, water per monster and Flooded tanks, the Netherite cage's field, farming and buffer FE, warning, time between escapes, alarm range, whether Withers escape, how loud caged monsters are"
+                ],
+                [
+                  "Fish Tanks",
+                  "Capacity, seconds per breeding, water per birth, water held, stress per RPM, for each tank"
+                ],
+                [
+                  "Cuckoo Clock",
+                  "Stress, and how far it reaches villagers"
+                ],
+                [
+                  "Magma Engine, Supercharged Magma Engine",
+                  "Speed, stress capacity per RPM, lava per second"
+                ],
+                [
+                  "Electricity",
+                  "Electric Motor maximum stress and FE per SU; Lava Generator and Geothermal Turbine FE per tick, lava (and water) per second; Battery capacity and rate, Industrial Battery capacity per block, FE per lightning strike"
+                ],
+                [
+                  "Fluid Lines",
+                  "Copper and brass mB per tick"
+                ],
+                [
+                  "Power Lines",
+                  "Copper and brass FE per tick, copper and brass span reach"
+                ],
+                [
+                  "Create Aeronautics",
+                  "Compact Gyroscope strength, damping, lean correction, full-strength speed, stress; Torque Rotor thrust per RPM and stress"
+                ],
+                [
+                  "Create Seats",
+                  "Whether villagers and wandering traders sit on seats"
+                ],
+                [
+                  "Trade Bot",
+                  "Range, bots per player, charge rate, station buffer, full charge, FE per block and per trade, how near a monster scares him"
+                ],
+                [
+                  "Mod Compatibility",
+                  "Pipez Blaze Burner feeding, Pipez-only feeding, Portable Engine fluid fuel"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "client",
+        "title": "Client settings",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Section",
+                "What you can set"
+              ],
+              "rows": [
+                [
+                  "Aviator's Goggles",
+                  "Show goggles in the Curios slot; show them over helmets"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "data",
+        "title": "Data packs and tags",
+        "body": [
+          {
+            "list": [
+              "**Recipes** are ordinary data-pack recipes: the Crucible's (dust, heat, time), the dust chances on Create's crushing and milling, the String Tangler's `comedymonkeysaddons:tangling` and the Stone Infuser's `comedymonkeysaddons:infusing`.",
+              "**Auto Harvester**: item tags `comedymonkeysaddons:auto_harvester_plantable` and `auto_harvester_blacklist` add or forbid plants.",
+              "**Monster Cages**: entity tags `monster_cage/andesite`, `/brass`, `/rare`, `/netherite`, `/flooded` and `/blacklist` decide which cage takes a monster and its chow cost. Any monster not in a tag counts as Brass.",
+              "**Pens and tanks**: entity tags `pen_blacklist` and `fish_tank_blacklist` keep creatures out."
+            ]
+          }
+        ]
+      }
+    ],
+    "related": [
+      "readouts",
+      "compatibility",
+      "electricity",
+      "one-block-farming"
+    ]
+  }
+]

@@ -1,0 +1,46 @@
+/* Design tokens: the Codex palette (dark steel, copper accent), type and spacing. Change the look here. */
+:root {
+  color-scheme: dark;
+
+  --bg: #101215;
+  --bg-2: #16191d;
+  --panel: #1c2025;
+  --panel-2: #232830;
+  --line: #2d333b;
+  --line-2: #3a414b;
+
+  --text: #d5d8dc;
+  --text-2: #b9bec4;
+  --muted: #8a919a;
+  --dim: #5d646d;
+
+  --copper: #c47a4a;
+  --copper-hi: #d9925f;
+  --copper-lo: #7e4729;
+  --copper-glow: rgba(196, 122, 74, .22);
+  --brass: #c4a050;
+  --cyan: #62b6b1;
+  --red: #b8544a;
+  --amber: #dda24a;
+  --violet: #8b7bb8;
+  --blue: #8fbbe3;
+
+  --heat-heated: var(--amber);
+  --heat-superheated: var(--blue);
+
+  --display: "Bahnschrift", "DIN Alternate", "Avenir Next Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Cascadia Mono", "SF Mono", Consolas, ui-monospace, monospace;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --rail: 76px;
+  --topbar: 62px;
+  --gutter: 28px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+@media (max-width: 760px) {
+  :root { --gutter: 16px; --topbar: 56px; }
+}

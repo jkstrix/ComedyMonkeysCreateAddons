@@ -1,0 +1,140 @@
+{
+  "modName": "ComedyMonkey's Create Addons",
+  "version": "2.5.0",
+  "minecraft": "1.21.1",
+  "create": "6.0.10",
+  "neoforge": "21.1.248",
+  "links": [
+    { "label": "Source on GitHub", "href": "https://github.com/jkstrix/ComedyMonkeysCreateAddons" }
+  ],
+  "unreleased": [],
+  "mods": {
+    "minecraft": "Minecraft",
+    "create": "Create",
+    "comedymonkeysaddons": "ComedyMonkey's Create Addons",
+    "simulated": "Create Aeronautics",
+    "aeronautics": "Create Aeronautics",
+    "c": "Common tag"
+  },
+
+  "categories": [
+    { "id": "guide", "label": "Guide", "single": "Chapter", "icon": "book", "file": "guide.json",
+      "title": "The guide",
+      "description": "The mod from your first Upgrade Template to a caged Wither, in order. Each chapter ends with what to build next." },
+    { "id": "blocks", "label": "Blocks", "single": "Block", "icon": "cube", "file": "blocks.json",
+      "description": "Storage, lines, posts and instruments: the blocks you build with, rather than the ones that do the work." },
+    { "id": "machines", "label": "Machines", "single": "Machine", "icon": "cog", "file": "machines.json",
+      "description": "Everything that turns, burns, grows or makes. Each one taught from the first block to full automation." },
+    { "id": "items", "label": "Items", "single": "Item", "icon": "gem", "file": "items.json",
+      "description": "Upgrades, templates, dusts, jars, feed, fittings and enchantments." },
+    { "id": "mobs", "label": "Mobs", "single": "Mob", "icon": "skull", "file": "mobs.json",
+      "description": "The mod's own creatures, and the vanilla ones it changes. Threat, rarity and where they fit in your progress." },
+    { "id": "biomes", "label": "Biomes", "single": "Biome", "icon": "mountain", "file": "biomes.json", "status": "soon",
+      "teaser": "New places to explore are on the drawing board. When they land, each biome gets its page here: what grows there, what lives there, and what it's worth building." },
+    { "id": "recipes", "label": "Recipes", "icon": "grid" },
+    { "id": "progression", "label": "Progression", "short": "Progress", "icon": "steps" },
+    { "id": "systems", "label": "Systems", "single": "System", "icon": "net", "file": "systems.json",
+      "description": "How the pieces fit together: power, lines, farms, upgrades and the rest, explained as whole systems." }
+  ],
+
+  "recipeTypes": {
+    "crafting_shaped": { "label": "Crafting", "machine": "minecraft:crafting_table" },
+    "crafting_shapeless": { "label": "Shapeless crafting", "machine": "minecraft:crafting_table" },
+    "mechanical_crafting": { "label": "Mechanical Crafting", "machine": "create:mechanical_crafter" },
+    "sequenced_assembly": { "label": "Sequenced Assembly", "machine": "create:deployer" },
+    "smithing_transform": { "label": "Smithing", "machine": "minecraft:smithing_table" },
+    "pressure_crucible": { "label": "Pressure Crucible", "machine": "comedymonkeysaddons:pressure_crucible", "timeAt": "16 RPM" },
+    "mixing": { "label": "Mixing", "machine": "create:mechanical_mixer" },
+    "crushing": { "label": "Crushing", "machine": "create:crushing_wheel" },
+    "milling": { "label": "Milling", "machine": "create:millstone" },
+    "deploying": { "label": "Deploying", "machine": "create:deployer" },
+    "filling": { "label": "Filling", "machine": "create:spout" },
+    "splashing": { "label": "Bulk Washing", "machine": "create:encased_fan" },
+    "infusing": { "label": "Stone Infuser", "machine": "comedymonkeysaddons:stone_infuser", "timeAt": "16 RPM" },
+    "tangling": { "label": "String Tangler", "machine": "comedymonkeysaddons:string_tangler", "timeAt": "16 RPM" }
+  },
+
+  "home": {
+    "hero": {
+      "entry": "geothermal-turbine",
+      "title": "Power, farms",
+      "accent": "& machinery",
+      "text": "Stone from nothing, herds in a single block, lava turned into grid power, and a clockwork shopkeeper who sells your goods to villagers. Every machine here is taught from the first block to full automation."
+    },
+    "latest": ["helper-bot", "fish-tank", "monster-cage", "netherite-monster-cage", "battery", "fluid-lines", "power-lines"],
+    "featuredMachines": ["pressure-crucible", "geothermal-turbine", "magma-engine", "auto-harvester", "animal-pen", "cobblestone-generator", "electric-motor", "cuckoo-clock"],
+    "featuredBlocks": ["upgraded-chest", "fluid-lines", "power-lines", "flight-instruments"],
+    "featuredMobs": ["trade-bot", "helper-bot", "contained-wither", "armed-drowned", "blue-axolotl"],
+    "intro": {
+      "title": "Into the workshop",
+      "body": [
+        "Your Create factory turns, crushes and mixes. But it still wants stone you dig by hand, a field of wheat, a pen of cows and a chest that fills too soon. This mod closes those gaps, one machine at a time.",
+        "Start small: an Upgrade Template, a Cobblestone Generator, a bigger chest. Then fluids from nothing, dust pressed into emeralds, herds and hordes kept in a single block. Then lava turned into Forge Energy, carried on hanging wires to motors and batteries across your base. And at the end, three Withers held in a field that must never lose power.",
+        "Every page answers the same five questions: what it does, why you'd want it, when it's worth building, how it fits with everything else, and the mistakes that cost players an evening."
+      ]
+    },
+    "notes": [
+      { "date": "2026-10-27", "title": "Fish Tanks", "body": "Fish, squid and axolotls now breed underwater in one block on **Fish Food**. Cages and tanks got their Ponder scenes, Display Links, Dispensers and advancements." },
+      { "date": "2026-10-27", "title": "Monster Cages", "body": "Five cages, from a zombie horde to three Withers in a containment field, with Iron Jars, **Monster Chow** and the **Monstrous** enchantment." },
+      { "date": "2026-10-26", "title": "Batteries", "body": "A Battery stores FE for the Power Lines. Fill a 3×3 column with them and they become an Industrial Battery, up to nine blocks tall." },
+      { "date": "2026-10-26", "title": "2.5.0: Fluid and Power Lines", "body": "The mod's own pipes and wires, in copper and brass, replace Pipez: fittings clip onto the line, and wires hang in spans between posts." },
+      { "date": "Coming soon", "title": "Biomes", "body": "New places are on the drawing board. They'll get their own section of the codex." }
+    ]
+  },
+
+  "progressionIntro": "Four stages, from your first andesite machines to a caged Wither. Each column lists the goals that mark the stage and the key builds. Tick goals off as you go (they're remembered in this browser), and hover a build to light up everything it needs first.",
+  "progression": [
+    {
+      "id": "early", "title": "Early game", "era": "the andesite age",
+      "summary": "Steady stone, food and storage without leaving the base.",
+      "needs": "Create's andesite machines and a sequenced assembly line.",
+      "goals": [
+        "Make an [[upgrade-template]] on a sequenced assembly line",
+        "Run a [[cobblestone-generator]] from a shaft",
+        "Upgrade a chest with a [[chest-upgrades|Copper Chest Upgrade]]",
+        "Plant a sapling in an [[auto-harvester]]",
+        "Catch an animal in a [[capture-bottle]] and start an [[animal-pen]]"
+      ],
+      "entries": ["upgrade-template", "cobblestone-generator", "chest-upgrades", "auto-harvester", "animal-pen", "monster-cage", "fluid-lines", "incinerator"]
+    },
+    {
+      "id": "mid", "title": "Mid game", "era": "the brass age",
+      "summary": "Fluids from nothing, gems from dust, and your first Forge Energy.",
+      "needs": "Brass, a Blaze Burner you can keep lit, and Crushing Wheels.",
+      "goals": [
+        "Fit a [[fluid-wellspring]] with [[lava-upgrade|Lava Upgrades]]",
+        "Press your first Emerald in the [[pressure-crucible]]",
+        "Run a [[magma-engine]] on Wellspring lava",
+        "Drive an [[electric-motor]] from a [[lava-generator]]",
+        "Store FE in a [[battery]]"
+      ],
+      "entries": ["fluid-wellspring", "pressure-crucible", "magma-engine", "lava-generator", "power-lines", "electric-motor", "battery", "cuckoo-clock"]
+    },
+    {
+      "id": "advanced", "title": "Advanced", "era": "heat and power",
+      "summary": "Grid-scale power, automated trading and the big farms.",
+      "needs": "Precision Mechanisms, a steady lava supply and plenty of brass.",
+      "goals": [
+        "Form a [[geothermal-turbine]]",
+        "Send a [[trade-bot]] out to trade with seated villagers",
+        "Fill a Brass [[animal-pen]] to 512",
+        "Supercharge a [[supercharged-magma-engine|Magma Engine]]"
+      ],
+      "entries": ["geothermal-turbine", "supercharged-magma-engine", "trade-bot", "flooded-monster-cage", "fish-tank", "compact-gyroscope"]
+    },
+    {
+      "id": "end", "title": "End game", "era": "the grid and the Wither",
+      "summary": "The biggest builds, and the one that must never lose power.",
+      "needs": "Netherite, FE Coils and a power grid you trust.",
+      "goals": [
+        "Form an Industrial [[battery]]",
+        "Cage a Wither in a [[netherite-monster-cage]]",
+        "Breed a [[blue-axolotl]] in a Fish Tank",
+        "Upgrade a chest to Netherite"
+      ],
+      "entries": ["netherite-monster-cage", "netherite-jar", "contained-wither", "blue-axolotl"]
+    }
+  ],
+
+  "extraIcons": ["minecraft:enchanted_book", "create:goggles", "create:wrench", "minecraft:crafting_table", "minecraft:smithing_table", "create:mechanical_crafter", "create:mechanical_mixer", "create:crushing_wheel", "create:millstone", "create:deployer", "create:spout", "create:encased_fan"]
+}

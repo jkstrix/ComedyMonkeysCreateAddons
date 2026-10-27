@@ -1,0 +1,1897 @@
+[
+  {
+    "id": "upgrade-template",
+    "name": "Upgrade Template",
+    "registry": [
+      "comedymonkeysaddons:upgrade_template",
+      "comedymonkeysaddons:incomplete_upgrade_template"
+    ],
+    "summary": "The blank card every upgrade in the mod starts from, made on a Create sequenced assembly line from a copper sheet.",
+    "tags": [
+      "upgrade",
+      "crafting component"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "A copper sheet that has had a Cogwheel, Glass and an Electron Tube deployed onto it in a sequenced assembly. On its own it does nothing: it's the base you finish into a Wellspring upgrade or a chest upgrade.",
+      "why": "Every [[fluid-wellspring]] upgrade and every [[chest-upgrades|chest upgrade]] begins here, so it's the first thing to automate.",
+      "when": "As soon as you can run a sequenced assembly line: a belt or depot with Deployers, and a supply of Electron Tubes.",
+      "interacts": "Finish it into a [[capacity-upgrade]] (three Fluid Tanks), a [[drip-template]] (two Pointed Dripstone, for the water, lava, honey and chocolate upgrades) or a [[chest-upgrade-template]] (a chest and Andesite Alloy).",
+      "mistakes": [
+        "Feeding the Deployers in the wrong order. The sequence is Cogwheel, then Glass, then Electron Tube; the Incomplete Upgrade Template only moves on with the right part.",
+        "Taking an Incomplete Upgrade Template off the line by hand: it's useless until the sequence finishes."
+      ]
+    },
+    "specs": [
+      [
+        "Made by",
+        "Sequenced assembly"
+      ],
+      [
+        "Base",
+        "Copper sheet"
+      ],
+      [
+        "Steps",
+        "Deploy Cogwheel, deploy Glass, deploy Electron Tube"
+      ]
+    ],
+    "obtain": [
+      "Sequenced assembly on a copper sheet: deploy a Cogwheel, then any glass block, then an Electron Tube. One pass, no loops.",
+      "The Incomplete Upgrade Template is the item in between steps."
+    ],
+    "uses": [
+      "Three Fluid Tanks deployed onto it make a [[capacity-upgrade]].",
+      "Two Pointed Dripstone deployed onto it make a [[drip-template]].",
+      "A chest and Andesite Alloy deployed onto it make a [[chest-upgrade-template]]."
+    ],
+    "tips": [
+      "Build one sequenced assembly line for the template, then a second line for whatever you finish it into. A Deployer swap is all that changes."
+    ],
+    "facts": [
+      "Your first one earns Template Monkey: \"Every great invention starts as a blank card\"."
+    ],
+    "flows": [
+      {
+        "title": "From a copper sheet to every upgrade",
+        "steps": [
+          {
+            "item": "create:copper_sheet",
+            "label": "Copper Sheet",
+            "kind": "source"
+          },
+          {
+            "label": "Sequenced assembly",
+            "kind": "machine",
+            "note": "Cogwheel, Glass, Electron Tube"
+          },
+          {
+            "ref": "upgrade-template",
+            "kind": "item"
+          },
+          {
+            "ref": "drip-template",
+            "kind": "result",
+            "via": "2 Pointed Dripstone"
+          }
+        ]
+      }
+    ],
+    "related": [
+      "drip-template",
+      "capacity-upgrade",
+      "chest-upgrade-template",
+      "upgrades",
+      "fluid-wellspring"
+    ]
+  },
+  {
+    "id": "chest-upgrade-template",
+    "name": "Chest Upgrade Template",
+    "registry": [
+      "comedymonkeysaddons:chest_upgrade_template",
+      "comedymonkeysaddons:incomplete_chest_upgrade_template"
+    ],
+    "summary": "An Upgrade Template with a chest and Andesite Alloy deployed onto it: the base of the Copper Chest Upgrade.",
+    "tags": [
+      "upgrade",
+      "crafting component"
+    ],
+    "stage": "early",
+    "requires": [
+      "upgrade-template"
+    ],
+    "teach": {
+      "what": "The middle step between an [[upgrade-template]] and your first [[chest-upgrades|chest upgrade]].",
+      "why": "Every chest tier is built on the one before, and they all start from this template.",
+      "when": "Right after your first Upgrade Template.",
+      "interacts": "Two copper sheets deployed onto it, then a press, make a Copper Chest Upgrade.",
+      "mistakes": [
+        "Trying to use it on a chest. It isn't an upgrade yet: finish it with copper sheets first.",
+        "Loading the Deployers the wrong way round. The chest goes on first, then the Andesite Alloy."
+      ]
+    },
+    "specs": [
+      [
+        "Made by",
+        "Sequenced assembly"
+      ],
+      [
+        "Base",
+        "Upgrade Template"
+      ],
+      [
+        "Steps",
+        "Deploy a wooden chest, deploy Andesite Alloy"
+      ]
+    ],
+    "obtain": [
+      "Sequenced assembly on an [[upgrade-template]]: deploy a wooden chest, then Andesite Alloy."
+    ],
+    "uses": [
+      "Deploy two copper sheets onto it and press it: a Copper Chest Upgrade."
+    ],
+    "facts": [
+      "Making one earns Never Skip Chest Day."
+    ],
+    "related": [
+      "upgrade-template",
+      "chest-upgrades",
+      "upgraded-chest",
+      "upgrades"
+    ],
+    "tips": [
+      "Keep a few spare: every chest tier starts from one, and a stack of templates lets you upgrade a whole storage room in one go."
+    ]
+  },
+  {
+    "id": "drip-template",
+    "name": "Drip Template",
+    "registry": [
+      "comedymonkeysaddons:drip_template",
+      "comedymonkeysaddons:incomplete_drip_template"
+    ],
+    "summary": "An Upgrade Template fitted with two Pointed Dripstone, ready to be finished with a fluid into a Wellspring generation upgrade.",
+    "tags": [
+      "upgrade",
+      "crafting component"
+    ],
+    "stage": "early",
+    "requires": [
+      "upgrade-template"
+    ],
+    "teach": {
+      "what": "The base of every generation upgrade for the [[fluid-wellspring]]. A Spout fills it with 250 mB of water or lava to make a [[water-upgrade]] or [[lava-upgrade]]; a longer sequence turns it into a [[honey-upgrade]] or [[chocolate-upgrade]].",
+      "why": "One template line feeds all four generation upgrades, so you only need to change the fluid.",
+      "when": "Straight after your first Upgrade Template, on the way to an endless water or lava source.",
+      "interacts": "Spouts fill it (Create's filling). The honey and chocolate sequences take it as their starting item.",
+      "mistakes": [
+        "Spouting the wrong amount: it takes exactly 250 mB of water or lava for the basic upgrades.",
+        "Spouting honey or chocolate straight onto it. Those upgrades need the full three-loop sequence, not a single fill."
+      ]
+    },
+    "specs": [
+      [
+        "Made by",
+        "Sequenced assembly"
+      ],
+      [
+        "Base",
+        "Upgrade Template"
+      ],
+      [
+        "Steps",
+        "Deploy 2 Pointed Dripstone"
+      ]
+    ],
+    "obtain": [
+      "Sequenced assembly on an [[upgrade-template]]: deploy Pointed Dripstone twice."
+    ],
+    "uses": [
+      "Spout 250 mB of water onto it: a [[water-upgrade]].",
+      "Spout 250 mB of lava onto it: a [[lava-upgrade]].",
+      "The start of the three-loop [[honey-upgrade]] and [[chocolate-upgrade]] sequences."
+    ],
+    "related": [
+      "upgrade-template",
+      "water-upgrade",
+      "lava-upgrade",
+      "honey-upgrade",
+      "chocolate-upgrade"
+    ],
+    "tips": [
+      "One Spout can make both Water and Lava Upgrades: just swap the fluid feeding it."
+    ]
+  },
+  {
+    "id": "water-upgrade",
+    "name": "Water Upgrade",
+    "registry": [
+      "comedymonkeysaddons:water_upgrade",
+      "comedymonkeysaddons:incomplete_water_upgrade"
+    ],
+    "summary": "A hydraulic module for the Fluid Wellspring: each one installed makes it generate water faster, up to 500 mB a second with three.",
+    "tags": [
+      "upgrade",
+      "wellspring"
+    ],
+    "stage": "early",
+    "requires": [
+      "drip-template",
+      "fluid-wellspring"
+    ],
+    "teach": {
+      "what": "Fitted to a [[fluid-wellspring]], it makes the tank fill itself with water: 100 mB a second with one, 250 with two, 500 with three.",
+      "why": "An endless water source in one block, with no pump and no infinite pool. It feeds [[fish-tank|Fish Tanks]], [[flooded-monster-cage|Flooded cages]], Create's washing fans and the [[geothermal-turbine]].",
+      "when": "Your first goal after the Upgrade Template. Water is useful everywhere.",
+      "interacts": "Pipes, pumps and [[fluid-lines|Fluid Lines]] (with an [[intake]]) draw from the Wellspring on any side. It can share the Wellspring with [[capacity-upgrade|Capacity Upgrades]], which have their own slots.",
+      "mistakes": [
+        "Mixing kinds. A Wellspring takes one kind of generation upgrade at a time; empty it of its current fluid before you switch kinds.",
+        "Opening the upgrade screen with sneak + empty hand. That's Carry On's pickup; use a Wrench.",
+        "Expecting a fourth upgrade to help: three of one kind is the maximum."
+      ]
+    },
+    "stats": [
+      {
+        "label": "1 upgrade",
+        "value": "100",
+        "unit": "mB/s",
+        "gauge": 0.2
+      },
+      {
+        "label": "2 upgrades",
+        "value": "250",
+        "unit": "mB/s",
+        "gauge": 0.5
+      },
+      {
+        "label": "3 upgrades",
+        "value": "500",
+        "unit": "mB/s",
+        "gauge": 1
+      }
+    ],
+    "specs": [
+      [
+        "Up to",
+        "3 per Wellspring"
+      ],
+      [
+        "Mixes with",
+        "Capacity Upgrades only"
+      ]
+    ],
+    "obtain": [
+      "A Spout fills a [[drip-template]] with 250 mB of water."
+    ],
+    "uses": [
+      "Right-click a [[fluid-wellspring]] with it to install it; the Wrench screen adds and removes upgrades.",
+      "Each one plugs into a socket on the Wellspring's lid, with a lens in its fluid's colour."
+    ],
+    "tips": [
+      "Two Water Upgrades make 250 mB a second: exactly what a [[geothermal-turbine]] boils off at full power."
+    ],
+    "facts": [
+      "Fitting one earns Make It Rain: \"Hydration on tap!\""
+    ],
+    "related": [
+      "fluid-wellspring",
+      "drip-template",
+      "lava-upgrade",
+      "capacity-upgrade",
+      "upgrades"
+    ]
+  },
+  {
+    "id": "lava-upgrade",
+    "name": "Lava Upgrade",
+    "registry": [
+      "comedymonkeysaddons:dripstone_upgrade",
+      "comedymonkeysaddons:incomplete_dripstone_upgrade"
+    ],
+    "summary": "A geothermal module for the Fluid Wellspring: each one installed makes it generate lava faster, up to 50 mB a second with three.",
+    "tags": [
+      "upgrade",
+      "wellspring"
+    ],
+    "stage": "early",
+    "requires": [
+      "drip-template",
+      "fluid-wellspring"
+    ],
+    "teach": {
+      "what": "Fitted to a [[fluid-wellspring]], it makes the tank fill itself with lava: 10 mB a second with one, 25 with two, 50 with three. (Its game id is still `dripstone_upgrade`.)",
+      "why": "Endless lava is fuel. It runs [[magma-engine|Magma Engines]], [[lava-generator|Lava Generators]] and the [[geothermal-turbine]], feeds the netherrack mixer for [[netherite-dust]], and meets water in the [[cobblestone-generator|stone generators]]' world.",
+      "when": "Early, alongside or just after water. It's the start of every power setup in the mod.",
+      "interacts": "A Lava Wellspring next to a Honey or Chocolate one makes Create's limestone or scoria where the fluids meet. Draw from it with pipes, pumps or [[fluid-lines|Fluid Lines]] and an [[intake]].",
+      "mistakes": [
+        "Mixing kinds. A Wellspring takes one kind of generation upgrade at a time; empty it of its current fluid before you switch kinds.",
+        "Opening the upgrade screen with sneak + empty hand. That's Carry On's pickup; use a Wrench.",
+        "Under-supplying a big consumer. One fully upgraded Lava Wellspring (50 mB/s) runs a [[magma-engine]] (10 mB/s) five times over, but a [[geothermal-turbine]] needs 90 mB/s: two maxed Wellsprings."
+      ]
+    },
+    "stats": [
+      {
+        "label": "1 upgrade",
+        "value": "10",
+        "unit": "mB/s",
+        "gauge": 0.2
+      },
+      {
+        "label": "2 upgrades",
+        "value": "25",
+        "unit": "mB/s",
+        "gauge": 0.5
+      },
+      {
+        "label": "3 upgrades",
+        "value": "50",
+        "unit": "mB/s",
+        "gauge": 1
+      }
+    ],
+    "specs": [
+      [
+        "Up to",
+        "3 per Wellspring"
+      ],
+      [
+        "Mixes with",
+        "Capacity Upgrades only"
+      ]
+    ],
+    "obtain": [
+      "A Spout fills a [[drip-template]] with 250 mB of lava."
+    ],
+    "uses": [
+      "Right-click a [[fluid-wellspring]] with it to install it.",
+      "Size your fuel: a [[lava-generator]] burns 20 mB/s, a [[magma-engine]] 10, a [[supercharged-magma-engine]] 20, a [[geothermal-turbine]] 90 at full power."
+    ],
+    "tips": [
+      "A maxed Lava Wellspring (50 mB/s) keeps two and a half Lava Generators burning flat out."
+    ],
+    "facts": [
+      "Fitting one earns The Floor Is Lava: \"Mind your toes\"."
+    ],
+    "related": [
+      "fluid-wellspring",
+      "drip-template",
+      "water-upgrade",
+      "lava-generator",
+      "magma-engine",
+      "upgrades",
+      "electricity"
+    ]
+  },
+  {
+    "id": "capacity-upgrade",
+    "name": "Capacity Upgrade",
+    "registry": [
+      "comedymonkeysaddons:capacity_upgrade",
+      "comedymonkeysaddons:incomplete_capacity_upgrade"
+    ],
+    "summary": "A reinforced tank module that makes a Fluid Wellspring hold 16,000 mB more, in its own slots beside the generation upgrades.",
+    "tags": [
+      "upgrade",
+      "wellspring"
+    ],
+    "stage": "early",
+    "requires": [
+      "upgrade-template",
+      "fluid-wellspring"
+    ],
+    "teach": {
+      "what": "Each one adds 16,000 mB to a [[fluid-wellspring]]'s 8,000 mB tank, up to three: 56,000 mB in all. It shows as a copper canister in the lid's back row.",
+      "why": "A bigger tank rides out bursts of demand, such as a [[magma-engine]] starting up or a [[fish-tank]] breeding a whole school at once, and stores more for when nothing is drawing.",
+      "when": "Once your Wellspring keeps running dry under load, or fills up and stops between uses.",
+      "interacts": "It has its own slots, so it goes alongside Water, Lava, Honey or Chocolate Upgrades without counting against them.",
+      "mistakes": [
+        "Taking one out of a full tank. It's refused until you drain the Wellspring to what the smaller tank can hold.",
+        "Expecting it to make fluid faster. It only adds room; generation comes from the generation upgrades."
+      ]
+    },
+    "specs": [
+      [
+        "Adds",
+        "16,000 mB each"
+      ],
+      [
+        "Up to",
+        "3 (56,000 mB in all)"
+      ],
+      [
+        "Base tank",
+        "8,000 mB"
+      ]
+    ],
+    "obtain": [
+      "Sequenced assembly on an [[upgrade-template]]: deploy three Fluid Tanks."
+    ],
+    "uses": [
+      "Right-click a [[fluid-wellspring]] with it to install it."
+    ],
+    "facts": [
+      "Fitting one earns Tank You Very Much: \"Room for seconds\"."
+    ],
+    "related": [
+      "fluid-wellspring",
+      "upgrade-template",
+      "water-upgrade",
+      "lava-upgrade",
+      "upgrades"
+    ],
+    "tips": [
+      "Fit Capacity Upgrades to the Wellsprings that feed bursty machines; a steady consumer only needs generation."
+    ]
+  },
+  {
+    "id": "honey-upgrade",
+    "name": "Honey Upgrade",
+    "registry": [
+      "comedymonkeysaddons:honey_upgrade",
+      "comedymonkeysaddons:incomplete_honey_upgrade"
+    ],
+    "summary": "A Wellspring upgrade that generates Create's honey, 10 to 50 mB a second: next to a Lava Wellspring, an endless limestone source.",
+    "tags": [
+      "upgrade",
+      "wellspring"
+    ],
+    "stage": "mid",
+    "requires": [
+      "drip-template",
+      "fluid-wellspring"
+    ],
+    "teach": {
+      "what": "Fitted to a [[fluid-wellspring]], it generates Create's honey: 10, 25 or 50 mB a second with one, two or three.",
+      "why": "Honey meets lava as limestone (Create's own fluid interaction), so a Honey Wellspring beside a Lava one is an endless limestone source. It's also honey on tap for Create's recipes.",
+      "when": "Mid game: each one costs three Precision Mechanisms and 3,000 mB of honey.",
+      "interacts": "Pair it with a [[lava-upgrade|Lava Wellspring]] for limestone. Pipes and [[fluid-lines|Fluid Lines]] draw it like any fluid.",
+      "mistakes": [
+        "Mixing kinds. A Wellspring takes one kind of generation upgrade at a time; empty it of its current fluid before you switch kinds.",
+        "Opening the upgrade screen with sneak + empty hand. That's Carry On's pickup; use a Wrench.",
+        "Stopping the sequence early. It takes three full loops of four steps."
+      ]
+    },
+    "stats": [
+      {
+        "label": "1 upgrade",
+        "value": "10",
+        "unit": "mB/s",
+        "gauge": 0.2
+      },
+      {
+        "label": "2 upgrades",
+        "value": "25",
+        "unit": "mB/s",
+        "gauge": 0.5
+      },
+      {
+        "label": "3 upgrades",
+        "value": "50",
+        "unit": "mB/s",
+        "gauge": 1
+      }
+    ],
+    "specs": [
+      [
+        "Up to",
+        "3 per Wellspring"
+      ],
+      [
+        "Each costs",
+        "3 Honeycomb Blocks, 3,000 mB honey, 3 Precision Mechanisms"
+      ]
+    ],
+    "obtain": [
+      "Sequenced assembly on a [[drip-template]], **3 loops** of: deploy a Honeycomb Block, spout 1,000 mB of honey, deploy a Precision Mechanism, press."
+    ],
+    "uses": [
+      "Right-click a [[fluid-wellspring]] with it to install it."
+    ],
+    "related": [
+      "fluid-wellspring",
+      "drip-template",
+      "chocolate-upgrade",
+      "lava-upgrade",
+      "upgrades"
+    ],
+    "tips": [
+      "Put the Honey Wellspring right beside a Lava one so the two fluids meet in the world: Create turns the meeting into limestone you can mine with a drill."
+    ]
+  },
+  {
+    "id": "chocolate-upgrade",
+    "name": "Chocolate Upgrade",
+    "registry": [
+      "comedymonkeysaddons:chocolate_upgrade",
+      "comedymonkeysaddons:incomplete_chocolate_upgrade"
+    ],
+    "summary": "A Wellspring upgrade that generates Create's chocolate, 10 to 50 mB a second: next to a Lava Wellspring, an endless scoria source.",
+    "tags": [
+      "upgrade",
+      "wellspring"
+    ],
+    "stage": "mid",
+    "requires": [
+      "drip-template",
+      "fluid-wellspring"
+    ],
+    "teach": {
+      "what": "Fitted to a [[fluid-wellspring]], it generates Create's chocolate: 10, 25 or 50 mB a second with one, two or three.",
+      "why": "Chocolate meets lava as scoria (Create's own fluid interaction), so a Chocolate Wellspring beside a Lava one is an endless scoria source, and chocolate on tap for Create's sweets.",
+      "when": "Mid game, like the [[honey-upgrade]]: it costs three Precision Mechanisms each.",
+      "interacts": "Pair it with a [[lava-upgrade|Lava Wellspring]] for scoria.",
+      "mistakes": [
+        "Mixing kinds. A Wellspring takes one kind of generation upgrade at a time; empty it of its current fluid before you switch kinds.",
+        "Opening the upgrade screen with sneak + empty hand. That's Carry On's pickup; use a Wrench.",
+        "Stopping the sequence early. It takes three full loops of four steps."
+      ]
+    },
+    "stats": [
+      {
+        "label": "1 upgrade",
+        "value": "10",
+        "unit": "mB/s",
+        "gauge": 0.2
+      },
+      {
+        "label": "2 upgrades",
+        "value": "25",
+        "unit": "mB/s",
+        "gauge": 0.5
+      },
+      {
+        "label": "3 upgrades",
+        "value": "50",
+        "unit": "mB/s",
+        "gauge": 1
+      }
+    ],
+    "specs": [
+      [
+        "Up to",
+        "3 per Wellspring"
+      ],
+      [
+        "Each costs",
+        "3 Cocoa Beans, 3,000 mB chocolate, 3 Precision Mechanisms"
+      ]
+    ],
+    "obtain": [
+      "Sequenced assembly on a [[drip-template]], **3 loops** of: deploy Cocoa Beans, spout 1,000 mB of chocolate, deploy a Precision Mechanism, press."
+    ],
+    "uses": [
+      "Right-click a [[fluid-wellspring]] with it to install it."
+    ],
+    "related": [
+      "fluid-wellspring",
+      "drip-template",
+      "honey-upgrade",
+      "lava-upgrade",
+      "upgrades"
+    ],
+    "tips": [
+      "As with honey, a Chocolate Wellspring touching a Lava one gives endless scoria where they meet."
+    ]
+  },
+  {
+    "id": "chest-upgrades",
+    "name": "Chest Upgrades",
+    "registry": [
+      "comedymonkeysaddons:copper_chest_upgrade",
+      "comedymonkeysaddons:iron_chest_upgrade",
+      "comedymonkeysaddons:gold_chest_upgrade",
+      "comedymonkeysaddons:diamond_chest_upgrade",
+      "comedymonkeysaddons:netherite_chest_upgrade",
+      "comedymonkeysaddons:incomplete_copper_chest_upgrade",
+      "comedymonkeysaddons:incomplete_iron_chest_upgrade",
+      "comedymonkeysaddons:incomplete_gold_chest_upgrade",
+      "comedymonkeysaddons:incomplete_diamond_chest_upgrade"
+    ],
+    "summary": "Copper, Iron, Gold, Diamond and Netherite upgrades that turn a chest or barrel into a bigger one, each tier built on the last.",
+    "tags": [
+      "upgrade",
+      "storage"
+    ],
+    "stage": "early",
+    "requires": [
+      "chest-upgrade-template"
+    ],
+    "teach": {
+      "what": "Right-click a chest or barrel with one and it becomes an [[upgraded-chest]] or [[upgraded-barrel]], keeping its items. Copper doubles each slot, Iron quadruples it, Gold makes it eight times; Diamond keeps Gold's stacks and doubles the slots; Netherite has Diamond's slots, sixteen times the stack, and shrugs off explosions.",
+      "why": "Storage is the first thing a Create base runs out of. Each tier multiplies what one block holds, so funnels and arms have fewer chests to serve.",
+      "when": "Copper as soon as you have a [[chest-upgrade-template]]. Each tier after that only needs the previous upgrade and a little of the next metal, so climb as you can afford it. Netherite needs a Netherite Upgrade smithing template.",
+      "interacts": "Hoppers, funnels, arms and Pipez fill the upgraded slots to their limit. Upgraded chests keep their stacks on contraptions and Aeronautics ships, and Carry On carries them.",
+      "mistakes": [
+        "Making two for a double chest. One upgrade covers both halves.",
+        "Trying to skip a tier. Each upgrade is made from the one below it, so a Gold upgrade needs an Iron one.",
+        "Downgrading a chest full of big stacks: it's refused until they'd fit."
+      ]
+    },
+    "specs": [
+      [
+        "Applies to",
+        "Vanilla chests and barrels, and lower-tier upgraded ones"
+      ],
+      [
+        "Double chests",
+        "One upgrade covers both halves"
+      ],
+      [
+        "Config",
+        "Copper, Iron, Gold and Netherite stack multipliers (Diamond uses Gold's)"
+      ]
+    ],
+    "variants": [
+      {
+        "id": "copper",
+        "name": "Copper Chest Upgrade",
+        "registry": [
+          "comedymonkeysaddons:copper_chest_upgrade",
+          "comedymonkeysaddons:incomplete_copper_chest_upgrade"
+        ],
+        "summary": "x2 stacks: 128 a slot. Two copper sheets deployed onto a Chest Upgrade Template, then pressed.",
+        "specs": [
+          [
+            "Per slot",
+            "128"
+          ],
+          [
+            "Slots",
+            "27"
+          ]
+        ]
+      },
+      {
+        "id": "iron",
+        "name": "Iron Chest Upgrade",
+        "registry": [
+          "comedymonkeysaddons:iron_chest_upgrade",
+          "comedymonkeysaddons:incomplete_iron_chest_upgrade"
+        ],
+        "summary": "x4 stacks: 256 a slot. Two iron sheets deployed onto a Copper Chest Upgrade, then pressed.",
+        "specs": [
+          [
+            "Per slot",
+            "256"
+          ],
+          [
+            "Slots",
+            "27"
+          ]
+        ]
+      },
+      {
+        "id": "gold",
+        "name": "Gold Chest Upgrade",
+        "registry": [
+          "comedymonkeysaddons:gold_chest_upgrade",
+          "comedymonkeysaddons:incomplete_gold_chest_upgrade"
+        ],
+        "summary": "x8 stacks: 512 a slot. Two golden sheets deployed onto an Iron Chest Upgrade, then pressed.",
+        "specs": [
+          [
+            "Per slot",
+            "512"
+          ],
+          [
+            "Slots",
+            "27"
+          ]
+        ]
+      },
+      {
+        "id": "diamond",
+        "name": "Diamond Chest Upgrade",
+        "registry": [
+          "comedymonkeysaddons:diamond_chest_upgrade",
+          "comedymonkeysaddons:incomplete_diamond_chest_upgrade"
+        ],
+        "summary": "Gold's 512 a slot with twice the slots. Two diamonds deployed onto a Gold Chest Upgrade, then pressed.",
+        "specs": [
+          [
+            "Per slot",
+            "512"
+          ],
+          [
+            "Slots",
+            "54 (108 as a double chest)"
+          ]
+        ]
+      },
+      {
+        "id": "netherite",
+        "name": "Netherite Chest Upgrade",
+        "registry": [
+          "comedymonkeysaddons:netherite_chest_upgrade"
+        ],
+        "summary": "x16 stacks with Diamond's slots, and blast-proof. Smithed like netherite gear: a Netherite Upgrade template, a Diamond Chest Upgrade and a netherite ingot.",
+        "specs": [
+          [
+            "Per slot",
+            "1,024"
+          ],
+          [
+            "Slots",
+            "54 (108 as a double chest)"
+          ],
+          [
+            "Extras",
+            "Blast-proof chest; the item survives fire and lava"
+          ]
+        ]
+      }
+    ],
+    "obtain": [
+      "Copper: sequenced assembly on a [[chest-upgrade-template]], deploying two copper sheets, then pressing.",
+      "Iron, Gold and Diamond: the same on the previous tier's upgrade, with two iron sheets, two golden sheets or two diamonds.",
+      "Netherite: a smithing table with a Netherite Upgrade smithing template, a Diamond Chest Upgrade and a netherite ingot."
+    ],
+    "uses": [
+      "Right-click a chest or barrel to upgrade it. Using a higher tier on an upgraded one replaces the upgrade and hands back the old one.",
+      "Use a Wrench (or sneak + right-click with an upgrade) on an upgraded chest to open its upgrade screen.",
+      "Sneak + right-click the side of a single upgraded chest with a chest to extend it into a double of the same tier."
+    ],
+    "tips": [
+      "Old upgrades aren't wasted: when you climb a tier you get the previous upgrade back, ready for the next chest.",
+      "Netherite is the end of the line, worth it for storage near explosions."
+    ],
+    "facts": [
+      "The tiers' advancements run Copper-Bottomed Guarantee, Pumping Iron, Heart of Gold, Bigger on the Inside and Ancient Debris Storage."
+    ],
+    "flows": [
+      {
+        "title": "The chest upgrade ladder",
+        "steps": [
+          {
+            "ref": "chest-upgrade-template",
+            "kind": "source"
+          },
+          {
+            "label": "Copper",
+            "kind": "item",
+            "via": "2 copper sheets, press"
+          },
+          {
+            "label": "Iron",
+            "kind": "item",
+            "via": "2 iron sheets, press"
+          },
+          {
+            "label": "Gold",
+            "kind": "item",
+            "via": "2 golden sheets, press"
+          },
+          {
+            "label": "Diamond",
+            "kind": "item",
+            "via": "2 diamonds, press"
+          },
+          {
+            "label": "Netherite",
+            "kind": "result",
+            "via": "smithing"
+          }
+        ]
+      }
+    ],
+    "related": [
+      "upgraded-chest",
+      "upgraded-barrel",
+      "chest-upgrade-template",
+      "upgrades"
+    ]
+  },
+  {
+    "id": "emerald-dust",
+    "name": "Emerald Dust",
+    "registry": [
+      "comedymonkeysaddons:emerald_dust"
+    ],
+    "summary": "Glittering green powder, a rare extra from crushing or milling cobblestone and stone: nine press into an Emerald.",
+    "tags": [
+      "material",
+      "dust"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "A by-product. Crushing Wheels turning cobblestone or stone into gravel have a 5% chance of Emerald Dust; a Millstone has 2.5%. Nine in a [[pressure-crucible]] over a heated Blaze Burner make one Emerald.",
+      "why": "It turns a [[cobblestone-generator]] into an emerald mine, with no villagers involved.",
+      "when": "As soon as you crush cobblestone. You'll collect dust long before you can press it, so start storing it.",
+      "interacts": "Feed it to the [[pressure-crucible]]. Spend the Emeralds on villager trades, or press a few more for [[trade-bot|Trade Bot]]'s Emerald Block.",
+      "mistakes": [
+        "Pressing it over an unheated or smouldering burner. Emeralds need a **heated** Blaze Burner.",
+        "Milling when you could crush: a Millstone gives half the chance of Crushing Wheels."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Crushing Wheels",
+        "value": "5",
+        "unit": "%",
+        "gauge": 0.5
+      },
+      {
+        "label": "Millstone",
+        "value": "2.5",
+        "unit": "%",
+        "gauge": 0.25
+      }
+    ],
+    "specs": [
+      [
+        "Pressed into",
+        "1 Emerald from 9"
+      ],
+      [
+        "Heat",
+        "Heated"
+      ],
+      [
+        "Time",
+        "2.5 s at 64 RPM"
+      ]
+    ],
+    "obtain": [
+      "Crushing Wheels on cobblestone or stone: 5% a block, alongside the gravel.",
+      "A Millstone on cobblestone or stone: 2.5%."
+    ],
+    "uses": [
+      "Nine make an Emerald in a [[pressure-crucible]] over a heated Blaze Burner."
+    ],
+    "tips": [
+      "On average one dust comes from every 20 cobblestone crushed, so an Emerald costs about 180 cobblestone."
+    ],
+    "facts": [
+      "Your first one earns Glitter in the Gravel."
+    ],
+    "flows": [
+      {
+        "title": "Emeralds from cobblestone",
+        "steps": [
+          {
+            "ref": "cobblestone-generator",
+            "kind": "source"
+          },
+          {
+            "item": "create:crushing_wheel",
+            "label": "Crushing Wheels",
+            "kind": "machine"
+          },
+          {
+            "ref": "emerald-dust",
+            "kind": "item",
+            "via": "5%"
+          },
+          {
+            "ref": "pressure-crucible",
+            "kind": "machine",
+            "note": "heated",
+            "via": "x9"
+          },
+          {
+            "item": "minecraft:emerald",
+            "label": "Emerald",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "related": [
+      "pressure-crucible",
+      "cobblestone-generator",
+      "netherite-dust",
+      "quartz-dust",
+      "precious-dusts"
+    ]
+  },
+  {
+    "id": "netherite-dust",
+    "name": "Netherite Dust",
+    "registry": [
+      "comedymonkeysaddons:netherite_dust"
+    ],
+    "summary": "Heavy, dark grains, very rarely left when Crushing Wheels grind netherrack: nine press into Netherite Scrap over a superheated burner.",
+    "tags": [
+      "material",
+      "dust"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "A 1% extra when Crushing Wheels turn netherrack into cinder flour. Nine in a [[pressure-crucible]] over a **superheated** Blaze Burner make one Netherite Scrap.",
+      "why": "Fully automatable netherite, without mining ancient debris.",
+      "when": "Mid game, once you can make netherrack (a Mixer over a heated Blaze Burner, cobblestone and 50 mB of lava) and keep a burner superheated with Blaze Cakes.",
+      "interacts": "Netherrack comes from a [[cobblestone-generator]] plus lava from a [[lava-upgrade|Lava Wellspring]]. The same crushing gives cinder flour (half of [[monster-chow|Monster Chow]]) and [[quartz-dust]] at 5%.",
+      "mistakes": [
+        "Pressing over a merely heated burner. Netherite Scrap needs superheating, so keep the burner fed with Blaze Cakes.",
+        "Under-building. At 1%, a Netherite Scrap takes about 900 netherrack on average."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Crushing netherrack",
+        "value": "1",
+        "unit": "%",
+        "gauge": 0.1
+      }
+    ],
+    "specs": [
+      [
+        "Pressed into",
+        "1 Netherite Scrap from 9"
+      ],
+      [
+        "Heat",
+        "Superheated"
+      ],
+      [
+        "Time",
+        "10 s at 64 RPM"
+      ]
+    ],
+    "obtain": [
+      "Crushing Wheels on netherrack: 1% a block, alongside cinder flour (1, plus 50% for a second)."
+    ],
+    "uses": [
+      "Nine make Netherite Scrap in a [[pressure-crucible]] over a superheated Blaze Burner."
+    ],
+    "tips": [
+      "Make netherrack with a Mixer: cobblestone and 50 mB of lava over a heated burner. A cobblestone generator and a Lava Wellspring make the whole chain endless."
+    ],
+    "facts": [
+      "Your first one earns One in a Hundred: \"Feeling lucky?\""
+    ],
+    "flows": [
+      {
+        "title": "Netherite from cobblestone and lava",
+        "steps": [
+          {
+            "ref": "cobblestone-generator",
+            "kind": "source"
+          },
+          {
+            "item": "create:mechanical_mixer",
+            "label": "Mixer",
+            "kind": "machine",
+            "note": "heated, +50 mB lava"
+          },
+          {
+            "item": "minecraft:netherrack",
+            "label": "Netherrack",
+            "kind": "item"
+          },
+          {
+            "item": "create:crushing_wheel",
+            "label": "Crushing Wheels",
+            "kind": "machine"
+          },
+          {
+            "ref": "netherite-dust",
+            "kind": "item",
+            "via": "1%"
+          },
+          {
+            "ref": "pressure-crucible",
+            "kind": "machine",
+            "note": "superheated",
+            "via": "x9"
+          },
+          {
+            "item": "minecraft:netherite_scrap",
+            "label": "Netherite Scrap",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "related": [
+      "pressure-crucible",
+      "emerald-dust",
+      "quartz-dust",
+      "lava-upgrade",
+      "precious-dusts"
+    ]
+  },
+  {
+    "id": "quartz-dust",
+    "name": "Quartz Dust",
+    "registry": [
+      "comedymonkeysaddons:quartz_dust"
+    ],
+    "summary": "Pale, sparkly grit from crushing netherrack or blackstone: four press into Nether Quartz.",
+    "tags": [
+      "material",
+      "dust"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "A by-product of Crushing Wheels: 5% from netherrack, 10% from blackstone (which crushes to gravel). Four in a [[pressure-crucible]] over a heated Blaze Burner make one Nether Quartz.",
+      "why": "Quartz for Create's Rose Quartz, electron tubes and redstone parts, without trips to the Nether. Pressed further, four Nether Quartz make two Amethyst Shards.",
+      "when": "When you start crushing netherrack for [[netherite-dust]], or build a [[blackstone-generator]].",
+      "interacts": "A [[blackstone-generator]] gives the better chance. The Nether Quartz can go back into the Crucible (superheated) for amethyst.",
+      "mistakes": [
+        "Pressing it with no heat: Nether Quartz needs a heated burner, amethyst a superheated one.",
+        "Crushing netherrack only for quartz. A [[blackstone-generator]] gives twice the chance, and netherrack is better saved for [[netherite-dust]]."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Blackstone",
+        "value": "10",
+        "unit": "%",
+        "gauge": 1
+      },
+      {
+        "label": "Netherrack",
+        "value": "5",
+        "unit": "%",
+        "gauge": 0.5
+      }
+    ],
+    "specs": [
+      [
+        "Pressed into",
+        "1 Nether Quartz from 4"
+      ],
+      [
+        "Heat",
+        "Heated"
+      ]
+    ],
+    "obtain": [
+      "Crushing Wheels on blackstone: 10%.",
+      "Crushing Wheels on netherrack: 5%."
+    ],
+    "uses": [
+      "Four make Nether Quartz in a [[pressure-crucible]] over a heated Blaze Burner.",
+      "Four Nether Quartz then make two Amethyst Shards over a superheated one."
+    ],
+    "tips": [
+      "A blackstone line gives about one Nether Quartz per 40 blackstone crushed."
+    ],
+    "related": [
+      "pressure-crucible",
+      "blackstone-generator",
+      "emerald-dust",
+      "netherite-dust",
+      "precious-dusts"
+    ]
+  },
+  {
+    "id": "fe-coil",
+    "name": "FE Coil",
+    "registry": [
+      "comedymonkeysaddons:fe_coil"
+    ],
+    "summary": "Copper wound on a redstone core: the part that lets a machine take Forge Energy, used in Trade Bot and the Netherite Monster Cage.",
+    "tags": [
+      "crafting component",
+      "power"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "A crafting part. Four copper sheets around a redstone dust make one.",
+      "why": "Machines that run on Forge Energy need it: [[trade-bot|Trade Bot]]'s winding station and the [[netherite-monster-cage]]'s containment field.",
+      "when": "When you're ready to build either of those. It's cheap, so make a few once you have copper sheets.",
+      "interacts": "It goes into Mechanical Crafting recipes. The machines it makes then need a real FE supply, such as a [[lava-generator]] on [[power-lines|Power Lines]].",
+      "mistakes": [
+        "Building an FE machine before you have a generator. The coil only lets the machine take power; something still has to make it.",
+        "Crafting it with copper ingots. It takes copper sheets (any `c:plates/copper`), pressed first."
+      ]
+    },
+    "specs": [
+      [
+        "Recipe",
+        "4 copper sheets around 1 redstone dust (shaped)"
+      ]
+    ],
+    "obtain": [
+      "Crafting table: copper sheets above, below and either side of a redstone dust."
+    ],
+    "uses": [
+      "1 in [[trade-bot|Trade Bot]]'s 5x5 Mechanical Crafting recipe.",
+      "2 in the [[netherite-monster-cage]]'s Mechanical Crafting recipe."
+    ],
+    "facts": [
+      "Making one earns Coiled and Ready."
+    ],
+    "related": [
+      "trade-bot",
+      "netherite-monster-cage",
+      "electricity"
+    ],
+    "tips": [
+      "Make two extra while you're at it: the Netherite Monster Cage takes two."
+    ]
+  },
+  {
+    "id": "capture-bottle",
+    "name": "Capture Bottle",
+    "registry": [
+      "comedymonkeysaddons:capture_bottle",
+      "comedymonkeysaddons:bottled_animal"
+    ],
+    "summary": "A copper-capped bottle that catches one animal, fish, squid or axolotl, to start an Animal Pen or a Fish Tank.",
+    "tags": [
+      "tool",
+      "farming"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Use it on an animal that breeds (modded ones too), or on cod, salmon, tropical fish, pufferfish, squid, glow squid or an axolotl, and it's caught: the Bottled Animal shows it standing inside and keeps its colour, name and variant.",
+      "why": "One bottled animal is all an [[animal-pen]] or [[fish-tank]] needs to start a whole herd or school.",
+      "when": "Your first step into one-block farming. It costs a copper nugget and a glass bottle.",
+      "interacts": "Use the full bottle on a pen or tank to move the creature in. Animals go in [[animal-pen|Animal Pens]], water creatures in [[fish-tank|Fish Tanks]]; monsters need an [[iron-jar]] instead. Deployers and Dispensers can catch and release with it.",
+      "mistakes": [
+        "Trying to catch a monster. The Capture Bottle refuses it, with a hint: monsters need an [[iron-jar]].",
+        "Putting a bottled fish or axolotl in an Animal Pen. Pens refuse water creatures and point you to the Fish Tank.",
+        "Trying to take someone else's tamed pet: it can't be caught.",
+        "Using an empty bottle on a tank to get a creature back out. That's done from the tank's Wrench screen, which also culls the rest into the output."
+      ]
+    },
+    "specs": [
+      [
+        "Catches",
+        "Animals that breed, fish, squid, glow squid, axolotls"
+      ],
+      [
+        "Refuses",
+        "Monsters, tadpoles, dolphins, other players' pets"
+      ],
+      [
+        "Stacks",
+        "Empty 64, full 1"
+      ]
+    ],
+    "obtain": [
+      "Crafting: a copper nugget on top of a glass bottle."
+    ],
+    "uses": [
+      "Use it on a creature to catch it; use the full bottle on the ground to let it out again and get the bottle back.",
+      "Use a Bottled Animal on an empty [[animal-pen]] or [[fish-tank]] to start it."
+    ],
+    "tips": [
+      "Name an animal before you bottle it: the name and variant carry into the pen's window."
+    ],
+    "facts": [
+      "Catching your first animal earns Message in a Bottle: \"It seems fine about it\"."
+    ],
+    "related": [
+      "animal-pen",
+      "fish-tank",
+      "iron-jar",
+      "one-block-farming"
+    ]
+  },
+  {
+    "id": "iron-jar",
+    "name": "Iron Jar",
+    "registry": [
+      "comedymonkeysaddons:iron_jar"
+    ],
+    "summary": "A jar for catching one monster, at any health, to start a Monster Cage.",
+    "tags": [
+      "tool",
+      "farming"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Use it on any monster a cage takes and it's caught, whatever its health. The jar shows the monster inside. Use it on a [[monster-cage]] to move the monster in, or on the ground to let it out again.",
+      "why": "One jarred monster starts a whole horde: string, bones, gunpowder and slime without building a dark-room farm.",
+      "when": "As soon as you have a Deployer: it's an Iron Sheet deployed onto a Glass Bottle.",
+      "interacts": "Jars go into [[monster-cage|Monster Cages]] and [[flooded-monster-cage|Flooded cages]] of the right tier. Deployers and Dispensers can catch and release with it. A smithing table turns it into a [[netherite-jar]] for Withers.",
+      "mistakes": [
+        "Trying to catch the Wither, a ridden monster, the Warden, the Ender Dragon, a Giant or an Illusioner. None of them fit; the Wither needs a [[netherite-jar]].",
+        "Releasing a monster on Peaceful: it's refused.",
+        "Letting a full jar burn or blow up. A destroyed jar loses its monster.",
+        "Using it on an animal. Animals and fish need a [[capture-bottle]]."
+      ]
+    },
+    "specs": [
+      [
+        "Catches",
+        "Any monster a cage takes, at any health"
+      ],
+      [
+        "Keeps",
+        "Its data, name tag included; not its equipment"
+      ],
+      [
+        "Stacks",
+        "Empty 16, full 1"
+      ]
+    ],
+    "obtain": [
+      "A Deployer puts an Iron Sheet on a Glass Bottle (Create's deploying)."
+    ],
+    "uses": [
+      "Catch a monster, then use the full jar on a [[monster-cage]] that takes it.",
+      "Use a full jar on the ground to let the monster out, anywhere but on Peaceful.",
+      "Smithing with a Netherite Upgrade template and a netherite ingot makes a [[netherite-jar]]."
+    ],
+    "tips": [
+      "Catch the monster you want most first: a cage holds one kind only, and emptying it culls the rest.",
+      "A Dispenser loaded with empty jars catches the monster in front of it when pulsed: handy beside a spawner."
+    ],
+    "related": [
+      "monster-cage",
+      "flooded-monster-cage",
+      "netherite-jar",
+      "monster-chow",
+      "one-block-farming"
+    ]
+  },
+  {
+    "id": "netherite-jar",
+    "name": "Netherite Jar",
+    "registry": [
+      "comedymonkeysaddons:netherite_jar"
+    ],
+    "summary": "The only jar that holds a Wither, and the only way to put one into a Netherite Monster Cage. Fireproof and blast-proof.",
+    "tags": [
+      "tool",
+      "farming"
+    ],
+    "stage": "end",
+    "requires": [
+      "iron-jar"
+    ],
+    "teach": {
+      "what": "An [[iron-jar]] smithed with netherite. It catches a Wither at any health, any time after it spawns.",
+      "why": "It's how a [[contained-wither|Wither]] gets into a [[netherite-monster-cage]], for Nether Stars without a boss fight every time.",
+      "when": "End game, when you have the Netherite cage built and a real FE grid to hold the field.",
+      "interacts": "A jarred Wither can only be let out into a Netherite Monster Cage, never into the world. A Deployer holding one can catch a Wither; a Dispenser does nothing with a full one.",
+      "mistakes": [
+        "Trying to release the Wither somewhere else. It only goes into a Netherite cage.",
+        "Catching a Wither before the cage has power. Build the grid first: the field takes 2,048 FE a tick from the moment a Wither is inside."
+      ]
+    },
+    "specs": [
+      [
+        "Catches",
+        "The Wither only"
+      ],
+      [
+        "Recipe",
+        "Smithing: Netherite Upgrade template, Iron Jar, netherite ingot"
+      ],
+      [
+        "Durability",
+        "Fireproof and blast-proof"
+      ],
+      [
+        "Stacks",
+        "Empty 16, full 1"
+      ]
+    ],
+    "obtain": [
+      "A smithing table: a Netherite Upgrade smithing template, an [[iron-jar]] and a netherite ingot."
+    ],
+    "uses": [
+      "Catch a Wither with it, then use the full jar on a [[netherite-monster-cage]]."
+    ],
+    "tips": [
+      "Fight the Wither near the cage, so you don't have to carry it far before the jar."
+    ],
+    "related": [
+      "contained-wither",
+      "netherite-monster-cage",
+      "iron-jar"
+    ]
+  },
+  {
+    "id": "monster-chow",
+    "name": "Monster Chow",
+    "registry": [
+      "comedymonkeysaddons:monster_chow"
+    ],
+    "summary": "What caged monsters eat: wheat flour, cinder flour and bone meal mixed in a Mixer, three at a time. Edible, badly.",
+    "tags": [
+      "food",
+      "farming"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "The running cost of every [[monster-cage|Monster Cage]]. Each new monster eats 1 (common Overworld monsters), 2 (Nether, End, ocean, pillager-type and modded ones), 4 (rare ones such as evokers, vindicators, ravagers, shulkers and elder guardians) or 64 (a Wither).",
+      "why": "A cage only brings in monsters while it has chow. Making it from milled ingredients keeps the farm honest: no caged monster drops wheat flour or cinder flour.",
+      "when": "With your first cage. You need a Millstone or Crushing Wheels for the flours and a Mixer.",
+      "interacts": "Wheat flour comes from milling wheat (an [[auto-harvester]] grows it), cinder flour from crushing netherrack (the [[netherite-dust]] line makes it anyway), bone meal from skeletons in a cage. Funnels and arms load it into a cage from any side.",
+      "mistakes": [
+        "Running a fast shaft on a thin chow supply. Faster rotation brings monsters in sooner and eats chow just as much faster.",
+        "Forgetting the multiplier. A Brass cage of blazes eats twice as fast as one of zombies, and takes twice as long per monster.",
+        "Eating it. It's like rotten flesh: 4 hunger with an 80% chance of Hunger."
+      ]
+    },
+    "specs": [
+      [
+        "Recipe",
+        "Mixer, no heat: Wheat Flour + Cinder Flour + Bone Meal = 3"
+      ],
+      [
+        "Chow per monster",
+        "1, 2, 4 or 64"
+      ],
+      [
+        "Stacks",
+        "64"
+      ]
+    ],
+    "obtain": [
+      "A Mechanical Mixer, no heat: 1 Wheat Flour, 1 Cinder Flour and 1 Bone Meal make 3."
+    ],
+    "uses": [
+      "Put it in a cage's bowl by hand, funnel or arm.",
+      "Eat it, if you must: 4 hunger, with an 80% chance of Hunger.",
+      "Each bite also has a 25% chance of a **Monster Belch** (a random monster's sound, heard by everyone near) and a 5% chance of **Chow Breath** (10 seconds of Nausea and a puff of green from your mouth)."
+    ],
+    "tips": [
+      "An Andesite cage of zombies at 64 RPM eats 180 chow an hour: 60 Mixer batches. Size your flour supply from that."
+    ],
+    "related": [
+      "monster-cage",
+      "flooded-monster-cage",
+      "netherite-monster-cage",
+      "fish-food",
+      "one-block-farming"
+    ]
+  },
+  {
+    "id": "fish-food",
+    "name": "Fish Food",
+    "registry": [
+      "comedymonkeysaddons:fish_food"
+    ],
+    "summary": "What Fish Tank creatures eat: wheat flour, dried kelp and bone meal mixed in a Mixer, four at a time.",
+    "tags": [
+      "food",
+      "farming"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Every adult in a [[fish-tank]] eats one Fish Food each time it breeds. Out in the world it breeds axolotls, as a Bucket of Tropical Fish does, and fish swim after you while you hold it.",
+      "why": "Tanks only breed while they have food (and water), so this is the tank's running cost.",
+      "when": "With your first Fish Tank.",
+      "interacts": "Wheat flour from milling wheat, dried kelp from smoking kelp (an [[auto-harvester]] grows kelp), bone meal from bones. Funnels load it into a tank from any side.",
+      "mistakes": [
+        "Expecting a full tank of 128 to run on a trickle. Every adult eats one each breeding, so a full tank eats a lot.",
+        "Giving tank creatures animal food. Tanks only take Fish Food."
+      ]
+    },
+    "specs": [
+      [
+        "Recipe",
+        "Mixer, no heat: Wheat Flour + Dried Kelp + Bone Meal = 4"
+      ],
+      [
+        "Stacks",
+        "64"
+      ]
+    ],
+    "obtain": [
+      "A Mechanical Mixer, no heat: 1 Wheat Flour, 1 Dried Kelp and 1 Bone Meal make 4."
+    ],
+    "uses": [
+      "Feed a [[fish-tank]]'s trough by hand, funnel or arm.",
+      "Breed wild axolotls with it, or lead fish around while you hold it."
+    ],
+    "tips": [
+      "A cod tank at its cap, culled every interval, eats about 770 Fish Food an hour at 64 RPM. Plan the Mixer to match."
+    ],
+    "related": [
+      "fish-tank",
+      "monster-chow",
+      "blue-axolotl",
+      "one-block-farming"
+    ]
+  },
+  {
+    "id": "intake",
+    "name": "Intake",
+    "registry": [
+      "comedymonkeysaddons:intake"
+    ],
+    "summary": "The fitting that makes a Fluid Line move fluid: clipped on the side that faces a tank, it draws that tank's fluid in. It replaces the pump.",
+    "tags": [
+      "fitting",
+      "fluids",
+      "lines"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Clip it onto the side of a [[fluid-lines|Fluid Line]] that faces a tank or machine, and it draws that block's fluid into the line. It's the only part of a line that moves fluid. It has a built-in filter: set it to one fluid and it draws only that.",
+      "why": "Without an Intake, a Fluid Line does nothing. With one, it carries fluid across the whole base with no pump and no stress.",
+      "when": "With your first Fluid Line.",
+      "interacts": "It only draws from containers: Create tanks, the [[fluid-wellspring]], machines and other mods' tanks. Two Intakes on one line share its throughput. It never delivers back into the block it draws from.",
+      "mistakes": [
+        "Clipping it on a side that doesn't face a tank: you'll get \"Fit the Intake on the side of the line that faces a tank\".",
+        "Expecting it to suck up a lava lake or the sea. It never draws from fluid in the world; that's still Create's pump and Hose Pulley's job.",
+        "Leaving the filter empty on a line where two sources could flow. Set each Intake to its own fluid so the line doesn't switch between them."
+      ]
+    },
+    "specs": [
+      [
+        "Fits",
+        "A straight Fluid Line, on the side facing a tank"
+      ],
+      [
+        "Filter",
+        "Right-click the line with a bucket; empty hand clears"
+      ],
+      [
+        "Recipe",
+        "Fluid Valve + Iron Sheet"
+      ]
+    ],
+    "obtain": [
+      "Shapeless crafting: a Create Fluid Valve and an Iron Sheet."
+    ],
+    "uses": [
+      "Right-click a straight piece of line with it, on the side that faces the source.",
+      "Right-click the fitted line with a bucket (or any fluid-holding item) to set the filter; with an empty hand to clear it.",
+      "The Wrench takes it off again."
+    ],
+    "tips": [
+      "It's the one costly part of a fluid run, since it uses a Fluid Valve. One per source is plenty."
+    ],
+    "facts": [
+      "Fitting your first earns Drinking Straw."
+    ],
+    "related": [
+      "fluid-lines",
+      "filter",
+      "valve",
+      "lines-and-networks"
+    ]
+  },
+  {
+    "id": "valve",
+    "name": "Valve",
+    "registry": [
+      "comedymonkeysaddons:valve"
+    ],
+    "summary": "A fitting that shuts a Fluid Line on a redstone signal, and throttles it in 10% steps with its wheel.",
+    "tags": [
+      "fitting",
+      "fluids",
+      "lines"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Clip it round a straight piece of [[fluid-lines|Fluid Line]]. A redstone signal shuts it. Right-click turns its wheel a tenth shut; sneak + right-click opens it a tenth.",
+      "why": "To stop a line when a tank is full, a machine is off, or you're working on it, and to share a source fairly between two lines by holding one back.",
+      "when": "When you first need control over a line. It costs a Fluid Valve and a copper sheet.",
+      "interacts": "Past a shut Valve the line's windows show empty. Pair it with a comparator on a tank, or a [[meter]], to switch on demand.",
+      "mistakes": [
+        "Using an empty hand when you meant to open it: plain right-click closes a step, sneak opens one.",
+        "Fitting it on a bend or a junction. Fittings go on straight pieces, one per block."
+      ]
+    },
+    "specs": [
+      [
+        "Fits",
+        "A straight Fluid Line"
+      ],
+      [
+        "Control",
+        "Redstone shuts it; wheel throttles 0 to 100% in 10% steps"
+      ],
+      [
+        "Recipe",
+        "Fluid Valve + Copper Sheet"
+      ]
+    ],
+    "obtain": [
+      "Shapeless crafting: a Create Fluid Valve and a Copper Sheet."
+    ],
+    "uses": [
+      "Right-click a straight piece of line with it.",
+      "Engineer's Goggles show how far open it is, or \"Valve shut by redstone\"."
+    ],
+    "related": [
+      "fluid-lines",
+      "intake",
+      "meter",
+      "lines-and-networks"
+    ],
+    "tips": [
+      "A comparator on the tank a line fills, wired to a Valve, shuts the line when the tank is full and saves the source for something else."
+    ]
+  },
+  {
+    "id": "filter",
+    "name": "Filter",
+    "registry": [
+      "comedymonkeysaddons:filter"
+    ],
+    "summary": "A fitting that lets one fluid past and nothing else: for sorting fluids part-way along a Fluid Line.",
+    "tags": [
+      "fitting",
+      "fluids",
+      "lines"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Clip it round a straight piece of [[fluid-lines|Fluid Line]] and set it with a bucket: only that fluid gets past it. Empty, it lets anything past.",
+      "why": "When one line could carry more than one fluid, Filters make sure each branch only ever gets its own.",
+      "when": "When you run two sources into one line, or protect a machine that must never get the wrong fluid.",
+      "interacts": "The [[intake]] has a filter of its own for the source end; the Filter works anywhere along the line. Past a Filter set to another fluid, the windows show empty.",
+      "mistakes": [
+        "Forgetting to set it. An empty Filter lets everything through: goggles say \"Filter lets anything past\".",
+        "Using a Filter where an Intake's own filter would do. If the source is the only place a fluid comes from, set the [[intake]] instead and save the part."
+      ]
+    },
+    "specs": [
+      [
+        "Fits",
+        "A straight Fluid Line"
+      ],
+      [
+        "Set",
+        "Right-click with a bucket or fluid-holding item; empty hand clears"
+      ],
+      [
+        "Recipe",
+        "Copper Sheet + Paper + Iron Bars"
+      ]
+    ],
+    "obtain": [
+      "Shapeless crafting: a Copper Sheet, Paper and Iron Bars."
+    ],
+    "uses": [
+      "Right-click a straight piece of line with it, then set it with a bucket."
+    ],
+    "related": [
+      "fluid-lines",
+      "intake",
+      "splitter",
+      "lines-and-networks"
+    ],
+    "tips": [
+      "One line can carry water to some machines and lava to others if each branch has a Filter set to its own fluid."
+    ]
+  },
+  {
+    "id": "meter",
+    "name": "Meter",
+    "registry": [
+      "comedymonkeysaddons:meter"
+    ],
+    "summary": "A fitting for Fluid or Power Lines whose needle shows the live flow through it. Comparators and Display Links read it.",
+    "tags": [
+      "fitting",
+      "lines",
+      "readouts"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "Clip it round a straight piece of [[fluid-lines|Fluid Line]] or [[power-lines|Power Line]]. Its dial shows what's flowing now; goggles give the figure in mB or FE a tick.",
+      "why": "It answers \"is anything moving, and how much?\" at a glance, and turns that into redstone.",
+      "when": "As soon as your lines get long enough that you can't see both ends.",
+      "interacts": "A comparator reads 0 to 15 by the fraction of the line's throughput that's flowing. Display Links read Meter Flow, Meter Load or a Meter Load Bar onto a board.",
+      "mistakes": [
+        "Reading the comparator as an amount. It's a fraction of the line's own throughput, so the same flow reads lower on brass than on copper.",
+        "Fitting it on a junction or a bend. Like every fitting except the power Splitter, it needs a straight piece."
+      ]
+    },
+    "specs": [
+      [
+        "Fits",
+        "A straight Fluid Line or Power Line"
+      ],
+      [
+        "Comparator",
+        "0 to 15 by load"
+      ],
+      [
+        "Display Link sources",
+        "Meter Flow, Meter Load, Meter Load Bar"
+      ],
+      [
+        "Recipe",
+        "Copper Ingot + Electron Tube + Glass"
+      ]
+    ],
+    "obtain": [
+      "Shapeless crafting: a Copper Ingot, an Electron Tube and Glass."
+    ],
+    "uses": [
+      "Right-click a straight piece of line with it.",
+      "Point a Display Link at it for a live flow board."
+    ],
+    "tips": [
+      "A Meter next to a generator's output tells you how close a copper line is to its 4,096 FE cap: time for brass when it reads near 15."
+    ],
+    "related": [
+      "fluid-lines",
+      "power-lines",
+      "readouts",
+      "lines-and-networks"
+    ]
+  },
+  {
+    "id": "splitter",
+    "name": "Splitter",
+    "registry": [
+      "comedymonkeysaddons:splitter"
+    ],
+    "summary": "Decides how a line shares: on a Fluid Line it sets Even, Nearest first or Round robin; on a Power Line junction it ranks the branches First, Second or Last.",
+    "tags": [
+      "fitting",
+      "lines"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "Two jobs in one item. On a Fluid Line it clips round a straight piece and decides how the ends beyond it share: evenly, nearest first, or one at a time in turn. On a Power Line it sits on a junction of three or four ways (floor, wall or ceiling) and ranks each branch First, Second or Last for when power runs short.",
+      "why": "Without one, a Fluid Line shares evenly and a Power Line shares evenly between its machines. When there isn't enough to go round, a Splitter decides who goes without.",
+      "when": "When a short supply starts stopping the wrong machines, or one tank should fill before the others.",
+      "interacts": "Power branches set First get everything they want before Second, then Last; branches on one level share evenly. Splitters further down a branch rank within it. Its dial points at the First branch (the fork mark when all are level).",
+      "mistakes": [
+        "Right-clicking a power Splitter to change it: that only works on Fluid Lines. A power Splitter's priorities are set in its screen, opened with a Wrench (sneak + Wrench takes it off).",
+        "Putting a power Splitter on a straight piece. It goes on a junction, a T or a cross.",
+        "Setting everything to First. All First is the same as all Second: even sharing."
+      ]
+    },
+    "specs": [
+      [
+        "Fluid modes",
+        "Even, Nearest first, Round robin"
+      ],
+      [
+        "Power priorities",
+        "First, Second (default), Last, per branch"
+      ],
+      [
+        "Recipe",
+        "Electron Tube + Brass Sheet"
+      ]
+    ],
+    "obtain": [
+      "Shapeless crafting: an Electron Tube and a Brass Sheet."
+    ],
+    "uses": [
+      "Fluid Line: right-click a straight piece with it, then right-click to cycle its mode.",
+      "Power Line: place it on a junction, then Wrench it for its screen. Each row shows a branch, what's down it, and its priority (or Power in)."
+    ],
+    "tips": [
+      "Put the [[netherite-monster-cage]] on a First branch. When power is short, the Withers' field should be the last thing to go dark."
+    ],
+    "related": [
+      "fluid-lines",
+      "power-lines",
+      "breaker",
+      "lines-and-networks",
+      "electricity"
+    ]
+  },
+  {
+    "id": "breaker",
+    "name": "Breaker",
+    "registry": [
+      "comedymonkeysaddons:breaker"
+    ],
+    "summary": "A switch for Power Lines: its lever or a redstone signal cuts the power, and it can join a brass run to a copper one.",
+    "tags": [
+      "fitting",
+      "power",
+      "lines"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "Clip it onto a straight piece of [[power-lines|Power Line]]. Right-click flips its lever; a redstone signal cuts it too. It's the Valve's twin for power.",
+      "why": "To switch whole circuits on and off, and to step a brass trunk down to copper without going through a pole.",
+      "when": "When you have more than one circuit, or want a machine room you can shut off.",
+      "interacts": "To join tiers, run the other tier up to it and wrench that wire's joint with it (same colour): brass then feeds copper through it while it's on, never the other way. The cable under its housing changes to show it.",
+      "mistakes": [
+        "Expecting copper to feed brass through it. Brass feeds copper only.",
+        "Trying to join two colours at a Breaker. Two colours never join."
+      ]
+    },
+    "specs": [
+      [
+        "Fits",
+        "A straight Power Line"
+      ],
+      [
+        "Control",
+        "Lever, or redstone"
+      ],
+      [
+        "Joins tiers",
+        "Brass to copper, once the joint is wrenched"
+      ],
+      [
+        "Recipe",
+        "Lever + Electron Tube"
+      ]
+    ],
+    "obtain": [
+      "Shapeless crafting: a Lever and an Electron Tube."
+    ],
+    "uses": [
+      "Right-click a straight piece of Power Line with it; right-click again to flip the lever."
+    ],
+    "related": [
+      "power-lines",
+      "line-post",
+      "splitter",
+      "lines-and-networks"
+    ],
+    "tips": [
+      "A Breaker with a lever is the quickest way to shut off a whole machine room while you rebuild it."
+    ]
+  },
+  {
+    "id": "bountiful",
+    "name": "Bountiful",
+    "registry": [],
+    "summary": "An enchantment for the Auto Harvester only, I to III: each level grows its plant 50% faster.",
+    "image": "icons/minecraft/enchanted_book.png",
+    "tags": [
+      "enchantment",
+      "farming"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Each level makes the [[auto-harvester]]'s plant grow 50% faster: 1.5x at I, 2x at II, 2.5x at III. The 4-second harvest itself doesn't change.",
+      "why": "The harvester always uses 512 SU and runs no faster with more speed, so Bountiful is the only way to speed it up.",
+      "when": "As soon as you have an Auto Harvester and a Librarian to trade with.",
+      "interacts": "Put it on the harvester item with an anvil; it stays when the harvester is broken and placed again. Its screen shows the level.",
+      "mistakes": [
+        "Looking for it in an enchanting table. Tables never offer it: buy the book from a Librarian.",
+        "Putting it on a pen or cage. The anvil refuses: each farm enchantment fits only its own machines."
+      ]
+    },
+    "specs": [
+      [
+        "Levels",
+        "I to III"
+      ],
+      [
+        "Bonus",
+        "+50% growing speed per level (config)"
+      ],
+      [
+        "Applies to",
+        "Auto Harvester"
+      ],
+      [
+        "Source",
+        "Librarian books"
+      ]
+    ],
+    "obtain": [
+      "Librarians: in their usual random enchanted-book trades, and as an extra Apprentice trade at a random level, priced like their own books (emeralds and a book).",
+      "Two books of the same level combine on an anvil into the next level, as vanilla books do."
+    ],
+    "uses": [
+      "Combine the book with an [[auto-harvester]] item on an anvil."
+    ],
+    "facts": [
+      "An Auto Harvester with Bountiful III earns Overgrown."
+    ],
+    "related": [
+      "auto-harvester",
+      "fruitful",
+      "monstrous",
+      "enchantments"
+    ],
+    "tips": [
+      "Bountiful matters most on trees: an 80-second sapling drops to 32 seconds at III."
+    ]
+  },
+  {
+    "id": "fruitful",
+    "name": "Fruitful",
+    "registry": [],
+    "summary": "An enchantment for the Animal Pens and Fish Tanks, I to III: each level breeds and grows the herd or school 50% faster.",
+    "image": "icons/minecraft/enchanted_book.png",
+    "tags": [
+      "enchantment",
+      "farming"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "Each level makes an [[animal-pen]] or [[fish-tank]] breed, and its young grow up, 50% faster: 1.5x, 2x and 2.5x.",
+      "why": "A pen breeds every five minutes at vanilla's pace. Fruitful III cuts that to two minutes, so a herd fills up in a fraction of the time.",
+      "when": "With your first pen or tank, once you've found a Librarian selling it.",
+      "interacts": "It works on the Animal Pen, Brass Animal Pen, Fish Tank and Brass Fish Tank, and stays on the block when it's broken. The pens' stress doesn't change; food is eaten faster, since breeding is.",
+      "mistakes": [
+        "Feeding a Fruitful pen as you fed a plain one. Faster breeding means faster eating: keep the trough topped up by funnel.",
+        "Putting it on a Monster Cage. Cages take [[monstrous]] instead."
+      ]
+    },
+    "specs": [
+      [
+        "Levels",
+        "I to III"
+      ],
+      [
+        "Bonus",
+        "+50% breeding and growing speed per level (config)"
+      ],
+      [
+        "Applies to",
+        "Animal Pens and Fish Tanks"
+      ],
+      [
+        "Source",
+        "Librarian books"
+      ]
+    ],
+    "obtain": [
+      "Librarians: random enchanted-book trades, and an extra Apprentice trade at a random level, for emeralds and a book."
+    ],
+    "uses": [
+      "Combine the book with a pen or tank item on an anvil."
+    ],
+    "facts": [
+      "An Animal Pen with Fruitful III earns Be Fruitful and Multiply."
+    ],
+    "related": [
+      "animal-pen",
+      "fish-tank",
+      "bountiful",
+      "monstrous",
+      "enchantments"
+    ],
+    "tips": [
+      "Put Fruitful on the Brass pen first: with 512 animals, every minute saved is a bigger litter."
+    ]
+  },
+  {
+    "id": "monstrous",
+    "name": "Monstrous",
+    "registry": [],
+    "summary": "An enchantment for every Monster Cage, I to III: each level makes monsters arrive 50% faster, Netherite cage included.",
+    "image": "icons/minecraft/enchanted_book.png",
+    "tags": [
+      "enchantment",
+      "farming"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "Each level makes new monsters arrive 50% faster in any [[monster-cage]]: 1.5x, 2x, 2.5x. Chow per monster and stress don't change.",
+      "why": "It's more drops from the same cage, without more rotation. On the [[netherite-monster-cage]] it takes Nether Stars from 3 an hour to 7.5 at Monstrous III and 256 RPM.",
+      "when": "Once a cage is running and you can keep up with its chow.",
+      "interacts": "It works on the Monster Cage, Brass Monster Cage, both Flooded cages and the Netherite cage, and stays when the cage is broken. Because monsters arrive faster, [[monster-chow|Monster Chow]] goes faster too.",
+      "mistakes": [
+        "Forgetting the chow bill. Monstrous III eats chow 2.5 times as fast.",
+        "Trying it on a pen or tank: the anvil refuses. Those take [[fruitful]]."
+      ]
+    },
+    "specs": [
+      [
+        "Levels",
+        "I to III"
+      ],
+      [
+        "Bonus",
+        "+50% arrival speed per level (config)"
+      ],
+      [
+        "Applies to",
+        "Every Monster Cage"
+      ],
+      [
+        "Source",
+        "Librarian books"
+      ]
+    ],
+    "obtain": [
+      "Librarians: random enchanted-book trades, and an extra Apprentice trade at a random level, for emeralds and a book."
+    ],
+    "uses": [
+      "Combine the book with a cage item on an anvil."
+    ],
+    "related": [
+      "monster-cage",
+      "netherite-monster-cage",
+      "fruitful",
+      "bountiful",
+      "enchantments"
+    ],
+    "tips": [
+      "On the Netherite cage, Monstrous III takes a Wither from every 20 minutes to every 8 at 256 RPM."
+    ]
+  }
+]

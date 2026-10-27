@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <title>Not found</title>
+  <!-- GitHub Pages serves this for any path that isn't a file: send /<repo>/machines/x to the codex's #/machines/x.
+       A project site lives under /<repo>/ on *.github.io; anywhere else (a custom domain) the site is at the root. -->
+  <script>
+    var parts = location.pathname.split('/').filter(Boolean);
+    var project = /\.github\.io$/.test(location.hostname) && parts.length ? parts.shift() : null;
+    var base = project ? '/' + project + '/' : '/';
+    location.replace(base + (parts.length ? '#/' + parts.join('/') : ''));
+  </script>
+</head>
+<body style="background:#101215;color:#d5d8dc;font:16px system-ui;padding:40px"><a href="./" style="color:#d9925f">Go to the codex</a></body>
+</html>
