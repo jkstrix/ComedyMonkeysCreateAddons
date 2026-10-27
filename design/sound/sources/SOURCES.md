@@ -98,3 +98,49 @@ Never add Minecraft's or other mods' sound files here.
 | `peek_click` | 2 | interface-sounds: tick_004.ogg | voice |
 | `relief_sigh` | 2 | rpg-audio: cloth3.ogg | servo, voice |
 | `shake_off` | 3 | casino-audio: dice-shake-2.ogg, casino-audio: dice-shake-3.ogg, impact-sounds: impactMetal_light_000.ogg, impact-sounds: impactMetal_light_001.ogg, impact-sounds: impactMetal_light_002.ogg, impact-sounds: impactMetal_light_003.ogg, impact-sounds: impactMetal_light_004.ogg | boing |
+
+
+## Monster Cage and Fish Tank (2026-10-27)
+
+Real-first ladder (`character-sound-designer` skill, Stage 2). **Rung 1, Minecraft's own** (referenced in game, never shipped; previews are copied from the local asset cache into git-ignored files only to audition them): the stored monster's ambient, the sweep, trident throw, drowned conversion, Wither spawn, eating, a monster's ambient for the belch, bubble pop, fish swim, bucket fill fish. **Rung 2, the project library**: Kenney Impact Sounds (`impactMetal_light`, `impactTin_medium`) and Interface Sounds (`glass_00x`). **Rung 3, new CC0 recordings**: BigSoundBank (all CC0, https://bigsoundbank.com), below; the segments used are cut by `design/sound/monster-cage/cuts.js` into `bigsoundbank/cuts/`. **Rung 4 (synth or AI): none used.**
+
+Not found on BigSoundBank, so made from the nearest real recording: kibble into a steel bowl (rice into a metal saucepan, cereal into a bowl, plus a Kenney metal ring); an aquarium air pump (a small air compressor and an electric pump, pitched up and low-passed); an air stone (a fermentation airlock); the containment field (transformer and neon hum).
+
+| File | Title | URL | Cuts used |
+|---|---|---|---|
+| 0026.ogg | electric-switch | https://bigsoundbank.com/electric-switch-s0026.html | switch_click (0.2-0.45 s) |
+| 0134.ogg | electric-shock | https://bigsoundbank.com/electric-shock-s0134.html | spark_shock_a (0.8-1.1 s), spark_shock_b (1.6-1.85 s), spark_shock_c (2.2-2.45 s) |
+| 0201.ogg | raw-rice-poured-into-a-saucepan | https://bigsoundbank.com/raw-rice-poured-into-a-saucepan-s0201.html | kibble_rice_pan (1.0-1.9 s) |
+| 0235.ogg | iron-bar-falls-2 | https://bigsoundbank.com/iron-bar-falls-2-s0235.html | bars_iron_clang (0-1.0 s) |
+| 0303.ogg | grinding-metal-gate-1 | https://bigsoundbank.com/grinding-metal-gate-1-s0303.html | bars_gate (0-1.2 s) |
+| 0378.ogg | lock-and-big-key | https://bigsoundbank.com/lock-and-big-key-s0378.html | lock_big_key (1.0-1.5 s) |
+| 0407.ogg | eat-a-rusk | https://bigsoundbank.com/eat-a-rusk-s0407.html | crunch_rusk (0.1-0.7 s) |
+| 0596.ogg | bones-cracking | https://bigsoundbank.com/bones-cracking-s0596.html | crunch_bones (2.2-2.8 s) |
+| 0686.ogg | yoghurt-pot | https://bigsoundbank.com/yoghurt-pot-s0686.html | lid_pot_a (0.2-0.6 s), lid_pot_b (0.6-1.0 s) |
+| 0709.ogg | electric-pump | https://bigsoundbank.com/electric-pump-s0709.html | loop_electric_pump (1-5 s) |
+| 0747.ogg | blow-on-hand | https://bigsoundbank.com/blow-on-hand-s0747.html | puff_blow_b (0.2-0.8 s) |
+| 0748.ogg | blow-on-piece | https://bigsoundbank.com/blow-on-piece-s0748.html | puff_blow_a (0.1-0.7 s) |
+| 0856.ogg | small-air-compressor | https://bigsoundbank.com/small-air-compressor-s0856.html | loop_air_compressor (5-9 s) |
+| 0952.ogg | short-welds | https://bigsoundbank.com/short-welds-s0952.html | spark_weld (2.7-3.1 s) |
+| 0995.ogg | wooden-stick-on-bars | https://bigsoundbank.com/wooden-stick-on-bars-s0995.html | bars_stick (3.1-3.9 s) |
+| 1252.ogg | electrical-fence | https://bigsoundbank.com/electrical-fence-s1252.html | loop_fence (0.5-6.5 s) |
+| 1432.ogg | eating-potato-chips-2 | https://bigsoundbank.com/eating-potato-chips-2-s1432.html | crunch_crisps (1.5-1.9 s) |
+| 1527.ogg | metal-mailbox-1 | https://bigsoundbank.com/metal-mailbox-1-s1527.html | hatch_mailbox_shut (0.2-0.8 s) |
+| 1528.ogg | metal-mailbox-2 | https://bigsoundbank.com/metal-mailbox-2-s1528.html | hatch_mailbox_open (0.1-0.6 s) |
+| 1539.ogg | barn-lock-unlocking | https://bigsoundbank.com/barn-lock-unlocking-s1539.html | lock_barn_unlock (0.1-0.8 s) |
+| 1540.ogg | barn-lock-locking | https://bigsoundbank.com/barn-lock-locking-s1540.html | lock_barn_lock (0.5-1.0 s) |
+| 1771.ogg | falling-sheet-steel-bar-1 | https://bigsoundbank.com/falling-sheet-steel-bar-1-s1771.html | crash_steel_b (0-0.8 s) |
+| 1776.ogg | fall-2-sheet-steel-bars-1 | https://bigsoundbank.com/fall-2-sheet-steel-bars-1-s1776.html | crash_steel_a (0-1.5 s) |
+| 2071.ogg | cereal-in-bowl-1 | https://bigsoundbank.com/cereal-in-bowl-1-s2071.html | kibble_cereal_b (0.9-1.8 s) |
+| 2072.ogg | cereal-in-bowl-2 | https://bigsoundbank.com/cereal-in-bowl-2-s2072.html | kibble_cereal_a (0.4-1.3 s) |
+| 2073.ogg | cereal-in-bowl-3 | https://bigsoundbank.com/cereal-in-bowl-3-s2073.html | flakes_cereal (0.2-0.8 s) |
+| 2118.ogg | neon-or-transformer-1 | https://bigsoundbank.com/neon-or-transformer-1-s2118.html | loop_neon (2-6 s) |
+| 2143.ogg | flashing-light-bulb-1 | https://bigsoundbank.com/flashing-light-bulb-1-s2143.html | flicker_bulb_a (0-0.4 s) |
+| 2144.ogg | flashing-light-bulb-2 | https://bigsoundbank.com/flashing-light-bulb-2-s2144.html | flicker_bulb_b (0-0.8 s) |
+| 2437.ogg | electric-transformer-4 | https://bigsoundbank.com/electric-transformer-4-s2437.html | loop_transformer (2-6 s) |
+| 2541.ogg | oogah-horn-2 | https://bigsoundbank.com/oogah-horn-2-s2541.html | klaxon_oogah_a (0-1.15 s) |
+| 2542.ogg | oogah-horn-3 | https://bigsoundbank.com/oogah-horn-3-s2542.html | klaxon_oogah_b (0-1.41 s) |
+| 2543.ogg | oogah-horn-4 | https://bigsoundbank.com/oogah-horn-4-s2543.html | klaxon_oogah_c (0-0.76 s) |
+| 3442.ogg | electric-strike-1 | https://bigsoundbank.com/electric-strike-1-s3442.html | strike_clunk (0-0.6 s) |
+| 3560.ogg | fermentation-airlock-1 | https://bigsoundbank.com/fermentation-airlock-1-s3560.html | loop_airlock_a (10-16 s) |
+| 3561.ogg | fermentation-airlock-2 | https://bigsoundbank.com/fermentation-airlock-2-s3561.html | loop_airlock_b (10-16 s) |

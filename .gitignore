@@ -36,3 +36,25 @@ design/sound/sources/epidemic/
 
 # the server paper test's state between runs
 design/tests/.line-paper-test.json
+# Minecraft's own sounds, copied from the local asset cache only to audition them on the soundboards (never committed or shipped)
+design/sound/sources/vanilla-preview/
+design/sound/monster-cage/placeholder/monster_grumble.wav
+design/sound/monster-cage/placeholder/cull.wav
+design/sound/monster-cage/placeholder/trident_throw.wav
+design/sound/monster-cage/placeholder/drowning.wav
+design/sound/monster-cage/placeholder/breakout.wav
+design/sound/monster-cage/placeholder/chow_eat.wav
+design/sound/monster-cage/placeholder/monster_belch.wav
+design/sound/fish-tank/placeholder/fish_birth.wav
+design/sound/fish-tank/placeholder/net_drop.wav
+design/sound/fish-tank/placeholder/scoop.wav
+design/sound/monster-cage/real/monster_grumble.ogg
+design/sound/monster-cage/real/cull.ogg
+design/sound/monster-cage/real/trident_throw.ogg
+design/sound/monster-cage/real/drowning.ogg
+design/sound/monster-cage/real/breakout.ogg
+design/sound/monster-cage/real/chow_eat.ogg
+design/sound/monster-cage/real/monster_belch.ogg
+design/sound/fish-tank/real/fish_birth.ogg
+design/sound/fish-tank/real/net_drop.ogg
+design/sound/fish-tank/real/scoop.ogg

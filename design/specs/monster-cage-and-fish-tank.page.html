@@ -7,7 +7,7 @@
 :root {
   --bg: #e6e6e1; --surface: #f2f2ee; --fg: #22231f; --muted: #5f6058; --line: #c9c8c0;
   --accent: #8a6626; --accent-soft: #e9dcc0; --iron: #4a4d50; --iron-hi: #5d6164;
-  --water: #3f6f84; --field: #6a5a86; --field-soft: #dcd6e6; --alarm: #a3412f;
+  --water: #3f6f84; --field: #3f6fa8; --field-soft: #d4e1f0; --alarm: #a3412f;
   --ok: #4c7a46; --warn: #a3712a;
   --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
   --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
@@ -16,12 +16,12 @@
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
   --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
-  --water: #6fa6bc; --field: #a796c4; --field-soft: #2c2737; --alarm: #d47a64;
+  --water: #6fa6bc; --field: #6fa6d6; --field-soft: #1f2c3a; --alarm: #d47a64;
   --ok: #84b07c; --warn: #d4a35a; color-scheme: dark } }
 :root[data-theme="dark"] {
   --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
   --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
-  --water: #6fa6bc; --field: #a796c4; --field-soft: #2c2737; --alarm: #d47a64;
+  --water: #6fa6bc; --field: #6fa6d6; --field-soft: #1f2c3a; --alarm: #d47a64;
   --ok: #84b07c; --warn: #d4a35a; color-scheme: dark }
 
 * { box-sizing: border-box }
@@ -135,7 +135,7 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
       <li>A sword or Deployer culls half.</li>
       <li>Water monsters need a Flooded cage and water.</li>
       <li>Netherite cage: Withers only, needs FE too.</li>
-      <li>Power fails near you: one Wither escapes, then daily.</li>
+      <li>Power fails: 5-minute warning, then Withers escape daily.</li>
       <li>New monsters never carry armour or weapons.</li>
       <li>Every number lives in the config.</li>
     </ul>
@@ -216,17 +216,17 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
 
   <section>
     <h2>Containment</h2>
-    <p class="sub">The Netherite cage's shaft runs the farm. Its FE holds the field: a flat 2,048 FE/t whenever any Wither is inside, plus up to 1,024 FE/t while it farms at full speed. Below that, the field is down.</p>
+    <p class="sub">The Netherite cage's shaft runs the farm. Its FE holds the field, shown as a blue glowing shield around the whole block that flickers when power runs short: a flat 2,048 FE/t whenever any Wither is inside, plus up to 1,024 FE/t while it farms at full speed. Below that, the field is down.</p>
     <div class="timeline">
-      <svg viewBox="0 0 680 170" role="img" aria-label="Timeline: the field drops, a 30-second klaxon, the first Wither escapes; then one more escapes every game day until the cage is empty. Power back at any point cancels and resets it.">
+      <svg viewBox="0 0 680 170" role="img" aria-label="Timeline: the field drops, a 5-minute warning, the first Wither escapes; then one more escapes every game day until the cage is empty. Power back at any point cancels and resets it.">
         <rect x="16" y="58" width="96" height="22" fill="var(--field-soft)" stroke="var(--field)"></rect>
         <text x="64" y="73" text-anchor="middle" class="lbl">field up</text>
         <rect x="112" y="58" width="90" height="22" fill="var(--alarm)" fill-opacity=".22" stroke="var(--alarm)"></rect>
-        <text x="157" y="73" text-anchor="middle" class="lbl">klaxon 30 s</text>
+        <text x="157" y="73" text-anchor="middle" class="lbl">warning 5 min</text>
         <rect x="202" y="58" width="168" height="22" fill="var(--surface)" stroke="var(--line)"></rect>
         <text x="286" y="73" text-anchor="middle" class="lbl dim">1 game day (20 min)</text>
         <rect x="370" y="58" width="90" height="22" fill="var(--alarm)" fill-opacity=".22" stroke="var(--alarm)"></rect>
-        <text x="415" y="73" text-anchor="middle" class="lbl">klaxon 30 s</text>
+        <text x="415" y="73" text-anchor="middle" class="lbl">warning 5 min</text>
         <rect x="460" y="58" width="168" height="22" fill="var(--surface)" stroke="var(--line)"></rect>
         <text x="544" y="73" text-anchor="middle" class="lbl dim">1 game day</text>
         <line x1="112" y1="40" x2="112" y2="98" stroke="var(--fg)" stroke-width="1.5"></line>
@@ -238,7 +238,7 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
         <text x="664" y="73" text-anchor="end" class="lbl">… empty</text>
         <path d="M157 84 Q157 122 40 122" fill="none" stroke="var(--ok)" stroke-width="1.5"></path>
         <text x="168" y="126" class="lbl dim">FE back at any point: countdown cancels, the clock resets</text>
-        <text x="16" y="156" class="lbl dim">The clock only runs with a player within 128 blocks and the chunk loaded.</text>
+        <text x="16" y="156" class="lbl dim">The clock stops whenever nobody is within 128 blocks, even if the chunk stays loaded.</text>
       </svg>
     </div>
     <p class="sub">Escaping Withers come out at the nearest open space, after the vanilla 10-second charge-up. Servers can turn escapes off; then the cage just stops.</p>
@@ -288,7 +288,8 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
       <div><b>…the cage is built into a wall?</b><span>The Wither comes out at the nearest open space.</span></div>
       <div><b>…the FE only covers part of it?</b><span>Farming stops first. Below 2,048 FE/t the field is down.</span></div>
       <div><b>…I break it to dodge an escape?</b><span>You can't. No breaking or emptying while the field is down.</span></div>
-      <div><b>…the chunk unloads mid-alarm?</b><span>The clock pauses. The klaxon restarts when it loads.</span></div>
+      <div><b>…everyone walks away mid-alarm?</b><span>The countdown stops, even chunk-loaded, and picks up where it left off when someone returns.</span></div>
+      <div><b>…who hears the warning?</b><span>Everyone within 128 blocks: chat at the start and each minute, a live hotbar countdown for the last 30 s.</span></div>
       <div><b>…my airship loses power?</b><span>A Wither escapes in mid-air.</span></div>
       <div><b>…I jar a zombie in diamond armour?</b><span>The copies arrive bare. Only its loot table drops.</span></div>
       <div><b>…I drop a full Iron Jar in lava?</b><span>The monster is lost. Netherite Jars can't burn or blow up.</span></div>
@@ -296,7 +297,10 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
       <div><b>…a Flooded cage runs dry?</b><span>It stops growing. The ones inside are fine.</span></div>
       <div><b>…I put a zombie in a Flooded cage?</b><span>It drowns into a drowned, and the cage makes drowned.</span></div>
       <div><b>…I stand in front of a drowned cage?</b><span>If one is armed, tridents fly out of the front every 3 s. Cull (armed go first) or stand aside.</span></div>
-      <div><b>…I want it faster?</b><span>Monstrous I–III, from Librarians, on any cage, Withers included.</span></div>
+      <div><b>…I want it faster?</b><span>Monstrous I–III, from Librarians, on any cage, Withers included. Fruitful stays on pens and tanks.</span></div>
+      <div><b>…I upgrade a cage with monsters in it?</b><span>Refused. Only empty cages and tanks upgrade.</span></div>
+      <div><b>…I use the wrong catcher?</b><span>Refused, with a hint: bottles for animals and fish, Iron Jars for monsters, Netherite Jars for the Wither.</span></div>
+      <div><b>…I eat Monster Chow?</b><span>Like rotten flesh. Sometimes you belch a monster's noise, or get green, nauseous Chow Breath.</span></div>
     </div>
   </section>
 
@@ -344,6 +348,7 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
       <div><b>…my pen already has axolotls?</b><span>It keeps them. New ones go to tanks.</span></div>
       <div><b>…only one fish is left?</b><span>It can't be culled or scooped.</span></div>
       <div><b>…I want a tadpole or dolphin tank?</b><span>The bottle refuses them.</span></div>
+      <div><b>…I hold Fish Food near water?</b><span>Fish swim after you, and it breeds axolotls in the wild.</span></div>
     </div>
   </section>
 

@@ -1,0 +1,35 @@
+{
+ "pump_loop": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/loop_air_compressor.wav",
+   "bigsoundbank/cuts/loop_electric_pump.wav"
+  ],
+  "synth": []
+ },
+ "bubbles_loop": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/loop_airlock_a.wav",
+   "bigsoundbank/cuts/loop_airlock_b.wav"
+  ],
+  "synth": []
+ },
+ "feeder_sprinkle": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/lid_pot_a.wav",
+   "bigsoundbank/cuts/lid_pot_b.wav",
+   "bigsoundbank/cuts/flakes_cereal.wav"
+  ],
+  "synth": []
+ },
+ "lid_feed": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/lid_pot_a.wav",
+   "bigsoundbank/cuts/lid_pot_b.wav"
+  ],
+  "synth": []
+ }
+}

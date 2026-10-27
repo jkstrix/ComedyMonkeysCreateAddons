@@ -1,0 +1,369 @@
+{
+  "namespace": "fish_tank",
+  "events": {
+    "pump_loop": {
+      "group": "Signature sounds",
+      "subtitle": "Aquarium pump hums",
+      "note": "Running loop: the staging bed (-36 LUFS), 8 blocks.",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.14,
+          "f": 100,
+          "dur": 2
+        },
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.05,
+          "f": 220,
+          "f2": 220,
+          "dur": 2,
+          "soft": true
+        },
+        {
+          "type": "thud",
+          "at": 0,
+          "gain": 0.05,
+          "f": 90,
+          "dur": 0.15
+        },
+        {
+          "type": "thud",
+          "at": 1,
+          "gain": 0.05,
+          "f": 90,
+          "dur": 0.15
+        }
+      ],
+      "real": {
+        "level": 0.0256,
+        "target": -46,
+        "variants": 2,
+        "post": {
+          "lowpass": 5000
+        },
+        "layers": [
+          {
+            "pick": [
+              "loop_air_compressor",
+              "loop_electric_pump"
+            ],
+            "gain": 1,
+            "pitch": 1.15
+          }
+        ]
+      }
+    },
+    "bubbles_loop": {
+      "group": "Signature sounds",
+      "subtitle": "Bubbles rise",
+      "layers": [
+        {
+          "type": "rustle",
+          "at": 0,
+          "gain": 0.05,
+          "density": 10,
+          "dur": 3
+        },
+        {
+          "type": "pop",
+          "at": 0.1,
+          "gain": 0.07,
+          "f": 600,
+          "dur": 0.07
+        },
+        {
+          "type": "pop",
+          "at": 0.35,
+          "gain": 0.09000000000000001,
+          "f": 751,
+          "dur": 0.07
+        },
+        {
+          "type": "pop",
+          "at": 0.7,
+          "gain": 0.11000000000000001,
+          "f": 902,
+          "dur": 0.07
+        },
+        {
+          "type": "pop",
+          "at": 1,
+          "gain": 0.07,
+          "f": 1053,
+          "dur": 0.07
+        },
+        {
+          "type": "pop",
+          "at": 1.3,
+          "gain": 0.09000000000000001,
+          "f": 704,
+          "dur": 0.07
+        },
+        {
+          "type": "pop",
+          "at": 1.55,
+          "gain": 0.11000000000000001,
+          "f": 855,
+          "dur": 0.07
+        },
+        {
+          "type": "pop",
+          "at": 1.9,
+          "gain": 0.07,
+          "f": 1006,
+          "dur": 0.07
+        },
+        {
+          "type": "pop",
+          "at": 2.2,
+          "gain": 0.09000000000000001,
+          "f": 657,
+          "dur": 0.07
+        },
+        {
+          "type": "pop",
+          "at": 2.5,
+          "gain": 0.11000000000000001,
+          "f": 808,
+          "dur": 0.07
+        },
+        {
+          "type": "pop",
+          "at": 2.75,
+          "gain": 0.07,
+          "f": 959,
+          "dur": 0.07
+        }
+      ],
+      "real": {
+        "level": 0.1393,
+        "target": -39,
+        "variants": 2,
+        "layers": [
+          {
+            "pick": [
+              "loop_airlock_a",
+              "loop_airlock_b"
+            ],
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "feeder_sprinkle": {
+      "group": "Signature sounds",
+      "subtitle": "Fish Food sprinkles in",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.15,
+          "dur": 0.04
+        },
+        {
+          "type": "rustle",
+          "at": 0.05,
+          "gain": 0.1,
+          "density": 28,
+          "dur": 0.5
+        },
+        {
+          "type": "pop",
+          "at": 0.25,
+          "gain": 0.05,
+          "f": 900,
+          "dur": 0.05
+        },
+        {
+          "type": "pop",
+          "at": 0.4,
+          "gain": 0.04,
+          "f": 1100,
+          "dur": 0.05
+        }
+      ],
+      "real": {
+        "level": 0.4159,
+        "target": -32,
+        "variants": 2,
+        "vary": {
+          "pitch": 0.05
+        },
+        "layers": [
+          {
+            "pick": [
+              "lid_pot_a",
+              "lid_pot_b"
+            ],
+            "gain": 0.8
+          },
+          {
+            "src": "flakes_cereal",
+            "at": 0.08,
+            "gain": 0.6,
+            "lowpass": 5000
+          }
+        ]
+      }
+    },
+    "fish_birth": {
+      "group": "Life in the tank",
+      "subtitle": "New fish",
+      "vanilla": {
+        "file": "block/bubble_column/bubble1",
+        "event": "block.bubble_column.bubble_pop",
+        "gain": 0.7
+      },
+      "layers": [
+        {
+          "type": "pop",
+          "at": 0,
+          "gain": 0.15,
+          "f": 700,
+          "dur": 0.1
+        }
+      ]
+    },
+    "net_drop": {
+      "group": "Life in the tank",
+      "subtitle": "Catch drops into the net",
+      "vanilla": {
+        "file": "entity/fish/swim1",
+        "event": "entity.fish.swim (a small splash)",
+        "gain": 0.5
+      },
+      "layers": [
+        {
+          "type": "pop",
+          "at": 0,
+          "gain": 0.12,
+          "f": 380,
+          "dur": 0.12
+        },
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.06,
+          "f": 1800,
+          "dur": 0.15
+        }
+      ]
+    },
+    "scoop": {
+      "group": "Life in the tank",
+      "subtitle": "Fish scooped up",
+      "vanilla": {
+        "file": "item/bucket/fill_fish1",
+        "event": "item.bucket.fill_fish",
+        "gain": 0.8
+      },
+      "layers": [
+        {
+          "type": "whoosh",
+          "at": 0,
+          "gain": 0.15,
+          "f": 400,
+          "f2": 900,
+          "dur": 0.3
+        }
+      ]
+    },
+    "lid_feed": {
+      "group": "Life in the tank",
+      "subtitle": "Feeder hatch",
+      "layers": [
+        {
+          "type": "clack",
+          "at": 0,
+          "gain": 0.15,
+          "f": 600,
+          "dur": 0.1
+        },
+        {
+          "type": "click",
+          "at": 0.12,
+          "gain": 0.1,
+          "dur": 0.04
+        }
+      ],
+      "real": {
+        "level": 0.4207,
+        "target": -32,
+        "variants": 2,
+        "vary": {
+          "pitch": 0.05
+        },
+        "layers": [
+          {
+            "pick": [
+              "lid_pot_a",
+              "lid_pot_b"
+            ],
+            "gain": 1
+          }
+        ]
+      }
+    }
+  },
+  "clips": {
+    "life": [
+      [
+        0,
+        "pump_loop"
+      ],
+      [
+        0,
+        "bubbles_loop"
+      ],
+      [
+        0,
+        "feeder_sprinkle"
+      ],
+      [
+        2,
+        "pump_loop"
+      ],
+      [
+        2,
+        "net_drop"
+      ],
+      [
+        3,
+        "bubbles_loop"
+      ],
+      [
+        4,
+        "pump_loop"
+      ],
+      [
+        4,
+        "feeder_sprinkle"
+      ],
+      [
+        4,
+        "net_drop"
+      ],
+      [
+        6,
+        "pump_loop"
+      ],
+      [
+        6,
+        "net_drop"
+      ],
+      [
+        6,
+        "bubbles_loop"
+      ]
+    ],
+    "pump": [
+      [
+        0,
+        "pump_loop"
+      ]
+    ]
+  }
+}

@@ -1,0 +1,170 @@
+{
+ "bars_rattle": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/bars_gate.wav",
+   "bigsoundbank/cuts/bars_stick.wav",
+   "bigsoundbank/cuts/bars_iron_clang.wav"
+  ],
+  "synth": []
+ },
+ "chow_pour": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/kibble_rice_pan.wav",
+   "bigsoundbank/cuts/kibble_cereal_a.wav",
+   "bigsoundbank/cuts/kibble_cereal_b.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "arrival": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/crunch_bones.wav",
+   "bigsoundbank/cuts/crunch_rusk.wav",
+   "bigsoundbank/cuts/crunch_crisps.wav",
+   "bigsoundbank/cuts/bars_iron_clang.wav",
+   "bigsoundbank/cuts/bars_gate.wav"
+  ],
+  "synth": []
+ },
+ "jar_in": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/lock_barn_lock.wav",
+   "bigsoundbank/cuts/lock_big_key.wav",
+   "kenney-interface-sounds/Audio/glass_002.ogg",
+   "kenney-interface-sounds/Audio/glass_003.ogg"
+  ],
+  "synth": []
+ },
+ "jar_out": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/lock_barn_unlock.wav",
+   "bigsoundbank/cuts/strike_clunk.wav",
+   "kenney-interface-sounds/Audio/glass_005.ogg",
+   "kenney-interface-sounds/Audio/glass_006.ogg"
+  ],
+  "synth": []
+ },
+ "drop_tray": {
+  "variants": 4,
+  "sources": [
+   "kenney-impact-sounds/Audio/impactTin_medium_000.ogg",
+   "kenney-impact-sounds/Audio/impactTin_medium_001.ogg",
+   "kenney-impact-sounds/Audio/impactTin_medium_002.ogg",
+   "kenney-impact-sounds/Audio/impactTin_medium_003.ogg",
+   "kenney-impact-sounds/Audio/impactTin_medium_004.ogg"
+  ],
+  "synth": []
+ },
+ "bubbles_loop": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/loop_airlock_a.wav",
+   "bigsoundbank/cuts/loop_airlock_b.wav"
+  ],
+  "synth": []
+ },
+ "hatch_open": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/hatch_mailbox_open.wav"
+  ],
+  "synth": []
+ },
+ "hatch_shut": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/hatch_mailbox_shut.wav"
+  ],
+  "synth": []
+ },
+ "field_hum": {
+  "variants": 2,
+  "sources": [
+   "generated/sa3_field_hum_loop_raw.wav",
+   "generated/sa3_field_hum_loop_clean.wav"
+  ],
+  "synth": []
+ },
+ "field_up": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/switch_click.wav",
+   "generated/sa3_field_hum_v2_clean.wav",
+   "bigsoundbank/cuts/spark_weld.wav"
+  ],
+  "synth": []
+ },
+ "field_flicker": {
+  "variants": 4,
+  "sources": [
+   "bigsoundbank/cuts/spark_shock_a.wav",
+   "bigsoundbank/cuts/spark_shock_b.wav",
+   "bigsoundbank/cuts/spark_shock_c.wav",
+   "bigsoundbank/cuts/flicker_bulb_a.wav"
+  ],
+  "synth": []
+ },
+ "field_down": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/strike_clunk.wav",
+   "bigsoundbank/cuts/spark_weld.wav",
+   "generated/sa3_field_hum_v2_clean.wav"
+  ],
+  "synth": []
+ },
+ "klaxon": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/klaxon_oogah_a.wav",
+   "bigsoundbank/cuts/klaxon_oogah_b.wav",
+   "bigsoundbank/cuts/klaxon_oogah_c.wav"
+  ],
+  "synth": []
+ },
+ "jar_catch": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/puff_blow_a.wav",
+   "bigsoundbank/cuts/puff_blow_b.wav",
+   "bigsoundbank/cuts/lock_barn_lock.wav",
+   "kenney-interface-sounds/Audio/glass_002.ogg",
+   "kenney-interface-sounds/Audio/glass_004.ogg"
+  ],
+  "synth": []
+ },
+ "chow_breath": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/puff_blow_a.wav",
+   "bigsoundbank/cuts/puff_blow_b.wav"
+  ],
+  "synth": []
+ },
+ "cage_burst": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/strike_clunk.wav",
+   "bigsoundbank/cuts/crash_steel_a.wav",
+   "bigsoundbank/cuts/crash_steel_b.wav"
+  ],
+  "synth": []
+ },
+ "field_cutout": {
+  "variants": 2,
+  "sources": [
+   "generated/sa3_field_hum_cutout_raw.wav",
+   "generated/sa3_field_hum_cutout_clean.wav"
+  ],
+  "synth": []
+ }
+}

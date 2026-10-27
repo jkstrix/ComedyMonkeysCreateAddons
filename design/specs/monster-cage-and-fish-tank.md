@@ -1,6 +1,6 @@
 # Monster Cage & Fish Tank: Systems Spec
 
-Status: ready for development, both blocks (looks to be designed)  ·  Related: [Animal Pen dossier](../dossiers/animal-pen.md), [Animal Pen brief](../briefs/animal-pen.md), brief to come (`design/briefs/monster-cage.md`), quick read `monster-cage-and-fish-tank.page.html`
+Status: ready for development, both blocks (looks to be designed)  ·  Related: [Animal Pen dossier](../dossiers/animal-pen.md), [Animal Pen brief](../briefs/animal-pen.md), briefs [Monster Cage](../briefs/monster-cage.md) and [Fish Tank](../briefs/fish-tank.md), quick read `monster-cage-and-fish-tank.page.html`
 
 ## Concept
 
@@ -26,7 +26,7 @@ Clarified: the Animal Pen's counterpart for hostile mobs. Catch one monster in a
 | D12 | The Wither | The **Netherite Monster Cage** holds the **Wither boss**, caught in a Netherite Jar. It needs **both rotation (SU) and Forge Energy (FE)** to contain and farm him | user, round 3 |
 | D13 | Rare mobs | Evoker, vindicator, ravager, shulker and elder guardian go in the **Brass** cage with the Nether and End monsters. The Warden and the Ender Dragon are never caged | user, round 3; Warden and Dragon carried over from the round 2 recommendation |
 | D14 | Chow | A **new item, Monster Chow** (first called a lure) made from cheap things you get from **milling**; monsters from higher tiers need **more chow** for each new one | user, round 3 |
-| D15 | Containment | The Netherite cage's rotation runs the farm and its FE holds a containment field. With FE short, a klaxon sounds and a **30-second countdown** shows on goggles, the comparator and Display Links; then **one Wither breaks out** at full health and the rest stay in. A server config option turns escapes off (the cage just stops) | user, round 4 |
+| D15 | Containment | The Netherite cage's rotation runs the farm and its FE holds a containment field. With FE short, a klaxon sounds and a **5-minute countdown** (revised from 30 s, D74) shows on goggles, the comparator and Display Links and is announced to players nearby (D75); then **one Wither breaks out** at full health and the rest stay in. A server config option turns escapes off (the cage just stops) | user, round 4 |
 | D16 | Netherite cage contents | **Only the Wither.** The Brass cage stays the best cage for everything else | user, round 4 |
 | D17 | Wither cost | Each new Wither costs **chow only** (no skulls or soul sand). Nether Stars become cheaper than in vanilla, so the chow count, the rate, the cap and the FE upkeep are what limit them | user, round 4 |
 | D18 | Growth | **Steady rate**: one new monster per interval while there's chow and room, however many are already in | user, round 4 |
@@ -50,13 +50,13 @@ Clarified: the Animal Pen's counterpart for hostile mobs. Catch one monster in a
 | D35 | Teaching | Ponder: "Monster Cages" (catch, Monster Chow, shaft, speed, cull, Deployer, tiers) and "Containment" (FE, alarm, escape). Advancements: first caged monster, first caged Wither | defaults approved, round 5 |
 | D36 | Escape details | An escape happens out of the cage's front with vanilla's 10-second summoning charge-up, then its blast. FE returning during the countdown cancels it. **If the field stays down, another Wither escapes every game day until the cage is empty** (revised: the first version let the rest stay in for good) | derived from D15; revised by the user 2026-10-27 ("if you don't fix it more will escape every game day until it's empty") |
 | D37 | Idle | No stress while empty, full, out of chow or overstressed; the Netherite field keeps drawing its holding FE whenever it holds a Wither, even when idle | derived from D4 and D20 |
-| D38 | Escape clock | With the field still down, the next Wither escapes **a game day (24,000 ticks) after the previous escape**, each with its own 30-second klaxon first. Goggles show "next escape in mm:ss". FE back at any point resets it all | user, what-if round 1 |
+| D38 | Escape clock | With the field still down, the next Wither escapes **a game day (24,000 ticks) after the previous escape**; its 5-minute warning (klaxon and messages) is the **last 5 minutes of that day** (D77). Goggles show "next escape in mm:ss". FE back at any point resets it all | user, what-if round 1; warning revised 2026-10-27 |
 | D39 | Brownout | The field cost is flat (D20), so it's all or nothing: below the field cost, the field is down. Farming FE is shed first, so the cage stops farming before the countdown starts | user, what-if round 1 (follows from D20) |
-| D40 | Unloaded while down | The escape clock pauses while the chunk is unloaded. Loaded again, the klaxon restarts from 30 s, so a Wither never comes out unheard | user, what-if round 1 |
+| D40 | Unloaded while down | The countdown and the escape clock pause while the chunk is unloaded and **resume where they stopped** when it loads with a player near (D44, D76) | user, what-if round 1; revised 2026-10-27 |
 | D41 | Breaking mid-alarm | The Netherite cage **can't be broken** (or have its jar taken out) during a countdown or while its field is down. At other times breaking culls the extras into Nether Stars (D29) | user, what-if round 1 |
 | D42 | Field numbers | The field takes **2,048 FE/t** whenever any Wither is inside; farming adds **up to 1,024 FE/t** at 256 RPM, scaling with speed (3,072 FE/t flat out). Buffer **200,000 FE** | user, what-if round 2 |
 | D43 | Blocked front | An escaping Wither comes out at the **nearest open space** big enough for it around the cage | user, what-if round 2 |
-| D44 | Nobody home | Escapes happen **only with a player within 128 blocks**; until then the klaxon stays off and the escape clock holds. When a player comes back with the field still down, the klaxon starts and an overdue Wither comes out 30 s later (a little mean, not very) | user, what-if round 2 ("Should only escape when a player is near, I don't want to be too mean (well maybe a little mean)"); 128-block range approved in Fish Tank round 3 |
+| D44 | Nobody home | Escapes happen **only with a player within 128 blocks**. With nobody near, the countdown and the escape clock **stop, even if the chunk is kept loaded**, and the klaxon is silent; when a player comes back they resume where they stopped, with a fresh announcement of the time left (D76). Nothing is ever overdue | user, what-if round 2 ("Should only escape when a player is near, I don't want to be too mean (well maybe a little mean)"); 128-block range approved in Fish Tank round 3 |
 | D45 | Airships | On Create Aeronautics physics objects the Netherite cage works with real rotation and FE, like the Pressure Crucible; if the ship's power fails, Withers escape in mid-air | user, what-if round 2 |
 | D46 | Owner | The Netherite cage remembers who placed it: only they and their team can wrench or break it. Lines and generators aren't protected | user, what-if round 3 |
 | D47 | Release | An Iron Jar's monster can be let out anywhere (not on Peaceful, D30) | user, what-if round 3 |
@@ -74,6 +74,19 @@ Clarified: the Animal Pen's counterpart for hostile mobs. Catch one monster in a
 | D60 | Drowned tridents | A slim chance: each new drowned has vanilla's 6.25% chance of holding a trident, and a culled one drops it at vanilla's 8.5% (+1% per Looting level), damaged as in vanilla. About 1 trident in 160–190 drowned culled | user, 2026-10-27 ("drowned should have a chance to have tridents (slim)"); odds proposed from vanilla |
 | D61 | Armed drowned | While a Flooded cage holds at least one armed drowned, it **throws a real trident out of its front** at the nearest player within 16 blocks in sight, at most every 3 seconds however many are armed. Vanilla damage (about 4 hearts); shields block it; the thrown trident can't be picked up and vanishes, as vanilla drowned tridents do. A cull takes armed drowned first; behind or beside the cage is safe; Deployers aren't targeted; nothing is thrown on Peaceful. Goggles show "Armed: n" | user, 2026-10-27 ("but if they do they will throw it at players") and follow-up round |
 | D59 | Monstrous on Withers | Every cage takes it, **the Netherite cage too**: up to 7.5 Nether Stars an hour at Monstrous III and 256 RPM | user, enchantment round |
+| D62 | Upgrading | Only **empty** cages and tanks can be upgraded (Andesite → Brass, dry → Flooded, Fish Tank → Brass Fish Tank); the recipe refuses a cage holding a jar, monsters, chow or output | user, final sweep |
+| D63 | Catchers | Strict split: the **Capture Bottle** takes animals and water creatures, the **Iron Jar** monsters, the **Netherite Jar** the Wither. The wrong one is refused with a hint naming the right one | user, final sweep |
+| D64 | Bottle automation | Deployers and Dispensers catch and release with the Capture Bottle too, the same as with jars | user, final sweep |
+| D65 | Eating and using | **Monster Chow is edible, badly** (like rotten flesh, with a chance of a fun effect: final sweep round 2). **Fish Food works in the world**: it breeds axolotls as a Bucket of Tropical Fish does, and fish swim after a player holding it | user, final sweep ("Chow is edible badly, has chance for other fun effect") |
+| D66 | Eating Monster Chow | Like rotten flesh: 4 hunger, 80% chance of Hunger. Plus a 25% chance of a **Monster Belch** (a random monster's ambient sound from the player, heard by others: zombie groan, creeper hiss, ghast wail…) and a 5% chance of **Chow Breath** (Nausea for 10 s and a puff of green particles from the mouth) | user, final sweep round 2; chances proposed |
+| D67 | Enchantments | Each to its own: **Fruitful** on Animal Pens and Fish Tanks, **Monstrous** on every Monster Cage, **Bountiful** on the Auto Harvester; an anvil refuses the others | user, final sweep round 2 |
+| D68 | Display Links | Every cage and tank can show its count and status ("Blaze: 112 / 256 · next in 14 s", "Needs chow"), plus water on Flooded cages and tanks; the Netherite cage adds containment and the escape clock | user, final sweep round 2 (replaces the Netherite-only line in D34) |
+| D69 | Stack sizes | Empty Iron and Netherite Jars stack to 16; filled jars and bottles to 1; Monster Chow and Fish Food to 64. The empty Capture Bottle stays at 64, as it already ships (cutting it would shrink players' stacks) | user, final sweep round 2; Capture Bottle kept at its released size |
+| D74 | Warning length | The countdown before a Wither escapes is **5 minutes** (6,000 ticks), "that gives you enough time to fix it"; FE back at any point cancels it | user, 2026-10-27 |
+| D75 | Warning messages | Broadcast to **every player within 128 blocks**: a chat message when it starts ("Containment failing at x, y, z! A Wither breaks out in 5:00"), chat reminders at 4, 3, 2 and 1 minutes and at 30 s, and a live countdown on the action bar in the last 30 s. A chat message when the power comes back ("Containment restored at x, y, z") and when a Wither escapes | user, 2026-10-27 ("they should broadcast to all local players"); format approved |
+| D76 | Leaving stops it | If no player is within 128 blocks, the countdown (and the escape clock) **stops, even with the chunk loaded**, and resumes where it stopped when a player returns | user, 2026-10-27 ("If players leave the area the timer stops (even if chunk loaded)") |
+| D77 | Klaxon rhythm | Bursts that speed up: three blasts when the countdown starts, then three every 30 s, every 10 s in the last minute, and continuously (every 1.6 s) in the last 10 s; silent while paused | user, 2026-10-27 |
+| D70 | Shield | While its field is up, the Netherite cage shows a **blue glowing shield around the whole block**; it flickers and cracks while short of FE and vanishes when the field is down. Look details in the brief | user, 2026-10-27 ("Netherite one should have a blue glowing shield around it when it's powered with FE") |
 
 ## Open Questions
 
@@ -101,7 +114,7 @@ Parked for later versions:
 6. **Culling**: a sword (a player's or a Deployer's) culls round(n/2), always leaving one. The drops come from the monster's own loot table as if a player killed it (Looting and Fire Aspect count); XP goes only to a real player (D28); each cull costs 1 sword durability.
 7. **Output**: 9 slots (Brass 18), emptied from any face by automation or by an empty-hand click. What doesn't fit is thrown out of the front.
 8. **Netherite field**: FE comes in on any face but the back, from Power Lines or any FE source, into a 200,000 FE buffer. Whenever the cage holds a Wither the field draws a flat **2,048 FE/t**; farming adds up to **1,024 FE/t** at 256 RPM, scaled by speed (D42). Short of FE, the farming draw is shed first.
-9. **Field down**: below the field cost, with a player within 128 blocks, a klaxon sounds and a 30-second countdown starts (goggles, comparator 15, Display Links). FE back in time cancels it. At zero, one Wither comes out at the nearest open space around the cage, with the vanilla charge-up and blast, at full health. While the field stays down the cage stops, and another Wither escapes a game day later (each with its own klaxon) until it's empty. The clock holds while no player is near (D44) and while the chunk is unloaded (D40); an overdue escape goes 30 s after the klaxon restarts. The config option `escapes = false` makes the cage just stop.
+9. **Field down**: below the field cost, with a player within 128 blocks, a 5-minute countdown starts: the klaxon sounds in bursts that speed up (D77), players within 128 blocks get chat messages and, in the last 30 s, a live action-bar countdown (D75), and goggles, the comparator (15) and Display Links show it. FE back in time cancels it. At zero, one Wither comes out at the nearest open space around the cage, with the vanilla charge-up and blast, at full health. While the field stays down the cage stops, and another Wither escapes a game day later, its 5-minute warning being the last 5 minutes of that day, until it's empty. The countdown and the clock stop whenever no player is within 128 blocks, even with the chunk loaded, and while it's unloaded, and resume where they stopped (D40, D76). The config option `escapes = false` makes the cage just stop.
 10. **Owner and breaking**: the Netherite cage belongs to whoever placed it (and their team): only they can wrench or break it, and not even they during a countdown or while the field is down (D41, D46).
 11. **Wrench screen**: the jar slot, Monster Chow slots, growth gauge (time per monster at the current speed), output and horde count; Flooded adds the water gauge; Netherite adds the FE bar, the containment state and the escape clock. Quick-move buttons and the mouse wheel work on the output.
 12. **Monstrous** I–III divides the interval by 1 + 0.5 × level, on every cage (D58, D59).
@@ -214,7 +227,7 @@ A shaft-driven box that keeps a horde of one kind of monster and turns Monster C
 - New monsters arrive bare: no armour, weapons or names (drowned: a slim trident chance).
 - Jarred Withers only go into a Netherite cage.
 - Netherite field: a flat 2,048 FE/t, plus up to 1,024 while farming.
-- Field down: 30 s klaxon, then one Wither escapes; another every game day.
+- Field down: 5-minute warning to everyone nearby, then one Wither escapes; another every game day.
 - Escapes only happen with a player within 128 blocks.
 - Only the owner can break a Netherite cage, and never mid-alarm.
 
@@ -223,9 +236,9 @@ A shaft-driven box that keeps a horde of one kind of monster and turns Monster C
 - Cage broken: the cage, jar, Monster Chow and output drop; the extras are culled into drops.
 - Netherite cage broken during an alarm: refused; fix the power first.
 - FE back mid-countdown: the countdown cancels and the clock resets.
-- Field down and nobody near: nothing happens until a player comes within 128 blocks.
+- Field down and nobody near: nothing counts down until a player comes within 128 blocks.
 - Cage built into a wall: the Wither comes out at the nearest open space.
-- Chunk unloads while the field is down: the clock pauses; the klaxon restarts on load.
+- Everyone walks away while the field is down: the countdown stops, even chunk-loaded, and resumes when someone returns.
 - Ship loses power mid-flight: a Wither escapes in the air.
 - Out of chow (or water): it stops and takes no stress.
 - Peaceful: it holds, with no growth, no escapes, no releases and no trident throws.
@@ -235,7 +248,7 @@ A shaft-driven box that keeps a horde of one kind of monster and turns Monster C
 
 - [ ] Blocks: Andesite, Brass and Netherite Monster Cage, plus Flooded Andesite and Flooded Brass (one block class, tier enum, flooded flag), BlockItems, loot tables that keep contents
 - [ ] Block entity: horde, progress by speed, Monster Chow, water (Flooded), output, culling, per-RPM stress with idle at 0, saving
-- [ ] Netherite: FE capability (all faces but the back), 200,000 FE buffer, flat field draw and speed-scaled farming draw, countdown, daily escape clock, player-near check, nearest-open-space escape with summoning charge-up, `escapes` config
+- [ ] Netherite: FE capability (all faces but the back), 200,000 FE buffer, flat field draw and speed-scaled farming draw, 5-minute countdown and daily escape clock that both stop with no player within 128 blocks (even chunk-loaded) and resume where they stopped, chat and action-bar warnings to every player within 128 blocks (D75), the klaxon rhythm (D77), nearest-open-space escape with summoning charge-up, `escapes` config
 - [ ] Netherite owner (placer and team), wrench and break checks, no breaking or emptying while the field is down
 - [ ] Items: Iron Jar, Netherite Jar (filled states, tooltip naming the monster, the monster drawn inside, Netherite fireproof and blast-proof), Monster Chow
 - [ ] Catching and releasing by hand, Deployer and Dispenser (Withers: catch only; release only into cages; no releases on Peaceful)
@@ -252,10 +265,12 @@ A shaft-driven box that keeps a horde of one kind of monster and turns Monster C
 - [ ] Config section "Monster Cages" with every number in D23, D24, D42, D44, D52
 - [ ] Sounds through the sound workflow: muffled growls, cull, chow eaten, klaxon, escape; subtitles
 - [ ] Ponder: "Monster Cages" and "Containment"; JEI info pages for tiers and chow costs
-- [ ] Monstrous enchantment (I–III, every cage, anvil only, kept when broken, Librarian trades)
+- [ ] Monstrous enchantment (I–III, every cage, anvil only, kept when broken, Librarian trades); anvils refuse the wrong farm enchantment (D67)
+- [ ] Monster Chow food and its Belch and Chow Breath effects (D66)
+- [ ] Display Link sources on every cage (D68); upgrade recipes refuse non-empty cages (D62); strict catcher split with hints (D63); Capture Bottle dispense and Deployer behaviour (D64)
 - [ ] Advancements: first caged monster, first caged Wither
 - [ ] Lang and README entries
-- [ ] Tests: game tests for growth against speed, chow and water use, culling half, bare copies, breaking, countdown cancel, daily escapes, no escapes with no player near, clock pause while unloaded, no breaking mid-alarm, escapes off
+- [ ] Tests: game tests for growth against speed, chow and water use, culling half, bare copies, breaking, countdown cancel, the 5-minute countdown, warnings reaching every player within 128 blocks, daily escapes, the countdown stopping when everyone leaves (chunk still loaded) and resuming, clock pause while unloaded, no breaking mid-alarm, escapes off
 
 # "IDIOT TEST"
 
@@ -266,7 +281,7 @@ A shaft-driven box that keeps a horde of one kind of monster and turns Monster C
 - A sword or Deployer culls half.
 - Water monsters need a Flooded cage and water.
 - Netherite cage: Withers only, needs FE too.
-- Power fails near you: one Wither escapes, then daily.
+- Power fails: 5-minute warning, then Withers escape daily.
 - New monsters never carry armour or weapons.
 - Every number lives in the config.
 
@@ -439,7 +454,7 @@ A shaft-driven glass tank that breeds one kind of water creature, in two sizes (
 - [ ] Blocks: Fish Tank, Brass Fish Tank (one class, brass flag), BlockItems, loot tables keeping contents
 - [ ] Block entity: school, young timers, speed-scaled breeding, Fish Food, water tank, output, culling, scooping, per-RPM stress, saving
 - [ ] Capture Bottle catches fish, squid and glow squid; `fish_tank_blacklist` tag; axolotls added to `pen_blacklist`
-- [ ] Fish Food item and Mixer recipe
+- [ ] Fish Food item and Mixer recipe; in the world it breeds axolotls and fish swim after a player holding it (D65)
 - [ ] Variant rules: copy pattern or colour; 1-in-1,200 blue axolotl
 - [ ] Light level 6 with glow squid
 - [ ] Item and fluid handlers; comparator; Deployer sword and bucket use

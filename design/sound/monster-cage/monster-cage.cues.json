@@ -1,0 +1,1171 @@
+{
+  "namespace": "monster_cage",
+  "events": {
+    "monster_grumble": {
+      "group": "Signature sounds",
+      "subtitle": "Caged monster grumbles",
+      "vanilla": {
+        "file": "mob/zombie/say1",
+        "event": "the stored monster's own ambient sound (a zombie here)",
+        "gain": 0.35
+      },
+      "note": "In game: the stored monster's own ambient event at volume 0.35 (user: the stored mob, but quieter so it's not annoying), pitch 0.95-1.05, at most once every 10-30 s per cage, and cages within 8 blocks share one cooldown so a wall of cages never talks over itself.",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.2,
+          "f": 110,
+          "dur": 0.8
+        }
+      ]
+    },
+    "bars_rattle": {
+      "group": "Signature sounds",
+      "subtitle": "Cage bars rattle",
+      "layers": [
+        {
+          "type": "clang",
+          "at": 0,
+          "gain": 0.32,
+          "f": 420,
+          "dur": 0.5
+        },
+        {
+          "type": "ratchet",
+          "at": 0.02,
+          "gain": 0.14,
+          "rate": 16,
+          "dur": 0.32
+        },
+        {
+          "type": "clink",
+          "at": 0.06,
+          "gain": 0.12,
+          "f": 900,
+          "dur": 0.3
+        }
+      ],
+      "real": {
+        "level": 0.1069,
+        "target": -33,
+        "variants": 3,
+        "vary": {
+          "pitch": 0.05
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "bars_gate",
+              "bars_stick",
+              "bars_iron_clang"
+            ],
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "chow_pour": {
+      "group": "Signature sounds",
+      "subtitle": "Monster Chow rattles into the bowl",
+      "layers": [
+        {
+          "type": "rustle",
+          "at": 0,
+          "gain": 0.22,
+          "density": 30,
+          "dur": 0.8
+        },
+        {
+          "type": "ping",
+          "at": 0.04,
+          "gain": 0.08,
+          "f": 700,
+          "dur": 0.6
+        },
+        {
+          "type": "clink",
+          "at": 0.12,
+          "gain": 0.1,
+          "f": 1300,
+          "dur": 0.15
+        },
+        {
+          "type": "clink",
+          "at": 0.3,
+          "gain": 0.09,
+          "f": 1500,
+          "dur": 0.15
+        },
+        {
+          "type": "clink",
+          "at": 0.52,
+          "gain": 0.07,
+          "f": 1200,
+          "dur": 0.15
+        }
+      ],
+      "real": {
+        "level": 0.0931,
+        "target": -32,
+        "variants": 3,
+        "vary": {
+          "pitch": 0.04
+        },
+        "post": {
+          "lowpass": 10000
+        },
+        "layers": [
+          {
+            "pick": [
+              "kibble_rice_pan",
+              "kibble_cereal_a",
+              "kibble_cereal_b"
+            ],
+            "gain": 1
+          },
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0.02,
+            "gain": 0.22,
+            "pitch": 0.8,
+            "fadeOut": 0.3
+          }
+        ]
+      }
+    },
+    "arrival": {
+      "group": "Signature sounds",
+      "subtitle": "A new monster joins the horde",
+      "layers": [
+        {
+          "type": "rustle",
+          "at": 0,
+          "gain": 0.2,
+          "density": 14,
+          "dur": 0.5
+        },
+        {
+          "type": "thud",
+          "at": 0.3,
+          "gain": 0.25,
+          "f": 120,
+          "dur": 0.3
+        },
+        {
+          "type": "clang",
+          "at": 0.34,
+          "gain": 0.18,
+          "f": 380,
+          "dur": 0.4
+        }
+      ],
+      "real": {
+        "level": 0.1563,
+        "target": -34,
+        "variants": 3,
+        "vary": {
+          "pitch": 0.05
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "crunch_bones",
+              "crunch_rusk",
+              "crunch_crisps"
+            ],
+            "gain": 0.9
+          },
+          {
+            "pick": [
+              "bars_iron_clang",
+              "bars_gate"
+            ],
+            "at": 0.3,
+            "gain": 0.45,
+            "trim": [
+              0,
+              0.5
+            ],
+            "fadeOut": 0.2
+          }
+        ]
+      }
+    },
+    "jar_in": {
+      "group": "Using the cage",
+      "subtitle": "Monster jar locked into a cage",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.25,
+          "dur": 0.05
+        },
+        {
+          "type": "clang",
+          "at": 0.1,
+          "gain": 0.25,
+          "f": 520,
+          "dur": 0.35
+        },
+        {
+          "type": "ping",
+          "at": 0.14,
+          "gain": 0.08,
+          "f": 1100,
+          "dur": 0.3
+        }
+      ],
+      "real": {
+        "level": 0.5874,
+        "target": -28,
+        "variants": 2,
+        "layers": [
+          {
+            "pick": [
+              "lock_barn_lock",
+              "lock_big_key"
+            ],
+            "gain": 1
+          },
+          {
+            "pick": [
+              "glass_002",
+              "glass_003"
+            ],
+            "at": 0.14,
+            "gain": 0.3
+          }
+        ]
+      }
+    },
+    "jar_out": {
+      "group": "Using the cage",
+      "subtitle": "Monster jar unlocked",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.25,
+          "dur": 0.05
+        },
+        {
+          "type": "clink",
+          "at": 0.08,
+          "gain": 0.18,
+          "f": 800,
+          "dur": 0.25
+        },
+        {
+          "type": "whoosh",
+          "at": 0.12,
+          "gain": 0.08,
+          "f": 500,
+          "f2": 900,
+          "dur": 0.25
+        }
+      ],
+      "real": {
+        "level": 0.2717,
+        "target": -28,
+        "variants": 2,
+        "layers": [
+          {
+            "pick": [
+              "lock_barn_unlock",
+              "strike_clunk"
+            ],
+            "gain": 1
+          },
+          {
+            "pick": [
+              "glass_005",
+              "glass_006"
+            ],
+            "at": 0.1,
+            "gain": 0.25
+          }
+        ]
+      }
+    },
+    "cull": {
+      "group": "Using the cage",
+      "subtitle": "Horde culled",
+      "vanilla": {
+        "file": "entity/player/attack/sweep1",
+        "event": "entity.player.attack.sweep (as the pens use)",
+        "gain": 0.8
+      },
+      "note": "In game: the vanilla sweep, as the Animal Pens play it, plus bars_rattle.",
+      "layers": [
+        {
+          "type": "whoosh",
+          "at": 0,
+          "gain": 0.2,
+          "f": 400,
+          "f2": 1600,
+          "dur": 0.25
+        }
+      ]
+    },
+    "drop_tray": {
+      "group": "Using the cage",
+      "subtitle": "Drops land in the tray",
+      "layers": [
+        {
+          "type": "clink",
+          "at": 0,
+          "gain": 0.18,
+          "f": 1500,
+          "dur": 0.18
+        },
+        {
+          "type": "thud",
+          "at": 0.01,
+          "gain": 0.12,
+          "f": 150,
+          "dur": 0.12
+        }
+      ],
+      "real": {
+        "level": 0.3499,
+        "target": -36,
+        "variants": 4,
+        "vary": {
+          "pitch": 0.06
+        },
+        "layers": [
+          {
+            "pick": [
+              "impactTin_medium_000",
+              "impactTin_medium_001",
+              "impactTin_medium_002",
+              "impactTin_medium_003",
+              "impactTin_medium_004"
+            ],
+            "gain": 1,
+            "pitch": 1.1
+          }
+        ]
+      }
+    },
+    "bubbles_loop": {
+      "group": "Flooded cages",
+      "subtitle": "Water bubbles",
+      "layers": [
+        {
+          "type": "rustle",
+          "at": 0,
+          "gain": 0.06,
+          "density": 10,
+          "dur": 3
+        },
+        {
+          "type": "pop",
+          "at": 0.15,
+          "gain": 0.08,
+          "f": 500,
+          "dur": 0.08
+        },
+        {
+          "type": "pop",
+          "at": 0.6,
+          "gain": 0.1,
+          "f": 637,
+          "dur": 0.08
+        },
+        {
+          "type": "pop",
+          "at": 0.9,
+          "gain": 0.12,
+          "f": 774,
+          "dur": 0.08
+        },
+        {
+          "type": "pop",
+          "at": 1.4,
+          "gain": 0.08,
+          "f": 511,
+          "dur": 0.08
+        },
+        {
+          "type": "pop",
+          "at": 1.75,
+          "gain": 0.1,
+          "f": 648,
+          "dur": 0.08
+        },
+        {
+          "type": "pop",
+          "at": 2.3,
+          "gain": 0.12,
+          "f": 785,
+          "dur": 0.08
+        },
+        {
+          "type": "pop",
+          "at": 2.6,
+          "gain": 0.08,
+          "f": 522,
+          "dur": 0.08
+        }
+      ],
+      "real": {
+        "level": 0.1393,
+        "target": -39,
+        "variants": 2,
+        "layers": [
+          {
+            "pick": [
+              "loop_airlock_a",
+              "loop_airlock_b"
+            ],
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "hatch_open": {
+      "group": "Flooded cages",
+      "subtitle": "Hatch flaps open",
+      "layers": [
+        {
+          "type": "creak",
+          "at": 0,
+          "gain": 0.14,
+          "f": 320,
+          "dur": 0.18
+        },
+        {
+          "type": "click",
+          "at": 0.02,
+          "gain": 0.15,
+          "dur": 0.04
+        }
+      ],
+      "real": {
+        "level": 0.3013,
+        "target": -30,
+        "variants": 1,
+        "layers": [
+          {
+            "src": "hatch_mailbox_open",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "trident_throw": {
+      "group": "Flooded cages",
+      "subtitle": "Drowned throws a trident",
+      "vanilla": {
+        "file": "item/trident/throw1",
+        "event": "item.trident.throw (the projectile plays it)",
+        "gain": 0.9
+      },
+      "layers": [
+        {
+          "type": "whoosh",
+          "at": 0,
+          "gain": 0.25,
+          "f": 300,
+          "f2": 1400,
+          "dur": 0.3
+        }
+      ]
+    },
+    "hatch_shut": {
+      "group": "Flooded cages",
+      "subtitle": "Hatch clanks shut",
+      "layers": [
+        {
+          "type": "clang",
+          "at": 0,
+          "gain": 0.28,
+          "f": 600,
+          "dur": 0.3
+        },
+        {
+          "type": "boing",
+          "at": 0.02,
+          "gain": 0.07,
+          "f": 240,
+          "dur": 0.3
+        }
+      ],
+      "real": {
+        "level": 0.1734,
+        "target": -30,
+        "variants": 2,
+        "vary": {
+          "pitch": 0.05
+        },
+        "layers": [
+          {
+            "src": "hatch_mailbox_shut",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "drowning": {
+      "group": "Flooded cages",
+      "subtitle": "Zombie turns into a drowned",
+      "vanilla": {
+        "file": "mob/drowned/convert1",
+        "event": "entity.zombie.converted_to_drowned",
+        "gain": 0.8
+      },
+      "layers": [
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.15,
+          "f": 800,
+          "dur": 1
+        }
+      ]
+    },
+    "field_hum": {
+      "group": "Netherite containment",
+      "subtitle": "Containment field hums",
+      "note": "Running loop: the staging bed (-36 LUFS), 8 blocks.",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.22,
+          "f": 60,
+          "dur": 2
+        },
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.08,
+          "f": 120,
+          "dur": 2
+        },
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.025,
+          "f": 900,
+          "f2": 900,
+          "dur": 2,
+          "soft": true
+        }
+      ],
+      "real": {
+        "level": 0.0848,
+        "target": -36,
+        "variants": 2,
+        "layers": [
+          {
+            "pick": [
+              "sa3_field_hum_loop_raw",
+              "sa3_field_hum_loop_clean"
+            ],
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "field_up": {
+      "group": "Netherite containment",
+      "subtitle": "Containment field rises",
+      "layers": [
+        {
+          "type": "swell",
+          "at": 0,
+          "gain": 0.25,
+          "f": 80,
+          "f2": 240,
+          "dur": 1.2
+        },
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.15,
+          "dur": 0.05
+        },
+        {
+          "type": "sparkle",
+          "at": 0.9,
+          "gain": 0.05,
+          "f": 2400,
+          "dur": 0.3
+        }
+      ],
+      "real": {
+        "level": 0.2716,
+        "target": -26,
+        "variants": 1,
+        "layers": [
+          {
+            "src": "switch_click",
+            "gain": 0.8
+          },
+          {
+            "src": "sa3_field_hum_v2_clean",
+            "at": 0.05,
+            "gain": 1,
+            "trim": [
+              0.5,
+              1.9
+            ],
+            "fadeIn": 1,
+            "fadeOut": 0.25
+          },
+          {
+            "src": "spark_weld",
+            "at": 0.9,
+            "gain": 0.35
+          }
+        ]
+      }
+    },
+    "field_flicker": {
+      "group": "Netherite containment",
+      "subtitle": "Containment field sputters",
+      "layers": [
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.18,
+          "f": 4200,
+          "dur": 0.07
+        },
+        {
+          "type": "click",
+          "at": 0.01,
+          "gain": 0.12,
+          "dur": 0.04
+        },
+        {
+          "type": "hum",
+          "at": 0.03,
+          "gain": 0.08,
+          "f": 55,
+          "dur": 0.15
+        }
+      ],
+      "real": {
+        "level": 0.4775,
+        "target": -32,
+        "variants": 4,
+        "vary": {
+          "pitch": 0.06
+        },
+        "layers": [
+          {
+            "pick": [
+              "spark_shock_a",
+              "spark_shock_b",
+              "spark_shock_c",
+              "flicker_bulb_a"
+            ],
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "field_cutout": {
+      "group": "Netherite containment",
+      "subtitle": "Containment field cuts out",
+      "note": "In game: the field_hum loop's volume follows the shield's flicker (cut to 5% while it's out, a short surge as it returns); this file previews that, timed to the containment clip.",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0.15,
+          "gain": 0.2,
+          "f": 60,
+          "dur": 0.15
+        },
+        {
+          "type": "hum",
+          "at": 0.7,
+          "gain": 0.2,
+          "f": 60,
+          "dur": 0.1
+        },
+        {
+          "type": "hum",
+          "at": 1.1,
+          "gain": 0.2,
+          "f": 60,
+          "dur": 0.25
+        },
+        {
+          "type": "hum",
+          "at": 1.4,
+          "gain": 0.2,
+          "f": 60,
+          "dur": 0.5
+        },
+        {
+          "type": "hum",
+          "at": 2,
+          "gain": 0.2,
+          "f": 60,
+          "dur": 0.25
+        },
+        {
+          "type": "hum",
+          "at": 2.6,
+          "gain": 0.2,
+          "f": 60,
+          "dur": 0.1
+        }
+      ],
+      "real": {
+        "level": 0.1132,
+        "target": -34,
+        "variants": 2,
+        "layers": [
+          {
+            "pick": [
+              "sa3_field_hum_cutout_raw",
+              "sa3_field_hum_cutout_clean"
+            ],
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "field_down": {
+      "group": "Netherite containment",
+      "subtitle": "Containment field fails",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.2,
+          "dur": 0.05
+        },
+        {
+          "type": "servo",
+          "at": 0.02,
+          "gain": 0.18,
+          "f": 420,
+          "f2": 50,
+          "dur": 1.4
+        },
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.1,
+          "f": 3000,
+          "dur": 0.12
+        }
+      ],
+      "real": {
+        "level": 0.3265,
+        "target": -26,
+        "variants": 1,
+        "layers": [
+          {
+            "src": "strike_clunk",
+            "gain": 0.9
+          },
+          {
+            "src": "spark_weld",
+            "at": 0.03,
+            "gain": 0.5
+          },
+          {
+            "src": "sa3_field_hum_v2_clean",
+            "at": 0.05,
+            "gain": 0.9,
+            "pitch": 0.85,
+            "trim": [
+              0.5,
+              2
+            ],
+            "fadeOut": 1.3
+          }
+        ]
+      }
+    },
+    "klaxon": {
+      "group": "Netherite containment",
+      "subtitle": "Containment klaxon",
+      "note": "Loud on purpose: an alarm, heard across a base (about B + 12, 32 blocks).",
+      "layers": [
+        {
+          "type": "chirp",
+          "at": 0,
+          "gain": 0.35,
+          "notes": [
+            [
+              300,
+              520,
+              0.45
+            ],
+            [
+              520,
+              380,
+              0.35
+            ]
+          ]
+        },
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.04,
+          "f": 2500,
+          "dur": 0.8
+        }
+      ],
+      "real": {
+        "level": 0.2477,
+        "target": -24,
+        "variants": 3,
+        "layers": [
+          {
+            "pick": [
+              "klaxon_oogah_a",
+              "klaxon_oogah_b",
+              "klaxon_oogah_c"
+            ],
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "breakout": {
+      "group": "Netherite containment",
+      "subtitle": "Wither breaks out",
+      "vanilla": {
+        "file": "mob/wither/spawn",
+        "event": "entity.wither.spawn (plays when it breaks free)",
+        "gain": 0.9
+      },
+      "note": "In game: the vanilla Wither spawn, plus a cage-burst clang of our own.",
+      "layers": [
+        {
+          "type": "clang",
+          "at": 0,
+          "gain": 0.45,
+          "f": 180,
+          "dur": 0.8
+        },
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.2,
+          "f": 3000,
+          "dur": 0.3
+        }
+      ]
+    },
+    "jar_catch": {
+      "group": "Jars and Monster Chow",
+      "subtitle": "Monster caught in a jar",
+      "layers": [
+        {
+          "type": "whoosh",
+          "at": 0,
+          "gain": 0.15,
+          "f": 900,
+          "f2": 300,
+          "dur": 0.25
+        },
+        {
+          "type": "click",
+          "at": 0.22,
+          "gain": 0.25,
+          "dur": 0.05
+        },
+        {
+          "type": "clink",
+          "at": 0.26,
+          "gain": 0.15,
+          "f": 1400,
+          "dur": 0.2
+        }
+      ],
+      "real": {
+        "level": 0.6823,
+        "target": -28,
+        "variants": 2,
+        "layers": [
+          {
+            "pick": [
+              "puff_blow_a",
+              "puff_blow_b"
+            ],
+            "gain": 0.5,
+            "trim": [
+              0,
+              0.25
+            ],
+            "fadeOut": 0.1,
+            "lowpass": 3000
+          },
+          {
+            "src": "lock_barn_lock",
+            "at": 0.2,
+            "gain": 1
+          },
+          {
+            "pick": [
+              "glass_002",
+              "glass_004"
+            ],
+            "at": 0.26,
+            "gain": 0.25
+          }
+        ]
+      }
+    },
+    "chow_eat": {
+      "group": "Jars and Monster Chow",
+      "subtitle": "Eating Monster Chow",
+      "vanilla": {
+        "file": "random/eat1",
+        "event": "entity.generic.eat (vanilla eating)",
+        "gain": 0.8
+      },
+      "layers": [
+        {
+          "type": "rustle",
+          "at": 0,
+          "gain": 0.2,
+          "density": 20,
+          "dur": 0.3
+        }
+      ]
+    },
+    "monster_belch": {
+      "group": "Jars and Monster Chow",
+      "subtitle": "Player belches like a monster",
+      "vanilla": {
+        "file": "mob/creeper/say1",
+        "event": "a random monster's ambient sound, from the player (a creeper hiss here)",
+        "gain": 0.8
+      },
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.2,
+          "f": 90,
+          "dur": 0.5
+        }
+      ]
+    },
+    "chow_breath": {
+      "group": "Jars and Monster Chow",
+      "subtitle": "Chow Breath",
+      "layers": [
+        {
+          "type": "whoosh",
+          "at": 0,
+          "gain": 0.16,
+          "f": 700,
+          "f2": 250,
+          "dur": 0.5
+        },
+        {
+          "type": "pop",
+          "at": 0.42,
+          "gain": 0.08,
+          "f": 300,
+          "dur": 0.08
+        }
+      ],
+      "real": {
+        "level": 0.1837,
+        "target": -30,
+        "variants": 2,
+        "layers": [
+          {
+            "pick": [
+              "puff_blow_a",
+              "puff_blow_b"
+            ],
+            "gain": 1,
+            "lowpass": 3000,
+            "fadeOut": 0.2
+          }
+        ]
+      }
+    },
+    "cage_burst": {
+      "group": "Netherite containment",
+      "subtitle": "Cage bursts open",
+      "layers": [
+        {
+          "type": "clang",
+          "at": 0,
+          "gain": 0.45,
+          "f": 180,
+          "dur": 0.8
+        },
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.2,
+          "f": 3000,
+          "dur": 0.3
+        }
+      ],
+      "real": {
+        "level": 0.3459,
+        "target": -24,
+        "variants": 2,
+        "layers": [
+          {
+            "src": "strike_clunk",
+            "gain": 0.8
+          },
+          {
+            "pick": [
+              "crash_steel_a",
+              "crash_steel_b"
+            ],
+            "at": 0.04,
+            "gain": 1
+          }
+        ]
+      }
+    }
+  },
+  "clips": {
+    "life": [
+      [
+        0,
+        "field_hum"
+      ],
+      [
+        0,
+        "bubbles_loop"
+      ],
+      [
+        1.2,
+        "monster_grumble"
+      ],
+      [
+        2,
+        "drop_tray"
+      ],
+      [
+        2,
+        "field_hum"
+      ],
+      [
+        3,
+        "bubbles_loop"
+      ],
+      [
+        4,
+        "drop_tray"
+      ],
+      [
+        4,
+        "field_hum"
+      ],
+      [
+        4.8,
+        "bars_rattle"
+      ],
+      [
+        5.6,
+        "monster_grumble"
+      ],
+      [
+        6,
+        "drop_tray"
+      ],
+      [
+        6,
+        "field_hum"
+      ],
+      [
+        6,
+        "bubbles_loop"
+      ]
+    ],
+    "trident_hatch": [
+      [
+        0.3,
+        "hatch_open"
+      ],
+      [
+        0.42,
+        "trident_throw"
+      ],
+      [
+        1.15,
+        "hatch_shut"
+      ]
+    ],
+    "containment": [
+      [
+        0,
+        "field_hum"
+      ],
+      [
+        2,
+        "field_cutout"
+      ],
+      [
+        2,
+        "klaxon"
+      ],
+      [
+        2,
+        "field_flicker"
+      ],
+      [
+        2.3,
+        "field_flicker"
+      ],
+      [
+        2.8,
+        "field_flicker"
+      ],
+      [
+        3.35,
+        "field_flicker"
+      ],
+      [
+        3.6,
+        "klaxon"
+      ],
+      [
+        3.9,
+        "field_flicker"
+      ],
+      [
+        4.25,
+        "field_flicker"
+      ],
+      [
+        4.7,
+        "field_flicker"
+      ],
+      [
+        5,
+        "field_down"
+      ],
+      [
+        5.2,
+        "klaxon"
+      ]
+    ]
+  }
+}
