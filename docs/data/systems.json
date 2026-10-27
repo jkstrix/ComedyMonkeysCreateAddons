@@ -2022,7 +2022,7 @@
                 ],
                 [
                   "Monster Cages",
-                  "Capacity and seconds per monster per tier, stress per RPM, chow per kind of monster, Monstrous's bonus, water per monster and Flooded tanks, the Netherite cage's field, farming and buffer FE, warning, time between escapes, alarm range, whether Withers escape, how loud caged monsters are"
+                  "Capacity and seconds per monster per tier, stress per RPM, chow per kind of monster, Monstrous's bonus, water per monster and Flooded tanks, the Netherite cage's field, farming and buffer FE, warning, how long a restored field must hold, time between escapes, alarm range, whether Withers escape, how loud caged monsters are"
                 ],
                 [
                   "Fish Tanks",

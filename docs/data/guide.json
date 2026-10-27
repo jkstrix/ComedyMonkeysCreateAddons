@@ -621,7 +621,7 @@
             ]
           },
           {
-            "warning": "If the field fails, everyone within 128 blocks gets five minutes' warning, then one Wither breaks out, and another every game day until the power is back. Back the cage with Batteries, put it on a First branch, and never leave it on generators alone."
+            "warning": "If the field fails, everyone within 128 blocks gets five minutes' warning, then one Wither breaks out, and another every game day until a full supply is back and has held for a minute. The cage takes nothing from a supply short of 2,048 FE/t, so back it with Batteries, put it on a First branch, and never leave it on generators alone."
           }
         ]
       },

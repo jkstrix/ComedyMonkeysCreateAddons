@@ -2153,9 +2153,10 @@
       "when": "Late. It takes netherite ingots, Precision Mechanisms, [[fe-coil|FE Coils]] and obsidian around a Brass cage, and a real power grid: Lava Generators or a [[geothermal-turbine]] on [[power-lines]], ideally with a [[battery]].",
       "interacts": "FE comes in on any side but the back, from [[power-lines]] or any FE source. [[monstrous]] works on it too. Display Links show the containment state and escape clock.",
       "mistakes": [
-        "If the power fails, every player within 128 blocks gets 5 minutes of warning, then one Wither breaks out, and another every game day until the power is back.",
+        "If the power fails, every player within 128 blocks gets 5 minutes of warning, then one Wither breaks out, and another every game day until a full supply is back and has held for a minute.",
         "You can't break or empty it while its field is down, so you can't 'rescue' it by picking it up.",
         "Short of FE, the farming draw is shed first: it stops bringing Withers in before the field fails.",
+        "Feeding it less than it needs. Short of 2,048 FE/t it takes nothing and stays down, and a battery charged by a weak generator only buys pauses: short bursts never call off the countdown.",
         "Only its owner (and their team) can open or break it. Carry On can't move it."
       ]
     },
@@ -2228,8 +2229,10 @@
       "With Monstrous III at 256 RPM, up to 7.5 Nether Stars an hour."
     ],
     "rules": [
+      "Below 2,048 FE/t coming in, the field stays down and takes no FE at all: the power stays on the network for other machines.",
+      "It starts only after a second of full supply. For that trial it takes at most 2,048 FE a tick; if the supply can't keep it up, it keeps that FE in its store and waits 10 seconds before trying again, then 20, 40 and 60.",
       "The countdown and escape clock stop whenever no player is within 128 blocks, even if the chunk stays loaded, and resume where they stopped.",
-      "FE back at any point during the countdown cancels it.",
+      "A full supply back during a countdown pauses it (\"Containment holding\"). Once the field has held for a minute the alarm stands down (\"Containment restored\"); if it drops before then, the countdown carries on from where it paused.",
       "An escaping Wither comes out at the nearest open space around the cage, with vanilla's charge-up and blast.",
       "A config option, `escapes`, makes the cage just stop instead.",
       "A comparator reads 15 during a countdown."
@@ -2242,7 +2245,8 @@
             "list": [
               "Run it from more generation than it needs: a Lava Generator makes 1,024 FE/t, so it takes three to farm flat out.",
               "Put a [[battery]] on the same line, so a gap in supply is carried through.",
-              "Use a [[splitter|Power Splitter]] to serve the cage's branch First when power runs short."
+              "Use a [[splitter|Power Splitter]] to serve the cage's branch First when power runs short.",
+              "Make sure the supply covers the whole 2,048 FE/t on its own: the cage won't take part of it."
             ]
           },
           {
@@ -2288,7 +2292,7 @@
       "On an Aeronautics ship it works with real rotation and FE, but if the ship's power fails the Withers escape in mid-air."
     ],
     "facts": [
-      "While the field is up a blue shield glows round the whole block; it flickers and cracks when short of FE.",
+      "While the field is up a blue shield glows round the whole block; it flickers and cracks through a countdown.",
       "Catching your first Wither earns the advancement \"Contained\"."
     ],
     "related": [

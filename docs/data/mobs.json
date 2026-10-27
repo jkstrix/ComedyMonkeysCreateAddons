@@ -368,6 +368,10 @@
         "5 minutes to everyone within 128 blocks"
       ],
       [
+        "Alarm stands down",
+        "After the field has held for a minute"
+      ],
+      [
         "Further escapes",
         "One a game day while the field stays down"
       ],
@@ -378,8 +382,8 @@
     ],
     "behaviour": [
       "Inside the cage it is part of the cage's count, not a loose mob, so it can't hurt anyone while the field holds. The cage shows a blue glowing shield around the whole block.",
-      "Short of FE, the shield flickers and cracks; the farming draw is shed first, so the cage stops bringing in Withers before the field itself is at risk.",
-      "Below the field's cost, the field is down. It's all or nothing."
+      "Short of FE, the farming draw is shed first, so the cage stops bringing in Withers before the field itself is at risk. Through a countdown the shield flickers and cracks.",
+      "Below the field's cost, the field is down, and it takes no FE at all: all or nothing. It starts only after a second of full supply. For that trial it takes at most 2,048 FE a tick; if the supply can't keep it up, it keeps that FE in its store and waits 10 seconds before trying again, then 20, 40 and 60."
     ],
     "spawning": [
       "It never spawns in a cage on its own: you summon a Wither as usual, catch it with a [[netherite-jar]] at any health, and use the jar on the cage.",
@@ -388,7 +392,7 @@
     ],
     "ai": [
       "**Power failure:** every player within 128 blocks gets a chat warning (\"Containment failing at x, y, z! A Wither breaks out in 5:00\"), reminders at 4, 3, 2 and 1 minutes and at 30 seconds, and a live action-bar countdown in the last 30 seconds. A klaxon sounds in bursts that speed up.",
-      "Power back at any point cancels it, with \"Containment restored\".",
+      "A full supply back during a countdown pauses it (\"Containment holding\"). Once the field has held for a minute the alarm stands down (\"Containment restored\"); if it drops before then, the countdown carries on from where it paused.",
       "At zero, **one Wither breaks out** of the front (or the nearest open space big enough), with the vanilla charge-up and blast, at full health. The rest stay in.",
       "While the field stays down, another breaks out a game day after the last, its 5-minute warning being the last 5 minutes of that day, until the cage is empty.",
       "The countdown and the escape clock stop whenever no player is within 128 blocks, even if the chunk stays loaded, and while the chunk is unloaded. They resume where they stopped."
