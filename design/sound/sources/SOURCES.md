@@ -159,3 +159,69 @@ Helper Bot reuses Trade Bot's approved sounds (see above). New layers, for his w
 | `kenney-rpg-audio/Audio/metalLatch.ogg`, `kenney-impact-sounds/.../impactSoft_heavy_000.ogg` | Lever candidate C | already in the library | CC0 | 2 |
 
 Searched and not used: BigSoundBank 3316, 3318, 3320 (the same foley whistle, other takes), 3321 (too low), 0226 (a long locomotive whistle), 0196 (wooden whistle, too pure) and 1351 (kettle).
+
+## Clockwork Juggernaut (2026-10-27)
+
+Stage 2 real sounds for the Clockwork Juggernaut and his props (design/sound/clockwork-juggernaut/). Rung 2: the Kenney packs, Trade Bot's approved tick and wind takes (generated/sa3_tradebot_*), and BigSoundBank recordings already here (0227, 0378, 0134, 2143, 1771, 1776). Rung 3: the new BigSoundBank downloads below, all CC0. Cuts are made by clockwork-juggernaut/cuts.js into bigsoundbank/cuts/ (prefix jug_). Rung 4 (synth) only for the rune hum, the low sub-whooshes under recorded whooshes, a spring wobble under the recorded spring, and a falling whirr: there is no recording of runes glowing, and the synth layers sit under real recordings.
+
+| File | Title | URL | Cuts used |
+|---|---|---|---|
+| 0103.ogg | door-slamming | https://bigsoundbank.com/door-slamming-s0103.html | searched, not used (file not kept) |
+| 0128.ogg | sword-through-the-air | https://bigsoundbank.com/sword-through-the-air-s0128.html | searched, not used (file not kept) |
+| 0206.ogg | large-spring | https://bigsoundbank.com/large-spring-s0206.html | jug_spring_a (0.05-1.6 s), jug_spring_b (6.94-9.0 s) |
+| 0227.ogg | hiss-of-steam-train-1 | https://bigsoundbank.com/hiss-of-steam-train-1-s0227.html | used whole or trimmed in a recipe |
+| 0304.ogg | grinding-metal-gate-2 | https://bigsoundbank.com/grinding-metal-gate-2-s0304.html | searched, not used (file not kept) |
+| 0306.ogg | long-creaking-door | https://bigsoundbank.com/long-creaking-door-s0306.html | jug_creak_long (0.3-2.6 s) |
+| 0322.ogg | petit-grincement-metal-1 | https://bigsoundbank.com/petit-grincement-metal-1-s0322.html | searched, not used (file not kept) |
+| 0359.ogg | heavy-chain | https://bigsoundbank.com/heavy-chain-s0359.html | jug_chain_clink_a (1.15-1.55 s), jug_chain_clink_b (2.18-2.6 s), jug_chain_clink_c (3.28-3.75 s) |
+| 0360.ogg | medium-chain-1 | https://bigsoundbank.com/medium-chain-1-s0360.html | searched, not used (file not kept) |
+| 0361.ogg | medium-chain-2 | https://bigsoundbank.com/medium-chain-2-s0361.html | jug_chain_rattle (0.0-1.6 s) |
+| 0539.ogg | creaking-barn-door | https://bigsoundbank.com/creaking-barn-door-s0539.html | jug_creak_low_a (18.6-19.5 s), jug_creak_low_b (26.35-27.4 s), jug_creak_low_c (12.45-12.95 s) |
+| 0572.ogg | whoosh-1 | https://bigsoundbank.com/whoosh-1-s0572.html | jug_whoosh_1..6 (from 0, 1.07, 2.24, 3.4, 6.46, 7.46 s, 0.8 s each) |
+| 0580.ogg | tombstone-opening | https://bigsoundbank.com/tombstone-opening-s0580.html | jug_grind_stone_a (0.5-2.0 s), jug_grind_stone_b (4.0-5.5 s), jug_grind_stone_c (10.0-11.5 s) |
+| 0616.ogg | creaking-metallic-door | https://bigsoundbank.com/creaking-metallic-door-s0616.html | jug_creak_metal (0.1-1.8 s) |
+| 0794.ogg | small-ratchet | https://bigsoundbank.com/small-ratchet-s0794.html | searched, not used (file not kept) |
+| 0795.ogg | large-ratchet | https://bigsoundbank.com/large-ratchet-s0795.html | searched, not used (file not kept) |
+| 0805.ogg | pressure-cooker | https://bigsoundbank.com/pressure-cooker-s0805.html | searched, not used (file not kept) |
+| 0830.ogg | 1-church-bell | https://bigsoundbank.com/1-church-bell-s0830.html | searched, not used (file not kept) |
+| 0832.ogg | whetstone | https://bigsoundbank.com/whetstone-s0832.html | searched, not used (file not kept) |
+| 0857.ogg | metal-grinding-2 | https://bigsoundbank.com/metal-grinding-2-s0857.html | jug_grinder_a (0.15-0.5 s), jug_grinder_b (1.28-1.62 s), jug_grinder_c (3.05-3.4 s) |
+| 0950.ogg | long-welding-1 | https://bigsoundbank.com/long-welding-1-s0950.html | jug_weld (1.0-2.5 s) |
+| 1022.ogg | fall-of-stone | https://bigsoundbank.com/fall-of-stone-s1022.html | jug_stone_1..7 (from 0.17, 1.69, 3.08, 4.62, 6.19, 8.26, 10.07 s, 0.45 s each) |
+| 1023.ogg | explosion-far-away | https://bigsoundbank.com/explosion-far-away-s1023.html | used whole or trimmed in a recipe |
+| 1043.ogg | metal-grinding-3 | https://bigsoundbank.com/metal-grinding-3-s1043.html | searched, not used (file not kept) |
+| 1134.ogg | manual-chain-hoist-downhill | https://bigsoundbank.com/manual-chain-hoist-downhill-s1134.html | jug_ratchet_hoist_loop (7.4-9.4 s), jug_ratchet_hoist (6.3-7.3 s) |
+| 1435.ogg | fishing-reel-fast | https://bigsoundbank.com/fishing-reel-fast-s1435.html | jug_reel_slow (0.3-2.3 s), jug_reel (0.3-4.6 s) |
+| 1482.ogg | gong-sweet | https://bigsoundbank.com/gong-sweet-s1482.html | jug_gong_c (0.05-3.0 s) |
+| 1483.ogg | gong-strong-1 | https://bigsoundbank.com/gong-strong-1-s1483.html | jug_gong_a (0.1-2.6 s) |
+| 1485.ogg | gong-very-strong | https://bigsoundbank.com/gong-very-strong-s1485.html | jug_gong_b (0.05-2.4 s) |
+| 1501.ogg | door-slamming-4 | https://bigsoundbank.com/door-slamming-4-s1501.html | searched, not used (file not kept) |
+| 1567.ogg | grandfather-clock-ticking | https://bigsoundbank.com/grandfather-clock-ticking-s1567.html | jug_tick_1..4 (from 0.17, 2.32, 4.42, 6.68 s, 0.42 s each), jug_tock_1..4 (from 1.01, 3.16, 5.32, 7.51 s, 0.45 s each) |
+| 1635.ogg | wheelbarrow-of-limestone-filling | https://bigsoundbank.com/wheelbarrow-of-limestone-filling-s1635.html | searched, not used (file not kept) |
+| 1772.ogg | falling-sheet-steel-bar-2 | https://bigsoundbank.com/falling-sheet-steel-bar-2-s1772.html | used whole or trimmed in a recipe |
+| 1774.ogg | falling-sheet-steel-bar-4 | https://bigsoundbank.com/falling-sheet-steel-bar-4-s1774.html | used whole or trimmed in a recipe |
+| 1778.ogg | fall-2-sheet-steel-bars-3 | https://bigsoundbank.com/fall-2-sheet-steel-bars-3-s1778.html | used whole or trimmed in a recipe |
+| 1796.ogg | whoosh-4 | https://bigsoundbank.com/whoosh-4-s1796.html | searched, not used (file not kept) |
+| 1799.ogg | whoosh-6 | https://bigsoundbank.com/whoosh-6-s1799.html | searched, not used (file not kept) |
+| 1803.ogg | automatic-hatch-opening | https://bigsoundbank.com/automatic-hatch-opening-s1803.html | searched, not used (file not kept) |
+| 1804.ogg | automatic-hatch-closing | https://bigsoundbank.com/automatic-hatch-closing-s1804.html | jug_whirr_loop (5.0-9.0 s) |
+| 1807.ogg | explosion-1 | https://bigsoundbank.com/explosion-1-s1807.html | searched, not used (file not kept) |
+| 1824.ogg | ratchet-tensioner | https://bigsoundbank.com/ratchet-tensioner-s1824.html | searched, not used (file not kept) |
+| 1950.ogg | planted-cartoon-1 | https://bigsoundbank.com/planted-cartoon-1-s1950.html | used whole or trimmed in a recipe |
+| 1953.ogg | planted-cartoon-4 | https://bigsoundbank.com/planted-cartoon-4-s1953.html | searched, not used (file not kept) |
+| 2359.ogg | grinding-metal-barrier-closure-2 | https://bigsoundbank.com/grinding-metal-barrier-closure-2-s2359.html | jug_grind_metal (0.1-2.0 s) |
+| 2460.ogg | punch-5 | https://bigsoundbank.com/punch-5-s2460.html | searched, not used (file not kept) |
+| 2545.ogg | starting-crank | https://bigsoundbank.com/starting-crank-s2545.html | searched, not used (file not kept) |
+| 3011.ogg | hiss-of-steam-train-3 | https://bigsoundbank.com/hiss-of-steam-train-3-s3011.html | jug_steam_long (0.1-2.9 s) |
+| 3013.ogg | hiss-of-steam-train-4 | https://bigsoundbank.com/hiss-of-steam-train-4-s3013.html | jug_steam_mid (0.1-1.7 s) |
+| 3014.ogg | hiss-of-steam-train-5 | https://bigsoundbank.com/hiss-of-steam-train-5-s3014.html | searched, not used (file not kept) |
+| 3015.ogg | steam-locomotive-stop | https://bigsoundbank.com/steam-locomotive-stop-s3015.html | searched, not used (file not kept) |
+| 3017.ogg | hiss-of-steam-train-6 | https://bigsoundbank.com/hiss-of-steam-train-6-s3017.html | jug_steam_puff (0.0-0.62 s), jug_steam_burst (0.78-1.1 s) |
+| 3019.ogg | hiss-of-steam-train-7 | https://bigsoundbank.com/hiss-of-steam-train-7-s3019.html | used whole or trimmed in a recipe |
+| 3311.ogg | steam-engine-foley-2 | https://bigsoundbank.com/steam-engine-foley-2-s3311.html | searched, not used (file not kept) |
+| 3357.ogg | pendulum-mechanism-1 | https://bigsoundbank.com/pendulum-mechanism-1-s3357.html | searched, not used (file not kept) |
+| 3358.ogg | pendulum-mechanism-2 | https://bigsoundbank.com/pendulum-mechanism-2-s3358.html | searched, not used (file not kept) |
+| 3359.ogg | pendulum-mechanism-3 | https://bigsoundbank.com/pendulum-mechanism-3-s3359.html | searched, not used (file not kept) |
+| 3360.ogg | 1-pendulum-chime | https://bigsoundbank.com/1-pendulum-chime-s3360.html | jug_chime (2.9-5.5 s) |
+| 3589.ogg | anvil-1 | https://bigsoundbank.com/anvil-1-s3589.html | jug_anvil_1..3 (from 0.1, 1.32, 2.39 s, 0.75 s each) |
+| 3590.ogg | anvil-2 | https://bigsoundbank.com/anvil-2-s3590.html | searched, not used (file not kept) |

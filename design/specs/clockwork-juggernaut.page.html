@@ -1,0 +1,308 @@
+<title>Clockwork Juggernaut</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the house quick-read column: material band, idiot test first, the fight-rhythm timeline as the centrepiece, then the Spring Engine, numbers, rules, what-ifs, scores */
+:root {
+  --bg: #e6e6e1; --surface: #f2f2ee; --fg: #22231f; --muted: #5f6058; --line: #c9c8c0;
+  --accent: #8a6626; --accent-soft: #e9dcc0; --iron: #4a4d50; --iron-hi: #5d6164;
+  --copper: #8a5233; --glow: #b9772f; --rail: #6b6e6a;
+  --ok: #4c7a46; --warn: #a3712a;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
+  --copper: #b9764d; --glow: #d99a4a; --rail: #8a8c86;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
+  --copper: #b9764d; --glow: #d99a4a; --rail: #8a8c86;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.15rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+code { font: .85em var(--mono) }
+
+header { display: grid; gap: 14px }
+.band { height: 10px; border-radius: 2px; background: linear-gradient(90deg, var(--iron) 0 46%, var(--bg) 46% 48%, var(--rail) 48% 66%, var(--bg) 66% 68%, var(--accent) 68% 86%, var(--bg) 86% 88%, var(--copper) 88% 100%) }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { padding: 8px 0 8px 14px; border-left: 3px solid var(--accent); font-weight: 500 }
+
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: step }
+.loop li { counter-increment: step; display: grid; gap: 6px; align-content: start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.loop li::before { content: counter(step); font: 600 1.4rem/1 var(--display); color: var(--accent) }
+
+.diagram { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 12px 8px }
+.diagram svg { display: block; width: 100%; min-width: 620px; height: auto }
+.lbl { font: 500 11px var(--mono); fill: var(--fg) }
+.lbl.dim { fill: var(--muted) }
+.lbl.big { font: 600 15px var(--display); }
+.lbl.ok { fill: var(--ok) }
+.lbl.warn { fill: var(--warn) }
+
+.react { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px }
+.react div { padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--iron-hi); border-radius: 3px; display: grid; gap: 4px; align-content: start }
+.react div.go { border-left-color: var(--ok) }
+.react div.bad { border-left-color: var(--warn) }
+.react .when { font: 500 .75rem/1.3 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em }
+
+.dyes { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px }
+.dye { display: grid; gap: 6px; justify-items: center; font: 500 .72rem/1.2 var(--mono); color: var(--muted); text-align: center }
+.dye i { display: block; width: 100%; height: 30px; border-radius: 3px; border: 1px solid var(--line) }
+
+.numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px }
+.num { padding: 12px 14px; border-top: 3px solid var(--accent); background: var(--surface); display: grid; gap: 2px }
+.num b { font: 600 1.4rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.num span { color: var(--muted); font-size: .85rem }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.pairs ul { margin: 0; padding: 14px 16px 14px 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 6px }
+.pairs h3 { margin-bottom: 4px }
+.does h3 { color: var(--ok) }
+.doesnt h3 { color: var(--warn) }
+
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 24px }
+.qa div { display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.qa b { font-weight: 600 }
+.qa span { color: var(--muted) }
+
+.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.watch { display: grid; gap: 8px; align-content: start; padding: 14px 16px; border: 1px dashed var(--warn); border-radius: 3px }
+.watch.ok { border-color: var(--accent) }
+.watch h3 { color: var(--warn) }
+.watch.ok h3 { color: var(--accent) }
+.watch ul { margin: 0; padding-left: 18px; display: grid; gap: 4px }
+
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center }
+.score .track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden }
+.score .fill { height: 100%; background: var(--ok) }
+.score .why { grid-column: 2 / -1; color: var(--muted); font-size: .85rem; margin-top: -6px }
+.score b { text-align: right; font: 500 .85rem var(--mono); font-variant-numeric: tabular-nums }
+@media (max-width: 520px) { .score { grid-template-columns: 1fr 44px } .score .track { grid-column: 1 / -1; order: 3 } .score .why { grid-column: 1 / -1; margin-top: 0 } }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px }
+</style>
+<style>
+/* Clockwork Juggernaut additions: the fight-rhythm timeline */
+.b-wound { fill: var(--line) }
+.b-run { fill: var(--bg); stroke: var(--rail); stroke-dasharray: 4 3 }
+.b-rewind { fill: var(--accent-soft); stroke: var(--accent) }
+.axis { stroke: var(--muted); stroke-width: 1 }
+.lbl.acc { fill: var(--accent) }
+</style>
+<div class="wrap">
+  <header>
+    <div class="band" aria-hidden="true"></div>
+    <p class="eyebrow">ComedyMonkey's Create Addons · Bosses</p>
+    <h1>Clockwork Juggernaut</h1>
+    <p class="pitch">A war automaton seven blocks tall, twice the Wither's height: the bots' grim ancestor. Wind him up and he wakes. While his spring is wound he shrugs off almost everything; then he stops to rewind, key exposed, and that's your moment. Every third of his health you take, he sheds plates, learns new moves and speeds up. He never breaks a block. Beat him for a Mainspring, the heart of the only block that stores rotation.</p>
+    <div class="chips">
+      <span class="chip ready">Design ready: 85%</span>
+      <span class="chip">Late game · beside the Wither</span>
+      <span class="chip">Summoned, or asleep in Overworld and End ruins</span>
+      <span class="chip">Look: brief written</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>In ten lines</h2>
+    <ul class="idiot">
+      <li>Brass T, Winding Key, turn it with a shaft: he wakes.</li>
+      <li>Wound: nearly unhurtable. Arrows bounce.</li>
+      <li>He stops to rewind, faster each stage.</li>
+      <li>Rewinding: hit him. The key from behind hurts most.</li>
+      <li>Seven blocks tall. Never breaks blocks.</li>
+      <li>Kill him: one Mainspring, always.</li>
+      <li>A Mainspring builds a Spring Engine.</li>
+      <li>Spring Engine stores rotation: shaft in, shaft out.</li>
+      <li>Full engine: an hour at 16,384 SU.</li>
+      <li>Can't be jarred. Also sleeps in rare ruins.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>The ritual</h2>
+    <ol class="loop">
+      <li><h3>Craft a Winding Key</h3><p>Mechanical Crafter: a Netherite Ingot, 4 Precision Mechanisms, 4 Brass Sheets.</p></li>
+      <li><h3>Build the effigy</h3><p>Four Brass Blocks in a T, like the Wither's soul sand.</p></li>
+      <li><h3>Fit the key</h3><p>Place it on the back of the T's centre.</p></li>
+      <li><h3>Wind it</h3><p>A shaft at 64 RPM or more, 30 s without stopping. The ticking grows louder.</p></li>
+      <li><h3>He wakes</h3><p>Effigy and key are used up. Underground, he rises to the surface above and kneels there until you come up. Not in the Nether.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Read his rhythm</h2>
+    <p class="sub">The whole fight is this cycle, tighter each stage. Survive the grey stretch, punish the brass one. A feint clicks sharply and his eyes stay lit; a real run-down dims them. Lightning skips his rewind.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 760 300" role="img" aria-label="Fight cycle by stage. Stage 1: wound 15 s, running down 4, rewinding 6. Stage 2: wound 12, running down 4, rewinding 5. Stage 3: wound 9, running down 4, rewinding 4.">
+        <text class="lbl big" x="60" y="18">Stage 1 · 100–67% health · 25 s cycle</text>
+        <rect class="b-wound" x="60" y="26" width="390" height="32" rx="2"/>
+        <rect class="b-run" x="450" y="26" width="104" height="32" rx="2"/>
+        <rect class="b-rewind" x="554" y="26" width="156" height="32" rx="2"/>
+        <text class="lbl" x="70" y="47">Wound: charge · swing · stomp · grab</text>
+        <text class="lbl" x="458" y="47">Running down</text>
+        <text class="lbl acc" x="562" y="47">Rewind 6 s</text>
+        <text class="lbl dim" x="70" y="76">10% damage while wound · arrows glance off</text>
+        <text class="lbl ok" x="562" y="76">full damage · 1.5× on the key</text>
+        <text class="lbl big" x="60" y="110">Stage 2 · 67–33% · plates shed · 21 s cycle</text>
+        <rect class="b-wound" x="60" y="118" width="312" height="32" rx="2"/>
+        <rect class="b-run" x="372" y="118" width="104" height="32" rx="2"/>
+        <rect class="b-rewind" x="476" y="118" width="130" height="32" rx="2"/>
+        <text class="lbl" x="70" y="139">+ spring leap · steam vent</text>
+        <text class="lbl" x="380" y="139">Running down</text>
+        <text class="lbl acc" x="484" y="139">Rewind 5 s</text>
+        <text class="lbl dim" x="616" y="139">+3 s if the key jams</text>
+        <text class="lbl dim" x="70" y="168">15% while wound</text>
+        <text class="lbl warn" x="380" y="168">1 in 4 run-downs is a feint</text>
+        <text class="lbl big" x="60" y="202">Stage 3 · overwound · under 33% · 17 s cycle</text>
+        <rect class="b-wound" x="60" y="210" width="234" height="32" rx="2"/>
+        <rect class="b-run" x="294" y="210" width="104" height="32" rx="2"/>
+        <rect class="b-rewind" x="398" y="210" width="104" height="32" rx="2"/>
+        <text class="lbl" x="70" y="231">+ gear spin · double stomps</text>
+        <text class="lbl" x="302" y="231">Running down</text>
+        <text class="lbl acc" x="406" y="231">Rewind 4 s</text>
+        <text class="lbl dim" x="70" y="260">20% while wound</text>
+        <text class="lbl warn" x="302" y="260">2 in 5 run-downs are feints</text>
+        <line class="axis" x1="60" y1="276" x2="710" y2="276"/>
+        <line class="axis" x1="60" y1="272" x2="60" y2="280"/><text class="lbl dim" x="54" y="294">0 s</text>
+        <line class="axis" x1="190" y1="272" x2="190" y2="280"/><text class="lbl dim" x="182" y="294">5</text>
+        <line class="axis" x1="320" y1="272" x2="320" y2="280"/><text class="lbl dim" x="312" y="294">10</text>
+        <line class="axis" x1="450" y1="272" x2="450" y2="280"/><text class="lbl dim" x="442" y="294">15</text>
+        <line class="axis" x1="580" y1="272" x2="580" y2="280"/><text class="lbl dim" x="572" y="294">20</text>
+        <line class="axis" x1="710" y1="272" x2="710" y2="280"/><text class="lbl dim" x="702" y="294">25</text>
+      </svg>
+    </div>
+  </section>
+
+  <section>
+    <h2>His moves</h2>
+    <p class="sub">He picks by how far away you are, chains two (three when overwound), and never repeats a move back to back.</p>
+    <div class="react">
+      <div><span class="when">Close · stage 1</span><b>Swing</b><span>Sweeping arm, 8 damage.</span></div>
+      <div><span class="when">Close · stage 1</span><b>Grab and throw</b><span>Hand opens for 1 s, 6 damage, hurled ~12 blocks. A raised shield blocks it.</span></div>
+      <div><span class="when">Close or mid · stage 1</span><b>Stomp</b><span>Shockwave ring, 6 damage. Jump it. Doubled when overwound.</span></div>
+      <div><span class="when">Mid or far · stage 1</span><b>Charge</b><span>12 damage, big knockback.</span></div>
+      <div class="bad"><span class="when">Far · stage 2</span><b>Spring leap</b><span>Coils 1.5 s, lands where you stood: 10 damage within 5 blocks.</span></div>
+      <div class="bad"><span class="when">Mid · stage 2</span><b>Steam vent</b><span>Hiss and a glowing grille for 2 s, then a 9-block cone: burns, blinds 2 s.</span></div>
+      <div class="bad"><span class="when">Close · stage 3</span><b>Gear spin</b><span>2 s wind-up, 4 s spin that pulls you in. Run.</span></div>
+      <div><span class="when">You're out of reach</span><b>Cog throw</b><span>After 5 s without a path. Pillars don't save you.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The reward: Spring Engine</h2>
+    <p class="sub">Create can't store rotation. This can. It makes nothing: every SU it gives back was wound in earlier.</p>
+    <ol class="loop">
+      <li><h3>Build it</h3><p>Mainspring, Brass Casing, 4 Brass Sheets, 2 Shafts, at a crafting table.</p></li>
+      <li><h3>Wind it</h3><p>Shaft into the back. Set how much stress it takes: 1,024 SU by default, up to 16,384.</p></li>
+      <li><h3>Let it out</h3><p>Shaft out of the front, 1–256 RPM, 16,384 SU on offer. Drains only what's used.</p></li>
+      <li><h3>Take it with you</h3><p>Keeps its wind when broken. Works on Aeronautics ships: fuel-free power for a voyage.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Numbers</h2>
+    <div class="numbers">
+      <div class="num"><b>7 × 6 blocks</b><span>tall and wide across his shields, twice the Wither</span></div>
+      <div class="num"><b>400</b><span>health, +50% per extra player nearby</span></div>
+      <div class="num"><b>10%</b><span>damage taken while wound</span></div>
+      <div class="num"><b>6 → 5 → 4 s</b><span>rewind window by stage, +3 s on a key jam</span></div>
+      <div class="num"><b>10 → 15 → 20%</b><span>damage taken while wound, by stage</span></div>
+      <div class="num"><b>1 hour</b><span>full Spring Engine at 16,384 SU</span></div>
+      <div class="num"><b>1 per 64² · 48²</b><span>chunks: ruins in the Overworld · on End islands</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Rules</h2>
+    <div class="pairs">
+      <div class="does"><h3>He does</h3><ul>
+        <li>Charge, sweep and stomp, with big knockback</li>
+        <li>Throw a cog if he can't reach you for 5 s</li>
+        <li>Shed plates, learn moves and speed up at 67% and 33% health</li>
+        <li>Fake a run-down now and then, from stage 2</li>
+        <li>Sit down and mend if everyone leaves for 60 s</li>
+        <li>Always drop one Mainspring, brass, Precision Mechanisms, 50 XP</li>
+      </ul></div>
+      <div class="doesnt"><h3>He doesn't</h3><ul>
+        <li>Break or change any block, ever</li>
+        <li>Burn, drown, suffocate, take fall damage, or take poison or wither</li>
+        <li>Take damage from saws, drills, crushers or deployers</li>
+        <li>Fit in a jar or a cage</li>
+        <li>Wake on peaceful</li>
+        <li>Drop extra Mainsprings with Looting</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What if…?</h2>
+    <div class="qa">
+      <div><b>The shaft stops mid-ritual?</b><span>The key slowly unwinds back. Start again.</span></div>
+      <div><b>I walk near a ruin?</b><span>5 s warning: his eyes light. Back off past 24 blocks and he settles.</span></div>
+      <div><b>A storm rolls in?</b><span>Lightning rewinds him instantly. Fight under clear skies.</span></div>
+      <div><b>I lure him into lava?</b><span>Immune. He'll walk the bottom of a lake too.</span></div>
+      <div><b>Everyone logs off mid-fight?</b><span>Saved. He sits dormant and mends after 60 s alone.</span></div>
+      <div><b>I loop an engine into itself?</b><span>Net zero. It drains by what's used, winding included.</span></div>
+      <div><b>I put an engine on a train?</b><span>Carried, but still. Aeronautics ships only.</span></div>
+      <div><b>He sags, I run in, he lunges?</b><span>A feint. Watch his eyes: lit means fake. The real rewind comes 5 s later.</span></div>
+      <div><b>He reaches for me?</b><span>Raise a shield: no grab, no throw.</span></div>
+      <div><b>I summon him underground?</b><span>He rises to the surface above and kneels until a player comes close.</span></div>
+      <div><b>I try it in the Nether?</b><span>The key turns but won't take. Overworld and End only.</span></div>
+      <div><b>We fight on an End island?</b><span>He never steps off a big drop. You can still be knocked off.</span></div>
+      <div><b>Two players fight him?</b><span>+50% health, fixed when he wakes.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Still to settle</h2>
+    <div class="open">
+      <div class="watch ok"><h3>Settled today</h3><ul>
+        <li>Immune to suffocation, falls, lava and water.</li>
+        <li>Contraptions can't hurt him: saws, drills, crushers and deployers do nothing. Players only.</li>
+      </ul></div>
+      <div class="watch ok"><h3>Next</h3><ul>
+        <li>The look, rig and motion: brief written (design/briefs/clockwork-juggernaut.md); Blockbench next.</li>
+        <li>The Spring Engine may need two blocks (one shaft network each). Settle before the look.</li>
+        <li>Fight length checked in play.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Readiness</h2>
+    <div class="scores">
+      <div class="score"><span>Gameplay</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">The look and motion feel are still for the brief.</span></div>
+      <div class="score"><span>World integration</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><span class="why">The ruin's layout isn't designed yet.</span></div>
+      <div class="score"><span>Balance</span><div class="track"><div class="fill" style="width:85%"></div></div><b>85%</b><span class="why">Numbers not yet played; fight length needs a check in game.</span></div>
+      <div class="score"><span>Progression</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">Placement settled.</span></div>
+      <div class="score"><span>Automation</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">Contraptions can't hurt him; the Spring Engine's two shafts are for implementation.</span></div>
+      <div class="score"><span>Edge cases</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">Ruin edge cases to check once the structure is built.</span></div>
+      <div class="score"><span><b style="text-align:left">Overall</b></span><div class="track"><div class="fill" style="width:85%"></div></div><b>85%</b><span class="why">The lowest area sets it.</span></div>
+    </div>
+  </section>
+
+  <footer>Full record: <code>design/specs/clockwork-juggernaut.md</code> · 56 decisions · 2026-10-27</footer>
+</div>

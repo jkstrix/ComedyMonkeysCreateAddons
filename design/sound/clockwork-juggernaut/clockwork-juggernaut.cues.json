@@ -1,0 +1,7452 @@
+{
+ "namespace": "clockwork_juggernaut",
+ "events": {
+  "tick": {
+   "subtitle": "Juggernaut ticks",
+   "group": "Signature sounds",
+   "layers": [
+    {
+     "type": "tick",
+     "at": 0,
+     "gain": 0.55,
+     "f": 1150,
+     "dur": 0.05
+    },
+    {
+     "type": "thud",
+     "at": 0.003,
+     "gain": 0.5,
+     "f": 62,
+     "dur": 0.22
+    },
+    {
+     "type": "clink",
+     "at": 0.006,
+     "gain": 0.18,
+     "f": 640,
+     "dur": 0.35
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -28,
+    "vary": {
+     "pitch": 0.025
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_tick_1",
+       "jug_tick_2",
+       "jug_tick_3",
+       "jug_tick_4"
+      ],
+      "pitch": 0.62,
+      "gain": 1
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 0.005,
+      "pitch": 0.5,
+      "gain": 0.3,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.15
+     },
+     {
+      "pick": [
+       "sa3_tradebot_tick_1",
+       "sa3_tradebot_tick_2",
+       "sa3_tradebot_tick_3",
+       "sa3_tradebot_tick_4"
+      ],
+      "pitch": 0.4,
+      "gain": 0.25
+     }
+    ],
+    "level": 0.2535
+   }
+  },
+  "tock": {
+   "subtitle": "Juggernaut ticks",
+   "group": "Signature sounds",
+   "layers": [
+    {
+     "type": "tick",
+     "at": 0,
+     "gain": 0.5,
+     "f": 900,
+     "dur": 0.05
+    },
+    {
+     "type": "thud",
+     "at": 0.003,
+     "gain": 0.55,
+     "f": 52,
+     "dur": 0.25
+    },
+    {
+     "type": "clink",
+     "at": 0.006,
+     "gain": 0.15,
+     "f": 520,
+     "dur": 0.4
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -28,
+    "vary": {
+     "pitch": 0.025
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_tock_1",
+       "jug_tock_2",
+       "jug_tock_3",
+       "jug_tock_4"
+      ],
+      "pitch": 0.55,
+      "gain": 1
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 0.005,
+      "pitch": 0.45,
+      "gain": 0.35,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.15
+     },
+     {
+      "pick": [
+       "sa3_tradebot_tick_1",
+       "sa3_tradebot_tick_2",
+       "sa3_tradebot_tick_3",
+       "sa3_tradebot_tick_4"
+      ],
+      "pitch": 0.33,
+      "gain": 0.22
+     }
+    ],
+    "level": 0.2564
+   }
+  },
+  "run_down_tick": {
+   "subtitle": "Juggernaut winds down",
+   "group": "Signature sounds",
+   "layers": [
+    {
+     "type": "tick",
+     "at": 0,
+     "gain": 0.55,
+     "f": 900,
+     "dur": 0.05
+    },
+    {
+     "type": "thud",
+     "at": 0.003,
+     "gain": 0.6050000000000001,
+     "f": 52,
+     "dur": 0.25
+    },
+    {
+     "type": "clink",
+     "at": 0.006,
+     "gain": 0.165,
+     "f": 520,
+     "dur": 0.4
+    },
+    {
+     "type": "creak",
+     "at": 0.05,
+     "gain": 0.45,
+     "f": 34,
+     "dur": 0.6
+    },
+    {
+     "type": "boing",
+     "at": 0.04,
+     "gain": 0.18,
+     "f": 70,
+     "wobble": 0.25,
+     "dur": 0.6
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -27,
+    "vary": {
+     "pitch": 0.02
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_tock_1",
+       "jug_tock_2",
+       "jug_tock_3",
+       "jug_tock_4"
+      ],
+      "pitch": 0.5,
+      "gain": 1
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 0.005,
+      "pitch": 0.4,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.15
+     },
+     {
+      "pick": [
+       "jug_creak_low_a",
+       "jug_creak_low_b",
+       "jug_creak_low_c"
+      ],
+      "at": 0.06,
+      "pitch": 0.6,
+      "gain": 0.55,
+      "trim": [
+       0,
+       0.7
+      ],
+      "fadeOut": 0.3
+     },
+     {
+      "src": "jug_spring_b",
+      "at": 0.04,
+      "pitch": 0.45,
+      "gain": 0.22,
+      "trim": [
+       0,
+       0.35
+      ],
+      "fadeOut": 0.5
+     }
+    ],
+    "level": 0.2748
+   }
+  },
+  "key_ratchet": {
+   "subtitle": "Juggernaut's key turns",
+   "group": "Signature sounds",
+   "layers": [
+    {
+     "type": "ratchet",
+     "at": 0,
+     "gain": 0.6,
+     "rate": 9,
+     "f": 950,
+     "dur": 0.6
+    },
+    {
+     "type": "thud",
+     "at": 0.6,
+     "gain": 0.35,
+     "f": 70,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -25,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "sa3_tradebot_wind_1",
+       "sa3_tradebot_wind_2",
+       "sa3_tradebot_wind_3",
+       "sa3_tradebot_wind_4"
+      ],
+      "pitch": 0.55,
+      "gain": 0.9,
+      "trim": [
+       0,
+       0.34
+      ],
+      "fadeOut": 0.08
+     },
+     {
+      "src": "jug_reel_slow",
+      "pitch": 0.6,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.36
+      ]
+     },
+     {
+      "pick": [
+       "jug_key_lock_a",
+       "jug_key_lock_b"
+      ],
+      "at": 0.6,
+      "pitch": 0.6,
+      "gain": 0.7
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 0.6,
+      "pitch": 0.45,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.15
+     }
+    ],
+    "level": 0.6368
+   }
+  },
+  "plate_ring": {
+   "subtitle": "Juggernaut's armour rings",
+   "group": "Signature sounds",
+   "layers": [
+    {
+     "type": "clang",
+     "at": 0,
+     "gain": 0.6,
+     "f": 190,
+     "dur": 1.4
+    },
+    {
+     "type": "ping",
+     "at": 0.004,
+     "gain": 0.12,
+     "f": 589,
+     "dur": 0.9
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -27,
+    "vary": {
+     "pitch": 0.06
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_gong_a",
+       "jug_gong_b",
+       "jug_gong_c"
+      ],
+      "pitch": 0.85,
+      "gain": 1,
+      "trim": [
+       0,
+       1.4
+      ],
+      "fadeOut": 0.9
+     },
+     {
+      "pick": [
+       "jug_anvil_1",
+       "jug_anvil_2",
+       "jug_anvil_3"
+      ],
+      "pitch": 0.45,
+      "gain": 0.3,
+      "fadeOut": 0.4
+     },
+     {
+      "pick": [
+       "impactPlate_heavy_000",
+       "impactPlate_heavy_001",
+       "impactPlate_heavy_002",
+       "impactPlate_heavy_003",
+       "impactPlate_heavy_004"
+      ],
+      "pitch": 0.6,
+      "gain": 0.5
+     }
+    ],
+    "level": 0.1923
+   }
+  },
+  "glow_on": {
+   "subtitle": "Juggernaut's runes glow",
+   "group": "Signature sounds",
+   "layers": [
+    {
+     "type": "swell",
+     "at": 0,
+     "gain": 0.35,
+     "f": 98,
+     "f2": 147,
+     "dur": 1.2
+    },
+    {
+     "type": "hum",
+     "at": 0.24,
+     "gain": 0.25,
+     "f": 196,
+     "dur": 0.96
+    },
+    {
+     "type": "sparkle",
+     "at": 0.25,
+     "gain": 0.06,
+     "f": 1800
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -27,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "type": "swell",
+      "at": 0,
+      "gain": 0.5,
+      "f": 98,
+      "f2": 147,
+      "dur": 1.2
+     },
+     {
+      "type": "hum",
+      "at": 0.24,
+      "gain": 0.35,
+      "f": 196,
+      "dur": 0.96
+     },
+     {
+      "src": "jug_chime",
+      "at": 0.25,
+      "pitch": 0.5,
+      "gain": 0.14,
+      "trim": [
+       0,
+       0.6
+      ],
+      "fadeOut": 0.6,
+      "highpass": 300
+     }
+    ],
+    "level": 0.1377
+   }
+  },
+  "steam_puff": {
+   "subtitle": "Juggernaut vents steam",
+   "group": "Signature sounds",
+   "layers": [
+    {
+     "type": "noise",
+     "at": 0,
+     "gain": 0.36000000000000004,
+     "f": 5200,
+     "dur": 0.45
+    },
+    {
+     "type": "whoosh",
+     "at": 0,
+     "gain": 0.25,
+     "f": 200,
+     "f2": 900,
+     "dur": 0.4
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -26,
+    "vary": {
+     "pitch": 0.08
+    },
+    "post": {
+     "lowpass": 7000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_steam_puff",
+       "jug_steam_burst"
+      ],
+      "pitch": 0.8,
+      "gain": 1,
+      "fadeOut": 0.15
+     },
+     {
+      "type": "whoosh",
+      "at": 0,
+      "gain": 0.2,
+      "f": 200,
+      "f2": 900,
+      "dur": 0.4
+     }
+    ],
+    "level": 0.2654
+   }
+  },
+  "step": {
+   "subtitle": "Juggernaut stomps",
+   "group": "Movement",
+   "layers": [
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.425,
+     "f": 44,
+     "dur": 0.4
+    },
+    {
+     "type": "clack",
+     "at": 0.005,
+     "gain": 0.125,
+     "f": 300,
+     "dur": 0.1
+    },
+    {
+     "type": "clink",
+     "at": 0.06,
+     "gain": 0.060500000000000005,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.13,
+     "gain": 0.044000000000000004,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.09,
+     "gain": 0.0495,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.26,
+     "gain": 0.022000000000000002,
+     "f": 760,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 6,
+    "target": -30,
+    "vary": {
+     "pitch": 0.05
+    },
+    "post": {
+     "lowpass": 6000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.45,
+      "gain": 1,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2
+     },
+     {
+      "pick": [
+       "impactPunch_heavy_000",
+       "impactPunch_heavy_001",
+       "impactPunch_heavy_002",
+       "impactPunch_heavy_003",
+       "impactPunch_heavy_004"
+      ],
+      "pitch": 0.7,
+      "gain": 0.7
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.07,
+      "gain": 0.21,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.1,
+      "gain": 0.18,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.13,
+      "gain": 0.09,
+      "pitch": 0.6
+     }
+    ],
+    "level": 0.2312
+   }
+  },
+  "step_run": {
+   "subtitle": "Juggernaut thunders",
+   "group": "Movement",
+   "layers": [
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.5525,
+     "f": 44,
+     "dur": 0.4
+    },
+    {
+     "type": "clack",
+     "at": 0.005,
+     "gain": 0.1625,
+     "f": 300,
+     "dur": 0.1
+    },
+    {
+     "type": "clink",
+     "at": 0.06,
+     "gain": 0.07865000000000001,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.13,
+     "gain": 0.05720000000000001,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.09,
+     "gain": 0.06435,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.26,
+     "gain": 0.028600000000000004,
+     "f": 760,
+     "dur": 0.15
+    },
+    {
+     "type": "thud",
+     "at": 0.01,
+     "gain": 0.2,
+     "f": 30,
+     "dur": 0.5
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -27,
+    "vary": {
+     "pitch": 0.05
+    },
+    "post": {
+     "lowpass": 6000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.42,
+      "gain": 1,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2
+     },
+     {
+      "pick": [
+       "impactPunch_heavy_000",
+       "impactPunch_heavy_001",
+       "impactPunch_heavy_002",
+       "impactPunch_heavy_003",
+       "impactPunch_heavy_004"
+      ],
+      "pitch": 0.45,
+      "gain": 0.7
+     },
+     {
+      "src": "1023",
+      "at": 0,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.6
+      ],
+      "pitch": 0.8,
+      "fadeOut": 0.36,
+      "lowpass": 2500
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.06,
+      "gain": 0.24499999999999997,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.09,
+      "gain": 0.21,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.12,
+      "gain": 0.105,
+      "pitch": 0.6
+     }
+    ],
+    "level": 0.3622
+   }
+  },
+  "foot_scrape": {
+   "subtitle": "Juggernaut scrapes the ground",
+   "group": "Movement",
+   "layers": [
+    {
+     "type": "scrape",
+     "at": 0,
+     "gain": 0.5,
+     "f": 500,
+     "dur": 0.22
+    },
+    {
+     "type": "thud",
+     "at": 0.02,
+     "gain": 0.3,
+     "f": 60,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -29,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_grind_stone_a",
+       "jug_grind_stone_b",
+       "jug_grind_stone_c"
+      ],
+      "pitch": 0.8,
+      "gain": 1,
+      "trim": [
+       0,
+       0.25
+      ],
+      "fadeIn": 0.03,
+      "fadeOut": 0.08
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 0.02,
+      "pitch": 0.55,
+      "gain": 0.45,
+      "trim": [
+       0,
+       0.25
+      ],
+      "fadeOut": 0.12
+     }
+    ],
+    "level": 0.3793
+   }
+  },
+  "skid": {
+   "subtitle": "Juggernaut skids",
+   "group": "Movement",
+   "layers": [
+    {
+     "type": "scrape",
+     "at": 0,
+     "gain": 0.55,
+     "f": 420,
+     "dur": 0.45
+    },
+    {
+     "type": "thud",
+     "at": 0.38,
+     "gain": 0.5,
+     "f": 50,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.42,
+     "gain": 0.17600000000000002,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.49,
+     "gain": 0.128,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.44999999999999996,
+     "gain": 0.144,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.62,
+     "gain": 0.064,
+     "f": 760,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -27,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_grind_stone_a",
+       "jug_grind_stone_b",
+       "jug_grind_stone_c"
+      ],
+      "pitch": 0.7,
+      "gain": 1,
+      "trim": [
+       0,
+       0.5
+      ],
+      "fadeIn": 0.05,
+      "fadeOut": 0.15
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 0.38,
+      "pitch": 0.45,
+      "gain": 0.7,
+      "trim": [
+       0,
+       0.35
+      ],
+      "fadeOut": 0.15
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.42,
+      "gain": 0.27999999999999997,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.44999999999999996,
+      "gain": 0.24,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.48,
+      "gain": 0.12,
+      "pitch": 0.6
+     }
+    ],
+    "level": 0.4018
+   }
+  },
+  "plates_settle": {
+   "subtitle": "Juggernaut's plates rattle",
+   "group": "Movement",
+   "layers": [
+    {
+     "type": "clink",
+     "at": 0,
+     "gain": 0.264,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.07,
+     "gain": 0.192,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.03,
+     "gain": 0.216,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.2,
+     "gain": 0.096,
+     "f": 760,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -31,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0,
+      "gain": 0.42,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.03,
+      "gain": 0.36,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.06,
+      "gain": 0.18,
+      "pitch": 0.6
+     }
+    ],
+    "level": 0.206
+   }
+  },
+  "joint_step": {
+   "subtitle": "Juggernaut's joints step",
+   "group": "Movement",
+   "layers": [
+    {
+     "type": "tick",
+     "at": 0,
+     "gain": 0.35,
+     "f": 800,
+     "dur": 0.04
+    },
+    {
+     "type": "creak",
+     "at": 0.01,
+     "gain": 0.35,
+     "f": 40,
+     "dur": 0.18
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -31,
+    "vary": {
+     "pitch": 0.06
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "metalClick",
+      "pitch": 0.6,
+      "gain": 0.8
+     },
+     {
+      "pick": [
+       "jug_creak_low_a",
+       "jug_creak_low_b",
+       "jug_creak_low_c"
+      ],
+      "at": 0.01,
+      "pitch": 0.8,
+      "gain": 0.6,
+      "trim": [
+       0,
+       0.2
+      ],
+      "fadeOut": 0.08
+     }
+    ],
+    "level": 0.4065
+   }
+  },
+  "head_ratchet": {
+   "subtitle": "Juggernaut turns his head",
+   "group": "Movement",
+   "layers": [
+    {
+     "type": "ratchet",
+     "at": 0,
+     "gain": 0.35,
+     "rate": 18,
+     "f": 1100,
+     "dur": 0.35
+    },
+    {
+     "type": "creak",
+     "at": 0,
+     "gain": 0.2,
+     "f": 60,
+     "dur": 0.35
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -32,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_reel",
+      "pitch": 0.55,
+      "gain": 1,
+      "trim": [
+       0,
+       0.2
+      ],
+      "fadeOut": 0.05
+     },
+     {
+      "pick": [
+       "jug_creak_low_a",
+       "jug_creak_low_b",
+       "jug_creak_low_c"
+      ],
+      "pitch": 1,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.35
+      ],
+      "fadeOut": 0.15
+     }
+    ],
+    "level": 0.5
+   }
+  },
+  "joint_creak": {
+   "subtitle": "Juggernaut creaks",
+   "group": "Movement",
+   "layers": [
+    {
+     "type": "creak",
+     "at": 0,
+     "gain": 0.45,
+     "f": 32,
+     "dur": 0.5
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -32,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_creak_low_a",
+       "jug_creak_low_b",
+       "jug_creak_low_c"
+      ],
+      "pitch": 0.75,
+      "gain": 1,
+      "fadeOut": 0.2
+     },
+     {
+      "src": "jug_creak_long",
+      "pitch": 0.5,
+      "gain": 0.3,
+      "trim": [
+       0,
+       0.25
+      ],
+      "fadeOut": 0.15
+     }
+    ],
+    "level": 0.1879
+   }
+  },
+  "knuckle_grind": {
+   "subtitle": "Juggernaut grinds his fist",
+   "group": "Movement",
+   "layers": [
+    {
+     "type": "scrape",
+     "at": 0,
+     "gain": 0.35,
+     "f": 380,
+     "dur": 0.4
+    },
+    {
+     "type": "ratchet",
+     "at": 0.05,
+     "gain": 0.25,
+     "rate": 12,
+     "f": 900,
+     "dur": 0.3
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -33,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_grind_stone_a",
+       "jug_grind_stone_b",
+       "jug_grind_stone_c"
+      ],
+      "pitch": 0.85,
+      "gain": 1,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeIn": 0.05,
+      "fadeOut": 0.12
+     },
+     {
+      "src": "jug_reel_slow",
+      "at": 0.05,
+      "pitch": 0.6,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.2
+      ]
+     }
+    ],
+    "level": 0.1618
+   }
+  },
+  "claw_flex": {
+   "subtitle": "Juggernaut flexes his claw",
+   "group": "Movement",
+   "layers": [
+    {
+     "type": "ratchet",
+     "at": 0,
+     "gain": 0.3,
+     "rate": 14,
+     "f": 1300,
+     "dur": 0.22
+    },
+    {
+     "type": "clink",
+     "at": 0.22,
+     "gain": 0.15,
+     "f": 900
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -33,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_reel",
+      "pitch": 0.8,
+      "gain": 1,
+      "trim": [
+       0,
+       0.22
+      ],
+      "fadeOut": 0.05
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.22,
+      "pitch": 0.9,
+      "gain": 0.35
+     }
+    ],
+    "level": 0.4508
+   }
+  },
+  "steam_sigh": {
+   "subtitle": "Juggernaut sighs steam",
+   "group": "Movement",
+   "layers": [
+    {
+     "type": "creak",
+     "at": 0,
+     "gain": 0.35,
+     "f": 30,
+     "dur": 0.6
+    },
+    {
+     "type": "noise",
+     "at": 0.6,
+     "gain": 0.315,
+     "f": 3800,
+     "dur": 0.9
+    },
+    {
+     "type": "swell",
+     "at": 0.6,
+     "gain": 0.12,
+     "f": 140,
+     "f2": 90,
+     "dur": 0.9
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -32,
+    "post": {
+     "lowpass": 6000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_creak_low_a",
+       "jug_creak_low_b",
+       "jug_creak_low_c"
+      ],
+      "pitch": 0.6,
+      "gain": 0.6,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2
+     },
+     {
+      "src": "0227",
+      "at": 0.55,
+      "pitch": 0.85,
+      "gain": 1,
+      "trim": [
+       0.4,
+       1.6
+      ],
+      "fadeIn": 0.2,
+      "fadeOut": 0.6
+     },
+     {
+      "type": "swell",
+      "at": 0.6,
+      "gain": 0.12,
+      "f": 140,
+      "f2": 90,
+      "dur": 0.9
+     }
+    ],
+    "level": 0.1009
+   }
+  },
+  "charge_tell": {
+   "subtitle": "Juggernaut lowers his head",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "clack",
+     "at": 0,
+     "gain": 0.45,
+     "f": 500,
+     "dur": 0.08
+    },
+    {
+     "type": "noise",
+     "at": 0.02,
+     "gain": 0.5,
+     "f": 2200,
+     "dur": 0.3
+    },
+    {
+     "type": "creak",
+     "at": 0.05,
+     "gain": 0.3,
+     "f": 36,
+     "dur": 0.4
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -24,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "metalLatch",
+      "pitch": 0.55,
+      "gain": 0.8
+     },
+     {
+      "src": "jug_steam_burst",
+      "at": 0.02,
+      "pitch": 0.7,
+      "gain": 1
+     },
+     {
+      "pick": [
+       "jug_creak_low_a",
+       "jug_creak_low_b",
+       "jug_creak_low_c"
+      ],
+      "at": 0.05,
+      "pitch": 0.8,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.35
+      ],
+      "fadeOut": 0.15
+     }
+    ],
+    "level": 0.342
+   }
+  },
+  "swing_windup": {
+   "subtitle": "Juggernaut winds up a swing",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "creak",
+     "at": 0,
+     "gain": 0.45,
+     "f": 30,
+     "dur": 0.4
+    },
+    {
+     "type": "ratchet",
+     "at": 0.05,
+     "gain": 0.25,
+     "rate": 10,
+     "f": 850,
+     "dur": 0.3
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -26,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_creak_long",
+      "pitch": 0.55,
+      "gain": 1,
+      "trim": [
+       0,
+       0.22
+      ],
+      "fadeIn": 0.05,
+      "fadeOut": 0.1
+     },
+     {
+      "src": "jug_reel_slow",
+      "at": 0.05,
+      "pitch": 0.5,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.15
+      ]
+     }
+    ],
+    "level": 0.2811
+   }
+  },
+  "swing_whoosh": {
+   "subtitle": "Juggernaut swings",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "whoosh",
+     "at": 0,
+     "gain": 0.7,
+     "f": 120,
+     "f2": 520,
+     "dur": 0.38
+    },
+    {
+     "type": "ratchet",
+     "at": 0.12,
+     "gain": 0.2,
+     "rate": 22,
+     "f": 1100,
+     "dur": 0.35
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -24,
+    "vary": {
+     "pitch": 0.05
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "pitch": 0.6,
+      "gain": 1
+     },
+     {
+      "type": "whoosh",
+      "at": 0,
+      "gain": 0.3,
+      "f": 110,
+      "f2": 450,
+      "dur": 0.4
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.12,
+      "pitch": 0.9,
+      "gain": 0.3,
+      "trim": [
+       0.2,
+       0.6
+      ],
+      "fadeOut": 0.15
+     }
+    ],
+    "level": 0.5297
+   }
+  },
+  "stomp_raise": {
+   "subtitle": "Juggernaut raises his foot",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "creak",
+     "at": 0,
+     "gain": 0.45,
+     "f": 28,
+     "dur": 0.5
+    },
+    {
+     "type": "noise",
+     "at": 0.25,
+     "gain": 0.135,
+     "f": 5200,
+     "dur": 0.25
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -27,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_creak_low_a",
+       "jug_creak_low_b",
+       "jug_creak_low_c"
+      ],
+      "pitch": 0.55,
+      "gain": 1,
+      "trim": [
+       0,
+       0.45
+      ],
+      "fadeOut": 0.2
+     },
+     {
+      "src": "jug_steam_puff",
+      "at": 0.25,
+      "pitch": 0.9,
+      "gain": 0.4,
+      "fadeOut": 0.15
+     }
+    ],
+    "level": 0.4256
+   }
+  },
+  "stomp_impact": {
+   "subtitle": "Juggernaut stomps a shockwave",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 1,
+     "f": 36,
+     "dur": 0.9
+    },
+    {
+     "type": "bump",
+     "at": 0,
+     "gain": 0.6,
+     "f": 80,
+     "f2": 30,
+     "dur": 0.5
+    },
+    {
+     "type": "noise",
+     "at": 0.01,
+     "gain": 0.35,
+     "f": 700,
+     "dur": 0.5
+    },
+    {
+     "type": "clang",
+     "at": 0.03,
+     "gain": 0.33,
+     "f": 170,
+     "dur": 1.4
+    },
+    {
+     "type": "ping",
+     "at": 0.034,
+     "gain": 0.066,
+     "f": 527,
+     "dur": 0.9
+    },
+    {
+     "type": "clink",
+     "at": 0.12,
+     "gain": 0.198,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.19,
+     "gain": 0.14400000000000002,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.15,
+     "gain": 0.162,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.32,
+     "gain": 0.07200000000000001,
+     "f": 760,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -21,
+    "vary": {
+     "pitch": 0.04
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.35,
+      "gain": 1,
+      "fadeOut": 0.25
+     },
+     {
+      "src": "1023",
+      "at": 0,
+      "gain": 0.9,
+      "trim": [
+       0,
+       1.2
+      ],
+      "pitch": 0.7,
+      "fadeOut": 0.72,
+      "lowpass": 2500
+     },
+     {
+      "pick": [
+       "impactPunch_heavy_000",
+       "impactPunch_heavy_001",
+       "impactPunch_heavy_002",
+       "impactPunch_heavy_003",
+       "impactPunch_heavy_004"
+      ],
+      "pitch": 0.4,
+      "gain": 0.7
+     },
+     {
+      "pick": [
+       "jug_gong_a",
+       "jug_gong_b",
+       "jug_gong_c"
+      ],
+      "at": 0.03,
+      "pitch": 0.6,
+      "gain": 0.3,
+      "trim": [
+       0,
+       1.2
+      ],
+      "fadeOut": 0.7
+     },
+     {
+      "pick": [
+       "1771",
+       "1772",
+       "1774",
+       "1776",
+       "1778"
+      ],
+      "at": 0.12,
+      "pitch": 0.6,
+      "gain": 0.3,
+      "trim": [
+       0,
+       0.9
+      ],
+      "fadeOut": 0.4
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.14,
+      "gain": 0.27999999999999997,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.17,
+      "gain": 0.24,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.2,
+      "gain": 0.12,
+      "pitch": 0.6
+     }
+    ],
+    "level": 0.7144
+   }
+  },
+  "grab_open": {
+   "subtitle": "Juggernaut opens his claw",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "ratchet",
+     "at": 0,
+     "gain": 0.4,
+     "rate": 16,
+     "f": 1000,
+     "dur": 0.4
+    },
+    {
+     "type": "creak",
+     "at": 0.05,
+     "gain": 0.3,
+     "f": 45,
+     "dur": 0.4
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -26,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_reel",
+      "pitch": 0.65,
+      "gain": 1,
+      "trim": [
+       0,
+       0.28
+      ],
+      "fadeOut": 0.05
+     },
+     {
+      "src": "jug_creak_metal",
+      "pitch": 0.7,
+      "gain": 0.45,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.15
+     }
+    ],
+    "level": 0.5482
+   }
+  },
+  "grab_snap": {
+   "subtitle": "Juggernaut grabs",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "clack",
+     "at": 0,
+     "gain": 0.6,
+     "f": 420,
+     "dur": 0.1
+    },
+    {
+     "type": "thud",
+     "at": 0.005,
+     "gain": 0.55,
+     "f": 80,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.01,
+     "gain": 0.25,
+     "f": 600,
+     "dur": 0.3
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -24,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "metalLatch",
+      "pitch": 0.5,
+      "gain": 1
+     },
+     {
+      "pick": [
+       "impactPunch_heavy_000",
+       "impactPunch_heavy_001",
+       "impactPunch_heavy_002",
+       "impactPunch_heavy_003",
+       "impactPunch_heavy_004"
+      ],
+      "pitch": 0.6,
+      "gain": 0.8
+     },
+     {
+      "pick": [
+       "jug_anvil_1",
+       "jug_anvil_2",
+       "jug_anvil_3"
+      ],
+      "pitch": 0.5,
+      "gain": 0.25,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.2
+     }
+    ],
+    "level": 0.5546
+   }
+  },
+  "grab_clang": {
+   "subtitle": "Juggernaut's claw clangs shut",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "clang",
+     "at": 0,
+     "gain": 0.54,
+     "f": 260,
+     "dur": 1.4
+    },
+    {
+     "type": "ping",
+     "at": 0.004,
+     "gain": 0.108,
+     "f": 806,
+     "dur": 0.9
+    },
+    {
+     "type": "clack",
+     "at": 0,
+     "gain": 0.5,
+     "f": 520,
+     "dur": 0.08
+    },
+    {
+     "type": "clink",
+     "at": 0.1,
+     "gain": 0.154,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.17,
+     "gain": 0.11199999999999999,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.13,
+     "gain": 0.126,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.30000000000000004,
+     "gain": 0.055999999999999994,
+     "f": 760,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -23,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_anvil_1",
+       "jug_anvil_2",
+       "jug_anvil_3"
+      ],
+      "pitch": 0.6,
+      "gain": 1
+     },
+     {
+      "pick": [
+       "jug_gong_a",
+       "jug_gong_b",
+       "jug_gong_c"
+      ],
+      "pitch": 0.9,
+      "gain": 0.5,
+      "trim": [
+       0,
+       1.2
+      ],
+      "fadeOut": 0.7
+     },
+     {
+      "src": "metalLatch",
+      "pitch": 0.7,
+      "gain": 0.5
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.12,
+      "gain": 0.24499999999999997,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.15,
+      "gain": 0.21,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.18,
+      "gain": 0.105,
+      "pitch": 0.6
+     }
+    ],
+    "level": 0.3499
+   }
+  },
+  "throw_whoosh": {
+   "subtitle": "Juggernaut hurls",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "whoosh",
+     "at": 0,
+     "gain": 0.7,
+     "f": 140,
+     "f2": 700,
+     "dur": 0.45
+    },
+    {
+     "type": "noise",
+     "at": 0.25,
+     "gain": 0.18000000000000002,
+     "f": 3000,
+     "dur": 0.3
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -24,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "pitch": 0.5,
+      "gain": 1
+     },
+     {
+      "src": "jug_steam_burst",
+      "at": 0.25,
+      "pitch": 0.8,
+      "gain": 0.5
+     }
+    ],
+    "level": 0.3972
+   }
+  },
+  "grab_release": {
+   "subtitle": "Juggernaut lets go",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "ratchet",
+     "at": 0,
+     "gain": 0.3,
+     "rate": 20,
+     "f": 1200,
+     "dur": 0.18
+    },
+    {
+     "type": "clink",
+     "at": 0.18,
+     "gain": 0.15,
+     "f": 800
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -28,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_reel",
+      "pitch": 0.9,
+      "gain": 1,
+      "trim": [
+       0,
+       0.18
+      ],
+      "fadeOut": 0.04
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.18,
+      "gain": 0.4
+     }
+    ],
+    "level": 0.7396
+   }
+  },
+  "leap_coil": {
+   "subtitle": "Juggernaut coils his spring",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "creak",
+     "at": 0,
+     "gain": 0.45,
+     "f": 26,
+     "dur": 1.4
+    },
+    {
+     "type": "ratchet",
+     "at": 0.1,
+     "gain": 0.25,
+     "rate": 8,
+     "f": 900,
+     "dur": 0.5
+    },
+    {
+     "type": "ratchet",
+     "at": 0.6,
+     "gain": 0.35,
+     "rate": 18,
+     "f": 1000,
+     "dur": 0.45
+    },
+    {
+     "type": "ratchet",
+     "at": 1.05,
+     "gain": 0.45,
+     "rate": 32,
+     "f": 1100,
+     "dur": 0.4
+    },
+    {
+     "type": "noise",
+     "at": 0.95,
+     "gain": 0.2025,
+     "f": 5200,
+     "dur": 0.5
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -24,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_creak_long",
+      "pitch": 0.5,
+      "gain": 0.8,
+      "trim": [
+       0,
+       0.7
+      ],
+      "fadeIn": 0.1,
+      "fadeOut": 0.3
+     },
+     {
+      "pick": [
+       "sa3_tradebot_wind_1",
+       "sa3_tradebot_wind_2",
+       "sa3_tradebot_wind_3",
+       "sa3_tradebot_wind_4"
+      ],
+      "at": 0.1,
+      "pitch": 0.5,
+      "gain": 0.45,
+      "trim": [
+       0,
+       0.25
+      ],
+      "fadeOut": 0.05
+     },
+     {
+      "pick": [
+       "sa3_tradebot_wind_1",
+       "sa3_tradebot_wind_2",
+       "sa3_tradebot_wind_3",
+       "sa3_tradebot_wind_4"
+      ],
+      "at": 0.6,
+      "pitch": 0.7,
+      "gain": 0.6,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.05
+     },
+     {
+      "pick": [
+       "sa3_tradebot_wind_1",
+       "sa3_tradebot_wind_2",
+       "sa3_tradebot_wind_3",
+       "sa3_tradebot_wind_4"
+      ],
+      "at": 1.05,
+      "pitch": 0.95,
+      "gain": 0.8,
+      "trim": [
+       0,
+       0.38
+      ],
+      "fadeOut": 0.05
+     },
+     {
+      "src": "jug_steam_mid",
+      "at": 0.95,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.5
+      ],
+      "fadeIn": 0.15,
+      "fadeOut": 0.1
+     }
+    ],
+    "level": 0.2812
+   }
+  },
+  "leap_launch": {
+   "subtitle": "Juggernaut leaps",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "boing",
+     "at": 0,
+     "gain": 0.6,
+     "f": 75,
+     "wobble": 0.45,
+     "dur": 0.9
+    },
+    {
+     "type": "whoosh",
+     "at": 0.03,
+     "gain": 0.55,
+     "f": 110,
+     "f2": 600,
+     "dur": 0.55
+    },
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.5,
+     "f": 50,
+     "dur": 0.3
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -23,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_spring_b",
+      "pitch": 0.45,
+      "gain": 1,
+      "trim": [
+       0,
+       0.45
+      ],
+      "fadeOut": 0.6
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 0.03,
+      "pitch": 0.45,
+      "gain": 0.8
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.4,
+      "gain": 0.6,
+      "fadeOut": 0.2
+     },
+     {
+      "type": "boing",
+      "at": 0,
+      "gain": 0.2,
+      "f": 70,
+      "wobble": 0.45,
+      "dur": 0.9
+     }
+    ],
+    "level": 0.4064
+   }
+  },
+  "leap_land": {
+   "subtitle": "Juggernaut slams down",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 1,
+     "f": 30,
+     "dur": 1.2
+    },
+    {
+     "type": "bump",
+     "at": 0,
+     "gain": 0.7,
+     "f": 70,
+     "f2": 25,
+     "dur": 0.7
+    },
+    {
+     "type": "noise",
+     "at": 0.01,
+     "gain": 0.45,
+     "f": 600,
+     "dur": 0.8
+    },
+    {
+     "type": "clang",
+     "at": 0.03,
+     "gain": 0.42,
+     "f": 150,
+     "dur": 1.4
+    },
+    {
+     "type": "ping",
+     "at": 0.034,
+     "gain": 0.08399999999999999,
+     "f": 465,
+     "dur": 0.9
+    },
+    {
+     "type": "clink",
+     "at": 0.15,
+     "gain": 0.24200000000000002,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.22,
+     "gain": 0.17600000000000002,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.18,
+     "gain": 0.198,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.35,
+     "gain": 0.08800000000000001,
+     "f": 760,
+     "dur": 0.15
+    },
+    {
+     "type": "clink",
+     "at": 0.45,
+     "gain": 0.132,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.52,
+     "gain": 0.096,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.48,
+     "gain": 0.108,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.65,
+     "gain": 0.048,
+     "f": 760,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -21,
+    "vary": {
+     "pitch": 0.04
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.3,
+      "gain": 1,
+      "fadeOut": 0.3
+     },
+     {
+      "src": "1023",
+      "at": 0,
+      "gain": 1,
+      "trim": [
+       0,
+       1.6
+      ],
+      "pitch": 0.6,
+      "fadeOut": 0.96,
+      "lowpass": 2500
+     },
+     {
+      "pick": [
+       "impactPunch_heavy_000",
+       "impactPunch_heavy_001",
+       "impactPunch_heavy_002",
+       "impactPunch_heavy_003",
+       "impactPunch_heavy_004"
+      ],
+      "pitch": 0.35,
+      "gain": 0.7
+     },
+     {
+      "pick": [
+       "jug_gong_a",
+       "jug_gong_b",
+       "jug_gong_c"
+      ],
+      "at": 0.03,
+      "pitch": 0.55,
+      "gain": 0.35,
+      "trim": [
+       0,
+       1.4
+      ],
+      "fadeOut": 0.8
+     },
+     {
+      "pick": [
+       "1771",
+       "1772",
+       "1774",
+       "1776",
+       "1778"
+      ],
+      "at": 0.15,
+      "pitch": 0.55,
+      "gain": 0.35,
+      "trim": [
+       0,
+       0.9
+      ],
+      "fadeOut": 0.4
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.15,
+      "gain": 0.35,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.18,
+      "gain": 0.3,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.21,
+      "gain": 0.15,
+      "pitch": 0.6
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.45,
+      "gain": 0.175,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.48,
+      "gain": 0.15,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.51,
+      "gain": 0.075,
+      "pitch": 0.6
+     }
+    ],
+    "level": 0.8109
+   }
+  },
+  "vent_tell": {
+   "subtitle": "Juggernaut builds up steam",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "swell",
+     "at": 0.15,
+     "gain": 0.385,
+     "f": 82,
+     "f2": 123,
+     "dur": 1.8
+    },
+    {
+     "type": "hum",
+     "at": 0.51,
+     "gain": 0.275,
+     "f": 164,
+     "dur": 1.4400000000000002
+    },
+    {
+     "type": "noise",
+     "at": 0.4,
+     "gain": 0.12,
+     "f": 4500,
+     "dur": 0.6
+    },
+    {
+     "type": "noise",
+     "at": 0.9,
+     "gain": 0.22,
+     "f": 4500,
+     "dur": 0.6
+    },
+    {
+     "type": "noise",
+     "at": 1.4,
+     "gain": 0.35,
+     "f": 4500,
+     "dur": 0.55
+    },
+    {
+     "type": "creak",
+     "at": 0,
+     "gain": 0.3,
+     "f": 32,
+     "dur": 0.5
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -25,
+    "post": {
+     "lowpass": 7000
+    },
+    "layers": [
+     {
+      "type": "swell",
+      "at": 0.15,
+      "gain": 0.5,
+      "f": 82,
+      "f2": 123,
+      "dur": 1.8
+     },
+     {
+      "type": "hum",
+      "at": 0.51,
+      "gain": 0.35,
+      "f": 164,
+      "dur": 1.4400000000000002
+     },
+     {
+      "src": "jug_steam_long",
+      "at": 0.3,
+      "pitch": 0.9,
+      "gain": 0.7,
+      "trim": [
+       0,
+       1.6
+      ],
+      "fadeIn": 1.4,
+      "fadeOut": 0.1
+     },
+     {
+      "pick": [
+       "jug_creak_low_a",
+       "jug_creak_low_b",
+       "jug_creak_low_c"
+      ],
+      "pitch": 0.6,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2
+     }
+    ],
+    "level": 0.2108
+   }
+  },
+  "vent_blast": {
+   "subtitle": "Juggernaut blasts steam",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "noise",
+     "at": 0,
+     "gain": 0.6,
+     "f": 1600,
+     "dur": 0.95
+    },
+    {
+     "type": "noise",
+     "at": 0,
+     "gain": 0.45,
+     "f": 6500,
+     "dur": 0.85
+    },
+    {
+     "type": "whoosh",
+     "at": 0,
+     "gain": 0.5,
+     "f": 90,
+     "f2": 400,
+     "dur": 0.9
+    },
+    {
+     "type": "noise",
+     "at": 0.85,
+     "gain": 0.2,
+     "f": 2500,
+     "dur": 0.12
+    },
+    {
+     "type": "noise",
+     "at": 1,
+     "gain": 0.12,
+     "f": 2500,
+     "dur": 0.1
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -23,
+    "post": {
+     "lowpass": 8000
+    },
+    "layers": [
+     {
+      "src": "jug_steam_long",
+      "pitch": 0.8,
+      "gain": 1,
+      "trim": [
+       0,
+       0.8
+      ],
+      "fadeOut": 0.3
+     },
+     {
+      "src": "3019",
+      "pitch": 0.85,
+      "gain": 0.55,
+      "trim": [
+       0.9,
+       1.8
+      ],
+      "fadeOut": 0.3
+     },
+     {
+      "type": "whoosh",
+      "at": 0,
+      "gain": 0.35,
+      "f": 90,
+      "f2": 400,
+      "dur": 0.9
+     },
+     {
+      "src": "jug_steam_burst",
+      "at": 0.85,
+      "pitch": 0.8,
+      "gain": 0.35
+     },
+     {
+      "src": "jug_steam_burst",
+      "at": 1,
+      "pitch": 0.7,
+      "gain": 0.25
+     }
+    ],
+    "level": 0.3048
+   }
+  },
+  "spin_windup": {
+   "subtitle": "Juggernaut winds up a spin",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "creak",
+     "at": 0,
+     "gain": 0.45,
+     "f": 28,
+     "dur": 0.9
+    },
+    {
+     "type": "ratchet",
+     "at": 0,
+     "gain": 0.25,
+     "rate": 8,
+     "f": 900,
+     "dur": 0.7
+    },
+    {
+     "type": "ratchet",
+     "at": 0.7,
+     "gain": 0.35,
+     "rate": 20,
+     "f": 1000,
+     "dur": 0.5
+    },
+    {
+     "type": "servo",
+     "at": 0.9,
+     "gain": 0.45,
+     "f": 60,
+     "f2": 160,
+     "dur": 0.9
+    },
+    {
+     "type": "whoosh",
+     "at": 1,
+     "gain": 0.5,
+     "f": 120,
+     "f2": 500,
+     "dur": 0.5
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -24,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_creak_long",
+      "pitch": 0.5,
+      "gain": 0.8,
+      "trim": [
+       0,
+       0.45
+      ],
+      "fadeIn": 0.1,
+      "fadeOut": 0.2
+     },
+     {
+      "pick": [
+       "sa3_tradebot_wind_1",
+       "sa3_tradebot_wind_2",
+       "sa3_tradebot_wind_3",
+       "sa3_tradebot_wind_4"
+      ],
+      "pitch": 0.5,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.35
+      ],
+      "fadeOut": 0.05
+     },
+     {
+      "pick": [
+       "sa3_tradebot_wind_1",
+       "sa3_tradebot_wind_2",
+       "sa3_tradebot_wind_3",
+       "sa3_tradebot_wind_4"
+      ],
+      "at": 0.7,
+      "pitch": 0.8,
+      "gain": 0.55,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.05
+     },
+     {
+      "src": "jug_whirr_loop",
+      "at": 0.9,
+      "pitch": 0.5,
+      "gain": 0.7,
+      "trim": [
+       0,
+       0.5
+      ],
+      "fadeIn": 0.6,
+      "fadeOut": 0.1
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 1,
+      "pitch": 0.55,
+      "gain": 0.7
+     }
+    ],
+    "level": 0.4886
+   }
+  },
+  "spin_loop": {
+   "subtitle": "Juggernaut spins",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "servo",
+     "at": 0,
+     "gain": 0.35,
+     "f": 150,
+     "f2": 160,
+     "dur": 1
+    },
+    {
+     "type": "whoosh",
+     "at": 0,
+     "gain": 0.45,
+     "f": 120,
+     "f2": 520,
+     "dur": 0.48
+    },
+    {
+     "type": "whoosh",
+     "at": 0.5,
+     "gain": 0.45,
+     "f": 120,
+     "f2": 520,
+     "dur": 0.48
+    }
+   ],
+   "real": {
+    "loop": 1,
+    "target": -26,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_whirr_loop",
+      "pitch": 0.6,
+      "gain": 0.7,
+      "trim": [
+       0,
+       0.8
+      ]
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 0,
+      "pitch": 0.55,
+      "gain": 0.8
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 0.5,
+      "pitch": 0.55,
+      "gain": 0.8
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 1,
+      "pitch": 0.55,
+      "gain": 0.8
+     }
+    ],
+    "level": 0.4018
+   }
+  },
+  "spin_down": {
+   "subtitle": "Juggernaut spins down",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "servo",
+     "at": 0,
+     "gain": 0.4,
+     "f": 160,
+     "f2": 45,
+     "dur": 1
+    },
+    {
+     "type": "whoosh",
+     "at": 0,
+     "gain": 0.35,
+     "f": 120,
+     "f2": 420,
+     "dur": 0.6
+    },
+    {
+     "type": "thud",
+     "at": 1,
+     "gain": 0.55,
+     "f": 50,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 1.05,
+     "gain": 0.17600000000000002,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 1.12,
+     "gain": 0.128,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 1.08,
+     "gain": 0.144,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 1.25,
+     "gain": 0.064,
+     "f": 760,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -25,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_whirr_loop",
+      "pitch": 0.55,
+      "gain": 0.6,
+      "trim": [
+       0,
+       0.55
+      ],
+      "fadeOut": 0.5
+     },
+     {
+      "type": "servo",
+      "at": 0,
+      "gain": 0.3,
+      "f": 160,
+      "f2": 45,
+      "dur": 1,
+      "soft": true
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 0,
+      "pitch": 0.5,
+      "gain": 0.6
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 1,
+      "pitch": 0.45,
+      "gain": 0.8,
+      "trim": [
+       0,
+       0.35
+      ],
+      "fadeOut": 0.15
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 1.05,
+      "gain": 0.27999999999999997,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 1.08,
+      "gain": 0.24,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 1.11,
+      "gain": 0.12,
+      "pitch": 0.6
+     }
+    ],
+    "level": 0.4886
+   }
+  },
+  "cog_draw": {
+   "subtitle": "Juggernaut draws a cog",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "scrape",
+     "at": 0,
+     "gain": 0.35,
+     "f": 1100,
+     "dur": 0.18
+    },
+    {
+     "type": "clink",
+     "at": 0.16,
+     "gain": 0.3,
+     "f": 560,
+     "dur": 0.4
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -29,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_grind_metal",
+      "pitch": 1,
+      "gain": 0.6,
+      "trim": [
+       0,
+       0.18
+      ],
+      "fadeIn": 0.03,
+      "fadeOut": 0.05
+     },
+     {
+      "pick": [
+       "jug_anvil_1",
+       "jug_anvil_2",
+       "jug_anvil_3"
+      ],
+      "at": 0.16,
+      "pitch": 0.9,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.25
+     }
+    ],
+    "level": 0.1493
+   }
+  },
+  "cog_throw": {
+   "subtitle": "Juggernaut throws a cog",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "whoosh",
+     "at": 0,
+     "gain": 0.6,
+     "f": 150,
+     "f2": 650,
+     "dur": 0.35
+    },
+    {
+     "type": "noise",
+     "at": 0.1,
+     "gain": 0.24750000000000003,
+     "f": 3200,
+     "dur": 0.35
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -25,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "pitch": 0.7,
+      "gain": 1
+     },
+     {
+      "src": "jug_steam_burst",
+      "at": 0.1,
+      "pitch": 0.9,
+      "gain": 0.55
+     }
+    ],
+    "level": 0.3622
+   }
+  },
+  "cog_fly": {
+   "subtitle": "A cog whirls",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "servo",
+     "at": 0,
+     "gain": 0.35,
+     "f": 210,
+     "f2": 200,
+     "dur": 1
+    },
+    {
+     "type": "whoosh",
+     "at": 0,
+     "gain": 0.25,
+     "f": 300,
+     "f2": 700,
+     "dur": 0.25
+    },
+    {
+     "type": "whoosh",
+     "at": 0.25,
+     "gain": 0.25,
+     "f": 300,
+     "f2": 700,
+     "dur": 0.25
+    },
+    {
+     "type": "whoosh",
+     "at": 0.5,
+     "gain": 0.25,
+     "f": 300,
+     "f2": 700,
+     "dur": 0.25
+    },
+    {
+     "type": "whoosh",
+     "at": 0.75,
+     "gain": 0.25,
+     "f": 300,
+     "f2": 700,
+     "dur": 0.25
+    }
+   ],
+   "real": {
+    "loop": 1,
+    "target": -28,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_whirr_loop",
+      "pitch": 0.9,
+      "gain": 0.6,
+      "trim": [
+       0,
+       1.3
+      ]
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 0,
+      "pitch": 1.1,
+      "gain": 0.45
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 0.25,
+      "pitch": 1.1,
+      "gain": 0.45
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 0.5,
+      "pitch": 1.1,
+      "gain": 0.45
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 0.75,
+      "pitch": 1.1,
+      "gain": 0.45
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 1,
+      "pitch": 1.1,
+      "gain": 0.45
+     }
+    ],
+    "level": 0.2421
+   }
+  },
+  "cog_hit": {
+   "subtitle": "A cog crashes",
+   "group": "Attacks",
+   "layers": [
+    {
+     "type": "clang",
+     "at": 0,
+     "gain": 0.6,
+     "f": 300,
+     "dur": 0.8
+    },
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.5,
+     "f": 70,
+     "dur": 0.25
+    },
+    {
+     "type": "clink",
+     "at": 0.18,
+     "gain": 0.25,
+     "f": 650,
+     "dur": 0.25
+    },
+    {
+     "type": "clink",
+     "at": 0.32,
+     "gain": 0.12,
+     "f": 690,
+     "dur": 0.2
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -25,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_anvil_1",
+       "jug_anvil_2",
+       "jug_anvil_3"
+      ],
+      "pitch": 0.75,
+      "gain": 1,
+      "fadeOut": 0.3
+     },
+     {
+      "pick": [
+       "impactMetal_heavy_000",
+       "impactMetal_heavy_001",
+       "impactMetal_heavy_002",
+       "impactMetal_heavy_003",
+       "impactMetal_heavy_004"
+      ],
+      "pitch": 0.7,
+      "gain": 0.7
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.18,
+      "gain": 0.35
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.32,
+      "pitch": 1.1,
+      "gain": 0.2
+     }
+    ],
+    "level": 0.1426
+   }
+  },
+  "rewind_loop": {
+   "subtitle": "Juggernaut rewinds",
+   "group": "Rhythm",
+   "layers": [
+    {
+     "type": "ratchet",
+     "at": 0,
+     "gain": 0.55,
+     "rate": 24,
+     "f": 950,
+     "dur": 1
+    },
+    {
+     "type": "hum",
+     "at": 0,
+     "gain": 0.12,
+     "f": 98,
+     "dur": 1
+    },
+    {
+     "type": "swell",
+     "at": 0.05,
+     "gain": 0.08,
+     "f": 196,
+     "f2": 220,
+     "dur": 0.4
+    },
+    {
+     "type": "swell",
+     "at": 0.55,
+     "gain": 0.08,
+     "f": 196,
+     "f2": 220,
+     "dur": 0.4
+    }
+   ],
+   "real": {
+    "loop": 1,
+    "target": -28,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_ratchet_hoist_loop",
+      "pitch": 0.6,
+      "gain": 1,
+      "trim": [
+       0,
+       0.8
+      ]
+     },
+     {
+      "type": "hum",
+      "at": 0,
+      "gain": 0.15,
+      "f": 98,
+      "dur": 1.4
+     },
+     {
+      "type": "swell",
+      "at": 0.05,
+      "gain": 0.12,
+      "f": 196,
+      "f2": 220,
+      "dur": 0.4
+     },
+     {
+      "type": "swell",
+      "at": 0.55,
+      "gain": 0.12,
+      "f": 196,
+      "f2": 220,
+      "dur": 0.4
+     },
+     {
+      "type": "swell",
+      "at": 1.05,
+      "gain": 0.12,
+      "f": 196,
+      "f2": 220,
+      "dur": 0.4
+     }
+    ],
+    "level": 0.2233
+   }
+  },
+  "rewind_end": {
+   "subtitle": "Juggernaut is wound",
+   "group": "Rhythm",
+   "layers": [
+    {
+     "type": "ratchet",
+     "at": 0,
+     "gain": 0.45,
+     "rate": 14,
+     "f": 950,
+     "dur": 0.3
+    },
+    {
+     "type": "clack",
+     "at": 0.3,
+     "gain": 0.6,
+     "f": 380,
+     "dur": 0.1
+    },
+    {
+     "type": "thud",
+     "at": 0.3,
+     "gain": 0.5,
+     "f": 55,
+     "dur": 0.25
+    },
+    {
+     "type": "noise",
+     "at": 0.35,
+     "gain": 0.225,
+     "f": 5200,
+     "dur": 0.4
+    },
+    {
+     "type": "clink",
+     "at": 0.38,
+     "gain": 0.132,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.45,
+     "gain": 0.096,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.41000000000000003,
+     "gain": 0.108,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.5800000000000001,
+     "gain": 0.048,
+     "f": 760,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -25,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_ratchet_hoist",
+      "pitch": 0.6,
+      "gain": 0.8,
+      "trim": [
+       0,
+       0.18
+      ],
+      "fadeOut": 0.1
+     },
+     {
+      "pick": [
+       "jug_key_lock_a",
+       "jug_key_lock_b"
+      ],
+      "at": 0.3,
+      "pitch": 0.6,
+      "gain": 0.9
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 0.3,
+      "pitch": 0.5,
+      "gain": 0.6,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.15
+     },
+     {
+      "src": "jug_steam_puff",
+      "at": 0.35,
+      "pitch": 0.85,
+      "gain": 0.6,
+      "fadeOut": 0.15
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.38,
+      "gain": 0.21,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.41000000000000003,
+      "gain": 0.18,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.44,
+      "gain": 0.09,
+      "pitch": 0.6
+     }
+    ],
+    "level": 0.3793
+   }
+  },
+  "feint_snap": {
+   "subtitle": "Juggernaut snaps awake",
+   "group": "Rhythm",
+   "layers": [
+    {
+     "type": "click",
+     "at": 0,
+     "gain": 0.9,
+     "dur": 0.02
+    },
+    {
+     "type": "tick",
+     "at": 0,
+     "gain": 0.7,
+     "f": 2400,
+     "dur": 0.04
+    },
+    {
+     "type": "clack",
+     "at": 0.01,
+     "gain": 0.5,
+     "f": 600,
+     "dur": 0.06
+    },
+    {
+     "type": "noise",
+     "at": 0.04,
+     "gain": 0.45,
+     "f": 2500,
+     "dur": 0.25
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -23,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "switch12",
+       "switch13",
+       "switch14"
+      ],
+      "pitch": 0.9,
+      "gain": 1
+     },
+     {
+      "src": "metalLatch",
+      "at": 0.01,
+      "pitch": 1,
+      "gain": 0.6
+     },
+     {
+      "pick": [
+       "sa3_tradebot_tick_1",
+       "sa3_tradebot_tick_2",
+       "sa3_tradebot_tick_3",
+       "sa3_tradebot_tick_4"
+      ],
+      "pitch": 1,
+      "gain": 0.6
+     },
+     {
+      "src": "jug_steam_burst",
+      "at": 0.04,
+      "pitch": 1,
+      "gain": 0.55
+     }
+    ],
+    "level": 0.5116
+   }
+  },
+  "key_jam": {
+   "subtitle": "Juggernaut's key jams",
+   "group": "Rhythm",
+   "layers": [
+    {
+     "type": "scrape",
+     "at": 0.05,
+     "gain": 0.55,
+     "f": 900,
+     "dur": 0.95
+    },
+    {
+     "type": "ratchet",
+     "at": 0.05,
+     "gain": 0.35,
+     "rate": 30,
+     "f": 700,
+     "dur": 0.9
+    },
+    {
+     "type": "rustle",
+     "at": 0.1,
+     "gain": 0.35,
+     "density": 40,
+     "dur": 0.22
+    },
+    {
+     "type": "rustle",
+     "at": 0.5,
+     "gain": 0.3,
+     "density": 40,
+     "dur": 0.14
+    },
+    {
+     "type": "rustle",
+     "at": 0.8,
+     "gain": 0.25,
+     "density": 40,
+     "dur": 0.1
+    },
+    {
+     "type": "thud",
+     "at": 0.18,
+     "gain": 0.45,
+     "f": 60,
+     "dur": 0.2
+    },
+    {
+     "type": "thud",
+     "at": 0.58,
+     "gain": 0.4,
+     "f": 60,
+     "dur": 0.2
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -24,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_grind_metal",
+      "at": 0.05,
+      "pitch": 0.6,
+      "gain": 0.9,
+      "trim": [
+       0,
+       0.6
+      ],
+      "fadeOut": 0.2
+     },
+     {
+      "src": "jug_ratchet_hoist",
+      "at": 0.05,
+      "pitch": 0.5,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.45
+      ],
+      "tremolo": {
+       "hz": 14,
+       "depth": 0.9
+      },
+      "fadeOut": 0.15
+     },
+     {
+      "pick": [
+       "jug_grinder_a",
+       "jug_grinder_b",
+       "jug_grinder_c"
+      ],
+      "at": 0.1,
+      "gain": 0.45,
+      "fadeOut": 0.1
+     },
+     {
+      "pick": [
+       "jug_grinder_b",
+       "jug_grinder_c",
+       "jug_grinder_a"
+      ],
+      "at": 0.5,
+      "gain": 0.35,
+      "fadeOut": 0.1
+     },
+     {
+      "pick": [
+       "jug_grinder_c",
+       "jug_grinder_a",
+       "jug_grinder_b"
+      ],
+      "at": 0.8,
+      "gain": 0.25,
+      "fadeOut": 0.1
+     },
+     {
+      "src": "jug_weld",
+      "at": 0.1,
+      "gain": 0.3,
+      "trim": [
+       0,
+       0.22
+      ],
+      "fadeOut": 0.08
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 0.18,
+      "pitch": 0.5,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.25
+      ],
+      "fadeOut": 0.1
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 0.58,
+      "pitch": 0.5,
+      "gain": 0.45,
+      "trim": [
+       0,
+       0.25
+      ],
+      "fadeOut": 0.1
+     }
+    ],
+    "level": 0.2477
+   }
+  },
+  "plates_burst": {
+   "subtitle": "Juggernaut sheds his armour",
+   "group": "Rhythm",
+   "layers": [
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.55,
+     "f": 55,
+     "dur": 0.3
+    },
+    {
+     "type": "clang",
+     "at": 0.06,
+     "gain": 0.48,
+     "f": 200,
+     "dur": 1.4
+    },
+    {
+     "type": "ping",
+     "at": 0.064,
+     "gain": 0.096,
+     "f": 620,
+     "dur": 0.9
+    },
+    {
+     "type": "clang",
+     "at": 0.11,
+     "gain": 0.36,
+     "f": 235,
+     "dur": 1.4
+    },
+    {
+     "type": "ping",
+     "at": 0.114,
+     "gain": 0.072,
+     "f": 728.5,
+     "dur": 0.9
+    },
+    {
+     "type": "clang",
+     "at": 0.17,
+     "gain": 0.3,
+     "f": 175,
+     "dur": 1.4
+    },
+    {
+     "type": "ping",
+     "at": 0.17400000000000002,
+     "gain": 0.06,
+     "f": 542.5,
+     "dur": 0.9
+    },
+    {
+     "type": "whoosh",
+     "at": 0.08,
+     "gain": 0.3,
+     "f": 200,
+     "f2": 700,
+     "dur": 0.4
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -23,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.5,
+      "gain": 0.6,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.15
+     },
+     {
+      "pick": [
+       "jug_gong_a",
+       "jug_gong_b",
+       "jug_gong_c"
+      ],
+      "at": 0.06,
+      "pitch": 0.8,
+      "gain": 0.6,
+      "trim": [
+       0,
+       1.2
+      ],
+      "fadeOut": 0.7
+     },
+     {
+      "pick": [
+       "jug_anvil_1",
+       "jug_anvil_2",
+       "jug_anvil_3"
+      ],
+      "at": 0.11,
+      "pitch": 0.65,
+      "gain": 0.6,
+      "fadeOut": 0.3
+     },
+     {
+      "pick": [
+       "1771",
+       "1772",
+       "1774",
+       "1776",
+       "1778"
+      ],
+      "at": 0.17,
+      "pitch": 0.8,
+      "gain": 0.6,
+      "trim": [
+       0,
+       0.9
+      ],
+      "fadeOut": 0.4
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 0.08,
+      "pitch": 0.6,
+      "gain": 0.4
+     }
+    ],
+    "level": 0.3119
+   }
+  },
+  "stage_roar": {
+   "subtitle": "Juggernaut roars steam",
+   "group": "Rhythm",
+   "layers": [
+    {
+     "type": "noise",
+     "at": 0,
+     "gain": 0.8,
+     "f": 1300,
+     "dur": 0.75
+    },
+    {
+     "type": "noise",
+     "at": 0.05,
+     "gain": 0.4,
+     "f": 6000,
+     "dur": 0.65
+    },
+    {
+     "type": "swell",
+     "at": 0,
+     "gain": 0.315,
+     "f": 73,
+     "f2": 109.5,
+     "dur": 0.8
+    },
+    {
+     "type": "hum",
+     "at": 0.16000000000000003,
+     "gain": 0.225,
+     "f": 146,
+     "dur": 0.6400000000000001
+    },
+    {
+     "type": "creak",
+     "at": 0,
+     "gain": 0.35,
+     "f": 26,
+     "dur": 0.6
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -23,
+    "post": {
+     "lowpass": 8000
+    },
+    "layers": [
+     {
+      "src": "jug_steam_long",
+      "pitch": 0.65,
+      "gain": 1,
+      "trim": [
+       0,
+       0.6
+      ],
+      "fadeOut": 0.3
+     },
+     {
+      "src": "jug_steam_mid",
+      "at": 0.05,
+      "pitch": 0.8,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.6
+      ],
+      "fadeOut": 0.3
+     },
+     {
+      "type": "swell",
+      "at": 0,
+      "gain": 0.45,
+      "f": 73,
+      "f2": 109.5,
+      "dur": 0.8
+     },
+     {
+      "type": "hum",
+      "at": 0.16000000000000003,
+      "gain": 0.315,
+      "f": 146,
+      "dur": 0.6400000000000001
+     },
+     {
+      "pick": [
+       "jug_creak_low_a",
+       "jug_creak_low_b",
+       "jug_creak_low_c"
+      ],
+      "pitch": 0.5,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.35
+      ],
+      "fadeOut": 0.2
+     }
+    ],
+    "level": 0.2844
+   }
+  },
+  "plates_land": {
+   "subtitle": "Armour plates clatter",
+   "group": "Rhythm",
+   "layers": [
+    {
+     "type": "clang",
+     "at": 0,
+     "gain": 0.35,
+     "f": 230,
+     "dur": 0.6
+    },
+    {
+     "type": "clang",
+     "at": 0.13,
+     "gain": 0.3,
+     "f": 190,
+     "dur": 0.6
+    },
+    {
+     "type": "clink",
+     "at": 0.25,
+     "gain": 0.2,
+     "f": 640,
+     "dur": 0.2
+    },
+    {
+     "type": "clang",
+     "at": 0.3,
+     "gain": 0.2,
+     "f": 260,
+     "dur": 0.5
+    },
+    {
+     "type": "clink",
+     "at": 0.42,
+     "gain": 0.12,
+     "f": 700,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -27,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "1771",
+       "1772",
+       "1774",
+       "1776",
+       "1778"
+      ],
+      "pitch": 0.75,
+      "gain": 1,
+      "trim": [
+       0,
+       0.9
+      ],
+      "fadeOut": 0.4
+     },
+     {
+      "pick": [
+       "1774",
+       "1778",
+       "1771",
+       "1776",
+       "1772"
+      ],
+      "at": 0.13,
+      "pitch": 0.7,
+      "gain": 0.8,
+      "trim": [
+       0,
+       0.9
+      ],
+      "fadeOut": 0.4
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.25,
+      "gain": 0.4
+     },
+     {
+      "pick": [
+       "1776",
+       "1772",
+       "1778",
+       "1771",
+       "1774"
+      ],
+      "at": 0.3,
+      "pitch": 0.85,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.9
+      ],
+      "fadeOut": 0.4
+     }
+    ],
+    "level": 0.2978
+   }
+  },
+  "hit_wound": {
+   "subtitle": "Juggernaut shrugs off a blow",
+   "group": "Reactions",
+   "layers": [
+    {
+     "type": "clang",
+     "at": 0,
+     "gain": 0.48,
+     "f": 210,
+     "dur": 1.4
+    },
+    {
+     "type": "ping",
+     "at": 0.004,
+     "gain": 0.096,
+     "f": 651,
+     "dur": 0.9
+    },
+    {
+     "type": "tick",
+     "at": 0.06,
+     "gain": 0.25,
+     "f": 1100,
+     "dur": 0.04
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -27,
+    "vary": {
+     "pitch": 0.06
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_gong_a",
+       "jug_gong_b",
+       "jug_gong_c"
+      ],
+      "pitch": 0.95,
+      "gain": 1,
+      "trim": [
+       0,
+       1.3
+      ],
+      "fadeOut": 0.8
+     },
+     {
+      "pick": [
+       "impactPlate_heavy_000",
+       "impactPlate_heavy_001",
+       "impactPlate_heavy_002",
+       "impactPlate_heavy_003",
+       "impactPlate_heavy_004"
+      ],
+      "pitch": 0.6,
+      "gain": 0.6
+     },
+     {
+      "pick": [
+       "sa3_tradebot_tick_1",
+       "sa3_tradebot_tick_2",
+       "sa3_tradebot_tick_3",
+       "sa3_tradebot_tick_4"
+      ],
+      "at": 0.06,
+      "pitch": 0.5,
+      "gain": 0.3
+     }
+    ],
+    "level": 0.2014
+   }
+  },
+  "hit_open": {
+   "subtitle": "Juggernaut is hurt",
+   "group": "Reactions",
+   "layers": [
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.6,
+     "f": 58,
+     "dur": 0.35
+    },
+    {
+     "type": "clack",
+     "at": 0,
+     "gain": 0.4,
+     "f": 350,
+     "dur": 0.1
+    },
+    {
+     "type": "boing",
+     "at": 0.02,
+     "gain": 0.35,
+     "f": 110,
+     "wobble": 0.5,
+     "dur": 0.6
+    },
+    {
+     "type": "noise",
+     "at": 0.03,
+     "gain": 0.25,
+     "f": 2500,
+     "dur": 0.2
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -25,
+    "vary": {
+     "pitch": 0.05
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "impactPunch_heavy_000",
+       "impactPunch_heavy_001",
+       "impactPunch_heavy_002",
+       "impactPunch_heavy_003",
+       "impactPunch_heavy_004"
+      ],
+      "pitch": 0.7,
+      "gain": 1
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.6,
+      "gain": 0.6,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.15
+     },
+     {
+      "src": "jug_spring_a",
+      "at": 0.02,
+      "pitch": 0.9,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.5
+      ],
+      "fadeOut": 0.3
+     },
+     {
+      "src": "jug_steam_burst",
+      "at": 0.03,
+      "pitch": 1.1,
+      "gain": 0.4
+     }
+    ],
+    "level": 0.4305
+   }
+  },
+  "lightning": {
+   "subtitle": "Juggernaut is struck by lightning",
+   "group": "Reactions",
+   "layers": [
+    {
+     "type": "rustle",
+     "at": 0,
+     "gain": 0.55,
+     "density": 50,
+     "dur": 0.5
+    },
+    {
+     "type": "swell",
+     "at": 0,
+     "gain": 0.42,
+     "f": 110,
+     "f2": 165,
+     "dur": 0.7
+    },
+    {
+     "type": "hum",
+     "at": 0.13999999999999999,
+     "gain": 0.3,
+     "f": 220,
+     "dur": 0.5599999999999999
+    },
+    {
+     "type": "servo",
+     "at": 0.1,
+     "gain": 0.35,
+     "f": 90,
+     "f2": 220,
+     "dur": 0.6
+    },
+    {
+     "type": "clack",
+     "at": 0.12,
+     "gain": 0.45,
+     "f": 420,
+     "dur": 0.08
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -24,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "spark_shock_a",
+       "spark_shock_b"
+      ],
+      "gain": 0.8
+     },
+     {
+      "src": "jug_weld",
+      "at": 0.05,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.45
+      ],
+      "fadeOut": 0.15
+     },
+     {
+      "type": "swell",
+      "at": 0,
+      "gain": 0.6,
+      "f": 110,
+      "f2": 165,
+      "dur": 0.7
+     },
+     {
+      "type": "hum",
+      "at": 0.13999999999999999,
+      "gain": 0.42,
+      "f": 220,
+      "dur": 0.5599999999999999
+     },
+     {
+      "type": "servo",
+      "at": 0.1,
+      "gain": 0.3,
+      "f": 90,
+      "f2": 220,
+      "dur": 0.6,
+      "soft": true
+     },
+     {
+      "src": "metalLatch",
+      "at": 0.12,
+      "pitch": 0.7,
+      "gain": 0.6
+     }
+    ],
+    "level": 0.3881
+   }
+  },
+  "ember_flicker": {
+   "subtitle": "Juggernaut stirs in his sleep",
+   "group": "Rest, waking and death",
+   "layers": [
+    {
+     "type": "hum",
+     "at": 0,
+     "gain": 0.12,
+     "f": 98,
+     "dur": 0.25
+    },
+    {
+     "type": "tick",
+     "at": 0.02,
+     "gain": 0.08,
+     "f": 900,
+     "dur": 0.03
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -34,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "flicker_bulb_a",
+       "flicker_bulb_b"
+      ],
+      "pitch": 0.5,
+      "gain": 0.6,
+      "trim": [
+       0,
+       0.25
+      ],
+      "fadeOut": 0.08
+     },
+     {
+      "type": "hum",
+      "at": 0,
+      "gain": 0.25,
+      "f": 98,
+      "dur": 0.25
+     }
+    ],
+    "level": 0.1361
+   }
+  },
+  "steam_wisp": {
+   "subtitle": "Steam wisps",
+   "group": "Rest, waking and death",
+   "layers": [
+    {
+     "type": "noise",
+     "at": 0,
+     "gain": 0.1125,
+     "f": 3500,
+     "dur": 0.9
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -35,
+    "post": {
+     "lowpass": 4000
+    },
+    "layers": [
+     {
+      "src": "0227",
+      "gain": 1,
+      "trim": [
+       1.5,
+       2.4
+      ],
+      "fadeIn": 0.25,
+      "fadeOut": 0.4
+     }
+    ],
+    "level": 0.0849
+   }
+  },
+  "key_turn": {
+   "subtitle": "Juggernaut's key turns",
+   "group": "Rest, waking and death",
+   "layers": [
+    {
+     "type": "ratchet",
+     "at": 0,
+     "gain": 0.45,
+     "rate": 10,
+     "f": 900,
+     "dur": 0.3
+    },
+    {
+     "type": "clack",
+     "at": 0.3,
+     "gain": 0.55,
+     "f": 360,
+     "dur": 0.1
+    },
+    {
+     "type": "thud",
+     "at": 0.3,
+     "gain": 0.45,
+     "f": 55,
+     "dur": 0.25
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -26,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "sa3_tradebot_wind_1",
+       "sa3_tradebot_wind_2",
+       "sa3_tradebot_wind_3",
+       "sa3_tradebot_wind_4"
+      ],
+      "pitch": 0.55,
+      "gain": 0.9,
+      "trim": [
+       0,
+       0.16
+      ],
+      "fadeOut": 0.05
+     },
+     {
+      "pick": [
+       "jug_key_lock_a",
+       "jug_key_lock_b"
+      ],
+      "at": 0.3,
+      "pitch": 0.6,
+      "gain": 0.9
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 0.3,
+      "pitch": 0.5,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.15
+     }
+    ],
+    "level": 0.4943
+   }
+  },
+  "salute_snap": {
+   "subtitle": "Juggernaut salutes",
+   "group": "Rest, waking and death",
+   "layers": [
+    {
+     "type": "clack",
+     "at": 0,
+     "gain": 0.6,
+     "f": 480,
+     "dur": 0.08
+    },
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.35,
+     "f": 90,
+     "dur": 0.15
+    },
+    {
+     "type": "ping",
+     "at": 0.01,
+     "gain": 0.25,
+     "f": 740,
+     "dur": 0.9
+    },
+    {
+     "type": "noise",
+     "at": 0.12,
+     "gain": 0.135,
+     "f": 5200,
+     "dur": 0.3
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -26,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "metalLatch",
+      "pitch": 0.75,
+      "gain": 1
+     },
+     {
+      "src": "jug_chime",
+      "at": 0.01,
+      "pitch": 0.75,
+      "gain": 0.5,
+      "trim": [
+       0,
+       1
+      ],
+      "fadeOut": 0.6
+     },
+     {
+      "pick": [
+       "impactBell_heavy_000",
+       "impactBell_heavy_001",
+       "impactBell_heavy_002",
+       "impactBell_heavy_003",
+       "impactBell_heavy_004"
+      ],
+      "at": 0.01,
+      "pitch": 0.8,
+      "gain": 0.35
+     },
+     {
+      "src": "jug_steam_puff",
+      "at": 0.12,
+      "gain": 0.3,
+      "fadeOut": 0.15
+     }
+    ],
+    "level": 0.483
+   }
+  },
+  "glow_out": {
+   "subtitle": "Juggernaut's runes fade",
+   "group": "Rest, waking and death",
+   "layers": [
+    {
+     "type": "swell",
+     "at": 0,
+     "gain": 0.3,
+     "f": 120,
+     "f2": 60,
+     "dur": 1
+    },
+    {
+     "type": "tick",
+     "at": 0,
+     "gain": 0.15,
+     "f": 900,
+     "dur": 0.03
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -30,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "type": "swell",
+      "at": 0,
+      "gain": 0.45,
+      "f": 120,
+      "f2": 60,
+      "dur": 1
+     },
+     {
+      "type": "hum",
+      "at": 0,
+      "gain": 0.2,
+      "f": 196,
+      "dur": 0.5
+     },
+     {
+      "pick": [
+       "sa3_tradebot_tick_1",
+       "sa3_tradebot_tick_2",
+       "sa3_tradebot_tick_3",
+       "sa3_tradebot_tick_4"
+      ],
+      "pitch": 0.4,
+      "gain": 0.3
+     }
+    ],
+    "level": 0.0859
+   }
+  },
+  "kneel_impact": {
+   "subtitle": "Juggernaut falls to his knee",
+   "group": "Rest, waking and death",
+   "layers": [
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.9,
+     "f": 40,
+     "dur": 0.8
+    },
+    {
+     "type": "noise",
+     "at": 0.01,
+     "gain": 0.3,
+     "f": 600,
+     "dur": 0.4
+    },
+    {
+     "type": "clang",
+     "at": 0.03,
+     "gain": 0.3,
+     "f": 165,
+     "dur": 1.4
+    },
+    {
+     "type": "ping",
+     "at": 0.034,
+     "gain": 0.06,
+     "f": 511.5,
+     "dur": 0.9
+    },
+    {
+     "type": "clink",
+     "at": 0.12,
+     "gain": 0.22,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.19,
+     "gain": 0.16,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.15,
+     "gain": 0.18,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.32,
+     "gain": 0.08,
+     "f": 760,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -23,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.38,
+      "gain": 1,
+      "fadeOut": 0.25
+     },
+     {
+      "src": "1023",
+      "at": 0,
+      "gain": 0.7,
+      "trim": [
+       0,
+       1
+      ],
+      "pitch": 0.75,
+      "fadeOut": 0.6,
+      "lowpass": 2500
+     },
+     {
+      "pick": [
+       "jug_gong_a",
+       "jug_gong_b",
+       "jug_gong_c"
+      ],
+      "at": 0.03,
+      "pitch": 0.65,
+      "gain": 0.3,
+      "trim": [
+       0,
+       1
+      ],
+      "fadeOut": 0.6
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.12,
+      "gain": 0.35,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.15,
+      "gain": 0.3,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.18,
+      "gain": 0.15,
+      "pitch": 0.6
+     }
+    ],
+    "level": 0.3048
+   }
+  },
+  "key_unwind": {
+   "subtitle": "Juggernaut's key spins free",
+   "group": "Rest, waking and death",
+   "layers": [
+    {
+     "type": "ratchet",
+     "at": 0,
+     "gain": 0.5,
+     "rate": 40,
+     "f": 900,
+     "dur": 0.35
+    },
+    {
+     "type": "ratchet",
+     "at": 0.35,
+     "gain": 0.4,
+     "rate": 22,
+     "f": 850,
+     "dur": 0.3
+    },
+    {
+     "type": "servo",
+     "at": 0,
+     "gain": 0.3,
+     "f": 240,
+     "f2": 80,
+     "dur": 0.7
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -26,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_ratchet_hoist",
+      "pitch": 0.9,
+      "gain": 1,
+      "trim": [
+       0,
+       0.35
+      ],
+      "fadeOut": 0.05
+     },
+     {
+      "src": "jug_reel",
+      "at": 0.35,
+      "pitch": 0.7,
+      "gain": 0.7,
+      "trim": [
+       0,
+       0.25
+      ],
+      "fadeOut": 0.1
+     },
+     {
+      "type": "servo",
+      "at": 0,
+      "gain": 0.25,
+      "f": 240,
+      "f2": 80,
+      "dur": 0.7,
+      "soft": true
+     }
+    ],
+    "level": 0.2978
+   }
+  },
+  "mainspring_burst": {
+   "subtitle": "The Mainspring bursts out",
+   "group": "Rest, waking and death",
+   "layers": [
+    {
+     "type": "clack",
+     "at": 0,
+     "gain": 0.7,
+     "f": 380,
+     "dur": 0.12
+    },
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.5,
+     "f": 60,
+     "dur": 0.3
+    },
+    {
+     "type": "boing",
+     "at": 0.01,
+     "gain": 0.85,
+     "f": 105,
+     "wobble": 0.6,
+     "dur": 1.5
+    },
+    {
+     "type": "boing",
+     "at": 0.02,
+     "gain": 0.3,
+     "f": 210,
+     "wobble": 0.5,
+     "dur": 1.1
+    },
+    {
+     "type": "ping",
+     "at": 0.02,
+     "gain": 0.15,
+     "f": 1050,
+     "dur": 1
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -21,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "metalLatch",
+      "pitch": 0.5,
+      "gain": 0.8
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.5,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.3
+      ],
+      "fadeOut": 0.15
+     },
+     {
+      "src": "jug_spring_a",
+      "at": 0.01,
+      "pitch": 0.6,
+      "gain": 1,
+      "trim": [
+       0,
+       1
+      ],
+      "fadeOut": 0.8
+     },
+     {
+      "src": "1950",
+      "at": 0.02,
+      "pitch": 0.7,
+      "gain": 0.4,
+      "trim": [
+       0,
+       1
+      ],
+      "fadeOut": 0.5
+     },
+     {
+      "type": "boing",
+      "at": 0.01,
+      "gain": 0.3,
+      "f": 105,
+      "wobble": 0.6,
+      "dur": 1.5
+     },
+     {
+      "pick": [
+       "jug_anvil_1",
+       "jug_anvil_2",
+       "jug_anvil_3"
+      ],
+      "at": 0.02,
+      "pitch": 0.9,
+      "gain": 0.2,
+      "fadeOut": 0.4
+     }
+    ],
+    "level": 0.5675
+   }
+  },
+  "fist_thud": {
+   "subtitle": "Juggernaut slumps",
+   "group": "Rest, waking and death",
+   "layers": [
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.5,
+     "f": 45,
+     "dur": 0.5
+    },
+    {
+     "type": "clink",
+     "at": 0.08,
+     "gain": 0.132,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.15000000000000002,
+     "gain": 0.096,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.11,
+     "gain": 0.108,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.28,
+     "gain": 0.048,
+     "f": 760,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -27,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.45,
+      "gain": 1,
+      "fadeOut": 0.2
+     },
+     {
+      "pick": [
+       "impactPunch_heavy_000",
+       "impactPunch_heavy_001",
+       "impactPunch_heavy_002",
+       "impactPunch_heavy_003",
+       "impactPunch_heavy_004"
+      ],
+      "pitch": 0.7,
+      "gain": 0.6
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.08,
+      "gain": 0.21,
+      "pitch": 0.8
+     },
+     {
+      "src": "jug_chain_rattle",
+      "at": 0.11,
+      "gain": 0.18,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2,
+      "pitch": 0.85
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.14,
+      "gain": 0.09,
+      "pitch": 0.6
+     }
+    ],
+    "level": 0.3191
+   }
+  },
+  "death_steam": {
+   "subtitle": "Juggernaut lets out his last steam",
+   "group": "Rest, waking and death",
+   "layers": [
+    {
+     "type": "noise",
+     "at": 0,
+     "gain": 0.24750000000000003,
+     "f": 3000,
+     "dur": 1.4
+    },
+    {
+     "type": "swell",
+     "at": 0,
+     "gain": 0.15,
+     "f": 120,
+     "f2": 55,
+     "dur": 1.4
+    },
+    {
+     "type": "creak",
+     "at": 0.4,
+     "gain": 0.25,
+     "f": 24,
+     "dur": 0.6
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -26,
+    "post": {
+     "lowpass": 6000
+    },
+    "layers": [
+     {
+      "src": "0227",
+      "pitch": 0.85,
+      "gain": 1,
+      "trim": [
+       0,
+       1.4
+      ],
+      "fadeOut": 0.9
+     },
+     {
+      "type": "swell",
+      "at": 0,
+      "gain": 0.15,
+      "f": 120,
+      "f2": 55,
+      "dur": 1.4
+     },
+     {
+      "pick": [
+       "jug_creak_low_a",
+       "jug_creak_low_b",
+       "jug_creak_low_c"
+      ],
+      "at": 0.4,
+      "pitch": 0.5,
+      "gain": 0.35,
+      "trim": [
+       0,
+       0.35
+      ],
+      "fadeOut": 0.2
+     }
+    ],
+    "level": 0.2084
+   }
+  },
+  "key_fit": {
+   "subtitle": "A Winding Key is fitted",
+   "group": "The ritual",
+   "layers": [
+    {
+     "type": "clack",
+     "at": 0,
+     "gain": 0.6,
+     "f": 420,
+     "dur": 0.1
+    },
+    {
+     "type": "clink",
+     "at": 0.01,
+     "gain": 0.35,
+     "f": 620,
+     "dur": 0.5
+    },
+    {
+     "type": "ratchet",
+     "at": 0.12,
+     "gain": 0.25,
+     "rate": 20,
+     "f": 1100,
+     "dur": 0.12
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "target": -28,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_key_lock_a",
+       "jug_key_lock_b"
+      ],
+      "pitch": 0.85,
+      "gain": 1
+     },
+     {
+      "pick": [
+       "jug_anvil_1",
+       "jug_anvil_2",
+       "jug_anvil_3"
+      ],
+      "pitch": 0.9,
+      "gain": 0.3,
+      "trim": [
+       0,
+       0.5
+      ],
+      "fadeOut": 0.3
+     },
+     {
+      "src": "jug_reel",
+      "at": 0.12,
+      "gain": 0.3,
+      "trim": [
+       0,
+       0.15
+      ],
+      "fadeOut": 0.04
+     }
+    ],
+    "level": 0.3013
+   }
+  },
+  "ritual_click": {
+   "subtitle": "The effigy's key clicks",
+   "group": "The ritual",
+   "layers": [
+    {
+     "type": "tick",
+     "at": 0,
+     "gain": 0.35,
+     "f": 1500,
+     "dur": 0.04
+    },
+    {
+     "type": "clink",
+     "at": 0.003,
+     "gain": 0.1,
+     "f": 700,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -31,
+    "vary": {
+     "pitch": 0.04
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "sa3_tradebot_tick_1",
+       "sa3_tradebot_tick_2",
+       "sa3_tradebot_tick_3",
+       "sa3_tradebot_tick_4"
+      ],
+      "pitch": 0.9,
+      "gain": 1
+     },
+     {
+      "src": "metalClick",
+      "pitch": 0.8,
+      "gain": 0.3
+     }
+    ],
+    "level": 0.354
+   }
+  },
+  "ritual_tick": {
+   "subtitle": "The effigy ticks",
+   "group": "The ritual",
+   "layers": [
+    {
+     "type": "tick",
+     "at": 0,
+     "gain": 0.49500000000000005,
+     "f": 1150,
+     "dur": 0.05
+    },
+    {
+     "type": "thud",
+     "at": 0.003,
+     "gain": 0.45,
+     "f": 62,
+     "dur": 0.22
+    },
+    {
+     "type": "clink",
+     "at": 0.006,
+     "gain": 0.162,
+     "f": 640,
+     "dur": 0.35
+    },
+    {
+     "type": "clink",
+     "at": 0.02,
+     "gain": 0.099,
+     "f": 700,
+     "dur": 0.2
+    },
+    {
+     "type": "clink",
+     "at": 0.09000000000000001,
+     "gain": 0.07200000000000001,
+     "f": 820,
+     "dur": 0.18
+    },
+    {
+     "type": "ratchet",
+     "at": 0.05,
+     "gain": 0.081,
+     "rate": 16,
+     "f": 1300,
+     "dur": 0.3
+    },
+    {
+     "type": "clink",
+     "at": 0.22,
+     "gain": 0.036000000000000004,
+     "f": 760,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -28,
+    "vary": {
+     "pitch": 0.03
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_tick_1",
+       "jug_tick_2",
+       "jug_tick_3",
+       "jug_tick_4"
+      ],
+      "pitch": 0.7,
+      "gain": 1
+     },
+     {
+      "pick": [
+       "impactMetal_light_000",
+       "impactMetal_light_001",
+       "impactMetal_light_002",
+       "impactMetal_light_003",
+       "impactMetal_light_004"
+      ],
+      "at": 0.02,
+      "pitch": 0.6,
+      "gain": 0.3
+     },
+     {
+      "pick": [
+       "jug_chain_clink_a",
+       "jug_chain_clink_b",
+       "jug_chain_clink_c"
+      ],
+      "at": 0.04,
+      "pitch": 1.2,
+      "gain": 0.2
+     }
+    ],
+    "level": 0.2844
+   }
+  },
+  "ritual_runes": {
+   "subtitle": "The effigy's runes glow",
+   "group": "The ritual",
+   "layers": [
+    {
+     "type": "swell",
+     "at": 0,
+     "gain": 0.21,
+     "f": 110,
+     "f2": 165,
+     "dur": 1
+    },
+    {
+     "type": "hum",
+     "at": 0.2,
+     "gain": 0.15,
+     "f": 220,
+     "dur": 0.8
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -30,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "type": "swell",
+      "at": 0,
+      "gain": 0.3,
+      "f": 110,
+      "f2": 165,
+      "dur": 1
+     },
+     {
+      "type": "hum",
+      "at": 0.2,
+      "gain": 0.21,
+      "f": 220,
+      "dur": 0.8
+     },
+     {
+      "src": "jug_chime",
+      "at": 0.1,
+      "pitch": 0.5,
+      "gain": 0.12,
+      "trim": [
+       0,
+       0.6
+      ],
+      "fadeOut": 0.5,
+      "highpass": 300
+     }
+    ],
+    "level": 0.1021
+   }
+  },
+  "ritual_steam": {
+   "subtitle": "Steam escapes the effigy",
+   "group": "The ritual",
+   "layers": [
+    {
+     "type": "noise",
+     "at": 0,
+     "gain": 0.1575,
+     "f": 4000,
+     "dur": 0.6
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -31,
+    "post": {
+     "lowpass": 6000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_steam_mid",
+       "jug_steam_puff",
+       "jug_steam_long"
+      ],
+      "gain": 1,
+      "trim": [
+       0,
+       0.6
+      ],
+      "fadeIn": 0.05,
+      "fadeOut": 0.3
+     }
+    ],
+    "level": 0.133
+   }
+  },
+  "ritual_ready": {
+   "subtitle": "The effigy is fully wound",
+   "group": "The ritual",
+   "layers": [
+    {
+     "type": "swell",
+     "at": 0,
+     "gain": 0.35,
+     "f": 98,
+     "f2": 147,
+     "dur": 0.8
+    },
+    {
+     "type": "hum",
+     "at": 0.16000000000000003,
+     "gain": 0.25,
+     "f": 196,
+     "dur": 0.6400000000000001
+    },
+    {
+     "type": "ratchet",
+     "at": 0,
+     "gain": 0.35,
+     "rate": 30,
+     "f": 1100,
+     "dur": 0.6
+    },
+    {
+     "type": "ping",
+     "at": 0.1,
+     "gain": 0.2,
+     "f": 588,
+     "dur": 1
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -23,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "type": "swell",
+      "at": 0,
+      "gain": 0.5,
+      "f": 98,
+      "f2": 147,
+      "dur": 0.8
+     },
+     {
+      "type": "hum",
+      "at": 0.16000000000000003,
+      "gain": 0.35,
+      "f": 196,
+      "dur": 0.6400000000000001
+     },
+     {
+      "src": "jug_ratchet_hoist",
+      "pitch": 0.8,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.6
+      ],
+      "fadeOut": 0.3
+     },
+     {
+      "src": "jug_chime",
+      "at": 0.1,
+      "pitch": 0.6,
+      "gain": 0.6,
+      "trim": [
+       0,
+       1.4
+      ],
+      "fadeOut": 0.8
+     }
+    ],
+    "level": 0.3303
+   }
+  },
+  "ritual_unfold": {
+   "subtitle": "The effigy unfolds",
+   "group": "The ritual",
+   "layers": [
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.8,
+     "f": 45,
+     "dur": 0.6
+    },
+    {
+     "type": "swell",
+     "at": 0,
+     "gain": 0.35,
+     "f": 98,
+     "f2": 147,
+     "dur": 0.6
+    },
+    {
+     "type": "hum",
+     "at": 0.12,
+     "gain": 0.25,
+     "f": 196,
+     "dur": 0.48
+    },
+    {
+     "type": "clang",
+     "at": 0.05,
+     "gain": 0.35,
+     "f": 230,
+     "dur": 0.6
+    },
+    {
+     "type": "clang",
+     "at": 0.17,
+     "gain": 0.3,
+     "f": 200,
+     "dur": 0.6
+    },
+    {
+     "type": "ratchet",
+     "at": 0.05,
+     "gain": 0.35,
+     "rate": 22,
+     "f": 1000,
+     "dur": 0.5
+    },
+    {
+     "type": "noise",
+     "at": 0.1,
+     "gain": 0.27,
+     "f": 5200,
+     "dur": 0.8
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -21,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.45,
+      "gain": 0.8,
+      "fadeOut": 0.2
+     },
+     {
+      "src": "1023",
+      "at": 0,
+      "gain": 0.8,
+      "trim": [
+       0,
+       1
+      ],
+      "pitch": 0.8,
+      "fadeOut": 0.6,
+      "lowpass": 2500
+     },
+     {
+      "type": "swell",
+      "at": 0,
+      "gain": 0.5,
+      "f": 98,
+      "f2": 147,
+      "dur": 0.6
+     },
+     {
+      "type": "hum",
+      "at": 0.12,
+      "gain": 0.35,
+      "f": 196,
+      "dur": 0.48
+     },
+     {
+      "src": "1774",
+      "at": 0.05,
+      "pitch": 0.75,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.9
+      ],
+      "fadeOut": 0.4
+     },
+     {
+      "src": "1776",
+      "at": 0.17,
+      "pitch": 0.7,
+      "gain": 0.45,
+      "trim": [
+       0,
+       0.9
+      ],
+      "fadeOut": 0.4
+     },
+     {
+      "src": "jug_ratchet_hoist",
+      "at": 0.05,
+      "pitch": 0.7,
+      "gain": 0.4,
+      "trim": [
+       0,
+       0.45
+      ],
+      "fadeOut": 0.15
+     },
+     {
+      "src": "jug_steam_long",
+      "at": 0.1,
+      "gain": 0.6,
+      "trim": [
+       0,
+       0.8
+      ],
+      "fadeOut": 0.4
+     }
+    ],
+    "level": 0.472
+   }
+  },
+  "ritual_collapse": {
+   "subtitle": "The effigy collapses into steam",
+   "group": "The ritual",
+   "layers": [
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.7,
+     "f": 50,
+     "dur": 0.5
+    },
+    {
+     "type": "clang",
+     "at": 0.02,
+     "gain": 0.3,
+     "f": 210,
+     "dur": 0.7
+    },
+    {
+     "type": "noise",
+     "at": 0.05,
+     "gain": 0.6,
+     "f": 2500,
+     "dur": 1.4
+    },
+    {
+     "type": "whoosh",
+     "at": 0.1,
+     "gain": 0.4,
+     "f": 150,
+     "f2": 800,
+     "dur": 1.2
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -24,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "pitch": 0.5,
+      "gain": 0.8,
+      "fadeOut": 0.2
+     },
+     {
+      "src": "1772",
+      "at": 0.02,
+      "pitch": 0.7,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.9
+      ],
+      "fadeOut": 0.4
+     },
+     {
+      "src": "jug_steam_long",
+      "at": 0.05,
+      "pitch": 0.85,
+      "gain": 0.8,
+      "trim": [
+       0,
+       1.4
+      ],
+      "fadeOut": 0.6
+     },
+     {
+      "pick": [
+       "jug_whoosh_1",
+       "jug_whoosh_2",
+       "jug_whoosh_3",
+       "jug_whoosh_4",
+       "jug_whoosh_5",
+       "jug_whoosh_6"
+      ],
+      "at": 0.1,
+      "pitch": 0.5,
+      "gain": 0.6
+     }
+    ],
+    "level": 0.1923
+   }
+  },
+  "engine_ratchet": {
+   "subtitle": "Spring Engine winds",
+   "group": "Spring Engine",
+   "layers": [
+    {
+     "type": "tick",
+     "at": 0,
+     "gain": 0.3,
+     "f": 1700,
+     "dur": 0.035
+    },
+    {
+     "type": "clink",
+     "at": 0.003,
+     "gain": 0.08,
+     "f": 900,
+     "dur": 0.12
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "target": -38,
+    "vary": {
+     "pitch": 0.04
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "sa3_tradebot_tick_1",
+       "sa3_tradebot_tick_2",
+       "sa3_tradebot_tick_3",
+       "sa3_tradebot_tick_4"
+      ],
+      "pitch": 1.2,
+      "gain": 1
+     },
+     {
+      "src": "metalClick",
+      "pitch": 1,
+      "gain": 0.2
+     }
+    ],
+    "level": 0.1945
+   }
+  },
+  "engine_tick": {
+   "subtitle": "Spring Engine ticks",
+   "group": "Spring Engine",
+   "layers": [
+    {
+     "type": "tick",
+     "at": 0,
+     "gain": 0.28,
+     "f": 1500,
+     "dur": 0.035
+    },
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.15,
+     "f": 110,
+     "dur": 0.08
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -38,
+    "vary": {
+     "pitch": 0.03
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_tick_1",
+       "jug_tick_2",
+       "jug_tick_3",
+       "jug_tick_4"
+      ],
+      "pitch": 1.6,
+      "gain": 1,
+      "fadeOut": 0.1
+     }
+    ],
+    "level": 0.1242
+   }
+  },
+  "engine_tock": {
+   "subtitle": "Spring Engine ticks",
+   "group": "Spring Engine",
+   "layers": [
+    {
+     "type": "tick",
+     "at": 0,
+     "gain": 0.28,
+     "f": 1200,
+     "dur": 0.035
+    },
+    {
+     "type": "thud",
+     "at": 0,
+     "gain": 0.15,
+     "f": 95,
+     "dur": 0.08
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "target": -38,
+    "vary": {
+     "pitch": 0.03
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_tock_1",
+       "jug_tock_2",
+       "jug_tock_3",
+       "jug_tock_4"
+      ],
+      "pitch": 1.5,
+      "gain": 1,
+      "fadeOut": 0.1
+     }
+    ],
+    "level": 0.127
+   }
+  },
+  "engine_rune_up": {
+   "subtitle": "Spring Engine fills",
+   "group": "Spring Engine",
+   "layers": [
+    {
+     "type": "swell",
+     "at": 0,
+     "gain": 0.12249999999999998,
+     "f": 147,
+     "f2": 220.5,
+     "dur": 0.6
+    },
+    {
+     "type": "hum",
+     "at": 0.12,
+     "gain": 0.0875,
+     "f": 294,
+     "dur": 0.48
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -33,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "type": "swell",
+      "at": 0,
+      "gain": 0.3,
+      "f": 147,
+      "f2": 220.5,
+      "dur": 0.6
+     },
+     {
+      "type": "hum",
+      "at": 0.12,
+      "gain": 0.21,
+      "f": 294,
+      "dur": 0.48
+     },
+     {
+      "src": "jug_chime",
+      "at": 0.05,
+      "pitch": 0.7,
+      "gain": 0.1,
+      "trim": [
+       0,
+       0.6
+      ],
+      "fadeOut": 0.4,
+      "highpass": 300
+     }
+    ],
+    "level": 0.0774
+   }
+  },
+  "engine_rune_down": {
+   "subtitle": "Spring Engine empties",
+   "group": "Spring Engine",
+   "layers": [
+    {
+     "type": "swell",
+     "at": 0,
+     "gain": 0.12,
+     "f": 147,
+     "f2": 110,
+     "dur": 0.6
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -34,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "type": "swell",
+      "at": 0,
+      "gain": 0.4,
+      "f": 147,
+      "f2": 110,
+      "dur": 0.6
+     }
+    ],
+    "level": 0.0494
+   }
+  },
+  "engine_full": {
+   "subtitle": "Spring Engine is fully wound",
+   "group": "Spring Engine",
+   "layers": [
+    {
+     "type": "clack",
+     "at": 0,
+     "gain": 0.4,
+     "f": 500,
+     "dur": 0.06
+    },
+    {
+     "type": "ping",
+     "at": 0.01,
+     "gain": 0.2,
+     "f": 784,
+     "dur": 0.8
+    },
+    {
+     "type": "swell",
+     "at": 0,
+     "gain": 0.12249999999999998,
+     "f": 196,
+     "f2": 294,
+     "dur": 0.6
+    },
+    {
+     "type": "hum",
+     "at": 0.12,
+     "gain": 0.0875,
+     "f": 392,
+     "dur": 0.48
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -31,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "jug_key_lock_a",
+      "pitch": 1,
+      "gain": 0.8
+     },
+     {
+      "src": "jug_chime",
+      "at": 0.01,
+      "pitch": 0.9,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.9
+      ],
+      "fadeOut": 0.5
+     },
+     {
+      "type": "swell",
+      "at": 0,
+      "gain": 0.2,
+      "f": 196,
+      "f2": 294,
+      "dur": 0.6
+     },
+     {
+      "type": "hum",
+      "at": 0.12,
+      "gain": 0.13999999999999999,
+      "f": 392,
+      "dur": 0.48
+     }
+    ],
+    "level": 0.1459
+   }
+  },
+  "engine_empty": {
+   "subtitle": "Spring Engine runs down",
+   "group": "Spring Engine",
+   "layers": [
+    {
+     "type": "creak",
+     "at": 0,
+     "gain": 0.3,
+     "f": 40,
+     "dur": 0.4
+    },
+    {
+     "type": "thud",
+     "at": 0.35,
+     "gain": 0.35,
+     "f": 70,
+     "dur": 0.2
+    }
+   ],
+   "real": {
+    "variants": 1,
+    "target": -33,
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "pick": [
+       "jug_creak_low_a",
+       "jug_creak_low_b",
+       "jug_creak_low_c"
+      ],
+      "pitch": 0.9,
+      "gain": 1,
+      "trim": [
+       0,
+       0.4
+      ],
+      "fadeOut": 0.2
+     },
+     {
+      "pick": [
+       "jug_stone_1",
+       "jug_stone_2",
+       "jug_stone_3",
+       "jug_stone_4",
+       "jug_stone_5",
+       "jug_stone_6",
+       "jug_stone_7"
+      ],
+      "at": 0.35,
+      "pitch": 0.8,
+      "gain": 0.5,
+      "trim": [
+       0,
+       0.25
+      ],
+      "fadeOut": 0.1
+     }
+    ],
+    "level": 0.3048
+   }
+  }
+ },
+ "clips": {
+  "idle": [
+   [
+    0,
+    "tick"
+   ],
+   [
+    0.75,
+    "tock"
+   ],
+   [
+    1.45,
+    "claw_flex"
+   ],
+   [
+    1.5,
+    "tick"
+   ],
+   [
+    2.25,
+    "tock"
+   ]
+  ],
+  "walk": [
+   [
+    0,
+    "tick"
+   ],
+   [
+    0.4,
+    "step"
+   ],
+   [
+    0.8,
+    "tock"
+   ],
+   [
+    1.2,
+    "step"
+   ]
+  ],
+  "scan": [
+   [
+    0,
+    "tick"
+   ],
+   [
+    0.29,
+    "head_ratchet"
+   ],
+   [
+    0.75,
+    "tock"
+   ],
+   [
+    1.16,
+    "head_ratchet"
+   ],
+   [
+    1.5,
+    "tick"
+   ],
+   [
+    1.99,
+    "head_ratchet"
+   ],
+   [
+    2.25,
+    "tock"
+   ]
+  ],
+  "knuckles": [
+   [
+    0,
+    "tick"
+   ],
+   [
+    0.25,
+    "joint_creak"
+   ],
+   [
+    0.75,
+    "tock"
+   ],
+   [
+    0.9,
+    "knuckle_grind"
+   ],
+   [
+    1.3,
+    "knuckle_grind"
+   ],
+   [
+    1.5,
+    "tick"
+   ]
+  ],
+  "sigh": [
+   [
+    0,
+    "tick"
+   ],
+   [
+    0.2,
+    "steam_sigh"
+   ],
+   [
+    1.5,
+    "tock"
+   ]
+  ],
+  "charge": [
+   [
+    0.05,
+    "charge_tell"
+   ],
+   [
+    0.12,
+    "foot_scrape"
+   ],
+   [
+    0.32,
+    "foot_scrape"
+   ],
+   [
+    0.45,
+    "steam_puff"
+   ],
+   [
+    0.75,
+    "step_run"
+   ],
+   [
+    1,
+    "step_run"
+   ],
+   [
+    1.25,
+    "step_run"
+   ],
+   [
+    1.5,
+    "step_run"
+   ],
+   [
+    1.62,
+    "skid"
+   ],
+   [
+    1.95,
+    "plates_settle"
+   ]
+  ],
+  "swing": [
+   [
+    0.02,
+    "swing_windup"
+   ],
+   [
+    0.42,
+    "swing_whoosh"
+   ]
+  ],
+  "stomp": [
+   [
+    0.1,
+    "stomp_raise"
+   ],
+   [
+    0.73,
+    "stomp_impact"
+   ]
+  ],
+  "stomp_double": [
+   [
+    0.1,
+    "stomp_raise"
+   ],
+   [
+    0.72,
+    "stomp_impact"
+   ],
+   [
+    1.27,
+    "stomp_impact"
+   ]
+  ],
+  "grab_throw": [
+   [
+    0.05,
+    "grab_open"
+   ],
+   [
+    1.22,
+    "grab_snap"
+   ],
+   [
+    1.55,
+    "throw_whoosh"
+   ],
+   [
+    1.95,
+    "grab_release"
+   ],
+   [
+    2.1,
+    "plates_settle"
+   ]
+  ],
+  "grab_blocked": [
+   [
+    0.02,
+    "grab_open"
+   ],
+   [
+    0.6,
+    "grab_clang"
+   ]
+  ],
+  "leap": [
+   [
+    0.05,
+    "leap_coil"
+   ],
+   [
+    1.5,
+    "leap_launch"
+   ],
+   [
+    2.08,
+    "leap_land"
+   ]
+  ],
+  "steam_vent": [
+   [
+    0.05,
+    "vent_tell"
+   ],
+   [
+    2,
+    "vent_blast"
+   ]
+  ],
+  "gear_spin_start": [
+   [
+    0.2,
+    "spin_windup"
+   ]
+  ],
+  "gear_spin": [
+   [
+    0,
+    "spin_loop"
+   ]
+  ],
+  "gear_spin_end": [
+   [
+    0,
+    "spin_down"
+   ]
+  ],
+  "cog_throw": [
+   [
+    0.45,
+    "cog_draw"
+   ],
+   [
+    0.8,
+    "cog_throw"
+   ]
+  ],
+  "run_down": [
+   [
+    0.45,
+    "run_down_tick"
+   ],
+   [
+    1.35,
+    "run_down_tick"
+   ],
+   [
+    2.36,
+    "run_down_tick"
+   ],
+   [
+    3.56,
+    "run_down_tick"
+   ]
+  ],
+  "rewind": [
+   [
+    0,
+    "rewind_loop"
+   ]
+  ],
+  "rewind_end": [
+   [
+    0,
+    "rewind_end"
+   ]
+  ],
+  "feint": [
+   [
+    0.44,
+    "run_down_tick"
+   ],
+   [
+    0.99,
+    "run_down_tick"
+   ],
+   [
+    1.2,
+    "feint_snap"
+   ],
+   [
+    1.25,
+    "swing_whoosh"
+   ]
+  ],
+  "key_jam": [
+   [
+    0,
+    "key_jam"
+   ]
+  ],
+  "shed_plates_2": [
+   [
+    0.12,
+    "plates_burst"
+   ],
+   [
+    0.7,
+    "stage_roar"
+   ],
+   [
+    1.15,
+    "plates_land"
+   ]
+  ],
+  "shed_plates_3": [
+   [
+    0.12,
+    "plates_burst"
+   ],
+   [
+    0.7,
+    "stage_roar"
+   ],
+   [
+    1.15,
+    "plates_land"
+   ]
+  ],
+  "hit_wound": [
+   [
+    0,
+    "hit_wound"
+   ]
+  ],
+  "hit_open": [
+   [
+    0,
+    "hit_open"
+   ]
+  ],
+  "lightning": [
+   [
+    0,
+    "lightning"
+   ]
+  ],
+  "dormant": [
+   [
+    1.3,
+    "ember_flicker"
+   ],
+   [
+    2,
+    "steam_wisp"
+   ],
+   [
+    3.1,
+    "ember_flicker"
+   ]
+  ],
+  "wake": [
+   [
+    0.2,
+    "glow_on"
+   ],
+   [
+    0.55,
+    "key_turn"
+   ],
+   [
+    0.85,
+    "joint_step"
+   ],
+   [
+    1.05,
+    "joint_step"
+   ],
+   [
+    1.25,
+    "joint_step"
+   ],
+   [
+    1.45,
+    "joint_step"
+   ],
+   [
+    1.75,
+    "plates_settle"
+   ],
+   [
+    1.9,
+    "key_turn"
+   ],
+   [
+    2.3,
+    "salute_snap"
+   ]
+  ],
+  "wake_ritual": [
+   [
+    0,
+    "ritual_unfold"
+   ],
+   [
+    0.2,
+    "key_ratchet"
+   ],
+   [
+    0.35,
+    "glow_on"
+   ],
+   [
+    0.9,
+    "steam_puff"
+   ],
+   [
+    1.1,
+    "plates_settle"
+   ],
+   [
+    2.05,
+    "salute_snap"
+   ]
+  ],
+  "death": [
+   [
+    0.34,
+    "run_down_tick"
+   ],
+   [
+    0.84,
+    "run_down_tick"
+   ],
+   [
+    1.4,
+    "glow_out"
+   ],
+   [
+    2.25,
+    "kneel_impact"
+   ],
+   [
+    2.6,
+    "key_unwind"
+   ],
+   [
+    2.9,
+    "mainspring_burst"
+   ],
+   [
+    3.15,
+    "fist_thud"
+   ],
+   [
+    3.35,
+    "death_steam"
+   ]
+  ],
+  "salute": [
+   [
+    0.45,
+    "salute_snap"
+   ]
+  ],
+  "ritual_winding": [
+   [
+    0.29,
+    "ritual_click"
+   ],
+   [
+    0.54,
+    "ritual_click"
+   ],
+   [
+    0.6,
+    "ritual_runes"
+   ],
+   [
+    0.75,
+    "ritual_tick"
+   ],
+   [
+    0.94,
+    "ritual_click"
+   ],
+   [
+    1.11,
+    "ritual_click"
+   ],
+   [
+    1.28,
+    "ritual_tick"
+   ],
+   [
+    1.43,
+    "ritual_click"
+   ],
+   [
+    1.57,
+    "ritual_click"
+   ],
+   [
+    1.71,
+    "ritual_tick"
+   ],
+   [
+    1.84,
+    "ritual_click"
+   ],
+   [
+    1.96,
+    "ritual_click"
+   ],
+   [
+    2.08,
+    "ritual_tick"
+   ],
+   [
+    2.19,
+    "ritual_click"
+   ],
+   [
+    2.31,
+    "ritual_click"
+   ],
+   [
+    2.41,
+    "ritual_tick"
+   ],
+   [
+    2.5,
+    "ritual_steam"
+   ],
+   [
+    2.52,
+    "ritual_click"
+   ],
+   [
+    2.62,
+    "ritual_click"
+   ],
+   [
+    2.72,
+    "ritual_tick"
+   ],
+   [
+    2.81,
+    "ritual_click"
+   ],
+   [
+    2.91,
+    "ritual_click"
+   ],
+   [
+    3,
+    "ritual_tick"
+   ],
+   [
+    3.09,
+    "ritual_click"
+   ],
+   [
+    3.18,
+    "ritual_click"
+   ],
+   [
+    3.26,
+    "ritual_tick"
+   ],
+   [
+    3.35,
+    "ritual_click"
+   ],
+   [
+    3.43,
+    "ritual_click"
+   ],
+   [
+    3.51,
+    "ritual_tick"
+   ],
+   [
+    3.59,
+    "ritual_click"
+   ],
+   [
+    3.67,
+    "ritual_click"
+   ],
+   [
+    3.75,
+    "ritual_tick"
+   ],
+   [
+    3.83,
+    "ritual_click"
+   ],
+   [
+    3.9,
+    "ritual_click"
+   ],
+   [
+    3.98,
+    "ritual_tick"
+   ],
+   [
+    4.05,
+    "ritual_click"
+   ],
+   [
+    4.12,
+    "ritual_click"
+   ],
+   [
+    4.19,
+    "ritual_tick"
+   ],
+   [
+    4.26,
+    "ritual_click"
+   ],
+   [
+    4.33,
+    "ritual_click"
+   ],
+   [
+    4.4,
+    "ritual_tick"
+   ],
+   [
+    4.4,
+    "ritual_steam"
+   ],
+   [
+    4.47,
+    "ritual_click"
+   ],
+   [
+    4.53,
+    "ritual_click"
+   ],
+   [
+    4.6,
+    "ritual_tick"
+   ],
+   [
+    4.66,
+    "ritual_click"
+   ],
+   [
+    4.73,
+    "ritual_click"
+   ],
+   [
+    4.79,
+    "ritual_tick"
+   ],
+   [
+    4.86,
+    "ritual_click"
+   ],
+   [
+    4.92,
+    "ritual_click"
+   ],
+   [
+    4.98,
+    "ritual_tick"
+   ],
+   [
+    5.04,
+    "ritual_click"
+   ],
+   [
+    5.1,
+    "ritual_click"
+   ],
+   [
+    5.16,
+    "ritual_tick"
+   ],
+   [
+    5.2,
+    "ritual_ready"
+   ],
+   [
+    5.22,
+    "ritual_click"
+   ],
+   [
+    5.28,
+    "ritual_click"
+   ],
+   [
+    5.34,
+    "ritual_tick"
+   ],
+   [
+    5.4,
+    "ritual_click"
+   ],
+   [
+    5.45,
+    "ritual_click"
+   ],
+   [
+    5.51,
+    "ritual_tick"
+   ],
+   [
+    5.57,
+    "ritual_click"
+   ],
+   [
+    5.62,
+    "ritual_click"
+   ],
+   [
+    5.68,
+    "ritual_tick"
+   ],
+   [
+    5.73,
+    "ritual_click"
+   ],
+   [
+    5.79,
+    "ritual_click"
+   ],
+   [
+    5.84,
+    "ritual_tick"
+   ],
+   [
+    5.89,
+    "ritual_click"
+   ],
+   [
+    5.95,
+    "ritual_click"
+   ]
+  ],
+  "engine_winding": [
+   [
+    0,
+    "engine_ratchet"
+   ],
+   [
+    0.33,
+    "engine_ratchet"
+   ],
+   [
+    0.67,
+    "engine_ratchet"
+   ],
+   [
+    1,
+    "engine_ratchet"
+   ],
+   [
+    1,
+    "engine_rune_up"
+   ],
+   [
+    1.33,
+    "engine_ratchet"
+   ],
+   [
+    1.67,
+    "engine_ratchet"
+   ],
+   [
+    2,
+    "engine_ratchet"
+   ],
+   [
+    2.33,
+    "engine_ratchet"
+   ],
+   [
+    2.67,
+    "engine_ratchet"
+   ],
+   [
+    3,
+    "engine_ratchet"
+   ],
+   [
+    3,
+    "engine_rune_up"
+   ],
+   [
+    3.33,
+    "engine_ratchet"
+   ],
+   [
+    3.67,
+    "engine_ratchet"
+   ],
+   [
+    4,
+    "engine_ratchet"
+   ],
+   [
+    4.33,
+    "engine_ratchet"
+   ],
+   [
+    4.67,
+    "engine_ratchet"
+   ],
+   [
+    5,
+    "engine_ratchet"
+   ],
+   [
+    5,
+    "engine_rune_up"
+   ],
+   [
+    5.33,
+    "engine_ratchet"
+   ],
+   [
+    5.67,
+    "engine_ratchet"
+   ],
+   [
+    6,
+    "engine_ratchet"
+   ],
+   [
+    6.33,
+    "engine_ratchet"
+   ],
+   [
+    6.67,
+    "engine_ratchet"
+   ],
+   [
+    7,
+    "engine_ratchet"
+   ],
+   [
+    7,
+    "engine_rune_up"
+   ],
+   [
+    7.33,
+    "engine_ratchet"
+   ],
+   [
+    7.67,
+    "engine_ratchet"
+   ]
+  ],
+  "engine_unwinding": [
+   [
+    0,
+    "engine_tick"
+   ],
+   [
+    0.25,
+    "engine_tock"
+   ],
+   [
+    0.5,
+    "engine_tick"
+   ],
+   [
+    0.75,
+    "engine_tock"
+   ],
+   [
+    1,
+    "engine_tick"
+   ],
+   [
+    1,
+    "engine_rune_down"
+   ],
+   [
+    1.25,
+    "engine_tock"
+   ],
+   [
+    1.5,
+    "engine_tick"
+   ],
+   [
+    1.75,
+    "engine_tock"
+   ],
+   [
+    2,
+    "engine_tick"
+   ],
+   [
+    2.25,
+    "engine_tock"
+   ],
+   [
+    2.5,
+    "engine_tick"
+   ],
+   [
+    2.75,
+    "engine_tock"
+   ],
+   [
+    3,
+    "engine_tick"
+   ],
+   [
+    3,
+    "engine_rune_down"
+   ],
+   [
+    3.25,
+    "engine_tock"
+   ],
+   [
+    3.5,
+    "engine_tick"
+   ],
+   [
+    3.75,
+    "engine_tock"
+   ],
+   [
+    4,
+    "engine_tick"
+   ],
+   [
+    4.25,
+    "engine_tock"
+   ],
+   [
+    4.5,
+    "engine_tick"
+   ],
+   [
+    4.75,
+    "engine_tock"
+   ],
+   [
+    5,
+    "engine_tick"
+   ],
+   [
+    5,
+    "engine_rune_down"
+   ],
+   [
+    5.25,
+    "engine_tock"
+   ],
+   [
+    5.5,
+    "engine_tick"
+   ],
+   [
+    5.75,
+    "engine_tock"
+   ],
+   [
+    6,
+    "engine_tick"
+   ],
+   [
+    6.25,
+    "engine_tock"
+   ],
+   [
+    6.5,
+    "engine_tick"
+   ],
+   [
+    6.75,
+    "engine_tock"
+   ],
+   [
+    7,
+    "engine_tick"
+   ],
+   [
+    7,
+    "engine_rune_down"
+   ],
+   [
+    7.25,
+    "engine_tock"
+   ],
+   [
+    7.5,
+    "engine_tick"
+   ],
+   [
+    7.75,
+    "engine_tock"
+   ]
+  ]
+ }
+}

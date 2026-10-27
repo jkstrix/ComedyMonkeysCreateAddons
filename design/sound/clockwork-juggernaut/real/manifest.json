@@ -1,0 +1,1179 @@
+{
+ "tick": {
+  "variants": 4,
+  "sources": [
+   "bigsoundbank/cuts/jug_tick_1.wav",
+   "bigsoundbank/cuts/jug_tick_2.wav",
+   "bigsoundbank/cuts/jug_tick_3.wav",
+   "bigsoundbank/cuts/jug_tick_4.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "generated/sa3_tradebot_tick_1.wav",
+   "generated/sa3_tradebot_tick_2.wav",
+   "generated/sa3_tradebot_tick_3.wav",
+   "generated/sa3_tradebot_tick_4.wav"
+  ],
+  "synth": []
+ },
+ "tock": {
+  "variants": 4,
+  "sources": [
+   "bigsoundbank/cuts/jug_tock_1.wav",
+   "bigsoundbank/cuts/jug_tock_2.wav",
+   "bigsoundbank/cuts/jug_tock_3.wav",
+   "bigsoundbank/cuts/jug_tock_4.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "generated/sa3_tradebot_tick_1.wav",
+   "generated/sa3_tradebot_tick_2.wav",
+   "generated/sa3_tradebot_tick_3.wav",
+   "generated/sa3_tradebot_tick_4.wav"
+  ],
+  "synth": []
+ },
+ "run_down_tick": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/jug_tock_1.wav",
+   "bigsoundbank/cuts/jug_tock_2.wav",
+   "bigsoundbank/cuts/jug_tock_3.wav",
+   "bigsoundbank/cuts/jug_tock_4.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/cuts/jug_creak_low_a.wav",
+   "bigsoundbank/cuts/jug_creak_low_b.wav",
+   "bigsoundbank/cuts/jug_creak_low_c.wav",
+   "bigsoundbank/cuts/jug_spring_b.wav"
+  ],
+  "synth": []
+ },
+ "key_ratchet": {
+  "variants": 3,
+  "sources": [
+   "generated/sa3_tradebot_wind_1.wav",
+   "generated/sa3_tradebot_wind_2.wav",
+   "generated/sa3_tradebot_wind_3.wav",
+   "generated/sa3_tradebot_wind_4.wav",
+   "bigsoundbank/cuts/jug_reel_slow.wav",
+   "bigsoundbank/cuts/jug_key_lock_a.wav",
+   "bigsoundbank/cuts/jug_key_lock_b.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav"
+  ],
+  "synth": []
+ },
+ "plate_ring": {
+  "variants": 4,
+  "sources": [
+   "bigsoundbank/cuts/jug_gong_a.wav",
+   "bigsoundbank/cuts/jug_gong_b.wav",
+   "bigsoundbank/cuts/jug_gong_c.wav",
+   "bigsoundbank/cuts/jug_anvil_1.wav",
+   "bigsoundbank/cuts/jug_anvil_2.wav",
+   "bigsoundbank/cuts/jug_anvil_3.wav",
+   "kenney-impact-sounds/Audio/impactPlate_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactPlate_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactPlate_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactPlate_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactPlate_heavy_004.ogg"
+  ],
+  "synth": []
+ },
+ "glow_on": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_chime.wav"
+  ],
+  "synth": [
+   "swell",
+   "hum"
+  ]
+ },
+ "steam_puff": {
+  "variants": 4,
+  "sources": [
+   "bigsoundbank/cuts/jug_steam_puff.wav",
+   "bigsoundbank/cuts/jug_steam_burst.wav"
+  ],
+  "synth": [
+   "whoosh"
+  ]
+ },
+ "step": {
+  "variants": 6,
+  "sources": [
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_004.ogg",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "step_run": {
+  "variants": 4,
+  "sources": [
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_004.ogg",
+   "bigsoundbank/1023.ogg",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "foot_scrape": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/jug_grind_stone_a.wav",
+   "bigsoundbank/cuts/jug_grind_stone_b.wav",
+   "bigsoundbank/cuts/jug_grind_stone_c.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav"
+  ],
+  "synth": []
+ },
+ "skid": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_grind_stone_a.wav",
+   "bigsoundbank/cuts/jug_grind_stone_b.wav",
+   "bigsoundbank/cuts/jug_grind_stone_c.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "plates_settle": {
+  "variants": 4,
+  "sources": [
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "joint_step": {
+  "variants": 4,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalClick.ogg",
+   "bigsoundbank/cuts/jug_creak_low_a.wav",
+   "bigsoundbank/cuts/jug_creak_low_b.wav",
+   "bigsoundbank/cuts/jug_creak_low_c.wav"
+  ],
+  "synth": []
+ },
+ "head_ratchet": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/jug_reel.wav",
+   "bigsoundbank/cuts/jug_creak_low_a.wav",
+   "bigsoundbank/cuts/jug_creak_low_b.wav",
+   "bigsoundbank/cuts/jug_creak_low_c.wav"
+  ],
+  "synth": []
+ },
+ "joint_creak": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/jug_creak_low_a.wav",
+   "bigsoundbank/cuts/jug_creak_low_b.wav",
+   "bigsoundbank/cuts/jug_creak_low_c.wav",
+   "bigsoundbank/cuts/jug_creak_long.wav"
+  ],
+  "synth": []
+ },
+ "knuckle_grind": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_grind_stone_a.wav",
+   "bigsoundbank/cuts/jug_grind_stone_b.wav",
+   "bigsoundbank/cuts/jug_grind_stone_c.wav",
+   "bigsoundbank/cuts/jug_reel_slow.wav"
+  ],
+  "synth": []
+ },
+ "claw_flex": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/jug_reel.wav",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav"
+  ],
+  "synth": []
+ },
+ "steam_sigh": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_creak_low_a.wav",
+   "bigsoundbank/cuts/jug_creak_low_b.wav",
+   "bigsoundbank/cuts/jug_creak_low_c.wav",
+   "bigsoundbank/0227.ogg"
+  ],
+  "synth": [
+   "swell"
+  ]
+ },
+ "charge_tell": {
+  "variants": 2,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "bigsoundbank/cuts/jug_steam_burst.wav",
+   "bigsoundbank/cuts/jug_creak_low_a.wav",
+   "bigsoundbank/cuts/jug_creak_low_b.wav",
+   "bigsoundbank/cuts/jug_creak_low_c.wav"
+  ],
+  "synth": []
+ },
+ "swing_windup": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_creak_long.wav",
+   "bigsoundbank/cuts/jug_reel_slow.wav"
+  ],
+  "synth": []
+ },
+ "swing_whoosh": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/jug_whoosh_1.wav",
+   "bigsoundbank/cuts/jug_whoosh_2.wav",
+   "bigsoundbank/cuts/jug_whoosh_3.wav",
+   "bigsoundbank/cuts/jug_whoosh_4.wav",
+   "bigsoundbank/cuts/jug_whoosh_5.wav",
+   "bigsoundbank/cuts/jug_whoosh_6.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav"
+  ],
+  "synth": [
+   "whoosh"
+  ]
+ },
+ "stomp_raise": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_creak_low_a.wav",
+   "bigsoundbank/cuts/jug_creak_low_b.wav",
+   "bigsoundbank/cuts/jug_creak_low_c.wav",
+   "bigsoundbank/cuts/jug_steam_puff.wav"
+  ],
+  "synth": []
+ },
+ "stomp_impact": {
+  "variants": 4,
+  "sources": [
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/1023.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_004.ogg",
+   "bigsoundbank/cuts/jug_gong_a.wav",
+   "bigsoundbank/cuts/jug_gong_b.wav",
+   "bigsoundbank/cuts/jug_gong_c.wav",
+   "bigsoundbank/1771.ogg",
+   "bigsoundbank/1772.ogg",
+   "bigsoundbank/1774.ogg",
+   "bigsoundbank/1776.ogg",
+   "bigsoundbank/1778.ogg",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "grab_open": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_reel.wav",
+   "bigsoundbank/cuts/jug_creak_metal.wav"
+  ],
+  "synth": []
+ },
+ "grab_snap": {
+  "variants": 3,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_004.ogg",
+   "bigsoundbank/cuts/jug_anvil_1.wav",
+   "bigsoundbank/cuts/jug_anvil_2.wav",
+   "bigsoundbank/cuts/jug_anvil_3.wav"
+  ],
+  "synth": []
+ },
+ "grab_clang": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_anvil_1.wav",
+   "bigsoundbank/cuts/jug_anvil_2.wav",
+   "bigsoundbank/cuts/jug_anvil_3.wav",
+   "bigsoundbank/cuts/jug_gong_a.wav",
+   "bigsoundbank/cuts/jug_gong_b.wav",
+   "bigsoundbank/cuts/jug_gong_c.wav",
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "throw_whoosh": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_whoosh_1.wav",
+   "bigsoundbank/cuts/jug_whoosh_2.wav",
+   "bigsoundbank/cuts/jug_whoosh_3.wav",
+   "bigsoundbank/cuts/jug_whoosh_4.wav",
+   "bigsoundbank/cuts/jug_whoosh_5.wav",
+   "bigsoundbank/cuts/jug_whoosh_6.wav",
+   "bigsoundbank/cuts/jug_steam_burst.wav"
+  ],
+  "synth": []
+ },
+ "grab_release": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_reel.wav",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav"
+  ],
+  "synth": []
+ },
+ "leap_coil": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_creak_long.wav",
+   "generated/sa3_tradebot_wind_1.wav",
+   "generated/sa3_tradebot_wind_2.wav",
+   "generated/sa3_tradebot_wind_3.wav",
+   "generated/sa3_tradebot_wind_4.wav",
+   "bigsoundbank/cuts/jug_steam_mid.wav"
+  ],
+  "synth": []
+ },
+ "leap_launch": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_spring_b.wav",
+   "bigsoundbank/cuts/jug_whoosh_1.wav",
+   "bigsoundbank/cuts/jug_whoosh_2.wav",
+   "bigsoundbank/cuts/jug_whoosh_3.wav",
+   "bigsoundbank/cuts/jug_whoosh_4.wav",
+   "bigsoundbank/cuts/jug_whoosh_5.wav",
+   "bigsoundbank/cuts/jug_whoosh_6.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav"
+  ],
+  "synth": [
+   "boing"
+  ]
+ },
+ "leap_land": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/1023.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_004.ogg",
+   "bigsoundbank/cuts/jug_gong_a.wav",
+   "bigsoundbank/cuts/jug_gong_b.wav",
+   "bigsoundbank/cuts/jug_gong_c.wav",
+   "bigsoundbank/1771.ogg",
+   "bigsoundbank/1772.ogg",
+   "bigsoundbank/1774.ogg",
+   "bigsoundbank/1776.ogg",
+   "bigsoundbank/1778.ogg",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "vent_tell": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_steam_long.wav",
+   "bigsoundbank/cuts/jug_creak_low_a.wav",
+   "bigsoundbank/cuts/jug_creak_low_b.wav",
+   "bigsoundbank/cuts/jug_creak_low_c.wav"
+  ],
+  "synth": [
+   "swell",
+   "hum"
+  ]
+ },
+ "vent_blast": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_steam_long.wav",
+   "bigsoundbank/3019.ogg",
+   "bigsoundbank/cuts/jug_steam_burst.wav"
+  ],
+  "synth": [
+   "whoosh"
+  ]
+ },
+ "spin_windup": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_creak_long.wav",
+   "generated/sa3_tradebot_wind_1.wav",
+   "generated/sa3_tradebot_wind_2.wav",
+   "generated/sa3_tradebot_wind_3.wav",
+   "generated/sa3_tradebot_wind_4.wav",
+   "bigsoundbank/cuts/jug_whirr_loop.wav",
+   "bigsoundbank/cuts/jug_whoosh_1.wav",
+   "bigsoundbank/cuts/jug_whoosh_2.wav",
+   "bigsoundbank/cuts/jug_whoosh_3.wav",
+   "bigsoundbank/cuts/jug_whoosh_4.wav",
+   "bigsoundbank/cuts/jug_whoosh_5.wav",
+   "bigsoundbank/cuts/jug_whoosh_6.wav"
+  ],
+  "synth": []
+ },
+ "spin_loop": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/jug_whirr_loop.wav",
+   "bigsoundbank/cuts/jug_whoosh_1.wav",
+   "bigsoundbank/cuts/jug_whoosh_2.wav",
+   "bigsoundbank/cuts/jug_whoosh_3.wav",
+   "bigsoundbank/cuts/jug_whoosh_4.wav",
+   "bigsoundbank/cuts/jug_whoosh_5.wav",
+   "bigsoundbank/cuts/jug_whoosh_6.wav"
+  ],
+  "synth": []
+ },
+ "spin_down": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_whirr_loop.wav",
+   "bigsoundbank/cuts/jug_whoosh_1.wav",
+   "bigsoundbank/cuts/jug_whoosh_2.wav",
+   "bigsoundbank/cuts/jug_whoosh_3.wav",
+   "bigsoundbank/cuts/jug_whoosh_4.wav",
+   "bigsoundbank/cuts/jug_whoosh_5.wav",
+   "bigsoundbank/cuts/jug_whoosh_6.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": [
+   "servo"
+  ]
+ },
+ "cog_draw": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_grind_metal.wav",
+   "bigsoundbank/cuts/jug_anvil_1.wav",
+   "bigsoundbank/cuts/jug_anvil_2.wav",
+   "bigsoundbank/cuts/jug_anvil_3.wav"
+  ],
+  "synth": []
+ },
+ "cog_throw": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_whoosh_1.wav",
+   "bigsoundbank/cuts/jug_whoosh_2.wav",
+   "bigsoundbank/cuts/jug_whoosh_3.wav",
+   "bigsoundbank/cuts/jug_whoosh_4.wav",
+   "bigsoundbank/cuts/jug_whoosh_5.wav",
+   "bigsoundbank/cuts/jug_whoosh_6.wav",
+   "bigsoundbank/cuts/jug_steam_burst.wav"
+  ],
+  "synth": []
+ },
+ "cog_fly": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/jug_whirr_loop.wav",
+   "bigsoundbank/cuts/jug_whoosh_1.wav",
+   "bigsoundbank/cuts/jug_whoosh_2.wav",
+   "bigsoundbank/cuts/jug_whoosh_3.wav",
+   "bigsoundbank/cuts/jug_whoosh_4.wav",
+   "bigsoundbank/cuts/jug_whoosh_5.wav",
+   "bigsoundbank/cuts/jug_whoosh_6.wav"
+  ],
+  "synth": []
+ },
+ "cog_hit": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/jug_anvil_1.wav",
+   "bigsoundbank/cuts/jug_anvil_2.wav",
+   "bigsoundbank/cuts/jug_anvil_3.wav",
+   "kenney-impact-sounds/Audio/impactMetal_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_heavy_004.ogg",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav"
+  ],
+  "synth": []
+ },
+ "rewind_loop": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/jug_ratchet_hoist_loop.wav"
+  ],
+  "synth": [
+   "hum",
+   "swell"
+  ]
+ },
+ "rewind_end": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_ratchet_hoist.wav",
+   "bigsoundbank/cuts/jug_key_lock_a.wav",
+   "bigsoundbank/cuts/jug_key_lock_b.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/cuts/jug_steam_puff.wav",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "feint_snap": {
+  "variants": 2,
+  "sources": [
+   "kenney-ui-audio/Audio/switch12.ogg",
+   "kenney-ui-audio/Audio/switch13.ogg",
+   "kenney-ui-audio/Audio/switch14.ogg",
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "generated/sa3_tradebot_tick_1.wav",
+   "generated/sa3_tradebot_tick_2.wav",
+   "generated/sa3_tradebot_tick_3.wav",
+   "generated/sa3_tradebot_tick_4.wav",
+   "bigsoundbank/cuts/jug_steam_burst.wav"
+  ],
+  "synth": []
+ },
+ "key_jam": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_grind_metal.wav",
+   "bigsoundbank/cuts/jug_ratchet_hoist.wav",
+   "bigsoundbank/cuts/jug_grinder_a.wav",
+   "bigsoundbank/cuts/jug_grinder_b.wav",
+   "bigsoundbank/cuts/jug_grinder_c.wav",
+   "bigsoundbank/cuts/jug_weld.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav"
+  ],
+  "synth": []
+ },
+ "plates_burst": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/cuts/jug_gong_a.wav",
+   "bigsoundbank/cuts/jug_gong_b.wav",
+   "bigsoundbank/cuts/jug_gong_c.wav",
+   "bigsoundbank/cuts/jug_anvil_1.wav",
+   "bigsoundbank/cuts/jug_anvil_2.wav",
+   "bigsoundbank/cuts/jug_anvil_3.wav",
+   "bigsoundbank/1771.ogg",
+   "bigsoundbank/1772.ogg",
+   "bigsoundbank/1774.ogg",
+   "bigsoundbank/1776.ogg",
+   "bigsoundbank/1778.ogg",
+   "bigsoundbank/cuts/jug_whoosh_1.wav",
+   "bigsoundbank/cuts/jug_whoosh_2.wav",
+   "bigsoundbank/cuts/jug_whoosh_3.wav",
+   "bigsoundbank/cuts/jug_whoosh_4.wav",
+   "bigsoundbank/cuts/jug_whoosh_5.wav",
+   "bigsoundbank/cuts/jug_whoosh_6.wav"
+  ],
+  "synth": []
+ },
+ "stage_roar": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_steam_long.wav",
+   "bigsoundbank/cuts/jug_steam_mid.wav",
+   "bigsoundbank/cuts/jug_creak_low_a.wav",
+   "bigsoundbank/cuts/jug_creak_low_b.wav",
+   "bigsoundbank/cuts/jug_creak_low_c.wav"
+  ],
+  "synth": [
+   "swell",
+   "hum"
+  ]
+ },
+ "plates_land": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/1771.ogg",
+   "bigsoundbank/1772.ogg",
+   "bigsoundbank/1774.ogg",
+   "bigsoundbank/1776.ogg",
+   "bigsoundbank/1778.ogg",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav"
+  ],
+  "synth": []
+ },
+ "hit_wound": {
+  "variants": 4,
+  "sources": [
+   "bigsoundbank/cuts/jug_gong_a.wav",
+   "bigsoundbank/cuts/jug_gong_b.wav",
+   "bigsoundbank/cuts/jug_gong_c.wav",
+   "kenney-impact-sounds/Audio/impactPlate_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactPlate_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactPlate_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactPlate_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactPlate_heavy_004.ogg",
+   "generated/sa3_tradebot_tick_1.wav",
+   "generated/sa3_tradebot_tick_2.wav",
+   "generated/sa3_tradebot_tick_3.wav",
+   "generated/sa3_tradebot_tick_4.wav"
+  ],
+  "synth": []
+ },
+ "hit_open": {
+  "variants": 4,
+  "sources": [
+   "kenney-impact-sounds/Audio/impactPunch_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_004.ogg",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/cuts/jug_spring_a.wav",
+   "bigsoundbank/cuts/jug_steam_burst.wav"
+  ],
+  "synth": []
+ },
+ "lightning": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/spark_shock_a.wav",
+   "bigsoundbank/cuts/spark_shock_b.wav",
+   "bigsoundbank/cuts/jug_weld.wav",
+   "kenney-rpg-audio/Audio/metalLatch.ogg"
+  ],
+  "synth": [
+   "swell",
+   "hum",
+   "servo"
+  ]
+ },
+ "ember_flicker": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/flicker_bulb_a.wav",
+   "bigsoundbank/cuts/flicker_bulb_b.wav"
+  ],
+  "synth": [
+   "hum"
+  ]
+ },
+ "steam_wisp": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/0227.ogg"
+  ],
+  "synth": []
+ },
+ "key_turn": {
+  "variants": 2,
+  "sources": [
+   "generated/sa3_tradebot_wind_1.wav",
+   "generated/sa3_tradebot_wind_2.wav",
+   "generated/sa3_tradebot_wind_3.wav",
+   "generated/sa3_tradebot_wind_4.wav",
+   "bigsoundbank/cuts/jug_key_lock_a.wav",
+   "bigsoundbank/cuts/jug_key_lock_b.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav"
+  ],
+  "synth": []
+ },
+ "salute_snap": {
+  "variants": 2,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "bigsoundbank/cuts/jug_chime.wav",
+   "kenney-impact-sounds/Audio/impactBell_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactBell_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactBell_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactBell_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactBell_heavy_004.ogg",
+   "bigsoundbank/cuts/jug_steam_puff.wav"
+  ],
+  "synth": []
+ },
+ "glow_out": {
+  "variants": 1,
+  "sources": [
+   "generated/sa3_tradebot_tick_1.wav",
+   "generated/sa3_tradebot_tick_2.wav",
+   "generated/sa3_tradebot_tick_3.wav",
+   "generated/sa3_tradebot_tick_4.wav"
+  ],
+  "synth": [
+   "swell",
+   "hum"
+  ]
+ },
+ "kneel_impact": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/1023.ogg",
+   "bigsoundbank/cuts/jug_gong_a.wav",
+   "bigsoundbank/cuts/jug_gong_b.wav",
+   "bigsoundbank/cuts/jug_gong_c.wav",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "key_unwind": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/jug_ratchet_hoist.wav",
+   "bigsoundbank/cuts/jug_reel.wav"
+  ],
+  "synth": [
+   "servo"
+  ]
+ },
+ "mainspring_burst": {
+  "variants": 1,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/cuts/jug_spring_a.wav",
+   "bigsoundbank/1950.ogg",
+   "bigsoundbank/cuts/jug_anvil_1.wav",
+   "bigsoundbank/cuts/jug_anvil_2.wav",
+   "bigsoundbank/cuts/jug_anvil_3.wav"
+  ],
+  "synth": [
+   "boing"
+  ]
+ },
+ "fist_thud": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_000.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_001.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_002.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_003.ogg",
+   "kenney-impact-sounds/Audio/impactPunch_heavy_004.ogg",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav",
+   "bigsoundbank/cuts/jug_chain_rattle.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "death_steam": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/0227.ogg",
+   "bigsoundbank/cuts/jug_creak_low_a.wav",
+   "bigsoundbank/cuts/jug_creak_low_b.wav",
+   "bigsoundbank/cuts/jug_creak_low_c.wav"
+  ],
+  "synth": [
+   "swell"
+  ]
+ },
+ "key_fit": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_key_lock_a.wav",
+   "bigsoundbank/cuts/jug_key_lock_b.wav",
+   "bigsoundbank/cuts/jug_anvil_1.wav",
+   "bigsoundbank/cuts/jug_anvil_2.wav",
+   "bigsoundbank/cuts/jug_anvil_3.wav",
+   "bigsoundbank/cuts/jug_reel.wav"
+  ],
+  "synth": []
+ },
+ "ritual_click": {
+  "variants": 4,
+  "sources": [
+   "generated/sa3_tradebot_tick_1.wav",
+   "generated/sa3_tradebot_tick_2.wav",
+   "generated/sa3_tradebot_tick_3.wav",
+   "generated/sa3_tradebot_tick_4.wav",
+   "kenney-rpg-audio/Audio/metalClick.ogg"
+  ],
+  "synth": []
+ },
+ "ritual_tick": {
+  "variants": 4,
+  "sources": [
+   "bigsoundbank/cuts/jug_tick_1.wav",
+   "bigsoundbank/cuts/jug_tick_2.wav",
+   "bigsoundbank/cuts/jug_tick_3.wav",
+   "bigsoundbank/cuts/jug_tick_4.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg",
+   "bigsoundbank/cuts/jug_chain_clink_a.wav",
+   "bigsoundbank/cuts/jug_chain_clink_b.wav",
+   "bigsoundbank/cuts/jug_chain_clink_c.wav"
+  ],
+  "synth": []
+ },
+ "ritual_runes": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/jug_chime.wav"
+  ],
+  "synth": [
+   "swell",
+   "hum"
+  ]
+ },
+ "ritual_steam": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/jug_steam_mid.wav",
+   "bigsoundbank/cuts/jug_steam_puff.wav",
+   "bigsoundbank/cuts/jug_steam_long.wav"
+  ],
+  "synth": []
+ },
+ "ritual_ready": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/jug_ratchet_hoist.wav",
+   "bigsoundbank/cuts/jug_chime.wav"
+  ],
+  "synth": [
+   "swell",
+   "hum"
+  ]
+ },
+ "ritual_unfold": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/1023.ogg",
+   "bigsoundbank/1774.ogg",
+   "bigsoundbank/1776.ogg",
+   "bigsoundbank/cuts/jug_ratchet_hoist.wav",
+   "bigsoundbank/cuts/jug_steam_long.wav"
+  ],
+  "synth": [
+   "swell",
+   "hum"
+  ]
+ },
+ "ritual_collapse": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav",
+   "bigsoundbank/1772.ogg",
+   "bigsoundbank/cuts/jug_steam_long.wav",
+   "bigsoundbank/cuts/jug_whoosh_1.wav",
+   "bigsoundbank/cuts/jug_whoosh_2.wav",
+   "bigsoundbank/cuts/jug_whoosh_3.wav",
+   "bigsoundbank/cuts/jug_whoosh_4.wav",
+   "bigsoundbank/cuts/jug_whoosh_5.wav",
+   "bigsoundbank/cuts/jug_whoosh_6.wav"
+  ],
+  "synth": []
+ },
+ "engine_ratchet": {
+  "variants": 4,
+  "sources": [
+   "generated/sa3_tradebot_tick_1.wav",
+   "generated/sa3_tradebot_tick_2.wav",
+   "generated/sa3_tradebot_tick_3.wav",
+   "generated/sa3_tradebot_tick_4.wav",
+   "kenney-rpg-audio/Audio/metalClick.ogg"
+  ],
+  "synth": []
+ },
+ "engine_tick": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/jug_tick_1.wav",
+   "bigsoundbank/cuts/jug_tick_2.wav",
+   "bigsoundbank/cuts/jug_tick_3.wav",
+   "bigsoundbank/cuts/jug_tick_4.wav"
+  ],
+  "synth": []
+ },
+ "engine_tock": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/jug_tock_1.wav",
+   "bigsoundbank/cuts/jug_tock_2.wav",
+   "bigsoundbank/cuts/jug_tock_3.wav",
+   "bigsoundbank/cuts/jug_tock_4.wav"
+  ],
+  "synth": []
+ },
+ "engine_rune_up": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/jug_chime.wav"
+  ],
+  "synth": [
+   "swell",
+   "hum"
+  ]
+ },
+ "engine_rune_down": {
+  "variants": 1,
+  "sources": [],
+  "synth": [
+   "swell"
+  ]
+ },
+ "engine_full": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/jug_key_lock_a.wav",
+   "bigsoundbank/cuts/jug_chime.wav"
+  ],
+  "synth": [
+   "swell",
+   "hum"
+  ]
+ },
+ "engine_empty": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/jug_creak_low_a.wav",
+   "bigsoundbank/cuts/jug_creak_low_b.wav",
+   "bigsoundbank/cuts/jug_creak_low_c.wav",
+   "bigsoundbank/cuts/jug_stone_1.wav",
+   "bigsoundbank/cuts/jug_stone_2.wav",
+   "bigsoundbank/cuts/jug_stone_3.wav",
+   "bigsoundbank/cuts/jug_stone_4.wav",
+   "bigsoundbank/cuts/jug_stone_5.wav",
+   "bigsoundbank/cuts/jug_stone_6.wav",
+   "bigsoundbank/cuts/jug_stone_7.wav"
+  ],
+  "synth": []
+ }
+}

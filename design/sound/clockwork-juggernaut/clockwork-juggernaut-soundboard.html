@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clockwork Juggernaut Sounds</title>
+<style>
+:root { --bg:#1c1f24; --panel:#262a31; --edge:#3c424a; --text:#d8d4c8; --dim:#8a8c86; --brass:#b08f45; --amber:#d99a4a; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:14px/1.4 system-ui, sans-serif; padding:24px 16px 64px; }
+main { max-width:1100px; margin:0 auto; }
+h1 { margin:0 0 4px; font-size:22px; } h2 { margin:28px 0 10px; font-size:15px; color:var(--brass); text-transform:uppercase; letter-spacing:.06em; }
+.note { color:var(--dim); margin:0 0 12px; }
+.controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; color:var(--dim); position:sticky; top:0; background:var(--bg); padding:8px 0; z-index:2; }
+button { font:inherit; }
+.sets { display:inline-flex; gap:4px; }
+.btn, .set { background:var(--panel); color:var(--dim); border:1px solid var(--edge); border-radius:4px; padding:4px 10px; cursor:pointer; }
+.set.on, .btn:hover { color:var(--amber); border-color:var(--amber); }
+.grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:8px; }
+.card { display:flex; gap:10px; align-items:flex-start; background:var(--panel); border:1px solid var(--edge); border-radius:6px; padding:10px; }
+.card.on { border-color:var(--amber); } .card.tweaked { box-shadow:inset 3px 0 0 var(--brass); }
+.play, .cplay, .tw { flex:none; width:26px; height:26px; border-radius:50%; background:var(--edge); color:var(--amber); display:grid; place-items:center; font-size:11px; border:0; cursor:pointer; }
+.tw { margin-left:auto; color:var(--dim); } .tw:hover { color:var(--amber); }
+.txt { display:flex; flex-direction:column; gap:2px; min-width:0; } .txt small { opacity:.85; } .txt i { color:var(--dim); font-style:normal; font-size:12px; overflow-wrap:anywhere; }
+.vars { display:flex; flex-wrap:wrap; gap:3px; margin-top:3px; } .vars button { background:none; border:1px solid var(--edge); color:var(--dim); border-radius:3px; font-size:11px; padding:0 5px; cursor:pointer; } .vars button:hover { color:var(--amber); border-color:var(--amber); }
+.clip { display:flex; gap:10px; align-items:flex-start; background:var(--panel); border:1px solid var(--edge); border-radius:6px; padding:10px; margin-bottom:8px; }
+.cinfo { flex:1; min-width:0; } .cinfo small { color:var(--dim); font-size:12px; display:block; overflow-wrap:anywhere; }
+.bar { position:relative; height:14px; margin:6px 0; background:#1a1d22; border-radius:3px; }
+.mark { position:absolute; top:2px; width:3px; height:10px; margin-left:-1px; background:var(--brass); border-radius:1px; }
+.head { position:absolute; top:0; left:0; width:2px; height:14px; background:var(--amber); display:none; }
+#panel { position:fixed; right:16px; bottom:16px; width:min(340px, calc(100vw - 32px)); background:var(--panel); border:1px solid var(--amber); border-radius:8px; padding:14px; display:none; z-index:5; box-shadow:0 8px 30px #0008; }
+#panel h3 { margin:0 0 8px; font-size:15px; } #panel label { display:grid; grid-template-columns:96px 1fr 52px; gap:8px; align-items:center; color:var(--dim); font-size:12px; margin:6px 0; }
+#panel output { color:var(--text); text-align:right; } #panel .row { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+</style></head><body><main>
+<h1>Clockwork Juggernaut sounds</h1>
+<p class="note">Switch sets to compare them. Click ▶ to play, a number to hear that variant, ⚙ to tweak a sound live. Tweaks are saved with the button at the top and applied by the next real-sound build.</p>
+<div class="controls">
+  <label>Volume <input id="vol" type="range" min="0" max="1" step="0.05" value="0.8"></label>
+  <span class="sets"><button class="set on" data-i="0">real</button><button class="set" data-i="1">placeholder</button></span>
+  <button class="btn" id="random">Random variants: on</button>
+  <button class="btn" id="save">Save tweaks (clockwork-juggernaut.tweaks.json)</button>
+  <span id="saved"></span>
+</div>
+<h2>Signature sounds</h2><div class="grid"><div class="card" data-id="tick">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>tick</b><small>Juggernaut ticks</small><i>real: jug_tick_1 · jug_tick_2 · jug_tick_3 · jug_tick_4 · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · sa3_tradebot_tick_1 · sa3_tradebot_tick_2 · sa3_tradebot_tick_3 · sa3_tradebot_tick_4 · in 5 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="tock">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>tock</b><small>Juggernaut ticks</small><i>real: jug_tock_1 · jug_tock_2 · jug_tock_3 · jug_tock_4 · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · sa3_tradebot_tick_1 · sa3_tradebot_tick_2 · sa3_tradebot_tick_3 · sa3_tradebot_tick_4 · in 5 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="run_down_tick">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>run_down_tick</b><small>Juggernaut winds down</small><i>real: jug_tock_1 · jug_tock_2 · jug_tock_3 · jug_tock_4 · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · jug_creak_low_a · jug_creak_low_b · jug_creak_low_c · jug_spring_b · jug_spring_b · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="key_ratchet">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>key_ratchet</b><small>Juggernaut's key turns</small><i>real: sa3_tradebot_wind_1 · sa3_tradebot_wind_2 · sa3_tradebot_wind_3 · sa3_tradebot_wind_4 · jug_reel_slow · jug_key_lock_a · jug_key_lock_b · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · jug_reel_slow · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="plate_ring">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>plate_ring</b><small>Juggernaut's armour rings</small><i>real: jug_gong_a · jug_gong_b · jug_gong_c · jug_anvil_1 · jug_anvil_2 · jug_anvil_3 · impactPlate_heavy_000 · impactPlate_heavy_001 · impactPlate_heavy_002 · impactPlate_heavy_003 · impactPlate_heavy_004 · unused</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="glow_on">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>glow_on</b><small>Juggernaut's runes glow</small><i>real: swell · hum · jug_chime · hum · jug_chime · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="steam_puff">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>steam_puff</b><small>Juggernaut vents steam</small><i>real: jug_steam_puff · jug_steam_burst · whoosh · whoosh · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Movement</h2><div class="grid"><div class="card" data-id="step">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>step</b><small>Juggernaut stomps</small><i>real: jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · impactPunch_heavy_000 · impactPunch_heavy_001 · impactPunch_heavy_002 · impactPunch_heavy_003 · impactPunch_heavy_004 · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · jug_chain_rattle · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 · jug_chain_rattle · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="step_run">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>step_run</b><small>Juggernaut thunders</small><i>real: jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · impactPunch_heavy_000 · impactPunch_heavy_001 · impactPunch_heavy_002 · impactPunch_heavy_003 · impactPunch_heavy_004 · 1023 · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · jug_chain_rattle · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 · 1023 · jug_chain_rattle · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="foot_scrape">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>foot_scrape</b><small>Juggernaut scrapes the ground</small><i>real: jug_grind_stone_a · jug_grind_stone_b · jug_grind_stone_c · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="skid">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>skid</b><small>Juggernaut skids</small><i>real: jug_grind_stone_a · jug_grind_stone_b · jug_grind_stone_c · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · jug_chain_rattle · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 · jug_chain_rattle · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="plates_settle">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>plates_settle</b><small>Juggernaut's plates rattle</small><i>real: jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · jug_chain_rattle · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 · jug_chain_rattle · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="joint_step">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>joint_step</b><small>Juggernaut's joints step</small><i>real: metalClick · jug_creak_low_a · jug_creak_low_b · jug_creak_low_c ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="head_ratchet">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>head_ratchet</b><small>Juggernaut turns his head</small><i>real: jug_reel · jug_creak_low_a · jug_creak_low_b · jug_creak_low_c ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="joint_creak">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>joint_creak</b><small>Juggernaut creaks</small><i>real: jug_creak_low_a · jug_creak_low_b · jug_creak_low_c · jug_creak_long · jug_creak_long · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="knuckle_grind">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>knuckle_grind</b><small>Juggernaut grinds his fist</small><i>real: jug_grind_stone_a · jug_grind_stone_b · jug_grind_stone_c · jug_reel_slow · jug_reel_slow · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="claw_flex">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>claw_flex</b><small>Juggernaut flexes his claw</small><i>real: jug_reel · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="steam_sigh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>steam_sigh</b><small>Juggernaut sighs steam</small><i>real: jug_creak_low_a · jug_creak_low_b · jug_creak_low_c · 0227 · swell · 0227 · swell · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Attacks</h2><div class="grid"><div class="card" data-id="charge_tell">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>charge_tell</b><small>Juggernaut lowers his head</small><i>real: metalLatch · jug_steam_burst · jug_creak_low_a · jug_creak_low_b · jug_creak_low_c · jug_steam_burst ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="swing_windup">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>swing_windup</b><small>Juggernaut winds up a swing</small><i>real: jug_creak_long · jug_reel_slow · jug_reel_slow · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="swing_whoosh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>swing_whoosh</b><small>Juggernaut swings</small><i>real: jug_whoosh_1 · jug_whoosh_2 · jug_whoosh_3 · jug_whoosh_4 · jug_whoosh_5 · jug_whoosh_6 · whoosh · jug_chain_rattle · whoosh · jug_chain_rattle · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="stomp_raise">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>stomp_raise</b><small>Juggernaut raises his foot</small><i>real: jug_creak_low_a · jug_creak_low_b · jug_creak_low_c · jug_steam_puff · jug_steam_puff · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="stomp_impact">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>stomp_impact</b><small>Juggernaut stomps a shockwave</small><i>real: jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · 1023 · impactPunch_heavy_000 · impactPunch_heavy_001 · impactPunch_heavy_002 · impactPunch_heavy_003 · impactPunch_heavy_004 · jug_gong_a · jug_gong_b · jug_gong_c · 1771 · 1772 · 1774 · 1776 · 1778 · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · jug_chain_rattle · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 · 1023 · jug_chain_rattle · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="grab_open">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>grab_open</b><small>Juggernaut opens his claw</small><i>real: jug_reel · jug_creak_metal · jug_creak_metal · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="grab_snap">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>grab_snap</b><small>Juggernaut grabs</small><i>real: metalLatch · impactPunch_heavy_000 · impactPunch_heavy_001 · impactPunch_heavy_002 · impactPunch_heavy_003 · impactPunch_heavy_004 · jug_anvil_1 · jug_anvil_2 · jug_anvil_3 ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="grab_clang">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>grab_clang</b><small>Juggernaut's claw clangs shut</small><i>real: jug_anvil_1 · jug_anvil_2 · jug_anvil_3 · jug_gong_a · jug_gong_b · jug_gong_c · metalLatch · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · jug_chain_rattle · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 · metalLatch · jug_chain_rattle · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="throw_whoosh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>throw_whoosh</b><small>Juggernaut hurls</small><i>real: jug_whoosh_1 · jug_whoosh_2 · jug_whoosh_3 · jug_whoosh_4 · jug_whoosh_5 · jug_whoosh_6 · jug_steam_burst · jug_steam_burst · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="grab_release">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>grab_release</b><small>Juggernaut lets go</small><i>real: jug_reel · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="leap_coil">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>leap_coil</b><small>Juggernaut coils his spring</small><i>real: jug_creak_long · sa3_tradebot_wind_1 · sa3_tradebot_wind_2 · sa3_tradebot_wind_3 · sa3_tradebot_wind_4 · jug_steam_mid ·  · jug_steam_mid · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="leap_launch">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>leap_launch</b><small>Juggernaut leaps</small><i>real: jug_spring_b · jug_whoosh_1 · jug_whoosh_2 · jug_whoosh_3 · jug_whoosh_4 · jug_whoosh_5 · jug_whoosh_6 · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · boing ·  · boing · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="leap_land">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>leap_land</b><small>Juggernaut slams down</small><i>real: jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · 1023 · impactPunch_heavy_000 · impactPunch_heavy_001 · impactPunch_heavy_002 · impactPunch_heavy_003 · impactPunch_heavy_004 · jug_gong_a · jug_gong_b · jug_gong_c · 1771 · 1772 · 1774 · 1776 · 1778 · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · jug_chain_rattle · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 · 1023 · jug_chain_rattle · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="vent_tell">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>vent_tell</b><small>Juggernaut builds up steam</small><i>real: swell · hum · jug_steam_long · jug_creak_low_a · jug_creak_low_b · jug_creak_low_c · hum · jug_steam_long ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="vent_blast">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>vent_blast</b><small>Juggernaut blasts steam</small><i>real: jug_steam_long · 3019 · whoosh · jug_steam_burst · 3019 · whoosh · jug_steam_burst · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="spin_windup">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>spin_windup</b><small>Juggernaut winds up a spin</small><i>real: jug_creak_long · sa3_tradebot_wind_1 · sa3_tradebot_wind_2 · sa3_tradebot_wind_3 · sa3_tradebot_wind_4 · jug_whirr_loop · jug_whoosh_1 · jug_whoosh_2 · jug_whoosh_3 · jug_whoosh_4 · jug_whoosh_5 · jug_whoosh_6 ·  · jug_whirr_loop · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="spin_loop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>spin_loop</b><small>Juggernaut spins</small><i>real: jug_whirr_loop · jug_whoosh_1 · jug_whoosh_2 · jug_whoosh_3 · jug_whoosh_4 · jug_whoosh_5 · jug_whoosh_6 ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="spin_down">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>spin_down</b><small>Juggernaut spins down</small><i>real: jug_whirr_loop · servo · jug_whoosh_1 · jug_whoosh_2 · jug_whoosh_3 · jug_whoosh_4 · jug_whoosh_5 · jug_whoosh_6 · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · jug_chain_rattle · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 · servo ·  · jug_chain_rattle · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="cog_draw">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>cog_draw</b><small>Juggernaut draws a cog</small><i>real: jug_grind_metal · jug_anvil_1 · jug_anvil_2 · jug_anvil_3 ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="cog_throw">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>cog_throw</b><small>Juggernaut throws a cog</small><i>real: jug_whoosh_1 · jug_whoosh_2 · jug_whoosh_3 · jug_whoosh_4 · jug_whoosh_5 · jug_whoosh_6 · jug_steam_burst · jug_steam_burst · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="cog_fly">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>cog_fly</b><small>A cog whirls</small><i>real: jug_whirr_loop · jug_whoosh_1 · jug_whoosh_2 · jug_whoosh_3 · jug_whoosh_4 · jug_whoosh_5 · jug_whoosh_6 ·  · unused</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="cog_hit">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>cog_hit</b><small>A cog crashes</small><i>real: jug_anvil_1 · jug_anvil_2 · jug_anvil_3 · impactMetal_heavy_000 · impactMetal_heavy_001 · impactMetal_heavy_002 · impactMetal_heavy_003 · impactMetal_heavy_004 · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · unused</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Rhythm</h2><div class="grid"><div class="card" data-id="rewind_loop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>rewind_loop</b><small>Juggernaut rewinds</small><i>real: jug_ratchet_hoist_loop · hum · swell · hum · swell · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="rewind_end">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>rewind_end</b><small>Juggernaut is wound</small><i>real: jug_ratchet_hoist · jug_key_lock_a · jug_key_lock_b · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · jug_steam_puff · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · jug_chain_rattle · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 ·  · jug_steam_puff · jug_chain_rattle · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="feint_snap">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>feint_snap</b><small>Juggernaut snaps awake</small><i>real: switch12 · switch13 · switch14 · metalLatch · sa3_tradebot_tick_1 · sa3_tradebot_tick_2 · sa3_tradebot_tick_3 · sa3_tradebot_tick_4 · jug_steam_burst · metalLatch · jug_steam_burst · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="key_jam">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>key_jam</b><small>Juggernaut's key jams</small><i>real: jug_grind_metal · jug_ratchet_hoist · jug_grinder_a · jug_grinder_b · jug_grinder_c · jug_weld · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · jug_ratchet_hoist ·  · jug_weld · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="plates_burst">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>plates_burst</b><small>Juggernaut sheds his armour</small><i>real: jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · jug_gong_a · jug_gong_b · jug_gong_c · jug_anvil_1 · jug_anvil_2 · jug_anvil_3 · 1771 · 1772 · 1774 · 1776 · 1778 · jug_whoosh_1 · jug_whoosh_2 · jug_whoosh_3 · jug_whoosh_4 · jug_whoosh_5 · jug_whoosh_6 · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="stage_roar">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>stage_roar</b><small>Juggernaut roars steam</small><i>real: jug_steam_long · jug_steam_mid · swell · hum · jug_creak_low_a · jug_creak_low_b · jug_creak_low_c · jug_steam_mid · swell · hum ·  · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="plates_land">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>plates_land</b><small>Armour plates clatter</small><i>real: 1771 · 1772 · 1774 · 1776 · 1778 · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Reactions</h2><div class="grid"><div class="card" data-id="hit_wound">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>hit_wound</b><small>Juggernaut shrugs off a blow</small><i>real: jug_gong_a · jug_gong_b · jug_gong_c · impactPlate_heavy_000 · impactPlate_heavy_001 · impactPlate_heavy_002 · impactPlate_heavy_003 · impactPlate_heavy_004 · sa3_tradebot_tick_1 · sa3_tradebot_tick_2 · sa3_tradebot_tick_3 · sa3_tradebot_tick_4 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="hit_open">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>hit_open</b><small>Juggernaut is hurt</small><i>real: impactPunch_heavy_000 · impactPunch_heavy_001 · impactPunch_heavy_002 · impactPunch_heavy_003 · impactPunch_heavy_004 · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · jug_spring_a · jug_steam_burst · jug_spring_a · jug_steam_burst · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="lightning">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>lightning</b><small>Juggernaut is struck by lightning</small><i>real: spark_shock_a · spark_shock_b · jug_weld · swell · hum · servo · metalLatch · jug_weld · swell · hum · servo · metalLatch · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Rest, waking and death</h2><div class="grid"><div class="card" data-id="ember_flicker">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>ember_flicker</b><small>Juggernaut stirs in his sleep</small><i>real: flicker_bulb_a · flicker_bulb_b · hum · hum · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="steam_wisp">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>steam_wisp</b><small>Steam wisps</small><i>real: 0227 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="key_turn">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>key_turn</b><small>Juggernaut's key turns</small><i>real: sa3_tradebot_wind_1 · sa3_tradebot_wind_2 · sa3_tradebot_wind_3 · sa3_tradebot_wind_4 · jug_key_lock_a · jug_key_lock_b · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="salute_snap">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>salute_snap</b><small>Juggernaut salutes</small><i>real: metalLatch · jug_chime · impactBell_heavy_000 · impactBell_heavy_001 · impactBell_heavy_002 · impactBell_heavy_003 · impactBell_heavy_004 · jug_steam_puff · jug_chime ·  · jug_steam_puff · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="glow_out">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>glow_out</b><small>Juggernaut's runes fade</small><i>real: swell · hum · sa3_tradebot_tick_1 · sa3_tradebot_tick_2 · sa3_tradebot_tick_3 · sa3_tradebot_tick_4 · hum ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="kneel_impact">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>kneel_impact</b><small>Juggernaut falls to his knee</small><i>real: jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · 1023 · jug_gong_a · jug_gong_b · jug_gong_c · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · jug_chain_rattle · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 · 1023 · jug_chain_rattle · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="key_unwind">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>key_unwind</b><small>Juggernaut's key spins free</small><i>real: jug_ratchet_hoist · jug_reel · servo · jug_reel · servo · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="mainspring_burst">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>mainspring_burst</b><small>The Mainspring bursts out</small><i>real: metalLatch · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · jug_spring_a · 1950 · boing · jug_anvil_1 · jug_anvil_2 · jug_anvil_3 ·  · jug_spring_a · 1950 · boing · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="fist_thud">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>fist_thud</b><small>Juggernaut slumps</small><i>real: jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · impactPunch_heavy_000 · impactPunch_heavy_001 · impactPunch_heavy_002 · impactPunch_heavy_003 · impactPunch_heavy_004 · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · jug_chain_rattle · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 · jug_chain_rattle · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="death_steam">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>death_steam</b><small>Juggernaut lets out his last steam</small><i>real: 0227 · swell · jug_creak_low_a · jug_creak_low_b · jug_creak_low_c · swell ·  · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>The ritual</h2><div class="grid"><div class="card" data-id="key_fit">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>key_fit</b><small>A Winding Key is fitted</small><i>real: jug_key_lock_a · jug_key_lock_b · jug_anvil_1 · jug_anvil_2 · jug_anvil_3 · jug_reel · jug_reel · unused</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="ritual_click">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>ritual_click</b><small>The effigy's key clicks</small><i>real: sa3_tradebot_tick_1 · sa3_tradebot_tick_2 · sa3_tradebot_tick_3 · sa3_tradebot_tick_4 · metalClick · metalClick · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="ritual_tick">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>ritual_tick</b><small>The effigy ticks</small><i>real: jug_tick_1 · jug_tick_2 · jug_tick_3 · jug_tick_4 · impactMetal_light_000 · impactMetal_light_001 · impactMetal_light_002 · impactMetal_light_003 · impactMetal_light_004 · jug_chain_clink_a · jug_chain_clink_b · jug_chain_clink_c · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="ritual_runes">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>ritual_runes</b><small>The effigy's runes glow</small><i>real: swell · hum · jug_chime · hum · jug_chime · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="ritual_steam">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>ritual_steam</b><small>Steam escapes the effigy</small><i>real: jug_steam_mid · jug_steam_puff · jug_steam_long · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="ritual_ready">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>ritual_ready</b><small>The effigy is fully wound</small><i>real: swell · hum · jug_ratchet_hoist · jug_chime · hum · jug_ratchet_hoist · jug_chime · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="ritual_unfold">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>ritual_unfold</b><small>The effigy unfolds</small><i>real: jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · 1023 · swell · hum · 1774 · 1776 · jug_ratchet_hoist · jug_steam_long · 1023 · swell · hum · 1774 · 1776 · jug_ratchet_hoist · jug_steam_long · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="ritual_collapse">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>ritual_collapse</b><small>The effigy collapses into steam</small><i>real: jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · 1772 · jug_steam_long · jug_whoosh_1 · jug_whoosh_2 · jug_whoosh_3 · jug_whoosh_4 · jug_whoosh_5 · jug_whoosh_6 · 1772 · jug_steam_long · unused</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Spring Engine</h2><div class="grid"><div class="card" data-id="engine_ratchet">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>engine_ratchet</b><small>Spring Engine winds</small><i>real: sa3_tradebot_tick_1 · sa3_tradebot_tick_2 · sa3_tradebot_tick_3 · sa3_tradebot_tick_4 · metalClick · metalClick · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="engine_tick">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>engine_tick</b><small>Spring Engine ticks</small><i>real: jug_tick_1 · jug_tick_2 · jug_tick_3 · jug_tick_4 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="engine_tock">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>engine_tock</b><small>Spring Engine ticks</small><i>real: jug_tock_1 · jug_tock_2 · jug_tock_3 · jug_tock_4 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="engine_rune_up">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>engine_rune_up</b><small>Spring Engine fills</small><i>real: swell · hum · jug_chime · hum · jug_chime · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="engine_rune_down">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>engine_rune_down</b><small>Spring Engine empties</small><i>real: swell · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="engine_full">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>engine_full</b><small>Spring Engine is fully wound</small><i>real: jug_key_lock_a · jug_chime · swell · hum · jug_chime · swell · hum · unused</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="engine_empty">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>engine_empty</b><small>Spring Engine runs down</small><i>real: jug_creak_low_a · jug_creak_low_b · jug_creak_low_c · jug_stone_1 · jug_stone_2 · jug_stone_3 · jug_stone_4 · jug_stone_5 · jug_stone_6 · jug_stone_7 · unused</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Clips</h2>
+<div class="clip" data-clip="idle" data-len="2.85"><button class="cplay">▶</button><div class="cinfo"><b>idle</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · tick"></span><span class="mark" style="left:26.32%" title="0.75 s · tock"></span><span class="mark" style="left:50.88%" title="1.45 s · claw_flex"></span><span class="mark" style="left:52.63%" title="1.50 s · tick"></span><span class="mark" style="left:78.95%" title="2.25 s · tock"></span><span class="head"></span></div><small>0.00 tick · 0.75 tock · 1.45 claw_flex · 1.50 tick · 2.25 tock</small></div></div>
+<div class="clip" data-clip="walk" data-len="1.7999999999999998"><button class="cplay">▶</button><div class="cinfo"><b>walk</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · tick"></span><span class="mark" style="left:22.22%" title="0.40 s · step"></span><span class="mark" style="left:44.44%" title="0.80 s · tock"></span><span class="mark" style="left:66.67%" title="1.20 s · step"></span><span class="head"></span></div><small>0.00 tick · 0.40 step · 0.80 tock · 1.20 step</small></div></div>
+<div class="clip" data-clip="scan" data-len="2.85"><button class="cplay">▶</button><div class="cinfo"><b>scan</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · tick"></span><span class="mark" style="left:10.18%" title="0.29 s · head_ratchet"></span><span class="mark" style="left:26.32%" title="0.75 s · tock"></span><span class="mark" style="left:40.70%" title="1.16 s · head_ratchet"></span><span class="mark" style="left:52.63%" title="1.50 s · tick"></span><span class="mark" style="left:69.82%" title="1.99 s · head_ratchet"></span><span class="mark" style="left:78.95%" title="2.25 s · tock"></span><span class="head"></span></div><small>0.00 tick · 0.29 head_ratchet · 0.75 tock · 1.16 head_ratchet · 1.50 tick · 1.99 head_ratchet · 2.25 tock</small></div></div>
+<div class="clip" data-clip="knuckles" data-len="2.1"><button class="cplay">▶</button><div class="cinfo"><b>knuckles</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · tick"></span><span class="mark" style="left:11.90%" title="0.25 s · joint_creak"></span><span class="mark" style="left:35.71%" title="0.75 s · tock"></span><span class="mark" style="left:42.86%" title="0.90 s · knuckle_grind"></span><span class="mark" style="left:61.90%" title="1.30 s · knuckle_grind"></span><span class="mark" style="left:71.43%" title="1.50 s · tick"></span><span class="head"></span></div><small>0.00 tick · 0.25 joint_creak · 0.75 tock · 0.90 knuckle_grind · 1.30 knuckle_grind · 1.50 tick</small></div></div>
+<div class="clip" data-clip="sigh" data-len="2.1"><button class="cplay">▶</button><div class="cinfo"><b>sigh</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · tick"></span><span class="mark" style="left:9.52%" title="0.20 s · steam_sigh"></span><span class="mark" style="left:71.43%" title="1.50 s · tock"></span><span class="head"></span></div><small>0.00 tick · 0.20 steam_sigh · 1.50 tock</small></div></div>
+<div class="clip" data-clip="charge" data-len="2.55"><button class="cplay">▶</button><div class="cinfo"><b>charge</b><div class="bar"><span class="mark" style="left:1.96%" title="0.05 s · charge_tell"></span><span class="mark" style="left:4.71%" title="0.12 s · foot_scrape"></span><span class="mark" style="left:12.55%" title="0.32 s · foot_scrape"></span><span class="mark" style="left:17.65%" title="0.45 s · steam_puff"></span><span class="mark" style="left:29.41%" title="0.75 s · step_run"></span><span class="mark" style="left:39.22%" title="1.00 s · step_run"></span><span class="mark" style="left:49.02%" title="1.25 s · step_run"></span><span class="mark" style="left:58.82%" title="1.50 s · step_run"></span><span class="mark" style="left:63.53%" title="1.62 s · skid"></span><span class="mark" style="left:76.47%" title="1.95 s · plates_settle"></span><span class="head"></span></div><small>0.05 charge_tell · 0.12 foot_scrape · 0.32 foot_scrape · 0.45 steam_puff · 0.75 step_run · 1.00 step_run · 1.25 step_run · 1.50 step_run · 1.62 skid · 1.95 plates_settle</small></div></div>
+<div class="clip" data-clip="swing" data-len="1.02"><button class="cplay">▶</button><div class="cinfo"><b>swing</b><div class="bar"><span class="mark" style="left:1.96%" title="0.02 s · swing_windup"></span><span class="mark" style="left:41.18%" title="0.42 s · swing_whoosh"></span><span class="head"></span></div><small>0.02 swing_windup · 0.42 swing_whoosh</small></div></div>
+<div class="clip" data-clip="stomp" data-len="1.33"><button class="cplay">▶</button><div class="cinfo"><b>stomp</b><div class="bar"><span class="mark" style="left:7.52%" title="0.10 s · stomp_raise"></span><span class="mark" style="left:54.89%" title="0.73 s · stomp_impact"></span><span class="head"></span></div><small>0.10 stomp_raise · 0.73 stomp_impact</small></div></div>
+<div class="clip" data-clip="stomp_double" data-len="1.87"><button class="cplay">▶</button><div class="cinfo"><b>stomp_double</b><div class="bar"><span class="mark" style="left:5.35%" title="0.10 s · stomp_raise"></span><span class="mark" style="left:38.50%" title="0.72 s · stomp_impact"></span><span class="mark" style="left:67.91%" title="1.27 s · stomp_impact"></span><span class="head"></span></div><small>0.10 stomp_raise · 0.72 stomp_impact · 1.27 stomp_impact</small></div></div>
+<div class="clip" data-clip="grab_throw" data-len="2.7"><button class="cplay">▶</button><div class="cinfo"><b>grab_throw</b><div class="bar"><span class="mark" style="left:1.85%" title="0.05 s · grab_open"></span><span class="mark" style="left:45.19%" title="1.22 s · grab_snap"></span><span class="mark" style="left:57.41%" title="1.55 s · throw_whoosh"></span><span class="mark" style="left:72.22%" title="1.95 s · grab_release"></span><span class="mark" style="left:77.78%" title="2.10 s · plates_settle"></span><span class="head"></span></div><small>0.05 grab_open · 1.22 grab_snap · 1.55 throw_whoosh · 1.95 grab_release · 2.10 plates_settle</small></div></div>
+<div class="clip" data-clip="grab_blocked" data-len="1.2"><button class="cplay">▶</button><div class="cinfo"><b>grab_blocked</b><div class="bar"><span class="mark" style="left:1.67%" title="0.02 s · grab_open"></span><span class="mark" style="left:50.00%" title="0.60 s · grab_clang"></span><span class="head"></span></div><small>0.02 grab_open · 0.60 grab_clang</small></div></div>
+<div class="clip" data-clip="leap" data-len="2.68"><button class="cplay">▶</button><div class="cinfo"><b>leap</b><div class="bar"><span class="mark" style="left:1.87%" title="0.05 s · leap_coil"></span><span class="mark" style="left:55.97%" title="1.50 s · leap_launch"></span><span class="mark" style="left:77.61%" title="2.08 s · leap_land"></span><span class="head"></span></div><small>0.05 leap_coil · 1.50 leap_launch · 2.08 leap_land</small></div></div>
+<div class="clip" data-clip="steam_vent" data-len="2.6"><button class="cplay">▶</button><div class="cinfo"><b>steam_vent</b><div class="bar"><span class="mark" style="left:1.92%" title="0.05 s · vent_tell"></span><span class="mark" style="left:76.92%" title="2.00 s · vent_blast"></span><span class="head"></span></div><small>0.05 vent_tell · 2.00 vent_blast</small></div></div>
+<div class="clip" data-clip="gear_spin_start" data-len="0.8"><button class="cplay">▶</button><div class="cinfo"><b>gear_spin_start</b><div class="bar"><span class="mark" style="left:25.00%" title="0.20 s · spin_windup"></span><span class="head"></span></div><small>0.20 spin_windup</small></div></div>
+<div class="clip" data-clip="gear_spin" data-len="0.6"><button class="cplay">▶</button><div class="cinfo"><b>gear_spin</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · spin_loop"></span><span class="head"></span></div><small>0.00 spin_loop</small></div></div>
+<div class="clip" data-clip="gear_spin_end" data-len="0.6"><button class="cplay">▶</button><div class="cinfo"><b>gear_spin_end</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · spin_down"></span><span class="head"></span></div><small>0.00 spin_down</small></div></div>
+<div class="clip" data-clip="cog_throw" data-len="1.4"><button class="cplay">▶</button><div class="cinfo"><b>cog_throw</b><div class="bar"><span class="mark" style="left:32.14%" title="0.45 s · cog_draw"></span><span class="mark" style="left:57.14%" title="0.80 s · cog_throw"></span><span class="head"></span></div><small>0.45 cog_draw · 0.80 cog_throw</small></div></div>
+<div class="clip" data-clip="run_down" data-len="4.16"><button class="cplay">▶</button><div class="cinfo"><b>run_down</b><div class="bar"><span class="mark" style="left:10.82%" title="0.45 s · run_down_tick"></span><span class="mark" style="left:32.45%" title="1.35 s · run_down_tick"></span><span class="mark" style="left:56.73%" title="2.36 s · run_down_tick"></span><span class="mark" style="left:85.58%" title="3.56 s · run_down_tick"></span><span class="head"></span></div><small>0.45 run_down_tick · 1.35 run_down_tick · 2.36 run_down_tick · 3.56 run_down_tick</small></div></div>
+<div class="clip" data-clip="rewind" data-len="0.6"><button class="cplay">▶</button><div class="cinfo"><b>rewind</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · rewind_loop"></span><span class="head"></span></div><small>0.00 rewind_loop</small></div></div>
+<div class="clip" data-clip="rewind_end" data-len="0.6"><button class="cplay">▶</button><div class="cinfo"><b>rewind_end</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · rewind_end"></span><span class="head"></span></div><small>0.00 rewind_end</small></div></div>
+<div class="clip" data-clip="feint" data-len="1.85"><button class="cplay">▶</button><div class="cinfo"><b>feint</b><div class="bar"><span class="mark" style="left:23.78%" title="0.44 s · run_down_tick"></span><span class="mark" style="left:53.51%" title="0.99 s · run_down_tick"></span><span class="mark" style="left:64.86%" title="1.20 s · feint_snap"></span><span class="mark" style="left:67.57%" title="1.25 s · swing_whoosh"></span><span class="head"></span></div><small>0.44 run_down_tick · 0.99 run_down_tick · 1.20 feint_snap · 1.25 swing_whoosh</small></div></div>
+<div class="clip" data-clip="key_jam" data-len="0.6"><button class="cplay">▶</button><div class="cinfo"><b>key_jam</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · key_jam"></span><span class="head"></span></div><small>0.00 key_jam</small></div></div>
+<div class="clip" data-clip="shed_plates_2" data-len="1.75"><button class="cplay">▶</button><div class="cinfo"><b>shed_plates_2</b><div class="bar"><span class="mark" style="left:6.86%" title="0.12 s · plates_burst"></span><span class="mark" style="left:40.00%" title="0.70 s · stage_roar"></span><span class="mark" style="left:65.71%" title="1.15 s · plates_land"></span><span class="head"></span></div><small>0.12 plates_burst · 0.70 stage_roar · 1.15 plates_land</small></div></div>
+<div class="clip" data-clip="shed_plates_3" data-len="1.75"><button class="cplay">▶</button><div class="cinfo"><b>shed_plates_3</b><div class="bar"><span class="mark" style="left:6.86%" title="0.12 s · plates_burst"></span><span class="mark" style="left:40.00%" title="0.70 s · stage_roar"></span><span class="mark" style="left:65.71%" title="1.15 s · plates_land"></span><span class="head"></span></div><small>0.12 plates_burst · 0.70 stage_roar · 1.15 plates_land</small></div></div>
+<div class="clip" data-clip="hit_wound" data-len="0.6"><button class="cplay">▶</button><div class="cinfo"><b>hit_wound</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · hit_wound"></span><span class="head"></span></div><small>0.00 hit_wound</small></div></div>
+<div class="clip" data-clip="hit_open" data-len="0.6"><button class="cplay">▶</button><div class="cinfo"><b>hit_open</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · hit_open"></span><span class="head"></span></div><small>0.00 hit_open</small></div></div>
+<div class="clip" data-clip="lightning" data-len="0.6"><button class="cplay">▶</button><div class="cinfo"><b>lightning</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · lightning"></span><span class="head"></span></div><small>0.00 lightning</small></div></div>
+<div class="clip" data-clip="dormant" data-len="3.7"><button class="cplay">▶</button><div class="cinfo"><b>dormant</b><div class="bar"><span class="mark" style="left:35.14%" title="1.30 s · ember_flicker"></span><span class="mark" style="left:54.05%" title="2.00 s · steam_wisp"></span><span class="mark" style="left:83.78%" title="3.10 s · ember_flicker"></span><span class="head"></span></div><small>1.30 ember_flicker · 2.00 steam_wisp · 3.10 ember_flicker</small></div></div>
+<div class="clip" data-clip="wake" data-len="2.9"><button class="cplay">▶</button><div class="cinfo"><b>wake</b><div class="bar"><span class="mark" style="left:6.90%" title="0.20 s · glow_on"></span><span class="mark" style="left:18.97%" title="0.55 s · key_turn"></span><span class="mark" style="left:29.31%" title="0.85 s · joint_step"></span><span class="mark" style="left:36.21%" title="1.05 s · joint_step"></span><span class="mark" style="left:43.10%" title="1.25 s · joint_step"></span><span class="mark" style="left:50.00%" title="1.45 s · joint_step"></span><span class="mark" style="left:60.34%" title="1.75 s · plates_settle"></span><span class="mark" style="left:65.52%" title="1.90 s · key_turn"></span><span class="mark" style="left:79.31%" title="2.30 s · salute_snap"></span><span class="head"></span></div><small>0.20 glow_on · 0.55 key_turn · 0.85 joint_step · 1.05 joint_step · 1.25 joint_step · 1.45 joint_step · 1.75 plates_settle · 1.90 key_turn · 2.30 salute_snap</small></div></div>
+<div class="clip" data-clip="wake_ritual" data-len="2.65"><button class="cplay">▶</button><div class="cinfo"><b>wake_ritual</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · ritual_unfold"></span><span class="mark" style="left:7.55%" title="0.20 s · key_ratchet"></span><span class="mark" style="left:13.21%" title="0.35 s · glow_on"></span><span class="mark" style="left:33.96%" title="0.90 s · steam_puff"></span><span class="mark" style="left:41.51%" title="1.10 s · plates_settle"></span><span class="mark" style="left:77.36%" title="2.05 s · salute_snap"></span><span class="head"></span></div><small>0.00 ritual_unfold · 0.20 key_ratchet · 0.35 glow_on · 0.90 steam_puff · 1.10 plates_settle · 2.05 salute_snap</small></div></div>
+<div class="clip" data-clip="death" data-len="3.95"><button class="cplay">▶</button><div class="cinfo"><b>death</b><div class="bar"><span class="mark" style="left:8.61%" title="0.34 s · run_down_tick"></span><span class="mark" style="left:21.27%" title="0.84 s · run_down_tick"></span><span class="mark" style="left:35.44%" title="1.40 s · glow_out"></span><span class="mark" style="left:56.96%" title="2.25 s · kneel_impact"></span><span class="mark" style="left:65.82%" title="2.60 s · key_unwind"></span><span class="mark" style="left:73.42%" title="2.90 s · mainspring_burst"></span><span class="mark" style="left:79.75%" title="3.15 s · fist_thud"></span><span class="mark" style="left:84.81%" title="3.35 s · death_steam"></span><span class="head"></span></div><small>0.34 run_down_tick · 0.84 run_down_tick · 1.40 glow_out · 2.25 kneel_impact · 2.60 key_unwind · 2.90 mainspring_burst · 3.15 fist_thud · 3.35 death_steam</small></div></div>
+<div class="clip" data-clip="salute" data-len="1.05"><button class="cplay">▶</button><div class="cinfo"><b>salute</b><div class="bar"><span class="mark" style="left:42.86%" title="0.45 s · salute_snap"></span><span class="head"></span></div><small>0.45 salute_snap</small></div></div>
+<div class="clip" data-clip="ritual_winding" data-len="6.55"><button class="cplay">▶</button><div class="cinfo"><b>ritual_winding</b><div class="bar"><span class="mark" style="left:4.43%" title="0.29 s · ritual_click"></span><span class="mark" style="left:8.24%" title="0.54 s · ritual_click"></span><span class="mark" style="left:9.16%" title="0.60 s · ritual_runes"></span><span class="mark" style="left:11.45%" title="0.75 s · ritual_tick"></span><span class="mark" style="left:14.35%" title="0.94 s · ritual_click"></span><span class="mark" style="left:16.95%" title="1.11 s · ritual_click"></span><span class="mark" style="left:19.54%" title="1.28 s · ritual_tick"></span><span class="mark" style="left:21.83%" title="1.43 s · ritual_click"></span><span class="mark" style="left:23.97%" title="1.57 s · ritual_click"></span><span class="mark" style="left:26.11%" title="1.71 s · ritual_tick"></span><span class="mark" style="left:28.09%" title="1.84 s · ritual_click"></span><span class="mark" style="left:29.92%" title="1.96 s · ritual_click"></span><span class="mark" style="left:31.76%" title="2.08 s · ritual_tick"></span><span class="mark" style="left:33.44%" title="2.19 s · ritual_click"></span><span class="mark" style="left:35.27%" title="2.31 s · ritual_click"></span><span class="mark" style="left:36.79%" title="2.41 s · ritual_tick"></span><span class="mark" style="left:38.17%" title="2.50 s · ritual_steam"></span><span class="mark" style="left:38.47%" title="2.52 s · ritual_click"></span><span class="mark" style="left:40.00%" title="2.62 s · ritual_click"></span><span class="mark" style="left:41.53%" title="2.72 s · ritual_tick"></span><span class="mark" style="left:42.90%" title="2.81 s · ritual_click"></span><span class="mark" style="left:44.43%" title="2.91 s · ritual_click"></span><span class="mark" style="left:45.80%" title="3.00 s · ritual_tick"></span><span class="mark" style="left:47.18%" title="3.09 s · ritual_click"></span><span class="mark" style="left:48.55%" title="3.18 s · ritual_click"></span><span class="mark" style="left:49.77%" title="3.26 s · ritual_tick"></span><span class="mark" style="left:51.15%" title="3.35 s · ritual_click"></span><span class="mark" style="left:52.37%" title="3.43 s · ritual_click"></span><span class="mark" style="left:53.59%" title="3.51 s · ritual_tick"></span><span class="mark" style="left:54.81%" title="3.59 s · ritual_click"></span><span class="mark" style="left:56.03%" title="3.67 s · ritual_click"></span><span class="mark" style="left:57.25%" title="3.75 s · ritual_tick"></span><span class="mark" style="left:58.47%" title="3.83 s · ritual_click"></span><span class="mark" style="left:59.54%" title="3.90 s · ritual_click"></span><span class="mark" style="left:60.76%" title="3.98 s · ritual_tick"></span><span class="mark" style="left:61.83%" title="4.05 s · ritual_click"></span><span class="mark" style="left:62.90%" title="4.12 s · ritual_click"></span><span class="mark" style="left:63.97%" title="4.19 s · ritual_tick"></span><span class="mark" style="left:65.04%" title="4.26 s · ritual_click"></span><span class="mark" style="left:66.11%" title="4.33 s · ritual_click"></span><span class="mark" style="left:67.18%" title="4.40 s · ritual_tick"></span><span class="mark" style="left:67.18%" title="4.40 s · ritual_steam"></span><span class="mark" style="left:68.24%" title="4.47 s · ritual_click"></span><span class="mark" style="left:69.16%" title="4.53 s · ritual_click"></span><span class="mark" style="left:70.23%" title="4.60 s · ritual_tick"></span><span class="mark" style="left:71.15%" title="4.66 s · ritual_click"></span><span class="mark" style="left:72.21%" title="4.73 s · ritual_click"></span><span class="mark" style="left:73.13%" title="4.79 s · ritual_tick"></span><span class="mark" style="left:74.20%" title="4.86 s · ritual_click"></span><span class="mark" style="left:75.11%" title="4.92 s · ritual_click"></span><span class="mark" style="left:76.03%" title="4.98 s · ritual_tick"></span><span class="mark" style="left:76.95%" title="5.04 s · ritual_click"></span><span class="mark" style="left:77.86%" title="5.10 s · ritual_click"></span><span class="mark" style="left:78.78%" title="5.16 s · ritual_tick"></span><span class="mark" style="left:79.39%" title="5.20 s · ritual_ready"></span><span class="mark" style="left:79.69%" title="5.22 s · ritual_click"></span><span class="mark" style="left:80.61%" title="5.28 s · ritual_click"></span><span class="mark" style="left:81.53%" title="5.34 s · ritual_tick"></span><span class="mark" style="left:82.44%" title="5.40 s · ritual_click"></span><span class="mark" style="left:83.21%" title="5.45 s · ritual_click"></span><span class="mark" style="left:84.12%" title="5.51 s · ritual_tick"></span><span class="mark" style="left:85.04%" title="5.57 s · ritual_click"></span><span class="mark" style="left:85.80%" title="5.62 s · ritual_click"></span><span class="mark" style="left:86.72%" title="5.68 s · ritual_tick"></span><span class="mark" style="left:87.48%" title="5.73 s · ritual_click"></span><span class="mark" style="left:88.40%" title="5.79 s · ritual_click"></span><span class="mark" style="left:89.16%" title="5.84 s · ritual_tick"></span><span class="mark" style="left:89.92%" title="5.89 s · ritual_click"></span><span class="mark" style="left:90.84%" title="5.95 s · ritual_click"></span><span class="head"></span></div><small>0.29 ritual_click · 0.54 ritual_click · 0.60 ritual_runes · 0.75 ritual_tick · 0.94 ritual_click · 1.11 ritual_click · 1.28 ritual_tick · 1.43 ritual_click · 1.57 ritual_click · 1.71 ritual_tick · 1.84 ritual_click · 1.96 ritual_click · 2.08 ritual_tick · 2.19 ritual_click · 2.31 ritual_click · 2.41 ritual_tick · 2.50 ritual_steam · 2.52 ritual_click · 2.62 ritual_click · 2.72 ritual_tick · 2.81 ritual_click · 2.91 ritual_click · 3.00 ritual_tick · 3.09 ritual_click · 3.18 ritual_click · 3.26 ritual_tick · 3.35 ritual_click · 3.43 ritual_click · 3.51 ritual_tick · 3.59 ritual_click · 3.67 ritual_click · 3.75 ritual_tick · 3.83 ritual_click · 3.90 ritual_click · 3.98 ritual_tick · 4.05 ritual_click · 4.12 ritual_click · 4.19 ritual_tick · 4.26 ritual_click · 4.33 ritual_click · 4.40 ritual_tick · 4.40 ritual_steam · 4.47 ritual_click · 4.53 ritual_click · 4.60 ritual_tick · 4.66 ritual_click · 4.73 ritual_click · 4.79 ritual_tick · 4.86 ritual_click · 4.92 ritual_click · 4.98 ritual_tick · 5.04 ritual_click · 5.10 ritual_click · 5.16 ritual_tick · 5.20 ritual_ready · 5.22 ritual_click · 5.28 ritual_click · 5.34 ritual_tick · 5.40 ritual_click · 5.45 ritual_click · 5.51 ritual_tick · 5.57 ritual_click · 5.62 ritual_click · 5.68 ritual_tick · 5.73 ritual_click · 5.79 ritual_click · 5.84 ritual_tick · 5.89 ritual_click · 5.95 ritual_click</small></div></div>
+<div class="clip" data-clip="engine_winding" data-len="8.27"><button class="cplay">▶</button><div class="cinfo"><b>engine_winding</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · engine_ratchet"></span><span class="mark" style="left:3.99%" title="0.33 s · engine_ratchet"></span><span class="mark" style="left:8.10%" title="0.67 s · engine_ratchet"></span><span class="mark" style="left:12.09%" title="1.00 s · engine_ratchet"></span><span class="mark" style="left:12.09%" title="1.00 s · engine_rune_up"></span><span class="mark" style="left:16.08%" title="1.33 s · engine_ratchet"></span><span class="mark" style="left:20.19%" title="1.67 s · engine_ratchet"></span><span class="mark" style="left:24.18%" title="2.00 s · engine_ratchet"></span><span class="mark" style="left:28.17%" title="2.33 s · engine_ratchet"></span><span class="mark" style="left:32.29%" title="2.67 s · engine_ratchet"></span><span class="mark" style="left:36.28%" title="3.00 s · engine_ratchet"></span><span class="mark" style="left:36.28%" title="3.00 s · engine_rune_up"></span><span class="mark" style="left:40.27%" title="3.33 s · engine_ratchet"></span><span class="mark" style="left:44.38%" title="3.67 s · engine_ratchet"></span><span class="mark" style="left:48.37%" title="4.00 s · engine_ratchet"></span><span class="mark" style="left:52.36%" title="4.33 s · engine_ratchet"></span><span class="mark" style="left:56.47%" title="4.67 s · engine_ratchet"></span><span class="mark" style="left:60.46%" title="5.00 s · engine_ratchet"></span><span class="mark" style="left:60.46%" title="5.00 s · engine_rune_up"></span><span class="mark" style="left:64.45%" title="5.33 s · engine_ratchet"></span><span class="mark" style="left:68.56%" title="5.67 s · engine_ratchet"></span><span class="mark" style="left:72.55%" title="6.00 s · engine_ratchet"></span><span class="mark" style="left:76.54%" title="6.33 s · engine_ratchet"></span><span class="mark" style="left:80.65%" title="6.67 s · engine_ratchet"></span><span class="mark" style="left:84.64%" title="7.00 s · engine_ratchet"></span><span class="mark" style="left:84.64%" title="7.00 s · engine_rune_up"></span><span class="mark" style="left:88.63%" title="7.33 s · engine_ratchet"></span><span class="mark" style="left:92.74%" title="7.67 s · engine_ratchet"></span><span class="head"></span></div><small>0.00 engine_ratchet · 0.33 engine_ratchet · 0.67 engine_ratchet · 1.00 engine_ratchet · 1.00 engine_rune_up · 1.33 engine_ratchet · 1.67 engine_ratchet · 2.00 engine_ratchet · 2.33 engine_ratchet · 2.67 engine_ratchet · 3.00 engine_ratchet · 3.00 engine_rune_up · 3.33 engine_ratchet · 3.67 engine_ratchet · 4.00 engine_ratchet · 4.33 engine_ratchet · 4.67 engine_ratchet · 5.00 engine_ratchet · 5.00 engine_rune_up · 5.33 engine_ratchet · 5.67 engine_ratchet · 6.00 engine_ratchet · 6.33 engine_ratchet · 6.67 engine_ratchet · 7.00 engine_ratchet · 7.00 engine_rune_up · 7.33 engine_ratchet · 7.67 engine_ratchet</small></div></div>
+<div class="clip" data-clip="engine_unwinding" data-len="8.35"><button class="cplay">▶</button><div class="cinfo"><b>engine_unwinding</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · engine_tick"></span><span class="mark" style="left:2.99%" title="0.25 s · engine_tock"></span><span class="mark" style="left:5.99%" title="0.50 s · engine_tick"></span><span class="mark" style="left:8.98%" title="0.75 s · engine_tock"></span><span class="mark" style="left:11.98%" title="1.00 s · engine_tick"></span><span class="mark" style="left:11.98%" title="1.00 s · engine_rune_down"></span><span class="mark" style="left:14.97%" title="1.25 s · engine_tock"></span><span class="mark" style="left:17.96%" title="1.50 s · engine_tick"></span><span class="mark" style="left:20.96%" title="1.75 s · engine_tock"></span><span class="mark" style="left:23.95%" title="2.00 s · engine_tick"></span><span class="mark" style="left:26.95%" title="2.25 s · engine_tock"></span><span class="mark" style="left:29.94%" title="2.50 s · engine_tick"></span><span class="mark" style="left:32.93%" title="2.75 s · engine_tock"></span><span class="mark" style="left:35.93%" title="3.00 s · engine_tick"></span><span class="mark" style="left:35.93%" title="3.00 s · engine_rune_down"></span><span class="mark" style="left:38.92%" title="3.25 s · engine_tock"></span><span class="mark" style="left:41.92%" title="3.50 s · engine_tick"></span><span class="mark" style="left:44.91%" title="3.75 s · engine_tock"></span><span class="mark" style="left:47.90%" title="4.00 s · engine_tick"></span><span class="mark" style="left:50.90%" title="4.25 s · engine_tock"></span><span class="mark" style="left:53.89%" title="4.50 s · engine_tick"></span><span class="mark" style="left:56.89%" title="4.75 s · engine_tock"></span><span class="mark" style="left:59.88%" title="5.00 s · engine_tick"></span><span class="mark" style="left:59.88%" title="5.00 s · engine_rune_down"></span><span class="mark" style="left:62.87%" title="5.25 s · engine_tock"></span><span class="mark" style="left:65.87%" title="5.50 s · engine_tick"></span><span class="mark" style="left:68.86%" title="5.75 s · engine_tock"></span><span class="mark" style="left:71.86%" title="6.00 s · engine_tick"></span><span class="mark" style="left:74.85%" title="6.25 s · engine_tock"></span><span class="mark" style="left:77.84%" title="6.50 s · engine_tick"></span><span class="mark" style="left:80.84%" title="6.75 s · engine_tock"></span><span class="mark" style="left:83.83%" title="7.00 s · engine_tick"></span><span class="mark" style="left:83.83%" title="7.00 s · engine_rune_down"></span><span class="mark" style="left:86.83%" title="7.25 s · engine_tock"></span><span class="mark" style="left:89.82%" title="7.50 s · engine_tick"></span><span class="mark" style="left:92.81%" title="7.75 s · engine_tock"></span><span class="head"></span></div><small>0.00 engine_tick · 0.25 engine_tock · 0.50 engine_tick · 0.75 engine_tock · 1.00 engine_tick · 1.00 engine_rune_down · 1.25 engine_tock · 1.50 engine_tick · 1.75 engine_tock · 2.00 engine_tick · 2.25 engine_tock · 2.50 engine_tick · 2.75 engine_tock · 3.00 engine_tick · 3.00 engine_rune_down · 3.25 engine_tock · 3.50 engine_tick · 3.75 engine_tock · 4.00 engine_tick · 4.25 engine_tock · 4.50 engine_tick · 4.75 engine_tock · 5.00 engine_tick · 5.00 engine_rune_down · 5.25 engine_tock · 5.50 engine_tick · 5.75 engine_tock · 6.00 engine_tick · 6.25 engine_tock · 6.50 engine_tick · 6.75 engine_tock · 7.00 engine_tick · 7.00 engine_rune_down · 7.25 engine_tock · 7.50 engine_tick · 7.75 engine_tock</small></div></div>
+</main>
+<div id="panel"><h3 id="pt"></h3>
+  <label>Pitch <input data-k="pitch" type="range" min="0.5" max="2" step="0.01"><output></output></label>
+  <label>Gain <input data-k="gain" type="range" min="0" max="2" step="0.01"><output></output></label>
+  <label>Low-pass Hz <input data-k="lowpass" type="range" min="200" max="20000" step="10"><output></output></label>
+  <label>High-pass Hz <input data-k="highpass" type="range" min="20" max="4000" step="10"><output></output></label>
+  <label>Echo <input data-k="echo" type="range" min="0" max="0.6" step="0.01"><output></output></label>
+  <label>Echo delay s <input data-k="echoDelay" type="range" min="0.02" max="0.4" step="0.01"><output></output></label>
+  <label>Pitch spread ± <input data-k="vary" type="range" min="0" max="0.2" step="0.005"><output></output></label>
+  <div class="row"><button class="btn" id="pplay">▶ Play</button><button class="btn" id="preset">Reset</button><button class="btn" id="pclose">Close</button></div>
+</div>
+<script>
+const SETS = [{"dir":"real/","ext":"ogg","label":"real","avail":{"tick":4,"tock":4,"run_down_tick":3,"key_ratchet":3,"plate_ring":4,"glow_on":2,"steam_puff":4,"step":6,"step_run":4,"foot_scrape":3,"skid":2,"plates_settle":4,"joint_step":4,"head_ratchet":3,"joint_creak":3,"knuckle_grind":2,"claw_flex":3,"steam_sigh":2,"charge_tell":2,"swing_windup":2,"swing_whoosh":3,"stomp_raise":2,"stomp_impact":4,"grab_open":2,"grab_snap":3,"grab_clang":2,"throw_whoosh":2,"grab_release":2,"leap_coil":2,"leap_launch":2,"leap_land":3,"vent_tell":2,"vent_blast":2,"spin_windup":2,"spin_loop":0,"spin_down":2,"cog_draw":2,"cog_throw":2,"cog_fly":0,"cog_hit":3,"rewind_loop":0,"rewind_end":2,"feint_snap":2,"key_jam":2,"plates_burst":2,"stage_roar":2,"plates_land":3,"hit_wound":4,"hit_open":4,"lightning":0,"ember_flicker":3,"steam_wisp":2,"key_turn":2,"salute_snap":2,"glow_out":0,"kneel_impact":2,"key_unwind":0,"mainspring_burst":0,"fist_thud":2,"death_steam":0,"key_fit":2,"ritual_click":4,"ritual_tick":4,"ritual_runes":0,"ritual_steam":3,"ritual_ready":0,"ritual_unfold":0,"ritual_collapse":0,"engine_ratchet":4,"engine_tick":3,"engine_tock":3,"engine_rune_up":0,"engine_rune_down":0,"engine_full":0,"engine_empty":0}},{"dir":"placeholder/","ext":"wav","label":"placeholder","avail":{"tick":0,"tock":0,"run_down_tick":0,"key_ratchet":0,"plate_ring":0,"glow_on":0,"steam_puff":0,"step":0,"step_run":0,"foot_scrape":0,"skid":0,"plates_settle":0,"joint_step":0,"head_ratchet":0,"joint_creak":0,"knuckle_grind":0,"claw_flex":0,"steam_sigh":0,"charge_tell":0,"swing_windup":0,"swing_whoosh":0,"stomp_raise":0,"stomp_impact":0,"grab_open":0,"grab_snap":0,"grab_clang":0,"throw_whoosh":0,"grab_release":0,"leap_coil":0,"leap_launch":0,"leap_land":0,"vent_tell":0,"vent_blast":0,"spin_windup":0,"spin_loop":0,"spin_down":0,"cog_draw":0,"cog_throw":0,"cog_fly":0,"cog_hit":0,"rewind_loop":0,"rewind_end":0,"feint_snap":0,"key_jam":0,"plates_burst":0,"stage_roar":0,"plates_land":0,"hit_wound":0,"hit_open":0,"lightning":0,"ember_flicker":0,"steam_wisp":0,"key_turn":0,"salute_snap":0,"glow_out":0,"kneel_impact":0,"key_unwind":0,"mainspring_burst":0,"fist_thud":0,"death_steam":0,"key_fit":0,"ritual_click":0,"ritual_tick":0,"ritual_runes":0,"ritual_steam":0,"ritual_ready":0,"ritual_unfold":0,"ritual_collapse":0,"engine_ratchet":0,"engine_tick":0,"engine_tock":0,"engine_rune_up":0,"engine_rune_down":0,"engine_full":0,"engine_empty":0}}];
+const CLIPS = {"idle":[[0,"tick"],[0.75,"tock"],[1.45,"claw_flex"],[1.5,"tick"],[2.25,"tock"]],"walk":[[0,"tick"],[0.4,"step"],[0.8,"tock"],[1.2,"step"]],"scan":[[0,"tick"],[0.29,"head_ratchet"],[0.75,"tock"],[1.16,"head_ratchet"],[1.5,"tick"],[1.99,"head_ratchet"],[2.25,"tock"]],"knuckles":[[0,"tick"],[0.25,"joint_creak"],[0.75,"tock"],[0.9,"knuckle_grind"],[1.3,"knuckle_grind"],[1.5,"tick"]],"sigh":[[0,"tick"],[0.2,"steam_sigh"],[1.5,"tock"]],"charge":[[0.05,"charge_tell"],[0.12,"foot_scrape"],[0.32,"foot_scrape"],[0.45,"steam_puff"],[0.75,"step_run"],[1,"step_run"],[1.25,"step_run"],[1.5,"step_run"],[1.62,"skid"],[1.95,"plates_settle"]],"swing":[[0.02,"swing_windup"],[0.42,"swing_whoosh"]],"stomp":[[0.1,"stomp_raise"],[0.73,"stomp_impact"]],"stomp_double":[[0.1,"stomp_raise"],[0.72,"stomp_impact"],[1.27,"stomp_impact"]],"grab_throw":[[0.05,"grab_open"],[1.22,"grab_snap"],[1.55,"throw_whoosh"],[1.95,"grab_release"],[2.1,"plates_settle"]],"grab_blocked":[[0.02,"grab_open"],[0.6,"grab_clang"]],"leap":[[0.05,"leap_coil"],[1.5,"leap_launch"],[2.08,"leap_land"]],"steam_vent":[[0.05,"vent_tell"],[2,"vent_blast"]],"gear_spin_start":[[0.2,"spin_windup"]],"gear_spin":[[0,"spin_loop"]],"gear_spin_end":[[0,"spin_down"]],"cog_throw":[[0.45,"cog_draw"],[0.8,"cog_throw"]],"run_down":[[0.45,"run_down_tick"],[1.35,"run_down_tick"],[2.36,"run_down_tick"],[3.56,"run_down_tick"]],"rewind":[[0,"rewind_loop"]],"rewind_end":[[0,"rewind_end"]],"feint":[[0.44,"run_down_tick"],[0.99,"run_down_tick"],[1.2,"feint_snap"],[1.25,"swing_whoosh"]],"key_jam":[[0,"key_jam"]],"shed_plates_2":[[0.12,"plates_burst"],[0.7,"stage_roar"],[1.15,"plates_land"]],"shed_plates_3":[[0.12,"plates_burst"],[0.7,"stage_roar"],[1.15,"plates_land"]],"hit_wound":[[0,"hit_wound"]],"hit_open":[[0,"hit_open"]],"lightning":[[0,"lightning"]],"dormant":[[1.3,"ember_flicker"],[2,"steam_wisp"],[3.1,"ember_flicker"]],"wake":[[0.2,"glow_on"],[0.55,"key_turn"],[0.85,"joint_step"],[1.05,"joint_step"],[1.25,"joint_step"],[1.45,"joint_step"],[1.75,"plates_settle"],[1.9,"key_turn"],[2.3,"salute_snap"]],"wake_ritual":[[0,"ritual_unfold"],[0.2,"key_ratchet"],[0.35,"glow_on"],[0.9,"steam_puff"],[1.1,"plates_settle"],[2.05,"salute_snap"]],"death":[[0.34,"run_down_tick"],[0.84,"run_down_tick"],[1.4,"glow_out"],[2.25,"kneel_impact"],[2.6,"key_unwind"],[2.9,"mainspring_burst"],[3.15,"fist_thud"],[3.35,"death_steam"]],"salute":[[0.45,"salute_snap"]],"ritual_winding":[[0.29,"ritual_click"],[0.54,"ritual_click"],[0.6,"ritual_runes"],[0.75,"ritual_tick"],[0.94,"ritual_click"],[1.11,"ritual_click"],[1.28,"ritual_tick"],[1.43,"ritual_click"],[1.57,"ritual_click"],[1.71,"ritual_tick"],[1.84,"ritual_click"],[1.96,"ritual_click"],[2.08,"ritual_tick"],[2.19,"ritual_click"],[2.31,"ritual_click"],[2.41,"ritual_tick"],[2.5,"ritual_steam"],[2.52,"ritual_click"],[2.62,"ritual_click"],[2.72,"ritual_tick"],[2.81,"ritual_click"],[2.91,"ritual_click"],[3,"ritual_tick"],[3.09,"ritual_click"],[3.18,"ritual_click"],[3.26,"ritual_tick"],[3.35,"ritual_click"],[3.43,"ritual_click"],[3.51,"ritual_tick"],[3.59,"ritual_click"],[3.67,"ritual_click"],[3.75,"ritual_tick"],[3.83,"ritual_click"],[3.9,"ritual_click"],[3.98,"ritual_tick"],[4.05,"ritual_click"],[4.12,"ritual_click"],[4.19,"ritual_tick"],[4.26,"ritual_click"],[4.33,"ritual_click"],[4.4,"ritual_tick"],[4.4,"ritual_steam"],[4.47,"ritual_click"],[4.53,"ritual_click"],[4.6,"ritual_tick"],[4.66,"ritual_click"],[4.73,"ritual_click"],[4.79,"ritual_tick"],[4.86,"ritual_click"],[4.92,"ritual_click"],[4.98,"ritual_tick"],[5.04,"ritual_click"],[5.1,"ritual_click"],[5.16,"ritual_tick"],[5.2,"ritual_ready"],[5.22,"ritual_click"],[5.28,"ritual_click"],[5.34,"ritual_tick"],[5.4,"ritual_click"],[5.45,"ritual_click"],[5.51,"ritual_tick"],[5.57,"ritual_click"],[5.62,"ritual_click"],[5.68,"ritual_tick"],[5.73,"ritual_click"],[5.79,"ritual_click"],[5.84,"ritual_tick"],[5.89,"ritual_click"],[5.95,"ritual_click"]],"engine_winding":[[0,"engine_ratchet"],[0.33,"engine_ratchet"],[0.67,"engine_ratchet"],[1,"engine_ratchet"],[1,"engine_rune_up"],[1.33,"engine_ratchet"],[1.67,"engine_ratchet"],[2,"engine_ratchet"],[2.33,"engine_ratchet"],[2.67,"engine_ratchet"],[3,"engine_ratchet"],[3,"engine_rune_up"],[3.33,"engine_ratchet"],[3.67,"engine_ratchet"],[4,"engine_ratchet"],[4.33,"engine_ratchet"],[4.67,"engine_ratchet"],[5,"engine_ratchet"],[5,"engine_rune_up"],[5.33,"engine_ratchet"],[5.67,"engine_ratchet"],[6,"engine_ratchet"],[6.33,"engine_ratchet"],[6.67,"engine_ratchet"],[7,"engine_ratchet"],[7,"engine_rune_up"],[7.33,"engine_ratchet"],[7.67,"engine_ratchet"]],"engine_unwinding":[[0,"engine_tick"],[0.25,"engine_tock"],[0.5,"engine_tick"],[0.75,"engine_tock"],[1,"engine_tick"],[1,"engine_rune_down"],[1.25,"engine_tock"],[1.5,"engine_tick"],[1.75,"engine_tock"],[2,"engine_tick"],[2.25,"engine_tock"],[2.5,"engine_tick"],[2.75,"engine_tock"],[3,"engine_tick"],[3,"engine_rune_down"],[3.25,"engine_tock"],[3.5,"engine_tick"],[3.75,"engine_tock"],[4,"engine_tick"],[4.25,"engine_tock"],[4.5,"engine_tick"],[4.75,"engine_tock"],[5,"engine_tick"],[5,"engine_rune_down"],[5.25,"engine_tock"],[5.5,"engine_tick"],[5.75,"engine_tock"],[6,"engine_tick"],[6.25,"engine_tock"],[6.5,"engine_tick"],[6.75,"engine_tock"],[7,"engine_tick"],[7,"engine_rune_down"],[7.25,"engine_tock"],[7.5,"engine_tick"],[7.75,"engine_tock"]]};
+const DEF = { pitch: 1, gain: 1, lowpass: 20000, highpass: 20, echo: 0, echoDelay: 0.12, vary: 0.04 };
+const TW = {};
+let cur = 0, randomVar = true, open = null;
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const vol = document.getElementById('vol');
+const bufCache = {};
+async function load(url) { if (!bufCache[url]) bufCache[url] = fetch(url).then((r) => { if (!r.ok) throw new Error(url); return r.arrayBuffer(); }).then((a) => ctx.decodeAudioData(a)); return bufCache[url]; }
+// a sound missing from the chosen set plays from the next set that has it (new placeholders among approved real sounds)
+function setFor(id) { for (let k = 0; k < SETS.length; k++) { const s = SETS[(cur + k) % SETS.length]; if (id in s.avail) return s; } return null; }
+function fileFor(id, v) { const s = setFor(id); if (!s) return null; const n = s.avail[id]; if (v === undefined) v = randomVar && n ? 1 + Math.floor(Math.random() * n) : 0; return s.dir + id + (v ? '_' + v : '') + '.' + s.ext; }
+async function play(id, v, when = 0) {
+  const url = fileFor(id, v); if (!url) return;
+  if (ctx.state === 'suspended') await ctx.resume();
+  let buf; try { buf = await load(url); } catch (e) { return; }
+  const t = Object.assign({}, DEF, TW[id] || {});
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  src.playbackRate.value = t.pitch * (v === undefined && randomVar ? 1 + (Math.random() * 2 - 1) * t.vary : 1);
+  const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = t.highpass;
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = t.lowpass;
+  const g = ctx.createGain(); g.gain.value = t.gain * +vol.value;
+  src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(ctx.destination);
+  if (t.echo > 0) { const d = ctx.createDelay(1); d.delayTime.value = t.echoDelay; const fb = ctx.createGain(); fb.gain.value = t.echo; g.connect(d); d.connect(fb); fb.connect(d); fb.connect(ctx.destination); }
+  src.start(ctx.currentTime + when);
+}
+function refreshCards() {
+  const s = SETS[cur];
+  document.querySelectorAll('.card').forEach((c) => {
+    const id = c.dataset.id, n = s.avail[id] || 0, vars = c.querySelector('.vars');
+    vars.innerHTML = n ? Array.from({ length: n }, (_, i) => '<button data-v="' + (i + 1) + '">' + (i + 1) + '</button>').join('') : '';
+    c.style.opacity = id in s.avail ? 1 : 0.45;
+    c.classList.toggle('tweaked', !!TW[id]);
+  });
+}
+document.querySelectorAll('.set').forEach((b) => b.addEventListener('click', () => { cur = +b.dataset.i; document.querySelectorAll('.set').forEach((x) => x.classList.toggle('on', x === b)); refreshCards(); }));
+document.getElementById('random').addEventListener('click', (e) => { randomVar = !randomVar; e.target.textContent = 'Random variants: ' + (randomVar ? 'on' : 'off'); });
+document.querySelectorAll('.card').forEach((c) => {
+  const id = c.dataset.id;
+  c.querySelector('.play').addEventListener('click', () => { c.classList.add('on'); setTimeout(() => c.classList.remove('on'), 300); play(id); });
+  c.querySelector('.vars').addEventListener('click', (e) => { if (e.target.dataset.v) play(id, +e.target.dataset.v); });
+  c.querySelector('.tw').addEventListener('click', () => openPanel(id));
+});
+const panel = document.getElementById('panel');
+function openPanel(id) {
+  open = id; document.getElementById('pt').textContent = id; panel.style.display = 'block';
+  const t = Object.assign({}, DEF, TW[id] || {});
+  panel.querySelectorAll('input').forEach((i) => { i.value = t[i.dataset.k]; i.nextElementSibling.value = (+i.value).toFixed(2); });
+}
+panel.querySelectorAll('input').forEach((i) => i.addEventListener('input', () => {
+  i.nextElementSibling.value = (+i.value).toFixed(2);
+  const t = TW[open] = Object.assign({}, DEF, TW[open] || {}, { [i.dataset.k]: +i.value });
+  for (const k of Object.keys(DEF)) if (t[k] === DEF[k]) delete t[k];
+  if (!Object.keys(t).length) delete TW[open];
+  refreshCards();
+}));
+document.getElementById('pplay').addEventListener('click', () => play(open));
+document.getElementById('preset').addEventListener('click', () => { delete TW[open]; openPanel(open); refreshCards(); });
+document.getElementById('pclose').addEventListener('click', () => (panel.style.display = 'none'));
+document.getElementById('save').addEventListener('click', async () => {
+  const body = JSON.stringify(TW, null, 2), out = document.getElementById('saved');
+  try { // served by serve.js: write straight into the project
+    const r = await fetch('save-tweaks?file=' + encodeURIComponent("clockwork-juggernaut.tweaks.json"), { method: 'POST', body });
+    if (!r.ok) throw new Error(r.status);
+    out.textContent = 'Saved to ' + "clockwork-juggernaut.tweaks.json" + '.';
+  } catch (e) { // opened from disk: download instead
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([body], { type: 'application/json' })); a.download = "clockwork-juggernaut.tweaks.json"; a.click();
+    out.textContent = 'Saved to your Downloads folder.';
+  }
+});
+let timers = [];
+document.querySelectorAll('.clip').forEach((row) => {
+  row.querySelector('.cplay').addEventListener('click', async () => {
+    if (ctx.state === 'suspended') await ctx.resume();
+    timers.forEach(clearTimeout); timers = [];
+    document.querySelectorAll('.head').forEach((h) => (h.style.display = 'none'));
+    const head = row.querySelector('.head'), len = +row.dataset.len, start = performance.now();
+    for (const [t, id] of CLIPS[row.dataset.clip]) timers.push(setTimeout(() => play(id), t * 1000));
+    head.style.display = 'block';
+    (function tick() { const p = (performance.now() - start) / 1000 / len; head.style.left = Math.min(100, p * 100) + '%'; if (p < 1) requestAnimationFrame(tick); else head.style.display = 'none'; })();
+  });
+});
+refreshCards();
+</script></body></html>
