@@ -47,11 +47,17 @@ public final class LineClient {
 				if (!(state.getBlock() instanceof LineBlock))
 					return -1;
 				LineTier tier = tierOf(state.getBlock());
+				// (2: a Fluid Line's hubs and flanges)
+				if (tint == 2)
+					return LineColors.joint(tier, null);
 				// (1: a Breaker's arm towards the other tier, even without its block entity to hand)
 				return LineColors.tier(tint == 1 ? (tier == LineTier.BRASS ? LineTier.COPPER : LineTier.BRASS) : tier);
 			}
 			if (be.encasing() != null)
 				return event.getBlockColors().getColor(be.encasing(), level, pos, tint);
+			// (2: a Fluid Line's hubs and flanges, a shade darker than the pipe)
+			if (tint == 2)
+				return LineColors.joint(be.tier(), be.dye());
 			// (1: a Breaker's arm towards a wire of the other tier, drawn in that tier's colour)
 			if (tint == 1)
 				return LineColors.of(be.tier() == LineTier.BRASS ? LineTier.COPPER : LineTier.BRASS, be.dye());

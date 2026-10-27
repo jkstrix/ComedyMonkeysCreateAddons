@@ -289,6 +289,24 @@
     },
     {
       "when": {
+        "up": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass_riser"
+      }
+    },
+    {
+      "when": {
+        "up": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass_riser_short"
+      }
+    },
+    {
+      "when": {
         "up": "tank"
       },
       "apply": {
@@ -331,6 +349,26 @@
       },
       "apply": {
         "model": "comedymonkeysaddons:block/fluid_line/brass_riser_short",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "down": "line|tank|intake",
+        "hub": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass_riser",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "down": "line|tank|intake",
+        "hub": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/fluid_line/glass_riser_short",
         "x": 180
       }
     },

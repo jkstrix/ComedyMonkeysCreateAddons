@@ -1177,7 +1177,8 @@ function solveArm(side, target, lean, o = {}) {
   const pt = o.held ? [6, 1.5, 0] : [side === 'right' ? 6 : -6, 3, 0];
   const chain = o.held ? HELD_CHAIN : ['trade_bot', 'body', 'arm_' + side, 'forearm_' + side, 'claw_' + side];
   let best = null;
-  for (let a = -30; a <= 180; a += 1) for (let f = -150; f <= 90; f += 1) {
+  const [aLo, aHi] = o.aRange || [-30, 180], [fLo, fHi] = o.fRange || [-150, 90];
+  for (let a = aLo; a <= aHi; a += 1) for (let f = fLo; f <= fHi; f += 1) {
     const T = { body: { rotation: () => V(lean, 0, 0) }, ['arm_' + side]: { rotation: () => V(a, 0, o.rz || 0) }, ['forearm_' + side]: { rotation: () => V(f, 0, 0) } };
     const p = fk(T, chain, 0, pt);
     const e = Math.hypot(p[1] - target[1], p[2] - target[2]) + 0.006 * Math.abs(f - (o.preferF || 0)) + 0.01 * Math.abs(a - (o.preferA === undefined ? 90 : o.preferA));
@@ -1419,9 +1420,11 @@ blindHandoff('chest_put_high', 'put', HIGH_CHEST);
 // onto a depot: set it down in the same spot, a beat ("hmm, not quite"), push it into the middle, lean back and admire
 {
   const L = 5.6, tr = 1.05, tp = 2.3, push = [-6, 0, -5]; // the depot's centre is 6 px left and 5 px further than the drop spot
-  const [dA, dF] = solveArm('right', [6, 11.8, -11], -10, { held: true, rz: -2, preferA: 95, preferF: -20 });
-  const [p0A, p0F] = solveArm('right', [6, 11.6, -8.8], -10, { rz: -2, preferA: 100, preferF: -40 });
-  const [p1A, p1F] = solveArm('right', [6, 11.6, -13.8], -15, { rz: -2, preferA: 100, preferF: -20 });
+  // these spots are close to his shoulder: the elbow bends forward (upper arm down, forearm up), never over his head
+  // and folded back down through his eye pod
+  const [dA, dF] = solveArm('right', [6, 11.8, -11], -10, { held: true, rz: -2, preferA: 60, preferF: 40, aRange: [-20, 110], fRange: [0, 140] });
+  const [p0A, p0F] = solveArm('right', [6, 11.6, -8.8], -10, { rz: -2, preferA: 40, preferF: 80, aRange: [-20, 110], fRange: [0, 140] });
+  const [p1A, p1F] = solveArm('right', [6, 11.6, -13.8], -15, { rz: -2, preferA: 70, preferF: 30, aRange: [-20, 110], fRange: [0, 140] });
   const T = keyedTracks({
     body: { rotation: [[0, Z], [0.3, V(-10, 0, 0)], [1.3, V(-6, 0, 0)], [2.0, V(-10, 0, 0)], [tp, V(-15, 0, 0), 4, 6], [3.05, V(-4, 0, 0)], [3.5, V(3, 0, 0)], [4.8, Z]] },
     head: { rotation: [[0, Z], [0.3, V(-18, 0, 0)], [1.35, V(-16, 0, 14)], [2.0, V(-20, 0, 0)], [3.5, V(-6, 0, -12)], [4.9, Z]] },
@@ -1454,7 +1457,8 @@ function solveArm3(side, target, lean, rootZ, o = {}) {
   const pt = o.held ? [6, 1.5, 0] : [side === 'right' ? 6 : -6, 3, 0];
   const chain = o.held ? HELD_CHAIN : ['trade_bot', 'body', 'arm_' + side, 'forearm_' + side, 'claw_' + side];
   let best = null;
-  for (let z = -50; z <= 50; z += 2) for (let a = 20; a <= 170; a += 2) for (let f = -120; f <= 60; f += 2) {
+  const [aLo, aHi] = o.aRange || [20, 170], [fLo, fHi] = o.fRange || [-120, 60];
+  for (let z = -50; z <= 50; z += 2) for (let a = aLo; a <= aHi; a += 2) for (let f = fLo; f <= fHi; f += 2) {
     const T = { trade_bot: { position: () => V(0, 0, rootZ) }, body: { rotation: () => V(lean, 0, 0) }, ['arm_' + side]: { rotation: () => V(a, z, 0) }, ['forearm_' + side]: { rotation: () => V(f, 0, 0) } };
     const p = fk(T, chain, 0, pt);
     const e = Math.hypot(p[0] - target[0], p[1] - target[1], p[2] - target[2]) + 0.004 * Math.abs(a - (o.preferA === undefined ? 90 : o.preferA));
@@ -1466,9 +1470,11 @@ function solveArm3(side, target, lean, rootZ, o = {}) {
 {
   const L = 3.8, t0 = 0.9, t1 = 1.45, tg = 2.05, rootZ = -2;
   const centre = [0, 11.5, -16], restC = [6, 11.5, -11]; // the package centre at the depot's middle, and at its drop spot
-  const [a0, f0, z0] = solveArm3('right', [0, 13.3, -15.2], -20, rootZ, { preferA: 110 }); // claw tip on top of the package, in the middle
-  const [a1, f1, z1] = solveArm3('right', [6, 13, -11], -10, rootZ, { preferA: 100 }); // dragged to the near edge
-  const [aG, fG, zG] = solveArm3('right', restC, -10, rootZ, { held: true, preferA: 100 }); // grab it properly
+  // elbow bends forward as in depot_place; the claw sits just right of the package's middle, so the arm needn't yaw
+  // across his chest
+  const [a0, f0, z0] = solveArm3('right', [1, 13.3, -15.2], -20, rootZ, { preferA: 70, aRange: [-20, 110], fRange: [0, 140] }); // claw tip on top of the package
+  const [a1, f1, z1] = solveArm3('right', [6, 13, -11], -10, rootZ, { preferA: 40, aRange: [-20, 110], fRange: [0, 140] }); // dragged to the near edge
+  const [aG, fG, zG] = solveArm3('right', restC, -10, rootZ, { held: true, preferA: 40, aRange: [-20, 110], fRange: [0, 140] }); // grab it properly
   const T = keyedTracks({
     trade_bot: { position: [[0, Z], [0.02, V(0, 0, rootZ), 4, 6], [2.35, Z, 4, 6]] },
     body: { rotation: [[0, Z], [0.2, V(-20, 0, 0)], [t0, V(-10, 0, 0), 4, 6], [1.6, V(-10, 0, 0)], [tg + 0.1, V(-4, 0, 0)], [2.6, Z]] },
@@ -1503,7 +1509,10 @@ function solveArm3(side, target, lean, rootZ, o = {}) {
 // the villager tosses an emerald back into his open drawer, drawer shut, spin-and-hop, lamp off, wave bye
 function tradeClip(name, withStation) {
   const L = 7.2, tTake = 1.45, tr = 3.42, tLand = 3.97, te = 4.45, tCatch = 5.0, tShut = 5.15;
-  const [dA, dF, dY] = solveArm3('right', [2, 12.5, -7], -8, 0, { held: true, preferA: 40 }); // into the drawer
+  // into the drawer: the target sits close to his shoulder, so the elbow bends forward (upper arm down, forearm curled
+  // up in front); the default range only reached it by lifting the arm over his head and folding the forearm down
+  // through his right eye pod
+  const [dA, dF, dY] = solveArm3('right', [4, 12.5, -8.5], -8, 0, { held: true, preferA: 10, aRange: [-10, 90], fRange: [0, 130] });
   const T = keyedTracks({
     head: { rotation: [[0, Z], [0.05, V(-4, 0, 0), 8, 6], [1.15, V(-14, 0, 0)], [1.6, V(8, 0, 0)], [3.0, V(6, 0, 0)], [3.3, V(-4, 0, 0)], [4.45, V(2, 0, 0)], [tCatch - 0.1, V(-18, 0, 0), 8, 6], [5.3, Z]] },
     eye_left: { rotation: [[0, Z], [0.35, V(0, 0, 8)], [1.2, Z], [2.45, V(0, 0, 10)], [2.85, V(0, 0, 8)], [3.4, Z], [5.3, V(0, 0, 10)], [6.4, Z]] },
@@ -1514,9 +1523,9 @@ function tradeClip(name, withStation) {
     iris_right: { scale: [[0, V(1, 1, 1)], [0.05, V(1.2, 1.2, 1), 8, 6], [0.6, V(1, 1, 1)], [tCatch - 0.05, V(1.25, 1.25, 1)], [5.6, V(1, 1, 1)]] },
     drawer: { position: [[0, Z], [0.95, V(0, 0, -3), 5, 7], [tShut, Z, 7, 8]] },
     body: { rotation: [[0, Z], [1.15, V(-8, 0, 0)], [1.6, V(4, 0, 0)], [3.0, V(6, 0, 0)], [3.22, V(-10, 0, 0), 9, 6], [3.7, Z], [4.45, V(-6, 0, 0)], [tShut, Z]] },
-    arm_right: { rotation: [[0, Z], [0.35, V(-10, 0, 115)], [0.95, Z], [1.15, V(dA, dY, 0), 5, 9], [1.6, V(150, 0, 10)], [3.0, V(-35, 0, 8)], [3.22, V(135, 0, 4), 9, 6], [3.7, V(20, 0, 0)], [4.4, V(40, 0, 25)], [tShut, Z], [5.3, V(160, 0, 30)], [6.0, Z], [6.4, V(-10, 0, 115)], [7.0, Z]] },
+    arm_right: { rotation: [[0, Z], [0.35, V(-10, 0, 115)], [0.95, Z], [1.15, V(dA, dY, 0), 5, 9], [1.6, V(150, 0, -30)], [3.0, V(-35, 0, 8)], [3.22, V(135, 0, -30), 9, 6], [3.7, V(20, 0, 0)], [4.4, V(40, 0, 25)], [tShut, Z], [5.3, V(160, 0, -35)], [6.0, Z], [6.4, V(-10, 0, 115)], [7.0, Z]] },
     forearm_right: { rotation: [[0, Z], [0.35, V(0, 0, 45)], [0.95, Z], [1.15, V(dF, 0, 0), 5, 9], [1.6, V(10, 0, 0)], [3.0, V(20, 0, 0)], [3.22, V(-10, 0, 0), 9, 6], [3.7, Z], [5.3, V(10, 0, 0)], [6.0, Z], [6.4, V(0, 0, 45)], [7.0, Z]] },
-    arm_left: { rotation: [[0, Z], [4.4, V(40, 0, -25)], [tShut, Z], [5.3, V(160, 0, -30)], [6.0, Z]] },
+    arm_left: { rotation: [[0, Z], [4.4, V(40, 0, -25)], [tShut, Z], [5.3, V(160, 0, 35)], [6.0, Z]] },
     trade_bot: { rotation: [[0, Z], [5.3, V(0, 360, 0), 2.5, 5]] },
   }, {
     extra: {
@@ -2005,7 +2014,11 @@ const ARMCLIP = process.env.ARMCLIP === '1', ARMCLIP_ONLY = process.env.ARMCLIP_
 function armClipReport(name, T, L) {
   if (!ARMCLIP || !name.startsWith(ARMCLIP_ONLY)) return;
   let worst = [0, '', 0];
-  for (let t = 0; t <= L + 1e-9; t += 1 / 30) { const w = selfClipAt(T, t); if (w[0] > worst[0]) worst = [w[0], w[1], t]; }
+  for (let t = 0; t <= L + 1e-9; t += 1 / 30) {
+    const w = selfClipAt(T, t);
+    if (w[0] > worst[0]) worst = [w[0], w[1], t];
+    if (process.env.ARMCLIP_TIMELINE === '1' && w[0] > 0.6) console.error('  ' + t.toFixed(2) + 's  ' + w[0].toFixed(2) + ' px  ' + w[1]);
+  }
   console.error(('armclip ' + name).padEnd(34) + (worst[0] > 0.05 ? worst[0].toFixed(2) + ' px  ' + worst[1] + '  at ' + worst[2].toFixed(2) + 's' : 'clear'));
 }
 

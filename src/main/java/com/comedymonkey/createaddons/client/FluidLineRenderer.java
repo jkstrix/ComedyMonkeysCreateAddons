@@ -35,6 +35,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 public class FluidLineRenderer implements BlockEntityRenderer<FluidLineBlockEntity> {
 	/** The slot's fluid sits level with the rim, a quarter pixel above the dark idle strip. */
 	private static final float SLOT_Y = 10f / 16, SLOT_X0 = 7.25f / 16, SLOT_X1 = 8.75f / 16;
+	/** A vertical pipe's two windows, on its north and south sides: the fluid level with their rims, across x 7.25-8.75. */
+	private static final float WINDOW_NORTH_Z = 6f / 16, WINDOW_SOUTH_Z = 10f / 16;
 	/** How far the slot runs in from the face: to the middle on a straight piece, short of the hub on the rest. */
 	private static final float SLOT_NEAR = 1.75f, SLOT_NEAR_INTAKE = 5f, SLOT_FAR = 8f, SLOT_FAR_HUB = 3.5f;
 
@@ -69,7 +71,7 @@ public class FluidLineRenderer implements BlockEntityRenderer<FluidLineBlockEnti
 		if (!flowing.isEmpty()) {
 			Sprite fluid = Sprite.of(flowing);
 			float far = state.getValue(FluidLineBlock.HUB) ? SLOT_FAR_HUB : SLOT_FAR;
-			for (Direction d : Direction.Plane.HORIZONTAL) {
+			for (Direction d : Direction.values()) {
 				LineSide side = FluidLineBlock.side(state, d);
 				if (side == LineSide.NONE)
 					continue;
@@ -92,6 +94,12 @@ public class FluidLineRenderer implements BlockEntityRenderer<FluidLineBlockEnti
 					b = near + len * k;
 				if (b - a < 0.05f)
 					continue;
+				if (d.getAxis().isVertical()) {
+					// up or down: in both windows, standing
+					window(vc, ms.last(), fluid, d, WINDOW_NORTH_Z, false, a, b, out ? phase : -phase, light, overlay);
+					window(vc, ms.last(), fluid, d, WINDOW_SOUTH_Z, true, a, b, out ? phase : -phase, light, overlay);
+					continue;
+				}
 				ms.pushPose();
 				turn(ms, d);
 				strip(vc, ms, fluid, SLOT_X0, SLOT_X1, SLOT_Y, a, b, out ? phase : -phase, light, overlay);
@@ -227,6 +235,37 @@ public class FluidLineRenderer implements BlockEntityRenderer<FluidLineBlockEnti
 			vertex(vc, pose, x1, y, zb, ub, v1, fluid.color, light, overlay, 0, 1, 0);
 			vertex(vc, pose, x1, y, za, ua, v1, fluid.color, light, overlay, 0, 1, 0);
 			z += len;
+		}
+	}
+
+	/**
+	 * A vertical pipe's window: a standing strip of fluid at z, facing south (or north), across the slot and from
+	 * {@code near} to {@code far} px in from the face the arm runs to (the top for up, the bottom for down), slid like
+	 * {@link #strip}.
+	 */
+	private static void window(VertexConsumer vc, PoseStack.Pose pose, Sprite fluid, Direction d, float z, boolean south, float near, float far,
+							   float phase, int light, int overlay) {
+		float v0 = fluid.sprite.getV(SLOT_X0), v1 = fluid.sprite.getV(SLOT_X1);
+		float nz = south ? 1 : -1;
+		float dist = near;
+		while (dist < far - 0.001f) {
+			float u = (((dist + phase) % 16) + 16) % 16;
+			float len = Math.min(far - dist, 16 - u);
+			float ya = (d == Direction.UP ? 16 - dist : dist) / 16, yb = (d == Direction.UP ? 16 - dist - len : dist + len) / 16;
+			float ua = fluid.sprite.getU(u / 16), ub = fluid.sprite.getU((u + len) / 16);
+			float yHi = Math.max(ya, yb), yLo = Math.min(ya, yb), uHi = ya > yb ? ua : ub, uLo = ya > yb ? ub : ua;
+			if (south) {
+				vertex(vc, pose, SLOT_X0, yHi, z, uHi, v0, fluid.color, light, overlay, 0, 0, nz);
+				vertex(vc, pose, SLOT_X0, yLo, z, uLo, v0, fluid.color, light, overlay, 0, 0, nz);
+				vertex(vc, pose, SLOT_X1, yLo, z, uLo, v1, fluid.color, light, overlay, 0, 0, nz);
+				vertex(vc, pose, SLOT_X1, yHi, z, uHi, v1, fluid.color, light, overlay, 0, 0, nz);
+			} else {
+				vertex(vc, pose, SLOT_X1, yHi, z, uHi, v1, fluid.color, light, overlay, 0, 0, nz);
+				vertex(vc, pose, SLOT_X1, yLo, z, uLo, v1, fluid.color, light, overlay, 0, 0, nz);
+				vertex(vc, pose, SLOT_X0, yLo, z, uLo, v0, fluid.color, light, overlay, 0, 0, nz);
+				vertex(vc, pose, SLOT_X0, yHi, z, uHi, v0, fluid.color, light, overlay, 0, 0, nz);
+			}
+			dist += len;
 		}
 	}
 

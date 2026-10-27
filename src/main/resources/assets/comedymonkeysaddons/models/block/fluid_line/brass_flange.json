@@ -4,7 +4,7 @@
   "ambientocclusion": false,
   "textures": {
     "particle": "comedymonkeysaddons:block/fluid_line/brass",
-    "brass_ring": "comedymonkeysaddons:block/fluid_line/brass_ring"
+    "ring_body": "comedymonkeysaddons:block/fluid_line/ring_body"
   },
   "elements": [
     {
@@ -27,7 +27,8 @@
             16,
             10.5
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "south": {
           "uv": [
@@ -36,7 +37,8 @@
             12,
             10.5
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "west": {
           "uv": [
@@ -45,7 +47,8 @@
             1,
             10.5
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "up": {
           "uv": [
@@ -54,7 +57,8 @@
             12,
             1
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "down": {
           "uv": [
@@ -63,7 +67,8 @@
             12,
             16
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         }
       }
     },
@@ -87,7 +92,8 @@
             16,
             12
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "south": {
           "uv": [
@@ -96,7 +102,8 @@
             10.5,
             12
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "west": {
           "uv": [
@@ -105,7 +112,8 @@
             1,
             12
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "up": {
           "uv": [
@@ -114,7 +122,8 @@
             10.5,
             1
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "down": {
           "uv": [
@@ -123,7 +132,8 @@
             10.5,
             16
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         }
       }
     },
@@ -147,7 +157,8 @@
             16,
             11.25
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "south": {
           "uv": [
@@ -156,7 +167,8 @@
             11.25,
             11.25
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "west": {
           "uv": [
@@ -165,7 +177,8 @@
             1,
             11.25
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "up": {
           "uv": [
@@ -174,7 +187,8 @@
             11.25,
             1
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         },
         "down": {
           "uv": [
@@ -183,7 +197,8 @@
             11.25,
             16
           ],
-          "texture": "#brass_ring"
+          "texture": "#ring_body",
+          "tintindex": 2
         }
       }
     }

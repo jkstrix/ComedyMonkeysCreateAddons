@@ -24,4 +24,15 @@ public final class LineColors {
 	public static int of(LineTier tier, @Nullable DyeColor dye) {
 		return dye == null ? tier(tier) : DYES[dye.getId()];
 	}
+
+	/**
+	 * A Fluid Line's hubs and flanges: a shade darker than the pipe. Undyed, its metal's ring shade (Create's copper, the
+	 * generators' brass); dyed, the dye at 84% (the coupling rings and corner collars stay the metal).
+	 */
+	public static int joint(LineTier tier, @Nullable DyeColor dye) {
+		if (dye == null)
+			return tier == LineTier.COPPER ? 0x9A5038 : 0x7E6832;
+		int c = DYES[dye.getId()];
+		return (int) ((c >> 16 & 0xFF) * 0.84) << 16 | (int) ((c >> 8 & 0xFF) * 0.84) << 8 | (int) ((c & 0xFF) * 0.84);
+	}
 }

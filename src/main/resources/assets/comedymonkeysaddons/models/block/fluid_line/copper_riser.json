@@ -5,7 +5,8 @@
   "textures": {
     "particle": "comedymonkeysaddons:block/fluid_line/copper",
     "copper_ring": "comedymonkeysaddons:block/fluid_line/copper_ring",
-    "body": "comedymonkeysaddons:block/fluid_line/body"
+    "body": "comedymonkeysaddons:block/fluid_line/body",
+    "slot_idle": "comedymonkeysaddons:block/fluid_line/slot_idle"
   },
   "elements": [
     {
@@ -299,10 +300,10 @@
       }
     },
     {
-      "name": "copper_up_b",
+      "name": "copper_up_b1",
       "from": [
         7,
-        8,
+        14.25,
         6
       ],
       "to": [
@@ -316,7 +317,7 @@
             7,
             0.25,
             9,
-            8
+            1.75
           ],
           "texture": "#body",
           "tintindex": 0
@@ -326,7 +327,7 @@
             6,
             0.25,
             10,
-            8
+            1.75
           ],
           "texture": "#body",
           "tintindex": 0
@@ -336,7 +337,7 @@
             7,
             0.25,
             9,
-            8
+            1.75
           ],
           "texture": "#body",
           "tintindex": 0
@@ -346,10 +347,261 @@
             6,
             0.25,
             10,
+            1.75
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "copper_up_bm",
+      "from": [
+        7,
+        8,
+        6.75
+      ],
+      "to": [
+        9,
+        14.25,
+        9.25
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6.75,
+            1.75,
+            9.25,
             8
           ],
           "texture": "#body",
           "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            6.75,
+            1.75,
+            9.25,
+            8
+          ],
+          "texture": "#body",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "copper_up_fluid_north",
+      "from": [
+        7.25,
+        8,
+        6.25
+      ],
+      "to": [
+        8.75,
+        14.25,
+        6.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            0,
+            8.5,
+            16
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    },
+    {
+      "name": "copper_up_edge_a_north",
+      "from": [
+        7,
+        8,
+        6
+      ],
+      "to": [
+        7.25,
+        14.25,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.75,
+            1.75,
+            9,
+            8
+          ],
+          "texture": "#slot_idle"
+        },
+        "east": {
+          "uv": [
+            9.5,
+            1.75,
+            10,
+            8
+          ],
+          "texture": "#slot_idle"
+        },
+        "west": {
+          "uv": [
+            6,
+            1.75,
+            6.5,
+            8
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    },
+    {
+      "name": "copper_up_edge_b_north",
+      "from": [
+        8.75,
+        8,
+        6
+      ],
+      "to": [
+        9,
+        14.25,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            1.75,
+            7.25,
+            8
+          ],
+          "texture": "#slot_idle"
+        },
+        "east": {
+          "uv": [
+            9.5,
+            1.75,
+            10,
+            8
+          ],
+          "texture": "#slot_idle"
+        },
+        "west": {
+          "uv": [
+            6,
+            1.75,
+            6.5,
+            8
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    },
+    {
+      "name": "copper_up_fluid_south",
+      "from": [
+        7.25,
+        8,
+        9.25
+      ],
+      "to": [
+        8.75,
+        14.25,
+        9.75
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            7,
+            0,
+            8.5,
+            16
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    },
+    {
+      "name": "copper_up_edge_a_south",
+      "from": [
+        7,
+        8,
+        9.5
+      ],
+      "to": [
+        7.25,
+        14.25,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            1.75,
+            6.5,
+            8
+          ],
+          "texture": "#slot_idle"
+        },
+        "south": {
+          "uv": [
+            7,
+            1.75,
+            7.25,
+            8
+          ],
+          "texture": "#slot_idle"
+        },
+        "west": {
+          "uv": [
+            9.5,
+            1.75,
+            10,
+            8
+          ],
+          "texture": "#slot_idle"
+        }
+      }
+    },
+    {
+      "name": "copper_up_edge_b_south",
+      "from": [
+        8.75,
+        8,
+        9.5
+      ],
+      "to": [
+        9,
+        14.25,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            1.75,
+            6.5,
+            8
+          ],
+          "texture": "#slot_idle"
+        },
+        "south": {
+          "uv": [
+            8.75,
+            1.75,
+            9,
+            8
+          ],
+          "texture": "#slot_idle"
+        },
+        "west": {
+          "uv": [
+            9.5,
+            1.75,
+            10,
+            8
+          ],
+          "texture": "#slot_idle"
         }
       }
     }

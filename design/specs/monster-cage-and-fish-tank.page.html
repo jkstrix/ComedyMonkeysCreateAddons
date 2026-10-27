@@ -1,0 +1,441 @@
+<title>Monster Cage &amp; Fish Tank</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the house quick-read column (as the Battery page): material band, idiot test first, a live speed calculator as the centrepiece, then containment, numbers, rules, what-ifs, scores */
+:root {
+  --bg: #e6e6e1; --surface: #f2f2ee; --fg: #22231f; --muted: #5f6058; --line: #c9c8c0;
+  --accent: #8a6626; --accent-soft: #e9dcc0; --iron: #4a4d50; --iron-hi: #5d6164;
+  --water: #3f6f84; --field: #6a5a86; --field-soft: #dcd6e6; --alarm: #a3412f;
+  --ok: #4c7a46; --warn: #a3712a;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
+  --water: #6fa6bc; --field: #a796c4; --field-soft: #2c2737; --alarm: #d47a64;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
+  --water: #6fa6bc; --field: #a796c4; --field-soft: #2c2737; --alarm: #d47a64;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.15rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+code { font: .85em var(--mono) }
+
+header { display: grid; gap: 14px }
+.band { height: 10px; border-radius: 2px; background: linear-gradient(90deg, var(--iron) 0 40%, var(--bg) 40% 42%, var(--accent) 42% 64%, var(--bg) 64% 66%, var(--water) 66% 80%, var(--bg) 80% 82%, var(--field) 82% 100%) }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { padding: 8px 0 8px 14px; border-left: 3px solid var(--accent); font-weight: 500 }
+
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: step }
+.loop li { counter-increment: step; display: grid; gap: 6px; align-content: start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.loop li::before { content: counter(step); font: 600 1.4rem/1 var(--display); color: var(--accent) }
+
+.tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px }
+.tier { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--iron-hi); border-radius: 3px; display: grid; gap: 8px; align-content: start }
+.tier.brass { border-top-color: var(--accent) }
+.tier.wet { border-top-color: var(--water) }
+.tier.neth { border-top-color: var(--field) }
+.tier .meta { font: 500 .78rem/1.4 var(--mono); color: var(--muted) }
+.tier ul { margin: 0; padding-left: 18px; display: grid; gap: 3px }
+
+.calc { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; display: grid }
+.calc-bar { display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--line) }
+.calc-bar label { font: 500 .82rem/1 var(--mono); display: flex; flex-wrap: wrap; gap: 10px; align-items: center }
+.calc-bar select { font: 500 .85rem var(--mono); padding: 5px 8px; background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 3px; max-width: 100% }
+.calc-bar input[type="range"] { accent-color: var(--accent); width: 200px; max-width: 50vw }
+.calc-bar select:focus-visible, .calc-bar input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.out { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line) }
+.out div { background: var(--surface); padding: 12px 16px; display: grid; gap: 2px }
+.out b { font: 600 1.45rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.out span { color: var(--muted); font-size: .82rem }
+.caption { padding: 10px 16px 14px; color: var(--muted); font-size: .88rem; border-top: 1px solid var(--line) }
+
+.timeline { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 10px 6px }
+.timeline svg { display: block; width: 100%; min-width: 600px; height: auto }
+.lbl { font: 500 11px var(--mono); fill: var(--fg) }
+.lbl.dim { fill: var(--muted) }
+
+.numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px }
+.num { padding: 12px 14px; border-top: 3px solid var(--accent); background: var(--surface); display: grid; gap: 2px }
+.num b { font: 600 1.4rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.num span { color: var(--muted); font-size: .85rem }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.pairs ul { margin: 0; padding: 14px 16px 14px 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 6px }
+.pairs h3 { margin-bottom: 4px }
+.does h3 { color: var(--ok) }
+.doesnt h3 { color: var(--warn) }
+
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 24px }
+.qa div { display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.qa b { font-weight: 600 }
+.qa span { color: var(--muted) }
+
+.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.watch { display: grid; gap: 8px; align-content: start; padding: 14px 16px; border: 1px dashed var(--warn); border-radius: 3px }
+.watch.ok { border-color: var(--accent) }
+.watch h3 { color: var(--warn) }
+.watch.ok h3 { color: var(--accent) }
+.watch ul { margin: 0; padding-left: 18px; display: grid; gap: 4px }
+
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center }
+.score .track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden }
+.score .fill { height: 100%; background: var(--ok) }
+.score .fill.mid { background: var(--warn) }
+.score .why { grid-column: 2 / -1; color: var(--muted); font-size: .85rem; margin-top: -6px }
+.score b { text-align: right; font: 500 .85rem var(--mono); font-variant-numeric: tabular-nums }
+@media (max-width: 520px) { .score { grid-template-columns: 1fr 44px } .score .track { grid-column: 1 / -1; order: 3 } .score .why { grid-column: 1 / -1; margin-top: 0 } }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px }
+</style>
+<div class="wrap">
+  <header>
+    <div class="band" aria-hidden="true"></div>
+    <p class="eyebrow">ComedyMonkey's Create Addons · Farms</p>
+    <h1>Monster Cage &amp; Fish Tank</h1>
+    <p class="pitch">The Animal Pen's two new siblings. The Monster Cage: jar one monster, feed it Monster Chow, turn the shaft, and cull the horde for its real drops; the Netherite cage holds Withers on the power grid, and they break out if the power fails. The Fish Tank: the pens' breeding, underwater, for fish, squid and axolotls.</p>
+    <div class="chips">
+      <span class="chip ready">Monster Cage ready: 95%</span>
+      <span class="chip ready">Fish Tank ready: 90%</span>
+      <span class="chip">Early–mid to late game</span>
+      <span class="chip">Looks: briefs next</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Monster Cage in ten lines</h2>
+    <ul class="idiot">
+      <li>Animal Pen, but for monsters.</li>
+      <li>Catch it in an Iron Jar.</li>
+      <li>Jar into cage, Monster Chow in, shaft on.</li>
+      <li>Faster shaft: more monsters, more chow eaten.</li>
+      <li>A sword or Deployer culls half.</li>
+      <li>Water monsters need a Flooded cage and water.</li>
+      <li>Netherite cage: Withers only, needs FE too.</li>
+      <li>Power fails near you: one Wither escapes, then daily.</li>
+      <li>New monsters never carry armour or weapons.</li>
+      <li>Every number lives in the config.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>How you use it</h2>
+    <ol class="loop">
+      <li><h3>Jar a monster</h3><p>Iron Jar, any health, by hand or Deployer. A Wither needs a Netherite Jar.</p></li>
+      <li><h3>Cage it</h3><p>Use the jar on a cage of the right tier. Flooded for water monsters.</p></li>
+      <li><h3>Feed it</h3><p>Monster Chow: milled flour, bone meal and cinder flour, mixed.</p></li>
+      <li><h3>Turn the shaft</h3><p>A new monster joins every interval. Faster shaft, sooner.</p></li>
+      <li><h3>Cull</h3><p>A sword or Deployer takes half. Drops go out to your funnels.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>The cages</h2>
+    <div class="tiers">
+      <div class="tier">
+        <h3>Andesite</h3>
+        <p class="meta">holds 64 · 4 SU/RPM · crafting table</p>
+        <ul><li>Zombies, husks</li><li>Skeletons, strays, bogged</li><li>Spiders, creepers, slimes, witches, phantoms</li></ul>
+      </div>
+      <div class="tier brass">
+        <h3>Brass</h3>
+        <p class="meta">holds 256 · 16 SU/RPM · Mechanical Crafting</p>
+        <ul><li>Everything above</li><li>Blazes, magma cubes, wither skeletons, endermen, ghasts, piglins, breezes</li><li>Rare: evokers, vindicators, ravagers, shulkers</li></ul>
+      </div>
+      <div class="tier wet">
+        <h3>Flooded</h3>
+        <p class="meta">Andesite or Brass · water piped in · 250 mB per monster</p>
+        <ul><li>Drowned (Andesite), now and then with a trident it throws at you</li><li>Guardians, elder guardians (Brass)</li><li>A zombie put in one turns into a drowned</li></ul>
+      </div>
+      <div class="tier neth">
+        <h3>Netherite</h3>
+        <p class="meta">holds 3 Withers · 16 SU/RPM + FE · owner only</p>
+        <ul><li>The Wither, and nothing else</li><li>Culls drop Nether Stars</li><li>Needs FE to hold them</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Speed sets the pace</h2>
+    <p class="sub">Each new monster always costs the same Monster Chow. A faster shaft spends it sooner and costs more stress. Pick a cage and a monster, then slide the speed.</p>
+    <div class="calc">
+      <div class="calc-bar">
+        <label for="mob">Monster
+          <select id="mob">
+            <option value="a1">Andesite · zombie (1 chow)</option>
+            <option value="b1">Brass · creeper (1 chow)</option>
+            <option value="b2" selected>Brass · blaze (2 chow)</option>
+            <option value="w2">Flooded Brass · guardian (2 chow)</option>
+            <option value="b4">Brass · evoker (4 chow)</option>
+            <option value="n">Netherite · Wither (64 chow)</option>
+          </select>
+        </label>
+        <label for="rpm">Speed <input id="rpm" type="range" min="0" max="8" step="1" value="4"> <span id="rpmv">64 RPM</span></label>
+        <label for="ench">Monstrous
+          <select id="ench">
+            <option value="0" selected>none</option>
+            <option value="1">I</option>
+            <option value="2">II</option>
+            <option value="3">III</option>
+          </select>
+        </label>
+      </div>
+      <div class="out" aria-live="polite">
+        <div><b id="o-int">20 s</b><span>per new monster</span></div>
+        <div><b id="o-hr">180</b><span>monsters per hour</span></div>
+        <div><b id="o-chow">360</b><span>Monster Chow per hour</span></div>
+        <div><b id="o-su">1,024 SU</b><span>stress while running</span></div>
+        <div><b id="o-extra">none</b><span id="o-extra-l">water or FE</span></div>
+      </div>
+      <p class="caption" id="cap">The slider uses common Create speeds. Stress drops to zero when the cage is full or out of chow.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Containment</h2>
+    <p class="sub">The Netherite cage's shaft runs the farm. Its FE holds the field: a flat 2,048 FE/t whenever any Wither is inside, plus up to 1,024 FE/t while it farms at full speed. Below that, the field is down.</p>
+    <div class="timeline">
+      <svg viewBox="0 0 680 170" role="img" aria-label="Timeline: the field drops, a 30-second klaxon, the first Wither escapes; then one more escapes every game day until the cage is empty. Power back at any point cancels and resets it.">
+        <rect x="16" y="58" width="96" height="22" fill="var(--field-soft)" stroke="var(--field)"></rect>
+        <text x="64" y="73" text-anchor="middle" class="lbl">field up</text>
+        <rect x="112" y="58" width="90" height="22" fill="var(--alarm)" fill-opacity=".22" stroke="var(--alarm)"></rect>
+        <text x="157" y="73" text-anchor="middle" class="lbl">klaxon 30 s</text>
+        <rect x="202" y="58" width="168" height="22" fill="var(--surface)" stroke="var(--line)"></rect>
+        <text x="286" y="73" text-anchor="middle" class="lbl dim">1 game day (20 min)</text>
+        <rect x="370" y="58" width="90" height="22" fill="var(--alarm)" fill-opacity=".22" stroke="var(--alarm)"></rect>
+        <text x="415" y="73" text-anchor="middle" class="lbl">klaxon 30 s</text>
+        <rect x="460" y="58" width="168" height="22" fill="var(--surface)" stroke="var(--line)"></rect>
+        <text x="544" y="73" text-anchor="middle" class="lbl dim">1 game day</text>
+        <line x1="112" y1="40" x2="112" y2="98" stroke="var(--fg)" stroke-width="1.5"></line>
+        <text x="112" y="32" text-anchor="middle" class="lbl">FE runs short</text>
+        <line x1="202" y1="40" x2="202" y2="98" stroke="var(--alarm)" stroke-width="2"></line>
+        <text x="202" y="20" text-anchor="middle" class="lbl">Wither 1 out</text>
+        <line x1="460" y1="40" x2="460" y2="98" stroke="var(--alarm)" stroke-width="2"></line>
+        <text x="460" y="32" text-anchor="middle" class="lbl">Wither 2 out</text>
+        <text x="664" y="73" text-anchor="end" class="lbl">… empty</text>
+        <path d="M157 84 Q157 122 40 122" fill="none" stroke="var(--ok)" stroke-width="1.5"></path>
+        <text x="168" y="126" class="lbl dim">FE back at any point: countdown cancels, the clock resets</text>
+        <text x="16" y="156" class="lbl dim">The clock only runs with a player within 128 blocks and the chunk loaded.</text>
+      </svg>
+    </div>
+    <p class="sub">Escaping Withers come out at the nearest open space, after the vanilla 10-second charge-up. Servers can turn escapes off; then the cage just stops.</p>
+  </section>
+
+  <section>
+    <h2>Numbers</h2>
+    <div class="numbers">
+      <div class="num"><b>20 s · 10 s</b><span>base interval, Andesite · Brass, at 64 RPM</span></div>
+      <div class="num"><b>× 1 · 2 · 4</b><span>chow and time: Overworld · Nether, End, ocean · rare</span></div>
+      <div class="num"><b>1 + 1 + 1 → 3</b><span>Wheat Flour, Bone Meal, Cinder Flour → Monster Chow (Mixer)</span></div>
+      <div class="num"><b>250 mB</b><span>water per new monster in a Flooded cage</span></div>
+      <div class="num"><b>64 chow · 20 min</b><span>a Wither, at 256 RPM: 3 Nether Stars an hour (7.5 with Monstrous III)</span></div>
+      <div class="num"><b>2,048 FE/t</b><span>to hold any Withers; 3,072 farming flat out</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Rules</h2>
+    <div class="pairs">
+      <div class="does"><h3>Does</h3><ul>
+        <li>Grow at a steady rate, faster with speed and Monstrous I–III</li>
+        <li>Eat Monster Chow for every new monster</li>
+        <li>Give real loot at vanilla rates: Looting and Fire Aspect count</li>
+        <li>Let Deployers catch, release and cull</li>
+        <li>Turn a zombie into a drowned in a Flooded cage</li>
+        <li>Keep working on an airship (and fail there too)</li>
+        <li>Keep its horde on pistons and contraptions</li>
+      </ul></div>
+      <div class="doesnt"><h3>Doesn't</h3><ul>
+        <li>Copy armour, weapons or names onto new monsters</li>
+        <li>Give XP to Deployers</li>
+        <li>Grow while unloaded, moving, or on Peaceful</li>
+        <li>Let a jarred Wither out anywhere but a cage</li>
+        <li>Let anyone but its owner break a Netherite cage</li>
+        <li>Let even the owner break it mid-alarm</li>
+        <li>Mind sunlight, rain or lightning</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What if…?</h2>
+    <div class="qa">
+      <div><b>…the power stays off?</b><span>One Wither now, then one every game day until the cage is empty.</span></div>
+      <div><b>…nobody is near?</b><span>Nothing happens until a player comes within 128 blocks. Then the klaxon starts.</span></div>
+      <div><b>…the cage is built into a wall?</b><span>The Wither comes out at the nearest open space.</span></div>
+      <div><b>…the FE only covers part of it?</b><span>Farming stops first. Below 2,048 FE/t the field is down.</span></div>
+      <div><b>…I break it to dodge an escape?</b><span>You can't. No breaking or emptying while the field is down.</span></div>
+      <div><b>…the chunk unloads mid-alarm?</b><span>The clock pauses. The klaxon restarts when it loads.</span></div>
+      <div><b>…my airship loses power?</b><span>A Wither escapes in mid-air.</span></div>
+      <div><b>…I jar a zombie in diamond armour?</b><span>The copies arrive bare. Only its loot table drops.</span></div>
+      <div><b>…I drop a full Iron Jar in lava?</b><span>The monster is lost. Netherite Jars can't burn or blow up.</span></div>
+      <div><b>…a Dispenser fires a jar?</b><span>It releases the monster. Not a Wither: those only go into cages.</span></div>
+      <div><b>…a Flooded cage runs dry?</b><span>It stops growing. The ones inside are fine.</span></div>
+      <div><b>…I put a zombie in a Flooded cage?</b><span>It drowns into a drowned, and the cage makes drowned.</span></div>
+      <div><b>…I stand in front of a drowned cage?</b><span>If one is armed, tridents fly out of the front every 3 s. Cull (armed go first) or stand aside.</span></div>
+      <div><b>…I want it faster?</b><span>Monstrous I–III, from Librarians, on any cage, Withers included.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band" aria-hidden="true" style="background: var(--water)"></div>
+    <h2>Fish Tank in ten lines</h2>
+    <ul class="idiot">
+      <li>Animal Pen, but underwater.</li>
+      <li>Catch it in a Capture Bottle.</li>
+      <li>Bottle into tank, water piped in.</li>
+      <li>Fish Food in, shaft on.</li>
+      <li>Every adult breeds every 5 minutes.</li>
+      <li>Each birth uses food and water.</li>
+      <li>Sword culls half; bucket scoops one.</li>
+      <li>Blue axolotls can turn up.</li>
+      <li>Axolotls moved here from the pens.</li>
+      <li>Glow squid tanks glow.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>The tank</h2>
+    <div class="tiers">
+      <div class="tier wet">
+        <h3>Fish Tank</h3>
+        <p class="meta">holds 128 · 4 SU/RPM · 4,000 mB water</p>
+        <ul><li>Cod, salmon, tropical fish, pufferfish</li><li>Squid, glow squid</li><li>Axolotls</li></ul>
+      </div>
+      <div class="tier brass">
+        <h3>Brass Fish Tank</h3>
+        <p class="meta">holds 512 · 16 SU/RPM · 16,000 mB water</p>
+        <ul><li>The same creatures</li><li>Mechanical Crafting around a Fish Tank</li><li>Twice the output room</li></ul>
+      </div>
+    </div>
+    <div class="numbers">
+      <div class="num"><b>5 min</b><span>breeding, every adult, at 64 RPM (faster with speed and Fruitful)</span></div>
+      <div class="num"><b>250 mB</b><span>water per birth</span></div>
+      <div class="num"><b>1 + 1 + 1 → 4</b><span>Wheat Flour, Dried Kelp, Bone Meal → Fish Food (Mixer)</span></div>
+      <div class="num"><b>1 in 1,200</b><span>a blue axolotl, vanilla's odds</span></div>
+    </div>
+    <div class="qa">
+      <div><b>…the tank runs dry?</b><span>Breeding stops. The fish are fine.</span></div>
+      <div><b>…I bucket a squid?</b><span>Nothing happens. Squid can't be bucketed.</span></div>
+      <div><b>…I put a bottled fish in a pen?</b><span>Refused, with a hint to use a Fish Tank.</span></div>
+      <div><b>…my pen already has axolotls?</b><span>It keeps them. New ones go to tanks.</span></div>
+      <div><b>…only one fish is left?</b><span>It can't be culled or scooped.</span></div>
+      <div><b>…I want a tadpole or dolphin tank?</b><span>The bottle refuses them.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Still open</h2>
+    <div class="open">
+      <div class="watch ok">
+        <h3>Nothing left to decide</h3>
+        <ul>
+          <li>Every question is answered for both blocks.</li>
+          <li>Next: the look briefs, previewed in Blockbench first.</li>
+        </ul>
+      </div>
+      <div class="watch">
+        <h3>Watch in playtesting</h3>
+        <ul>
+          <li>How fast Monster Chow is used up.</li>
+          <li>Brass Fish Tank water use at its cap.</li>
+        </ul>
+        <p class="sub">Parked: shared chow lines, mob heads, raid banners.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Monster Cage: ready to build?</h2>
+    <div class="scores">
+      <div class="score"><span>Gameplay</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">How big monsters fit in the window is left to the look.</span></div>
+      <div class="score"><span>World integration</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">Multiplayer, unloading, airships and weather settled; claim mods untested.</span></div>
+      <div class="score"><span>Balance</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">Vanilla drop rates; stars far below a vanilla Wither farm. Chow use still to play.</span></div>
+      <div class="score"><span>Progression</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">Every recipe is set.</span></div>
+      <div class="score"><span>Automation</span><div class="track"><div class="fill" style="width:100%"></div></div><b>100%</b><span class="why">Every step, catching included.</span></div>
+      <div class="score"><span>Edge cases</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">Escape placement in tight spaces needs a playtest.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Fish Tank: ready to build?</h2>
+    <div class="scores">
+      <div class="score"><span>Gameplay</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">How creatures swim in a one-block window is left to the look.</span></div>
+      <div class="score"><span>World integration</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><span class="why">Moving axolotls out of pens needs a test on an existing world.</span></div>
+      <div class="score"><span>Balance</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><span class="why">Cheap resources; Brass water use may want tuning.</span></div>
+      <div class="score"><span>Progression</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">Recipes and tier set.</span></div>
+      <div class="score"><span>Automation</span><div class="track"><div class="fill" style="width:100%"></div></div><b>100%</b><span class="why">Deployers cull and scoop, as on the pens.</span></div>
+      <div class="score"><span>Edge cases</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><span class="why">Bottle routing between pens and tanks needs a test.</span></div>
+    </div>
+  </section>
+
+  <footer>Full record: <code>design/specs/monster-cage-and-fish-tank.md</code> · Next: the look briefs for the cage and the tank</footer>
+</div>
+<script>
+(() => {
+  const STEPS = [8, 16, 24, 32, 64, 96, 128, 192, 256];
+  // base seconds at the reference speed, chow cost, SU per RPM; water per monster (Flooded); field (Netherite)
+  const MOBS = {
+    a1: { base: 20, ref: 64, chow: 1, su: 4 },
+    b1: { base: 10, ref: 64, chow: 1, su: 16 },
+    b2: { base: 10, ref: 64, chow: 2, su: 16 },
+    w2: { base: 10, ref: 64, chow: 2, su: 16, water: 250 },
+    b4: { base: 10, ref: 64, chow: 4, su: 16 },
+    n:  { base: 1200, ref: 256, chow: 64, su: 16, field: true, fixedInterval: true }
+  };
+  const fmt = n => Math.round(n).toLocaleString('en-GB');
+  const time = s => s >= 3600 ? (Math.round(s / 360) / 10) + ' h' : s >= 60 ? (Math.round(s / 6) / 10) + ' min' : (Math.round(s * 10) / 10) + ' s';
+  const mob = document.getElementById('mob'), rpm = document.getElementById('rpm'), ench = document.getElementById('ench');
+  const $ = id => document.getElementById(id);
+  function draw() {
+    const m = MOBS[mob.value], speed = STEPS[+rpm.value];
+    const interval = (m.fixedInterval ? m.base : m.base * m.chow) * m.ref / speed / (1 + 0.5 * +ench.value);
+    const perHour = 3600 / interval;
+    $('rpmv').textContent = speed + ' RPM';
+    $('o-int').textContent = time(interval);
+    $('o-hr').textContent = perHour < 10 ? perHour.toFixed(1) : fmt(perHour);
+    $('o-chow').textContent = fmt(perHour * m.chow);
+    $('o-su').textContent = fmt(m.su * speed) + ' SU';
+    if (m.field) {
+      $('o-extra').textContent = fmt(2048 + 1024 * speed / 256) + ' FE/t';
+      $('o-extra-l').textContent = 'field + farming FE';
+      $('cap').textContent = 'The field\'s 2,048 FE/t is flat: one Wither or three, any speed. Only the farming part scales with speed. Each Wither culled drops a Nether Star.';
+    } else if (m.water) {
+      $('o-extra').textContent = fmt(perHour * m.water) + ' mB/h';
+      $('o-extra-l').textContent = 'water';
+      $('cap').textContent = 'Water comes in through pipes or Fluid Lines. Short of water, a Flooded cage stops growing.';
+    } else {
+      $('o-extra').textContent = 'none';
+      $('o-extra-l').textContent = 'water or FE';
+      $('cap').textContent = 'The slider uses common Create speeds. Stress drops to zero when the cage is full or out of chow.';
+    }
+  }
+  mob.addEventListener('change', draw);
+  rpm.addEventListener('input', draw);
+  ench.addEventListener('change', draw);
+  draw();
+})();
+</script>

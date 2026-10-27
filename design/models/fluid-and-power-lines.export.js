@@ -17,7 +17,9 @@ const used = new Set();
 // A part list -> Java block model JSON (cutout, no AO). Faces of an element marked tint get tintindex 0; with tintBody
 // the line's own body (its copper or brass) becomes the near-white body texture, tinted in game by tier or dye.
 // A model with glass in it (an item, or a glass part) is translucent; the block parts keep their glass apart.
-function blockModel(cubes, particle, { tintBody = false } = {}) {
+// With tintRing the metal's ring shade on a hub or flange becomes the near-white joint body, tinted (tintindex 2) with the
+// ring shade, or on a dyed line the dye a shade darker; the thin coupling rings and collars keep the metal.
+function blockModel(cubes, particle, { tintBody = false, tintRing = false } = {}) {
   const vars = new Map();
   const v = (r) => {
     if (!vars.has(r)) {
@@ -34,13 +36,16 @@ function blockModel(cubes, particle, { tintBody = false } = {}) {
       let t = dir in c.faces ? c.faces[dir] : c.faces.all;
       if (!t) continue;
       const body = tintBody && (t === 'copper' || t === 'brass' || t === 'brass_twin');
+      const joint = tintRing && (t === 'copper_ring' || t === 'brass_ring');
       if (body) t = t === 'brass_twin' ? 'body_twin' : 'body';
+      if (joint) t = 'ring_body';
       if (!t.includes(':')) used.add(t);
       const raw = (c.uv && c.uv[dir]) || fitUv(dir, c.from, c.to);
       if (raw.some((n) => n < -0.001 || n > 16.001)) throw new Error(`${c.name} ${dir}: UV ${raw} is off the texture`);
       faces[dir] = { uv: r3(raw), texture: v(ref(t)) };
       if (c.frot && c.frot[dir]) faces[dir].rotation = c.frot[dir];
       if (c.tint || body) faces[dir].tintindex = 0;
+      if (joint) faces[dir].tintindex = 2;
     }
     const el = { name: c.name, from: r3(c.from), to: r3(c.to) };
     if (c.rot) {
@@ -76,18 +81,21 @@ function writeJson(rel, obj) {
 // ---------- block-model parts ----------
 const part = (name) => `${NS}:block/fluid_line/${name}`;
 for (const tier of TIERS) {
-  writeJson(`models/block/fluid_line/${tier}_hub.json`, blockModel(G.hub(tier + '_hub', 6, tier + '_ring'), tier, { tintBody: true }));
+  writeJson(`models/block/fluid_line/${tier}_hub.json`, blockModel(G.hub(tier + '_hub', 6, tier + '_ring'), tier, { tintBody: true, tintRing: true }));
   // arms: from the middle (no hub: the slot runs open into the middle) or from the hub's edge, to the north face
   writeJson(`models/block/fluid_line/${tier}_arm.json`, blockModel(solid(G.pipeArm('north', tier, { from: 8, openInner: true })), tier, { tintBody: true }));
-  writeJson(`models/block/fluid_line/${tier}_arm_short.json`, blockModel(solid(G.pipeArm('north', tier, { from: 11 })), tier, { tintBody: true }));
-  // risers: the same up the block, with no slot
-  writeJson(`models/block/fluid_line/${tier}_riser.json`, blockModel(G.pipeArm('up', tier, { from: 8 }), tier, { tintBody: true }));
-  writeJson(`models/block/fluid_line/${tier}_riser_short.json`, blockModel(G.pipeArm('up', tier, { from: 11 }), tier, { tintBody: true }));
-  writeJson(`models/block/fluid_line/${tier}_flange.json`, blockModel(G.flange('north', tier + '_ring'), tier, { tintBody: true }));
+  // (from the hub: a thin collar of the metal where it leaves it)
+  writeJson(`models/block/fluid_line/${tier}_arm_short.json`, blockModel(solid(G.pipeArm('north', tier, { from: 11, collar: true })), tier, { tintBody: true }));
+  // risers: the same up the block, their sight slot on the north and south sides
+  writeJson(`models/block/fluid_line/${tier}_riser.json`, blockModel(solid(G.pipeArm('up', tier, { from: 8, openInner: true })), tier, { tintBody: true }));
+  writeJson(`models/block/fluid_line/${tier}_riser_short.json`, blockModel(solid(G.pipeArm('up', tier, { from: 11, collar: true })), tier, { tintBody: true }));
+  writeJson(`models/block/fluid_line/${tier}_flange.json`, blockModel(G.flange('north', tier + '_ring'), tier, { tintBody: true, tintRing: true }));
 }
 // The glass over the sight slot, the same for both tiers: the long arm's and the short (hub) arm's
 writeJson('models/block/fluid_line/glass.json', blockModel(glassOf(G.pipeArm('north', 'copper', { from: 8, openInner: true })), 'copper'));
 writeJson('models/block/fluid_line/glass_short.json', blockModel(glassOf(G.pipeArm('north', 'copper', { from: 11 })), 'copper'));
+writeJson('models/block/fluid_line/glass_riser.json', blockModel(glassOf(G.pipeArm('up', 'copper', { from: 8, openInner: true })), 'copper'));
+writeJson('models/block/fluid_line/glass_riser_short.json', blockModel(glassOf(G.pipeArm('up', 'copper', { from: 11 })), 'copper'));
 // The Intake on the north side: a brass flange on the tank, a dark-steel collar, and its window on top, a glass cover
 // over the fluid the renderer draws (at y 11.25, over the collar's top at 11)
 const intakePart = [
@@ -132,10 +140,9 @@ for (const tier of TIERS) {
     const long = vertical ? tier + '_riser' : tier + '_arm', short = long + '_short';
     multipart.push({ when: { [side]: 'line|tank|intake', hub: 'false' }, apply: { model: part(long), ...t } });
     multipart.push({ when: { [side]: 'line|tank|intake', hub: 'true' }, apply: { model: part(short), ...t } });
-    if (!vertical) {
-      multipart.push({ when: { [side]: 'line|tank|intake', hub: 'false' }, apply: { model: part('glass'), ...t } });
-      multipart.push({ when: { [side]: 'line|tank|intake', hub: 'true' }, apply: { model: part('glass_short'), ...t } });
-    }
+    const glassPart = vertical ? 'glass_riser' : 'glass';
+    multipart.push({ when: { [side]: 'line|tank|intake', hub: 'false' }, apply: { model: part(glassPart), ...t } });
+    multipart.push({ when: { [side]: 'line|tank|intake', hub: 'true' }, apply: { model: part(glassPart + '_short'), ...t } });
     multipart.push({ when: { [side]: 'tank' }, apply: { model: part(tier + '_flange'), ...turn(side) } });
     multipart.push({ when: { [side]: 'intake' }, apply: { model: part('intake'), ...turn(side) } });
     multipart.push({ when: { [side]: 'intake' }, apply: { model: part('intake_glass'), ...turn(side) } });

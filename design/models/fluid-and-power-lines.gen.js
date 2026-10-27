@@ -51,6 +51,8 @@ T.paint('copper', flat(CU.field, CU.mid, 1));
 T.paint('body', flat('#ffffff', '#eeeeee', 1));
 T.paint('body_twin', (x, y) => ((x + y) % 4 === 0 ? '#e0e0e0' : '#ffffff'));
 T.paint('copper_ring', flat(CU.ring, CU.ringLo, 2, 0.2));
+// the game's hubs and flanges: near-white, tinted in game with the metal's ring shade, or the dye a shade darker
+T.paint('ring_body', flat('#ffffff', '#efebe4', 2, 0.2));
 T.paint('brass', flat(BR.field, BR.lo, 3));
 T.paint('brass_ring', flat(BR.ring, BR.ringLo, 4, 0.2));
 T.paint('steel', flat(STEEL[1], STEEL[2], 5, 0.1));
@@ -69,6 +71,8 @@ T.paint('glass', (x, y) => {
 // the brass twin flex: two strands with a twist mark every 4 px
 T.paint('brass_twin', (x, y) => ((x + y) % 4 === 0 ? BR.lo : BR.field));
 for (const [k, v] of Object.entries(DYES)) T.paint('dye_' + k, flat(v, darker(v, 0.88), 9 + k.length));
+// a dyed pipe's hubs, caps and flanges: the dye a shade darker, as the bare pipe's are its metal a shade darker
+for (const [k, v] of Object.entries(DYES)) T.paint('dye_' + k + '_ring', flat(darker(v, 0.84), darker(v, 0.76), 20 + k.length));
 // The gauge: a 6 px dial at u 5-11, v 0-6, brass rim, mid-grey face, five dark ticks
 T.paint('gauge', (x, y) => {
   const dx = x + 0.5 - 8, dy = y + 0.5 - 3, r = Math.hypot(dx, dy);
@@ -143,12 +147,15 @@ const AX = { east: ['x', 1], west: ['x', -1], up: ['y', 1], down: ['y', -1], sou
 // One arm of a pipe, from the middle of the block (or the hub's edge) out to the face, with its half coupling ring
 // at the face. A slot only on horizontal arms: a recessed groove along the top with the fluid strip in it.
 // openInner: the slot runs right into the middle of the block (two such arms make one straight piece with a single slot)
-function pipeArm(dir, tier, { from = 8, fluid = null, slot = true, ring = true, openInner = false } = {}) {
+// collar: a thin band of the metal where the arm leaves a hub (the corners' accent on a dyed pipe)
+function pipeArm(dir, tier, { from = 8, fluid = null, slot = true, ring = true, openInner = false, collar = false } = {}) {
   const [axis, s] = AX[dir];
   const body = tier, ringT = tier + '_ring';
   const span = s > 0 ? [from, 16] : [0, 16 - from];
   const out = [];
   const name = `${tier}_${dir}`;
+  if (collar) out.push(...rod(name + '_collar', axis, s > 0 ? from : 16 - from - 0.5, s > 0 ? from + 0.5 : 16 - from, 5, ringT,
+    { capLo: s < 0, capHi: s > 0 }));
   const horiz = axis !== 'y' && slot;
   // the half ring at the joint (0.5 px each side makes one 1 px ring between two pieces)
   // a subtle coupling: half a pixel proud of the pipe, a quarter pixel each side of the joint
@@ -160,6 +167,26 @@ function pipeArm(dir, tier, { from = 8, fluid = null, slot = true, ring = true, 
   out.push(C(name + '_a', fa, ta, { all: body, [END[axis][0]]: null, [END[axis][1]]: null }));
   // the corner-filling square that makes the 4 px pipe read round
   { const [fc, tc] = ab(axis, b0, b1, 6.5, 9.5, 6.5, 9.5); out.push(C(name + '_c', fc, tc, { all: body, [END[axis][0]]: null, [END[axis][1]]: null })); }
+  if (axis === 'y' && slot) {
+    // a vertical pipe: the same sight slot on two opposite sides, north and south, a sight glass through the pipe
+    const g0 = openInner && s > 0 ? b0 : b0 + 1.5, g1 = openInner && s < 0 ? b1 : b1 - 1.5, ends = { down: null, up: null };
+    if (g0 > b0) out.push(C(name + '_b0', [7, b0, 6], [9, g0, 10], { all: body, ...ends }));
+    if (g1 < b1) out.push(C(name + '_b1', [7, g1, 6], [9, b1, 10], { all: body, ...ends }));
+    out.push(C(name + '_bm', [7, g0, 6.75], [9, g1, 9.25], { all: body, north: null, south: null, ...ends }));
+    for (const [side, z0, z1, e0, e1, gl0, gl1] of [['north', 6.25, 6.75, 6, 6.5, 5.75, 6.5], ['south', 9.25, 9.75, 9.5, 10, 9.5, 10.25]]) {
+      out.push(C(name + '_fluid_' + side, [7.25, g0, z0], [8.75, g1, z1], { [side]: 'slot_idle', all: null }, { uv: { [side]: [7, 0, 8.5, 16] } }));
+      for (const [n, x0, x1] of [['_edge_a', 7, 7.25], ['_edge_b', 8.75, 9]])
+        out.push(C(name + n + '_' + side, [x0, g0, e0], [x1, g1, e1], { all: 'slot_idle', ...ends, [side === 'north' ? 'south' : 'north']: null }));
+      if (fluid) {
+        const zf = side === 'north' ? 6 : 10;
+        out.push(C(name + '_flow_' + side, [7.25, g0, zf], [8.75, g1, zf], { [side]: 'flow_' + fluid, all: null },
+          { uv: { [side]: [7, 0, 8.5, 16] }, frot: { [side]: 90 } }));
+      }
+      out.push(glass(C(name + '_glass_' + side, [7, g0, gl0], [9, g1, gl1], { [side]: 'glass', down: g0 > b0 ? 'glass' : null, up: g1 < b1 ? 'glass' : null,
+        all: null })));
+    }
+    return out;
+  }
   if (!horiz) {
     const [fb, tb] = ab(axis, b0, b1, ...(axis === 'x' ? [6, 10, 7, 9] : axis === 'z' ? [7, 9, 6, 10] : [7, 9, 6, 10]));
     out.push(C(name + '_b', fb, tb, { all: body, [END[axis][0]]: null, [END[axis][1]]: null }));
@@ -206,7 +233,7 @@ function straight(axis, tier, o = {}) {
 function junction(dirs, tier, o = {}) {
   const out = hub(tier + '_hub', 6, tier + '_ring');
   // an arm starts at the hub's edge: 11 from its own far side either way
-  for (const d of dirs) out.push(...pipeArm(d, tier, { ...o, from: 11 }));
+  for (const d of dirs) out.push(...pipeArm(d, tier, { ...o, from: 11, collar: true }));
   return out;
 }
 // The flange at a container: an 8 px plate 1 px thick on the face (dir: the side the container is on)
@@ -550,6 +577,34 @@ for (const [dz, ws] of [[0, wireSpec('copper', null)], [2, wireSpec('copper', 'r
   P('machine_lead2_2', [floorRun('x', 0, 16, ws, 'wire_lead')], 27, 0, 2);
 }
 outliner.push(group('dyes_and_encasing', [8, 0, 8], DROW, dyeKids));
+
+// Dyed joins: the same run of pipe (a T with a branch up a bend to a cap, a flange into a basin) bare, then dyed. A dyed
+// pipe's hubs, caps and flanges take the dye a shade darker; the thin coupling rings at the block joints stay the metal
+function joinRow(tier, dye, row, label) {
+  const swap = (list) => !dye ? list : list.map((c) => {
+    const joint = /_hub_|_endcap_|^flange_/.test(c.name);
+    return { ...c, faces: Object.fromEntries(Object.entries(c.faces).map(([k, v]) => [k, v === tier ? 'dye_' + dye : joint && v === tier + '_ring' ? 'dye_' + dye + '_ring' : v])) };
+  });
+  const kids = [];
+  kids.push(stand(label + '_tank', 'create:block/fluid_tank', 0, 0, 0, row, 'create:block/fluid_tank_top'));
+  kids.push(blockOf(label + '_start', swap([...pipeArm('west', tier, { from: 0.25, fluid: 'water', ring: false }),
+    ...rod(tier + '_east_ring', 'x', 15.75, 16, 5, tier + '_ring', { capLo: true }), ...flange('west', tier + '_ring')]), 1, 0, 0, row));
+  kids.push(blockOf(label + '_straight', swap(straight('x', tier, { fluid: 'water' })), 2, 0, 0, row));
+  kids.push(blockOf(label + '_tee', swap(junction(['west', 'east', 'north'], tier, { fluid: 'water' })), 3, 0, 0, row));
+  kids.push(blockOf(label + '_bend', swap(junction(['south', 'up'], tier, {})), 3, 0, -1, row));
+  kids.push(blockOf(label + '_riser', swap(straight('y', tier, {})), 3, 1, -1, row));
+  kids.push(blockOf(label + '_cap', swap([...pipeArm('down', tier, { from: 10.5 }), ...hub(tier + '_endcap', 5, tier + '_ring')]), 3, 2, -1, row));
+  kids.push(blockOf(label + '_corner', swap(junction(['west', 'south'], tier, { fluid: 'water' })), 4, 0, 0, row));
+  kids.push(blockOf(label + '_down', swap(straight('z', tier, { fluid: 'water' })), 4, 0, 1, row));
+  kids.push(blockOf(label + '_end', swap([...pipeArm('south', tier, { from: 0.25, fluid: 'water', ring: false }),
+    ...rod(tier + '_north_ring', 'z', 0, 0.25, 5, tier + '_ring', { capHi: true }), ...flange('south', tier + '_ring')]), 4, 0, 2, row));
+  kids.push(stand(label + '_basin', 'create:block/basin', 4, 0, 3, row));
+  outliner.push(group(label, [8, 0, 8], row, kids));
+}
+joinRow('copper', null, [0, 0, -112], 'joins_bare_copper');
+joinRow('copper', 'red', [112, 0, -112], 'joins_red_copper');
+joinRow('brass', 'blue', [224, 0, -112], 'joins_blue_brass');
+joinRow('brass', null, [336, 0, -112], 'joins_bare_brass');
 
 // Wire scene (copper, undyed): a machine, along the floor, up and along a wall, down, a junction, a Breaker, a 3-high pole
 // with two branches; spans to a 2-high pole with four; down over a step (inside and outside corners) into a machine
