@@ -8,6 +8,10 @@
     {
       "id": "comedymonkeysaddons:trade_bot",
       "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:netherite_monster_cage",
+      "required": false
     }
   ]
 }

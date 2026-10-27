@@ -1,0 +1,64 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:translucent",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/monster_cage_water",
+    "monster_cage_water": "comedymonkeysaddons:block/monster_cage_water",
+    "monster_cage_water_top": "comedymonkeysaddons:block/monster_cage_water_top"
+  },
+  "elements": [
+    {
+      "name": "water",
+      "from": [
+        2.05,
+        0,
+        0.75
+      ],
+      "to": [
+        13.95,
+        1,
+        13.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#monster_cage_water"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#monster_cage_water"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#monster_cage_water"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#monster_cage_water_top"
+        }
+      }
+    }
+  ]
+}

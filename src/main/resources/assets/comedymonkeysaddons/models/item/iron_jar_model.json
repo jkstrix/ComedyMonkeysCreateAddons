@@ -1,0 +1,753 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:translucent",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:item/capture_bottle_glass",
+    "capture_bottle_glass": "comedymonkeysaddons:item/capture_bottle_glass",
+    "jar_iron": "comedymonkeysaddons:item/jar_iron",
+    "jar_iron_lid": "comedymonkeysaddons:item/jar_iron_lid"
+  },
+  "elements": [
+    {
+      "name": "glass",
+      "from": [
+        3.5,
+        0,
+        3.5
+      ],
+      "to": [
+        12.5,
+        8,
+        12.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#capture_bottle_glass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#capture_bottle_glass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#capture_bottle_glass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#capture_bottle_glass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#capture_bottle_glass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#capture_bottle_glass"
+        }
+      }
+    },
+    {
+      "name": "band_0",
+      "from": [
+        3.25,
+        1.5,
+        3.25
+      ],
+      "to": [
+        12.75,
+        2.25,
+        12.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.25,
+            13.75,
+            12.75,
+            14.5
+          ],
+          "texture": "#jar_iron"
+        },
+        "east": {
+          "uv": [
+            3.25,
+            13.75,
+            12.75,
+            14.5
+          ],
+          "texture": "#jar_iron"
+        },
+        "south": {
+          "uv": [
+            3.25,
+            13.75,
+            12.75,
+            14.5
+          ],
+          "texture": "#jar_iron"
+        },
+        "west": {
+          "uv": [
+            3.25,
+            13.75,
+            12.75,
+            14.5
+          ],
+          "texture": "#jar_iron"
+        }
+      }
+    },
+    {
+      "name": "band_1",
+      "from": [
+        3.25,
+        5.25,
+        3.25
+      ],
+      "to": [
+        12.75,
+        6,
+        12.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.25,
+            10,
+            12.75,
+            10.75
+          ],
+          "texture": "#jar_iron"
+        },
+        "east": {
+          "uv": [
+            3.25,
+            10,
+            12.75,
+            10.75
+          ],
+          "texture": "#jar_iron"
+        },
+        "south": {
+          "uv": [
+            3.25,
+            10,
+            12.75,
+            10.75
+          ],
+          "texture": "#jar_iron"
+        },
+        "west": {
+          "uv": [
+            3.25,
+            10,
+            12.75,
+            10.75
+          ],
+          "texture": "#jar_iron"
+        }
+      }
+    },
+    {
+      "name": "neck",
+      "from": [
+        5,
+        8,
+        5
+      ],
+      "to": [
+        11,
+        8.75,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            7.25,
+            11,
+            8
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "east": {
+          "uv": [
+            5,
+            7.25,
+            11,
+            8
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "south": {
+          "uv": [
+            5,
+            7.25,
+            11,
+            8
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "west": {
+          "uv": [
+            5,
+            7.25,
+            11,
+            8
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "up": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#jar_iron_lid"
+        }
+      }
+    },
+    {
+      "name": "lid",
+      "from": [
+        4.25,
+        8.75,
+        4.25
+      ],
+      "to": [
+        11.75,
+        10.25,
+        11.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.25,
+            5.75,
+            11.75,
+            7.25
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            5.75,
+            11.75,
+            7.25
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "south": {
+          "uv": [
+            4.25,
+            5.75,
+            11.75,
+            7.25
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "west": {
+          "uv": [
+            4.25,
+            5.75,
+            11.75,
+            7.25
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "up": {
+          "uv": [
+            4.25,
+            4.25,
+            11.75,
+            11.75
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "down": {
+          "uv": [
+            4.25,
+            4.25,
+            11.75,
+            11.75
+          ],
+          "texture": "#jar_iron_lid"
+        }
+      }
+    },
+    {
+      "name": "lid_knob",
+      "from": [
+        7,
+        10.25,
+        7
+      ],
+      "to": [
+        9,
+        10.75,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            5.25,
+            9,
+            5.75
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "east": {
+          "uv": [
+            7,
+            5.25,
+            9,
+            5.75
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "south": {
+          "uv": [
+            7,
+            5.25,
+            9,
+            5.75
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "west": {
+          "uv": [
+            7,
+            5.25,
+            9,
+            5.75
+          ],
+          "texture": "#jar_iron_lid"
+        },
+        "up": {
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "texture": "#jar_iron_lid"
+        }
+      }
+    },
+    {
+      "name": "bail_w",
+      "from": [
+        3,
+        6,
+        7.75
+      ],
+      "to": [
+        3.25,
+        10.6,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.75,
+            5.4,
+            13,
+            10
+          ],
+          "texture": "#jar_iron"
+        },
+        "east": {
+          "uv": [
+            7.75,
+            5.4,
+            8.25,
+            10
+          ],
+          "texture": "#jar_iron"
+        },
+        "south": {
+          "uv": [
+            3,
+            5.4,
+            3.25,
+            10
+          ],
+          "texture": "#jar_iron"
+        },
+        "west": {
+          "uv": [
+            7.75,
+            5.4,
+            8.25,
+            10
+          ],
+          "texture": "#jar_iron"
+        },
+        "up": {
+          "uv": [
+            3,
+            7.75,
+            3.25,
+            8.25
+          ],
+          "texture": "#jar_iron"
+        },
+        "down": {
+          "uv": [
+            3,
+            7.75,
+            3.25,
+            8.25
+          ],
+          "texture": "#jar_iron"
+        }
+      }
+    },
+    {
+      "name": "bail_e",
+      "from": [
+        12.75,
+        6,
+        7.75
+      ],
+      "to": [
+        13,
+        10.6,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            5.4,
+            3.25,
+            10
+          ],
+          "texture": "#jar_iron"
+        },
+        "east": {
+          "uv": [
+            7.75,
+            5.4,
+            8.25,
+            10
+          ],
+          "texture": "#jar_iron"
+        },
+        "south": {
+          "uv": [
+            12.75,
+            5.4,
+            13,
+            10
+          ],
+          "texture": "#jar_iron"
+        },
+        "west": {
+          "uv": [
+            7.75,
+            5.4,
+            8.25,
+            10
+          ],
+          "texture": "#jar_iron"
+        },
+        "up": {
+          "uv": [
+            12.75,
+            7.75,
+            13,
+            8.25
+          ],
+          "texture": "#jar_iron"
+        },
+        "down": {
+          "uv": [
+            12.75,
+            7.75,
+            13,
+            8.25
+          ],
+          "texture": "#jar_iron"
+        }
+      }
+    },
+    {
+      "name": "bail_top",
+      "from": [
+        3.25,
+        10.6,
+        7.75
+      ],
+      "to": [
+        12.75,
+        10.85,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.25,
+            5.15,
+            12.75,
+            5.4
+          ],
+          "texture": "#jar_iron"
+        },
+        "south": {
+          "uv": [
+            3.25,
+            5.15,
+            12.75,
+            5.4
+          ],
+          "texture": "#jar_iron"
+        },
+        "up": {
+          "uv": [
+            3.25,
+            7.75,
+            12.75,
+            8.25
+          ],
+          "texture": "#jar_iron"
+        },
+        "down": {
+          "uv": [
+            3.25,
+            7.75,
+            12.75,
+            8.25
+          ],
+          "texture": "#jar_iron"
+        }
+      }
+    },
+    {
+      "name": "clamp",
+      "from": [
+        12.75,
+        8.6,
+        7.4
+      ],
+      "to": [
+        13.25,
+        9.6,
+        8.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.75,
+            6.4,
+            3.25,
+            7.4
+          ],
+          "texture": "#jar_iron"
+        },
+        "east": {
+          "uv": [
+            7.4,
+            6.4,
+            8.6,
+            7.4
+          ],
+          "texture": "#jar_iron"
+        },
+        "south": {
+          "uv": [
+            12.75,
+            6.4,
+            13.25,
+            7.4
+          ],
+          "texture": "#jar_iron"
+        },
+        "west": {
+          "uv": [
+            7.4,
+            6.4,
+            8.6,
+            7.4
+          ],
+          "texture": "#jar_iron"
+        },
+        "up": {
+          "uv": [
+            12.75,
+            7.4,
+            13.25,
+            8.6
+          ],
+          "texture": "#jar_iron"
+        },
+        "down": {
+          "uv": [
+            12.75,
+            7.4,
+            13.25,
+            8.6
+          ],
+          "texture": "#jar_iron"
+        }
+      }
+    }
+  ],
+  "gui_light": "side",
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        1.5,
+        0
+      ],
+      "scale": [
+        0.95,
+        0.95,
+        0.95
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    "head": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        14,
+        0
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    }
+  }
+}

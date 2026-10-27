@@ -52,6 +52,14 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.ANIMAL_PEN.get());
 				output.accept(ModItems.BRASS_ANIMAL_PEN.get());
 				output.accept(ModItems.CAPTURE_BOTTLE.get());
+				output.accept(ModItems.MONSTER_CAGE.get());
+				output.accept(ModItems.BRASS_MONSTER_CAGE.get());
+				output.accept(ModItems.FLOODED_MONSTER_CAGE.get());
+				output.accept(ModItems.BRASS_FLOODED_MONSTER_CAGE.get());
+				output.accept(ModItems.NETHERITE_MONSTER_CAGE.get());
+				output.accept(ModItems.IRON_JAR.get());
+				output.accept(ModItems.NETHERITE_JAR.get());
+				output.accept(ModItems.MONSTER_CHOW.get());
 				output.accept(ModItems.CUCKOO_CLOCK.get());
 				output.accept(ModItems.TRADE_BOT.get());
 				output.accept(ModItems.STRING_TANGLER.get());

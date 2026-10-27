@@ -1,0 +1,287 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/netherite_monster_cage_tip_lit",
+    "netherite_monster_cage_tip_lit": "comedymonkeysaddons:block/netherite_monster_cage_tip_lit"
+  },
+  "elements": [
+    {
+      "name": "tip_lit_0",
+      "from": [
+        2.1999999999999997,
+        5.5,
+        1.65
+      ],
+      "to": [
+        2.8,
+        5.9,
+        2.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.2,
+            10.1,
+            13.8,
+            10.5
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "east": {
+          "uv": [
+            13.75,
+            10.1,
+            14.35,
+            10.5
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "south": {
+          "uv": [
+            2.2,
+            10.1,
+            2.8,
+            10.5
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "west": {
+          "uv": [
+            1.65,
+            10.1,
+            2.25,
+            10.5
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "up": {
+          "uv": [
+            2.2,
+            1.65,
+            2.8,
+            2.25
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "down": {
+          "uv": [
+            2.2,
+            13.75,
+            2.8,
+            14.35
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        }
+      }
+    },
+    {
+      "name": "tip_lit_1",
+      "from": [
+        13.200000000000001,
+        5.5,
+        1.65
+      ],
+      "to": [
+        13.8,
+        5.9,
+        2.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.2,
+            10.1,
+            2.8,
+            10.5
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "east": {
+          "uv": [
+            13.75,
+            10.1,
+            14.35,
+            10.5
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "south": {
+          "uv": [
+            13.2,
+            10.1,
+            13.8,
+            10.5
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "west": {
+          "uv": [
+            1.65,
+            10.1,
+            2.25,
+            10.5
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "up": {
+          "uv": [
+            13.2,
+            1.65,
+            13.8,
+            2.25
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "down": {
+          "uv": [
+            13.2,
+            13.75,
+            13.8,
+            14.35
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        }
+      }
+    },
+    {
+      "name": "tip_lit_2",
+      "from": [
+        2.1999999999999997,
+        10.6,
+        1.65
+      ],
+      "to": [
+        2.8,
+        11,
+        2.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.2,
+            5,
+            13.8,
+            5.4
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "east": {
+          "uv": [
+            13.75,
+            5,
+            14.35,
+            5.4
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "south": {
+          "uv": [
+            2.2,
+            5,
+            2.8,
+            5.4
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "west": {
+          "uv": [
+            1.65,
+            5,
+            2.25,
+            5.4
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "up": {
+          "uv": [
+            2.2,
+            1.65,
+            2.8,
+            2.25
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "down": {
+          "uv": [
+            2.2,
+            13.75,
+            2.8,
+            14.35
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        }
+      }
+    },
+    {
+      "name": "tip_lit_3",
+      "from": [
+        13.200000000000001,
+        10.6,
+        1.65
+      ],
+      "to": [
+        13.8,
+        11,
+        2.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.2,
+            5,
+            2.8,
+            5.4
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "east": {
+          "uv": [
+            13.75,
+            5,
+            14.35,
+            5.4
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "south": {
+          "uv": [
+            13.2,
+            5,
+            13.8,
+            5.4
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "west": {
+          "uv": [
+            1.65,
+            5,
+            2.25,
+            5.4
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "up": {
+          "uv": [
+            13.2,
+            1.65,
+            13.8,
+            2.25
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        },
+        "down": {
+          "uv": [
+            13.2,
+            13.75,
+            13.8,
+            14.35
+          ],
+          "texture": "#netherite_monster_cage_tip_lit"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "pattern": [
+    " SBS ",
+    "SEHES",
+    "BHPHB",
+    "SEHES",
+    " SBS "
+  ],
+  "key": {
+    "S": {
+      "item": "create:brass_sheet"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "H": {
+      "item": "minecraft:iron_bars"
+    },
+    "P": {
+      "item": "comedymonkeysaddons:flooded_monster_cage"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:brass_flooded_monster_cage"
+  },
+  "show_notification": true
+}

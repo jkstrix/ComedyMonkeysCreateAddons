@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/monster_cage"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/monster_cage",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/monster_cage",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/monster_cage",
+      "y": 270
+    }
+  }
+}

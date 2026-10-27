@@ -73,6 +73,23 @@ public final class ModSounds {
 		return get(CRUCIBLE, id, "Pressure Crucible");
 	}
 
+	/**
+	 * The Monster Cages' and the Fish Tanks' sounds, which {@code design/sound/monster-cage/export-game.js} writes. Their
+	 * vanilla sounds (the monsters' own, the Wither, the trident, the bucket) are played as Minecraft's own events.
+	 */
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> CAGE = registerPrefixed("monster_cage.");
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> TANK = registerPrefixed("fish_tank.");
+
+	/** One of the Monster Cages' sounds; throws for an unknown id. */
+	public static SoundEvent cage(String id) {
+		return get(CAGE, id, "Monster Cage");
+	}
+
+	/** One of the Fish Tanks' sounds; throws for an unknown id. */
+	public static SoundEvent tank(String id) {
+		return get(TANK, id, "Fish Tank");
+	}
+
 	private static SoundEvent get(Map<String, DeferredHolder<SoundEvent, SoundEvent>> sounds, String id, String block) {
 		DeferredHolder<SoundEvent, SoundEvent> holder = sounds.get(id);
 		if (holder == null)

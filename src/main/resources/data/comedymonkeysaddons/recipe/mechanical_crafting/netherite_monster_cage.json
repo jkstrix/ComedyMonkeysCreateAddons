@@ -1,0 +1,33 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "pattern": [
+    "N O N",
+    " PFP ",
+    "O C O",
+    " PFP ",
+    "N O N"
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "F": {
+      "item": "comedymonkeysaddons:fe_coil"
+    },
+    "C": {
+      "item": "comedymonkeysaddons:brass_monster_cage"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:netherite_monster_cage"
+  },
+  "show_notification": true
+}

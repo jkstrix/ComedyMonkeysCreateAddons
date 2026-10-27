@@ -10,6 +10,8 @@ import com.comedymonkey.createaddons.content.crucible.PressureCrucibleBlock;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineBlock;
 import com.comedymonkey.createaddons.content.harvester.AutoHarvesterBlock;
 import com.comedymonkey.createaddons.content.pen.AnimalPenBlock;
+import com.comedymonkey.createaddons.content.cage.CageTier;
+import com.comedymonkey.createaddons.content.cage.MonsterCageBlock;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlock;
 import com.comedymonkey.createaddons.content.electric.GeothermalControllerBlock;
 import com.comedymonkey.createaddons.content.electric.GeothermalPartBlock;
@@ -160,6 +162,23 @@ public final class ModBlocks {
 	/** Holds four times as many animals. */
 	public static final DeferredBlock<AnimalPenBlock> BRASS_ANIMAL_PEN = BLOCKS.register("brass_animal_pen",
 		() -> new AnimalPenBlock(BlockBehaviour.Properties.ofFullCopy(BRASS_COBBLE_GENERATOR.get()).lightLevel(state -> 0), true));
+
+	/** Keeps one jarred monster and brings in more of it, each eating Monster Chow. */
+	public static final DeferredBlock<MonsterCageBlock> MONSTER_CAGE = BLOCKS.register("monster_cage",
+		() -> new MonsterCageBlock(BlockBehaviour.Properties.ofFullCopy(AUTO_HARVESTER.get()), CageTier.ANDESITE, false));
+	public static final DeferredBlock<MonsterCageBlock> BRASS_MONSTER_CAGE = BLOCKS.register("brass_monster_cage",
+		() -> new MonsterCageBlock(BlockBehaviour.Properties.ofFullCopy(BRASS_COBBLE_GENERATOR.get()).lightLevel(state -> 0),
+			CageTier.BRASS, false));
+	/** For drowned and guardians: water piped in. */
+	public static final DeferredBlock<MonsterCageBlock> FLOODED_MONSTER_CAGE = BLOCKS.register("flooded_monster_cage",
+		() -> new MonsterCageBlock(BlockBehaviour.Properties.ofFullCopy(AUTO_HARVESTER.get()), CageTier.ANDESITE, true));
+	public static final DeferredBlock<MonsterCageBlock> BRASS_FLOODED_MONSTER_CAGE = BLOCKS.register("brass_flooded_monster_cage",
+		() -> new MonsterCageBlock(BlockBehaviour.Properties.ofFullCopy(BRASS_COBBLE_GENERATOR.get()).lightLevel(state -> 0),
+			CageTier.BRASS, true));
+	/** Withers in a containment field on FE; blast-proof. */
+	public static final DeferredBlock<MonsterCageBlock> NETHERITE_MONSTER_CAGE = BLOCKS.register("netherite_monster_cage",
+		() -> new MonsterCageBlock(BlockBehaviour.Properties.ofFullCopy(BRASS_COBBLE_GENERATOR.get()).lightLevel(state -> 0)
+			.strength(5f, 1200f).sound(SoundType.NETHERITE_BLOCK), CageTier.NETHERITE, false));
 
 	/** A wall clock two blocks tall that sets nearby villagers' restock times to 8:00 and 12:00, at a fixed stress. */
 	public static final DeferredBlock<CuckooClockBlock> CUCKOO_CLOCK = BLOCKS.register("cuckoo_clock",

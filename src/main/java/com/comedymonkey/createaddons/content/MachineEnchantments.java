@@ -31,6 +31,8 @@ import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 public final class MachineEnchantments {
 	public static final ResourceKey<Enchantment> BOUNTIFUL = key("bountiful");
 	public static final ResourceKey<Enchantment> FRUITFUL = key("fruitful");
+	/** The Monster Cages: monsters arrive faster. */
+	public static final ResourceKey<Enchantment> MONSTROUS = key("monstrous");
 	public static final int MAX_LEVEL = 3;
 	/** Librarian level the extra trades are unlocked at (2 = Apprentice). */
 	private static final int TRADE_LEVEL = 2;
@@ -58,7 +60,7 @@ public final class MachineEnchantments {
 	public static void addTrades(VillagerTradesEvent event) {
 		if (event.getType() != VillagerProfession.LIBRARIAN)
 			return;
-		for (ResourceKey<Enchantment> key : List.of(BOUNTIFUL, FRUITFUL))
+		for (ResourceKey<Enchantment> key : List.of(BOUNTIFUL, FRUITFUL, MONSTROUS))
 			event.getTrades().get(TRADE_LEVEL).add((trader, random) -> {
 				Optional<Holder.Reference<Enchantment>> enchantment =
 					trader.level().registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(key);

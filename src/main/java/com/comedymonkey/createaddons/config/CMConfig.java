@@ -78,6 +78,16 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue penWoolSeconds;
 		public final ModConfigSpec.IntValue penEggSeconds;
 		public final ModConfigSpec.IntValue penMilkPerMinute;
+		public final ModConfigSpec.IntValue andesiteCageCapacity, brassCageCapacity, netheriteCageCapacity;
+		public final ModConfigSpec.IntValue andesiteCageSeconds, brassCageSeconds, witherCageSeconds;
+		public final ModConfigSpec.DoubleValue andesiteCageStress, brassCageStress, netheriteCageStress;
+		public final ModConfigSpec.IntValue cageChowCommon, cageChowNether, cageChowRare, cageChowWither;
+		public final ModConfigSpec.DoubleValue cageMonstrousBonus;
+		public final ModConfigSpec.IntValue cageWaterPerMonster, floodedCageTank, brassFloodedCageTank;
+		public final ModConfigSpec.IntValue cageFieldFe, cageFarmFe, cageFeBuffer;
+		public final ModConfigSpec.IntValue cageWarningSeconds, cageEscapeSeconds, cageAlarmRange;
+		public final ModConfigSpec.BooleanValue cageEscapes;
+		public final ModConfigSpec.DoubleValue cageGrumbleVolume;
 		public final ModConfigSpec.DoubleValue tanglerStressImpact;
 		public final ModConfigSpec.DoubleValue infuserStressImpact;
 
@@ -280,6 +290,61 @@ public final class CMConfig {
 				.comment("Milk each cow or goat gives a minute, in millibuckets.")
 				.translation("comedymonkeysaddons.configuration.penMilkPerMinute")
 				.defineInRange("milkPerMinute", 125, 0, 100000);
+			builder.pop();
+
+			builder.comment("Monster Cages: hold one captured monster and bring in more of it, each eating Monster Chow. Faster",
+					"shafts bring them sooner (and eat chow sooner); the stress is per RPM. The Netherite cage holds Withers on FE.")
+				.push("monsterCage");
+			andesiteCageCapacity = builder.comment("Monsters the Andesite (and Flooded Andesite) Monster Cage holds.")
+				.translation("comedymonkeysaddons.configuration.andesiteCageCapacity").defineInRange("andesiteCapacity", 64, 1, 4096);
+			brassCageCapacity = builder.comment("Monsters the Brass (and Flooded Brass) Monster Cage holds.")
+				.translation("comedymonkeysaddons.configuration.brassCageCapacity").defineInRange("brassCapacity", 256, 1, 4096);
+			netheriteCageCapacity = builder.comment("Withers the Netherite Monster Cage holds.")
+				.translation("comedymonkeysaddons.configuration.netheriteCageCapacity").defineInRange("netheriteCapacity", 3, 1, 64);
+			andesiteCageSeconds = builder.comment("Seconds per new monster in the Andesite cages at 64 RPM, times the monster's chow cost.")
+				.translation("comedymonkeysaddons.configuration.andesiteCageSeconds").defineInRange("andesiteSeconds", 20, 1, 36000);
+			brassCageSeconds = builder.comment("Seconds per new monster in the Brass cages at 64 RPM, times the monster's chow cost.")
+				.translation("comedymonkeysaddons.configuration.brassCageSeconds").defineInRange("brassSeconds", 10, 1, 36000);
+			witherCageSeconds = builder.comment("Seconds per new Wither in the Netherite cage at 256 RPM.")
+				.translation("comedymonkeysaddons.configuration.witherCageSeconds").defineInRange("witherSeconds", 1200, 1, 360000);
+			andesiteCageStress = builder.comment("Stress per RPM of the Andesite cages while they work (at 64 RPM, 256 SU).")
+				.translation("comedymonkeysaddons.configuration.andesiteCageStress").defineInRange("andesiteStressPerRpm", 4.0, 0.0, 1024.0);
+			brassCageStress = builder.comment("Stress per RPM of the Brass cages while they work.")
+				.translation("comedymonkeysaddons.configuration.brassCageStress").defineInRange("brassStressPerRpm", 16.0, 0.0, 1024.0);
+			netheriteCageStress = builder.comment("Stress per RPM of the Netherite cage while it works.")
+				.translation("comedymonkeysaddons.configuration.netheriteCageStress").defineInRange("netheriteStressPerRpm", 16.0, 0.0, 1024.0);
+			cageChowCommon = builder.comment("Monster Chow for each new common Overworld monster (tag monster_cage/andesite).")
+				.translation("comedymonkeysaddons.configuration.cageChowCommon").defineInRange("chowCommon", 1, 0, 64);
+			cageChowNether = builder.comment("Monster Chow for each new Nether, End, ocean or pillager-type monster, and modded ones.")
+				.translation("comedymonkeysaddons.configuration.cageChowNether").defineInRange("chowNether", 2, 0, 64);
+			cageChowRare = builder.comment("Monster Chow for each new rare monster (tag monster_cage/rare: evoker, ravager, shulker...).")
+				.translation("comedymonkeysaddons.configuration.cageChowRare").defineInRange("chowRare", 4, 0, 64);
+			cageChowWither = builder.comment("Monster Chow for each new Wither.")
+				.translation("comedymonkeysaddons.configuration.cageChowWither").defineInRange("chowWither", 64, 0, 512);
+			cageMonstrousBonus = builder.comment("Extra speed per level of Monstrous: 0.5 makes I 1.5x, II 2x, III 2.5x as fast.")
+				.translation("comedymonkeysaddons.configuration.cageMonstrousBonus").defineInRange("monstrousBonusPerLevel", 0.5, 0.0, 10.0);
+			cageWaterPerMonster = builder.comment("Water each new monster in a Flooded cage uses, in millibuckets.")
+				.translation("comedymonkeysaddons.configuration.cageWaterPerMonster").defineInRange("waterPerMonster", 250, 0, 16000);
+			floodedCageTank = builder.comment("Water the Flooded Andesite cage's tank holds, in millibuckets.")
+				.translation("comedymonkeysaddons.configuration.floodedCageTank").defineInRange("floodedTank", 4000, 1000, 1000000);
+			brassFloodedCageTank = builder.comment("Water the Flooded Brass cage's tank holds, in millibuckets.")
+				.translation("comedymonkeysaddons.configuration.brassFloodedCageTank").defineInRange("brassFloodedTank", 16000, 1000, 1000000);
+			cageFieldFe = builder.comment("FE per tick the Netherite cage's containment field takes whenever it holds a Wither, at any speed.")
+				.translation("comedymonkeysaddons.configuration.cageFieldFe").defineInRange("fieldFePerTick", 2048, 0, 1000000);
+			cageFarmFe = builder.comment("Extra FE per tick while it brings in Withers, at 256 RPM (less when slower).")
+				.translation("comedymonkeysaddons.configuration.cageFarmFe").defineInRange("farmingFePerTick", 1024, 0, 1000000);
+			cageFeBuffer = builder.comment("FE the Netherite cage stores.")
+				.translation("comedymonkeysaddons.configuration.cageFeBuffer").defineInRange("feBuffer", 200000, 1000, 100000000);
+			cageWarningSeconds = builder.comment("Seconds of warning before a Wither escapes from a cage whose field is down.")
+				.translation("comedymonkeysaddons.configuration.cageWarningSeconds").defineInRange("warningSeconds", 300, 10, 36000);
+			cageEscapeSeconds = builder.comment("Seconds between escapes while the field stays down (a game day).")
+				.translation("comedymonkeysaddons.configuration.cageEscapeSeconds").defineInRange("escapeIntervalSeconds", 1200, 60, 360000);
+			cageAlarmRange = builder.comment("Blocks a player must be within for the countdown to run and to get the warnings.")
+				.translation("comedymonkeysaddons.configuration.cageAlarmRange").defineInRange("alarmRange", 128, 8, 1024);
+			cageEscapes = builder.comment("Whether Withers escape when the field is down. Off: the cage just stops.")
+				.translation("comedymonkeysaddons.configuration.cageEscapes").define("escapes", true);
+			cageGrumbleVolume = builder.comment("Volume of the caged monsters' own sounds, which they make now and then.")
+				.translation("comedymonkeysaddons.configuration.cageGrumbleVolume").defineInRange("grumbleVolume", 0.35, 0.0, 1.0);
 			builder.pop();
 
 			builder.comment("Cuckoo Clock: while it turns, villagers near it restock at 8:00 and 12:00 (game time), and it chimes",
@@ -605,7 +670,8 @@ public final class CMConfig {
 			return SERVER_SPEC.isLoaded() ? value.get() : value.getDefault();
 		}
 
-		private static boolean get(ModConfigSpec.BooleanValue value) {
+		/** A boolean setting, or its default before the server config has loaded. */
+		public static boolean get(ModConfigSpec.BooleanValue value) {
 			return SERVER_SPEC.isLoaded() ? value.get() : value.getDefault();
 		}
 
@@ -621,7 +687,8 @@ public final class CMConfig {
 			return SERVER_SPEC.isLoaded() ? brassCobbleGenStressImpact.get() : brassCobbleGenStressImpact.getDefault();
 		}
 
-		private static double get(ModConfigSpec.DoubleValue value) {
+		/** A decimal setting, or its default before the server config has loaded. */
+		public static double get(ModConfigSpec.DoubleValue value) {
 			return SERVER_SPEC.isLoaded() ? value.get() : value.getDefault();
 		}
 

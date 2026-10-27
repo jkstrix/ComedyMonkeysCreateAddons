@@ -41,6 +41,11 @@
     "comedymonkeysaddons:geothermal_controller",
     "comedymonkeysaddons:auto_harvester",
     "comedymonkeysaddons:animal_pen",
-    "comedymonkeysaddons:brass_animal_pen"
+    "comedymonkeysaddons:brass_animal_pen",
+    "comedymonkeysaddons:monster_cage",
+    "comedymonkeysaddons:brass_monster_cage",
+    "comedymonkeysaddons:flooded_monster_cage",
+    "comedymonkeysaddons:brass_flooded_monster_cage",
+    "comedymonkeysaddons:netherite_monster_cage"
   ]
 }

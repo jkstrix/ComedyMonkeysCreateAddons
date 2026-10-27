@@ -1,0 +1,36 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:translucent",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/netherite_monster_cage_shield",
+    "netherite_monster_cage_shield": "comedymonkeysaddons:block/netherite_monster_cage_shield"
+  },
+  "elements": [
+    {
+      "name": "shield_down",
+      "from": [
+        -1,
+        -1,
+        -1
+      ],
+      "to": [
+        17,
+        17,
+        17
+      ],
+      "shade": false,
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_shield"
+        }
+      }
+    }
+  ]
+}

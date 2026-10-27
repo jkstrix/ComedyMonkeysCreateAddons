@@ -58,6 +58,21 @@ public final class ModItems {
 	public static final DeferredItem<BlockItem> AUTO_HARVESTER = ITEMS.registerSimpleBlockItem(ModBlocks.AUTO_HARVESTER);
 	public static final DeferredItem<BlockItem> ANIMAL_PEN = ITEMS.registerSimpleBlockItem(ModBlocks.ANIMAL_PEN);
 	public static final DeferredItem<BlockItem> BRASS_ANIMAL_PEN = ITEMS.registerSimpleBlockItem(ModBlocks.BRASS_ANIMAL_PEN);
+	public static final DeferredItem<BlockItem> MONSTER_CAGE = ITEMS.registerSimpleBlockItem(ModBlocks.MONSTER_CAGE);
+	public static final DeferredItem<BlockItem> BRASS_MONSTER_CAGE = ITEMS.registerSimpleBlockItem(ModBlocks.BRASS_MONSTER_CAGE);
+	public static final DeferredItem<BlockItem> FLOODED_MONSTER_CAGE = ITEMS.registerSimpleBlockItem(ModBlocks.FLOODED_MONSTER_CAGE);
+	public static final DeferredItem<BlockItem> BRASS_FLOODED_MONSTER_CAGE = ITEMS.registerSimpleBlockItem(ModBlocks.BRASS_FLOODED_MONSTER_CAGE);
+	public static final DeferredItem<BlockItem> NETHERITE_MONSTER_CAGE = ITEMS.registerSimpleBlockItem(ModBlocks.NETHERITE_MONSTER_CAGE,
+		new Item.Properties().fireResistant());
+	/** Catches a monster for the cages (not the Wither); stacks to 16 empty, 1 filled. */
+	public static final DeferredItem<com.comedymonkey.createaddons.content.cage.MonsterJarItem> IRON_JAR = ITEMS.register("iron_jar",
+		() -> new com.comedymonkey.createaddons.content.cage.MonsterJarItem(new Item.Properties().stacksTo(16), false));
+	/** Catches the Wither, for the Netherite cage only. Fireproof. */
+	public static final DeferredItem<com.comedymonkey.createaddons.content.cage.MonsterJarItem> NETHERITE_JAR = ITEMS.register("netherite_jar",
+		() -> new com.comedymonkey.createaddons.content.cage.MonsterJarItem(new Item.Properties().stacksTo(16).fireResistant(), true));
+	/** What the cages' monsters eat. Edible, badly. */
+	public static final DeferredItem<com.comedymonkey.createaddons.content.cage.MonsterChowItem> MONSTER_CHOW = ITEMS.register("monster_chow",
+		() -> new com.comedymonkey.createaddons.content.cage.MonsterChowItem(new Item.Properties()));
 	public static final DeferredItem<BlockItem> CUCKOO_CLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.CUCKOO_CLOCK);
 	/** Trade Bot on his station, as one item (D27). */
 	public static final DeferredItem<TradeBotItem> TRADE_BOT = ITEMS.register("trade_bot",

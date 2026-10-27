@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "comedymonkeysaddons:monster_cage"
+    },
+    {
+      "item": "create:fluid_tank"
+    },
+    {
+      "item": "create:framed_glass"
+    },
+    {
+      "item": "create:framed_glass"
+    }
+  ],
+  "result": {
+    "id": "comedymonkeysaddons:flooded_monster_cage",
+    "count": 1
+  }
+}

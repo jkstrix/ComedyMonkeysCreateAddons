@@ -1,0 +1,71 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/netherite_monster_cage_lens_lit",
+    "netherite_monster_cage_lens_lit": "comedymonkeysaddons:block/netherite_monster_cage_lens_lit"
+  },
+  "elements": [
+    {
+      "name": "lens_lit",
+      "from": [
+        6.45,
+        14.5,
+        6.45
+      ],
+      "to": [
+        9.55,
+        15.55,
+        9.55
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_lens_lit"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_lens_lit"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_lens_lit"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_lens_lit"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_lens_lit"
+        }
+      }
+    }
+  ]
+}

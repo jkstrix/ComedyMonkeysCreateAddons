@@ -11,7 +11,7 @@ const OUT = process.argv.slice(2).find((a) => !a.startsWith('--')) || path.resol
 const FLOOR_Y = 2.5;
 const WANDER = { x0: 3.5, x1: 12.5, z0: 4.5, z1: 8.8 };
 const GLASS_Z = 0.5;                  // the cage's glass sits further forward than the pen's, to make room for the bars
-const BAR_Z = [0.75, 1.15];           // bars: 0.25 clear of the glass in front and the tray behind
+const BAR_Z = [1.0, 1.35];            // bars: clear of the glass (0.5) and the water's front (0.75); the tray (1.4) faces the other way
 const BARS_X = [4.5, 7.5, 10.5];      // three 1 px bars
 const CROSS_Y = [9.5, 10.5];
 const CHOW = [[6.6, -30], [8, 40], [9.4, 110]];
@@ -188,7 +188,11 @@ CAGE.paint('bars', (x, y) => (y % 6 === 0 ? '#5f656e' : mot('iron', x, y, 36)));
 CAGE.paint('iron', (x, y) => mot('iron', x, y, 37));
 CAGE.paint('bowl', (x, y) => (hash(x, y, 38) > 0.85 ? '#5f656e' : '#4a5059'));
 CAGE.paint('bowl_rim', (x, y) => (hash(x, y, 39) > 0.7 ? '#7c7f79' : '#6f757d'));
-CAGE.paint('lock', (x, y) => (edge(x, y) === 0 ? '#2a2f35' : (x === 7 && y >= 8 && y <= 10 ? '#141619' : mot('iron', x, y, 43))));
+CAGE.paint('lock', (x, y) => {
+  if (edge(x, y) === 0) return '#2a2f35';
+  if (x >= 5 && x <= 10 && y >= 5 && y <= 11) return x === 7 && y >= 7 && y <= 9 ? '#141619' : mot('brassMid', x, y, 44);   // the brass keyplate
+  return mot('iron', x, y, 43);
+});
 CAGE.paint('keyplate', (x, y) => (x === 8 && y >= 7 && y <= 9 ? '#141619' : mot('brassMid', x, y, 44)));
 CAGE.paint('hasp', (x, y) => (edge(x, y) === 0 || (x === 4 && y % 4 === 1) ? '#2a2f35' : mot('steel', x, y, 45)));
 CAGE.paint('chain', (x, y) => (y % 3 === 1 ? '#141619' : (x % 2 ? '#5f656e' : '#454b53')));
@@ -256,11 +260,11 @@ function cageModel(tier, kind) {
     out.push(C(`skin_${side}_top`, [sx0, rec.y1, rec.z0], [sx1, 14, rec.z1], { ...skin, down: 'cage:dark' }));
     out.push(C(`skin_${side}_foot`, [sx0, 2, rec.z0], [sx1, rec.y0, rec.z1], { ...skin, up: 'cage:dark' }));
     const ox = side === 'west' ? [0.1, 0.5] : [15.5, 15.9];
-    if (fl) out.push(C(`tap_${side}`, [ox[0], GAUGE.y0, 7.55], [ox[1], GAUGE.y0 + 0.7, 8.45], { all: 'cage:brass' }));
+    if (fl) out.push(C(`tap_${side}`, side === 'west' ? [0, GAUGE.y0, 7.55] : [15.6, GAUGE.y0, 7.55], side === 'west' ? [0.4, GAUGE.y0 + 0.7, 8.45] : [16, GAUGE.y0 + 0.7, 8.45], { all: 'cage:brass' }));
     else if (isN) {
       // power terminal at the face centre: a copper stud in an insulated collar
-      const cx = side === 'west' ? [0.05, 0.5] : [15.5, 15.95];
-      out.push(C(`collar_${side}`, [cx[0] + (side === 'west' ? 0.15 : 0), 6.5, 6.5], [cx[1] - (side === 'east' ? 0.15 : 0), 9.5, 9.5], { all: 'neth:collar', [inner]: null }));
+      const cx = side === 'west' ? [0, 0.5] : [15.5, 16];
+      out.push(C(`collar_${side}`, [cx[0] + (side === 'west' ? 0.25 : 0), 6.5, 6.5], [cx[1] - (side === 'east' ? 0.25 : 0), 9.5, 9.5], { all: 'neth:collar', [inner]: null }));
       out.push(C(`terminal_${side}`, [cx[0], 7.25, 7.25], [cx[1], 8.75, 8.75], { all: 'neth:terminal', [inner]: null }));
     } else {
       // three bars across the vent
@@ -272,14 +276,13 @@ function cageModel(tier, kind) {
       out.push(C('post_upper', [0, LOCK.y1, 0], [2, 14, LOCK.depth], { north: T('front'), west: sideTex, east: wall, down: 'cage:dark', up: null, south: null }));
       out.push(C('post_lower', [0, 2, 0], [2, LOCK.y0, LOCK.depth], { north: T('front'), west: sideTex, east: wall, up: 'cage:dark', down: null, south: null }));
       out.push(C('lock_body', [0.45, 5.8, 0.1], [1.55, 7.3, LOCK.depth], { all: T('lock'), south: null }));
-      out.push(C('lock_keyplate', [0.7, 6.1, 0.05], [1.3, 6.9, 0.1], { north: tier === 'brass' ? 'brass:keyplate' : 'cage:keyplate', all: null }));
       out.push(C('lock_shackle_l', [0.6, 7.3, 0.25], [0.8, 8.2, 0.45], { all: 'cage:iron' }));
       out.push(C('lock_shackle_r', [1.2, 7.3, 0.25], [1.4, 8.2, 0.45], { all: 'cage:iron' }));
       out.push(C('lock_shackle_t', [0.8, 8.0, 0.25], [1.2, 8.2, 0.45], { all: 'cage:iron', east: null, west: null }));
     }
   }
   // floor (its top is the monsters' floor)
-  out.push(C('floor', [2, 2, GLASS_Z + 0.05], [14, FLOOR_Y, 14], { up: fl ? 'cage:floor_wet' : I('floor'), north: I('floor'), all: null }));
+  out.push(C('floor', [2, 2, GLASS_Z + 0.25], [14, FLOOR_Y, 14], { up: fl ? 'cage:floor_wet' : I('floor'), north: I('floor'), all: null }));
   // bars and crossbar between the glass and the tray
   const barTex = isN ? 'neth:bars' : 'cage:bars';
   for (const [i, x] of BARS_X.entries())
@@ -288,7 +291,7 @@ function cageModel(tier, kind) {
     const xs = [2, ...BARS_X.flatMap((x) => [x, x + 1]), 14];
     for (let i = 0; i < xs.length; i += 2) {
       const ends = i === 0 || i === xs.length - 2, capTex = tier === 'brass' && ends ? 'brass:cap' : 'cage:iron';
-      out.push(C(`crossbar_${i / 2}`, [xs[i], CROSS_Y[0], BAR_Z[0] - 0.05], [xs[i + 1], CROSS_Y[1], BAR_Z[1] + 0.05], { all: capTex, east: null, west: null }));
+      out.push(C(`crossbar_${i / 2}`, [xs[i], CROSS_Y[0], BAR_Z[0]], [xs[i + 1], CROSS_Y[1], BAR_Z[1]], { all: capTex, east: null, west: null }));
     }
   }
   // the tray of drops in front
@@ -297,7 +300,7 @@ function cageModel(tier, kind) {
     C('tray_back', [3, FLOOR_Y, 3.3], [13, 3.3, 3.8], { all: trayTex, up: lip, down: null }),
     C('tray_west', [3, FLOOR_Y, 1.9], [3.5, 3.3, 3.3], { all: trayTex, up: lip, down: null, north: null, south: null }),
     C('tray_east', [12.5, FLOOR_Y, 1.9], [13, 3.3, 3.3], { all: trayTex, up: lip, down: null, north: null, south: null }),
-    C('tray_bed', [3.5, FLOOR_Y, 1.9], [12.5, 2.6, 3.3], { up: trayTex, all: null }),
+    C('tray_bed', [3.5, FLOOR_Y, 1.9], [12.5, 2.75, 3.3], { up: trayTex, all: null }),
   );
   if (!isN) {
     // chow chute down the back wall (swallows the stub's tip) and the dented steel dog bowl under it
@@ -320,8 +323,8 @@ function cageModel(tier, kind) {
   } else {
     // sealed hopper port round the stub; field coils in the window's inner corners; the beacon set into the roof
     out.push(C('port', [4.5, 4.5, 13.5], [11.5, 11.5, 14], { north: 'neth:port', all: 'neth:plate', south: null }, { uv: { north: [0, 0, 16, 16] } }));
-    for (const [i, [x, y0, y1]] of [[2.05, FLOOR_Y, 5.5], [12.85, FLOOR_Y, 5.5], [2.05, 11, 13.95], [12.85, 11, 13.95]].entries()) {
-      out.push(C(`coil_${i}`, [x, y0, 1.4], [x + 1.1, y1, 2.5], { all: 'neth:coil', up: 'neth:coil_cap', down: 'neth:coil_cap' }));
+    for (const [i, [x, y0, y1]] of [[2.05, FLOOR_Y, 5.5], [13.05, FLOOR_Y, 5.5], [2.05, 11, 13.95], [13.05, 11, 13.95]].entries()) {
+      out.push(C(`coil_${i}`, [x, y0, 1.4], [x + 0.9, y1, 2.5], { all: 'neth:coil', up: 'neth:coil_cap', down: 'neth:coil_cap' }));
     }
     // beacon: lens in a well in the roof, under a guard; the slab is split round the well
     out.push(
@@ -357,9 +360,9 @@ const beacon = () => [
   C('lens', [6.5, 14.5, 6.5], [9.5, 15.5, 9.5], { all: 'neth:lens', down: null }, { uv: { north: [0, 0, 16, 16], south: [0, 0, 16, 16], east: [0, 0, 16, 16], west: [0, 0, 16, 16], up: [0, 0, 16, 16] } }),
 ];
 const beaconLit = () => [C('lens_lit', [6.45, 14.5, 6.45], [9.55, 15.55, 9.55], { all: 'neth:lens_lit', down: null }, { uv: { north: [0, 0, 16, 16], south: [0, 0, 16, 16], east: [0, 0, 16, 16], west: [0, 0, 16, 16], up: [0, 0, 16, 16] } })];
-const reflector = () => [C('reflector', [7, 14.6, 7.8], [9, 15.4, 8.2], { all: 'neth:reflector' })];
-const tips = (lit) => [[2.05, 5.5], [12.85, 5.5], [2.05, 10.6], [12.85, 10.6]].map(([x, y], i) =>
-  C(`tip_${lit ? 'lit' : 'dark'}_${i}`, [x + 0.25, y, 1.65], [x + 0.85, y + 0.4, 2.25], { all: lit ? 'neth:tip_lit' : 'neth:tip_dark' }));
+const reflector = () => [C('reflector', [7, 14.6, 7.8], [9, 15.2, 8.2], { all: 'neth:reflector' })];
+const tips = (lit) => [[2.05, 5.5], [13.05, 5.5], [2.05, 10.6], [13.05, 10.6]].map(([x, y], i) =>
+  C(`tip_${lit ? 'lit' : 'dark'}_${i}`, [x + 0.15, y, 1.65], [x + 0.75, y + 0.4, 2.25], { all: lit ? 'neth:tip_lit' : 'neth:tip_dark' }));
 const SH = { uv: Object.fromEntries(['north', 'east', 'south', 'west', 'up'].map((d) => [d, [0, 0, 16, 16]])), shade: false };
 const shield = () => [C('shield', [-1, -1, -1], [17, 17, 17], { all: 'neth:shield', down: null }, SH)];
 const water = (top) => [C('water', [2.05, FLOOR_Y, GLASS_Z + 0.25], [13.95, top, 13.75], { north: 'cage:water', east: 'cage:water', west: 'cage:water', south: null, up: 'cage:water_top', down: null }, { shade: false })];
@@ -638,4 +641,4 @@ write(OUT, outliner);
   for (const t of bb.textures) if (t.name.includes('shield')) { t.render_mode = 'additive'; t.height = 16 * SHIELD_FRAMES; t.frame_time = 2; }
   fs.writeFileSync(OUT, JSON.stringify(bb));
 }
-module.exports = { cageModel, CAGE, BRASS, NETH, ITEMS, GAUGE, VENT, WANDER, hatch, beacon, reflector, shield };
+module.exports = { cageModel, CAGE, BRASS, NETH, ITEMS, JARS, GAUGE, VENT, WANDER, GLASS_Z, hatch, beacon, beaconLit, reflector, tips, shield, water, waterCols, jar };

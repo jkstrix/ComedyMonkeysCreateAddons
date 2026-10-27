@@ -1,0 +1,2490 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/brass_monster_cage_side",
+    "brass_monster_cage_front": "comedymonkeysaddons:block/brass_monster_cage_front",
+    "brass_monster_cage_side": "comedymonkeysaddons:block/brass_monster_cage_side",
+    "brass_monster_cage_back": "comedymonkeysaddons:block/brass_monster_cage_back",
+    "brass_monster_cage_grate": "comedymonkeysaddons:block/brass_monster_cage_grate",
+    "monster_cage_ceiling": "comedymonkeysaddons:block/monster_cage_ceiling",
+    "brass_monster_cage_bottom": "comedymonkeysaddons:block/brass_monster_cage_bottom",
+    "monster_cage_cell": "comedymonkeysaddons:block/monster_cage_cell",
+    "monster_cage_hasp": "comedymonkeysaddons:block/monster_cage_hasp",
+    "monster_cage_vent_back": "comedymonkeysaddons:block/monster_cage_vent_back",
+    "monster_cage_dark": "comedymonkeysaddons:block/monster_cage_dark",
+    "monster_cage_iron": "comedymonkeysaddons:block/monster_cage_iron",
+    "brass_monster_cage_lock": "comedymonkeysaddons:block/brass_monster_cage_lock",
+    "monster_cage_floor": "comedymonkeysaddons:block/monster_cage_floor",
+    "monster_cage_bars": "comedymonkeysaddons:block/monster_cage_bars",
+    "brass_monster_cage_cap": "comedymonkeysaddons:block/brass_monster_cage_cap",
+    "brass_monster_cage_lip": "comedymonkeysaddons:block/brass_monster_cage_lip",
+    "monster_cage_chute": "comedymonkeysaddons:block/monster_cage_chute",
+    "monster_cage_steel": "comedymonkeysaddons:block/monster_cage_steel",
+    "monster_cage_bowl": "comedymonkeysaddons:block/monster_cage_bowl",
+    "monster_cage_chain": "comedymonkeysaddons:block/monster_cage_chain"
+  },
+  "elements": [
+    {
+      "name": "top",
+      "from": [
+        0,
+        14,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#brass_monster_cage_front"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#brass_monster_cage_back"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#brass_monster_cage_grate"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#monster_cage_ceiling"
+        }
+      }
+    },
+    {
+      "name": "bottom",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#brass_monster_cage_front"
+        },
+        "east": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#brass_monster_cage_back"
+        },
+        "west": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#brass_monster_cage_bottom"
+        }
+      }
+    },
+    {
+      "name": "wall_back",
+      "from": [
+        2,
+        2,
+        14
+      ],
+      "to": [
+        14,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#monster_cage_cell"
+        },
+        "south": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#brass_monster_cage_back"
+        }
+      }
+    },
+    {
+      "name": "wall_west",
+      "from": [
+        0.5,
+        2,
+        0.6
+      ],
+      "to": [
+        2,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            2,
+            15.5,
+            14
+          ],
+          "texture": "#monster_cage_hasp"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            15.4,
+            14
+          ],
+          "texture": "#monster_cage_cell"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            2,
+            2,
+            14
+          ],
+          "texture": "#brass_monster_cage_back"
+        },
+        "west": {
+          "uv": [
+            0.6,
+            2,
+            16,
+            14
+          ],
+          "texture": "#monster_cage_vent_back"
+        }
+      }
+    },
+    {
+      "name": "skin_west_front",
+      "from": [
+        0,
+        2,
+        0.6
+      ],
+      "to": [
+        0.5,
+        14,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.5,
+            2,
+            16,
+            14
+          ],
+          "texture": "#monster_cage_hasp"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            0.5,
+            14
+          ],
+          "texture": "#monster_cage_dark"
+        },
+        "west": {
+          "uv": [
+            0.6,
+            2,
+            6,
+            14
+          ],
+          "texture": "#brass_monster_cage_side"
+        }
+      }
+    },
+    {
+      "name": "skin_west_back",
+      "from": [
+        0,
+        2,
+        10
+      ],
+      "to": [
+        0.5,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.5,
+            2,
+            16,
+            14
+          ],
+          "texture": "#monster_cage_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            0.5,
+            14
+          ],
+          "texture": "#brass_monster_cage_back"
+        },
+        "west": {
+          "uv": [
+            10,
+            2,
+            16,
+            14
+          ],
+          "texture": "#brass_monster_cage_side"
+        }
+      }
+    },
+    {
+      "name": "skin_west_top",
+      "from": [
+        0,
+        10,
+        6
+      ],
+      "to": [
+        0.5,
+        14,
+        10
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            6,
+            2,
+            10,
+            6
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "down": {
+          "uv": [
+            0,
+            6,
+            0.5,
+            10
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "skin_west_foot",
+      "from": [
+        0,
+        2,
+        6
+      ],
+      "to": [
+        0.5,
+        6,
+        10
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            6,
+            10,
+            10,
+            14
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            0.5,
+            10
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "vent_bar_west_0",
+      "from": [
+        0.1,
+        6,
+        6.75
+      ],
+      "to": [
+        0.45,
+        10,
+        7.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.55,
+            6,
+            15.9,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            0.1,
+            6,
+            0.45,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            6,
+            7.25,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "vent_bar_west_1",
+      "from": [
+        0.1,
+        6,
+        7.75
+      ],
+      "to": [
+        0.45,
+        10,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.55,
+            6,
+            15.9,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            0.1,
+            6,
+            0.45,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "west": {
+          "uv": [
+            7.75,
+            6,
+            8.25,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "vent_bar_west_2",
+      "from": [
+        0.1,
+        6,
+        8.75
+      ],
+      "to": [
+        0.45,
+        10,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.55,
+            6,
+            15.9,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            0.1,
+            6,
+            0.45,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "west": {
+          "uv": [
+            8.75,
+            6,
+            9.25,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "post_upper",
+      "from": [
+        0,
+        8.5,
+        0
+      ],
+      "to": [
+        2,
+        14,
+        0.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            2,
+            16,
+            7.5
+          ],
+          "texture": "#brass_monster_cage_front"
+        },
+        "east": {
+          "uv": [
+            15.4,
+            2,
+            16,
+            7.5
+          ],
+          "texture": "#monster_cage_cell"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            0.6,
+            7.5
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "down": {
+          "uv": [
+            0,
+            15.4,
+            2,
+            16
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "post_lower",
+      "from": [
+        0,
+        2,
+        0
+      ],
+      "to": [
+        2,
+        5.5,
+        0.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            10.5,
+            16,
+            14
+          ],
+          "texture": "#brass_monster_cage_front"
+        },
+        "east": {
+          "uv": [
+            15.4,
+            10.5,
+            16,
+            14
+          ],
+          "texture": "#monster_cage_cell"
+        },
+        "west": {
+          "uv": [
+            0,
+            10.5,
+            0.6,
+            14
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2,
+            0.6
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "lock_body",
+      "from": [
+        0.45,
+        5.8,
+        0.1
+      ],
+      "to": [
+        1.55,
+        7.3,
+        0.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.45,
+            8.7,
+            15.55,
+            10.2
+          ],
+          "texture": "#brass_monster_cage_lock"
+        },
+        "east": {
+          "uv": [
+            15.4,
+            8.7,
+            15.9,
+            10.2
+          ],
+          "texture": "#brass_monster_cage_lock"
+        },
+        "west": {
+          "uv": [
+            0.1,
+            8.7,
+            0.6,
+            10.2
+          ],
+          "texture": "#brass_monster_cage_lock"
+        },
+        "up": {
+          "uv": [
+            0.45,
+            0.1,
+            1.55,
+            0.6
+          ],
+          "texture": "#brass_monster_cage_lock"
+        },
+        "down": {
+          "uv": [
+            0.45,
+            15.4,
+            1.55,
+            15.9
+          ],
+          "texture": "#brass_monster_cage_lock"
+        }
+      }
+    },
+    {
+      "name": "lock_shackle_l",
+      "from": [
+        0.6,
+        7.3,
+        0.25
+      ],
+      "to": [
+        0.8,
+        8.2,
+        0.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.2,
+            7.8,
+            15.4,
+            8.7
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "east": {
+          "uv": [
+            15.55,
+            7.8,
+            15.75,
+            8.7
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            0.6,
+            7.8,
+            0.8,
+            8.7
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "west": {
+          "uv": [
+            0.25,
+            7.8,
+            0.45,
+            8.7
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "up": {
+          "uv": [
+            0.6,
+            0.25,
+            0.8,
+            0.45
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "down": {
+          "uv": [
+            0.6,
+            15.55,
+            0.8,
+            15.75
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "lock_shackle_r",
+      "from": [
+        1.2,
+        7.3,
+        0.25
+      ],
+      "to": [
+        1.4,
+        8.2,
+        0.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.6,
+            7.8,
+            14.8,
+            8.7
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "east": {
+          "uv": [
+            15.55,
+            7.8,
+            15.75,
+            8.7
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            1.2,
+            7.8,
+            1.4,
+            8.7
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "west": {
+          "uv": [
+            0.25,
+            7.8,
+            0.45,
+            8.7
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "up": {
+          "uv": [
+            1.2,
+            0.25,
+            1.4,
+            0.45
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "down": {
+          "uv": [
+            1.2,
+            15.55,
+            1.4,
+            15.75
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "lock_shackle_t",
+      "from": [
+        0.8,
+        8,
+        0.25
+      ],
+      "to": [
+        1.2,
+        8.2,
+        0.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.8,
+            7.8,
+            15.2,
+            8
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            0.8,
+            7.8,
+            1.2,
+            8
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "up": {
+          "uv": [
+            0.8,
+            0.25,
+            1.2,
+            0.45
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "down": {
+          "uv": [
+            0.8,
+            15.55,
+            1.2,
+            15.75
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "wall_east",
+      "from": [
+        14,
+        2,
+        0
+      ],
+      "to": [
+        15.5,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            2,
+            2,
+            14
+          ],
+          "texture": "#brass_monster_cage_front"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#monster_cage_vent_back"
+        },
+        "south": {
+          "uv": [
+            14,
+            2,
+            15.5,
+            14
+          ],
+          "texture": "#brass_monster_cage_back"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#monster_cage_cell"
+        }
+      }
+    },
+    {
+      "name": "skin_east_front",
+      "from": [
+        15.5,
+        2,
+        0
+      ],
+      "to": [
+        16,
+        14,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2,
+            0.5,
+            14
+          ],
+          "texture": "#brass_monster_cage_front"
+        },
+        "east": {
+          "uv": [
+            10,
+            2,
+            16,
+            14
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "south": {
+          "uv": [
+            15.5,
+            2,
+            16,
+            14
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "skin_east_back",
+      "from": [
+        15.5,
+        2,
+        10
+      ],
+      "to": [
+        16,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2,
+            0.5,
+            14
+          ],
+          "texture": "#monster_cage_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            6,
+            14
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "south": {
+          "uv": [
+            15.5,
+            2,
+            16,
+            14
+          ],
+          "texture": "#brass_monster_cage_back"
+        }
+      }
+    },
+    {
+      "name": "skin_east_top",
+      "from": [
+        15.5,
+        10,
+        6
+      ],
+      "to": [
+        16,
+        14,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            2,
+            10,
+            6
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "down": {
+          "uv": [
+            15.5,
+            6,
+            16,
+            10
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "skin_east_foot",
+      "from": [
+        15.5,
+        2,
+        6
+      ],
+      "to": [
+        16,
+        6,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            10,
+            10,
+            14
+          ],
+          "texture": "#brass_monster_cage_side"
+        },
+        "up": {
+          "uv": [
+            15.5,
+            6,
+            16,
+            10
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "vent_bar_east_0",
+      "from": [
+        15.5,
+        6,
+        6.75
+      ],
+      "to": [
+        15.85,
+        10,
+        7.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.15,
+            6,
+            0.5,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "east": {
+          "uv": [
+            8.75,
+            6,
+            9.25,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            15.5,
+            6,
+            15.85,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "vent_bar_east_1",
+      "from": [
+        15.5,
+        6,
+        7.75
+      ],
+      "to": [
+        15.85,
+        10,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.15,
+            6,
+            0.5,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "east": {
+          "uv": [
+            7.75,
+            6,
+            8.25,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            15.5,
+            6,
+            15.85,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "vent_bar_east_2",
+      "from": [
+        15.5,
+        6,
+        8.75
+      ],
+      "to": [
+        15.85,
+        10,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.15,
+            6,
+            0.5,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "east": {
+          "uv": [
+            6.75,
+            6,
+            7.25,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            15.5,
+            6,
+            15.85,
+            10
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "floor",
+      "from": [
+        2,
+        2,
+        0.75
+      ],
+      "to": [
+        14,
+        2.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            13.5,
+            14,
+            14
+          ],
+          "texture": "#monster_cage_floor"
+        },
+        "up": {
+          "uv": [
+            2,
+            0.75,
+            14,
+            14
+          ],
+          "texture": "#monster_cage_floor"
+        }
+      }
+    },
+    {
+      "name": "bar_0",
+      "from": [
+        4.5,
+        2.5,
+        1
+      ],
+      "to": [
+        5.5,
+        14,
+        1.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.5,
+            2,
+            11.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        },
+        "east": {
+          "uv": [
+            14.65,
+            2,
+            15,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        },
+        "south": {
+          "uv": [
+            4.5,
+            2,
+            5.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            1.35,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        }
+      }
+    },
+    {
+      "name": "bar_1",
+      "from": [
+        7.5,
+        2.5,
+        1
+      ],
+      "to": [
+        8.5,
+        14,
+        1.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        },
+        "east": {
+          "uv": [
+            14.65,
+            2,
+            15,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            1.35,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        }
+      }
+    },
+    {
+      "name": "bar_2",
+      "from": [
+        10.5,
+        2.5,
+        1
+      ],
+      "to": [
+        11.5,
+        14,
+        1.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.5,
+            2,
+            5.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        },
+        "east": {
+          "uv": [
+            14.65,
+            2,
+            15,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        },
+        "south": {
+          "uv": [
+            10.5,
+            2,
+            11.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            1.35,
+            13.5
+          ],
+          "texture": "#monster_cage_bars"
+        }
+      }
+    },
+    {
+      "name": "crossbar_0",
+      "from": [
+        2,
+        9.5,
+        1
+      ],
+      "to": [
+        4.5,
+        10.5,
+        1.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.5,
+            5.5,
+            14,
+            6.5
+          ],
+          "texture": "#brass_monster_cage_cap"
+        },
+        "south": {
+          "uv": [
+            2,
+            5.5,
+            4.5,
+            6.5
+          ],
+          "texture": "#brass_monster_cage_cap"
+        },
+        "up": {
+          "uv": [
+            2,
+            1,
+            4.5,
+            1.35
+          ],
+          "texture": "#brass_monster_cage_cap"
+        },
+        "down": {
+          "uv": [
+            2,
+            14.65,
+            4.5,
+            15
+          ],
+          "texture": "#brass_monster_cage_cap"
+        }
+      }
+    },
+    {
+      "name": "crossbar_1",
+      "from": [
+        5.5,
+        9.5,
+        1
+      ],
+      "to": [
+        7.5,
+        10.5,
+        1.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.5,
+            5.5,
+            10.5,
+            6.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            5.5,
+            7.5,
+            6.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            1,
+            7.5,
+            1.35
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            14.65,
+            7.5,
+            15
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "crossbar_2",
+      "from": [
+        8.5,
+        9.5,
+        1
+      ],
+      "to": [
+        10.5,
+        10.5,
+        1.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            5.5,
+            7.5,
+            6.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            8.5,
+            5.5,
+            10.5,
+            6.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "up": {
+          "uv": [
+            8.5,
+            1,
+            10.5,
+            1.35
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "down": {
+          "uv": [
+            8.5,
+            14.65,
+            10.5,
+            15
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "crossbar_3",
+      "from": [
+        11.5,
+        9.5,
+        1
+      ],
+      "to": [
+        14,
+        10.5,
+        1.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            5.5,
+            4.5,
+            6.5
+          ],
+          "texture": "#brass_monster_cage_cap"
+        },
+        "south": {
+          "uv": [
+            11.5,
+            5.5,
+            14,
+            6.5
+          ],
+          "texture": "#brass_monster_cage_cap"
+        },
+        "up": {
+          "uv": [
+            11.5,
+            1,
+            14,
+            1.35
+          ],
+          "texture": "#brass_monster_cage_cap"
+        },
+        "down": {
+          "uv": [
+            11.5,
+            14.65,
+            14,
+            15
+          ],
+          "texture": "#brass_monster_cage_cap"
+        }
+      }
+    },
+    {
+      "name": "tray_front",
+      "from": [
+        3,
+        2.5,
+        1.4
+      ],
+      "to": [
+        13,
+        3.3,
+        1.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            12.7,
+            13,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "east": {
+          "uv": [
+            14.1,
+            12.7,
+            14.6,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            3,
+            12.7,
+            13,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "west": {
+          "uv": [
+            1.4,
+            12.7,
+            1.9,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "up": {
+          "uv": [
+            3,
+            1.4,
+            13,
+            1.9
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "tray_back",
+      "from": [
+        3,
+        2.5,
+        3.3
+      ],
+      "to": [
+        13,
+        3.3,
+        3.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            12.7,
+            13,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "east": {
+          "uv": [
+            12.2,
+            12.7,
+            12.7,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "south": {
+          "uv": [
+            3,
+            12.7,
+            13,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "west": {
+          "uv": [
+            3.3,
+            12.7,
+            3.8,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "up": {
+          "uv": [
+            3,
+            3.3,
+            13,
+            3.8
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "tray_west",
+      "from": [
+        3,
+        2.5,
+        1.9
+      ],
+      "to": [
+        3.5,
+        3.3,
+        3.3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            12.7,
+            12.7,
+            14.1,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "west": {
+          "uv": [
+            1.9,
+            12.7,
+            3.3,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "up": {
+          "uv": [
+            3,
+            1.9,
+            3.5,
+            3.3
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "tray_east",
+      "from": [
+        12.5,
+        2.5,
+        1.9
+      ],
+      "to": [
+        13,
+        3.3,
+        3.3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            12.7,
+            12.7,
+            14.1,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "west": {
+          "uv": [
+            1.9,
+            12.7,
+            3.3,
+            13.5
+          ],
+          "texture": "#monster_cage_iron"
+        },
+        "up": {
+          "uv": [
+            12.5,
+            1.9,
+            13,
+            3.3
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "tray_bed",
+      "from": [
+        3.5,
+        2.5,
+        1.9
+      ],
+      "to": [
+        12.5,
+        2.75,
+        3.3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            3.5,
+            1.9,
+            12.5,
+            3.3
+          ],
+          "texture": "#monster_cage_iron"
+        }
+      }
+    },
+    {
+      "name": "chute",
+      "from": [
+        5.5,
+        5,
+        12.4
+      ],
+      "to": [
+        10.5,
+        10.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            11
+          ],
+          "texture": "#monster_cage_chute"
+        },
+        "east": {
+          "uv": [
+            2,
+            5.5,
+            3.6,
+            11
+          ],
+          "texture": "#monster_cage_steel"
+        },
+        "west": {
+          "uv": [
+            12.4,
+            5.5,
+            14,
+            11
+          ],
+          "texture": "#monster_cage_steel"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            12.4,
+            10.5,
+            14
+          ],
+          "texture": "#monster_cage_steel"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            2,
+            10.5,
+            3.6
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "bowl_bed",
+      "from": [
+        5.5,
+        2.5,
+        9.5
+      ],
+      "to": [
+        10.5,
+        2.75,
+        13.5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            5.5,
+            9.5,
+            10.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        }
+      }
+    },
+    {
+      "name": "bowl_front",
+      "from": [
+        6,
+        2.5,
+        9
+      ],
+      "to": [
+        10,
+        4,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            12,
+            10,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            12,
+            7,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "south": {
+          "uv": [
+            6,
+            12,
+            10,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "west": {
+          "uv": [
+            9,
+            12,
+            9.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "up": {
+          "uv": [
+            6,
+            9,
+            10,
+            9.5
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "bowl_back",
+      "from": [
+        6,
+        2.5,
+        13.5
+      ],
+      "to": [
+        10,
+        4,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            12,
+            10,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "east": {
+          "uv": [
+            2,
+            12,
+            2.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "west": {
+          "uv": [
+            13.5,
+            12,
+            14,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "up": {
+          "uv": [
+            6,
+            13.5,
+            10,
+            14
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "bowl_west",
+      "from": [
+        5,
+        2.5,
+        10
+      ],
+      "to": [
+        5.5,
+        4,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.5,
+            12,
+            11,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "east": {
+          "uv": [
+            3,
+            12,
+            6,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "south": {
+          "uv": [
+            5,
+            12,
+            5.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "west": {
+          "uv": [
+            10,
+            12,
+            13,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "up": {
+          "uv": [
+            5,
+            10,
+            5.5,
+            13
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "bowl_east",
+      "from": [
+        10.5,
+        2.5,
+        10
+      ],
+      "to": [
+        11,
+        4,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            12,
+            5.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "east": {
+          "uv": [
+            3,
+            12,
+            6,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "south": {
+          "uv": [
+            10.5,
+            12,
+            11,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "west": {
+          "uv": [
+            10,
+            12,
+            13,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "up": {
+          "uv": [
+            10.5,
+            10,
+            11,
+            13
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "bowl_c1",
+      "from": [
+        5.5,
+        2.5,
+        9.5
+      ],
+      "to": [
+        6,
+        3.6,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            12.4,
+            10.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "east": {
+          "uv": [
+            6,
+            12.4,
+            6.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            12.4,
+            6,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "west": {
+          "uv": [
+            9.5,
+            12.4,
+            10,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            9.5,
+            6,
+            10
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "bowl_c2",
+      "from": [
+        10,
+        2.5,
+        9.5
+      ],
+      "to": [
+        10.5,
+        4,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            12,
+            6,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "east": {
+          "uv": [
+            6,
+            12,
+            6.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "south": {
+          "uv": [
+            10,
+            12,
+            10.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "west": {
+          "uv": [
+            9.5,
+            12,
+            10,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "up": {
+          "uv": [
+            10,
+            9.5,
+            10.5,
+            10
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "bowl_c3",
+      "from": [
+        5.5,
+        2.5,
+        13
+      ],
+      "to": [
+        6,
+        4,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            12,
+            10.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            12,
+            3,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            12,
+            6,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "west": {
+          "uv": [
+            13,
+            12,
+            13.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            13,
+            6,
+            13.5
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "bowl_c4",
+      "from": [
+        10,
+        2.5,
+        13
+      ],
+      "to": [
+        10.5,
+        4,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            12,
+            6,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            12,
+            3,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "south": {
+          "uv": [
+            10,
+            12,
+            10.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "west": {
+          "uv": [
+            13,
+            12,
+            13.5,
+            13.5
+          ],
+          "texture": "#monster_cage_bowl"
+        },
+        "up": {
+          "uv": [
+            10,
+            13,
+            10.5,
+            13.5
+          ],
+          "texture": "#brass_monster_cage_lip"
+        }
+      }
+    },
+    {
+      "name": "chain_0",
+      "from": [
+        2.4,
+        10.8,
+        12.8
+      ],
+      "to": [
+        2.9,
+        14,
+        13.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.1,
+            2,
+            13.6,
+            5.2
+          ],
+          "texture": "#monster_cage_chain"
+        },
+        "east": {
+          "uv": [
+            2.7,
+            2,
+            3.2,
+            5.2
+          ],
+          "texture": "#monster_cage_chain"
+        },
+        "south": {
+          "uv": [
+            2.4,
+            2,
+            2.9,
+            5.2
+          ],
+          "texture": "#monster_cage_chain"
+        },
+        "west": {
+          "uv": [
+            12.8,
+            2,
+            13.3,
+            5.2
+          ],
+          "texture": "#monster_cage_chain"
+        },
+        "down": {
+          "uv": [
+            2.4,
+            2.7,
+            2.9,
+            3.2
+          ],
+          "texture": "#monster_cage_chain"
+        }
+      }
+    },
+    {
+      "name": "chain_1",
+      "from": [
+        13.1,
+        10.8,
+        12.8
+      ],
+      "to": [
+        13.6,
+        14,
+        13.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.4,
+            2,
+            2.9,
+            5.2
+          ],
+          "texture": "#monster_cage_chain"
+        },
+        "east": {
+          "uv": [
+            2.7,
+            2,
+            3.2,
+            5.2
+          ],
+          "texture": "#monster_cage_chain"
+        },
+        "south": {
+          "uv": [
+            13.1,
+            2,
+            13.6,
+            5.2
+          ],
+          "texture": "#monster_cage_chain"
+        },
+        "west": {
+          "uv": [
+            12.8,
+            2,
+            13.3,
+            5.2
+          ],
+          "texture": "#monster_cage_chain"
+        },
+        "down": {
+          "uv": [
+            13.1,
+            2.7,
+            13.6,
+            3.2
+          ],
+          "texture": "#monster_cage_chain"
+        }
+      }
+    }
+  ]
+}

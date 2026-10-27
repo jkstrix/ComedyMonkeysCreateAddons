@@ -99,6 +99,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		com.comedymonkey.createaddons.content.engine.MagmaEngineBlockEntity.clientTicker = MagmaEngineSounds::tick;
 		// The Pressure Crucible's sounds run from its client tick
 		com.comedymonkey.createaddons.content.crucible.PressureCrucibleBlockEntity.clientTicker = PressureCrucibleSounds::tick;
+		// The Monster Cages' hum and bubbles run from their client ticks
+		com.comedymonkey.createaddons.content.cage.MonsterCageBlockEntity.clientTicker = MonsterCageSounds::tick;
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ChestSortButton::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseScrolled);
@@ -146,8 +148,10 @@ public class ComedyMonkeysCreateAddonsClient {
 		ElectricSounds.forget();
 		MagmaEngineSounds.forget();
 		PressureCrucibleSounds.forget();
+		MonsterCageSounds.forget();
 		Hearing.forget();
 		BottledAnimalRenderer.forget();
+		MonsterJarRenderer.forget();
 	}
 
 	private void registerScreens(RegisterMenuScreensEvent event) {
@@ -157,6 +161,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.register(ModMenus.CHEST_UPGRADE.get(), ChestUpgradeScreen::new);
 		event.register(ModMenus.AUTO_HARVESTER.get(), AutoHarvesterScreen::new);
 		event.register(ModMenus.ANIMAL_PEN.get(), AnimalPenScreen::new);
+		event.register(ModMenus.MONSTER_CAGE.get(), MonsterCageScreen::new);
 	}
 
 	private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -170,6 +175,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.AUTO_HARVESTER.get(), AutoHarvesterRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.CUCKOO_CLOCK.get(), CuckooClockRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ANIMAL_PEN.get(), AnimalPenRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.MONSTER_CAGE.get(), MonsterCageRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.MAGMA_ENGINE.get(), MagmaEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ELECTRIC_MOTOR.get(), ElectricRenderers.Motor::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);
@@ -207,6 +213,9 @@ public class ComedyMonkeysCreateAddonsClient {
 		MachineRenderers.registerModels(event);
 		AutoHarvesterRenderer.registerModels(event);
 		event.register(AnimalPenRenderer.MILK);
+		MonsterCageRenderer.registerModels(event);
+		event.register(MonsterJarRenderer.IRON);
+		event.register(MonsterJarRenderer.NETHERITE);
 		CuckooClockRenderer.registerModels(event);
 		MagmaEngineRenderer.registerModels(event);
 		ElectricRenderers.registerModels(event);
@@ -238,6 +247,17 @@ public class ComedyMonkeysCreateAddonsClient {
 				return renderer;
 			}
 		}, ModItems.BOTTLED_ANIMAL.get());
+		// The jars draw their monster inside the glass
+		event.registerItem(new IClientItemExtensions() {
+			private MonsterJarRenderer renderer;
+
+			@Override
+			public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+				if (renderer == null)
+					renderer = new MonsterJarRenderer();
+				return renderer;
+			}
+		}, ModItems.IRON_JAR.get(), ModItems.NETHERITE_JAR.get());
 	}
 
 	private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {

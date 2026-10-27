@@ -118,6 +118,8 @@ public class ComedyMonkeysCreateAddons {
 		NeoForge.EVENT_BUS.addListener(MachineEnchantments::addTrades);
 		// Capture Bottles catch animals for the Animal Pens
 		NeoForge.EVENT_BUS.addListener(AnimalCapture::onEntityInteract);
+		// Iron and Netherite Jars catch monsters for the Monster Cages
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.cage.MonsterCapture::onEntityInteract);
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> CuckooClocks.clear());
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.FluidLines::onLevelTick);
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.PowerLines::onLevelTick);
@@ -139,6 +141,12 @@ public class ComedyMonkeysCreateAddons {
 			AviatorGogglesCurios.init();
 	}
 
+	/** The face a cage's shaft goes into, which takes nothing else. */
+	private static boolean isBack(net.minecraft.world.level.block.state.BlockState state, @org.jetbrains.annotations.Nullable net.minecraft.core.Direction side) {
+		return side != null && state.hasProperty(com.comedymonkey.createaddons.content.cage.MonsterCageBlock.FACING)
+			&& side == state.getValue(com.comedymonkey.createaddons.content.cage.MonsterCageBlock.FACING).getOpposite();
+	}
+
 	private void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.WELLSPRING.get(),
 			(be, side) -> be.getTank());
@@ -158,6 +166,13 @@ public class ComedyMonkeysCreateAddons {
 			(be, side) -> be.getAutomationHandler());
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.ANIMAL_PEN.get(),
 			(be, side) -> be.getMilkHandler());
+		// Monster Chow in and drops out from any side; water (Flooded) and FE (Netherite) on every side but the back
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.MONSTER_CAGE.get(),
+			(be, side) -> be.getAutomationHandler());
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.MONSTER_CAGE.get(),
+			(be, side) -> be.isFlooded() && !isBack(be.getBlockState(), side) ? be.getWaterHandler() : null);
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.MONSTER_CAGE.get(),
+			(be, side) -> be.isNetherite() && !isBack(be.getBlockState(), side) ? be.getEnergy() : null);
 		// Trade Bot's station takes FE from underneath only (D16)
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.TRADE_BOT_STATION.get(),
 			(be, side) -> be.getEnergy(side));
@@ -278,6 +293,14 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.FE_COIL.get());
 			registerCreateTooltip(ModItems.BOTTLED_ANIMAL.get());
 			registerCreateTooltip(ModItems.CAPTURE_BOTTLE.get());
+			registerCreateTooltip(ModItems.MONSTER_CAGE.get());
+			registerCreateTooltip(ModItems.BRASS_MONSTER_CAGE.get());
+			registerCreateTooltip(ModItems.FLOODED_MONSTER_CAGE.get());
+			registerCreateTooltip(ModItems.BRASS_FLOODED_MONSTER_CAGE.get());
+			registerCreateTooltip(ModItems.NETHERITE_MONSTER_CAGE.get());
+			registerCreateTooltip(ModItems.IRON_JAR.get());
+			registerCreateTooltip(ModItems.NETHERITE_JAR.get());
+			registerCreateTooltip(ModItems.MONSTER_CHOW.get());
 			registerCreateTooltip(ModItems.INCINERATOR.get());
 			registerCreateTooltip(ModItems.STRING_TANGLER.get());
 			registerCreateTooltip(ModItems.STONE_INFUSER.get());

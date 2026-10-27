@@ -1054,5 +1054,244 @@
         "attenuation_distance": 16
       }
     ]
+  },
+  "monster_cage.bars_rattle": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.bars_rattle",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:monster_cage/bars_rattle_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/bars_rattle_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/bars_rattle_3",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "monster_cage.chow_pour": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.chow_pour",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:monster_cage/chow_pour_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/chow_pour_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/chow_pour_3",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "monster_cage.arrival": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.arrival",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:monster_cage/arrival_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/arrival_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/arrival_3",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "monster_cage.jar_in": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.jar_in",
+    "sounds": [
+      "comedymonkeysaddons:monster_cage/jar_in_1",
+      "comedymonkeysaddons:monster_cage/jar_in_2"
+    ]
+  },
+  "monster_cage.jar_out": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.jar_out",
+    "sounds": [
+      "comedymonkeysaddons:monster_cage/jar_out_1",
+      "comedymonkeysaddons:monster_cage/jar_out_2"
+    ]
+  },
+  "monster_cage.drop_tray": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.drop_tray",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:monster_cage/drop_tray_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/drop_tray_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/drop_tray_3",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/drop_tray_4",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "monster_cage.bubbles_loop": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.bubbles_loop",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:monster_cage/bubbles_loop_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/bubbles_loop_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "monster_cage.hatch_open": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.hatch_open",
+    "sounds": [
+      "comedymonkeysaddons:monster_cage/hatch_open"
+    ]
+  },
+  "monster_cage.hatch_shut": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.hatch_shut",
+    "sounds": [
+      "comedymonkeysaddons:monster_cage/hatch_shut_1",
+      "comedymonkeysaddons:monster_cage/hatch_shut_2"
+    ]
+  },
+  "monster_cage.field_hum": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.field_hum",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:monster_cage/field_hum_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/field_hum_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "monster_cage.field_up": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.field_up",
+    "sounds": [
+      "comedymonkeysaddons:monster_cage/field_up"
+    ]
+  },
+  "monster_cage.field_flicker": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.field_flicker",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:monster_cage/field_flicker_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/field_flicker_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/field_flicker_3",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:monster_cage/field_flicker_4",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "monster_cage.field_down": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.field_down",
+    "sounds": [
+      "comedymonkeysaddons:monster_cage/field_down"
+    ]
+  },
+  "monster_cage.klaxon": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.klaxon",
+    "sounds": [
+      "comedymonkeysaddons:monster_cage/klaxon_1",
+      "comedymonkeysaddons:monster_cage/klaxon_2",
+      "comedymonkeysaddons:monster_cage/klaxon_3"
+    ]
+  },
+  "monster_cage.jar_catch": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.jar_catch",
+    "sounds": [
+      "comedymonkeysaddons:monster_cage/jar_catch_1",
+      "comedymonkeysaddons:monster_cage/jar_catch_2"
+    ]
+  },
+  "monster_cage.chow_breath": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.chow_breath",
+    "sounds": [
+      "comedymonkeysaddons:monster_cage/chow_breath_1",
+      "comedymonkeysaddons:monster_cage/chow_breath_2"
+    ]
+  },
+  "monster_cage.cage_burst": {
+    "subtitle": "subtitles.comedymonkeysaddons.monster_cage.cage_burst",
+    "sounds": [
+      "comedymonkeysaddons:monster_cage/cage_burst_1",
+      "comedymonkeysaddons:monster_cage/cage_burst_2"
+    ]
+  },
+  "fish_tank.pump_loop": {
+    "subtitle": "subtitles.comedymonkeysaddons.fish_tank.pump_loop",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:fish_tank/pump_loop_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:fish_tank/pump_loop_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "fish_tank.bubbles_loop": {
+    "subtitle": "subtitles.comedymonkeysaddons.fish_tank.bubbles_loop",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:fish_tank/bubbles_loop_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:fish_tank/bubbles_loop_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "fish_tank.feeder_sprinkle": {
+    "subtitle": "subtitles.comedymonkeysaddons.fish_tank.feeder_sprinkle",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:fish_tank/feeder_sprinkle_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:fish_tank/feeder_sprinkle_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "fish_tank.lid_feed": {
+    "subtitle": "subtitles.comedymonkeysaddons.fish_tank.lid_feed",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:fish_tank/lid_feed_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:fish_tank/lid_feed_2",
+        "attenuation_distance": 8
+      }
+    ]
   }
 }

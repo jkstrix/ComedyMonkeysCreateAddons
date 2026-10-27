@@ -1,0 +1,1964 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/netherite_monster_cage_side",
+    "netherite_monster_cage_ceiling": "comedymonkeysaddons:block/netherite_monster_cage_ceiling",
+    "netherite_monster_cage_front": "comedymonkeysaddons:block/netherite_monster_cage_front",
+    "netherite_monster_cage_side": "comedymonkeysaddons:block/netherite_monster_cage_side",
+    "netherite_monster_cage_back": "comedymonkeysaddons:block/netherite_monster_cage_back",
+    "netherite_monster_cage_bottom": "comedymonkeysaddons:block/netherite_monster_cage_bottom",
+    "netherite_monster_cage_cell": "comedymonkeysaddons:block/netherite_monster_cage_cell",
+    "monster_cage_vent_back": "comedymonkeysaddons:block/monster_cage_vent_back",
+    "monster_cage_dark": "comedymonkeysaddons:block/monster_cage_dark",
+    "netherite_monster_cage_collar": "comedymonkeysaddons:block/netherite_monster_cage_collar",
+    "netherite_monster_cage_terminal": "comedymonkeysaddons:block/netherite_monster_cage_terminal",
+    "netherite_monster_cage_floor": "comedymonkeysaddons:block/netherite_monster_cage_floor",
+    "netherite_monster_cage_bars": "comedymonkeysaddons:block/netherite_monster_cage_bars",
+    "netherite_monster_cage_tray": "comedymonkeysaddons:block/netherite_monster_cage_tray",
+    "netherite_monster_cage_plate": "comedymonkeysaddons:block/netherite_monster_cage_plate",
+    "netherite_monster_cage_port": "comedymonkeysaddons:block/netherite_monster_cage_port",
+    "netherite_monster_cage_coil": "comedymonkeysaddons:block/netherite_monster_cage_coil",
+    "netherite_monster_cage_coil_cap": "comedymonkeysaddons:block/netherite_monster_cage_coil_cap",
+    "netherite_monster_cage_top": "comedymonkeysaddons:block/netherite_monster_cage_top",
+    "netherite_monster_cage_guard": "comedymonkeysaddons:block/netherite_monster_cage_guard"
+  },
+  "elements": [
+    {
+      "name": "ceiling",
+      "from": [
+        2,
+        13.99,
+        0.5
+      ],
+      "to": [
+        14,
+        14,
+        14
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            2,
+            2,
+            14,
+            15.5
+          ],
+          "texture": "#netherite_monster_cage_ceiling"
+        }
+      }
+    },
+    {
+      "name": "bottom",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_front"
+        },
+        "east": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_back"
+        },
+        "west": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_bottom"
+        }
+      }
+    },
+    {
+      "name": "wall_back",
+      "from": [
+        2,
+        2,
+        14
+      ],
+      "to": [
+        14,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#netherite_monster_cage_cell"
+        },
+        "south": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#netherite_monster_cage_back"
+        }
+      }
+    },
+    {
+      "name": "wall_west",
+      "from": [
+        0.5,
+        2,
+        0
+      ],
+      "to": [
+        2,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            2,
+            15.5,
+            14
+          ],
+          "texture": "#netherite_monster_cage_front"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#netherite_monster_cage_cell"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            2,
+            2,
+            14
+          ],
+          "texture": "#netherite_monster_cage_back"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#monster_cage_vent_back"
+        }
+      }
+    },
+    {
+      "name": "skin_west_front",
+      "from": [
+        0,
+        2,
+        0
+      ],
+      "to": [
+        0.5,
+        14,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.5,
+            2,
+            16,
+            14
+          ],
+          "texture": "#netherite_monster_cage_front"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            0.5,
+            14
+          ],
+          "texture": "#monster_cage_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            6,
+            14
+          ],
+          "texture": "#netherite_monster_cage_side"
+        }
+      }
+    },
+    {
+      "name": "skin_west_back",
+      "from": [
+        0,
+        2,
+        10
+      ],
+      "to": [
+        0.5,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.5,
+            2,
+            16,
+            14
+          ],
+          "texture": "#monster_cage_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            0.5,
+            14
+          ],
+          "texture": "#netherite_monster_cage_back"
+        },
+        "west": {
+          "uv": [
+            10,
+            2,
+            16,
+            14
+          ],
+          "texture": "#netherite_monster_cage_side"
+        }
+      }
+    },
+    {
+      "name": "skin_west_top",
+      "from": [
+        0,
+        10,
+        6
+      ],
+      "to": [
+        0.5,
+        14,
+        10
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            6,
+            2,
+            10,
+            6
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "down": {
+          "uv": [
+            0,
+            6,
+            0.5,
+            10
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "skin_west_foot",
+      "from": [
+        0,
+        2,
+        6
+      ],
+      "to": [
+        0.5,
+        6,
+        10
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            6,
+            10,
+            10,
+            14
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            0.5,
+            10
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "collar_west",
+      "from": [
+        0.25,
+        6.5,
+        6.5
+      ],
+      "to": [
+        0.5,
+        9.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.5,
+            6.5,
+            15.75,
+            9.5
+          ],
+          "texture": "#netherite_monster_cage_collar"
+        },
+        "south": {
+          "uv": [
+            0.25,
+            6.5,
+            0.5,
+            9.5
+          ],
+          "texture": "#netherite_monster_cage_collar"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#netherite_monster_cage_collar"
+        },
+        "up": {
+          "uv": [
+            0.25,
+            6.5,
+            0.5,
+            9.5
+          ],
+          "texture": "#netherite_monster_cage_collar"
+        },
+        "down": {
+          "uv": [
+            0.25,
+            6.5,
+            0.5,
+            9.5
+          ],
+          "texture": "#netherite_monster_cage_collar"
+        }
+      }
+    },
+    {
+      "name": "terminal_west",
+      "from": [
+        0,
+        7.25,
+        7.25
+      ],
+      "to": [
+        0.5,
+        8.75,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15.5,
+            7.25,
+            16,
+            8.75
+          ],
+          "texture": "#netherite_monster_cage_terminal"
+        },
+        "south": {
+          "uv": [
+            0,
+            7.25,
+            0.5,
+            8.75
+          ],
+          "texture": "#netherite_monster_cage_terminal"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#netherite_monster_cage_terminal"
+        },
+        "up": {
+          "uv": [
+            0,
+            7.25,
+            0.5,
+            8.75
+          ],
+          "texture": "#netherite_monster_cage_terminal"
+        },
+        "down": {
+          "uv": [
+            0,
+            7.25,
+            0.5,
+            8.75
+          ],
+          "texture": "#netherite_monster_cage_terminal"
+        }
+      }
+    },
+    {
+      "name": "wall_east",
+      "from": [
+        14,
+        2,
+        0
+      ],
+      "to": [
+        15.5,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            2,
+            2,
+            14
+          ],
+          "texture": "#netherite_monster_cage_front"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#monster_cage_vent_back"
+        },
+        "south": {
+          "uv": [
+            14,
+            2,
+            15.5,
+            14
+          ],
+          "texture": "#netherite_monster_cage_back"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#netherite_monster_cage_cell"
+        }
+      }
+    },
+    {
+      "name": "skin_east_front",
+      "from": [
+        15.5,
+        2,
+        0
+      ],
+      "to": [
+        16,
+        14,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2,
+            0.5,
+            14
+          ],
+          "texture": "#netherite_monster_cage_front"
+        },
+        "east": {
+          "uv": [
+            10,
+            2,
+            16,
+            14
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "south": {
+          "uv": [
+            15.5,
+            2,
+            16,
+            14
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "skin_east_back",
+      "from": [
+        15.5,
+        2,
+        10
+      ],
+      "to": [
+        16,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2,
+            0.5,
+            14
+          ],
+          "texture": "#monster_cage_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            6,
+            14
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "south": {
+          "uv": [
+            15.5,
+            2,
+            16,
+            14
+          ],
+          "texture": "#netherite_monster_cage_back"
+        }
+      }
+    },
+    {
+      "name": "skin_east_top",
+      "from": [
+        15.5,
+        10,
+        6
+      ],
+      "to": [
+        16,
+        14,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            2,
+            10,
+            6
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "down": {
+          "uv": [
+            15.5,
+            6,
+            16,
+            10
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "skin_east_foot",
+      "from": [
+        15.5,
+        2,
+        6
+      ],
+      "to": [
+        16,
+        6,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            10,
+            10,
+            14
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "up": {
+          "uv": [
+            15.5,
+            6,
+            16,
+            10
+          ],
+          "texture": "#monster_cage_dark"
+        }
+      }
+    },
+    {
+      "name": "collar_east",
+      "from": [
+        15.5,
+        6.5,
+        6.5
+      ],
+      "to": [
+        15.75,
+        9.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.25,
+            6.5,
+            0.5,
+            9.5
+          ],
+          "texture": "#netherite_monster_cage_collar"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#netherite_monster_cage_collar"
+        },
+        "south": {
+          "uv": [
+            15.5,
+            6.5,
+            15.75,
+            9.5
+          ],
+          "texture": "#netherite_monster_cage_collar"
+        },
+        "up": {
+          "uv": [
+            15.5,
+            6.5,
+            15.75,
+            9.5
+          ],
+          "texture": "#netherite_monster_cage_collar"
+        },
+        "down": {
+          "uv": [
+            15.5,
+            6.5,
+            15.75,
+            9.5
+          ],
+          "texture": "#netherite_monster_cage_collar"
+        }
+      }
+    },
+    {
+      "name": "terminal_east",
+      "from": [
+        15.5,
+        7.25,
+        7.25
+      ],
+      "to": [
+        16,
+        8.75,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            7.25,
+            0.5,
+            8.75
+          ],
+          "texture": "#netherite_monster_cage_terminal"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#netherite_monster_cage_terminal"
+        },
+        "south": {
+          "uv": [
+            15.5,
+            7.25,
+            16,
+            8.75
+          ],
+          "texture": "#netherite_monster_cage_terminal"
+        },
+        "up": {
+          "uv": [
+            15.5,
+            7.25,
+            16,
+            8.75
+          ],
+          "texture": "#netherite_monster_cage_terminal"
+        },
+        "down": {
+          "uv": [
+            15.5,
+            7.25,
+            16,
+            8.75
+          ],
+          "texture": "#netherite_monster_cage_terminal"
+        }
+      }
+    },
+    {
+      "name": "floor",
+      "from": [
+        2,
+        2,
+        0.75
+      ],
+      "to": [
+        14,
+        2.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            13.5,
+            14,
+            14
+          ],
+          "texture": "#netherite_monster_cage_floor"
+        },
+        "up": {
+          "uv": [
+            2,
+            0.75,
+            14,
+            14
+          ],
+          "texture": "#netherite_monster_cage_floor"
+        }
+      }
+    },
+    {
+      "name": "bar_0",
+      "from": [
+        4.5,
+        2.5,
+        1
+      ],
+      "to": [
+        5.5,
+        14,
+        1.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.5,
+            2,
+            11.5,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        },
+        "east": {
+          "uv": [
+            14.65,
+            2,
+            15,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        },
+        "south": {
+          "uv": [
+            4.5,
+            2,
+            5.5,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            1.35,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        }
+      }
+    },
+    {
+      "name": "bar_1",
+      "from": [
+        7.5,
+        2.5,
+        1
+      ],
+      "to": [
+        8.5,
+        14,
+        1.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        },
+        "east": {
+          "uv": [
+            14.65,
+            2,
+            15,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            1.35,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        }
+      }
+    },
+    {
+      "name": "bar_2",
+      "from": [
+        10.5,
+        2.5,
+        1
+      ],
+      "to": [
+        11.5,
+        14,
+        1.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.5,
+            2,
+            5.5,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        },
+        "east": {
+          "uv": [
+            14.65,
+            2,
+            15,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        },
+        "south": {
+          "uv": [
+            10.5,
+            2,
+            11.5,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            1.35,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_bars"
+        }
+      }
+    },
+    {
+      "name": "tray_front",
+      "from": [
+        3,
+        2.5,
+        1.4
+      ],
+      "to": [
+        13,
+        3.3,
+        1.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            12.7,
+            13,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "east": {
+          "uv": [
+            14.1,
+            12.7,
+            14.6,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "south": {
+          "uv": [
+            3,
+            12.7,
+            13,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "west": {
+          "uv": [
+            1.4,
+            12.7,
+            1.9,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "up": {
+          "uv": [
+            3,
+            1.4,
+            13,
+            1.9
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        }
+      }
+    },
+    {
+      "name": "tray_back",
+      "from": [
+        3,
+        2.5,
+        3.3
+      ],
+      "to": [
+        13,
+        3.3,
+        3.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            12.7,
+            13,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "east": {
+          "uv": [
+            12.2,
+            12.7,
+            12.7,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "south": {
+          "uv": [
+            3,
+            12.7,
+            13,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "west": {
+          "uv": [
+            3.3,
+            12.7,
+            3.8,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "up": {
+          "uv": [
+            3,
+            3.3,
+            13,
+            3.8
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        }
+      }
+    },
+    {
+      "name": "tray_west",
+      "from": [
+        3,
+        2.5,
+        1.9
+      ],
+      "to": [
+        3.5,
+        3.3,
+        3.3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            12.7,
+            12.7,
+            14.1,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "west": {
+          "uv": [
+            1.9,
+            12.7,
+            3.3,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "up": {
+          "uv": [
+            3,
+            1.9,
+            3.5,
+            3.3
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        }
+      }
+    },
+    {
+      "name": "tray_east",
+      "from": [
+        12.5,
+        2.5,
+        1.9
+      ],
+      "to": [
+        13,
+        3.3,
+        3.3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            12.7,
+            12.7,
+            14.1,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "west": {
+          "uv": [
+            1.9,
+            12.7,
+            3.3,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        },
+        "up": {
+          "uv": [
+            12.5,
+            1.9,
+            13,
+            3.3
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        }
+      }
+    },
+    {
+      "name": "tray_bed",
+      "from": [
+        3.5,
+        2.5,
+        1.9
+      ],
+      "to": [
+        12.5,
+        2.75,
+        3.3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            3.5,
+            1.9,
+            12.5,
+            3.3
+          ],
+          "texture": "#netherite_monster_cage_tray"
+        }
+      }
+    },
+    {
+      "name": "port",
+      "from": [
+        4.5,
+        4.5,
+        13.5
+      ],
+      "to": [
+        11.5,
+        11.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_port"
+        },
+        "east": {
+          "uv": [
+            2,
+            4.5,
+            2.5,
+            11.5
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        },
+        "west": {
+          "uv": [
+            13.5,
+            4.5,
+            14,
+            11.5
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        },
+        "up": {
+          "uv": [
+            4.5,
+            13.5,
+            11.5,
+            14
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        },
+        "down": {
+          "uv": [
+            4.5,
+            2,
+            11.5,
+            2.5
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        }
+      }
+    },
+    {
+      "name": "coil_0",
+      "from": [
+        2.05,
+        2.5,
+        1.4
+      ],
+      "to": [
+        2.9499999999999997,
+        5.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.05,
+            10.5,
+            13.95,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "east": {
+          "uv": [
+            13.5,
+            10.5,
+            14.6,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "south": {
+          "uv": [
+            2.05,
+            10.5,
+            2.95,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "west": {
+          "uv": [
+            1.4,
+            10.5,
+            2.5,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "up": {
+          "uv": [
+            2.05,
+            1.4,
+            2.95,
+            2.5
+          ],
+          "texture": "#netherite_monster_cage_coil_cap"
+        },
+        "down": {
+          "uv": [
+            2.05,
+            13.5,
+            2.95,
+            14.6
+          ],
+          "texture": "#netherite_monster_cage_coil_cap"
+        }
+      }
+    },
+    {
+      "name": "coil_1",
+      "from": [
+        13.05,
+        2.5,
+        1.4
+      ],
+      "to": [
+        13.950000000000001,
+        5.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.05,
+            10.5,
+            2.95,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "east": {
+          "uv": [
+            13.5,
+            10.5,
+            14.6,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "south": {
+          "uv": [
+            13.05,
+            10.5,
+            13.95,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "west": {
+          "uv": [
+            1.4,
+            10.5,
+            2.5,
+            13.5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "up": {
+          "uv": [
+            13.05,
+            1.4,
+            13.95,
+            2.5
+          ],
+          "texture": "#netherite_monster_cage_coil_cap"
+        },
+        "down": {
+          "uv": [
+            13.05,
+            13.5,
+            13.95,
+            14.6
+          ],
+          "texture": "#netherite_monster_cage_coil_cap"
+        }
+      }
+    },
+    {
+      "name": "coil_2",
+      "from": [
+        2.05,
+        11,
+        1.4
+      ],
+      "to": [
+        2.9499999999999997,
+        13.95,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.05,
+            2.05,
+            13.95,
+            5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "east": {
+          "uv": [
+            13.5,
+            2.05,
+            14.6,
+            5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "south": {
+          "uv": [
+            2.05,
+            2.05,
+            2.95,
+            5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "west": {
+          "uv": [
+            1.4,
+            2.05,
+            2.5,
+            5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "up": {
+          "uv": [
+            2.05,
+            1.4,
+            2.95,
+            2.5
+          ],
+          "texture": "#netherite_monster_cage_coil_cap"
+        },
+        "down": {
+          "uv": [
+            2.05,
+            13.5,
+            2.95,
+            14.6
+          ],
+          "texture": "#netherite_monster_cage_coil_cap"
+        }
+      }
+    },
+    {
+      "name": "coil_3",
+      "from": [
+        13.05,
+        11,
+        1.4
+      ],
+      "to": [
+        13.950000000000001,
+        13.95,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.05,
+            2.05,
+            2.95,
+            5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "east": {
+          "uv": [
+            13.5,
+            2.05,
+            14.6,
+            5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "south": {
+          "uv": [
+            13.05,
+            2.05,
+            13.95,
+            5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "west": {
+          "uv": [
+            1.4,
+            2.05,
+            2.5,
+            5
+          ],
+          "texture": "#netherite_monster_cage_coil"
+        },
+        "up": {
+          "uv": [
+            13.05,
+            1.4,
+            13.95,
+            2.5
+          ],
+          "texture": "#netherite_monster_cage_coil_cap"
+        },
+        "down": {
+          "uv": [
+            13.05,
+            13.5,
+            13.95,
+            14.6
+          ],
+          "texture": "#netherite_monster_cage_coil_cap"
+        }
+      }
+    },
+    {
+      "name": "roof_n",
+      "from": [
+        0,
+        14,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#netherite_monster_cage_front"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            0,
+            16,
+            2
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            5.5,
+            2
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            5.5
+          ],
+          "texture": "#netherite_monster_cage_top"
+        }
+      }
+    },
+    {
+      "name": "roof_s",
+      "from": [
+        0,
+        14,
+        10.5
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            5.5,
+            2
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#netherite_monster_cage_back"
+        },
+        "west": {
+          "uv": [
+            10.5,
+            0,
+            16,
+            2
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "up": {
+          "uv": [
+            0,
+            10.5,
+            16,
+            16
+          ],
+          "texture": "#netherite_monster_cage_top"
+        }
+      }
+    },
+    {
+      "name": "roof_w",
+      "from": [
+        0,
+        14,
+        5.5
+      ],
+      "to": [
+        5.5,
+        16,
+        10.5
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            2
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "up": {
+          "uv": [
+            0,
+            5.5,
+            5.5,
+            10.5
+          ],
+          "texture": "#netherite_monster_cage_top"
+        }
+      }
+    },
+    {
+      "name": "roof_e",
+      "from": [
+        10.5,
+        14,
+        5.5
+      ],
+      "to": [
+        16,
+        16,
+        10.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            2
+          ],
+          "texture": "#netherite_monster_cage_side"
+        },
+        "up": {
+          "uv": [
+            10.5,
+            5.5,
+            16,
+            10.5
+          ],
+          "texture": "#netherite_monster_cage_top"
+        }
+      }
+    },
+    {
+      "name": "well_floor",
+      "from": [
+        5.5,
+        14,
+        5.5
+      ],
+      "to": [
+        10.5,
+        14.5,
+        10.5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        }
+      }
+    },
+    {
+      "name": "well_n",
+      "from": [
+        5.5,
+        14.5,
+        5.5
+      ],
+      "to": [
+        10.5,
+        16,
+        5.5
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            1.5
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        }
+      }
+    },
+    {
+      "name": "well_s",
+      "from": [
+        5.5,
+        14.5,
+        10.5
+      ],
+      "to": [
+        10.5,
+        16,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            1.5
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        }
+      }
+    },
+    {
+      "name": "well_w",
+      "from": [
+        5.5,
+        14.5,
+        5.5
+      ],
+      "to": [
+        5.5,
+        16,
+        10.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            1.5
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        }
+      }
+    },
+    {
+      "name": "well_e",
+      "from": [
+        10.5,
+        14.5,
+        5.5
+      ],
+      "to": [
+        10.5,
+        16,
+        10.5
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            1.5
+          ],
+          "texture": "#netherite_monster_cage_plate"
+        }
+      }
+    },
+    {
+      "name": "guard_a",
+      "from": [
+        5.5,
+        15.6,
+        7.6
+      ],
+      "to": [
+        10.5,
+        15.9,
+        7.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            0.1,
+            10.5,
+            0.4
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        },
+        "east": {
+          "uv": [
+            8.1,
+            0.1,
+            8.4,
+            0.4
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            0.1,
+            10.5,
+            0.4
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        },
+        "west": {
+          "uv": [
+            7.6,
+            0.1,
+            7.9,
+            0.4
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            7.6,
+            10.5,
+            7.9
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            8.1,
+            10.5,
+            8.4
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        }
+      }
+    },
+    {
+      "name": "guard_b",
+      "from": [
+        5.5,
+        15.6,
+        8.6
+      ],
+      "to": [
+        10.5,
+        15.9,
+        8.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            0.1,
+            10.5,
+            0.4
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        },
+        "east": {
+          "uv": [
+            7.1,
+            0.1,
+            7.4,
+            0.4
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            0.1,
+            10.5,
+            0.4
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        },
+        "west": {
+          "uv": [
+            8.6,
+            0.1,
+            8.9,
+            0.4
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            8.6,
+            10.5,
+            8.9
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            7.1,
+            10.5,
+            7.4
+          ],
+          "texture": "#netherite_monster_cage_guard"
+        }
+      }
+    }
+  ]
+}
