@@ -85,7 +85,7 @@ public final class CMConfig {
 		public final ModConfigSpec.DoubleValue cageMonstrousBonus;
 		public final ModConfigSpec.IntValue cageWaterPerMonster, floodedCageTank, brassFloodedCageTank;
 		public final ModConfigSpec.IntValue cageFieldFe, cageFarmFe, cageFeBuffer;
-		public final ModConfigSpec.IntValue cageWarningSeconds, cageEscapeSeconds, cageAlarmRange;
+		public final ModConfigSpec.IntValue cageWarningSeconds, cageEscapeSeconds, cageAlarmRange, cageRestoreHoldSeconds;
 		public final ModConfigSpec.BooleanValue cageEscapes;
 		public final ModConfigSpec.DoubleValue cageGrumbleVolume;
 		public final ModConfigSpec.IntValue fishTankCapacity, brassFishTankCapacity, fishTankBreedSeconds, fishTankWaterPerBirth, fishTankWater, brassFishTankWater;
@@ -136,6 +136,7 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue tradeBotFePerBlock;
 		public final ModConfigSpec.IntValue tradeBotFePerTrade;
 		public final ModConfigSpec.IntValue tradeBotHostileRadius;
+		public final ModConfigSpec.BooleanValue helperBotShopKeeper;
 
 		public final ModConfigSpec.BooleanValue pipezFeedsBlazeBurners;
 		public final ModConfigSpec.BooleanValue blazeBurnerPipezOnly;
@@ -343,6 +344,8 @@ public final class CMConfig {
 				.translation("comedymonkeysaddons.configuration.cageEscapeSeconds").defineInRange("escapeIntervalSeconds", 1200, 60, 360000);
 			cageAlarmRange = builder.comment("Blocks a player must be within for the countdown to run and to get the warnings.")
 				.translation("comedymonkeysaddons.configuration.cageAlarmRange").defineInRange("alarmRange", 128, 8, 1024);
+			cageRestoreHoldSeconds = builder.comment("Seconds a restored field must hold before it calls off a countdown. Until then the countdown only stands still, and carries on if the field drops again.")
+				.translation("comedymonkeysaddons.configuration.cageRestoreHoldSeconds").defineInRange("restoreHoldSeconds", 60, 0, 3600);
 			cageEscapes = builder.comment("Whether Withers escape when the field is down. Off: the cage just stops.")
 				.translation("comedymonkeysaddons.configuration.cageEscapes").define("escapes", true);
 			cageGrumbleVolume = builder.comment("Volume of the caged monsters' own sounds, which they make now and then.")
@@ -594,6 +597,13 @@ public final class CMConfig {
 				.comment("How close (in blocks) a monster he can see has to be before he gets scared and hides.")
 				.translation("comedymonkeysaddons.configuration.tradeBotHostileRadius")
 				.defineInRange("tradeBotHostileRadius", 12, 2, 32);
+			builder.pop();
+
+			builder.comment("Helper Bot: the robot who drives trains and keeps shop, like a Blaze Burner").push("helperBot");
+			helperBotShopKeeper = builder
+				.comment("Helper Bot can keep shop beside a Stock Ticker, as a Blaze Burner can. Turn off if a Create update breaks it.")
+				.translation("comedymonkeysaddons.configuration.helperBotShopKeeper")
+				.define("helperBotShopKeeper", true);
 			builder.pop();
 
 			builder.comment("Compatibility with other mods").push("modCompatibility");
@@ -899,6 +909,7 @@ public final class CMConfig {
 	public static class Client {
 		public final ModConfigSpec.BooleanValue renderCurioGoggles;
 		public final ModConfigSpec.BooleanValue renderOverHelmet;
+		public final ModConfigSpec.IntValue helperBotVoiceCooldown;
 
 		Client(ModConfigSpec.Builder builder) {
 			builder.comment("Aviator's Goggles worn in the Curios head slot").push("aviatorsGoggles");
@@ -913,6 +924,13 @@ public final class CMConfig {
 				.translation("comedymonkeysaddons.configuration.showGogglesOverHelmet")
 				.define("showGogglesOverHelmet", true);
 
+			builder.pop();
+
+			builder.comment("Helper Bot: the robot who drives trains and keeps shop").push("helperBot");
+			helperBotVoiceCooldown = builder
+				.comment("Seconds each Helper Bot waits between voice sounds (chirps, grumbles, sighs). Trains are loud enough.")
+				.translation("comedymonkeysaddons.configuration.helperBotVoiceCooldown")
+				.defineInRange("helperBotVoiceCooldown", 20, 0, 600);
 			builder.pop();
 		}
 	}

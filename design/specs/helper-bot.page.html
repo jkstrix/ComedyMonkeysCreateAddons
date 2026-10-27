@@ -1,0 +1,325 @@
+<title>Helper Bot</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the house quick-read column (as the Monster Cage page): material band, idiot test first, a "where he goes" diagram as the centrepiece, then reactions, dyes, numbers, rules, what-ifs, scores */
+:root {
+  --bg: #e6e6e1; --surface: #f2f2ee; --fg: #22231f; --muted: #5f6058; --line: #c9c8c0;
+  --accent: #8a6626; --accent-soft: #e9dcc0; --iron: #4a4d50; --iron-hi: #5d6164;
+  --copper: #8a5233; --glow: #b9772f; --rail: #6b6e6a;
+  --ok: #4c7a46; --warn: #a3712a;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
+  --copper: #b9764d; --glow: #d99a4a; --rail: #8a8c86;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
+  --copper: #b9764d; --glow: #d99a4a; --rail: #8a8c86;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.15rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+code { font: .85em var(--mono) }
+
+header { display: grid; gap: 14px }
+.band { height: 10px; border-radius: 2px; background: linear-gradient(90deg, var(--iron) 0 46%, var(--bg) 46% 48%, var(--rail) 48% 66%, var(--bg) 66% 68%, var(--accent) 68% 86%, var(--bg) 86% 88%, var(--copper) 88% 100%) }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { padding: 8px 0 8px 14px; border-left: 3px solid var(--accent); font-weight: 500 }
+
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: step }
+.loop li { counter-increment: step; display: grid; gap: 6px; align-content: start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.loop li::before { content: counter(step); font: 600 1.4rem/1 var(--display); color: var(--accent) }
+
+.diagram { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 12px 8px }
+.diagram svg { display: block; width: 100%; min-width: 620px; height: auto }
+.lbl { font: 500 11px var(--mono); fill: var(--fg) }
+.lbl.dim { fill: var(--muted) }
+.lbl.big { font: 600 15px var(--display); }
+.lbl.ok { fill: var(--ok) }
+.lbl.warn { fill: var(--warn) }
+
+.react { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px }
+.react div { padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--iron-hi); border-radius: 3px; display: grid; gap: 4px; align-content: start }
+.react div.go { border-left-color: var(--ok) }
+.react div.bad { border-left-color: var(--warn) }
+.react .when { font: 500 .75rem/1.3 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em }
+
+.dyes { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px }
+.dye { display: grid; gap: 6px; justify-items: center; font: 500 .72rem/1.2 var(--mono); color: var(--muted); text-align: center }
+.dye i { display: block; width: 100%; height: 30px; border-radius: 3px; border: 1px solid var(--line) }
+
+.numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px }
+.num { padding: 12px 14px; border-top: 3px solid var(--accent); background: var(--surface); display: grid; gap: 2px }
+.num b { font: 600 1.4rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.num span { color: var(--muted); font-size: .85rem }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.pairs ul { margin: 0; padding: 14px 16px 14px 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 6px }
+.pairs h3 { margin-bottom: 4px }
+.does h3 { color: var(--ok) }
+.doesnt h3 { color: var(--warn) }
+
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 24px }
+.qa div { display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.qa b { font-weight: 600 }
+.qa span { color: var(--muted) }
+
+.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.watch { display: grid; gap: 8px; align-content: start; padding: 14px 16px; border: 1px dashed var(--warn); border-radius: 3px }
+.watch.ok { border-color: var(--accent) }
+.watch h3 { color: var(--warn) }
+.watch.ok h3 { color: var(--accent) }
+.watch ul { margin: 0; padding-left: 18px; display: grid; gap: 4px }
+
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center }
+.score .track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden }
+.score .fill { height: 100%; background: var(--ok) }
+.score .why { grid-column: 2 / -1; color: var(--muted); font-size: .85rem; margin-top: -6px }
+.score b { text-align: right; font: 500 .85rem var(--mono); font-variant-numeric: tabular-nums }
+@media (max-width: 520px) { .score { grid-template-columns: 1fr 44px } .score .track { grid-column: 1 / -1; order: 3 } .score .why { grid-column: 1 / -1; margin-top: 0 } }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px }
+</style>
+<div class="wrap">
+  <header>
+    <div class="band" aria-hidden="true"></div>
+    <p class="eyebrow">ComedyMonkey's Create Addons · Trains</p>
+    <h1>Helper Bot</h1>
+    <p class="pitch">Trade Bot's cousin, bolted in place. Put him where you'd put a Blaze Burner and he does its job by Create's exact rules: he drives your train, or keeps your shop. The difference is that you can watch him do it.</p>
+    <div class="chips">
+      <span class="chip ready">Design ready: 90%</span>
+      <span class="chip">Early–mid game</span>
+      <span class="chip">Crafting table · andesite tier</span>
+      <span class="chip">Look: brief written</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>In ten lines</h2>
+    <ul class="idiot">
+      <li>Helper Bot replaces the Blaze Burner. Same rules.</li>
+      <li>Put him right behind the Train Controls.</li>
+      <li>Right-click him with a Schedule. He drives.</li>
+      <li>Empty hand takes the schedule back.</li>
+      <li>Beside a Stock Ticker, he keeps shop.</li>
+      <li>He never moves. He can't fall off.</li>
+      <li>Crafting table plus one dye recolours him.</li>
+      <li>Bulk washing makes him plain again.</li>
+      <li>Low roof? He ducks. Still works.</li>
+      <li>No power, no owner, no bonuses.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>How you use him</h2>
+    <ol class="loop">
+      <li><h3>Craft him</h3><p>Andesite casing, electron tube, cogwheel, 2 iron sheets. No Nether trip.</p></li>
+      <li><h3>Dye him</h3><p>Optional. Helper Bot + 1 dye in a crafting table.</p></li>
+      <li><h3>Place him</h3><p>Right behind the Train Controls. He turns to face them.</p></li>
+      <li><h3>Hand him a Schedule</h3><p>Assemble, then right-click him. His train cap pops on.</p></li>
+      <li><h3>Watch him drive</h3><p>Throttle, brake, clock checks, toots and waves.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Where he goes</h2>
+    <p class="sub">The same spots as a Blaze Burner. On a train: directly behind the controls, along the train, with the controls facing him. One driver per direction. In a shop: beside the Stock Ticker, on the same level.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 700 250" role="img" aria-label="Side view of a carriage: a Helper Bot directly behind the Train Controls drives; a second Helper Bot elsewhere rides as a passenger. A two-way train has one driver at each end. In a shop, a Helper Bot stands beside the Stock Ticker on the same level.">
+        <!-- carriage -->
+        <rect x="20" y="40" width="420" height="120" fill="none" stroke="var(--iron-hi)" stroke-width="2"></rect>
+        <line x1="20" y1="160" x2="440" y2="160" stroke="var(--iron-hi)" stroke-width="4"></line>
+        <circle cx="90" cy="176" r="14" fill="var(--iron)" stroke="var(--iron-hi)"></circle>
+        <circle cx="370" cy="176" r="14" fill="var(--iron)" stroke="var(--iron-hi)"></circle>
+        <line x1="10" y1="192" x2="450" y2="192" stroke="var(--rail)" stroke-width="3"></line>
+        <!-- front driver: bot (1.5 tall) then controls at the front -->
+        <rect x="350" y="100" width="40" height="60" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
+        <rect x="355" y="76" width="30" height="24" fill="var(--accent-soft)" stroke="var(--accent)" stroke-dasharray="3 2"></rect>
+        <circle cx="364" cy="88" r="3.5" fill="var(--glow)"></circle><circle cx="376" cy="88" r="3.5" fill="var(--glow)"></circle>
+        <rect x="390" y="120" width="40" height="40" fill="var(--iron)" stroke="var(--iron-hi)" stroke-width="2"></rect>
+        <path d="M398 124 L408 136 L398 148" fill="none" stroke="var(--fg)" stroke-width="2" transform="rotate(180 410 136)"></path>
+        <text x="370" y="66" text-anchor="middle" class="lbl ok">drives ✓</text>
+        <text x="410" y="114" text-anchor="middle" class="lbl dim">controls</text>
+        <text x="410" y="215" text-anchor="middle" class="lbl dim">faces him</text>
+        <!-- passenger -->
+        <rect x="170" y="100" width="40" height="60" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"></rect>
+        <rect x="175" y="76" width="30" height="24" fill="var(--surface)" stroke="var(--muted)" stroke-dasharray="3 2"></rect>
+        <circle cx="184" cy="88" r="3.5" fill="var(--muted)"></circle><circle cx="196" cy="88" r="3.5" fill="var(--muted)"></circle>
+        <text x="190" y="66" text-anchor="middle" class="lbl warn">passenger</text>
+        <text x="190" y="215" text-anchor="middle" class="lbl dim">no controls in front</text>
+        <!-- direction -->
+        <line x1="250" y1="24" x2="430" y2="24" stroke="var(--fg)" stroke-width="1.5"></line>
+        <path d="M430 24 l-8 -5 v10 z" fill="var(--fg)"></path>
+        <text x="240" y="28" text-anchor="end" class="lbl">this way</text>
+        <!-- dashed half label -->
+        <text x="30" y="58" class="lbl dim">dashed: his top half (1.5 blocks)</text>
+        <!-- shop -->
+        <line x1="480" y1="30" x2="480" y2="220" stroke="var(--line)"></line>
+        <text x="500" y="58" class="lbl big">In a shop</text>
+        <rect x="520" y="100" width="40" height="60" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
+        <rect x="525" y="76" width="30" height="24" fill="var(--accent-soft)" stroke="var(--accent)" stroke-dasharray="3 2"></rect>
+        <circle cx="534" cy="88" r="3.5" fill="var(--glow)"></circle><circle cx="546" cy="88" r="3.5" fill="var(--glow)"></circle>
+        <rect x="560" y="120" width="40" height="40" fill="var(--copper)" stroke="var(--iron-hi)" stroke-width="2"></rect>
+        <text x="580" y="114" text-anchor="middle" class="lbl dim">ticker</text>
+        <line x1="500" y1="160" x2="680" y2="160" stroke="var(--iron-hi)" stroke-width="2"></line>
+        <text x="540" y="66" text-anchor="middle" class="lbl ok">keeps shop ✓</text>
+        <text x="590" y="182" text-anchor="middle" class="lbl dim">beside it, same level</text>
+        <text x="590" y="198" text-anchor="middle" class="lbl dim">right-click him to shop</text>
+      </svg>
+    </div>
+    <p class="sub">A two-way train needs one at each end. Under a solid block he ducks into one block and keeps working.</p>
+  </section>
+
+  <section>
+    <h2>What the train makes him do</h2>
+    <p class="sub">The rules never change. Only the show does.</p>
+    <div class="react">
+      <div class="go"><span class="when">Speeding up</span><b>Pushes the throttle, leans in</b></div>
+      <div class="go"><span class="when">Cruising</span><b>Relaxes, glances out, waves at players by the track</b></div>
+      <div class="go"><span class="when">Braking</span><b>Hauls back and braces</b></div>
+      <div class="go"><span class="when">Waiting at a station</span><b>Checks his clock, taps his wheel</b></div>
+      <div class="go"><span class="when">Leaving a station</span><b>Toot and a little wave</b></div>
+      <div class="go"><span class="when">The train honks</span><b>Pulls the whistle cord</b></div>
+      <div><span class="when">A player drives</span><b>Folds his arms; afterwards points at the schedule until you right-click him</b></div>
+      <div><span class="when">No schedule</span><b>Waits, looks at you expectantly</b></div>
+      <div class="bad"><span class="when">No path</span><b>Shrugs, looks at the map</b></div>
+      <div class="bad"><span class="when">Crash or derail</span><b>Jolts, goes dizzy, sulks until re-railed</b></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>One dye, one bot</h2>
+    <p class="sub">Dyed as an item in a crafting table, and re-dyed the same way. Bulk washing makes him plain again; Dragons Plus Bulk Coloring works too. A placed bot can't be dyed. The colour goes on his body panels, muted to the house palette (the same colours as dyed Fluid Lines): his chest and side panels and his forearms.</p>
+    <div class="dyes" aria-label="Plain plus the sixteen dye colours">
+      <div class="dye"><i style="background:#7c7f79"></i>plain</div>
+      <div class="dye"><i style="background:#888C8B"></i>white</div>
+      <div class="dye"><i style="background:#6B6B68"></i>light grey</div>
+      <div class="dye"><i style="background:#464A4C"></i>grey</div>
+      <div class="dye"><i style="background:#353537"></i>black</div>
+      <div class="dye"><i style="background:#674B37"></i>brown</div>
+      <div class="dye"><i style="background:#7F312C"></i>red</div>
+      <div class="dye"><i style="background:#A55D21"></i>orange</div>
+      <div class="dye"><i style="background:#A58E31"></i>yellow</div>
+      <div class="dye"><i style="background:#618C27"></i>lime</div>
+      <div class="dye"><i style="background:#546629"></i>green</div>
+      <div class="dye"><i style="background:#267676"></i>cyan</div>
+      <div class="dye"><i style="background:#337B93"></i>light blue</div>
+      <div class="dye"><i style="background:#383D7A"></i>blue</div>
+      <div class="dye"><i style="background:#663282"></i>purple</div>
+      <div class="dye"><i style="background:#873F81"></i>magenta</div>
+      <div class="dye"><i style="background:#985A6C"></i>pink</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Numbers</h2>
+    <div class="numbers">
+      <div class="num"><b>1.5 blocks</b><span>tall, Trade Bot size; ducks to 1 under a solid block</span></div>
+      <div class="num"><b>1 per direction</b><span>drivers per train; extras ride along</span></div>
+      <div class="num"><b>5 items</b><span>casing, tube, cogwheel, 2 iron sheets</span></div>
+      <div class="num"><b>1 dye</b><span>per bot · 16 colours + plain</span></div>
+      <div class="num"><b>0 FE · 0 SU</b><span>no power, no upkeep</span></div>
+      <div class="num"><b>64</b><span>stack size, one stack per colour</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Rules</h2>
+    <div class="pairs">
+      <div class="does"><h3>Does</h3><ul>
+        <li>Drive trains under Create's own conductor rules</li>
+        <li>Keep shop beside a Stock Ticker</li>
+        <li>Wear a train cap while driving with a schedule</li>
+        <li>Wear a logistics cap in a shop</li>
+        <li>Turn to face the controls (in a shop he faces you)</li>
+        <li>Duck under low roofs</li>
+        <li>Show direction, schedule and status on goggles</li>
+      </ul></div>
+      <div class="doesnt"><h3>Doesn't</h3><ul>
+        <li>Move, wander or fall off</li>
+        <li>Need FE, fuel or winding</li>
+        <li>Belong to anyone</li>
+        <li>Resume a paused schedule by himself</li>
+        <li>Heat basins like a Blaze Burner</li>
+        <li>Fly Aeronautics ships (yet)</li>
+        <li>Give any bonus over a Blaze Burner</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What if…?</h2>
+    <div class="qa">
+      <div><b>…there are two bots on one end?</b><span>Only the one right behind the controls drives. The other rides along.</span></div>
+      <div><b>…I drive the train myself?</b><span>The schedule pauses (Create's rule). Right-click him afterwards to resume.</span></div>
+      <div><b>…the train is disassembled?</b><span>He's a block again. The schedule goes back as Create does it.</span></div>
+      <div><b>…the roof is one block above the floor?</b><span>He ducks to fit and keeps working.</span></div>
+      <div><b>…a zombie walks up?</b><span>He shrinks down but never leaves. Mobs ignore him.</span></div>
+      <div><b>…it rains on him?</b><span>He wipes his lenses. Thunder makes him flinch.</span></div>
+      <div><b>…he's beside a ticker while driving?</b><span>The train cap wins.</span></div>
+      <div><b>…the chunk unloads?</b><span>Colour and facing are saved. The animation restarts.</span></div>
+      <div><b>…he's on an airship?</b><span>A passenger who idles.</span></div>
+      <div><b>…I right-click him off duty?</b><span>He waves.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Still open</h2>
+    <div class="open">
+      <div class="watch ok">
+        <h3>Nothing left to decide</h3>
+        <ul>
+          <li>Every gameplay question is answered.</li>
+          <li>Next: the model, built and previewed in Blockbench first.</li>
+          <li>The look: Trade Bot's head and arms on a swivel post and round foot plate; the post telescopes down when he ducks.</li>
+        </ul>
+      </div>
+      <div class="watch">
+        <h3>Prototype first</h3>
+        <ul>
+          <li>The Stock Keeper mixin (Create hard-codes keepers).</li>
+          <li>The status sync for no path, paused and derailed.</li>
+          <li>The recipe grid is proposed, not final.</li>
+        </ul>
+        <p class="sub">Parked: flying Aeronautics ships; Blaze Burner extras like goggles.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ready to build?</h2>
+    <div class="scores">
+      <div class="score"><span>Gameplay</span><div class="track"><div class="fill" style="width:100%"></div></div><b>100%</b><span class="why">Both jobs, every trigger and reaction decided.</span></div>
+      <div class="score"><span>World integration</span><div class="track"><div class="fill" style="width:100%"></div></div><b>100%</b><span class="why">The "part block" look is settled: a swivel post on a foot plate.</span></div>
+      <div class="score"><span>Balance</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">The ingredients are set; the grid is proposed.</span></div>
+      <div class="score"><span>Progression</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">Tier set; by design he unlocks nothing new.</span></div>
+      <div class="score"><span>Automation</span><div class="track"><div class="fill" style="width:100%"></div></div><b>100%</b><span class="why">Nothing to automate beyond Create's own schedules.</span></div>
+      <div class="score"><span>Edge cases</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><span class="why">The status sync needs checking against Create's train runtime.</span></div>
+    </div>
+  </section>
+
+  <footer>Full record: <code>design/specs/helper-bot.md</code> · Look: <code>design/briefs/helper-bot.md</code> · Next: the Blockbench model</footer>
+</div>

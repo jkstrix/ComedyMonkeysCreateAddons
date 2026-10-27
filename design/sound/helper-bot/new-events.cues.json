@@ -1,0 +1,201 @@
+{
+ "namespace": "helper_bot",
+ "events": {
+  "whistle_toot": {
+   "subtitle": "Helper Bot toots his whistle",
+   "group": "Signature sounds (new)",
+   "layers": [
+    {
+     "type": "noise",
+     "at": 0,
+     "gain": 0.25,
+     "f": 3000,
+     "dur": 0.06
+    },
+    {
+     "type": "chirp",
+     "at": 0.02,
+     "gain": 0.55,
+     "notes": [
+      [
+       1180,
+       1240,
+       0.2
+      ]
+     ]
+    },
+    {
+     "type": "chirp",
+     "at": 0.02,
+     "gain": 0.3,
+     "notes": [
+      [
+       1480,
+       1550,
+       0.2
+      ]
+     ]
+    },
+    {
+     "type": "noise",
+     "at": 0.05,
+     "gain": 0.12,
+     "f": 6000,
+     "dur": 0.18
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "level": 0.5,
+    "vary": {
+     "pitch": 0.03,
+     "gain": 0.08,
+     "at": 0.004
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "0225",
+      "trim": [
+       0.04,
+       0.7
+      ],
+      "pitch": 2.2,
+      "gain": 0.9,
+      "fadeIn": 0.005,
+      "fadeOut": 0.09
+     },
+     {
+      "src": "0227",
+      "trim": [
+       0.05,
+       0.3
+      ],
+      "highpass": 2500,
+      "lowpass": 9000,
+      "gain": 0.16,
+      "fadeIn": 0.01,
+      "fadeOut": 0.15,
+      "at": 0
+     }
+    ]
+   }
+  },
+  "whistle_peep": {
+   "subtitle": "Helper Bot peeps his whistle",
+   "group": "Signature sounds (new)",
+   "layers": [
+    {
+     "type": "noise",
+     "at": 0,
+     "gain": 0.2,
+     "f": 3000,
+     "dur": 0.04
+    },
+    {
+     "type": "chirp",
+     "at": 0.01,
+     "gain": 0.5,
+     "notes": [
+      [
+       1240,
+       1300,
+       0.11
+      ]
+     ]
+    },
+    {
+     "type": "noise",
+     "at": 0.03,
+     "gain": 0.1,
+     "f": 6000,
+     "dur": 0.09
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "level": 0.42,
+    "vary": {
+     "pitch": 0.06,
+     "gain": 0.08,
+     "at": 0.003
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "0225",
+      "trim": [
+       0.04,
+       0.34800000000000003
+      ],
+      "pitch": 2.2,
+      "gain": 0.9,
+      "fadeIn": 0.004,
+      "fadeOut": 0.05
+     },
+     {
+      "src": "0227",
+      "trim": [
+       0.05,
+       0.16
+      ],
+      "highpass": 2500,
+      "lowpass": 9000,
+      "gain": 0.12,
+      "fadeIn": 0.01,
+      "fadeOut": 0.08
+     }
+    ]
+   }
+  },
+  "lever_clunk": {
+   "subtitle": "Helper Bot pulls a lever",
+   "group": "Signature sounds (new)",
+   "layers": [
+    {
+     "type": "click",
+     "at": 0,
+     "gain": 0.6,
+     "dur": 0.03
+    },
+    {
+     "type": "clack",
+     "at": 0.015,
+     "gain": 0.7,
+     "f": 420,
+     "dur": 0.12
+    },
+    {
+     "type": "thud",
+     "at": 0.02,
+     "gain": 0.35,
+     "f": 110,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "level": 0.5,
+    "vary": {
+     "pitch": 0.03
+    },
+    "layers": [
+     {
+      "pick": [
+       "block_copper_trapdoor_toggle1",
+       "block_copper_trapdoor_toggle2"
+      ],
+      "gain": 1,
+      "pitch": 1.1,
+      "fadeOut": 0.05
+     }
+    ]
+   }
+  }
+ },
+ "clips": {}
+}

@@ -35,6 +35,29 @@ public final class ClipPlayback {
 	/** When the voice last spoke, and in which clip (by its start tick). */
 	private double lastVoice = Double.NEGATIVE_INFINITY;
 	private double lastVoiceClip = Double.NEGATIVE_INFINITY;
+	private int lastVoiceCycle;
+	private double voiceCooldown = VOICE_COOLDOWN_TICKS;
+	/** Helper Bot: every round of a looping clip is a new line, so it waits out the cooldown too. */
+	private boolean everyRoundSpeaks;
+	/** Helper Bot has no looping sound instances: his loop sounds (2 s, a round of their clip) play as cues. */
+	private boolean loopsAsCues;
+
+	/** A bot whose voice waits {@code ticks} between lines, a looping clip's rounds included (Helper Bot, D27). */
+	public void voiceCooldown(double ticks) {
+		voiceCooldown = ticks;
+		everyRoundSpeaks = true;
+	}
+
+	/** Plays the loop sounds as ordinary cues (for a bot without looping sound instances). */
+	public void loopsAsCues() {
+		loopsAsCues = true;
+	}
+
+	/** The clip clock started again (it wraps after a day of play): his last line was "in the future", so forget it. */
+	public void restartClock() {
+		lastVoice = Double.NEGATIVE_INFINITY;
+		lastVoiceClip = Double.NEGATIVE_INFINITY;
+	}
 
 	/**
 	 * Follows the server's choice; a change starts a cross-fade at {@code now}. Times are in ticks with the partial tick,
@@ -53,6 +76,20 @@ public final class ClipPlayback {
 		start = startTick;
 		this.speed = speed;
 		lastCueTime = Float.NaN;
+	}
+
+	/**
+	 * Takes another playback's clip, its timing and its cross-fade, so a copy posed off the thread that ticks the
+	 * original (Helper Bot's Flywheel visuals) poses exactly as the original would. Sound cues aren't copied.
+	 */
+	public void copyTimeline(ClipPlayback from) {
+		clip = from.clip;
+		start = from.start;
+		speed = from.speed;
+		fadeFrom = from.fadeFrom;
+		fadeFromStart = from.fadeFromStart;
+		fadeFromSpeed = from.fadeFromSpeed;
+		fadeStart = from.fadeStart;
 	}
 
 	@Nullable
@@ -105,18 +142,21 @@ public final class ClipPlayback {
 		}
 		float from = Float.isNaN(lastCueTime) ? -1e-4f : lastCueTime;
 		for (Clip.Cue cue : clip.cues()) {
-			if (LOOPS.contains(cue.event()) || cue.event().startsWith("villager_"))
+			if (!loopsAsCues && LOOPS.contains(cue.event()) || cue.event().startsWith("villager_"))
 				continue;
 			boolean passed = t >= from ? cue.time() > from && cue.time() <= t : cue.time() > from || cue.time() <= t;
 			if (!passed)
 				continue;
 			if (VOICE.contains(cue.event())) {
-				if (start != lastVoiceClip && now - lastVoice < VOICE_COOLDOWN_TICKS)
+				int round = clip.mode() == Clip.Mode.LOOP ? (int) (elapsed / clip.length()) : 0;
+				boolean sameLine = start == lastVoiceClip && (!everyRoundSpeaks || round == lastVoiceCycle);
+				if (!sameLine && now - lastVoice < voiceCooldown)
 					continue;
-				if (clip.mode() == Clip.Mode.LOOP && (int) (elapsed / clip.length()) % 2 == 1)
+				if (round % 2 == 1)
 					continue;
 				lastVoice = now;
 				lastVoiceClip = start;
+				lastVoiceCycle = round;
 			}
 			play.accept(cue.event());
 		}

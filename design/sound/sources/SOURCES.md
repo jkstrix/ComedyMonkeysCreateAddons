@@ -144,3 +144,18 @@ Not found on BigSoundBank, so made from the nearest real recording: kibble into 
 | 3442.ogg | electric-strike-1 | https://bigsoundbank.com/electric-strike-1-s3442.html | strike_clunk (0-0.6 s) |
 | 3560.ogg | fermentation-airlock-1 | https://bigsoundbank.com/fermentation-airlock-1-s3560.html | loop_airlock_a (10-16 s) |
 | 3561.ogg | fermentation-airlock-2 | https://bigsoundbank.com/fermentation-airlock-2-s3561.html | loop_airlock_b (10-16 s) |
+
+## Helper Bot (2026-10-27)
+Helper Bot reuses Trade Bot's approved sounds (see above). New layers, for his whistle and lever only:
+
+| File | What | Source | Licence | Rung |
+|---|---|---|---|---|
+| `bigsoundbank/3319.ogg` | Train whistle, foley #5: whistle candidate A (pitched up 1.6x) | https://bigsoundbank.com/train-whistle-foley-5-s3319.html | CC0 | 3 |
+| `bigsoundbank/3317.ogg` | Train whistle, foley #3: whistle candidate B (up 1.5x) | https://bigsoundbank.com/train-whistle-foley-3-s3317.html | CC0 | 3 |
+| `bigsoundbank/3315.ogg` | Train whistle, foley #1: whistle candidate C (up 3x) | https://bigsoundbank.com/train-whistle-foley-1-s3315.html | CC0 | 3 |
+| `bigsoundbank/0225.ogg` | Whistling train #1: whistle candidate D (up 2.2x) | https://bigsoundbank.com/whistling-train-1-s0225.html | CC0 | 3 |
+| `bigsoundbank/0227.ogg` | Hiss of steam train #1: the puff under every toot | https://bigsoundbank.com/hiss-of-steam-train-1-s0227.html | CC0 | 3 |
+| `vanilla-preview/random_click.ogg`, `block_copper_trapdoor_toggle1/2.ogg` | Lever candidates A and B: Minecraft's own (`block.lever.click`, `block.copper_trapdoor.open`), extracted for auditioning only, git-ignored, referenced by event in game | Minecraft 1.21.1 assets | Mojang (not shipped) | 1 |
+| `kenney-rpg-audio/Audio/metalLatch.ogg`, `kenney-impact-sounds/.../impactSoft_heavy_000.ogg` | Lever candidate C | already in the library | CC0 | 2 |
+
+Searched and not used: BigSoundBank 3316, 3318, 3320 (the same foley whistle, other takes), 3321 (too low), 0226 (a long locomotive whistle), 0196 (wooden whistle, too pure) and 1351 (kettle).

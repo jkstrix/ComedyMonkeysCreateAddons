@@ -1,0 +1,20 @@
+{
+  "type": "comedymonkeysaddons:helper_bot_dye",
+  "category": "misc",
+  "group": "comedymonkeysaddons:dyed_helper_bot",
+  "ingredients": [
+    {
+      "item": "comedymonkeysaddons:helper_bot"
+    },
+    {
+      "item": "minecraft:red_dye"
+    }
+  ],
+  "result": {
+    "id": "comedymonkeysaddons:helper_bot",
+    "count": 1,
+    "components": {
+      "comedymonkeysaddons:helper_bot_dye": "red"
+    }
+  }
+}

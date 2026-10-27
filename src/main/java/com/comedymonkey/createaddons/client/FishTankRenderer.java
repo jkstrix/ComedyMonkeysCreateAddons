@@ -30,6 +30,7 @@ import net.minecraft.world.entity.animal.Squid;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.client.event.ModelEvent;
 
 /**
@@ -65,6 +66,12 @@ public class FishTankRenderer extends SafeBlockEntityRenderer<FishTankBlockEntit
 	}
 
 	@Override
+	public AABB getRenderBoundingBox(FishTankBlockEntity be) {
+		// the block's own box, as by default, but kept on the tank rather than made every frame
+		return be.getRenderBox();
+	}
+
+	@Override
 	protected void renderSafe(FishTankBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
 		BlockState state = be.getBlockState();
 		if (!state.hasProperty(FishTankBlock.FACING))
@@ -73,7 +80,9 @@ public class FishTankRenderer extends SafeBlockEntityRenderer<FishTankBlockEntit
 		CameraView camera = CameraView.of(be, ms);
 		boolean hidden = camera.behindGlass(front) && camera.behindGlass(front.getClockWise())
 			&& camera.behindGlass(front.getCounterClockWise());
-		parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
+		// with Flywheel on, its visual has the parts: no need to pose them all for nothing
+		if (!PartSink.instanced(be))
+			parts(be, partialTicks, ms, PartSink.screen(buffer, state, overlay), light);
 		PartSink sink = PartSink.screen(buffer, state, overlay);
 		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5);
@@ -82,9 +91,10 @@ public class FishTankRenderer extends SafeBlockEntityRenderer<FishTankBlockEntit
 		if (state.getValue(FishTankBlock.GLOWING))
 			sink.part(GLOW, ms, LightTexture.FULL_BRIGHT, RenderType.eyes(TextureAtlas.LOCATION_BLOCKS));
 		if (!hidden) {
-			renderFood(be, partialTicks, ms, buffer, light, overlay);
+			renderFood(be, partialTicks, ms, buffer, light, overlay, camera);
 			renderCreatures(be, partialTicks, ms, buffer, light, camera);
-			TrayItems.render(be.getOutput(), NET_Y, be.getLevel(), ms, buffer, light, overlay);
+			TrayItems.render(be.getTray(), be.getTrayUsed(), be.getOutput().getSlots(), camera.items(3), NET_Y, be.getLevel(), ms,
+				buffer, light, overlay);
 		}
 		// the water last, over everything inside
 		if (be.getWater().getFluidAmount() > 0) {
@@ -128,15 +138,17 @@ public class FishTankRenderer extends SafeBlockEntityRenderer<FishTankBlockEntit
 	}
 
 	/** Fish Food sinking under the feeder, starting again every few seconds while there's food. */
-	private static void renderFood(FishTankBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+	private static void renderFood(FishTankBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light,
+								   int overlay, CameraView camera) {
 		ItemStack food = be.getShownFood();
 		var level = be.getLevel();
-		if (food.isEmpty() || level == null)
+		int shown = camera.items(FOOD.length);
+		if (food.isEmpty() || level == null || shown <= 0)
 			return;
 		float surface = be.waterLevel();
 		float t = ((level.getGameTime() % 80) + partialTicks) / 80f;
 		var items = Minecraft.getInstance().getItemRenderer();
-		for (int i = 0; i < FOOD.length; i++) {
+		for (int i = 0; i < shown; i++) {
 			float y = surface - 0.6f - (t * 4 + i * 0.3f);
 			if (y < 4)
 				continue;
@@ -153,16 +165,16 @@ public class FishTankRenderer extends SafeBlockEntityRenderer<FishTankBlockEntit
 	private static void renderCreatures(FishTankBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
 										int light, CameraView camera) {
 		List<TankCreature> shown = be.getShown();
-		// far off, just one; past 32 blocks, none (as the pens)
-		double distanceSqr = camera.known() ? camera.distanceSqr() : 0;
-		if (shown.isEmpty() || distanceSqr > 32 * 32)
+		if (shown.isEmpty())
+			return;
+		// fewer further off, none past 32 blocks or in a shadow pass, within the frame's budget
+		int drawn = camera.creatures(shown.size());
+		if (drawn <= 0)
 			return;
 		EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
 		dispatcher.setRenderShadow(false);
 		try {
-			for (int i = 0; i < shown.size(); i++) {
-				if (distanceSqr > 16 * 16 && i > 0)
-					break;
+			for (int i = 0; i < drawn; i++) {
 				TankCreature creature = shown.get(i);
 				Entity entity = creature.entity();
 				float size = entity instanceof Squid ? TankCreature.SQUID_HEIGHT : Math.max(entity.getBbHeight(), entity.getBbWidth());

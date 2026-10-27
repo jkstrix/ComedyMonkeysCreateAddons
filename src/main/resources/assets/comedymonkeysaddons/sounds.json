@@ -1293,5 +1293,405 @@
         "attenuation_distance": 8
       }
     ]
+  },
+  "helper_bot.whistle_toot": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.whistle_toot",
+    "sounds": [
+      "comedymonkeysaddons:helper_bot/whistle_toot_1",
+      "comedymonkeysaddons:helper_bot/whistle_toot_2",
+      "comedymonkeysaddons:helper_bot/whistle_toot_3"
+    ]
+  },
+  "helper_bot.whistle_peep": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.whistle_peep",
+    "sounds": [
+      "comedymonkeysaddons:helper_bot/whistle_peep_1",
+      "comedymonkeysaddons:helper_bot/whistle_peep_2",
+      "comedymonkeysaddons:helper_bot/whistle_peep_3",
+      "comedymonkeysaddons:helper_bot/whistle_peep_4"
+    ]
+  },
+  "helper_bot.lever_clunk": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.lever_clunk",
+    "sounds": [
+      {
+        "name": "minecraft:block/copper_trapdoor/toggle1",
+        "pitch": 1.1
+      },
+      {
+        "name": "minecraft:block/copper_trapdoor/toggle2",
+        "pitch": 1.1
+      },
+      {
+        "name": "minecraft:block/copper_trapdoor/toggle3",
+        "pitch": 1.1
+      },
+      {
+        "name": "minecraft:block/copper_trapdoor/toggle4",
+        "pitch": 1.1
+      }
+    ]
+  },
+  "helper_bot.clock_tick": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.clock_tick",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/clock_tick_1",
+      "comedymonkeysaddons:trade_bot/clock_tick_2",
+      "comedymonkeysaddons:trade_bot/clock_tick_3",
+      "comedymonkeysaddons:trade_bot/clock_tick_4"
+    ]
+  },
+  "helper_bot.focus_click": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.focus_click",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/focus_click_1",
+      "comedymonkeysaddons:trade_bot/focus_click_2",
+      "comedymonkeysaddons:trade_bot/focus_click_3"
+    ]
+  },
+  "helper_bot.merchant_trill": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.merchant_trill",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/merchant_trill_1",
+      "comedymonkeysaddons:trade_bot/merchant_trill_2",
+      "comedymonkeysaddons:trade_bot/merchant_trill_3"
+    ]
+  },
+  "helper_bot.brass_ping": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.brass_ping",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/brass_ping_1",
+      "comedymonkeysaddons:trade_bot/brass_ping_2"
+    ]
+  },
+  "helper_bot.servo_short": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.servo_short",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/servo_short_1",
+      "comedymonkeysaddons:trade_bot/servo_short_2",
+      "comedymonkeysaddons:trade_bot/servo_short_3",
+      "comedymonkeysaddons:trade_bot/servo_short_4"
+    ]
+  },
+  "helper_bot.servo_snap": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.servo_snap",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/servo_snap_1",
+      "comedymonkeysaddons:trade_bot/servo_snap_2",
+      "comedymonkeysaddons:trade_bot/servo_snap_3"
+    ]
+  },
+  "helper_bot.aerial_boing": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.aerial_boing",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/aerial_boing_1",
+      "comedymonkeysaddons:trade_bot/aerial_boing_2",
+      "comedymonkeysaddons:trade_bot/aerial_boing_3"
+    ]
+  },
+  "helper_bot.hop_small": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.hop_small",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/hop_small_1",
+      "comedymonkeysaddons:trade_bot/hop_small_2",
+      "comedymonkeysaddons:trade_bot/hop_small_3"
+    ]
+  },
+  "helper_bot.land_soft": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.land_soft",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/land_soft_1",
+      "comedymonkeysaddons:trade_bot/land_soft_2",
+      "comedymonkeysaddons:trade_bot/land_soft_3",
+      "comedymonkeysaddons:trade_bot/land_soft_4"
+    ]
+  },
+  "helper_bot.land_heavy": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.land_heavy",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/land_heavy_1",
+      "comedymonkeysaddons:trade_bot/land_heavy_2",
+      "comedymonkeysaddons:trade_bot/land_heavy_3"
+    ]
+  },
+  "helper_bot.blink": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.blink",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/blink_1",
+      "comedymonkeysaddons:trade_bot/blink_2"
+    ]
+  },
+  "helper_bot.grip": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.grip",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/grip_1",
+      "comedymonkeysaddons:trade_bot/grip_2",
+      "comedymonkeysaddons:trade_bot/grip_3"
+    ]
+  },
+  "helper_bot.claw_fidget": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.claw_fidget",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/claw_fidget_1",
+      "comedymonkeysaddons:trade_bot/claw_fidget_2"
+    ]
+  },
+  "helper_bot.pat": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.pat",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/pat_1",
+      "comedymonkeysaddons:trade_bot/pat_2",
+      "comedymonkeysaddons:trade_bot/pat_3"
+    ]
+  },
+  "helper_bot.set_soft": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.set_soft",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/set_soft_1",
+      "comedymonkeysaddons:trade_bot/set_soft_2",
+      "comedymonkeysaddons:trade_bot/set_soft_3"
+    ]
+  },
+  "helper_bot.dust_off": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.dust_off",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/dust_off_1",
+      "comedymonkeysaddons:trade_bot/dust_off_2"
+    ]
+  },
+  "helper_bot.drop_whoosh": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.drop_whoosh",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/drop_whoosh_1",
+      "comedymonkeysaddons:trade_bot/drop_whoosh_2",
+      "comedymonkeysaddons:trade_bot/drop_whoosh_3"
+    ]
+  },
+  "helper_bot.light_off": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.light_off",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/light_off_1",
+      "comedymonkeysaddons:trade_bot/light_off_2"
+    ]
+  },
+  "helper_bot.light_on": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.light_on",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/light_on_1",
+      "comedymonkeysaddons:trade_bot/light_on_2"
+    ]
+  },
+  "helper_bot.flicker": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.flicker",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/flicker_1",
+      "comedymonkeysaddons:trade_bot/flicker_2"
+    ]
+  },
+  "helper_bot.poof_in": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.poof_in",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/poof_in_1",
+      "comedymonkeysaddons:trade_bot/poof_in_2",
+      "comedymonkeysaddons:trade_bot/poof_in_3"
+    ]
+  },
+  "helper_bot.poof_out": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.poof_out",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/poof_out_1",
+      "comedymonkeysaddons:trade_bot/poof_out_2",
+      "comedymonkeysaddons:trade_bot/poof_out_3"
+    ]
+  },
+  "helper_bot.wave_clink": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.wave_clink",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/wave_clink_1",
+      "comedymonkeysaddons:trade_bot/wave_clink_2",
+      "comedymonkeysaddons:trade_bot/wave_clink_3",
+      "comedymonkeysaddons:trade_bot/wave_clink_4"
+    ]
+  },
+  "helper_bot.bonk": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.bonk",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/bonk_1",
+      "comedymonkeysaddons:trade_bot/bonk_2"
+    ]
+  },
+  "helper_bot.dizzy": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.dizzy",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/dizzy_1",
+      "comedymonkeysaddons:trade_bot/dizzy_2"
+    ]
+  },
+  "helper_bot.head_shake": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.head_shake",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/head_shake_1",
+      "comedymonkeysaddons:trade_bot/head_shake_2"
+    ]
+  },
+  "helper_bot.grumble": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.grumble",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/grumble_1",
+      "comedymonkeysaddons:trade_bot/grumble_2",
+      "comedymonkeysaddons:trade_bot/grumble_3"
+    ]
+  },
+  "helper_bot.double_take": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.double_take",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/double_take_1",
+      "comedymonkeysaddons:trade_bot/double_take_2"
+    ]
+  },
+  "helper_bot.curious_chirp": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.curious_chirp",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/curious_chirp_1",
+      "comedymonkeysaddons:trade_bot/curious_chirp_2",
+      "comedymonkeysaddons:trade_bot/curious_chirp_3"
+    ]
+  },
+  "helper_bot.puzzled_hmm": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.puzzled_hmm",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/puzzled_hmm_1",
+      "comedymonkeysaddons:trade_bot/puzzled_hmm_2",
+      "comedymonkeysaddons:trade_bot/puzzled_hmm_3"
+    ]
+  },
+  "helper_bot.huh": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.huh",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/huh_1",
+      "comedymonkeysaddons:trade_bot/huh_2",
+      "comedymonkeysaddons:trade_bot/huh_3"
+    ]
+  },
+  "helper_bot.shrug": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.shrug",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/shrug_1",
+      "comedymonkeysaddons:trade_bot/shrug_2"
+    ]
+  },
+  "helper_bot.startled_chirp": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.startled_chirp",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/startled_chirp_1",
+      "comedymonkeysaddons:trade_bot/startled_chirp_2",
+      "comedymonkeysaddons:trade_bot/startled_chirp_3"
+    ]
+  },
+  "helper_bot.sad_aww": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.sad_aww",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/sad_aww_1",
+      "comedymonkeysaddons:trade_bot/sad_aww_2"
+    ]
+  },
+  "helper_bot.sigh": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.sigh",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/sigh_1",
+      "comedymonkeysaddons:trade_bot/sigh_2"
+    ]
+  },
+  "helper_bot.snore": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.snore",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/snore_1",
+      "comedymonkeysaddons:trade_bot/snore_2",
+      "comedymonkeysaddons:trade_bot/snore_3"
+    ]
+  },
+  "helper_bot.sleepy_mmm": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.sleepy_mmm",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/sleepy_mmm_1",
+      "comedymonkeysaddons:trade_bot/sleepy_mmm_2",
+      "comedymonkeysaddons:trade_bot/sleepy_mmm_3"
+    ]
+  },
+  "helper_bot.pleased_boop": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.pleased_boop",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/pleased_boop_1",
+      "comedymonkeysaddons:trade_bot/pleased_boop_2",
+      "comedymonkeysaddons:trade_bot/pleased_boop_3"
+    ]
+  },
+  "helper_bot.hi_boop": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.hi_boop",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/hi_boop_1",
+      "comedymonkeysaddons:trade_bot/hi_boop_2",
+      "comedymonkeysaddons:trade_bot/hi_boop_3"
+    ]
+  },
+  "helper_bot.bye_boop": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.bye_boop",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/bye_boop_1",
+      "comedymonkeysaddons:trade_bot/bye_boop_2",
+      "comedymonkeysaddons:trade_bot/bye_boop_3"
+    ]
+  },
+  "helper_bot.scared_yelp": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.scared_yelp",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/scared_yelp_1",
+      "comedymonkeysaddons:trade_bot/scared_yelp_2",
+      "comedymonkeysaddons:trade_bot/scared_yelp_3"
+    ]
+  },
+  "helper_bot.hide_tuck": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.hide_tuck",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/hide_tuck_1",
+      "comedymonkeysaddons:trade_bot/hide_tuck_2"
+    ]
+  },
+  "helper_bot.tremble_loop": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.tremble_loop",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/tremble_loop_1",
+      "comedymonkeysaddons:trade_bot/tremble_loop_2"
+    ]
+  },
+  "helper_bot.whimper": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.whimper",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/whimper_1",
+      "comedymonkeysaddons:trade_bot/whimper_2",
+      "comedymonkeysaddons:trade_bot/whimper_3"
+    ]
+  },
+  "helper_bot.peek_click": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.peek_click",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/peek_click_1",
+      "comedymonkeysaddons:trade_bot/peek_click_2"
+    ]
+  },
+  "helper_bot.relief_sigh": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.relief_sigh",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/relief_sigh_1",
+      "comedymonkeysaddons:trade_bot/relief_sigh_2"
+    ]
+  },
+  "helper_bot.shake_off": {
+    "subtitle": "subtitles.comedymonkeysaddons.helper_bot.shake_off",
+    "sounds": [
+      "comedymonkeysaddons:trade_bot/shake_off_1",
+      "comedymonkeysaddons:trade_bot/shake_off_2",
+      "comedymonkeysaddons:trade_bot/shake_off_3"
+    ]
   }
 }

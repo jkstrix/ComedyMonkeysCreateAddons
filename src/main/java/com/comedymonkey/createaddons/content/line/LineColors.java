@@ -21,6 +21,11 @@ public final class LineColors {
 		return tier == LineTier.COPPER ? 0xB26247 : 0x8F7638;
 	}
 
+	/** The dye, muted to the house palette. */
+	public static int dye(DyeColor dye) {
+		return DYES[dye.getId()];
+	}
+
 	public static int of(LineTier tier, @Nullable DyeColor dye) {
 		return dye == null ? tier(tier) : DYES[dye.getId()];
 	}

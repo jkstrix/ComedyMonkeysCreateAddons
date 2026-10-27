@@ -75,11 +75,13 @@ public class MonsterJarItem extends Item {
 	}
 
 	@Nullable
+	@SuppressWarnings("deprecation") // getUnsafe: read, never changed
 	public static EntityType<?> typeOf(ItemStack stack) {
 		CustomData data = stack.get(DataComponents.ENTITY_DATA);
 		if (data == null)
 			return null;
-		return EntityType.byString(data.copyTag().getString("id")).orElse(null);
+		// read in place: a copy of the whole monster just for its id was the cages' busiest call
+		return EntityType.byString(data.getUnsafe().getString("id")).orElse(null);
 	}
 
 	/**

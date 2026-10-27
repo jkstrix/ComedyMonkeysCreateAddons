@@ -21,6 +21,24 @@ public class CMJeiPlugin implements IModPlugin {
 		return ComedyMonkeysCreateAddons.asResource("jei_plugin");
 	}
 
+	/** Each dye of Helper Bot is its own item in JEI (one per colour, not 16 duplicates). */
+	@Override
+	public void registerItemSubtypes(mezz.jei.api.registration.ISubtypeRegistration registration) {
+		registration.registerSubtypeInterpreter(ModItems.HELPER_BOT.get(), new mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter<>() {
+			@Override
+			public Object getSubtypeData(net.minecraft.world.item.ItemStack stack, mezz.jei.api.ingredients.subtypes.UidContext context) {
+				return stack.get(com.comedymonkey.createaddons.registry.ModDataComponents.HELPER_BOT_DYE.get());
+			}
+
+			@Override
+			@SuppressWarnings("removal")
+			public String getLegacyStringSubtypeInfo(net.minecraft.world.item.ItemStack stack, mezz.jei.api.ingredients.subtypes.UidContext context) {
+				Object dye = getSubtypeData(stack, context);
+				return dye == null ? "" : dye.toString();
+			}
+		});
+	}
+
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registration) {
 		registration.addRecipeCategories(new CrucibleCategory(registration.getJeiHelpers().getGuiHelper()));

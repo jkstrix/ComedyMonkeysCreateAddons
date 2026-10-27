@@ -3,6 +3,8 @@ package com.comedymonkey.createaddons.client;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.comedymonkey.createaddons.compat.sable.SableCompat;
 import com.comedymonkey.createaddons.compat.sable.client.SableSoundPositions;
 
@@ -21,9 +23,9 @@ import net.minecraft.world.phys.Vec3;
  * earshot they aren't played at all. A sound's range is its attenuation distance (from sounds.json), longer when it's
  * played louder than 1, exactly as the sound engine works it out.
  */
-final class Hearing {
+public final class Hearing {
 	/** One-shots: a little past their range, as the listener may walk into it while one plays. */
-	static final double ONE_SHOT_MARGIN = 2;
+	public static final double ONE_SHOT_MARGIN = 2;
 	/** Loops start this far past their range, so they've faded in before they can be heard... */
 	static final double LOOP_START_MARGIN = 4;
 	/** ...and stop a little further out, so walking along the edge doesn't start and stop them over and over. */
@@ -40,7 +42,7 @@ final class Hearing {
 	}
 
 	/** Whether a sound played at {@code volume} from (x, y, z) reaches the listener, give or take {@code margin}. */
-	static boolean inRange(SoundEvent sound, float volume, double x, double y, double z, double margin) {
+	public static boolean inRange(SoundEvent sound, float volume, double x, double y, double z, double margin) {
 		return inRange(sound.getLocation(), volume, x, y, z, margin);
 	}
 
@@ -57,6 +59,28 @@ final class Hearing {
 			return listener().distanceToSqr(heard) <= range * range;
 		}
 		return listener().distanceToSqr(x, y, z) <= range * range;
+	}
+
+	/**
+	 * Squared distance from the listener (the camera) to (x, y, z), a block on a ship measured from where the ship is.
+	 * Endless for one that can't be placed: for ranking loops and building display creatures it's furthest of all (a
+	 * one-shot's {@link #inRange} still plays it).
+	 */
+	static double distanceSqr(double x, double y, double z) {
+		if (SableCompat.LOADED)
+			return distanceSqr(SableSoundPositions.heardFrom(x, y, z), listener());
+		return listener().distanceToSqr(x, y, z);
+	}
+
+	/** From the listener to where a sound is heard from, endless when that can't be told. */
+	static double distanceSqr(@Nullable Vec3 heard, Vec3 listener) {
+		return heard == null ? Double.POSITIVE_INFINITY : listener.distanceToSqr(heard);
+	}
+
+	/** {@link #inRange} for a distance already worked out with {@link #distanceSqr}. */
+	static boolean inRange(SoundEvent sound, float volume, double distanceSqr, double margin) {
+		double range = Math.max(volume, 1) * range(sound.getLocation()) + margin;
+		return distanceSqr <= range * range;
 	}
 
 	/** The sound's attenuation distance in blocks; all the variants of each of our sounds share one. */

@@ -63,7 +63,7 @@ public class MonsterCageScreen extends AbstractContainerScreen<MonsterCageMenu> 
 		if (be.isFlooded())
 			gauge(graphics, SECOND_X, be.getWater().getFluidAmount() / (float) be.getWater().getCapacity(), WATER, WATER_TOP);
 		else if (be.isNetherite())
-			gauge(graphics, SECOND_X, be.getEnergyStored() / (float) Math.max(1, be.getEnergyCapacity()), FE, FE_TOP);
+			gauge(graphics, SECOND_X, menu.getEnergy() / (float) Math.max(1, be.getEnergyCapacity()), FE, FE_TOP);
 		RenderSystem.enableBlend();
 		if (be.getCaptive().isEmpty())
 			ghost(graphics, new ItemStack(be.isNetherite() ? ModItems.NETHERITE_JAR.get() : ModItems.IRON_JAR.get()),
@@ -121,7 +121,7 @@ public class MonsterCageScreen extends AbstractContainerScreen<MonsterCageMenu> 
 				be.getWater().getCapacity())).withStyle(ChatFormatting.GRAY));
 		} else if (be.isNetherite()) {
 			lines.add(tr(be.isFieldUp() ? "field_up" : "field_down"));
-			lines.add(Component.literal(String.format(Locale.ROOT, "%,d / %,d FE", be.getEnergyStored(), be.getEnergyCapacity()))
+			lines.add(Component.literal(String.format(Locale.ROOT, "%,d / %,d FE", menu.getEnergy(), be.getEnergyCapacity()))
 				.withStyle(ChatFormatting.GRAY));
 		} else {
 			lines.add(tr("no_second_gauge").withStyle(ChatFormatting.GRAY));

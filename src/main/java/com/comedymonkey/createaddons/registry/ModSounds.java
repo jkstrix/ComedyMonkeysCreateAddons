@@ -46,7 +46,17 @@ public final class ModSounds {
 	/** The Pressure Crucible's sounds: the gears, the screw's creak, the crunch and the burner's fire. */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> CRUCIBLE = registerPrefixed("pressure_crucible.");
 
+	/** Helper Bot's sounds, from the {@code helper_bot.*} entries that {@code design/sound/helper-bot/export-game.js} writes. */
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> HELPER_BOT = registerPrefixed("helper_bot.");
+
 	private ModSounds() {}
+
+	/** One of Helper Bot's sounds, or null for an id the sound design doesn't have. */
+	@org.jetbrains.annotations.Nullable
+	public static SoundEvent helperBot(String id) {
+		DeferredHolder<SoundEvent, SoundEvent> holder = HELPER_BOT.get(id);
+		return holder == null ? null : holder.get();
+	}
 
 	/** One of the Lava Generator's sounds; throws for an unknown id. */
 	public static SoundEvent generator(String id) {

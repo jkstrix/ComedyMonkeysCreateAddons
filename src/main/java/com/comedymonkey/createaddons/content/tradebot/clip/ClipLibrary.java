@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -29,6 +30,8 @@ public final class ClipLibrary {
 	public static final String PATH = "/assets/comedymonkeysaddons/trade_bot/clips.json";
 
 	private static volatile ClipLibrary instance;
+	/** Other characters' clip files (Helper Bot's), by path. */
+	private static final Map<String, ClipLibrary> OTHERS = new ConcurrentHashMap<>();
 
 	private final List<Clip> clips;
 	private final Map<String, Clip> byName = new LinkedHashMap<>();
@@ -51,6 +54,11 @@ public final class ClipLibrary {
 		return lib;
 	}
 
+	/** The clips in another character's file, in the same format (read once). */
+	public static ClipLibrary of(String path) {
+		return PATH.equals(path) ? get() : OTHERS.computeIfAbsent(path, ClipLibrary::load);
+	}
+
 	public List<Clip> all() {
 		return clips;
 	}
@@ -59,7 +67,7 @@ public final class ClipLibrary {
 	public Clip clip(String name) {
 		Clip clip = byName.get(name);
 		if (clip == null)
-			throw new IllegalArgumentException("no Trade Bot clip " + name);
+			throw new IllegalArgumentException("no clip " + name);
 		return clip;
 	}
 
@@ -78,9 +86,13 @@ public final class ClipLibrary {
 	}
 
 	private static ClipLibrary load() {
-		try (InputStream in = ClipLibrary.class.getResourceAsStream(PATH)) {
+		return load(PATH);
+	}
+
+	private static ClipLibrary load(String path) {
+		try (InputStream in = ClipLibrary.class.getResourceAsStream(path)) {
 			if (in == null)
-				throw new IllegalStateException("missing " + PATH);
+				throw new IllegalStateException("missing " + path);
 			try (Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
 				return parse(JsonParser.parseReader(reader).getAsJsonObject());
 			}

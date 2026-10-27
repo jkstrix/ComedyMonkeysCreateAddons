@@ -1,0 +1,81 @@
+{
+ "whistle_toot": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/0225.ogg",
+   "bigsoundbank/0227.ogg"
+  ],
+  "synth": []
+ },
+ "whistle_peep": {
+  "variants": 4,
+  "sources": [
+   "bigsoundbank/0225.ogg",
+   "bigsoundbank/0227.ogg"
+  ],
+  "synth": []
+ },
+ "lever_clunk": {
+  "variants": 2,
+  "sources": [
+   "vanilla-preview/block_copper_trapdoor_toggle1.ogg",
+   "vanilla-preview/block_copper_trapdoor_toggle2.ogg"
+  ],
+  "synth": []
+ },
+ "whistle_toot_a": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/3319.ogg",
+   "bigsoundbank/0227.ogg"
+  ],
+  "synth": []
+ },
+ "whistle_toot_b": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/3317.ogg",
+   "bigsoundbank/0227.ogg"
+  ],
+  "synth": []
+ },
+ "whistle_toot_c": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/3315.ogg",
+   "bigsoundbank/0227.ogg"
+  ],
+  "synth": []
+ },
+ "whistle_toot_d": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/0225.ogg",
+   "bigsoundbank/0227.ogg"
+  ],
+  "synth": []
+ },
+ "lever_clunk_a": {
+  "variants": 1,
+  "sources": [
+   "vanilla-preview/random_click.ogg"
+  ],
+  "synth": []
+ },
+ "lever_clunk_b": {
+  "variants": 2,
+  "sources": [
+   "vanilla-preview/block_copper_trapdoor_toggle1.ogg",
+   "vanilla-preview/block_copper_trapdoor_toggle2.ogg"
+  ],
+  "synth": []
+ },
+ "lever_clunk_c": {
+  "variants": 3,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "kenney-impact-sounds/Audio/impactSoft_heavy_000.ogg"
+  ],
+  "synth": []
+ }
+}

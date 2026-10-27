@@ -128,9 +128,11 @@ public class AnimalPenRenderer extends SafeBlockEntityRenderer<AnimalPenBlockEnt
 
 	/**
 	 * How many of this pen's animals to draw from where the camera is, going on from what it drew last time. All of
-	 * them where the camera isn't known (Ponder, a shadow pass), which doesn't count as last time.
+	 * them where the camera isn't known (Ponder), none in a shadow pass; neither counts as last time.
 	 */
 	private int detail(AnimalPenBlockEntity be, CameraView camera) {
+		if (camera.shadow())
+			return NONE;
 		if (!camera.known())
 			return ALL;
 		double distanceSqr = camera.distanceSqr();

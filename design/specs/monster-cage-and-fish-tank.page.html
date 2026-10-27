@@ -216,9 +216,9 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
 
   <section>
     <h2>Containment</h2>
-    <p class="sub">The Netherite cage's shaft runs the farm. Its FE holds the field, shown as a blue glowing shield around the whole block that flickers when power runs short: a flat 2,048 FE/t whenever any Wither is inside, plus up to 1,024 FE/t while it farms at full speed. Below that, the field is down.</p>
+    <p class="sub">The Netherite cage's shaft runs the farm. Its FE holds the field, shown as a blue glowing shield around the whole block that flickers through a countdown: a flat 2,048 FE/t whenever any Wither is inside, plus up to 1,024 FE/t while it farms at full speed. Below that, the field is down and the cage takes no FE at all; it comes back only after a one-second trial of full supply (failed trials retry after 10, 20, 40 and 60 s). Back up, it holds the countdown where it stands, and calls it off once it has held for a minute; bursts of power never reset it.</p>
     <div class="timeline">
-      <svg viewBox="0 0 680 170" role="img" aria-label="Timeline: the field drops, a 5-minute warning, the first Wither escapes; then one more escapes every game day until the cage is empty. Power back at any point cancels and resets it.">
+      <svg viewBox="0 0 680 170" role="img" aria-label="Timeline: the field drops, a 5-minute warning, the first Wither escapes; then one more escapes every game day until the cage is empty. The field back up at any point pauses it, and cancels and resets it once it has held for a minute.">
         <rect x="16" y="58" width="96" height="22" fill="var(--field-soft)" stroke="var(--field)"></rect>
         <text x="64" y="73" text-anchor="middle" class="lbl">field up</text>
         <rect x="112" y="58" width="90" height="22" fill="var(--alarm)" fill-opacity=".22" stroke="var(--alarm)"></rect>
@@ -237,7 +237,7 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
         <text x="460" y="32" text-anchor="middle" class="lbl">Wither 2 out</text>
         <text x="664" y="73" text-anchor="end" class="lbl">… empty</text>
         <path d="M157 84 Q157 122 40 122" fill="none" stroke="var(--ok)" stroke-width="1.5"></path>
-        <text x="168" y="126" class="lbl dim">FE back at any point: countdown cancels, the clock resets</text>
+        <text x="168" y="126" class="lbl dim">Field back up: the countdown pauses; held a minute, it's called off</text>
         <text x="16" y="156" class="lbl dim">The clock stops whenever nobody is within 128 blocks, even if the chunk stays loaded.</text>
       </svg>
     </div>
@@ -286,7 +286,8 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
       <div><b>…the power stays off?</b><span>One Wither now, then one every game day until the cage is empty.</span></div>
       <div><b>…nobody is near?</b><span>Nothing happens until a player comes within 128 blocks. Then the klaxon starts.</span></div>
       <div><b>…the cage is built into a wall?</b><span>The Wither comes out at the nearest open space.</span></div>
-      <div><b>…the FE only covers part of it?</b><span>Farming stops first. Below 2,048 FE/t the field is down.</span></div>
+      <div><b>…the FE only covers part of it?</b><span>Farming stops first. Below 2,048 FE/t the field stays down and takes no power at all; only a full supply starts it again.</span></div>
+      <div><b>…a battery gives it short bursts?</b><span>A burst only pauses the countdown. The alarm stands down once the field holds a full minute.</span></div>
       <div><b>…I break it to dodge an escape?</b><span>You can't. No breaking or emptying while the field is down.</span></div>
       <div><b>…everyone walks away mid-alarm?</b><span>The countdown stops, even chunk-loaded, and picks up where it left off when someone returns.</span></div>
       <div><b>…who hears the warning?</b><span>Everyone within 128 blocks: chat at the start and each minute, a live hotbar countdown for the last 30 s.</span></div>

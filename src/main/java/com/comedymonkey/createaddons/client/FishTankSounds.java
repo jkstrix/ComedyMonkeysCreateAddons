@@ -21,6 +21,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  */
 public final class FishTankSounds {
 	private static final Map<FishTankBlockEntity, State> STATES = new WeakHashMap<>();
+	/** Only the nearest few tanks' pumps and bubbles play: a wall of tanks would take every sound channel. */
+	private static final NearestLoops PUMPS = new NearestLoops(), BUBBLES = new NearestLoops();
 
 	private FishTankSounds() {}
 
@@ -47,26 +49,40 @@ public final class FishTankSounds {
 		if (!STATES.containsKey(be))
 			STATES.keySet().removeIf(BlockEntity::isRemoved);
 		State s = STATES.computeIfAbsent(be, b -> new State());
-		BlockPos pos = be.getBlockPos();
+		// worked out once this tick, by the block entity, for its window too
+		double distanceSqr = be.getViewDistanceSqr();
 		SoundEvent pump = ModSounds.tank("pump_loop");
-		if (MachineLoop.ended(s.pump) && pumping(be) && Loop.canStart(pump, pos))
-			mc.getSoundManager().play(s.pump = new Loop(be, pump, FishTankSounds::pumping, true));
+		if (pumping(be) && wanted(s.pump, pump, PUMPS, be, distanceSqr))
+			mc.getSoundManager().play(s.pump = new Loop(be, pump, FishTankSounds::pumping, true, PUMPS));
 		SoundEvent bubbles = ModSounds.tank("bubbles_loop");
-		if (MachineLoop.ended(s.bubbles) && bubbling(be) && Loop.canStart(bubbles, pos))
-			mc.getSoundManager().play(s.bubbles = new Loop(be, bubbles, FishTankSounds::bubbling, false));
+		if (bubbling(be) && wanted(s.bubbles, bubbles, BUBBLES, be, distanceSqr))
+			mc.getSoundManager().play(s.bubbles = new Loop(be, bubbles, FishTankSounds::bubbling, false, BUBBLES));
 	}
 
-	/** A running loop: fades in and out with {@code on}, stops once silent or gone. */
+	/**
+	 * For a tank whose loop should run: offers it among the nearest (if it's in earshot, a playing one a little further
+	 * out), and whether a new one should start.
+	 */
+	private static boolean wanted(Loop loop, SoundEvent sound, NearestLoops kind, FishTankBlockEntity be, double distanceSqr) {
+		boolean playing = !MachineLoop.ended(loop);
+		if (!Hearing.inRange(sound, 1, distanceSqr, playing ? Hearing.LOOP_STOP_MARGIN : Hearing.LOOP_START_MARGIN))
+			return false;
+		return kind.offer(be, distanceSqr, playing) && !playing;
+	}
+
+	/** A running loop: fades in and out with {@code on} (and out when nearer tanks take its place), stops once silent or gone. */
 	private static final class Loop extends MachineLoop {
 		private final WeakReference<FishTankBlockEntity> tank;
 		private final Predicate<FishTankBlockEntity> on;
 		private final boolean pitched;
+		private final NearestLoops kind;
 
-		Loop(FishTankBlockEntity be, SoundEvent sound, Predicate<FishTankBlockEntity> on, boolean pitched) {
+		Loop(FishTankBlockEntity be, SoundEvent sound, Predicate<FishTankBlockEntity> on, boolean pitched, NearestLoops kind) {
 			super(sound);
 			this.tank = new WeakReference<>(be);
 			this.on = on;
 			this.pitched = pitched;
+			this.kind = kind;
 			BlockPos at = be.getBlockPos();
 			x = at.getX() + 0.5;
 			y = at.getY() + 0.5;
@@ -76,10 +92,6 @@ public final class FishTankSounds {
 			volume = 0.01f;
 		}
 
-		static boolean canStart(SoundEvent sound, BlockPos at) {
-			return Hearing.inRange(sound, 1, at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, Hearing.LOOP_START_MARGIN);
-		}
-
 		@Override
 		public void tick() {
 			FishTankBlockEntity be = tank.get();
@@ -87,7 +99,7 @@ public final class FishTankSounds {
 				stop();
 				return;
 			}
-			boolean running = on.test(be);
+			boolean running = on.test(be) && kind.allows(be);
 			volume = running ? Math.min(1, volume + 0.1f) : volume - 0.1f;
 			if (pitched)
 				pitch = Mth.clampedMap(Math.abs(be.getSpeed()), 16, 256, 0.9f, 1.1f);

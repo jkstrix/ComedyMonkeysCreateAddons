@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Helper Bot Sounds</title>
+<style>
+:root { --bg:#1c1f24; --panel:#262a31; --edge:#3c424a; --text:#d8d4c8; --dim:#8a8c86; --brass:#b08f45; --amber:#d99a4a; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:14px/1.4 system-ui, sans-serif; padding:24px 16px 64px; }
+main { max-width:1100px; margin:0 auto; }
+h1 { margin:0 0 4px; font-size:22px; } h2 { margin:28px 0 10px; font-size:15px; color:var(--brass); text-transform:uppercase; letter-spacing:.06em; }
+.note { color:var(--dim); margin:0 0 12px; }
+.controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; color:var(--dim); position:sticky; top:0; background:var(--bg); padding:8px 0; z-index:2; }
+button { font:inherit; }
+.sets { display:inline-flex; gap:4px; }
+.btn, .set { background:var(--panel); color:var(--dim); border:1px solid var(--edge); border-radius:4px; padding:4px 10px; cursor:pointer; }
+.set.on, .btn:hover { color:var(--amber); border-color:var(--amber); }
+.grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:8px; }
+.card { display:flex; gap:10px; align-items:flex-start; background:var(--panel); border:1px solid var(--edge); border-radius:6px; padding:10px; }
+.card.on { border-color:var(--amber); } .card.tweaked { box-shadow:inset 3px 0 0 var(--brass); }
+.play, .cplay, .tw { flex:none; width:26px; height:26px; border-radius:50%; background:var(--edge); color:var(--amber); display:grid; place-items:center; font-size:11px; border:0; cursor:pointer; }
+.tw { margin-left:auto; color:var(--dim); } .tw:hover { color:var(--amber); }
+.txt { display:flex; flex-direction:column; gap:2px; min-width:0; } .txt small { opacity:.85; } .txt i { color:var(--dim); font-style:normal; font-size:12px; overflow-wrap:anywhere; }
+.vars { display:flex; flex-wrap:wrap; gap:3px; margin-top:3px; } .vars button { background:none; border:1px solid var(--edge); color:var(--dim); border-radius:3px; font-size:11px; padding:0 5px; cursor:pointer; } .vars button:hover { color:var(--amber); border-color:var(--amber); }
+.clip { display:flex; gap:10px; align-items:flex-start; background:var(--panel); border:1px solid var(--edge); border-radius:6px; padding:10px; margin-bottom:8px; }
+.cinfo { flex:1; min-width:0; } .cinfo small { color:var(--dim); font-size:12px; display:block; overflow-wrap:anywhere; }
+.bar { position:relative; height:14px; margin:6px 0; background:#1a1d22; border-radius:3px; }
+.mark { position:absolute; top:2px; width:3px; height:10px; margin-left:-1px; background:var(--brass); border-radius:1px; }
+.head { position:absolute; top:0; left:0; width:2px; height:14px; background:var(--amber); display:none; }
+#panel { position:fixed; right:16px; bottom:16px; width:min(340px, calc(100vw - 32px)); background:var(--panel); border:1px solid var(--amber); border-radius:8px; padding:14px; display:none; z-index:5; box-shadow:0 8px 30px #0008; }
+#panel h3 { margin:0 0 8px; font-size:15px; } #panel label { display:grid; grid-template-columns:96px 1fr 52px; gap:8px; align-items:center; color:var(--dim); font-size:12px; margin:6px 0; }
+#panel output { color:var(--text); text-align:right; } #panel .row { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+</style></head><body><main>
+<h1>Helper Bot sounds</h1>
+<p class="note">Switch sets to compare them. Click ▶ to play, a number to hear that variant, ⚙ to tweak a sound live. Tweaks are saved with the button at the top and applied by the next real-sound build.</p>
+<div class="controls">
+  <label>Volume <input id="vol" type="range" min="0" max="1" step="0.05" value="0.8"></label>
+  <span class="sets"><button class="set on" data-i="0">real</button><button class="set" data-i="1">placeholder</button></span>
+  <button class="btn" id="random">Random variants: on</button>
+  <button class="btn" id="save">Save tweaks (helper-bot.tweaks.json)</button>
+  <span id="saved"></span>
+</div>
+<h2>Signature sounds (new)</h2><div class="grid"><div class="card" data-id="whistle_toot">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>whistle_toot</b><small>Helper Bot toots his whistle</small><i>real: 0225 · 0227 · 0227 · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="whistle_peep">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>whistle_peep</b><small>Helper Bot peeps his whistle</small><i>real: 0225 · 0227 · 0227 · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="lever_clunk">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>lever_clunk</b><small>Helper Bot pulls a lever</small><i>real: block_copper_trapdoor_toggle1 · block_copper_trapdoor_toggle2 · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Signature sounds (Trade Bot's)</h2><div class="grid"><div class="card" data-id="clock_tick">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>clock_tick</b><small>Helper Bot's watch ticks</small><i>Trade Bot's approved sound · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="focus_click">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>focus_click</b><small>Helper Bot focuses</small><i>Trade Bot's approved sound · in 9 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="merchant_trill">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>merchant_trill</b><small>Helper Bot trills</small><i>Trade Bot's approved sound · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="brass_ping">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>brass_ping</b><small>Helper Bot dings</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Movement</h2><div class="grid"><div class="card" data-id="servo_short">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>servo_short</b><small>Helper Bot whirs</small><i>Trade Bot's approved sound · in 13 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="servo_snap">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>servo_snap</b><small>Helper Bot whirs</small><i>Trade Bot's approved sound · in 6 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="aerial_boing">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>aerial_boing</b><small>Helper Bot wobbles on his spring</small><i>Trade Bot's approved sound · in 9 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="hop_small">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>hop_small</b><small>Helper Bot bounces</small><i>Trade Bot's approved sound · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="land_soft">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>land_soft</b><small>Helper Bot settles</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="land_heavy">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>land_heavy</b><small>Helper Bot is jolted</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="blink">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>blink</b><small>Helper Bot blinks</small><i>Trade Bot's approved sound · in 7 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Hands, watch and cap</h2><div class="grid"><div class="card" data-id="grip">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>grip</b><small>Helper Bot grips</small><i>Trade Bot's approved sound · in 11 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="claw_fidget">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>claw_fidget</b><small>Helper Bot fidgets</small><i>Trade Bot's approved sound · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="pat">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>pat</b><small>Helper Bot taps</small><i>Trade Bot's approved sound · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="set_soft">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>set_soft</b><small>Helper Bot clips the schedule in</small><i>Trade Bot's approved sound · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="dust_off">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>dust_off</b><small>Helper Bot wipes</small><i>Trade Bot's approved sound · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="drop_whoosh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>drop_whoosh</b><small>Helper Bot blows</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="light_off">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>light_off</b><small>Helper Bot's watch snaps shut</small><i>Trade Bot's approved sound · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="light_on">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>light_on</b><small>Helper Bot's eyes come on</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="flicker">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>flicker</b><small>Helper Bot's eyes flicker</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="poof_in">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>poof_in</b><small>Helper Bot's cap pops on</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="poof_out">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>poof_out</b><small>Helper Bot's cap pops off</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="wave_clink">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>wave_clink</b><small>Helper Bot waves</small><i>Trade Bot's approved sound · in 6 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Voice and reactions</h2><div class="grid"><div class="card" data-id="bonk">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>bonk</b><small>Helper Bot bonks</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="dizzy">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>dizzy</b><small>Helper Bot is dizzy</small><i>Trade Bot's approved sound · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="head_shake">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>head_shake</b><small>Helper Bot shakes his head</small><i>Trade Bot's approved sound · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="grumble">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>grumble</b><small>Helper Bot huffs</small><i>Trade Bot's approved sound · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="double_take">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>double_take</b><small>Helper Bot does a double-take</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="curious_chirp">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>curious_chirp</b><small>Helper Bot wonders</small><i>Trade Bot's approved sound · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="puzzled_hmm">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>puzzled_hmm</b><small>Helper Bot is puzzled</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="huh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>huh</b><small>Helper Bot is baffled</small><i>Trade Bot's approved sound · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="shrug">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>shrug</b><small>Helper Bot shrugs</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="startled_chirp">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>startled_chirp</b><small>Helper Bot startles</small><i>Trade Bot's approved sound · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="sad_aww">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>sad_aww</b><small>Helper Bot droops</small><i>Trade Bot's approved sound · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="sigh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>sigh</b><small>Helper Bot sighs</small><i>Trade Bot's approved sound · in 2 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="snore">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>snore</b><small>Helper Bot snores</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="sleepy_mmm">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>sleepy_mmm</b><small>Helper Bot gets sleepy</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="pleased_boop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>pleased_boop</b><small>Helper Bot boops</small><i>Trade Bot's approved sound · in 4 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="hi_boop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>hi_boop</b><small>Helper Bot says hi</small><i>Trade Bot's approved sound · in 3 clips</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="bye_boop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>bye_boop</b><small>Helper Bot says bye</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Scared</h2><div class="grid"><div class="card" data-id="scared_yelp">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>scared_yelp</b><small>Helper Bot yelps</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="hide_tuck">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>hide_tuck</b><small>Helper Bot hides</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="tremble_loop">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>tremble_loop</b><small>Helper Bot trembles</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="whimper">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>whimper</b><small>Helper Bot whimpers</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="peek_click">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>peek_click</b><small>Helper Bot peeks</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="relief_sigh">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>relief_sigh</b><small>Helper Bot sighs with relief</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div><div class="card" data-id="shake_off">
+  <button class="play" title="play">▶</button>
+  <span class="txt"><b>shake_off</b><small>Helper Bot shakes it off</small><i>Trade Bot's approved sound · in 1 clip</i>
+  <span class="vars"></span></span>
+  <button class="tw" title="tweak">⚙</button>
+</div></div>
+<h2>Clips</h2>
+<div class="clip" data-clip="idle" data-len="2.8000000000000003"><button class="cplay">▶</button><div class="cinfo"><b>idle</b><div class="bar"><span class="mark" style="left:78.57%" title="2.20 s · blink"></span><span class="head"></span></div><small>2.20 blink</small></div></div>
+<div class="clip" data-clip="drive_ready" data-len="2.9"><button class="cplay">▶</button><div class="cinfo"><b>drive_ready</b><div class="bar"><span class="mark" style="left:25.86%" title="0.75 s · focus_click"></span><span class="mark" style="left:79.31%" title="2.30 s · blink"></span><span class="head"></span></div><small>0.75 focus_click · 2.30 blink</small></div></div>
+<div class="clip" data-clip="cruise" data-len="2.2"><button class="cplay">▶</button><div class="cinfo"><b>cruise</b><div class="bar"><span class="mark" style="left:13.64%" title="0.30 s · servo_short"></span><span class="mark" style="left:54.55%" title="1.20 s · blink"></span><span class="mark" style="left:72.73%" title="1.60 s · servo_short"></span><span class="head"></span></div><small>0.30 servo_short · 1.20 blink · 1.60 servo_short</small></div></div>
+<div class="clip" data-clip="throttle_up" data-len="2"><button class="cplay">▶</button><div class="cinfo"><b>throttle_up</b><div class="bar"><span class="mark" style="left:4.00%" title="0.08 s · servo_snap"></span><span class="mark" style="left:20.00%" title="0.40 s · aerial_boing"></span><span class="mark" style="left:30.00%" title="0.60 s · lever_clunk"></span><span class="mark" style="left:47.50%" title="0.95 s · pleased_boop"></span><span class="mark" style="left:70.00%" title="1.40 s · grip"></span><span class="head"></span></div><small>0.08 servo_snap · 0.40 aerial_boing · 0.60 lever_clunk · 0.95 pleased_boop · 1.40 grip</small></div></div>
+<div class="clip" data-clip="brake" data-len="1.25"><button class="cplay">▶</button><div class="cinfo"><b>brake</b><div class="bar"><span class="mark" style="left:16.00%" title="0.20 s · aerial_boing"></span><span class="mark" style="left:28.00%" title="0.35 s · grip"></span><span class="mark" style="left:48.00%" title="0.60 s · lever_clunk"></span><span class="mark" style="left:52.00%" title="0.65 s · grumble"></span><span class="head"></span></div><small>0.20 aerial_boing · 0.35 grip · 0.60 lever_clunk · 0.65 grumble</small></div></div>
+<div class="clip" data-clip="station_wait" data-len="6.05"><button class="cplay">▶</button><div class="cinfo"><b>station_wait</b><div class="bar"><span class="mark" style="left:5.79%" title="0.35 s · grip"></span><span class="mark" style="left:19.83%" title="1.20 s · focus_click"></span><span class="mark" style="left:23.14%" title="1.40 s · clock_tick"></span><span class="mark" style="left:31.40%" title="1.90 s · clock_tick"></span><span class="mark" style="left:33.88%" title="2.05 s · pat"></span><span class="mark" style="left:39.67%" title="2.40 s · clock_tick"></span><span class="mark" style="left:49.59%" title="3.00 s · clock_tick"></span><span class="mark" style="left:57.85%" title="3.50 s · clock_tick"></span><span class="mark" style="left:65.29%" title="3.95 s · grumble"></span><span class="mark" style="left:66.94%" title="4.05 s · light_off"></span><span class="mark" style="left:72.73%" title="4.40 s · grip"></span><span class="mark" style="left:81.82%" title="4.95 s · pat"></span><span class="mark" style="left:85.95%" title="5.20 s · pat"></span><span class="mark" style="left:90.08%" title="5.45 s · pat"></span><span class="head"></span></div><small>0.35 grip · 1.20 focus_click · 1.40 clock_tick · 1.90 clock_tick · 2.05 pat · 2.40 clock_tick · 3.00 clock_tick · 3.50 clock_tick · 3.95 grumble · 4.05 light_off · 4.40 grip · 4.95 pat · 5.20 pat · 5.45 pat</small></div></div>
+<div class="clip" data-clip="depart" data-len="2.15"><button class="cplay">▶</button><div class="cinfo"><b>depart</b><div class="bar"><span class="mark" style="left:6.98%" title="0.15 s · servo_snap"></span><span class="mark" style="left:23.26%" title="0.50 s · grip"></span><span class="mark" style="left:28.84%" title="0.62 s · whistle_toot"></span><span class="mark" style="left:45.12%" title="0.97 s · whistle_toot"></span><span class="mark" style="left:67.44%" title="1.45 s · wave_clink"></span><span class="mark" style="left:72.09%" title="1.55 s · bye_boop"></span><span class="head"></span></div><small>0.15 servo_snap · 0.50 grip · 0.62 whistle_toot · 0.97 whistle_toot · 1.45 wave_clink · 1.55 bye_boop</small></div></div>
+<div class="clip" data-clip="honk" data-len="1.02"><button class="cplay">▶</button><div class="cinfo"><b>honk</b><div class="bar"><span class="mark" style="left:29.41%" title="0.30 s · grip"></span><span class="mark" style="left:41.18%" title="0.42 s · whistle_peep"></span><span class="head"></span></div><small>0.30 grip · 0.42 whistle_peep</small></div></div>
+<div class="clip" data-clip="no_path" data-len="4.35"><button class="cplay">▶</button><div class="cinfo"><b>no_path</b><div class="bar"><span class="mark" style="left:9.20%" title="0.40 s · grip"></span><span class="mark" style="left:18.39%" title="0.80 s · focus_click"></span><span class="mark" style="left:29.89%" title="1.30 s · claw_fidget"></span><span class="mark" style="left:33.33%" title="1.45 s · curious_chirp"></span><span class="mark" style="left:45.98%" title="2.00 s · claw_fidget"></span><span class="mark" style="left:50.57%" title="2.20 s · huh"></span><span class="mark" style="left:59.77%" title="2.60 s · servo_short"></span><span class="mark" style="left:67.82%" title="2.95 s · servo_short"></span><span class="mark" style="left:75.86%" title="3.30 s · shrug"></span><span class="mark" style="left:86.21%" title="3.75 s · set_soft"></span><span class="head"></span></div><small>0.40 grip · 0.80 focus_click · 1.30 claw_fidget · 1.45 curious_chirp · 2.00 claw_fidget · 2.20 huh · 2.60 servo_short · 2.95 servo_short · 3.30 shrug · 3.75 set_soft</small></div></div>
+<div class="clip" data-clip="manual_folded" data-len="2.05"><button class="cplay">▶</button><div class="cinfo"><b>manual_folded</b><div class="bar"><span class="mark" style="left:70.73%" title="1.45 s · grumble"></span><span class="head"></span></div><small>1.45 grumble</small></div></div>
+<div class="clip" data-clip="paused_point" data-len="2.4"><button class="cplay">▶</button><div class="cinfo"><b>paused_point</b><div class="bar"><span class="mark" style="left:12.50%" title="0.30 s · pat"></span><span class="mark" style="left:25.00%" title="0.60 s · pat"></span><span class="mark" style="left:41.67%" title="1.00 s · servo_short"></span><span class="mark" style="left:75.00%" title="1.80 s · focus_click"></span><span class="head"></span></div><small>0.30 pat · 0.60 pat · 1.00 servo_short · 1.80 focus_click</small></div></div>
+<div class="clip" data-clip="crash" data-len="3.15"><button class="cplay">▶</button><div class="cinfo"><b>crash</b><div class="bar"><span class="mark" style="left:3.81%" title="0.12 s · bonk"></span><span class="mark" style="left:4.44%" title="0.14 s · land_heavy"></span><span class="mark" style="left:7.94%" title="0.25 s · aerial_boing"></span><span class="mark" style="left:15.87%" title="0.50 s · dizzy"></span><span class="mark" style="left:63.49%" title="2.00 s · head_shake"></span><span class="mark" style="left:80.95%" title="2.55 s · sad_aww"></span><span class="head"></span></div><small>0.12 bonk · 0.14 land_heavy · 0.25 aerial_boing · 0.50 dizzy · 2.00 head_shake · 2.55 sad_aww</small></div></div>
+<div class="clip" data-clip="sulk" data-len="2.25"><button class="cplay">▶</button><div class="cinfo"><b>sulk</b><div class="bar"><span class="mark" style="left:73.33%" title="1.65 s · sigh"></span><span class="head"></span></div><small>1.65 sigh</small></div></div>
+<div class="clip" data-clip="no_schedule" data-len="2.75"><button class="cplay">▶</button><div class="cinfo"><b>no_schedule</b><div class="bar"><span class="mark" style="left:7.27%" title="0.20 s · servo_short"></span><span class="mark" style="left:25.45%" title="0.70 s · servo_short"></span><span class="mark" style="left:45.45%" title="1.25 s · curious_chirp"></span><span class="mark" style="left:78.18%" title="2.15 s · pat"></span><span class="head"></span></div><small>0.20 servo_short · 0.70 servo_short · 1.25 curious_chirp · 2.15 pat</small></div></div>
+<div class="clip" data-clip="schedule_given" data-len="2.45"><button class="cplay">▶</button><div class="cinfo"><b>schedule_given</b><div class="bar"><span class="mark" style="left:8.16%" title="0.20 s · set_soft"></span><span class="mark" style="left:8.98%" title="0.22 s · servo_snap"></span><span class="mark" style="left:12.24%" title="0.30 s · aerial_boing"></span><span class="mark" style="left:18.37%" title="0.45 s · poof_in"></span><span class="mark" style="left:34.69%" title="0.85 s · wave_clink"></span><span class="mark" style="left:36.73%" title="0.90 s · merchant_trill"></span><span class="mark" style="left:75.51%" title="1.85 s · grip"></span><span class="head"></span></div><small>0.20 set_soft · 0.22 servo_snap · 0.30 aerial_boing · 0.45 poof_in · 0.85 wave_clink · 0.90 merchant_trill · 1.85 grip</small></div></div>
+<div class="clip" data-clip="schedule_taken" data-len="1.9"><button class="cplay">▶</button><div class="cinfo"><b>schedule_taken</b><div class="bar"><span class="mark" style="left:10.53%" title="0.20 s · grip"></span><span class="mark" style="left:18.42%" title="0.35 s · servo_short"></span><span class="mark" style="left:28.95%" title="0.55 s · sad_aww"></span><span class="mark" style="left:68.42%" title="1.30 s · poof_out"></span><span class="head"></span></div><small>0.20 grip · 0.35 servo_short · 0.55 sad_aww · 1.30 poof_out</small></div></div>
+<div class="clip" data-clip="passenger" data-len="3"><button class="cplay">▶</button><div class="cinfo"><b>passenger</b><div class="bar"><span class="mark" style="left:43.33%" title="1.30 s · blink"></span><span class="mark" style="left:80.00%" title="2.40 s · wave_clink"></span><span class="head"></span></div><small>1.30 blink · 2.40 wave_clink</small></div></div>
+<div class="clip" data-clip="shop_idle" data-len="2.3"><button class="cplay">▶</button><div class="cinfo"><b>shop_idle</b><div class="bar"><span class="mark" style="left:73.91%" title="1.70 s · blink"></span><span class="head"></span></div><small>1.70 blink</small></div></div>
+<div class="clip" data-clip="shop_greet" data-len="1.7999999999999998"><button class="cplay">▶</button><div class="cinfo"><b>shop_greet</b><div class="bar"><span class="mark" style="left:11.11%" title="0.20 s · focus_click"></span><span class="mark" style="left:30.56%" title="0.55 s · wave_clink"></span><span class="mark" style="left:33.33%" title="0.60 s · hi_boop"></span><span class="mark" style="left:66.67%" title="1.20 s · wave_clink"></span><span class="head"></span></div><small>0.20 focus_click · 0.55 wave_clink · 0.60 hi_boop · 1.20 wave_clink</small></div></div>
+<div class="clip" data-clip="shop_order_nod" data-len="1.5499999999999998"><button class="cplay">▶</button><div class="cinfo"><b>shop_order_nod</b><div class="bar"><span class="mark" style="left:9.68%" title="0.15 s · servo_short"></span><span class="mark" style="left:12.90%" title="0.20 s · brass_ping"></span><span class="mark" style="left:29.03%" title="0.45 s · servo_short"></span><span class="mark" style="left:61.29%" title="0.95 s · pleased_boop"></span><span class="head"></span></div><small>0.15 servo_short · 0.20 brass_ping · 0.45 servo_short · 0.95 pleased_boop</small></div></div>
+<div class="clip" data-clip="check_watch" data-len="2.55"><button class="cplay">▶</button><div class="cinfo"><b>check_watch</b><div class="bar"><span class="mark" style="left:11.76%" title="0.30 s · grip"></span><span class="mark" style="left:33.33%" title="0.85 s · focus_click"></span><span class="mark" style="left:39.22%" title="1.00 s · clock_tick"></span><span class="mark" style="left:58.82%" title="1.50 s · clock_tick"></span><span class="mark" style="left:66.67%" title="1.70 s · light_off"></span><span class="mark" style="left:76.47%" title="1.95 s · grip"></span><span class="head"></span></div><small>0.30 grip · 0.85 focus_click · 1.00 clock_tick · 1.50 clock_tick · 1.70 light_off · 1.95 grip</small></div></div>
+<div class="clip" data-clip="polish_lens" data-len="2.85"><button class="cplay">▶</button><div class="cinfo"><b>polish_lens</b><div class="bar"><span class="mark" style="left:22.81%" title="0.65 s · dust_off"></span><span class="mark" style="left:43.86%" title="1.25 s · dust_off"></span><span class="mark" style="left:70.18%" title="2.00 s · blink"></span><span class="mark" style="left:78.95%" title="2.25 s · blink"></span><span class="head"></span></div><small>0.65 dust_off · 1.25 dust_off · 2.00 blink · 2.25 blink</small></div></div>
+<div class="clip" data-clip="toot_tune" data-len="2.8000000000000003"><button class="cplay">▶</button><div class="cinfo"><b>toot_tune</b><div class="bar"><span class="mark" style="left:17.86%" title="0.50 s · grip"></span><span class="mark" style="left:25.71%" title="0.72 s · whistle_peep"></span><span class="mark" style="left:41.79%" title="1.17 s · whistle_peep"></span><span class="mark" style="left:57.86%" title="1.62 s · whistle_peep"></span><span class="mark" style="left:78.57%" title="2.20 s · pleased_boop"></span><span class="head"></span></div><small>0.50 grip · 0.72 whistle_peep · 1.17 whistle_peep · 1.62 whistle_peep · 2.20 pleased_boop</small></div></div>
+<div class="clip" data-clip="adjust_cap" data-len="2.05"><button class="cplay">▶</button><div class="cinfo"><b>adjust_cap</b><div class="bar"><span class="mark" style="left:24.39%" title="0.50 s · grip"></span><span class="mark" style="left:36.59%" title="0.75 s · claw_fidget"></span><span class="mark" style="left:70.73%" title="1.45 s · grip"></span><span class="head"></span></div><small>0.50 grip · 0.75 claw_fidget · 1.45 grip</small></div></div>
+<div class="clip" data-clip="dust_controls" data-len="2.6"><button class="cplay">▶</button><div class="cinfo"><b>dust_controls</b><div class="bar"><span class="mark" style="left:13.46%" title="0.35 s · dust_off"></span><span class="mark" style="left:36.54%" title="0.95 s · dust_off"></span><span class="mark" style="left:62.31%" title="1.62 s · drop_whoosh"></span><span class="mark" style="left:76.92%" title="2.00 s · pleased_boop"></span><span class="head"></span></div><small>0.35 dust_off · 0.95 dust_off · 1.62 drop_whoosh · 2.00 pleased_boop</small></div></div>
+<div class="clip" data-clip="doze_off" data-len="6.699999999999999"><button class="cplay">▶</button><div class="cinfo"><b>doze_off</b><div class="bar"><span class="mark" style="left:5.97%" title="0.40 s · sleepy_mmm"></span><span class="mark" style="left:17.91%" title="1.20 s · servo_short"></span><span class="mark" style="left:29.85%" title="2.00 s · servo_short"></span><span class="mark" style="left:32.84%" title="2.20 s · flicker"></span><span class="mark" style="left:35.22%" title="2.36 s · light_off"></span><span class="mark" style="left:38.81%" title="2.60 s · snore"></span><span class="mark" style="left:53.73%" title="3.60 s · snore"></span><span class="mark" style="left:67.16%" title="4.50 s · startled_chirp"></span><span class="mark" style="left:67.16%" title="4.50 s · aerial_boing"></span><span class="mark" style="left:67.46%" title="4.52 s · light_on"></span><span class="mark" style="left:73.13%" title="4.90 s · servo_snap"></span><span class="mark" style="left:83.58%" title="5.60 s · servo_snap"></span><span class="mark" style="left:91.04%" title="6.10 s · huh"></span><span class="head"></span></div><small>0.40 sleepy_mmm · 1.20 servo_short · 2.00 servo_short · 2.20 flicker · 2.36 light_off · 2.60 snore · 3.60 snore · 4.50 startled_chirp · 4.50 aerial_boing · 4.52 light_on · 4.90 servo_snap · 5.60 servo_snap · 6.10 huh</small></div></div>
+<div class="clip" data-clip="sees_player" data-len="2.05"><button class="cplay">▶</button><div class="cinfo"><b>sees_player</b><div class="bar"><span class="mark" style="left:9.76%" title="0.20 s · servo_snap"></span><span class="mark" style="left:21.95%" title="0.45 s · servo_snap"></span><span class="mark" style="left:36.59%" title="0.75 s · double_take"></span><span class="mark" style="left:48.78%" title="1.00 s · servo_short"></span><span class="mark" style="left:65.85%" title="1.35 s · wave_clink"></span><span class="mark" style="left:70.73%" title="1.45 s · hi_boop"></span><span class="head"></span></div><small>0.20 servo_snap · 0.45 servo_snap · 0.75 double_take · 1.00 servo_short · 1.35 wave_clink · 1.45 hi_boop</small></div></div>
+<div class="clip" data-clip="wave" data-len="0.95"><button class="cplay">▶</button><div class="cinfo"><b>wave</b><div class="bar"><span class="mark" style="left:31.58%" title="0.30 s · wave_clink"></span><span class="mark" style="left:36.84%" title="0.35 s · hi_boop"></span><span class="head"></span></div><small>0.30 wave_clink · 0.35 hi_boop</small></div></div>
+<div class="clip" data-clip="hostile_shrink" data-len="1.05"><button class="cplay">▶</button><div class="cinfo"><b>hostile_shrink</b><div class="bar"><span class="mark" style="left:9.52%" title="0.10 s · scared_yelp"></span><span class="mark" style="left:19.05%" title="0.20 s · aerial_boing"></span><span class="mark" style="left:42.86%" title="0.45 s · hide_tuck"></span><span class="head"></span></div><small>0.10 scared_yelp · 0.20 aerial_boing · 0.45 hide_tuck</small></div></div>
+<div class="clip" data-clip="hostile_cower" data-len="2.1"><button class="cplay">▶</button><div class="cinfo"><b>hostile_cower</b><div class="bar"><span class="mark" style="left:0.00%" title="0.00 s · tremble_loop"></span><span class="mark" style="left:40.48%" title="0.85 s · peek_click"></span><span class="mark" style="left:71.43%" title="1.50 s · whimper"></span><span class="head"></span></div><small>0.00 tremble_loop · 0.85 peek_click · 1.50 whimper</small></div></div>
+<div class="clip" data-clip="hostile_recover" data-len="2"><button class="cplay">▶</button><div class="cinfo"><b>hostile_recover</b><div class="bar"><span class="mark" style="left:15.00%" title="0.30 s · servo_short"></span><span class="mark" style="left:30.00%" title="0.60 s · servo_short"></span><span class="mark" style="left:47.50%" title="0.95 s · relief_sigh"></span><span class="mark" style="left:70.00%" title="1.40 s · shake_off"></span><span class="head"></span></div><small>0.30 servo_short · 0.60 servo_short · 0.95 relief_sigh · 1.40 shake_off</small></div></div>
+<div class="clip" data-clip="rain_wipe" data-len="2.3"><button class="cplay">▶</button><div class="cinfo"><b>rain_wipe</b><div class="bar"><span class="mark" style="left:21.74%" title="0.50 s · dust_off"></span><span class="mark" style="left:52.17%" title="1.20 s · dust_off"></span><span class="mark" style="left:73.91%" title="1.70 s · head_shake"></span><span class="head"></span></div><small>0.50 dust_off · 1.20 dust_off · 1.70 head_shake</small></div></div>
+<div class="clip" data-clip="thunder_flinch" data-len="1.15"><button class="cplay">▶</button><div class="cinfo"><b>thunder_flinch</b><div class="bar"><span class="mark" style="left:4.35%" title="0.05 s · startled_chirp"></span><span class="mark" style="left:6.96%" title="0.08 s · hop_small"></span><span class="mark" style="left:47.83%" title="0.55 s · servo_short"></span><span class="head"></span></div><small>0.05 startled_chirp · 0.08 hop_small · 0.55 servo_short</small></div></div>
+<div class="clip" data-clip="idle_ducked" data-len="3.1"><button class="cplay">▶</button><div class="cinfo"><b>idle_ducked</b><div class="bar"><span class="mark" style="left:35.48%" title="1.10 s · servo_short"></span><span class="mark" style="left:80.65%" title="2.50 s · blink"></span><span class="head"></span></div><small>1.10 servo_short · 2.50 blink</small></div></div>
+<div class="clip" data-clip="duck_down" data-len="0.95"><button class="cplay">▶</button><div class="cinfo"><b>duck_down</b><div class="bar"><span class="mark" style="left:5.26%" title="0.05 s · servo_short"></span><span class="mark" style="left:36.84%" title="0.35 s · land_soft"></span><span class="head"></span></div><small>0.05 servo_short · 0.35 land_soft</small></div></div>
+<div class="clip" data-clip="duck_up" data-len="1.05"><button class="cplay">▶</button><div class="cinfo"><b>duck_up</b><div class="bar"><span class="mark" style="left:9.52%" title="0.10 s · servo_short"></span><span class="mark" style="left:42.86%" title="0.45 s · aerial_boing"></span><span class="head"></span></div><small>0.10 servo_short · 0.45 aerial_boing</small></div></div>
+<div class="clip" data-clip="expr_happy" data-len="1.6"><button class="cplay">▶</button><div class="cinfo"><b>expr_happy</b><div class="bar"><span class="mark" style="left:12.50%" title="0.20 s · merchant_trill"></span><span class="mark" style="left:25.00%" title="0.40 s · hop_small"></span><span class="mark" style="left:42.50%" title="0.68 s · hop_small"></span><span class="mark" style="left:62.50%" title="1.00 s · aerial_boing"></span><span class="head"></span></div><small>0.20 merchant_trill · 0.40 hop_small · 0.68 hop_small · 1.00 aerial_boing</small></div></div>
+<div class="clip" data-clip="expr_proud" data-len="1.7999999999999998"><button class="cplay">▶</button><div class="cinfo"><b>expr_proud</b><div class="bar"><span class="mark" style="left:13.89%" title="0.25 s · servo_snap"></span><span class="mark" style="left:19.44%" title="0.35 s · merchant_trill"></span><span class="mark" style="left:66.67%" title="1.20 s · claw_fidget"></span><span class="head"></span></div><small>0.25 servo_snap · 0.35 merchant_trill · 1.20 claw_fidget</small></div></div>
+<div class="clip" data-clip="expr_focused" data-len="2.9"><button class="cplay">▶</button><div class="cinfo"><b>expr_focused</b><div class="bar"><span class="mark" style="left:6.90%" title="0.20 s · focus_click"></span><span class="mark" style="left:79.31%" title="2.30 s · focus_click"></span><span class="head"></span></div><small>0.20 focus_click · 2.30 focus_click</small></div></div>
+<div class="clip" data-clip="expr_curious" data-len="2.7"><button class="cplay">▶</button><div class="cinfo"><b>expr_curious</b><div class="bar"><span class="mark" style="left:9.26%" title="0.25 s · curious_chirp"></span><span class="mark" style="left:33.33%" title="0.90 s · focus_click"></span><span class="mark" style="left:55.56%" title="1.50 s · focus_click"></span><span class="mark" style="left:77.78%" title="2.10 s · focus_click"></span><span class="head"></span></div><small>0.25 curious_chirp · 0.90 focus_click · 1.50 focus_click · 2.10 focus_click</small></div></div>
+<div class="clip" data-clip="expr_startled" data-len="0.8"><button class="cplay">▶</button><div class="cinfo"><b>expr_startled</b><div class="bar"><span class="mark" style="left:18.75%" title="0.15 s · startled_chirp"></span><span class="mark" style="left:25.00%" title="0.20 s · aerial_boing"></span><span class="head"></span></div><small>0.15 startled_chirp · 0.20 aerial_boing</small></div></div>
+<div class="clip" data-clip="expr_sad" data-len="1.7000000000000002"><button class="cplay">▶</button><div class="cinfo"><b>expr_sad</b><div class="bar"><span class="mark" style="left:17.65%" title="0.30 s · sad_aww"></span><span class="mark" style="left:64.71%" title="1.10 s · sigh"></span><span class="head"></span></div><small>0.30 sad_aww · 1.10 sigh</small></div></div>
+<div class="clip" data-clip="expr_cross" data-len="1.7000000000000002"><button class="cplay">▶</button><div class="cinfo"><b>expr_cross</b><div class="bar"><span class="mark" style="left:11.76%" title="0.20 s · focus_click"></span><span class="mark" style="left:58.82%" title="1.00 s · grumble"></span><span class="mark" style="left:64.71%" title="1.10 s · head_shake"></span><span class="head"></span></div><small>0.20 focus_click · 1.00 grumble · 1.10 head_shake</small></div></div>
+<div class="clip" data-clip="expr_confused" data-len="1.9"><button class="cplay">▶</button><div class="cinfo"><b>expr_confused</b><div class="bar"><span class="mark" style="left:15.79%" title="0.30 s · puzzled_hmm"></span><span class="mark" style="left:68.42%" title="1.30 s · huh"></span><span class="head"></span></div><small>0.30 puzzled_hmm · 1.30 huh</small></div></div>
+<div class="clip" data-clip="expr_dizzy" data-len="3.4"><button class="cplay">▶</button><div class="cinfo"><b>expr_dizzy</b><div class="bar"><span class="mark" style="left:7.35%" title="0.25 s · dizzy"></span><span class="mark" style="left:82.35%" title="2.80 s · head_shake"></span><span class="head"></span></div><small>0.25 dizzy · 2.80 head_shake</small></div></div>
+</main>
+<div id="panel"><h3 id="pt"></h3>
+  <label>Pitch <input data-k="pitch" type="range" min="0.5" max="2" step="0.01"><output></output></label>
+  <label>Gain <input data-k="gain" type="range" min="0" max="2" step="0.01"><output></output></label>
+  <label>Low-pass Hz <input data-k="lowpass" type="range" min="200" max="20000" step="10"><output></output></label>
+  <label>High-pass Hz <input data-k="highpass" type="range" min="20" max="4000" step="10"><output></output></label>
+  <label>Echo <input data-k="echo" type="range" min="0" max="0.6" step="0.01"><output></output></label>
+  <label>Echo delay s <input data-k="echoDelay" type="range" min="0.02" max="0.4" step="0.01"><output></output></label>
+  <label>Pitch spread ± <input data-k="vary" type="range" min="0" max="0.2" step="0.005"><output></output></label>
+  <div class="row"><button class="btn" id="pplay">▶ Play</button><button class="btn" id="preset">Reset</button><button class="btn" id="pclose">Close</button></div>
+</div>
+<script>
+const SETS = [{"dir":"real/","ext":"ogg","label":"real","avail":{"whistle_toot":3,"whistle_peep":4,"lever_clunk":2,"clock_tick":4,"focus_click":3,"merchant_trill":3,"brass_ping":2,"servo_short":4,"servo_snap":3,"aerial_boing":3,"hop_small":3,"land_soft":4,"land_heavy":3,"blink":2,"grip":3,"claw_fidget":2,"pat":3,"set_soft":3,"dust_off":2,"drop_whoosh":3,"light_off":2,"light_on":2,"flicker":2,"poof_in":3,"poof_out":3,"wave_clink":4,"bonk":2,"dizzy":2,"head_shake":2,"grumble":3,"double_take":2,"curious_chirp":3,"puzzled_hmm":3,"huh":3,"shrug":2,"startled_chirp":3,"sad_aww":2,"sigh":2,"snore":3,"sleepy_mmm":3,"pleased_boop":3,"hi_boop":3,"bye_boop":3,"scared_yelp":3,"hide_tuck":2,"tremble_loop":2,"whimper":3,"peek_click":2,"relief_sigh":2,"shake_off":3}},{"dir":"placeholder/","ext":"wav","label":"placeholder","avail":{"whistle_toot":0,"whistle_peep":0,"lever_clunk":0}}];
+const CLIPS = {"idle":[[2.2,"blink"]],"drive_ready":[[0.75,"focus_click"],[2.3,"blink"]],"cruise":[[0.3,"servo_short"],[1.2,"blink"],[1.6,"servo_short"]],"throttle_up":[[0.08,"servo_snap"],[0.4,"aerial_boing"],[0.6,"lever_clunk"],[0.95,"pleased_boop"],[1.4,"grip"]],"brake":[[0.2,"aerial_boing"],[0.35,"grip"],[0.6,"lever_clunk"],[0.65,"grumble"]],"station_wait":[[0.35,"grip"],[1.2,"focus_click"],[1.4,"clock_tick"],[1.9,"clock_tick"],[2.05,"pat"],[2.4,"clock_tick"],[3,"clock_tick"],[3.5,"clock_tick"],[3.95,"grumble"],[4.05,"light_off"],[4.4,"grip"],[4.95,"pat"],[5.2,"pat"],[5.45,"pat"]],"depart":[[0.15,"servo_snap"],[0.5,"grip"],[0.62,"whistle_toot"],[0.97,"whistle_toot"],[1.45,"wave_clink"],[1.55,"bye_boop"]],"honk":[[0.3,"grip"],[0.42,"whistle_peep"]],"no_path":[[0.4,"grip"],[0.8,"focus_click"],[1.3,"claw_fidget"],[1.45,"curious_chirp"],[2,"claw_fidget"],[2.2,"huh"],[2.6,"servo_short"],[2.95,"servo_short"],[3.3,"shrug"],[3.75,"set_soft"]],"manual_folded":[[1.45,"grumble"]],"paused_point":[[0.3,"pat"],[0.6,"pat"],[1,"servo_short"],[1.8,"focus_click"]],"crash":[[0.12,"bonk"],[0.14,"land_heavy"],[0.25,"aerial_boing"],[0.5,"dizzy"],[2,"head_shake"],[2.55,"sad_aww"]],"sulk":[[1.65,"sigh"]],"no_schedule":[[0.2,"servo_short"],[0.7,"servo_short"],[1.25,"curious_chirp"],[2.15,"pat"]],"schedule_given":[[0.2,"set_soft"],[0.22,"servo_snap"],[0.3,"aerial_boing"],[0.45,"poof_in"],[0.85,"wave_clink"],[0.9,"merchant_trill"],[1.85,"grip"]],"schedule_taken":[[0.2,"grip"],[0.35,"servo_short"],[0.55,"sad_aww"],[1.3,"poof_out"]],"passenger":[[1.3,"blink"],[2.4,"wave_clink"]],"shop_idle":[[1.7,"blink"]],"shop_greet":[[0.2,"focus_click"],[0.55,"wave_clink"],[0.6,"hi_boop"],[1.2,"wave_clink"]],"shop_order_nod":[[0.15,"servo_short"],[0.2,"brass_ping"],[0.45,"servo_short"],[0.95,"pleased_boop"]],"check_watch":[[0.3,"grip"],[0.85,"focus_click"],[1,"clock_tick"],[1.5,"clock_tick"],[1.7,"light_off"],[1.95,"grip"]],"polish_lens":[[0.65,"dust_off"],[1.25,"dust_off"],[2,"blink"],[2.25,"blink"]],"toot_tune":[[0.5,"grip"],[0.72,"whistle_peep"],[1.17,"whistle_peep"],[1.62,"whistle_peep"],[2.2,"pleased_boop"]],"adjust_cap":[[0.5,"grip"],[0.75,"claw_fidget"],[1.45,"grip"]],"dust_controls":[[0.35,"dust_off"],[0.95,"dust_off"],[1.62,"drop_whoosh"],[2,"pleased_boop"]],"doze_off":[[0.4,"sleepy_mmm"],[1.2,"servo_short"],[2,"servo_short"],[2.2,"flicker"],[2.36,"light_off"],[2.6,"snore"],[3.6,"snore"],[4.5,"startled_chirp"],[4.5,"aerial_boing"],[4.52,"light_on"],[4.9,"servo_snap"],[5.6,"servo_snap"],[6.1,"huh"]],"sees_player":[[0.2,"servo_snap"],[0.45,"servo_snap"],[0.75,"double_take"],[1,"servo_short"],[1.35,"wave_clink"],[1.45,"hi_boop"]],"wave":[[0.3,"wave_clink"],[0.35,"hi_boop"]],"hostile_shrink":[[0.1,"scared_yelp"],[0.2,"aerial_boing"],[0.45,"hide_tuck"]],"hostile_cower":[[0,"tremble_loop"],[0.85,"peek_click"],[1.5,"whimper"]],"hostile_recover":[[0.3,"servo_short"],[0.6,"servo_short"],[0.95,"relief_sigh"],[1.4,"shake_off"]],"rain_wipe":[[0.5,"dust_off"],[1.2,"dust_off"],[1.7,"head_shake"]],"thunder_flinch":[[0.05,"startled_chirp"],[0.08,"hop_small"],[0.55,"servo_short"]],"idle_ducked":[[1.1,"servo_short"],[2.5,"blink"]],"duck_down":[[0.05,"servo_short"],[0.35,"land_soft"]],"duck_up":[[0.1,"servo_short"],[0.45,"aerial_boing"]],"expr_happy":[[0.2,"merchant_trill"],[0.4,"hop_small"],[0.68,"hop_small"],[1,"aerial_boing"]],"expr_proud":[[0.25,"servo_snap"],[0.35,"merchant_trill"],[1.2,"claw_fidget"]],"expr_focused":[[0.2,"focus_click"],[2.3,"focus_click"]],"expr_curious":[[0.25,"curious_chirp"],[0.9,"focus_click"],[1.5,"focus_click"],[2.1,"focus_click"]],"expr_startled":[[0.15,"startled_chirp"],[0.2,"aerial_boing"]],"expr_sad":[[0.3,"sad_aww"],[1.1,"sigh"]],"expr_cross":[[0.2,"focus_click"],[1,"grumble"],[1.1,"head_shake"]],"expr_confused":[[0.3,"puzzled_hmm"],[1.3,"huh"]],"expr_dizzy":[[0.25,"dizzy"],[2.8,"head_shake"]]};
+const DEF = { pitch: 1, gain: 1, lowpass: 20000, highpass: 20, echo: 0, echoDelay: 0.12, vary: 0.04 };
+const TW = {};
+let cur = 0, randomVar = true, open = null;
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const vol = document.getElementById('vol');
+const bufCache = {};
+async function load(url) { if (!bufCache[url]) bufCache[url] = fetch(url).then((r) => { if (!r.ok) throw new Error(url); return r.arrayBuffer(); }).then((a) => ctx.decodeAudioData(a)); return bufCache[url]; }
+// a sound missing from the chosen set plays from the next set that has it (new placeholders among approved real sounds)
+function setFor(id) { for (let k = 0; k < SETS.length; k++) { const s = SETS[(cur + k) % SETS.length]; if (id in s.avail) return s; } return null; }
+function fileFor(id, v) { const s = setFor(id); if (!s) return null; const n = s.avail[id]; if (v === undefined) v = randomVar && n ? 1 + Math.floor(Math.random() * n) : 0; return s.dir + id + (v ? '_' + v : '') + '.' + s.ext; }
+async function play(id, v, when = 0) {
+  const url = fileFor(id, v); if (!url) return;
+  if (ctx.state === 'suspended') await ctx.resume();
+  let buf; try { buf = await load(url); } catch (e) { return; }
+  const t = Object.assign({}, DEF, TW[id] || {});
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  src.playbackRate.value = t.pitch * (v === undefined && randomVar ? 1 + (Math.random() * 2 - 1) * t.vary : 1);
+  const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = t.highpass;
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = t.lowpass;
+  const g = ctx.createGain(); g.gain.value = t.gain * +vol.value;
+  src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(ctx.destination);
+  if (t.echo > 0) { const d = ctx.createDelay(1); d.delayTime.value = t.echoDelay; const fb = ctx.createGain(); fb.gain.value = t.echo; g.connect(d); d.connect(fb); fb.connect(d); fb.connect(ctx.destination); }
+  src.start(ctx.currentTime + when);
+}
+function refreshCards() {
+  const s = SETS[cur];
+  document.querySelectorAll('.card').forEach((c) => {
+    const id = c.dataset.id, n = s.avail[id] || 0, vars = c.querySelector('.vars');
+    vars.innerHTML = n ? Array.from({ length: n }, (_, i) => '<button data-v="' + (i + 1) + '">' + (i + 1) + '</button>').join('') : '';
+    c.style.opacity = id in s.avail ? 1 : 0.45;
+    c.classList.toggle('tweaked', !!TW[id]);
+  });
+}
+document.querySelectorAll('.set').forEach((b) => b.addEventListener('click', () => { cur = +b.dataset.i; document.querySelectorAll('.set').forEach((x) => x.classList.toggle('on', x === b)); refreshCards(); }));
+document.getElementById('random').addEventListener('click', (e) => { randomVar = !randomVar; e.target.textContent = 'Random variants: ' + (randomVar ? 'on' : 'off'); });
+document.querySelectorAll('.card').forEach((c) => {
+  const id = c.dataset.id;
+  c.querySelector('.play').addEventListener('click', () => { c.classList.add('on'); setTimeout(() => c.classList.remove('on'), 300); play(id); });
+  c.querySelector('.vars').addEventListener('click', (e) => { if (e.target.dataset.v) play(id, +e.target.dataset.v); });
+  c.querySelector('.tw').addEventListener('click', () => openPanel(id));
+});
+const panel = document.getElementById('panel');
+function openPanel(id) {
+  open = id; document.getElementById('pt').textContent = id; panel.style.display = 'block';
+  const t = Object.assign({}, DEF, TW[id] || {});
+  panel.querySelectorAll('input').forEach((i) => { i.value = t[i.dataset.k]; i.nextElementSibling.value = (+i.value).toFixed(2); });
+}
+panel.querySelectorAll('input').forEach((i) => i.addEventListener('input', () => {
+  i.nextElementSibling.value = (+i.value).toFixed(2);
+  const t = TW[open] = Object.assign({}, DEF, TW[open] || {}, { [i.dataset.k]: +i.value });
+  for (const k of Object.keys(DEF)) if (t[k] === DEF[k]) delete t[k];
+  if (!Object.keys(t).length) delete TW[open];
+  refreshCards();
+}));
+document.getElementById('pplay').addEventListener('click', () => play(open));
+document.getElementById('preset').addEventListener('click', () => { delete TW[open]; openPanel(open); refreshCards(); });
+document.getElementById('pclose').addEventListener('click', () => (panel.style.display = 'none'));
+document.getElementById('save').addEventListener('click', async () => {
+  const body = JSON.stringify(TW, null, 2), out = document.getElementById('saved');
+  try { // served by serve.js: write straight into the project
+    const r = await fetch('save-tweaks?file=' + encodeURIComponent("helper-bot.tweaks.json"), { method: 'POST', body });
+    if (!r.ok) throw new Error(r.status);
+    out.textContent = 'Saved to ' + "helper-bot.tweaks.json" + '.';
+  } catch (e) { // opened from disk: download instead
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([body], { type: 'application/json' })); a.download = "helper-bot.tweaks.json"; a.click();
+    out.textContent = 'Saved to your Downloads folder.';
+  }
+});
+let timers = [];
+document.querySelectorAll('.clip').forEach((row) => {
+  row.querySelector('.cplay').addEventListener('click', async () => {
+    if (ctx.state === 'suspended') await ctx.resume();
+    timers.forEach(clearTimeout); timers = [];
+    document.querySelectorAll('.head').forEach((h) => (h.style.display = 'none'));
+    const head = row.querySelector('.head'), len = +row.dataset.len, start = performance.now();
+    for (const [t, id] of CLIPS[row.dataset.clip]) timers.push(setTimeout(() => play(id), t * 1000));
+    head.style.display = 'block';
+    (function tick() { const p = (performance.now() - start) / 1000 / len; head.style.left = Math.min(100, p * 100) + '%'; if (p < 1) requestAnimationFrame(tick); else head.style.display = 'none'; })();
+  });
+});
+refreshCards();
+</script></body></html>

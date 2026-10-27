@@ -79,6 +79,9 @@ public final class ModItems {
 		() -> new com.comedymonkey.createaddons.content.cage.MonsterChowItem(new Item.Properties()));
 	public static final DeferredItem<BlockItem> CUCKOO_CLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.CUCKOO_CLOCK);
 	/** Trade Bot on his station, as one item (D27). */
+	public static final DeferredItem<com.comedymonkey.createaddons.content.helperbot.HelperBotItem> HELPER_BOT = ITEMS.register("helper_bot",
+		() -> new com.comedymonkey.createaddons.content.helperbot.HelperBotItem(ModBlocks.HELPER_BOT.get(), new Item.Properties()));
+
 	public static final DeferredItem<TradeBotItem> TRADE_BOT = ITEMS.register("trade_bot",
 		() -> new TradeBotItem(ModBlocks.TRADE_BOT.get(), new Item.Properties().stacksTo(1)));
 	/** Catches an animal for the Animal Pens; given back when the animal is let out. Stacks while empty. */

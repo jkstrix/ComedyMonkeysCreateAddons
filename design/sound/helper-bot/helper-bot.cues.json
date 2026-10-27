@@ -1,0 +1,1458 @@
+{
+ "namespace": "helper_bot",
+ "events": {
+  "whistle_toot": {
+   "subtitle": "Helper Bot toots his whistle",
+   "group": "Signature sounds (new)",
+   "layers": [
+    {
+     "type": "noise",
+     "at": 0,
+     "gain": 0.25,
+     "f": 3000,
+     "dur": 0.06
+    },
+    {
+     "type": "chirp",
+     "at": 0.02,
+     "gain": 0.55,
+     "notes": [
+      [
+       1180,
+       1240,
+       0.2
+      ]
+     ]
+    },
+    {
+     "type": "chirp",
+     "at": 0.02,
+     "gain": 0.3,
+     "notes": [
+      [
+       1480,
+       1550,
+       0.2
+      ]
+     ]
+    },
+    {
+     "type": "noise",
+     "at": 0.05,
+     "gain": 0.12,
+     "f": 6000,
+     "dur": 0.18
+    }
+   ],
+   "real": {
+    "variants": 3,
+    "level": 0.5,
+    "vary": {
+     "pitch": 0.03,
+     "gain": 0.08,
+     "at": 0.004
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "0225",
+      "trim": [
+       0.04,
+       0.7
+      ],
+      "pitch": 2.2,
+      "gain": 0.9,
+      "fadeIn": 0.005,
+      "fadeOut": 0.09
+     },
+     {
+      "src": "0227",
+      "trim": [
+       0.05,
+       0.3
+      ],
+      "highpass": 2500,
+      "lowpass": 9000,
+      "gain": 0.16,
+      "fadeIn": 0.01,
+      "fadeOut": 0.15,
+      "at": 0
+     }
+    ]
+   }
+  },
+  "whistle_peep": {
+   "subtitle": "Helper Bot peeps his whistle",
+   "group": "Signature sounds (new)",
+   "layers": [
+    {
+     "type": "noise",
+     "at": 0,
+     "gain": 0.2,
+     "f": 3000,
+     "dur": 0.04
+    },
+    {
+     "type": "chirp",
+     "at": 0.01,
+     "gain": 0.5,
+     "notes": [
+      [
+       1240,
+       1300,
+       0.11
+      ]
+     ]
+    },
+    {
+     "type": "noise",
+     "at": 0.03,
+     "gain": 0.1,
+     "f": 6000,
+     "dur": 0.09
+    }
+   ],
+   "real": {
+    "variants": 4,
+    "level": 0.42,
+    "vary": {
+     "pitch": 0.06,
+     "gain": 0.08,
+     "at": 0.003
+    },
+    "post": {
+     "lowpass": 9000
+    },
+    "layers": [
+     {
+      "src": "0225",
+      "trim": [
+       0.04,
+       0.34800000000000003
+      ],
+      "pitch": 2.2,
+      "gain": 0.9,
+      "fadeIn": 0.004,
+      "fadeOut": 0.05
+     },
+     {
+      "src": "0227",
+      "trim": [
+       0.05,
+       0.16
+      ],
+      "highpass": 2500,
+      "lowpass": 9000,
+      "gain": 0.12,
+      "fadeIn": 0.01,
+      "fadeOut": 0.08
+     }
+    ]
+   }
+  },
+  "lever_clunk": {
+   "subtitle": "Helper Bot pulls a lever",
+   "group": "Signature sounds (new)",
+   "layers": [
+    {
+     "type": "click",
+     "at": 0,
+     "gain": 0.6,
+     "dur": 0.03
+    },
+    {
+     "type": "clack",
+     "at": 0.015,
+     "gain": 0.7,
+     "f": 420,
+     "dur": 0.12
+    },
+    {
+     "type": "thud",
+     "at": 0.02,
+     "gain": 0.35,
+     "f": 110,
+     "dur": 0.15
+    }
+   ],
+   "real": {
+    "variants": 2,
+    "level": 0.5,
+    "vary": {
+     "pitch": 0.03
+    },
+    "layers": [
+     {
+      "pick": [
+       "block_copper_trapdoor_toggle1",
+       "block_copper_trapdoor_toggle2"
+      ],
+      "gain": 1,
+      "pitch": 1.1,
+      "fadeOut": 0.05
+     }
+    ]
+   }
+  },
+  "clock_tick": {
+   "subtitle": "Helper Bot's watch ticks",
+   "group": "Signature sounds (Trade Bot's)",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "focus_click": {
+   "subtitle": "Helper Bot focuses",
+   "group": "Signature sounds (Trade Bot's)",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "merchant_trill": {
+   "subtitle": "Helper Bot trills",
+   "group": "Signature sounds (Trade Bot's)",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "brass_ping": {
+   "subtitle": "Helper Bot dings",
+   "group": "Signature sounds (Trade Bot's)",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "servo_short": {
+   "subtitle": "Helper Bot whirs",
+   "group": "Movement",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "servo_snap": {
+   "subtitle": "Helper Bot whirs",
+   "group": "Movement",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "aerial_boing": {
+   "subtitle": "Helper Bot wobbles on his spring",
+   "group": "Movement",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "hop_small": {
+   "subtitle": "Helper Bot bounces",
+   "group": "Movement",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "land_soft": {
+   "subtitle": "Helper Bot settles",
+   "group": "Movement",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "land_heavy": {
+   "subtitle": "Helper Bot is jolted",
+   "group": "Movement",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "blink": {
+   "subtitle": "Helper Bot blinks",
+   "group": "Movement",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "grip": {
+   "subtitle": "Helper Bot grips",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "claw_fidget": {
+   "subtitle": "Helper Bot fidgets",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "pat": {
+   "subtitle": "Helper Bot taps",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "set_soft": {
+   "subtitle": "Helper Bot clips the schedule in",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "dust_off": {
+   "subtitle": "Helper Bot wipes",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "drop_whoosh": {
+   "subtitle": "Helper Bot blows",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "light_off": {
+   "subtitle": "Helper Bot's watch snaps shut",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "light_on": {
+   "subtitle": "Helper Bot's eyes come on",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "flicker": {
+   "subtitle": "Helper Bot's eyes flicker",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "poof_in": {
+   "subtitle": "Helper Bot's cap pops on",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "poof_out": {
+   "subtitle": "Helper Bot's cap pops off",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "wave_clink": {
+   "subtitle": "Helper Bot waves",
+   "group": "Hands, watch and cap",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "bonk": {
+   "subtitle": "Helper Bot bonks",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "dizzy": {
+   "subtitle": "Helper Bot is dizzy",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "head_shake": {
+   "subtitle": "Helper Bot shakes his head",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "grumble": {
+   "subtitle": "Helper Bot huffs",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "double_take": {
+   "subtitle": "Helper Bot does a double-take",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "curious_chirp": {
+   "subtitle": "Helper Bot wonders",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "puzzled_hmm": {
+   "subtitle": "Helper Bot is puzzled",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "huh": {
+   "subtitle": "Helper Bot is baffled",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "shrug": {
+   "subtitle": "Helper Bot shrugs",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "startled_chirp": {
+   "subtitle": "Helper Bot startles",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "sad_aww": {
+   "subtitle": "Helper Bot droops",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "sigh": {
+   "subtitle": "Helper Bot sighs",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "snore": {
+   "subtitle": "Helper Bot snores",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "sleepy_mmm": {
+   "subtitle": "Helper Bot gets sleepy",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "pleased_boop": {
+   "subtitle": "Helper Bot boops",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "hi_boop": {
+   "subtitle": "Helper Bot says hi",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "bye_boop": {
+   "subtitle": "Helper Bot says bye",
+   "group": "Voice and reactions",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "scared_yelp": {
+   "subtitle": "Helper Bot yelps",
+   "group": "Scared",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "hide_tuck": {
+   "subtitle": "Helper Bot hides",
+   "group": "Scared",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "tremble_loop": {
+   "subtitle": "Helper Bot trembles",
+   "group": "Scared",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "whimper": {
+   "subtitle": "Helper Bot whimpers",
+   "group": "Scared",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "peek_click": {
+   "subtitle": "Helper Bot peeks",
+   "group": "Scared",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "relief_sigh": {
+   "subtitle": "Helper Bot sighs with relief",
+   "group": "Scared",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  },
+  "shake_off": {
+   "subtitle": "Helper Bot shakes it off",
+   "group": "Scared",
+   "reuse": "trade_bot",
+   "layers": [
+    {
+     "type": "Trade Bot's approved sound"
+    }
+   ]
+  }
+ },
+ "clips": {
+  "idle": [
+   [
+    2.2,
+    "blink"
+   ]
+  ],
+  "drive_ready": [
+   [
+    0.75,
+    "focus_click"
+   ],
+   [
+    2.3,
+    "blink"
+   ]
+  ],
+  "cruise": [
+   [
+    0.3,
+    "servo_short"
+   ],
+   [
+    1.2,
+    "blink"
+   ],
+   [
+    1.6,
+    "servo_short"
+   ]
+  ],
+  "throttle_up": [
+   [
+    0.08,
+    "servo_snap"
+   ],
+   [
+    0.4,
+    "aerial_boing"
+   ],
+   [
+    0.6,
+    "lever_clunk"
+   ],
+   [
+    0.95,
+    "pleased_boop"
+   ],
+   [
+    1.4,
+    "grip"
+   ]
+  ],
+  "brake": [
+   [
+    0.2,
+    "aerial_boing"
+   ],
+   [
+    0.35,
+    "grip"
+   ],
+   [
+    0.6,
+    "lever_clunk"
+   ],
+   [
+    0.65,
+    "grumble"
+   ]
+  ],
+  "station_wait": [
+   [
+    0.35,
+    "grip"
+   ],
+   [
+    1.2,
+    "focus_click"
+   ],
+   [
+    1.4,
+    "clock_tick"
+   ],
+   [
+    1.9,
+    "clock_tick"
+   ],
+   [
+    2.05,
+    "pat"
+   ],
+   [
+    2.4,
+    "clock_tick"
+   ],
+   [
+    3,
+    "clock_tick"
+   ],
+   [
+    3.5,
+    "clock_tick"
+   ],
+   [
+    3.95,
+    "grumble"
+   ],
+   [
+    4.05,
+    "light_off"
+   ],
+   [
+    4.4,
+    "grip"
+   ],
+   [
+    4.95,
+    "pat"
+   ],
+   [
+    5.2,
+    "pat"
+   ],
+   [
+    5.45,
+    "pat"
+   ]
+  ],
+  "depart": [
+   [
+    0.15,
+    "servo_snap"
+   ],
+   [
+    0.5,
+    "grip"
+   ],
+   [
+    0.62,
+    "whistle_toot"
+   ],
+   [
+    0.97,
+    "whistle_toot"
+   ],
+   [
+    1.45,
+    "wave_clink"
+   ],
+   [
+    1.55,
+    "bye_boop"
+   ]
+  ],
+  "honk": [
+   [
+    0.3,
+    "grip"
+   ],
+   [
+    0.42,
+    "whistle_peep"
+   ]
+  ],
+  "no_path": [
+   [
+    0.4,
+    "grip"
+   ],
+   [
+    0.8,
+    "focus_click"
+   ],
+   [
+    1.3,
+    "claw_fidget"
+   ],
+   [
+    1.45,
+    "curious_chirp"
+   ],
+   [
+    2,
+    "claw_fidget"
+   ],
+   [
+    2.2,
+    "huh"
+   ],
+   [
+    2.6,
+    "servo_short"
+   ],
+   [
+    2.95,
+    "servo_short"
+   ],
+   [
+    3.3,
+    "shrug"
+   ],
+   [
+    3.75,
+    "set_soft"
+   ]
+  ],
+  "manual_folded": [
+   [
+    1.45,
+    "grumble"
+   ]
+  ],
+  "paused_point": [
+   [
+    0.3,
+    "pat"
+   ],
+   [
+    0.6,
+    "pat"
+   ],
+   [
+    1,
+    "servo_short"
+   ],
+   [
+    1.8,
+    "focus_click"
+   ]
+  ],
+  "crash": [
+   [
+    0.12,
+    "bonk"
+   ],
+   [
+    0.14,
+    "land_heavy"
+   ],
+   [
+    0.25,
+    "aerial_boing"
+   ],
+   [
+    0.5,
+    "dizzy"
+   ],
+   [
+    2,
+    "head_shake"
+   ],
+   [
+    2.55,
+    "sad_aww"
+   ]
+  ],
+  "sulk": [
+   [
+    1.65,
+    "sigh"
+   ]
+  ],
+  "no_schedule": [
+   [
+    0.2,
+    "servo_short"
+   ],
+   [
+    0.7,
+    "servo_short"
+   ],
+   [
+    1.25,
+    "curious_chirp"
+   ],
+   [
+    2.15,
+    "pat"
+   ]
+  ],
+  "schedule_given": [
+   [
+    0.2,
+    "set_soft"
+   ],
+   [
+    0.22,
+    "servo_snap"
+   ],
+   [
+    0.3,
+    "aerial_boing"
+   ],
+   [
+    0.45,
+    "poof_in"
+   ],
+   [
+    0.85,
+    "wave_clink"
+   ],
+   [
+    0.9,
+    "merchant_trill"
+   ],
+   [
+    1.85,
+    "grip"
+   ]
+  ],
+  "schedule_taken": [
+   [
+    0.2,
+    "grip"
+   ],
+   [
+    0.35,
+    "servo_short"
+   ],
+   [
+    0.55,
+    "sad_aww"
+   ],
+   [
+    1.3,
+    "poof_out"
+   ]
+  ],
+  "passenger": [
+   [
+    1.3,
+    "blink"
+   ],
+   [
+    2.4,
+    "wave_clink"
+   ]
+  ],
+  "shop_idle": [
+   [
+    1.7,
+    "blink"
+   ]
+  ],
+  "shop_greet": [
+   [
+    0.2,
+    "focus_click"
+   ],
+   [
+    0.55,
+    "wave_clink"
+   ],
+   [
+    0.6,
+    "hi_boop"
+   ],
+   [
+    1.2,
+    "wave_clink"
+   ]
+  ],
+  "shop_order_nod": [
+   [
+    0.15,
+    "servo_short"
+   ],
+   [
+    0.2,
+    "brass_ping"
+   ],
+   [
+    0.45,
+    "servo_short"
+   ],
+   [
+    0.95,
+    "pleased_boop"
+   ]
+  ],
+  "check_watch": [
+   [
+    0.3,
+    "grip"
+   ],
+   [
+    0.85,
+    "focus_click"
+   ],
+   [
+    1,
+    "clock_tick"
+   ],
+   [
+    1.5,
+    "clock_tick"
+   ],
+   [
+    1.7,
+    "light_off"
+   ],
+   [
+    1.95,
+    "grip"
+   ]
+  ],
+  "polish_lens": [
+   [
+    0.65,
+    "dust_off"
+   ],
+   [
+    1.25,
+    "dust_off"
+   ],
+   [
+    2,
+    "blink"
+   ],
+   [
+    2.25,
+    "blink"
+   ]
+  ],
+  "toot_tune": [
+   [
+    0.5,
+    "grip"
+   ],
+   [
+    0.72,
+    "whistle_peep"
+   ],
+   [
+    1.17,
+    "whistle_peep"
+   ],
+   [
+    1.62,
+    "whistle_peep"
+   ],
+   [
+    2.2,
+    "pleased_boop"
+   ]
+  ],
+  "adjust_cap": [
+   [
+    0.5,
+    "grip"
+   ],
+   [
+    0.75,
+    "claw_fidget"
+   ],
+   [
+    1.45,
+    "grip"
+   ]
+  ],
+  "dust_controls": [
+   [
+    0.35,
+    "dust_off"
+   ],
+   [
+    0.95,
+    "dust_off"
+   ],
+   [
+    1.62,
+    "drop_whoosh"
+   ],
+   [
+    2,
+    "pleased_boop"
+   ]
+  ],
+  "doze_off": [
+   [
+    0.4,
+    "sleepy_mmm"
+   ],
+   [
+    1.2,
+    "servo_short"
+   ],
+   [
+    2,
+    "servo_short"
+   ],
+   [
+    2.2,
+    "flicker"
+   ],
+   [
+    2.36,
+    "light_off"
+   ],
+   [
+    2.6,
+    "snore"
+   ],
+   [
+    3.6,
+    "snore"
+   ],
+   [
+    4.5,
+    "startled_chirp"
+   ],
+   [
+    4.5,
+    "aerial_boing"
+   ],
+   [
+    4.52,
+    "light_on"
+   ],
+   [
+    4.9,
+    "servo_snap"
+   ],
+   [
+    5.6,
+    "servo_snap"
+   ],
+   [
+    6.1,
+    "huh"
+   ]
+  ],
+  "sees_player": [
+   [
+    0.2,
+    "servo_snap"
+   ],
+   [
+    0.45,
+    "servo_snap"
+   ],
+   [
+    0.75,
+    "double_take"
+   ],
+   [
+    1,
+    "servo_short"
+   ],
+   [
+    1.35,
+    "wave_clink"
+   ],
+   [
+    1.45,
+    "hi_boop"
+   ]
+  ],
+  "wave": [
+   [
+    0.3,
+    "wave_clink"
+   ],
+   [
+    0.35,
+    "hi_boop"
+   ]
+  ],
+  "hostile_shrink": [
+   [
+    0.1,
+    "scared_yelp"
+   ],
+   [
+    0.2,
+    "aerial_boing"
+   ],
+   [
+    0.45,
+    "hide_tuck"
+   ]
+  ],
+  "hostile_cower": [
+   [
+    0,
+    "tremble_loop"
+   ],
+   [
+    0.85,
+    "peek_click"
+   ],
+   [
+    1.5,
+    "whimper"
+   ]
+  ],
+  "hostile_recover": [
+   [
+    0.3,
+    "servo_short"
+   ],
+   [
+    0.6,
+    "servo_short"
+   ],
+   [
+    0.95,
+    "relief_sigh"
+   ],
+   [
+    1.4,
+    "shake_off"
+   ]
+  ],
+  "rain_wipe": [
+   [
+    0.5,
+    "dust_off"
+   ],
+   [
+    1.2,
+    "dust_off"
+   ],
+   [
+    1.7,
+    "head_shake"
+   ]
+  ],
+  "thunder_flinch": [
+   [
+    0.05,
+    "startled_chirp"
+   ],
+   [
+    0.08,
+    "hop_small"
+   ],
+   [
+    0.55,
+    "servo_short"
+   ]
+  ],
+  "idle_ducked": [
+   [
+    1.1,
+    "servo_short"
+   ],
+   [
+    2.5,
+    "blink"
+   ]
+  ],
+  "duck_down": [
+   [
+    0.05,
+    "servo_short"
+   ],
+   [
+    0.35,
+    "land_soft"
+   ]
+  ],
+  "duck_up": [
+   [
+    0.1,
+    "servo_short"
+   ],
+   [
+    0.45,
+    "aerial_boing"
+   ]
+  ],
+  "expr_happy": [
+   [
+    0.2,
+    "merchant_trill"
+   ],
+   [
+    0.4,
+    "hop_small"
+   ],
+   [
+    0.68,
+    "hop_small"
+   ],
+   [
+    1,
+    "aerial_boing"
+   ]
+  ],
+  "expr_proud": [
+   [
+    0.25,
+    "servo_snap"
+   ],
+   [
+    0.35,
+    "merchant_trill"
+   ],
+   [
+    1.2,
+    "claw_fidget"
+   ]
+  ],
+  "expr_focused": [
+   [
+    0.2,
+    "focus_click"
+   ],
+   [
+    2.3,
+    "focus_click"
+   ]
+  ],
+  "expr_curious": [
+   [
+    0.25,
+    "curious_chirp"
+   ],
+   [
+    0.9,
+    "focus_click"
+   ],
+   [
+    1.5,
+    "focus_click"
+   ],
+   [
+    2.1,
+    "focus_click"
+   ]
+  ],
+  "expr_startled": [
+   [
+    0.15,
+    "startled_chirp"
+   ],
+   [
+    0.2,
+    "aerial_boing"
+   ]
+  ],
+  "expr_sad": [
+   [
+    0.3,
+    "sad_aww"
+   ],
+   [
+    1.1,
+    "sigh"
+   ]
+  ],
+  "expr_cross": [
+   [
+    0.2,
+    "focus_click"
+   ],
+   [
+    1,
+    "grumble"
+   ],
+   [
+    1.1,
+    "head_shake"
+   ]
+  ],
+  "expr_confused": [
+   [
+    0.3,
+    "puzzled_hmm"
+   ],
+   [
+    1.3,
+    "huh"
+   ]
+  ],
+  "expr_dizzy": [
+   [
+    0.25,
+    "dizzy"
+   ],
+   [
+    2.8,
+    "head_shake"
+   ]
+  ]
+ }
+}

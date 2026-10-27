@@ -46,6 +46,10 @@ public class TradeBotStationVisual extends AbstractBlockEntityVisual<TradeBotSta
 	private final com.comedymonkey.createaddons.content.tradebot.clip.ClipPlayback playback = new com.comedymonkey.createaddons.content.tradebot.clip.ClipPlayback();
 	/** On a ship or a contraption its position is the embedding's, so the world's frustum says nothing about it. */
 	private final boolean embedded;
+	/** The contraption it's on, if any, looked up once. */
+	@org.jetbrains.annotations.Nullable
+	private net.minecraft.world.entity.Entity owner;
+	private boolean ownerSought;
 
 	public TradeBotStationVisual(VisualizationContext context, TradeBotStationBlockEntity be, float partialTick) {
 		super(context, be, partialTick);
@@ -86,7 +90,16 @@ public class TradeBotStationVisual extends AbstractBlockEntityVisual<TradeBotSta
 
 	@Override
 	public void beginFrame(DynamicVisual.Context context) {
-		if (!embedded && (!isVisible(context.frustum()) || doDistanceLimitThisFrame(context)))
+		if (embedded) {
+			// measured from where it really is, on its ship or contraption (the same rate as off one)
+			if (!ownerSought) {
+				ownerSought = true;
+				owner = com.comedymonkey.createaddons.client.parts.DistanceGate.contraptionOf(blockEntity);
+			}
+			if (com.comedymonkey.createaddons.client.parts.DistanceGate.skip(context,
+				com.comedymonkey.createaddons.client.parts.DistanceGate.worldPosition(blockEntity, owner)))
+				return;
+		} else if (!isVisible(context.frustum()) || doDistanceLimitThisFrame(context))
 			return;
 		draw(context.partialTick());
 	}

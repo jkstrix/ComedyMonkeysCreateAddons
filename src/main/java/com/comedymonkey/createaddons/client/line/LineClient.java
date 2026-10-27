@@ -66,7 +66,7 @@ public final class LineClient {
 	}
 
 	public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-		event.register((stack, tint) -> tint == 0 ? LineColors.of(tierOf(stack), stack.get(ModDataComponents.LINE_DYE.get())) : -1,
+		event.register((stack, tint) -> tint == 0 ? 0xFF000000 | LineColors.of(tierOf(stack), stack.get(ModDataComponents.LINE_DYE.get())) : -1,
 			ModItems.COPPER_FLUID_LINE.get(), ModItems.BRASS_FLUID_LINE.get(), ModItems.COPPER_POWER_LINE.get(), ModItems.BRASS_POWER_LINE.get());
 	}
 

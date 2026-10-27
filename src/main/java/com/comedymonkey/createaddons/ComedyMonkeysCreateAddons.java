@@ -99,9 +99,19 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.BatteryGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.TankGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.CagePerformanceGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.CageFieldGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.HelperBotGameTests::register);
 		if (SableCompat.LOADED)
 			modBus.addListener(com.comedymonkey.createaddons.gametest.SableGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
+		// Helper Bot's test courses (/helperbot testsetup), and the follow-up once Create has registered their stations
+		// Helper Bot's test railway and shop: the command is a dev tool (testtrain go gives every train a schedule), so
+		// not in releases; its queue runs everywhere, for the game tests
+		if (!net.neoforged.fml.loading.FMLEnvironment.production)
+			NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.helperbot.HelperBotTestSetup::register);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.helperbot.HelperBotTestSetup::onLevelTick);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.helperbot.HelperBotTestSetup::onServerStopped);
 		// picking containers for Trade Bot: the server takes over the picker's clicks on blocks
 		NeoForge.EVENT_BUS.addListener(TradeBotPicking::onRightClickBlock);
 		NeoForge.EVENT_BUS.addListener(TradeBotPicking::onLeftClickBlock);
@@ -244,6 +254,10 @@ public class ComedyMonkeysCreateAddons {
 		event.registrar("1").playToServer(TurbineSettingsPayload.TYPE, TurbineSettingsPayload.STREAM_CODEC, TurbineSettingsPayload::handle);
 		event.registrar("1").playToServer(SplitterSettingsPayload.TYPE, SplitterSettingsPayload.STREAM_CODEC, SplitterSettingsPayload::handle);
 		event.registrar("1").playToClient(SplitterInfoPayload.TYPE, SplitterInfoPayload.STREAM_CODEC, SplitterInfoPayload::handle);
+		// Helper Bot: what his train is doing that clients can't see (paused, a player driving, lost, derailed)
+		event.registrar("1").playToClient(com.comedymonkey.createaddons.network.HelperBotStatusPayload.TYPE,
+			com.comedymonkey.createaddons.network.HelperBotStatusPayload.STREAM_CODEC,
+			(payload, context) -> context.enqueueWork(() -> com.comedymonkey.createaddons.client.helperbot.HelperBotClient.applyStatus(payload)));
 		event.registrar("1").playToServer(TradeBotStationPayload.TYPE, TradeBotStationPayload.STREAM_CODEC, TradeBotStationPayload::handle);
 		// Covers on Pipez pipes
 		event.registrar("1").playToClient(PipeCoverPayload.TYPE, PipeCoverPayload.STREAM_CODEC,
@@ -298,6 +312,7 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.BRASS_ANIMAL_PEN.get());
 			registerCreateTooltip(ModItems.CUCKOO_CLOCK.get());
 			registerCreateTooltip(ModItems.TRADE_BOT.get());
+			registerCreateTooltip(ModItems.HELPER_BOT.get());
 			registerCreateTooltip(ModItems.FE_COIL.get());
 			registerCreateTooltip(ModItems.BOTTLED_ANIMAL.get());
 			registerCreateTooltip(ModItems.CAPTURE_BOTTLE.get());
@@ -347,6 +362,8 @@ public class ComedyMonkeysCreateAddons {
 
 			// Upgraded chests keep their oversized stacks, and Wellsprings keep generating, on Create contraptions
 			ModMountedStorage.bindBlocks();
+			// Helper Bot conducts trains through Create's conductor rules, and animates himself on contraptions
+			com.comedymonkey.createaddons.content.helperbot.HelperBots.bindBlocks();
 		});
 	}
 

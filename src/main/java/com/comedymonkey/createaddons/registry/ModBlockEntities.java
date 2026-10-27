@@ -71,6 +71,10 @@ public final class ModBlockEntities {
 			() -> BlockEntityType.Builder.of(CuckooClockBlockEntity::new, ModBlocks.CUCKOO_CLOCK.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.helperbot.HelperBotBlockEntity>> HELPER_BOT =
+		BLOCK_ENTITY_TYPES.register("helper_bot",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.helperbot.HelperBotBlockEntity::new, ModBlocks.HELPER_BOT.get()).build(null));
+
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TradeBotStationBlockEntity>> TRADE_BOT_STATION =
 		BLOCK_ENTITY_TYPES.register("trade_bot",
 			() -> BlockEntityType.Builder.of(TradeBotStationBlockEntity::new, ModBlocks.TRADE_BOT.get()).build(null));

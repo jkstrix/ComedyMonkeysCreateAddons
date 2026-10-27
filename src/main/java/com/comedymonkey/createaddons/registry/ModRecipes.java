@@ -2,6 +2,7 @@ package com.comedymonkey.createaddons.registry;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.crucible.CrucibleRecipe;
+import com.comedymonkey.createaddons.content.helperbot.HelperBotDyeRecipe;
 import com.comedymonkey.createaddons.content.machine.MachineKind;
 import com.comedymonkey.createaddons.content.machine.TwoInputRecipe;
 
@@ -32,6 +33,10 @@ public final class ModRecipes {
 		"infusing", () -> RecipeType.simple(ComedyMonkeysCreateAddons.asResource("infusing")));
 	public static final DeferredHolder<RecipeSerializer<?>, TwoInputRecipe.Serializer> INFUSING_SERIALIZER =
 		SERIALIZERS.register("infusing", () -> new TwoInputRecipe.Serializer(MachineKind.INFUSING));
+
+	/** Helper Bot's dyeing: vanilla shapeless, keeping his name. */
+	public static final DeferredHolder<RecipeSerializer<?>, HelperBotDyeRecipe.Serializer> HELPER_BOT_DYE_SERIALIZER =
+		SERIALIZERS.register("helper_bot_dye", HelperBotDyeRecipe.Serializer::new);
 
 	private ModRecipes() {}
 }

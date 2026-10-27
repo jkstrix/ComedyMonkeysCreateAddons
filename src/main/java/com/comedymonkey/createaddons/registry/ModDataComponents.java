@@ -24,6 +24,10 @@ public final class ModDataComponents {
 	public static final Supplier<DataComponentType<DyeColor>> LINE_DYE = DATA_COMPONENTS.registerComponentType("line_dye",
 		builder -> builder.persistent(DyeColor.CODEC).networkSynchronized(DyeColor.STREAM_CODEC));
 
+	/** On a Helper Bot: his dye (none: plain andesite). */
+	public static final Supplier<DataComponentType<DyeColor>> HELPER_BOT_DYE = DATA_COMPONENTS.registerComponentType("helper_bot_dye",
+		builder -> builder.persistent(DyeColor.CODEC).networkSynchronized(DyeColor.STREAM_CODEC));
+
 	/** On Power Lines in hand while a span is being hung: the insulator it starts from. */
 	public static final Supplier<DataComponentType<SpanStart>> SPAN_START = DATA_COMPONENTS.registerComponentType("span_start",
 		builder -> builder.persistent(SpanStart.CODEC).networkSynchronized(SpanStart.STREAM_CODEC));

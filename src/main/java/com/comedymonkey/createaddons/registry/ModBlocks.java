@@ -35,6 +35,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotStationBlock;
+import com.comedymonkey.createaddons.content.helperbot.HelperBotBlock;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -320,6 +321,18 @@ public final class ModBlocks {
 		() -> new BatteryBlock(machine().sound(SoundType.METAL)));
 
 	/** Trade Bot's winding station: unbreakable except by its owner's wrench (D51), which packs it up with him. */
+	/** Helper Bot: drives trains and keeps shop like a Blaze Burner (design/specs/helper-bot.md). Pickaxe, andesite-casing hardness (D23). */
+	public static final DeferredBlock<HelperBotBlock> HELPER_BOT = BLOCKS.register("helper_bot",
+		() -> new HelperBotBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.STONE)
+			.strength(1.5f, 6.0f)
+			.sound(SoundType.NETHERITE_BLOCK)
+			.requiresCorrectToolForDrops()
+			.noOcclusion()
+			.isRedstoneConductor((state, level, pos) -> false)
+			.isSuffocating((state, level, pos) -> false)
+			.isViewBlocking((state, level, pos) -> false)));
+
 	public static final DeferredBlock<TradeBotStationBlock> TRADE_BOT = BLOCKS.register("trade_bot",
 		() -> new TradeBotStationBlock(BlockBehaviour.Properties.of()
 			.mapColor(MapColor.METAL)

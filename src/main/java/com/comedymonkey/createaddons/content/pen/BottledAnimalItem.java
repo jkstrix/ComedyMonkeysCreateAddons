@@ -48,12 +48,13 @@ public class BottledAnimalItem extends Item {
 	}
 
 	@Nullable
+	@SuppressWarnings("deprecation") // getUnsafe: read, never changed
 	public static EntityType<?> typeOf(ItemStack stack) {
 		CustomData data = stack.get(DataComponents.ENTITY_DATA);
 		if (data == null)
 			return null;
-		// byString, not by(tag): a malformed id is just no animal rather than an exception
-		return EntityType.byString(data.copyTag().getString("id")).orElse(null);
+		// byString, not by(tag): a malformed id is just no animal rather than an exception; read in place, not copied
+		return EntityType.byString(data.getUnsafe().getString("id")).orElse(null);
 	}
 
 	/**

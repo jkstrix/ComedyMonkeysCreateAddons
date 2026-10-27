@@ -1,0 +1,15 @@
+{
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "comedymonkeysaddons:block/helper_bot_item"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "comedymonkeysaddons:item/helper_bot",
+        "layer1": "comedymonkeysaddons:item/helper_bot_panels"
+      }
+    }
+  }
+}

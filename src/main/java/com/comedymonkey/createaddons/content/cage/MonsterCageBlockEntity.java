@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 import org.jetbrains.annotations.Nullable;
@@ -14,9 +15,13 @@ import org.jetbrains.annotations.Nullable;
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
+import com.comedymonkey.createaddons.content.ClientView;
+import com.comedymonkey.createaddons.content.Drops;
 import com.comedymonkey.createaddons.content.FillOnly;
 import com.comedymonkey.createaddons.content.FixedStress;
 import com.comedymonkey.createaddons.content.MachineEnchantments;
+import com.comedymonkey.createaddons.content.SettlingImpact;
+import com.comedymonkey.createaddons.content.SyncStagger;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModItems;
 import com.comedymonkey.createaddons.registry.ModSounds;
@@ -32,8 +37,11 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
@@ -115,6 +123,8 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	/** Trident throws: range, and the ticks between them. */
 	private static final double THROW_RANGE = 16;
 	private static final int THROW_COOLDOWN = 60, HATCH_SHUT_TICKS = 17;
+	/** Ticks between looks for a target while an armed drowned has none. */
+	private static final int SEARCH_COOLDOWN = 10;
 	/** The klaxon's blasts in a burst, this many ticks apart; and continuous in the last 10 s. */
 	private static final int BLAST_GAP = 32;
 
@@ -136,9 +146,34 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	private final CageEnergy energy;
 	private final IItemHandler automation = new AutomationHandler();
 	private final IItemHandlerModifiable captiveSlot = new CaptiveHandler();
+	/** The captive's monster, read once whenever the captive changes (it's asked several times a tick). */
+	@Nullable
+	private EntityType<?> monsterType;
 	private boolean syncQueued;
+	/** Queued syncs go out on this tick of every {@link #SYNC_INTERVAL}, by position, so a wall of cages doesn't sync all at once. */
+	private final int syncPhase;
+	/** Server: the captive as last sent to clients, when, and this cage's own last sync (as the tanks'). */
+	@Nullable
+	private ItemStack sentCaptive;
+	private long sentCaptiveAt, ownSyncAt;
+	private boolean omitCaptive;
+	private static final int CAPTIVE_RESEND_TICKS = 100;
+	/** Client: the captive as the server last sent it (a click here may have guessed another the server refused). */
+	@Nullable
+	private ItemStack receivedCaptive;
+	/** Client: the stress impact the server's network holds for it (NaN until sent), for the goggles. */
+	private float syncedImpact = Float.NaN;
+	/** Client: the bowl and the tray as the server summed them up (clients aren't sent the inventories; an open menu syncs its own slots). */
+	private ItemStack shownChow = ItemStack.EMPTY;
+	private int shownChowCount, trayUsed;
+	private final List<ItemStack> tray = new ArrayList<>(TRAY_SHOWN);
+	private static final int TRAY_SHOWN = 3;
+	/** The stress impact the network holds: a rise at once, a fall once it has lasted (see {@link SettlingImpact}). */
+	private final SettlingImpact impact = new SettlingImpact();
 	@Nullable
 	private Entity sample;
+	@Nullable
+	private AABB renderBox;
 
 	// the Netherite cage's field
 	private boolean fieldUp;
@@ -151,6 +186,50 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	@Nullable
 	private UUID owner;
 	private String ownerName = "";
+	/**
+	 * The FE changes every tick, so it doesn't sync the cage: the open screen reads it through the menu, and clients'
+	 * goggles get it with the next sync, or at most every {@link #ENERGY_SYNC_TICKS} while it's changing. Sent: the FE at
+	 * the last sync, and when.
+	 */
+	private boolean energyChanged;
+	private int sentEnergy;
+	private long sentEnergyAt;
+	private static final int ENERGY_SYNC_TICKS = 20;
+	/** Whether comparators were last told of a countdown (they read 15 through one). */
+	private boolean toldWarning;
+	/**
+	 * The field off takes no FE at all (user, 2026-10-27): it notes what's offered instead, each call's amount, simulated
+	 * or not, this tick and for each of the last {@link #SUPPLY_TICKS}. Only a second's offers covering the field's cost
+	 * start it.
+	 */
+	private long offeredNow, offeredSum;
+	private final long[] offered = new long[SUPPLY_TICKS];
+	private int offeredAt, offeredTicks;
+	private static final int SUPPLY_TICKS = 20;
+	/**
+	 * A trial: a second's offers covered the cost, so the field takes FE again (at most its cost a tick, kept in its
+	 * store, not drawn), and it comes up once that much has come in every tick for {@link #SUPPLY_TICKS} ticks. Some
+	 * suppliers offer more than they give (a Power Line offers its whole capacity; a generator, its whole store): their
+	 * FE has to arrive. The first may wait for a Power Line's next round to send any. -1 while not on trial.
+	 */
+	private int startingFor = -1;
+	private int startingFull;
+	private long receivedNow;
+	/** Ticks a trial may wait for the first FE to come in (a Power Line plans once a second). */
+	private static final int START_WAIT = 2 * SUPPLY_TICKS;
+	/**
+	 * After a failed trial, offers can't start another until {@link #retryAt}: 10 s, doubling with each failure to a
+	 * minute, and back to none once a field has held for the hold (user, 2026-10-27: short trial, slow retries).
+	 */
+	private long retryAt;
+	private int retryWait;
+	private static final int RETRY_FIRST = 200, RETRY_MOST = 1200;
+	/**
+	 * Ticks the field has held since it came up. A countdown stands still while it holds, and is called off only once
+	 * it has held for the config's hold (a minute); a field that drops before then lets the countdown carry on where it
+	 * stood (user, 2026-10-27: bursts pause the countdown, they don't cancel it).
+	 */
+	private int heldFor;
 
 	// the Flooded cages
 	private int drownTicks;
@@ -163,6 +242,11 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	private long lastPour = Long.MIN_VALUE, lastDrop = Long.MIN_VALUE;
 	/** Client only: the monsters walking about in the window. */
 	private final List<CageMonster> shown = new ArrayList<>();
+	/** Client: the jar's monster couldn't be made (its mod gone, a tag changed): not tried again until the jar changes. */
+	private boolean createFailed;
+	/** Client: the camera's distance this tick (for the window and the loops); endless where it can't be told. */
+	private double viewDistanceSqr;
+	private final BooleanSupplier mayBuild = () -> ClientView.mayBuild(level);
 
 	public MonsterCageBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.MONSTER_CAGE.get(), pos, state);
@@ -189,6 +273,7 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 		};
 		waterIn = new FillOnly(water);
 		energy = new CageEnergy(tier == CageTier.NETHERITE ? CMConfig.Server.get(CMConfig.SERVER.cageFeBuffer) : 0);
+		syncPhase = SyncStagger.phase(pos, SYNC_INTERVAL);
 	}
 
 	private static CageTier tierOf(BlockState state) {
@@ -239,7 +324,14 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 
 	@Nullable
 	public EntityType<?> getMonsterType() {
-		return MonsterJarItem.typeOf(captive);
+		return monsterType;
+	}
+
+	/** Every change of the captive comes through here, so its monster's type is read once per jar. */
+	private void holdCaptive(ItemStack jar) {
+		captive = jar;
+		monsterType = MonsterJarItem.typeOf(jar);
+		createFailed = false;
 	}
 
 	/**
@@ -268,10 +360,17 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	}
 
 	public int getChowCount() {
+		if (showsSummary())
+			return shownChowCount;
 		int n = 0;
 		for (int i = 0; i < chow.getSlots(); i++)
 			n += chow.getStackInSlot(i).getCount();
 		return n;
+	}
+
+	/** Clients go by the server's summary of the bowl and the tray (see {@link #writeSummary}), not the inventories. */
+	boolean showsSummary() {
+		return level != null && level.isClientSide;
 	}
 
 	/** Monster Chow a new one of this monster eats. */
@@ -291,7 +390,7 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 			sample = null;
 			shown.clear();
 		}
-		captive = jar.copyWithCount(1);
+		holdCaptive(jar.copyWithCount(1));
 		count = jar.isEmpty() ? 0 : monsters;
 		armed = Math.min(armedOnes, count);
 	}
@@ -317,7 +416,7 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 			if (CageRules.kindOf(MonsterJarItem.typeOf(jar)) == CageRules.Kind.WITHER)
 				ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.CAGE_WITHER, ItemStack.EMPTY, 1);
 		}
-		captive = jar;
+		holdCaptive(jar);
 		count = jar.isEmpty() ? 0 : 1;
 		armed = 0;
 		progress = 0;
@@ -493,7 +592,8 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 			}
 		armed -= armedKilled;
 		count -= killed;
-		return drops;
+		// up to 255 rolls: joined into full stacks before they're stored or dropped
+		return Drops.merged(drops);
 	}
 
 	/** Into the output; what doesn't fit drops out of the front. */
@@ -529,19 +629,37 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 			clientTick();
 			return;
 		}
-		if (FixedStress.keep(this, wantedImpact()))
+		float wasImpact = impact.applied();
+		impact.settle(wantedImpact());
+		// the goggles show the settled impact, so clients hear when it changes, network or not
+		if (Float.compare(wasImpact, impact.applied()) != 0)
+			syncQueued = true;
+		if (FixedStress.keep(this, impact()))
 			sendData();
-		if (isNetherite())
+		if (isNetherite()) {
 			field();
+			energyUpkeep();
+		}
 		if (isFlooded())
 			flooded();
 		if (canGrow())
 			grow();
 		grumble();
-		if (syncQueued && level.getGameTime() % SYNC_INTERVAL == 0) {
-			syncQueued = false;
+		// sendData clears the queue, so a sync this tick already sent leaves nothing to send again
+		if (syncQueued && SyncStagger.due(level.getGameTime(), syncPhase, SYNC_INTERVAL))
 			sendData();
+	}
+
+	@Override
+	public void sendData() {
+		if (level != null) {
+			long now = level.getGameTime();
+			ownSyncAt = sentEnergyAt = now;
+			markCaptiveSent(now);
 		}
+		sentEnergy = energy.getEnergyStored();
+		syncQueued = false;
+		super.sendData();
 	}
 
 	/** Turning, not overstressed, holding a monster, and (Netherite) its field up and farming powered. */
@@ -608,9 +726,17 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 
 	@Override
 	public float calculateStressApplied() {
-		float impact = wantedImpact();
+		float impact = impact();
 		lastStressApplied = impact;
 		return impact;
+	}
+
+	/** The impact the network should hold (see {@link #impact}); clients just go by what's wanted. */
+	private float impact() {
+		if (level == null || level.isClientSide)
+			return Float.isNaN(syncedImpact) ? wantedImpact() : syncedImpact;
+		float applied = impact.applied();
+		return Float.isNaN(applied) ? wantedImpact() : applied;
 	}
 
 	/** Per RPM while it works; nothing while empty, full, out of chow or water, or with the field down. */
@@ -623,7 +749,7 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	@Override
 	public void onSpeedChanged(float previousSpeed) {
 		super.onSpeedChanged(previousSpeed);
-		if (level != null && !level.isClientSide && FixedStress.keep(this, wantedImpact()))
+		if (level != null && !level.isClientSide && FixedStress.keep(this, impact()))
 			sendData();
 	}
 
@@ -657,7 +783,7 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 			tag.remove(key);
 		ItemStack jar = captive.copy();
 		jar.set(DataComponents.ENTITY_DATA, CustomData.of(tag));
-		captive = jar;
+		holdCaptive(jar);
 		sample = null;
 		shown.clear();
 		drownTicks = 0;
@@ -687,8 +813,11 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 			best = d;
 			target = player;
 		}
-		if (target == null)
+		if (target == null) {
+			// nobody to throw at: look again in a moment, not every tick
+			throwCooldown = SEARCH_COOLDOWN;
 			return;
+		}
 		throwCooldown = THROW_COOLDOWN;
 		ThrownTrident trident = new ThrownTrident(level, hatch.x, hatch.y, hatch.z, new ItemStack(Items.TRIDENT));
 		trident.pickup = AbstractArrow.Pickup.DISALLOWED;
@@ -734,33 +863,65 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 
 	/** Takes the field's FE, and runs the countdown and the escapes while it's down. */
 	private void field() {
+		int wasEscapeIn = escapeIn;
+		boolean wasPaused = paused;
+		runField();
+		// the countdown is saved with the chunk as it runs, or a crash or an unload would put it back
+		if (escapeIn != wasEscapeIn || paused != wasPaused)
+			level.blockEntityChanged(worldPosition);
+	}
+
+	private void runField() {
+		long received = receivedNow;
+		receivedNow = 0;
+		noteOffers();
 		if (!hasMonster()) {
-			fieldUp = false;
+			if (fieldUp || startingFor >= 0)
+				switchOff();
 			escapeIn = -1;
 			return;
 		}
-		boolean was = fieldUp;
+		boolean was = fieldUp, wasFarming = farmingPowered;
 		int fieldCost = CMConfig.Server.get(CMConfig.SERVER.cageFieldFe);
 		int farmCost = getSpeed() == 0 || count >= getCapacity() ? 0
 			: Math.round(CMConfig.Server.get(CMConfig.SERVER.cageFarmFe) * Math.min(1, Math.abs(getSpeed()) / 256f));
-		fieldUp = energy.getEnergyStored() >= fieldCost;
 		if (fieldUp) {
-			energy.take(fieldCost);
-			farmingPowered = energy.getEnergyStored() >= farmCost;
-			if (farmingPowered)
-				energy.take(farmCost);
+			// up: as ever, the field first and farming shed first; stored FE covers dips, and once it can't, it's off
+			if (energy.getEnergyStored() >= fieldCost) {
+				energy.take(fieldCost);
+				farmingPowered = energy.getEnergyStored() >= farmCost;
+				if (farmingPowered)
+					energy.take(farmCost);
+			} else {
+				switchOff();
+			}
+		} else if (startingFor >= 0) {
+			starting(received, fieldCost);
+		} else if (offeredTicks >= SUPPLY_TICKS && offeredSum >= (long) SUPPLY_TICKS * fieldCost && level.getGameTime() >= retryAt) {
+			// a second's offers cover the field: a trial, taking FE again, and up once that FE arrives
+			startingFor = 0;
+			startingFull = 0;
 		}
 		if (fieldUp != was) {
 			level.playSound(null, worldPosition, ModSounds.cage(fieldUp ? "field_up" : "field_down"), SoundSource.BLOCKS, 1, 1);
 			sendData();
+		} else if (farmingPowered != wasFarming) {
+			// queued: on a supply just short of both draws this can flip every tick
+			syncQueued = true;
 		}
 		if (fieldUp) {
-			if (escapeIn >= 0) {
-				if (escapeIn <= warningTicks())
-					announce("alarm_restored");
-				escapeIn = -1;
-				paused = false;
-				sendData();
+			// holding: a countdown stands still, and is called off once the field has held for the hold
+			if (fieldUp != was && escapeIn >= 0 && escapeIn <= warningTicks())
+				announce("alarm_holding", time(holdTicks()));
+			if (++heldFor >= holdTicks()) {
+				retryWait = 0;
+				if (escapeIn >= 0) {
+					if (escapeIn <= warningTicks())
+						announce("alarm_restored");
+					escapeIn = -1;
+					paused = false;
+					sendData();
+				}
 			}
 			return;
 		}
@@ -794,6 +955,88 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 			escape();
 		else if (escapeIn % 20 == 0)
 			syncQueued = true;
+	}
+
+	/** This tick's offers into the last second's, while the field is off (they don't count while it's on). */
+	private void noteOffers() {
+		long now = offeredNow;
+		offeredNow = 0;
+		if (fieldUp || startingFor >= 0)
+			return;
+		offeredSum += now - offered[offeredAt];
+		offered[offeredAt] = now;
+		offeredAt = (offeredAt + 1) % SUPPLY_TICKS;
+		offeredTicks = Math.min(SUPPLY_TICKS, offeredTicks + 1);
+	}
+
+	/**
+	 * A tick of a trial: nothing is drawn, the FE coming in is only measured (and kept), and the field comes up after a
+	 * second in which every tick brought in its cost; what came in is then its reserve. A tick short, or no FE at all
+	 * within {@link #START_WAIT}, and it's off again, quietly, keeping what came in, and the next trial waits.
+	 */
+	private void starting(long received, int fieldCost) {
+		startingFor++;
+		if (startingFull == 0 && received == 0) {
+			if (startingFor > START_WAIT)
+				failTrial();
+			return;
+		}
+		if (received < fieldCost) {
+			failTrial();
+			return;
+		}
+		if (++startingFull >= SUPPLY_TICKS) {
+			startingFor = -1;
+			fieldUp = true;
+			farmingPowered = false;
+			heldFor = 0;
+		}
+	}
+
+	private void failTrial() {
+		retryWait = retryWait == 0 ? RETRY_FIRST : Math.min(RETRY_MOST, 2 * retryWait);
+		retryAt = level.getGameTime() + retryWait;
+		switchOff();
+	}
+
+	/** Ticks the field must hold before a countdown is called off. */
+	private static int holdTicks() {
+		return 20 * CMConfig.Server.get(CMConfig.SERVER.cageRestoreHoldSeconds);
+	}
+
+	/** Off: it takes no more FE, and only a fresh second of offers covering the cost starts it again. */
+	private void switchOff() {
+		fieldUp = false;
+		heldFor = 0;
+		startingFor = -1;
+		startingFull = 0;
+		java.util.Arrays.fill(offered, 0);
+		offeredSum = 0;
+		offeredAt = 0;
+		offeredTicks = 0;
+	}
+
+	/** Whether the field takes FE: up, or starting. */
+	private boolean takesFe() {
+		return fieldUp || startingFor >= 0;
+	}
+
+	/**
+	 * After the field's draw: the FE is saved with the chunk and reaches clients now and then (not a sync and a comparator
+	 * update every tick), and comparators hear when a countdown starts or ends.
+	 */
+	private void energyUpkeep() {
+		if (energyChanged) {
+			energyChanged = false;
+			level.blockEntityChanged(worldPosition);
+		}
+		if (energy.getEnergyStored() != sentEnergy && level.getGameTime() - sentEnergyAt >= ENERGY_SYNC_TICKS)
+			syncQueued = true;
+		boolean warning = isWarning();
+		if (warning != toldWarning) {
+			toldWarning = warning;
+			level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
+		}
 	}
 
 	/** The messages, the klaxon and the field sputtering, through the warning (D75, D77). */
@@ -987,13 +1230,29 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 			drownTicks = Math.min(drownTicks + 1, DROWN_TICKS - 1);
 		else
 			drownTicks = 0;
-		int want = hasMonster() ? Math.min(count, isNetherite() ? 1 : SHOWN) : 0;
+		// the monsters in the window are only built near enough to be seen soon, and let go well out of sight
+		viewDistanceSqr = ClientView.distanceSqr.applyAsDouble(this);
+		int want = ClientView.keep(hasMonster() ? Math.min(count, isNetherite() ? 1 : SHOWN) : 0, viewDistanceSqr);
 		while (shown.size() > want)
 			shown.removeLast();
-		while (shown.size() < want) {
+		if (ClientView.builds(viewDistanceSqr))
+			buildShown(want, mayBuild);
+		for (CageMonster monster : shown)
+			monster.tick(level.random, isRunning() || getSpeed() != 0);
+		clientTicker.accept(this);
+	}
+
+	/**
+	 * Builds the window's monsters up to {@code want}, each one {@code mayBuild} allows. A jar whose monster can't be
+	 * made stops it trying (and taking builds) until the jar changes.
+	 */
+	void buildShown(int want, BooleanSupplier mayBuild) {
+		while (shown.size() < want && !createFailed && mayBuild.getAsBoolean()) {
 			Entity made = MonsterJarItem.create(captive, level).orElse(null);
-			if (made == null)
-				break;
+			if (made == null) {
+				createFailed = true;
+				return;
+			}
 			if (made instanceof Mob mob)
 				for (var slot : net.minecraft.world.entity.EquipmentSlot.values())
 					mob.setItemSlot(slot, ItemStack.EMPTY);
@@ -1002,9 +1261,11 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 				mob.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
 			shown.add(new CageMonster(made, level.random, isNetherite()));
 		}
-		for (CageMonster monster : shown)
-			monster.tick(level.random, isRunning() || getSpeed() != 0);
-		clientTicker.accept(this);
+	}
+
+	/** Client: the camera's squared distance as of this tick (the loops go by it too). */
+	public double getViewDistanceSqr() {
+		return viewDistanceSqr;
 	}
 
 	// ---------------------------------------------------------------- the wrench screen and readouts
@@ -1038,10 +1299,73 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 
 	/** The chow to show in the bowl: some once there's any. */
 	public ItemStack getBowlChow() {
+		if (showsSummary())
+			return shownChow;
 		for (int i = 0; i < chow.getSlots(); i++)
 			if (!chow.getStackInSlot(i).isEmpty())
 				return chow.getStackInSlot(i);
 		return ItemStack.EMPTY;
+	}
+
+	/** The first few stacks waiting in the output, for the tray. */
+	public List<ItemStack> getTray() {
+		return tray;
+	}
+
+	/** Output slots in use, for how full the tray looks. */
+	public int getTrayUsed() {
+		return trayUsed;
+	}
+
+	/** The box the renderer draws in: the shield sits a pixel outside the block. Made once, not every frame. */
+	public AABB getRenderBox() {
+		if (renderBox == null)
+			renderBox = new AABB(worldPosition).inflate(0.1);
+		return renderBox;
+	}
+
+	/** The bowl and the tray worked out again from the inventories (on the server, or where a client has them). */
+	private void summarise() {
+		shownChow = ItemStack.EMPTY;
+		shownChowCount = 0;
+		for (int i = 0; i < chow.getSlots(); i++) {
+			ItemStack stack = chow.getStackInSlot(i);
+			if (shownChow.isEmpty() && !stack.isEmpty())
+				shownChow = stack.copyWithCount(1);
+			shownChowCount += stack.getCount();
+		}
+		tray.clear();
+		trayUsed = 0;
+		for (int i = 0; i < output.getSlots(); i++) {
+			ItemStack stack = output.getStackInSlot(i);
+			if (stack.isEmpty())
+				continue;
+			trayUsed++;
+			if (tray.size() < TRAY_SHOWN)
+				tray.add(stack.copyWithCount(1));
+		}
+	}
+
+	/** What clients are sent of the bowl and the tray: all the renderer, goggles and screen read of them. */
+	private void writeSummary(CompoundTag tag, HolderLookup.Provider registries) {
+		summarise();
+		if (!shownChow.isEmpty())
+			tag.put("ShownChow", shownChow.save(registries));
+		tag.putInt("ChowCount", shownChowCount);
+		ListTag shownTray = new ListTag();
+		for (ItemStack stack : tray)
+			shownTray.add(stack.save(registries));
+		tag.put("Tray", shownTray);
+		tag.putInt("TrayUsed", trayUsed);
+	}
+
+	private void readSummary(CompoundTag tag, HolderLookup.Provider registries) {
+		shownChow = ItemStack.parseOptional(registries, tag.getCompound("ShownChow"));
+		shownChowCount = tag.getInt("ChowCount");
+		tray.clear();
+		for (Tag entry : tag.getList("Tray", Tag.TAG_COMPOUND))
+			ItemStack.parse(registries, entry).ifPresent(tray::add);
+		trayUsed = tag.getInt("TrayUsed");
 	}
 
 	/** "Blaze: 112 / 256" */
@@ -1125,6 +1449,8 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	}
 
 	public boolean hasOutput() {
+		if (showsSummary())
+			return trayUsed > 0;
 		for (int i = 0; i < output.getSlots(); i++)
 			if (!output.getStackInSlot(i).isEmpty())
 				return true;
@@ -1166,11 +1492,14 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	private void onInventoryChanged() {
 		setChanged();
 		syncQueued = true;
+		// a client's inventories change only through an open menu (or in Ponder): the bowl and tray follow them
+		if (showsSummary())
+			summarise();
 	}
 
 	@Override
 	public void clearContent() {
-		captive = ItemStack.EMPTY;
+		holdCaptive(ItemStack.EMPTY);
 		count = 0;
 		armed = 0;
 		sample = null;
@@ -1207,13 +1536,23 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	@Override
 	protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.write(tag, registries, clientPacket);
-		if (!captive.isEmpty())
+		if (clientPacket && omitCaptive)
+			tag.putBoolean("SameCaptive", true);
+		else if (!captive.isEmpty())
 			tag.put("Captive", captive.save(registries));
 		tag.putInt("Count", count);
 		tag.putInt("Armed", armed);
 		tag.putFloat("Progress", progress);
-		tag.put("Chow", chow.serializeNBT(registries));
-		tag.put("Output", output.serializeNBT(registries));
+		if (clientPacket) {
+			writeSummary(tag, registries);
+			// the impact the network holds, settled, so the goggles agree with it
+			if (!Float.isNaN(impact.applied()))
+				tag.putFloat("Impact", impact.applied());
+		} else if (!showsSummary()) {
+			// a client's inventories aren't the cage's (a creative pick-block copy mustn't paste a stale bowl and tray)
+			tag.put("Chow", chow.serializeNBT(registries));
+			tag.put("Output", output.serializeNBT(registries));
+		}
 		if (isFlooded())
 			tag.put("Water", water.writeToNBT(registries, new CompoundTag()));
 		if (isNetherite()) {
@@ -1235,20 +1574,39 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	@Override
 	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.read(tag, registries, clientPacket);
-		ItemStack was = captive;
-		captive = ItemStack.parseOptional(registries, tag.getCompound("Captive"));
-		if (!ItemStack.isSameItemSameComponents(was, captive)) {
-			sample = null;
-			shown.clear();
+		// a sync that left the captive out (see getUpdatePacket): it's the one last sent, whatever a click here guessed;
+		// and the same jar again keeps the stack it has, so what's cached against it (the jar's drawn monster) stays
+		if (clientPacket && tag.getBoolean("SameCaptive")) {
+			if (receivedCaptive != null && captive != receivedCaptive) {
+				holdCaptive(receivedCaptive);
+				sample = null;
+				shown.clear();
+			}
+		} else {
+			ItemStack read = ItemStack.parseOptional(registries, tag.getCompound("Captive"));
+			if (!ItemStack.isSameItemSameComponents(captive, read)) {
+				holdCaptive(read);
+				sample = null;
+				shown.clear();
+			}
+			if (clientPacket)
+				receivedCaptive = captive;
 		}
+		if (clientPacket)
+			syncedImpact = tag.contains("Impact") ? tag.getFloat("Impact") : Float.NaN;
 		count = tag.getInt("Count");
 		int wasArmed = armed;
 		armed = tag.getInt("Armed");
 		if (clientPacket && armed != wasArmed)
 			shown.clear();
 		progress = tag.getFloat("Progress");
-		chow.deserializeNBT(registries, tag.getCompound("Chow"));
-		output.deserializeNBT(registries, tag.getCompound("Output"));
+		if (clientPacket) {
+			readSummary(tag, registries);
+		} else {
+			chow.deserializeNBT(registries, tag.getCompound("Chow"));
+			output.deserializeNBT(registries, tag.getCompound("Output"));
+			summarise();
+		}
 		if (tag.contains("Water"))
 			water.readFromNBT(registries, tag.getCompound("Water"));
 		energy.set(tag.getInt("Energy"));
@@ -1263,6 +1621,35 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 			? ItemEnchantments.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("Enchantments"))
 				.result().orElse(ItemEnchantments.EMPTY)
 			: ItemEnchantments.EMPTY;
+	}
+
+	/** At a sync: the jar goes with it unless an earlier one sent it, and again once that was a while ago. */
+	private void markCaptiveSent(long now) {
+		if (captive != sentCaptive || now - sentCaptiveAt >= CAPTIVE_RESEND_TICKS) {
+			sentCaptive = captive;
+			sentCaptiveAt = now;
+		}
+	}
+
+	/**
+	 * The changes this cage's own syncs send leave out the captive when it's the one clients were last sent (its jar
+	 * carries the whole monster). A client first seeing the cage gets everything, from {@code getUpdateTag}.
+	 */
+	@Override
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this, (be, registries) -> ((MonsterCageBlockEntity) be).updatePacketTag(registries));
+	}
+
+	private CompoundTag updatePacketTag(HolderLookup.Provider registries) {
+		long now = level == null ? 0 : level.getGameTime();
+		// its own sync is broadcast at the start of the next tick; the jar is left out only if an earlier one of its own
+		// syncs sent it (building a packet doesn't count: only sendData, which broadcasts to every client watching)
+		omitCaptive = now - ownSyncAt <= 1 && captive == sentCaptive && sentCaptiveAt < ownSyncAt;
+		try {
+			return writeClient(new CompoundTag(), registries);
+		} finally {
+			omitCaptive = false;
+		}
 	}
 
 	// ---------------------------------------------------------------- handlers
@@ -1317,7 +1704,7 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 			if (!stack.isEmpty() && hasMonster() && ItemStack.isSameItemSameComponents(stack, captive))
 				return;
 			if (level == null || level.isClientSide) {
-				captive = stack.copyWithCount(Math.min(1, stack.getCount()));
+				holdCaptive(stack.copyWithCount(Math.min(1, stack.getCount())));
 				count = captive.isEmpty() ? 0 : Math.max(1, count);
 				sample = null;
 				shown.clear();
@@ -1410,7 +1797,7 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 
 		void take(int amount) {
 			energy = Math.max(0, energy - amount);
-			onInventoryChanged();
+			energyChanged = true;
 		}
 
 		void set(int amount) {
@@ -1419,9 +1806,25 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 
 		@Override
 		public int receiveEnergy(int toReceive, boolean simulate) {
+			if (capacity <= 0)
+				return 0;
+			if (!takesFe()) {
+				// off, it takes nothing: the FE stays on the network for other machines, and what was offered is noted
+				if (toReceive > 0)
+					offeredNow += toReceive;
+				return 0;
+			}
+			// on trial, real FE comes in at most at the field's cost a tick; a simulation still answers with the room (a
+			// Power Line plans a second ahead with one), and what a pusher can't put in it keeps
+			if (startingFor >= 0 && !simulate)
+				toReceive = (int) Math.min(toReceive, Math.max(0, CMConfig.Server.get(CMConfig.SERVER.cageFieldFe) - receivedNow));
 			int got = super.receiveEnergy(toReceive, simulate);
-			if (got > 0 && !simulate)
-				onInventoryChanged();
+			if (got > 0 && !simulate) {
+				receivedNow += got;
+				// marked at once: a cable can feed a cage whose own chunk isn't ticking, and it would be lost on unload
+				if (level != null)
+					level.blockEntityChanged(worldPosition);
+			}
 			return got;
 		}
 	}

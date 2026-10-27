@@ -53,6 +53,11 @@ public class ComedyMonkeysCreateAddonsClient {
 		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::registerBlockColors);
 		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::registerItemColors);
 		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::wrapModels);
+		// Helper Bot's flat icon: his chest panels in his dye
+		modBus.addListener(com.comedymonkey.createaddons.client.helperbot.HelperBotClient::registerItemColors);
+		// Helper Bot's render types batch on their own buffers, drawn once the block entities are
+		modBus.addListener(com.comedymonkey.createaddons.client.helperbot.HelperBotClient::registerRenderBuffers);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.helperbot.HelperBotClient::endBatches);
 		// A formed Battery draws its tile of the Industrial Battery
 		modBus.addListener(BatteryTowerModel::wrap);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.line.LineClient::drawHiddenLines);
@@ -103,6 +108,9 @@ public class ComedyMonkeysCreateAddonsClient {
 		com.comedymonkey.createaddons.content.cage.MonsterCageBlockEntity.clientTicker = MonsterCageSounds::tick;
 		// The Fish Tanks' pump and bubbles, and their creatures swimming, run from their client ticks
 		com.comedymonkey.createaddons.content.tank.FishTankBlockEntity.clientTicker = FishTankSounds::tick;
+		// Cages and tanks keep their window's creatures only near the camera (Ponder's and contraptions' always), only
+		// the nearest few of their loops play, and only so many creatures are built a tick and drawn a frame
+		WindowClient.install();
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ChestSortButton::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseScrolled);
@@ -128,6 +136,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerReloadListener((net.minecraft.server.packs.resources.ResourceManagerReloadListener) manager -> {
 			Hearing.forget();
 			TradeBotItemRenderer.forget();
+			com.comedymonkey.createaddons.client.helperbot.HelperBotModels.forget();
 		});
 	}
 
@@ -152,6 +161,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		PressureCrucibleSounds.forget();
 		MonsterCageSounds.forget();
 		FishTankSounds.forget();
+		NearestLoops.forget();
 		Hearing.forget();
 		BottledAnimalRenderer.forget();
 		MonsterJarRenderer.forget();
@@ -192,6 +202,7 @@ public class ComedyMonkeysCreateAddonsClient {
 			AeronauticsRenderers.registerRenderers(event);
 		event.registerEntityRenderer(ModEntities.TRADE_BOT.get(), TradeBotRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.TRADE_BOT_STATION.get(), TradeBotStationRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.HELPER_BOT.get(), com.comedymonkey.createaddons.client.helperbot.HelperBotRenderer::new);
 	}
 
 	/** A block entity's Flywheel visual made again (it needs a different one now: a fitting went on, a chest opened). */
@@ -244,6 +255,16 @@ public class ComedyMonkeysCreateAddonsClient {
 			}
 		}, ModItems.TRADE_BOT.get());
 		event.registerItem(new IClientItemExtensions() {
+			private com.comedymonkey.createaddons.client.helperbot.HelperBotItemRenderer renderer;
+
+			@Override
+			public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+				if (renderer == null)
+					renderer = new com.comedymonkey.createaddons.client.helperbot.HelperBotItemRenderer();
+				return renderer;
+			}
+		}, ModItems.HELPER_BOT.get());
+		event.registerItem(new IClientItemExtensions() {
 			private BottledAnimalRenderer renderer;
 
 			@Override
@@ -268,6 +289,8 @@ public class ComedyMonkeysCreateAddonsClient {
 
 	private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(TradeBotGeometry.BOT_LAYER, TradeBotGeometry::botLayer);
+		event.registerLayerDefinition(com.comedymonkey.createaddons.client.helperbot.HelperBotModels.LAYER,
+			com.comedymonkey.createaddons.client.helperbot.HelperBotModels::layer);
 		event.registerLayerDefinition(TradeBotGeometry.STATION_LAYER, TradeBotGeometry::stationLayer);
 		event.registerLayerDefinition(TradeBotGeometry.STATION_GLOW_LAYER, TradeBotGeometry::stationGlowLayer);
 		// The goggles renderer is a Curios one, so its class can't even be loaded without Curios
@@ -279,6 +302,8 @@ public class ComedyMonkeysCreateAddonsClient {
 	private void clientSetup(FMLClientSetupEvent event) {
 		// The machines' moving parts, drawn by Flywheel when it can
 		event.enqueueWork(com.comedymonkey.createaddons.client.parts.MachineVisuals::register);
+		// Helper Bot's clips (a big file) are read now, in the background, rather than on the first frame he's seen
+		com.comedymonkey.createaddons.client.helperbot.HelperBotRig.preload();
 		// Upgraded chest item picks its tier's model (0 copper .. 0.3 diamond)
 		event.enqueueWork(() -> ItemProperties.register(ModItems.UPGRADED_CHEST.get(),
 			ComedyMonkeysCreateAddons.asResource("tier"),

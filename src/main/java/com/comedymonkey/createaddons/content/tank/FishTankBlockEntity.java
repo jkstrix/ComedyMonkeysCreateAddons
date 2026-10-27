@@ -10,9 +10,13 @@ import org.jetbrains.annotations.Nullable;
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
+import com.comedymonkey.createaddons.content.ClientView;
+import com.comedymonkey.createaddons.content.Drops;
 import com.comedymonkey.createaddons.content.FillOnly;
 import com.comedymonkey.createaddons.content.FixedStress;
 import com.comedymonkey.createaddons.content.MachineEnchantments;
+import com.comedymonkey.createaddons.content.SettlingImpact;
+import com.comedymonkey.createaddons.content.SyncStagger;
 import com.comedymonkey.createaddons.content.pen.BottledAnimalItem;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModItems;
@@ -68,6 +72,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -95,6 +100,9 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	public static Consumer<FishTankBlockEntity> clientTicker = be -> {};
 
 	private ItemStack captive = ItemStack.EMPTY;
+	/** The captive's creature, read once whenever the captive changes. */
+	@Nullable
+	private EntityType<?> creatureType;
 	private ItemEnchantments enchantments = ItemEnchantments.EMPTY;
 	private int adults;
 	/** Blue axolotls among the adults. */
@@ -116,16 +124,34 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	private final IItemHandler automation = new AutomationHandler();
 	private final IItemHandlerModifiable captiveSlot = new CaptiveHandler();
 	private boolean syncQueued;
+	/** Queued syncs go out on this tick of every {@link #SYNC_INTERVAL}, by position, so a wall of tanks doesn't sync all at once. */
+	private final int syncPhase;
+	/** Client: the trough and the net as the server summed them up (clients aren't sent the inventories; an open menu syncs its own slots). */
+	private ItemStack shownFood = ItemStack.EMPTY;
+	private int shownFoodCount, trayUsed;
+	private final List<ItemStack> tray = new ArrayList<>(TRAY_SHOWN);
+	private static final int TRAY_SHOWN = 3;
+	/** The stress impact the network holds: a rise at once, a fall once it has lasted (see {@link SettlingImpact}). */
+	private final SettlingImpact impact = new SettlingImpact();
+	@Nullable
+	private AABB renderBox;
 	/** Server: the captive as last sent to clients, when, and this tank's own last sync (as the pens'). */
 	@Nullable
 	private ItemStack sentCaptive;
 	private long sentCaptiveAt, ownSyncAt;
 	private boolean omitCaptive;
 	private static final int CAPTIVE_RESEND_TICKS = 100;
+	/** Client: the captive as the server last sent it (a click here may have guessed another the server refused). */
+	@Nullable
+	private ItemStack receivedCaptive;
+	/** Client: the stress impact the server's network holds for it (NaN until sent), for the goggles. */
+	private float syncedImpact = Float.NaN;
 	private long lastFeed = Long.MIN_VALUE;
 	@Nullable
 	private Entity sample;
 	private final List<TankCreature> shown = new ArrayList<>();
+	/** Client: the camera's distance this tick (for the window and the loops); endless where it can't be told. */
+	private double viewDistanceSqr;
 
 	public FishTankBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.FISH_TANK.get(), pos, state);
@@ -171,6 +197,7 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 			}
 		};
 		waterIn = new FillOnly(water);
+		syncPhase = SyncStagger.phase(pos, SYNC_INTERVAL);
 	}
 
 	private static boolean isBrass(BlockState state) {
@@ -235,6 +262,12 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 		return captive;
 	}
 
+	/** Every change of the captive comes through here, so its creature's type is read once per bottle. */
+	private void holdCaptive(ItemStack bottle) {
+		captive = bottle;
+		creatureType = BottledAnimalItem.typeOf(bottle);
+	}
+
 	@Nullable
 	public Entity sample() {
 		if (sample == null && !createFailed && hasCreature() && level != null) {
@@ -249,17 +282,26 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	}
 
 	public boolean isAxolotl() {
-		return BottledAnimalItem.typeOf(captive) == EntityType.AXOLOTL;
+		return creatureType == EntityType.AXOLOTL;
 	}
 
 	public int getFoodCount() {
+		if (showsSummary())
+			return shownFoodCount;
 		int n = 0;
 		for (int i = 0; i < food.getSlots(); i++)
 			n += food.getStackInSlot(i).getCount();
 		return n;
 	}
 
+	/** Clients go by the server's summary of the trough and the net (see {@link #writeSummary}), not the inventories. */
+	boolean showsSummary() {
+		return level != null && level.isClientSide;
+	}
+
 	public ItemStack getShownFood() {
+		if (showsSummary())
+			return shownFood;
 		for (int i = 0; i < food.getSlots(); i++)
 			if (!food.getStackInSlot(i).isEmpty())
 				return food.getStackInSlot(i);
@@ -291,13 +333,13 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	}
 
 	private void setCaptive(ItemStack bottle) {
-		captive = bottle;
+		holdCaptive(bottle);
 		adults = bottle.isEmpty() ? 0 : 1;
 		blue = 0;
 		young.clear();
 		if (!bottle.isEmpty() && bottle.get(DataComponents.ENTITY_DATA) != null) {
 			CompoundTag tag = bottle.get(DataComponents.ENTITY_DATA).copyTag();
-			int isBlue = BottledAnimalItem.typeOf(bottle) == EntityType.AXOLOTL && tag.getInt("Variant") == Axolotl.Variant.BLUE.getId() ? 1 : 0;
+			int isBlue = creatureType == EntityType.AXOLOTL && tag.getInt("Variant") == Axolotl.Variant.BLUE.getId() ? 1 : 0;
 			if (tag.getInt("Age") < 0) {
 				adults = 0;
 				young.add(new int[] {1, Math.min(-tag.getInt("Age"), growTime()), isBlue});
@@ -320,7 +362,7 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	private void updateGlow() {
 		if (level == null || level.isClientSide)
 			return;
-		boolean glow = hasCreature() && BottledAnimalItem.typeOf(captive) == EntityType.GLOW_SQUID;
+		boolean glow = hasCreature() && creatureType == EntityType.GLOW_SQUID;
 		BlockState state = getBlockState();
 		if (state.hasProperty(FishTankBlock.GLOWING) && state.getValue(FishTankBlock.GLOWING) != glow)
 			level.setBlock(worldPosition, state.setValue(FishTankBlock.GLOWING, glow), 3);
@@ -468,7 +510,8 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 		adults -= killed;
 		if (killed > notBlue)
 			blue -= killed - notBlue;
-		return drops;
+		// a big school's cull is many rolls: joined into full stacks before they're stored or dropped
+		return Drops.merged(drops);
 	}
 
 	private void store(List<ItemStack> drops) {
@@ -501,14 +544,18 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 			clientTick();
 			return;
 		}
-		if (FixedStress.keep(this, wantedImpact()))
+		float wasImpact = impact.applied();
+		impact.settle(wantedImpact());
+		// the goggles show the settled impact, so clients hear when it changes, network or not
+		if (Float.compare(wasImpact, impact.applied()) != 0)
+			syncQueued = true;
+		if (FixedStress.keep(this, impact()))
 			sendData();
 		if (isRunning())
 			work();
-		if (syncQueued && level.getGameTime() % SYNC_INTERVAL == 0) {
-			syncQueued = false;
+		// sendData clears the queue, so a sync this tick already sent leaves nothing to send again
+		if (syncQueued && SyncStagger.due(level.getGameTime(), syncPhase, SYNC_INTERVAL))
 			sendData();
-		}
 	}
 
 	@Override
@@ -522,9 +569,10 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	}
 
 	private boolean canBreed() {
-		// a creature whose mod has gone doesn't breed
+		// a creature whose mod has gone doesn't breed (clients go by its type being known, rather than each tank in the
+		// world making a creature to ask)
 		return adults > 0 && getCount() < getCapacity() && getFoodCount() > 0 && water.getFluidAmount() >= waterPerBirth()
-			&& sample() != null;
+			&& (showsSummary() ? creatureType != null : sample() != null);
 	}
 
 	public boolean isBreeding() {
@@ -592,9 +640,17 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 
 	@Override
 	public float calculateStressApplied() {
-		float impact = wantedImpact();
+		float impact = impact();
 		lastStressApplied = impact;
 		return impact;
+	}
+
+	/** The impact the network should hold (see {@link #impact}); clients just go by what's wanted. */
+	private float impact() {
+		if (level == null || level.isClientSide)
+			return Float.isNaN(syncedImpact) ? wantedImpact() : syncedImpact;
+		float applied = impact.applied();
+		return Float.isNaN(applied) ? wantedImpact() : applied;
 	}
 
 	private float wantedImpact() {
@@ -605,7 +661,7 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	@Override
 	public void onSpeedChanged(float previousSpeed) {
 		super.onSpeedChanged(previousSpeed);
-		if (level != null && !level.isClientSide && FixedStress.keep(this, wantedImpact()))
+		if (level != null && !level.isClientSide && FixedStress.keep(this, impact()))
 			sendData();
 	}
 
@@ -618,12 +674,14 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	private void clientTick() {
 		if (isBreeding())
 			progress = Math.min(progress + Math.abs(getSpeed()) / 64f, breedTime() - 1);
-		int want = hasCreature() ? Math.min(getCount(), SHOWN) : 0;
+		// the creatures in the water are only built near enough to be seen soon, and let go well out of sight
+		viewDistanceSqr = ClientView.distanceSqr.applyAsDouble(this);
+		int want = ClientView.keep(hasCreature() ? Math.min(getCount(), SHOWN) : 0, viewDistanceSqr);
 		while (shown.size() > want)
 			shown.removeLast();
 		if (shown.isEmpty())
 			ownVariant = null;
-		while (shown.size() < want && !createFailed) {
+		while (shown.size() < want && !createFailed && ClientView.builds(viewDistanceSqr) && ClientView.mayBuild(level)) {
 			Entity made = BottledAnimalItem.create(captive, level).orElse(null);
 			if (made == null) {
 				createFailed = true;
@@ -648,6 +706,11 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 		for (TankCreature creature : shown)
 			creature.tick(level.random, getSpeed() != 0, surface);
 		clientTicker.accept(this);
+	}
+
+	/** Client: the camera's squared distance as of this tick (the loops go by it too). */
+	public double getViewDistanceSqr() {
+		return viewDistanceSqr;
 	}
 
 	/** The water's surface in model pixels. */
@@ -698,7 +761,7 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	}
 
 	public Component getSchool() {
-		EntityType<?> type = BottledAnimalItem.typeOf(captive);
+		EntityType<?> type = creatureType;
 		Component name = type == null ? Component.empty() : type.getDescription();
 		int babies = getYoung();
 		return babies > 0 ? tr("school_young", name, adults, babies, getCapacity()) : tr("school", name, adults, getCapacity());
@@ -750,6 +813,8 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	}
 
 	public boolean hasOutput() {
+		if (showsSummary())
+			return trayUsed > 0;
 		for (int i = 0; i < output.getSlots(); i++)
 			if (!output.getStackInSlot(i).isEmpty())
 				return true;
@@ -785,14 +850,78 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 		return hasCreature() ? Mth.clamp(Math.round(15f * getCount() / getCapacity()), 1, 15) : 0;
 	}
 
+	/** The first few stacks waiting in the net, for the tray. */
+	public List<ItemStack> getTray() {
+		return tray;
+	}
+
+	/** Output slots in use, for how full the net looks. */
+	public int getTrayUsed() {
+		return trayUsed;
+	}
+
+	/** The box the renderer draws in (the block's own), made once rather than every frame. */
+	public AABB getRenderBox() {
+		if (renderBox == null)
+			renderBox = new AABB(worldPosition);
+		return renderBox;
+	}
+
+	/** The trough and the net worked out again from the inventories (on the server, or where a client has them). */
+	private void summarise() {
+		shownFood = ItemStack.EMPTY;
+		shownFoodCount = 0;
+		for (int i = 0; i < food.getSlots(); i++) {
+			ItemStack stack = food.getStackInSlot(i);
+			if (shownFood.isEmpty() && !stack.isEmpty())
+				shownFood = stack.copyWithCount(1);
+			shownFoodCount += stack.getCount();
+		}
+		tray.clear();
+		trayUsed = 0;
+		for (int i = 0; i < output.getSlots(); i++) {
+			ItemStack stack = output.getStackInSlot(i);
+			if (stack.isEmpty())
+				continue;
+			trayUsed++;
+			if (tray.size() < TRAY_SHOWN)
+				tray.add(stack.copyWithCount(1));
+		}
+	}
+
+	/** What clients are sent of the trough and the net: all the renderer, goggles and screen read of them. */
+	private void writeSummary(CompoundTag tag, HolderLookup.Provider registries) {
+		summarise();
+		if (!shownFood.isEmpty())
+			tag.put("ShownFood", shownFood.save(registries));
+		tag.putInt("FoodCount", shownFoodCount);
+		ListTag shownTray = new ListTag();
+		for (ItemStack stack : tray)
+			shownTray.add(stack.save(registries));
+		tag.put("Tray", shownTray);
+		tag.putInt("TrayUsed", trayUsed);
+	}
+
+	private void readSummary(CompoundTag tag, HolderLookup.Provider registries) {
+		shownFood = ItemStack.parseOptional(registries, tag.getCompound("ShownFood"));
+		shownFoodCount = tag.getInt("FoodCount");
+		tray.clear();
+		for (Tag entry : tag.getList("Tray", Tag.TAG_COMPOUND))
+			ItemStack.parse(registries, entry).ifPresent(tray::add);
+		trayUsed = tag.getInt("TrayUsed");
+	}
+
 	private void onInventoryChanged() {
 		setChanged();
 		syncQueued = true;
+		// a client's inventories change only through an open menu (or in Ponder): the trough and net follow them
+		if (showsSummary())
+			summarise();
 	}
 
 	@Override
 	public void clearContent() {
-		captive = ItemStack.EMPTY;
+		holdCaptive(ItemStack.EMPTY);
 		adults = 0;
 		blue = 0;
 		young.clear();
@@ -847,8 +976,16 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 		}
 		tag.put("Young", litters);
 		tag.putFloat("Progress", progress);
-		tag.put("Food", food.serializeNBT(registries));
-		tag.put("Output", output.serializeNBT(registries));
+		if (clientPacket) {
+			writeSummary(tag, registries);
+			// the impact the network holds, settled, so the goggles agree with it
+			if (!Float.isNaN(impact.applied()))
+				tag.putFloat("Impact", impact.applied());
+		} else if (!showsSummary()) {
+			// a client's inventories aren't the tank's (a creative pick-block copy mustn't paste a stale trough and net)
+			tag.put("Food", food.serializeNBT(registries));
+			tag.put("Output", output.serializeNBT(registries));
+		}
 		tag.put("Water", water.writeToNBT(registries, new CompoundTag()));
 		if (!enchantments.isEmpty())
 			ItemEnchantments.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), enchantments)
@@ -859,9 +996,20 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.read(tag, registries, clientPacket);
 		ItemStack was = captive;
-		// a sync that left the captive out (see getUpdatePacket): it's the one already here
-		if (!(clientPacket && tag.getBoolean("SameCaptive")))
-			captive = ItemStack.parseOptional(registries, tag.getCompound("Captive"));
+		// a sync that left the captive out (see getUpdatePacket): it's the one last sent, whatever a click here guessed;
+		// and the same bottle again keeps the stack it has, so what's cached against it isn't made again
+		if (clientPacket && tag.getBoolean("SameCaptive")) {
+			if (receivedCaptive != null && captive != receivedCaptive)
+				holdCaptive(receivedCaptive);
+		} else {
+			ItemStack read = ItemStack.parseOptional(registries, tag.getCompound("Captive"));
+			if (!ItemStack.isSameItemSameComponents(captive, read))
+				holdCaptive(read);
+			if (clientPacket)
+				receivedCaptive = captive;
+		}
+		if (clientPacket)
+			syncedImpact = tag.contains("Impact") ? tag.getFloat("Impact") : Float.NaN;
 		int wasBlue = blue, wasCount = getCount();
 		adults = tag.getInt("Adults");
 		blue = tag.getInt("Blue");
@@ -874,8 +1022,13 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 			shown.clear();
 		}
 		progress = tag.getFloat("Progress");
-		food.deserializeNBT(registries, tag.getCompound("Food"));
-		output.deserializeNBT(registries, tag.getCompound("Output"));
+		if (clientPacket) {
+			readSummary(tag, registries);
+		} else {
+			food.deserializeNBT(registries, tag.getCompound("Food"));
+			output.deserializeNBT(registries, tag.getCompound("Output"));
+			summarise();
+		}
 		water.readFromNBT(registries, tag.getCompound("Water"));
 		enchantments = tag.contains("Enchantments")
 			? ItemEnchantments.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("Enchantments"))
@@ -885,8 +1038,16 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 
 	@Override
 	public void sendData() {
-		if (level != null)
-			ownSyncAt = level.getGameTime();
+		if (level != null) {
+			long now = level.getGameTime();
+			ownSyncAt = now;
+			// the bottle goes with this sync unless an earlier one sent it, and again once that was a while ago
+			if (captive != sentCaptive || now - sentCaptiveAt >= CAPTIVE_RESEND_TICKS) {
+				sentCaptive = captive;
+				sentCaptiveAt = now;
+			}
+		}
+		syncQueued = false;
 		super.sendData();
 	}
 
@@ -901,15 +1062,12 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 
 	private CompoundTag updatePacketTag(HolderLookup.Provider registries) {
 		long now = level == null ? 0 : level.getGameTime();
-		// its own sync is broadcast at the start of the next tick
-		omitCaptive = now - ownSyncAt <= 1 && captive == sentCaptive && now - sentCaptiveAt < CAPTIVE_RESEND_TICKS;
+		// its own sync is broadcast at the start of the next tick; the bottle is left out only if an earlier one of its own
+		// syncs sent it (building a packet doesn't count: only sendData, which broadcasts to every client watching)
+		omitCaptive = now - ownSyncAt <= 1 && captive == sentCaptive && sentCaptiveAt < ownSyncAt;
 		try {
 			return writeClient(new CompoundTag(), registries);
 		} finally {
-			if (!omitCaptive) {
-				sentCaptive = captive;
-				sentCaptiveAt = now;
-			}
 			omitCaptive = false;
 		}
 	}
@@ -933,7 +1091,7 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 			if (!stack.isEmpty() && hasCreature() && ItemStack.isSameItemSameComponents(stack, captive))
 				return;
 			if (level == null || level.isClientSide) {
-				captive = stack.copyWithCount(Math.min(1, stack.getCount()));
+				holdCaptive(stack.copyWithCount(Math.min(1, stack.getCount())));
 				adults = captive.isEmpty() ? 0 : Math.max(1, adults);
 				sample = null;
 				createFailed = false;

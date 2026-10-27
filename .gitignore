@@ -58,3 +58,9 @@ design/sound/monster-cage/real/monster_belch.ogg
 design/sound/fish-tank/real/fish_birth.ogg
 design/sound/fish-tank/real/net_drop.ogg
 design/sound/fish-tank/real/scoop.ogg
+# Helper Bot's lever clunk is Minecraft's copper trapdoor (played from the game's own files): never shipped here
+design/sound/helper-bot/real/lever_clunk*.ogg
+
+# website renders: its own game folder, and the run's report
+run-renders/
+tools/website/renders-report.txt

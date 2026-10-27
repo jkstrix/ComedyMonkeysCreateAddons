@@ -48,6 +48,18 @@ final class TrayItems {
 	}
 
 	/**
+	 * The same from a summary, as the Monster Cages and Fish Tanks send their clients: the first few stacks waiting, and
+	 * {@code used} of the {@code slots} in use. At most {@code max} items (fewer further off).
+	 */
+	static void render(List<ItemStack> waiting, int used, int slots, int max, float bedY, Level level, PoseStack ms,
+					   MultiBufferSource buffer, int light, int overlay) {
+		if (used == 0 || waiting.isEmpty() || max <= 0)
+			return;
+		float full = used / (float) Math.max(1, slots);
+		draw(waiting, Math.min(max, full >= 2 / 3f ? 3 : full >= 1 / 3f ? 2 : 1), bedY, level, ms, buffer, light, overlay);
+	}
+
+	/**
 	 * The same tray for a machine with a single output slot (the String Tangler, the Stone Infuser): one item once
 	 * there's anything, two from a third of a stack, three from two thirds.
 	 */

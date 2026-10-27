@@ -76,8 +76,8 @@ public class MonsterCageRenderer extends SafeBlockEntityRenderer<MonsterCageBloc
 
 	@Override
 	public AABB getRenderBoundingBox(MonsterCageBlockEntity be) {
-		// the shield sits a pixel outside the block
-		return new AABB(be.getBlockPos()).inflate(0.1);
+		// the shield sits a pixel outside the block (the box is kept on the cage, not made every frame)
+		return be.getRenderBox();
 	}
 
 	@Override
@@ -88,7 +88,9 @@ public class MonsterCageRenderer extends SafeBlockEntityRenderer<MonsterCageBloc
 			return;
 		Direction front = state.getValue(MonsterCageBlock.FACING);
 		CameraView camera = CameraView.of(be, ms);
-		parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
+		// with Flywheel on, its visual has the parts: no need to pose them all for nothing
+		if (!PartSink.instanced(be))
+			parts(be, partialTicks, ms, PartSink.screen(buffer, state, overlay), light);
 		// Translucent things stay here: drawn by Flywheel, they'd hide the monsters behind them. They go last, into the
 		// sorted translucent sheet the items use: the plain translucent type writes depth before the items are drawn.
 		PartSink sink = PartSink.screen(buffer, state, overlay);
@@ -97,9 +99,10 @@ public class MonsterCageRenderer extends SafeBlockEntityRenderer<MonsterCageBloc
 		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
 		ms.translate(-0.5, -0.5, -0.5);
 		if (!camera.behindGlass(front)) {
-			renderChow(be, ms, buffer, light, overlay);
+			renderChow(be, ms, buffer, light, overlay, camera);
 			renderMonsters(be, partialTicks, ms, buffer, light, camera);
-			TrayItems.render(be.getOutput(), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
+			TrayItems.render(be.getTray(), be.getTrayUsed(), be.getOutput().getSlots(), camera.items(3), TRAY_Y, be.getLevel(), ms,
+				buffer, light, overlay);
 		}
 		if (be.isFlooded())
 			water(be, ms, sink, light);
@@ -216,12 +219,13 @@ public class MonsterCageRenderer extends SafeBlockEntityRenderer<MonsterCageBloc
 
 	// ---------------------------------------------------------------- the bowl and the monsters
 
-	private static void renderChow(MonsterCageBlockEntity be, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+	private static void renderChow(MonsterCageBlockEntity be, PoseStack ms, MultiBufferSource buffer, int light, int overlay,
+								   CameraView camera) {
 		ItemStack chow = be.getBowlChow();
 		if (chow.isEmpty() || be.isNetherite())
 			return;
 		int count = be.getChowCount();
-		int shown = count >= 32 ? 3 : count >= 8 ? 2 : 1;
+		int shown = camera.items(count >= 32 ? 3 : count >= 8 ? 2 : 1);
 		var items = Minecraft.getInstance().getItemRenderer();
 		for (int i = 0; i < shown; i++) {
 			ms.pushPose();
@@ -239,18 +243,14 @@ public class MonsterCageRenderer extends SafeBlockEntityRenderer<MonsterCageBloc
 		List<CageMonster> shown = be.getShown();
 		if (shown.isEmpty())
 			return;
-		// far off, just one; past 32 blocks, none (as the pens)
-		boolean known = camera.known();
-		double distanceSqr = known ? camera.distanceSqr() : 0;
-		if (distanceSqr > 32 * 32)
+		// fewer further off, none past 32 blocks or in a shadow pass, within the frame's budget
+		int drawn = camera.creatures(shown.size());
+		if (drawn <= 0)
 			return;
-		boolean fewer = distanceSqr > 16 * 16;
 		EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
 		dispatcher.setRenderShadow(false);
 		try {
-			for (int i = 0; i < shown.size(); i++) {
-				if (fewer && i > 0)
-					break;
+			for (int i = 0; i < drawn; i++) {
 				CageMonster monster = shown.get(i);
 				Entity entity = monster.entity();
 				float scale = Math.min(MAX_SCALE, MAX_SIZE / Math.max(entity.getBbHeight(), entity.getBbWidth()));

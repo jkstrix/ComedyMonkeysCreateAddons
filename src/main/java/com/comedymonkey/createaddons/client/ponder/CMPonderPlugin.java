@@ -113,6 +113,10 @@ public class CMPonderPlugin implements PonderPlugin {
 			.addStoryBoard("trade_bot", TradeBotScenes::station)
 			.addStoryBoard("trade_bot_linking", TradeBotScenes::linking)
 			.addStoryBoard("trade_bot_trading", TradeBotScenes::trading);
+		// Helper Bot: driving a train, keeping shop
+		helper.forComponents(ModBlocks.HELPER_BOT.getId())
+			.addStoryBoard("helper_bot_driving", HelperBotScenes::driving)
+			.addStoryBoard("helper_bot_shop", HelperBotScenes::shop);
 		helper.forComponents(ModBlocks.CUCKOO_CLOCK.getId())
 			.addStoryBoard("cuckoo_clock", ClockScenes::cuckooClock);
 		if (SableCompat.LOADED)

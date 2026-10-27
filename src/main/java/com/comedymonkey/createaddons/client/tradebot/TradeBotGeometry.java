@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 import org.jetbrains.annotations.Nullable;
@@ -48,6 +49,8 @@ public final class TradeBotGeometry {
 	public record Cube(float[] from, float[] to, int u, int v) {}
 
 	private static volatile TradeBotGeometry instance;
+	/** Other characters' geometry files (Helper Bot's), by path. */
+	private static final Map<String, TradeBotGeometry> OTHERS = new ConcurrentHashMap<>();
 
 	private final int textureWidth, textureHeight;
 	private final List<Bone> bones;
@@ -68,6 +71,11 @@ public final class TradeBotGeometry {
 			}
 		}
 		return geometry;
+	}
+
+	/** Another character's geometry, in the same format and frame (read once). */
+	public static TradeBotGeometry of(String path) {
+		return PATH.equals(path) ? get() : OTHERS.computeIfAbsent(path, TradeBotGeometry::load);
 	}
 
 	/** The lobbed package and the emerald paid back in a trade: drawn with him, but only while a clip shows them. */
@@ -159,9 +167,13 @@ public final class TradeBotGeometry {
 	}
 
 	private static TradeBotGeometry load() {
-		try (InputStream in = TradeBotGeometry.class.getResourceAsStream(PATH)) {
+		return load(PATH);
+	}
+
+	private static TradeBotGeometry load(String path) {
+		try (InputStream in = TradeBotGeometry.class.getResourceAsStream(path)) {
 			if (in == null)
-				throw new IllegalStateException("missing " + PATH);
+				throw new IllegalStateException("missing " + path);
 			try (Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
 				JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
 				JsonArray texture = json.getAsJsonArray("texture");

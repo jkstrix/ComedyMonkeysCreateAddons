@@ -1,8 +1,12 @@
 package com.comedymonkey.createaddons.content.tank;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.pen.AnimalCapture;
 import com.comedymonkey.createaddons.content.pen.BottledAnimalItem;
 
 import net.minecraft.core.registries.Registries;
@@ -24,17 +28,30 @@ public final class TankRules {
 	public static final TagKey<EntityType<?>> BLACKLIST =
 		TagKey.create(Registries.ENTITY_TYPE, ComedyMonkeysCreateAddons.asResource("fish_tank_blacklist"));
 
+	/** Whether each kind of entity is a water creature (by its class, which never changes). */
+	private static final Map<EntityType<?>, Boolean> WATER_KINDS = new ConcurrentHashMap<>();
+
 	private TankRules() {}
 
 	public static boolean isTankCreature(@Nullable Entity entity) {
-		return (entity instanceof AbstractFish || entity instanceof Squid || entity instanceof Axolotl)
-			&& !entity.getType().is(BLACKLIST);
+		return isWaterKind(entity) && !entity.getType().is(BLACKLIST);
 	}
 
-	/** Whether a Bottled Animal holds a tank creature (so a pen refuses it and a tank takes it). */
+	private static boolean isWaterKind(@Nullable Entity entity) {
+		return entity instanceof AbstractFish || entity instanceof Squid || entity instanceof Axolotl;
+	}
+
+	/**
+	 * Whether a Bottled Animal holds a tank creature (so a pen refuses it and a tank takes it). Asked on every slot check
+	 * and quick move, so what each kind of creature is gets worked out once; the tags are still read each time, as a
+	 * datapack reload can change them.
+	 */
 	public static boolean livesInTank(ItemStack bottle, @Nullable Level level) {
 		if (level == null || !(bottle.getItem() instanceof BottledAnimalItem))
 			return false;
-		return BottledAnimalItem.create(bottle, level).filter(TankRules::isTankCreature).isPresent();
+		EntityType<?> type = BottledAnimalItem.typeOf(bottle);
+		if (type == null || type.is(AnimalCapture.BLACKLIST) || type.is(BLACKLIST))
+			return false;
+		return WATER_KINDS.computeIfAbsent(type, t -> isWaterKind(t.create(level)));
 	}
 }

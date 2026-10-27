@@ -9,11 +9,15 @@
     "PipeLogicTileEntityMixin",
     "PipeTileEntityMixin",
     "SeatEntityMixin",
-    "VillagerMixin"
+    "VillagerMixin",
+    "StockTickerBlockEntityMixin",
+    "RecipeApplierMixin",
+    "ContraptionMixin"
   ],
   "client": [
     "PipeRendererMixin",
-    "VillagerModelMixin"
+    "VillagerModelMixin",
+    "StockKeeperRequestScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 0

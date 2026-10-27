@@ -67,6 +67,11 @@ public final class MachineVisuals {
 			.factory(com.comedymonkey.createaddons.client.tradebot.TradeBotStationVisual::new)
 			.skipVanillaRender(be -> true)
 			.apply();
+		// Helper Bot, posed every frame (his renderer stays for Ponder, the shop screen, and when Flywheel can't draw)
+		SimpleBlockEntityVisualizer.builder(ModBlockEntities.HELPER_BOT.get())
+			.factory(com.comedymonkey.createaddons.client.helperbot.HelperBotVisual::new)
+			.skipVanillaRender(be -> true)
+			.apply();
 		// the spans between Line Posts: laid out once, as instances
 		SimpleBlockEntityVisualizer.builder(ModBlockEntities.LINE_POST.get())
 			.factory(com.comedymonkey.createaddons.client.line.LinePostVisual::new)

@@ -56,6 +56,10 @@ class ModSoundsTest {
 					continue;
 				}
 				String[] id = name.split(":");
+				// or one of Minecraft's own files, played where it is with options of ours (Helper Bot's lever clunk is
+				// the copper trapdoor pitched up): it's in the game's assets, not ours, and never copied
+				if (id[0].equals("minecraft") && id[1].startsWith("block/"))
+					continue;
 				assertEquals(MOD, id[0]);
 				assertNotNull(ModResourceFiles.find("assets", MOD, "sounds", id[1] + ".ogg"), "missing " + name);
 			}

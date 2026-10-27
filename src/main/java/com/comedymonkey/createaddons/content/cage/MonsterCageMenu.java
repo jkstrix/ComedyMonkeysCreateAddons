@@ -11,7 +11,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.SlotItemHandler;
@@ -33,16 +35,40 @@ public class MonsterCageMenu extends AbstractContainerMenu implements QuickTrans
 	private final ContainerLevelAccess access;
 	private final int firstOutput;
 	private final int firstPlayer;
+	/**
+	 * The Netherite cage's FE, kept live for the screen here rather than by syncing the cage every tick. One whole int:
+	 * NeoForge sends container data to its clients as var-ints, not vanilla's shorts.
+	 */
+	private final ContainerData energy;
 
 	public MonsterCageMenu(int containerId, Inventory inventory, RegistryFriendlyByteBuf extraData) {
 		this(containerId, inventory, ScreenBlockEntities.find(inventory, extraData.readBlockPos(),
-			ModBlockEntities.MONSTER_CAGE.get(), ModBlocks.MONSTER_CAGE.get()));
+			ModBlockEntities.MONSTER_CAGE.get(), ModBlocks.MONSTER_CAGE.get()), new SimpleContainerData(1));
 	}
 
 	public MonsterCageMenu(int containerId, Inventory inventory, MonsterCageBlockEntity be) {
+		this(containerId, inventory, be, new ContainerData() {
+			@Override
+			public int get(int index) {
+				return be.getEnergyStored();
+			}
+
+			@Override
+			public void set(int index, int value) {}
+
+			@Override
+			public int getCount() {
+				return 1;
+			}
+		});
+	}
+
+	private MonsterCageMenu(int containerId, Inventory inventory, MonsterCageBlockEntity be, ContainerData energy) {
 		super(ModMenus.MONSTER_CAGE.get(), containerId);
 		this.be = be;
+		this.energy = energy;
 		this.access = ContainerLevelAccess.create(be.getLevel(), be.getBlockPos());
+		addDataSlots(energy);
 
 		addSlot(new SlotItemHandler(be.getCaptiveSlot(), 0, JAR_X, JAR_Y));
 		var chow = be.getChow();
@@ -69,6 +95,11 @@ public class MonsterCageMenu extends AbstractContainerMenu implements QuickTrans
 
 	public MonsterCageBlockEntity getBlockEntity() {
 		return be;
+	}
+
+	/** The Netherite cage's stored FE, as the server has it now. */
+	public int getEnergy() {
+		return energy.get(0);
 	}
 
 	@Override

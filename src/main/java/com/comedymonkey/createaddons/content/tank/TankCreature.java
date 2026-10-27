@@ -1,5 +1,9 @@
 package com.comedymonkey.createaddons.content.tank;
 
+import java.lang.reflect.Field;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -43,12 +47,27 @@ public class TankCreature {
 
 	/** Fish flop about unless they know they're in water; there's no setter, so the flag is set directly. */
 	private static void inWater(Entity entity) {
+		if (TOUCHING_WATER == null)
+			return;
 		try {
-			java.lang.reflect.Field field = Entity.class.getDeclaredField("wasTouchingWater");
-			field.setAccessible(true);
-			field.setBoolean(entity, true);
+			TOUCHING_WATER.setBoolean(entity, true);
 		} catch (ReflectiveOperationException | RuntimeException ignored) {
 			// drawn flopping, then: harmless
+		}
+	}
+
+	/** The flag, looked up once rather than for every creature made. */
+	@Nullable
+	private static final Field TOUCHING_WATER = touchingWater();
+
+	@Nullable
+	private static Field touchingWater() {
+		try {
+			Field field = Entity.class.getDeclaredField("wasTouchingWater");
+			field.setAccessible(true);
+			return field;
+		} catch (ReflectiveOperationException | RuntimeException e) {
+			return null;
 		}
 	}
 
