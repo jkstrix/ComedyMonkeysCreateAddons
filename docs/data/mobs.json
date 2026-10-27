@@ -416,7 +416,7 @@
     ],
     "strategies": [
       "Back the cage with [[battery|Batteries]] on its line, so a generator running out of lava never reaches the field.",
-      "Put it on a First branch of a power [[splitter]], so other machines go without before the field does.",
+      "Put it on a First branch of a [[power-splitter|power Splitter]], so other machines go without before the field does.",
       "Wire a comparator: it reads 15 during a countdown. Display Links can show the containment state and the escape clock in your control room.",
       "Build it where an escape won't wreck the base, with open space in front. The cage itself is blast-proof.",
       "On an Aeronautics airship it works with real rotation and FE, and if the ship's power fails, Withers escape in mid-air. Think twice.",

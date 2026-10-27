@@ -44,6 +44,11 @@ for (const k of ['latest', 'featuredMachines', 'featuredBlocks', 'featuredMobs']
 check('site.json home.hero', h.hero?.entry);
 for (const s of site.progression ?? []) { (s.entries ?? []).forEach(id => check(`site.json progression ${s.id}`, id)); links(`site.json progression ${s.id}`, s.goals); }
 
+for (const r of read('releases.json') ?? []) {
+  (r.highlights ?? []).forEach(id => check(`releases.json ${r.version} highlights`, id));
+  links(`releases.json ${r.version}`, r.sections);
+}
+
 // every item of the mod that a recipe makes should have an entry that covers it
 const covered = new Set([...entries.values()].flatMap(e => [...(e.registry ?? []), ...(e.variants ?? []).flatMap(v => v.registry ?? [])]));
 const unreleased = new Set(site.unreleased ?? []);

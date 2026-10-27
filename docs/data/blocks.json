@@ -321,7 +321,7 @@
       "what": "A pipe that needs no pump and no power. Clip an [[intake]] onto the side that faces a tank and it draws that tank's fluid into the line, then delivers it at once to every tank or machine the line reaches. Copper moves 100 mB a tick, brass 1,000. Nothing stays in the line.",
       "why": "Create's pipes need a pump and stress for every run. Fluid Lines are cheap, tidy, unlimited in range and lose nothing, so they're the easy way to feed a [[fluid-wellspring]]'s water or lava to engines, generators, cages and tanks across a base.",
       "when": "Copper with your first copper sheets, at the same moment as Create's first fluid pipes. Brass once you have brass, when a line needs more than 100 mB a tick.",
-      "interacts": "Lines connect to any block that holds fluid: Create tanks, basins, spouts and item drains, the [[fluid-wellspring]], the [[magma-engine]], the [[lava-generator]], the [[geothermal-turbine]], [[flooded-monster-cage|Flooded cages]], [[fish-tank|Fish Tanks]] and other mods' tanks. Clip-on fittings ([[valve]], [[filter]], [[meter]], [[splitter]]) control the flow. They never join Create's Fluid Pipes.",
+      "interacts": "Lines connect to any block that holds fluid: Create tanks, basins, spouts and item drains, the [[fluid-wellspring]], the [[magma-engine]], the [[lava-generator]], the [[geothermal-turbine]], [[flooded-monster-cage|Flooded cages]], [[fish-tank|Fish Tanks]] and other mods' tanks. Clip-on fittings ([[valve]], [[filter]], [[fluid-meter]], [[fluid-splitter]]) control the flow. They never join Create's Fluid Pipes.",
       "mistakes": [
         "Forgetting the [[intake]]: without one nothing moves, however the line is laid.",
         "Expecting it to pull from a lake or a lava pool. Intakes only draw from containers; use Create's pump or Hose Pulley for world fluid.",
@@ -416,7 +416,7 @@
     "mechanics": [
       "A line is every connected piece of the same tier and colour. Any face that touches a block with a fluid handler is an end.",
       "Each tick every [[intake]] on the line draws from its block, up to the line's throughput shared between Intakes, and only a fluid some end can accept. An Intake never feeds back into the block it draws from.",
-      "Without a [[splitter]], the line shares **evenly** between the ends that can take more.",
+      "Without a [[fluid-splitter]], the line shares **evenly** between the ends that can take more.",
       "One fluid per line at a time. If two could flow, the first Intake in turn wins that tick; set each Intake's filter, or use a [[filter]], to keep fluids apart.",
       "The window shows the fluid creeping out from the Intake (a block every 8 ticks on copper, every 3 on brass) and draining back when the supply stops. That's only the look: the line still stores nothing, so breaking it never spills or duplicates fluid.",
       "**Encase** a line by right-clicking it with any plain, solid full block (not glass or anything with a block entity). It keeps working; sneak + Wrench gives the block back. With Engineer's Goggles on, hidden lines within 16 blocks show as a faint outline.",
@@ -426,14 +426,14 @@
       "On a moving Create contraption a line does nothing until it's placed again. On Create Aeronautics physics objects it works."
     ],
     "automation": [
-      "A [[valve]] shuts on redstone and throttles in 10% steps; a [[meter]] gives a comparator signal and Display Link readings.",
+      "A [[valve]] shuts on redstone and throttles in 10% steps; a [[fluid-meter]] gives a comparator signal and Display Link readings.",
       "Deployers can place lines and clip fittings on, because they use items.",
       "Bulk washing (an Encased Fan through water) takes the dye off line items."
     ],
     "tips": [
       "One Intake per source keeps things simple. Two Intakes on one line share its throughput.",
       "A copper line already moves 2,000 mB a second: more than a fully upgraded Water Wellspring makes. Save brass for trunks that really need it.",
-      "Put a [[meter]] near the source while you build: its needle tells you at a glance whether anything is moving."
+      "Put a [[fluid-meter]] near the source while you build: its needle tells you at a glance whether anything is moving."
     ],
     "facts": [
       "The advancements Look, No Pump, Drinking Straw and Out of Sight follow your first line, first Intake and first encased line."
@@ -442,8 +442,8 @@
       "intake",
       "valve",
       "filter",
-      "meter",
-      "splitter",
+      "fluid-meter",
+      "fluid-splitter",
       "power-lines",
       "lines-and-networks",
       "fluid-wellspring"
@@ -470,7 +470,7 @@
       "what": "Cable for Forge Energy. Power flows by itself from anything that gives FE to anything that takes it, with no Intake. Copper carries 4,096 FE a tick, brass 65,536. Laid on a surface it clips flat to the face you placed it on; between [[line-post|Line Posts]] it hangs in spans.",
       "why": "Your [[lava-generator|Lava Generators]], [[geothermal-turbine]] and [[battery|Batteries]] need to reach [[electric-motor|Electric Motors]], [[trade-bot|Trade Bot]]'s station and the [[netherite-monster-cage]]. Power Lines do it over any distance, without loss, and keep working when the far end's chunk isn't loaded.",
       "when": "Copper as soon as you have your first generator. Brass when a run carries more than four Lava Generators' worth, such as a turbine or a motor above 65,536 SU.",
-      "interacts": "Machines on a line share what its generators make; [[battery|Batteries]] fill from the spare and give it back when generators fall short. A [[breaker]] cuts power, a [[meter]] measures it, and a [[splitter]] on a junction decides which branches come first when power is short.",
+      "interacts": "Machines on a line share what its generators make; [[battery|Batteries]] fill from the spare and give it back when generators fall short. A [[breaker]] cuts power, a [[power-meter]] measures it, and a [[power-splitter]] on a junction decides which branches come first when power is short.",
       "mistakes": [
         "Running copper into a big load. A copper line tops out at 4,096 FE a tick, so a motor set above 65,536 SU (4,096 FE a tick) starves on it. Use brass.",
         "Expecting copper and brass to join where they touch. Tiers join only on a [[line-post|pole]] or at a [[breaker]], and only one way: brass feeds copper, never the reverse.",
@@ -574,7 +574,7 @@
     ],
     "automation": [
       "A [[breaker]] cuts power on a redstone signal.",
-      "A [[meter]] gives a comparator signal from 0 to 15 by how much of the line's throughput is flowing, and feeds Display Links.",
+      "A [[power-meter]] gives a comparator signal from 0 to 15 by how much of the line's throughput is flowing, and feeds Display Links.",
       "Engineer's Goggles on a generator, machine or wire show the whole network: what its generators make and what its machines use."
     ],
     "tips": [
@@ -585,8 +585,8 @@
     "related": [
       "line-post",
       "breaker",
-      "meter",
-      "splitter",
+      "power-meter",
+      "power-splitter",
       "battery",
       "lava-generator",
       "electricity",

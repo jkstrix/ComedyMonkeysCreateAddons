@@ -18,6 +18,7 @@
   },
 
   "categories": [
+    { "id": "whats-new", "label": "What's new", "short": "New", "icon": "star" },
     { "id": "guide", "label": "Guide", "single": "Chapter", "icon": "book", "file": "guide.json",
       "title": "The guide",
       "description": "The mod from your first Upgrade Template to a caged Wither, in order. Each chapter ends with what to build next." },

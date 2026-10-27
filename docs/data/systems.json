@@ -214,7 +214,7 @@
           {
             "strategy": {
               "title": "The grid",
-              "body": "A turbine's 46,080 FE a tick runs two and a half full-power motors. Run a brass trunk on poles, feed copper branches off it at the poles, rank the branches with a power [[splitter]] so the important ones come first, and hang an Industrial Battery off the trunk to cover the gaps."
+              "body": "A turbine's 46,080 FE a tick runs two and a half full-power motors. Run a brass trunk on poles, feed copper branches off it at the poles, rank the branches with a [[power-splitter|power Splitter]] so the important ones come first, and hang an Industrial Battery off the trunk to cover the gaps."
             }
           }
         ]
@@ -336,15 +336,27 @@
                   "Copper Sheet, Paper, Iron Bars"
                 ],
                 [
-                  "[[meter]]",
-                  "Both",
-                  "Shows live flow; comparator and Display Link source",
+                  "[[fluid-meter]]",
+                  "Fluid",
+                  "An upright gauge: live flow in mB a tick; comparator and Display Link source",
                   "Copper Ingot, Electron Tube, Glass"
                 ],
                 [
-                  "[[splitter]]",
-                  "Both",
-                  "Fluid: Even, Nearest first or Round robin. Power (on a junction): First, Second or Last per branch",
+                  "[[power-meter]]",
+                  "Power",
+                  "The same gauge lying flat over the wire: live flow in FE a tick",
+                  "Copper Ingot, Electron Tube, Glass"
+                ],
+                [
+                  "[[fluid-splitter]]",
+                  "Fluid",
+                  "On a straight piece: Even, Nearest first or Round robin (right-click)",
+                  "Electron Tube, Brass Sheet"
+                ],
+                [
+                  "[[power-splitter]]",
+                  "Power",
+                  "On a junction: First, Second or Last per branch (Wrench screen)",
                   "Electron Tube, Brass Sheet"
                 ],
                 [
@@ -463,8 +475,10 @@
       "intake",
       "valve",
       "filter",
-      "meter",
-      "splitter",
+      "fluid-meter",
+      "power-meter",
+      "fluid-splitter",
+      "power-splitter",
       "breaker",
       "electricity"
     ]
@@ -1747,7 +1761,7 @@
                   "Lava level (mB and %), output (RPM and SU, or Out of lava)"
                 ],
                 [
-                  "[[meter]]",
+                  "[[fluid-meter|Fluid]] and [[power-meter|Power Line Meters]]",
                   "Meter Flow, Meter Load, Meter Load Bar"
                 ],
                 [
@@ -1791,7 +1805,7 @@
                   "15 during a containment countdown"
                 ],
                 [
-                  "[[meter]]",
+                  "[[fluid-meter|Fluid]] and [[power-meter|Power Line Meters]]",
                   "0 to 15 by the share of the line's throughput flowing"
                 ],
                 [
@@ -1816,7 +1830,8 @@
       }
     ],
     "related": [
-      "meter",
+      "fluid-meter",
+      "power-meter",
       "flight-instruments",
       "electricity",
       "one-block-farming",

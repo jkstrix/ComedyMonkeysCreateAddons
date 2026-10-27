@@ -176,6 +176,23 @@
 .item-head { display: flex; align-items: center; gap: 20px; }
 .item-head .thumb { width: 96px; height: 96px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
 
+/* ---- what's new ---- */
+/* masonry: the sections flow down columns, each only as tall as its notes, so short and long ones pack with no
+   holes (a grid's rows would stretch to the tallest) */
+.release { columns: 2; column-gap: 16px; }
+.release-sec { break-inside: avoid; display: inline-block; width: 100%; margin-bottom: 16px; padding: 18px 20px; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); }
+.release-sec h2 { display: flex; align-items: center; gap: 10px; font-size: 19px; line-height: 1.2; text-transform: uppercase; margin-bottom: 10px; }
+.release-sec h2 svg { flex: none; width: 20px; height: 20px; color: var(--copper); }
+.release-sec .prose { font-size: 14.5px; gap: 10px; }
+.release-sec .prose h4 { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--copper-hi); margin-top: 6px; }
+.release-sec .prose h4:first-child { margin-top: 0; }
+@media (min-width: 1800px) { .release { columns: 3; } }
+@media (max-width: 1000px) { .release { columns: 1; } }
+.new-flag { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; padding: 6px 12px 6px 6px; border-radius: 20px; background: rgba(98, 182, 177, .08); border: 1px solid rgba(98, 182, 177, .35); font: 600 12px var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--cyan); transition: background .2s; }
+.new-flag:hover { background: rgba(98, 182, 177, .16); }
+.new-flag b { background: var(--cyan); color: #0e2222; border-radius: 12px; padding: 3px 8px; font-weight: 700; }
+.new-flag svg { width: 14px; height: 14px; }
+
 /* ---- search ---- */
 .results .row b mark { background: rgba(196, 122, 74, .35); }
 

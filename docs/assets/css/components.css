@@ -66,6 +66,12 @@
 .star-btn svg { width: 16px; height: 16px; }
 @media (hover: none) { .star-btn { opacity: 1; } }
 
+/* a compact strip of cards (a release's highlights): narrower, no blurb, so a whole set fits on one row */
+.cards.compact { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.cards.compact .card p, .cards.compact .card .meta .badge.stat { display: none; }
+.cards.compact .card .body { padding: 10px 12px 12px; }
+.cards.compact .card h3 { font-size: 15px; }
+
 /* compact list row (items, search, favourites) */
 .rows { display: flex; flex-direction: column; gap: 6px; }
 .row { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 8px; background: var(--panel); border: 1px solid var(--line); transition: border-color .2s; }

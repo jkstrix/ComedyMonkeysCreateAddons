@@ -13,6 +13,7 @@ import { categoryPage } from './pages/category.js';
 import { entryPage } from './pages/entry.js';
 import { recipesPage } from './pages/recipes.js';
 import { progressionPage } from './pages/progression.js';
+import { releasesPage } from './pages/releases.js';
 import { searchPage, savedPage, itemPage, notFound } from './pages/misc.js';
 
 const root = document.getElementById('app');
@@ -36,6 +37,8 @@ async function boot() {
   route('', () => homePage(view()));
   route('recipes', (p, q, same) => recipesPage(view(), q, same));
   route('progression', () => progressionPage(view()));
+  route('whats-new', () => releasesPage(view()));
+  route('whats-new/:version', p => releasesPage(view(), p.version));
   route('search', (p, q) => searchPage(view(), q));
   route('favourites', () => savedPage(view()));
   route('item/:ns/:path', p => itemPage(view(), `${p.ns}:${p.path}`));

@@ -204,8 +204,12 @@ public final class RenderExporter {
 				shotStep = 1;
 			}
 			case 1 -> {
-				for (String c : s.setup())
-					command("execute positioned " + s.origin().getX() + " " + s.origin().getY() + " " + s.origin().getZ() + " run " + c);
+				for (String c : s.setup()) {
+					if (c.startsWith("!use "))
+						use(s.origin(), c);
+					else
+						command("execute positioned " + s.origin().getX() + " " + s.origin().getY() + " " + s.origin().getZ() + " run " + c);
+				}
 				wait = s.settle();
 				shotStep = 2;
 			}
@@ -539,6 +543,39 @@ public final class RenderExporter {
 		IntegratedServer server = Minecraft.getInstance().getSingleplayerServer();
 		if (server != null)
 			server.execute(() -> server.getCommands().performPrefixedCommand(server.createCommandSourceStack(), command));
+	}
+
+	/**
+	 * {@code !use <item> <x> <y> <z> <face>}: a fake player uses the item on that face of that block (x y z as ~ offsets
+	 * from the scene's origin), exactly as a player's click would, for things a command can't place properly: wires
+	 * laid on a face, fittings clipped onto a line.
+	 */
+	private static void use(BlockPos origin, String step) {
+		String[] p = step.split("\\s+");
+		IntegratedServer server = Minecraft.getInstance().getSingleplayerServer();
+		if (server == null || p.length < 6)
+			return;
+		server.execute(() -> {
+			try {
+				net.minecraft.server.level.ServerLevel level = server.overworld();
+				BlockPos pos = origin.offset(rel(p[2]), rel(p[3]), rel(p[4]));
+				net.minecraft.core.Direction face = net.minecraft.core.Direction.byName(p[5]);
+				var player = net.neoforged.neoforge.common.util.FakePlayerFactory.getMinecraft(level);
+				ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(p[1])));
+				player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, stack);
+				Vec3 at = Vec3.atCenterOf(pos).add(Vec3.atLowerCornerOf(face.getNormal()).scale(0.5));
+				player.moveTo(at.x + face.getStepX(), at.y + face.getStepY() - 1, at.z + face.getStepZ(), 0, 0);
+				var hit = new net.minecraft.world.phys.BlockHitResult(at, face, pos, false);
+				player.gameMode.useItemOn(player, level, stack, net.minecraft.world.InteractionHand.MAIN_HAND, hit);
+			} catch (RuntimeException e) {
+				report.add("FAILED " + step + ": " + e);
+			}
+		});
+	}
+
+	private static int rel(String coordinate) {
+		String n = coordinate.startsWith("~") ? coordinate.substring(1) : coordinate;
+		return n.isEmpty() ? 0 : Integer.parseInt(n);
 	}
 
 	private static void deleteWorld(Minecraft mc) throws IOException {

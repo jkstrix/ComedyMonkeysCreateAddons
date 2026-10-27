@@ -17,6 +17,7 @@ export const db = {
   made: new Map(),         // game id -> recipes that make it
   used: new Map(),         // game id -> recipes that use it
   names: {},               // game id -> name
+  releases: [],            // releases.json, newest first
 };
 
 /** Fetches a JSON file, revalidating with the server (cheap 304s) so edits show up on reload. */
@@ -34,12 +35,14 @@ async function json(path, fallback) {
 export async function load() {
   db.site = await json('data/site.json');
   const files = db.site.categories.filter(c => c.file);
-  const [lists, recipes, names] = await Promise.all([
+  const [lists, recipes, names, releases] = await Promise.all([
     Promise.all(files.map(c => json(`data/${c.file}`, []))),
     json('data/recipes.json', []),
     json('data/names.json', {}),
+    json('data/releases.json', []),
   ]);
   db.names = names;
+  db.releases = releases;
 
   db.categories = db.site.categories.map(c => ({ ...c, entries: [] }));
   db.categories.forEach(c => db.category.set(c.id, c));

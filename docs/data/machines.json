@@ -2245,7 +2245,7 @@
             "list": [
               "Run it from more generation than it needs: a Lava Generator makes 1,024 FE/t, so it takes three to farm flat out.",
               "Put a [[battery]] on the same line, so a gap in supply is carried through.",
-              "Use a [[splitter|Power Splitter]] to serve the cage's branch First when power runs short.",
+              "Use a [[power-splitter|Power Splitter]] to serve the cage's branch First when power runs short.",
               "Make sure the supply covers the whole 2,048 FE/t on its own: the cage won't take part of it."
             ]
           },

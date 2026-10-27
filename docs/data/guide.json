@@ -421,7 +421,7 @@
         "body": [
           "Brass Casing, four copper sheets, two redstone and an Electron Tube make a [[battery]]: 10,000,000 FE. Put one on the line and the generator's spare fills it; when the lava runs low, it carries the motor. Batteries side by side share one store.",
           {
-            "tip": "Add a [[meter]] and a [[breaker]] to your first line: the Meter shows how much flows, the Breaker switches the circuit off."
+            "tip": "Add a [[power-meter]] and a [[breaker]] to your first line: the Meter shows how much flows, the Breaker switches the circuit off."
           }
         ]
       },
@@ -536,7 +536,7 @@
         "body": [
           "A turbine's output is far beyond copper's 4,096 FE a tick. Run [[power-lines|Brass Power Lines]] (65,536 FE a tick, spans up to 32 blocks) on [[line-post|Line Posts]] as a trunk, and tie copper branches of the same colour at the poles: brass feeds copper there, one way.",
           {
-            "tip": "Put a power [[splitter]] on a junction and rank its branches First, Second or Last. When power runs short, your most important machines keep running."
+            "tip": "Put a [[power-splitter|power Splitter]] on a junction and rank its branches First, Second or Last. When power runs short, your most important machines keep running."
           }
         ]
       },
@@ -582,7 +582,7 @@
       "battery",
       "power-lines",
       "line-post",
-      "splitter",
+      "power-splitter",
       "lines-and-networks"
     ]
   },

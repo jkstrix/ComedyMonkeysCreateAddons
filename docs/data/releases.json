@@ -1,0 +1,136 @@
+[
+  {
+    "version": "2.5.0",
+    "from": "2.0.2",
+    "date": "2026-10-27",
+    "title": "Pipes, wires, batteries and bigger farms",
+    "summary": "Everything since 2.0.2: the mod's own pipes and wires, batteries up to grid scale, Monster Cages and Fish Tanks, a second robot, and a big performance pass, on screen and on the server.",
+    "highlights": [
+      "fluid-lines",
+      "power-lines",
+      "battery",
+      "monster-cage",
+      "netherite-monster-cage",
+      "fish-tank",
+      "helper-bot"
+    ],
+    "sections": [
+      {
+        "title": "Fluid Lines and Power Lines",
+        "icon": "net",
+        "body": [
+          "The mod's own pipes and wires, in copper and brass, replacing Pipez. They need no pump, rotation or power, have no range limit, and lose nothing along the way.",
+          {
+            "list": [
+              "**[[fluid-lines]]** carry fluid from an [[intake]] to every tank it reaches, under glass in a sight window: copper 100 mB a tick, brass 1,000.",
+              "**[[power-lines]]** are thin wires laid flat on floors, walls and ceilings, folding round corners and plugging into machines: copper 4,096 FE a tick, brass 65,536. [[line-post|Line Posts]] stack into poles and hang spans between them.",
+              "**Fittings clip onto the line** instead of going in upgrade slots: the [[intake]], [[valve]], [[filter]] and [[breaker]], and the Meter and Splitter, which look and work differently on [[fluid-meter|pipes]] and [[power-meter|wires]].",
+              "**16 dyes**, applied before you place a line. Two colours never join, so lines can run side by side; bulk washing takes the dye off.",
+              "**Hide them** inside any full block. Engineer's Goggles show the hidden lines.",
+              "**Power networks keep a record** when chunks unload: far-off generators keep running on paper, and no extra chunk is ever loaded.",
+              "Display Link sources, JEI pages, four Ponder scenes and advancements."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Batteries",
+        "icon": "bolt",
+        "body": [
+          {
+            "list": [
+              "The **[[battery]]** stores 10,000,000 FE, in or out at 2,048 FE a tick. Batteries that touch share one store, and a broken Battery keeps its charge as an item.",
+              "Fill a 3×3 footprint with Batteries 3 to 9 blocks high and they form an **Industrial Battery**: 20,000,000 FE a block, hung off the pole network through four insulators on its top corners. Place a Battery on top and it fills the whole layer, like a Create vault.",
+              "A Lightning Rod on top of either adds 250,000 FE a strike."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Monster Cages",
+        "icon": "skull",
+        "body": [
+          {
+            "list": [
+              "Five cages that keep a horde of one kind of monster in a single block: the [[monster-cage|Monster Cage and Brass Monster Cage]], [[flooded-monster-cage|Flooded cages]] for drowned and guardians, and the [[netherite-monster-cage]], which holds up to three Withers in an FE containment field.",
+              "Catch monsters in an [[iron-jar]] (a [[netherite-jar]] for Withers) and feed them [[monster-chow]]. Cull them with a sword or a Deployer for their real loot. The new [[monstrous]] enchantment speeds a cage up.",
+              "If the Netherite cage's power fails, players nearby get five minutes' warning, and then a Wither breaks out."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Fish Tanks",
+        "icon": "drop",
+        "body": [
+          {
+            "list": [
+              "The [[fish-tank|Fish Tank and Brass Fish Tank]] breed cod, salmon, tropical fish, pufferfish, squid, glow squid and axolotls underwater, on [[fish-food]] and piped water.",
+              "One axolotl in 1,200 is born [[blue-axolotl|blue]], and a tank of glow squid gives light. [[fruitful]] works on the tanks as on the pens."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Helper Bot",
+        "icon": "cog",
+        "body": [
+          "[[helper-bot]], the [[trade-bot|Trade Bot]]'s cousin on a swivel post, drives your Create trains from behind the Train Controls and keeps shop beside a Stock Ticker, by exactly the Blaze Burner's rules. He's cheap, comes in 16 dyes, and has an animation for everything a train does."
+        ]
+      },
+      {
+        "title": "Performance",
+        "icon": "layers",
+        "body": [
+          "Big bases and busy servers run much lighter.",
+          {
+            "heading": "Your frame rate"
+          },
+          {
+            "list": [
+              "**Moving parts are drawn with Flywheel** instead of being rebuilt every frame: the drills, pistons, gears, wheels and dials of the Cobblestone, Basalt, Blackstone and Tuff Generators, Magma Engines, Electric Motor, Lava Generator, Geothermal Turbine, Pressure Crucible, String Tangler, Stone Infuser, Auto Harvester, Wellspring, Animal Pens, Cuckoo Clock, Compact Gyroscope and Torque Rotor. With 400 in view, Wellsprings went from about 160 to 1,300 frames a second, and Cobblestone Generators from 160 to 920.",
+              "Also drawn through Flywheel: Fluid and Power Lines and their spans, upgraded chests and their lids, the [[trade-bot|Trade Bot]]'s station, the [[helper-bot]], and the solid parts of Monster Cages and Fish Tanks. Parts are only sent when they change, so still lines and closed chests cost almost nothing.",
+              "**Monster Cages and Fish Tanks** draw the creatures and items inside by distance, with a fair share each frame, so a wall of them doesn't stall. They're left out of shader shadow passes, their display mobs are only built near you, and only the nearest four of each looping sound play."
+            ]
+          },
+          {
+            "heading": "The server"
+          },
+          {
+            "list": [
+              "**Power networks are a saved record**, read only when something changes. They plan once a second, only while a machine on them is running, and never load a chunk; generators and batteries in unloaded chunks run on paper instead of ticking.",
+              "**Batteries** work out each block's share without scanning the whole bank, and a plain Battery only updates your screen when its charge moves by an eighth.",
+              "**Monster Cages and Fish Tanks** send smaller packets (the caged creature only when it changes), stagger and merge their updates, merge their drops, and let their stress settle instead of flickering."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Changed",
+        "icon": "rotate",
+        "body": [
+          {
+            "list": [
+              "**Pipez Covers are retired.** Covers already placed keep working, but they can't be crafted any more. Pipez feeding Blaze Burners and Portable Engines stays.",
+              "**[[lava-generator|Lava Generators]]** that touch share their stored FE, and generators always run flat out while they have fuel.",
+              "**[[geothermal-turbine]]** power level: set how hard it runs in its screen.",
+              "**Cables plug into machines** at a socket in the middle of a face, and an upright [[electric-motor]] can be powered from a cable underneath it."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Fixed",
+        "icon": "check",
+        "body": [
+          {
+            "list": [
+              "**[[magma-engine|Magma Engines]] and [[electric-motor|Electric Motors]] on Create Aeronautics ships** kept burning lava but turned nothing once the ship was assembled. They turn again.",
+              "**[[trade-bot|Trade Bot]]'s arm** no longer reaches over his head or folds back through his eyes when he uses a drawer, a depot or a package."
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1392,7 +1392,7 @@
     ],
     "summary": "The fitting that makes a Fluid Line move fluid: clipped on the side that faces a tank, it draws that tank's fluid in. It replaces the pump.",
     "tags": [
-      "fitting",
+      "fluid fitting",
       "fluids",
       "lines"
     ],
@@ -1451,7 +1451,7 @@
     ],
     "summary": "A fitting that shuts a Fluid Line on a redstone signal, and throttles it in 10% steps with its wheel.",
     "tags": [
-      "fitting",
+      "fluid fitting",
       "fluids",
       "lines"
     ],
@@ -1460,7 +1460,7 @@
       "what": "Clip it round a straight piece of [[fluid-lines|Fluid Line]]. A redstone signal shuts it. Right-click turns its wheel a tenth shut; sneak + right-click opens it a tenth.",
       "why": "To stop a line when a tank is full, a machine is off, or you're working on it, and to share a source fairly between two lines by holding one back.",
       "when": "When you first need control over a line. It costs a Fluid Valve and a copper sheet.",
-      "interacts": "Past a shut Valve the line's windows show empty. Pair it with a comparator on a tank, or a [[meter]], to switch on demand.",
+      "interacts": "Past a shut Valve the line's windows show empty. Pair it with a comparator on a tank, or a [[fluid-meter]], to switch on demand.",
       "mistakes": [
         "Using an empty hand when you meant to open it: plain right-click closes a step, sneak opens one.",
         "Fitting it on a bend or a junction. Fittings go on straight pieces, one per block."
@@ -1490,7 +1490,7 @@
     "related": [
       "fluid-lines",
       "intake",
-      "meter",
+      "fluid-meter",
       "lines-and-networks"
     ],
     "tips": [
@@ -1505,7 +1505,7 @@
     ],
     "summary": "A fitting that lets one fluid past and nothing else: for sorting fluids part-way along a Fluid Line.",
     "tags": [
-      "fitting",
+      "fluid fitting",
       "fluids",
       "lines"
     ],
@@ -1543,7 +1543,7 @@
     "related": [
       "fluid-lines",
       "intake",
-      "splitter",
+      "fluid-splitter",
       "lines-and-networks"
     ],
     "tips": [
@@ -1551,40 +1551,48 @@
     ]
   },
   {
-    "id": "meter",
-    "name": "Meter",
+    "id": "fluid-meter",
+    "name": "Fluid Line Meter",
     "registry": [
       "comedymonkeysaddons:meter"
     ],
-    "summary": "A fitting for Fluid or Power Lines whose needle shows the live flow through it. Comparators and Display Links read it.",
+    "summary": "A gauge clipped round a straight piece of Fluid Line, standing upright on its stem: its needle swings with the fluid going through.",
     "tags": [
-      "fitting",
-      "lines",
+      "fluid fitting",
       "readouts"
     ],
     "stage": "mid",
     "teach": {
-      "what": "Clip it round a straight piece of [[fluid-lines|Fluid Line]] or [[power-lines|Power Line]]. Its dial shows what's flowing now; goggles give the figure in mB or FE a tick.",
-      "why": "It answers \"is anything moving, and how much?\" at a glance, and turns that into redstone.",
-      "when": "As soon as your lines get long enough that you can't see both ends.",
-      "interacts": "A comparator reads 0 to 15 by the fraction of the line's throughput that's flowing. Display Links read Meter Flow, Meter Load or a Meter Load Bar onto a board.",
+      "what": "Clip it round a straight piece of [[fluid-lines|Fluid Line]]: a housing ring round the pipe, a short stem, and a round gauge standing on top. Its needle swings with the fluid flowing past; Engineer's Goggles give the figure in **mB a tick**.",
+      "why": "It answers \"is anything moving, and how much?\" at a glance, and turns that into a redstone signal.",
+      "when": "As soon as your fluid lines run far enough that you can't see both ends.",
+      "interacts": "A comparator reads 0 to 15 by the share of the line's throughput that's flowing: of 100 mB a tick on copper, 1,000 on brass. Display Links read Meter Flow, Meter Load or a Meter Load Bar onto a board.",
       "mistakes": [
-        "Reading the comparator as an amount. It's a fraction of the line's own throughput, so the same flow reads lower on brass than on copper.",
-        "Fitting it on a junction or a bend. Like every fitting except the power Splitter, it needs a straight piece."
+        "Reading the comparator as an amount. It's a share of the line's own throughput, so the same flow reads lower on brass than on copper.",
+        "Fitting it on a junction or a bend. It needs a straight piece.",
+        "Expecting it to move anything. It only measures: without an [[intake]] upstream, nothing flows past it."
       ]
     },
     "specs": [
       [
         "Fits",
-        "A straight Fluid Line or Power Line"
+        "A straight piece of Fluid Line"
+      ],
+      [
+        "Reads",
+        "mB a tick"
       ],
       [
         "Comparator",
-        "0 to 15 by load"
+        "0 to 15: share of 100 mB/t (copper) or 1,000 mB/t (brass)"
       ],
       [
         "Display Link sources",
         "Meter Flow, Meter Load, Meter Load Bar"
+      ],
+      [
+        "Same item as",
+        "[[power-meter]]: it changes with the line it's on"
       ],
       [
         "Recipe",
@@ -1595,50 +1603,60 @@
       "Shapeless crafting: a Copper Ingot, an Electron Tube and Glass."
     ],
     "uses": [
-      "Right-click a straight piece of line with it.",
-      "Point a Display Link at it for a live flow board."
+      "Right-click a straight piece of Fluid Line with it.",
+      "Point a Display Link at it for a live flow board.",
+      "Run a comparator off it to switch something on when a line starts or stops flowing."
     ],
     "tips": [
-      "A Meter next to a generator's output tells you how close a copper line is to its 4,096 FE cap: time for brass when it reads near 15."
+      "Put one near the [[intake]] while you build: its needle shows the line is drawing before you've reached the far end."
     ],
     "related": [
       "fluid-lines",
-      "power-lines",
-      "readouts",
-      "lines-and-networks"
+      "intake",
+      "valve",
+      "fluid-splitter",
+      "power-meter",
+      "readouts"
     ]
   },
   {
-    "id": "splitter",
-    "name": "Splitter",
+    "id": "fluid-splitter",
+    "name": "Fluid Line Splitter",
     "registry": [
       "comedymonkeysaddons:splitter"
     ],
-    "summary": "Decides how a line shares: on a Fluid Line it sets Even, Nearest first or Round robin; on a Power Line junction it ranks the branches First, Second or Last.",
+    "summary": "A hub with a dial disc, clipped round a straight piece of Fluid Line, that decides how the ends beyond it share the flow: Even, Nearest first or Round robin.",
     "tags": [
-      "fitting",
-      "lines"
+      "fluid fitting"
     ],
     "stage": "mid",
     "teach": {
-      "what": "Two jobs in one item. On a Fluid Line it clips round a straight piece and decides how the ends beyond it share: evenly, nearest first, or one at a time in turn. On a Power Line it sits on a junction of three or four ways (floor, wall or ceiling) and ranks each branch First, Second or Last for when power runs short.",
-      "why": "Without one, a Fluid Line shares evenly and a Power Line shares evenly between its machines. When there isn't enough to go round, a Splitter decides who goes without.",
-      "when": "When a short supply starts stopping the wrong machines, or one tank should fill before the others.",
-      "interacts": "Power branches set First get everything they want before Second, then Last; branches on one level share evenly. Splitters further down a branch rank within it. Its dial points at the First branch (the fork mark when all are level).",
+      "what": "Clip it round a straight piece of [[fluid-lines|Fluid Line]], then right-click it to choose how the ends downstream share: **Even** (every end that can take more gets the same), **Nearest first** (the nearest end fills first, then the next) or **Round robin** (one end at a time, in turn). The mark on its dial shows which: a fork, one arrow, or a curled arrow.",
+      "why": "Without one, a line shares evenly. A Splitter lets one tank fill before the rest, or feeds machines one at a time.",
+      "when": "When one tank should fill before the others, or a line feeds more ends than its flow can fill at once.",
+      "interacts": "It decides only for the ends beyond it. The [[intake]] still sets what comes in, and a [[valve]] or [[filter]] still applies on the way.",
       "mistakes": [
-        "Right-clicking a power Splitter to change it: that only works on Fluid Lines. A power Splitter's priorities are set in its screen, opened with a Wrench (sneak + Wrench takes it off).",
-        "Putting a power Splitter on a straight piece. It goes on a junction, a T or a cross.",
-        "Setting everything to First. All First is the same as all Second: even sharing."
+        "Reaching for a Wrench to change it. On a Fluid Line a plain right-click cycles the mode.",
+        "Putting it on a junction. On a Fluid Line it goes on a straight piece, before the line branches.",
+        "Expecting more flow. It only shares the line's throughput; for more, use brass."
       ]
     },
     "specs": [
       [
-        "Fluid modes",
+        "Fits",
+        "A straight piece of Fluid Line"
+      ],
+      [
+        "Modes",
         "Even, Nearest first, Round robin"
       ],
       [
-        "Power priorities",
-        "First, Second (default), Last, per branch"
+        "Change it",
+        "Right-click"
+      ],
+      [
+        "Same item as",
+        "[[power-splitter]]: it changes with the line it's on"
       ],
       [
         "Recipe",
@@ -1649,18 +1667,151 @@
       "Shapeless crafting: an Electron Tube and a Brass Sheet."
     ],
     "uses": [
-      "Fluid Line: right-click a straight piece with it, then right-click to cycle its mode.",
-      "Power Line: place it on a junction, then Wrench it for its screen. Each row shows a branch, what's down it, and its priority (or Power in)."
+      "Right-click a straight piece of Fluid Line with it, then right-click to cycle its mode."
+    ],
+    "tips": [
+      "Nearest first fills the closest tank to the brim before the next gets a drop: put the tank that matters most nearest."
+    ],
+    "related": [
+      "fluid-lines",
+      "intake",
+      "valve",
+      "fluid-meter",
+      "power-splitter"
+    ]
+  },
+  {
+    "id": "power-meter",
+    "name": "Power Line Meter",
+    "registry": [
+      "comedymonkeysaddons:meter"
+    ],
+    "summary": "The same Meter clipped over a Power Line: the gauge lies flat on the wire, dial facing out, and its needle shows the FE going through.",
+    "tags": [
+      "power fitting",
+      "readouts"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "Clip it round a straight piece of [[power-lines|Power Line]]. On a wire the gauge lies on the face the wire is fixed to, dial facing out, clipped over the cable. Its needle swings with the power flowing; goggles give it in **FE a tick**.",
+      "why": "It tells you how hard a line is working: whether a copper run is near its cap, and whether anything is drawing at all.",
+      "when": "When your first generator feeds more than one machine, or a copper line might be running out of room.",
+      "interacts": "A comparator reads 0 to 15 by the share of the line's throughput that's flowing: of 4,096 FE a tick on copper, 65,536 on brass. Display Links read Meter Flow, Meter Load or a Meter Load Bar.",
+      "mistakes": [
+        "Reading the comparator as an amount. It's a share of the line's throughput, so the same flow reads far lower on brass.",
+        "Fitting it on a junction. Meters need a straight piece; the [[power-splitter]] is the one that goes on junctions.",
+        "Looking for it on a span. Fittings go on wires laid on a surface, not on the cables hung between posts."
+      ]
+    },
+    "specs": [
+      [
+        "Fits",
+        "A straight piece of laid Power Line"
+      ],
+      [
+        "Reads",
+        "FE a tick"
+      ],
+      [
+        "Comparator",
+        "0 to 15: share of 4,096 FE/t (copper) or 65,536 FE/t (brass)"
+      ],
+      [
+        "Display Link sources",
+        "Meter Flow, Meter Load, Meter Load Bar"
+      ],
+      [
+        "Same item as",
+        "[[fluid-meter]]: it changes with the line it's on"
+      ],
+      [
+        "Recipe",
+        "Copper Ingot + Electron Tube + Glass"
+      ]
+    ],
+    "obtain": [
+      "Shapeless crafting: a Copper Ingot, an Electron Tube and Glass."
+    ],
+    "uses": [
+      "Right-click a straight piece of Power Line with it.",
+      "Point a Display Link at it for a live power board."
+    ],
+    "tips": [
+      "A Meter next to a generator's output tells you how close a copper line is to its 4,096 FE cap: time for brass when it reads near 15."
+    ],
+    "related": [
+      "power-lines",
+      "breaker",
+      "power-splitter",
+      "fluid-meter",
+      "electricity",
+      "readouts"
+    ]
+  },
+  {
+    "id": "power-splitter",
+    "name": "Power Line Splitter",
+    "registry": [
+      "comedymonkeysaddons:splitter"
+    ],
+    "summary": "The same Splitter set on a Power Line junction: a low round body whose dial points at the branch served first. Its Wrench screen ranks each branch First, Second or Last.",
+    "tags": [
+      "power fitting"
+    ],
+    "stage": "mid",
+    "teach": {
+      "what": "Place it on a junction of [[power-lines|Power Line]], a T or a cross, on a floor, wall or ceiling. Wrench it for its screen: each row is a branch, what's down it, and its priority (or Power in). When there isn't enough power for everything, **First** branches get all they want, then **Second**, then **Last**.",
+      "why": "Without one, a Power Line shares evenly between its machines. When power runs short, a Splitter decides who goes without.",
+      "when": "When a short supply starts stopping the wrong machines.",
+      "interacts": "Branches on one level share evenly. Splitters further down a branch rank within it. Its dial points at the First branch (the fork mark when all are level).",
+      "mistakes": [
+        "Right-clicking it to change it. That only works on Fluid Lines: a power Splitter's priorities are set in its screen, opened with a Wrench (sneak + Wrench takes it off).",
+        "Putting it on a straight piece. It belongs on a junction, a T or a cross; left on a straight wire it drops off.",
+        "Setting everything to First. All First is the same as all Second: even sharing."
+      ]
+    },
+    "specs": [
+      [
+        "Fits",
+        "A Power Line junction (T or cross), floor, wall or ceiling"
+      ],
+      [
+        "Priorities",
+        "First, Second (default), Last, per branch"
+      ],
+      [
+        "Change it",
+        "Wrench: its screen"
+      ],
+      [
+        "Take it off",
+        "Sneak + Wrench"
+      ],
+      [
+        "Same item as",
+        "[[fluid-splitter]]: it changes with the line it's on"
+      ],
+      [
+        "Recipe",
+        "Electron Tube + Brass Sheet"
+      ]
+    ],
+    "obtain": [
+      "Shapeless crafting: an Electron Tube and a Brass Sheet."
+    ],
+    "uses": [
+      "Place it on a junction, then Wrench it for its screen. Its header shows the power coming in and whether there's enough for every branch."
     ],
     "tips": [
       "Put the [[netherite-monster-cage]] on a First branch. When power is short, the Withers' field should be the last thing to go dark."
     ],
     "related": [
-      "fluid-lines",
       "power-lines",
       "breaker",
-      "lines-and-networks",
-      "electricity"
+      "power-meter",
+      "netherite-monster-cage",
+      "electricity",
+      "fluid-splitter"
     ]
   },
   {
@@ -1671,7 +1822,7 @@
     ],
     "summary": "A switch for Power Lines: its lever or a redstone signal cuts the power, and it can join a brass run to a copper one.",
     "tags": [
-      "fitting",
+      "power fitting",
       "power",
       "lines"
     ],
@@ -1713,7 +1864,7 @@
     "related": [
       "power-lines",
       "line-post",
-      "splitter",
+      "power-splitter",
       "lines-and-networks"
     ],
     "tips": [

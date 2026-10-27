@@ -25,6 +25,7 @@ docs/
     systems.json
     guide.json          the long-form guide's chapters
     recipes.json        generated from the mod's recipe files (see "Recipes")
+    releases.json       the "What's new" page: one object per release, newest first (see below)
   assets/
     css/                tokens, base, layout, components, pages, print
     js/                 core/ (data, router, search, storage), ui/ (components), pages/
@@ -152,7 +153,9 @@ and entities into `docs/assets/renders/`, then draws an icon for **every game id
 A scene is a list of commands with `~` at the scene's origin; helpers outside its `region` (Creative
 Motors, Blaze Burners, walls) run it without being drawn. Block-entity NBT fills machines (lava in
 tanks, a captive in a jar), so the pictures show them working. `"block"` and `"variants"` repeat a
-scene for each tier. Blocks face south and the camera looks from the south-east, so fronts are on
+scene for each tier. A step `!use <item> x y z face` has a fake player use the item on that face of
+that block, as a click would: it lays wires on a face and clips fittings onto lines, which
+commands can't. Blocks face south and the camera looks from the south-east, so fronts are on
 the left. The code is `src/main/java/.../client/dev/RenderExporter.java`; it does nothing unless
 the game is started by this run.
 
@@ -166,6 +169,21 @@ node tools/website/import-recipes.mjs
 
 Re-run it when recipes change. The Recipes page, each entry's "How to make" and "Used in", and
 ingredient links all come from it.
+
+## What's new (`releases.json`)
+
+One object per release, newest first; `#/whats-new` shows the newest, `#/whats-new/<version>` any
+other, and the home page links the newest. Add the next release at the top:
+
+```jsonc
+{
+  "version": "2.6.0", "from": "2.5.0", "date": "2026-11-20",
+  "title": "A few words",
+  "summary": "A sentence or two.",
+  "highlights": ["entry-id", "entry-id"],        // cards of the entries it added
+  "sections": [{ "title": "Fixed", "icon": "check", "body": [{ "list": ["...", "..."] }] }]
+}
+```
 
 ## Site settings (`site.json`)
 
