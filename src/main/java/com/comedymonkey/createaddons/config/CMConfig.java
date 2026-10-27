@@ -88,6 +88,8 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue cageWarningSeconds, cageEscapeSeconds, cageAlarmRange;
 		public final ModConfigSpec.BooleanValue cageEscapes;
 		public final ModConfigSpec.DoubleValue cageGrumbleVolume;
+		public final ModConfigSpec.IntValue fishTankCapacity, brassFishTankCapacity, fishTankBreedSeconds, fishTankWaterPerBirth, fishTankWater, brassFishTankWater;
+		public final ModConfigSpec.DoubleValue fishTankStress, brassFishTankStress;
 		public final ModConfigSpec.DoubleValue tanglerStressImpact;
 		public final ModConfigSpec.DoubleValue infuserStressImpact;
 
@@ -345,6 +347,27 @@ public final class CMConfig {
 				.translation("comedymonkeysaddons.configuration.cageEscapes").define("escapes", true);
 			cageGrumbleVolume = builder.comment("Volume of the caged monsters' own sounds, which they make now and then.")
 				.translation("comedymonkeysaddons.configuration.cageGrumbleVolume").defineInRange("grumbleVolume", 0.35, 0.0, 1.0);
+			builder.pop();
+
+			builder.comment("Fish Tanks: breed one kind of fish, squid or axolotl, as the Animal Pens breed animals. Faster shafts",
+					"breed faster (the times are at 64 RPM); each birth eats a Fish Food and uses water. Fruitful works on them.")
+				.push("fishTank");
+			fishTankCapacity = builder.comment("Creatures the Fish Tank holds.")
+				.translation("comedymonkeysaddons.configuration.fishTankCapacity").defineInRange("capacity", 128, 1, 4096);
+			brassFishTankCapacity = builder.comment("Creatures the Brass Fish Tank holds.")
+				.translation("comedymonkeysaddons.configuration.brassFishTankCapacity").defineInRange("brassCapacity", 512, 1, 4096);
+			fishTankBreedSeconds = builder.comment("Seconds between breedings at 64 RPM. (Axolotl young grow up in the Animal Pens' time.)")
+				.translation("comedymonkeysaddons.configuration.fishTankBreedSeconds").defineInRange("secondsPerBreeding", 300, 1, 36000);
+			fishTankWaterPerBirth = builder.comment("Water each birth uses, in millibuckets.")
+				.translation("comedymonkeysaddons.configuration.fishTankWaterPerBirth").defineInRange("waterPerBirth", 250, 0, 16000);
+			fishTankWater = builder.comment("Water the Fish Tank holds, in millibuckets.")
+				.translation("comedymonkeysaddons.configuration.fishTankWater").defineInRange("tank", 4000, 1000, 1000000);
+			brassFishTankWater = builder.comment("Water the Brass Fish Tank holds, in millibuckets.")
+				.translation("comedymonkeysaddons.configuration.brassFishTankWater").defineInRange("brassTank", 16000, 1000, 1000000);
+			fishTankStress = builder.comment("Stress per RPM of the Fish Tank while it works.")
+				.translation("comedymonkeysaddons.configuration.fishTankStress").defineInRange("stressPerRpm", 4.0, 0.0, 1024.0);
+			brassFishTankStress = builder.comment("Stress per RPM of the Brass Fish Tank while it works.")
+				.translation("comedymonkeysaddons.configuration.brassFishTankStress").defineInRange("brassStressPerRpm", 16.0, 0.0, 1024.0);
 			builder.pop();
 
 			builder.comment("Cuckoo Clock: while it turns, villagers near it restock at 8:00 and 12:00 (game time), and it chimes",

@@ -101,6 +101,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		com.comedymonkey.createaddons.content.crucible.PressureCrucibleBlockEntity.clientTicker = PressureCrucibleSounds::tick;
 		// The Monster Cages' hum and bubbles run from their client ticks
 		com.comedymonkey.createaddons.content.cage.MonsterCageBlockEntity.clientTicker = MonsterCageSounds::tick;
+		// The Fish Tanks' pump and bubbles, and their creatures swimming, run from their client ticks
+		com.comedymonkey.createaddons.content.tank.FishTankBlockEntity.clientTicker = FishTankSounds::tick;
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ChestSortButton::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onScreenInit);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseScrolled);
@@ -149,6 +151,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		MagmaEngineSounds.forget();
 		PressureCrucibleSounds.forget();
 		MonsterCageSounds.forget();
+		FishTankSounds.forget();
 		Hearing.forget();
 		BottledAnimalRenderer.forget();
 		MonsterJarRenderer.forget();
@@ -162,6 +165,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.register(ModMenus.AUTO_HARVESTER.get(), AutoHarvesterScreen::new);
 		event.register(ModMenus.ANIMAL_PEN.get(), AnimalPenScreen::new);
 		event.register(ModMenus.MONSTER_CAGE.get(), MonsterCageScreen::new);
+		event.register(ModMenus.FISH_TANK.get(), FishTankScreen::new);
 	}
 
 	private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -176,6 +180,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.CUCKOO_CLOCK.get(), CuckooClockRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ANIMAL_PEN.get(), AnimalPenRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.MONSTER_CAGE.get(), MonsterCageRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.FISH_TANK.get(), FishTankRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.MAGMA_ENGINE.get(), MagmaEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ELECTRIC_MOTOR.get(), ElectricRenderers.Motor::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);
@@ -214,6 +219,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		AutoHarvesterRenderer.registerModels(event);
 		event.register(AnimalPenRenderer.MILK);
 		MonsterCageRenderer.registerModels(event);
+		FishTankRenderer.registerModels(event);
 		event.register(MonsterJarRenderer.IRON);
 		event.register(MonsterJarRenderer.NETHERITE);
 		CuckooClockRenderer.registerModels(event);

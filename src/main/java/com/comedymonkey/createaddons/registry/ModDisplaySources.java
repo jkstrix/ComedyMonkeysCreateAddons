@@ -1,6 +1,7 @@
 package com.comedymonkey.createaddons.registry;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.cage.FarmDisplaySources;
 import com.comedymonkey.createaddons.content.engine.MagmaEngineDisplaySources;
 import com.comedymonkey.createaddons.content.line.LineDisplaySources;
 import com.comedymonkey.createaddons.content.wellspring.WellspringDisplaySources;
@@ -34,6 +35,15 @@ public final class ModDisplaySources {
 	public static final DeferredHolder<DisplaySource, LineDisplaySources.LoadBar> LINE_METER_LOAD_BAR =
 		SOURCES.register("line_meter_load_bar", LineDisplaySources.LoadBar::new);
 
+	public static final DeferredHolder<DisplaySource, FarmDisplaySources.Count> FARM_COUNT =
+		SOURCES.register("farm_count", FarmDisplaySources.Count::new);
+	public static final DeferredHolder<DisplaySource, FarmDisplaySources.Status> FARM_STATUS =
+		SOURCES.register("farm_status", FarmDisplaySources.Status::new);
+	public static final DeferredHolder<DisplaySource, FarmDisplaySources.Water> FARM_WATER =
+		SOURCES.register("farm_water", FarmDisplaySources.Water::new);
+	public static final DeferredHolder<DisplaySource, FarmDisplaySources.Containment> CAGE_CONTAINMENT =
+		SOURCES.register("cage_containment", FarmDisplaySources.Containment::new);
+
 	/** From common setup: which blocks offer which sources. */
 	public static void bindBlocks() {
 		DisplaySource.BY_BLOCK.add(ModBlocks.MAGMA_ENGINE.get(), MAGMA_ENGINE_LAVA.get());
@@ -44,6 +54,16 @@ public final class ModDisplaySources {
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_FILL.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_FILL_BAR.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_GENERATION.get());
+		// every cage and tank: its count and status; water in the Flooded cages and tanks; the Netherite cage's field (D68)
+		for (var farm : java.util.List.of(ModBlocks.MONSTER_CAGE, ModBlocks.BRASS_MONSTER_CAGE, ModBlocks.FLOODED_MONSTER_CAGE,
+				ModBlocks.BRASS_FLOODED_MONSTER_CAGE, ModBlocks.NETHERITE_MONSTER_CAGE, ModBlocks.FISH_TANK, ModBlocks.BRASS_FISH_TANK)) {
+			DisplaySource.BY_BLOCK.add(farm.get(), FARM_COUNT.get());
+			DisplaySource.BY_BLOCK.add(farm.get(), FARM_STATUS.get());
+		}
+		for (var wet : java.util.List.of(ModBlocks.FLOODED_MONSTER_CAGE, ModBlocks.BRASS_FLOODED_MONSTER_CAGE, ModBlocks.FISH_TANK,
+				ModBlocks.BRASS_FISH_TANK))
+			DisplaySource.BY_BLOCK.add(wet.get(), FARM_WATER.get());
+		DisplaySource.BY_BLOCK.add(ModBlocks.NETHERITE_MONSTER_CAGE.get(), CAGE_CONTAINMENT.get());
 		// a line with a Meter on it
 		for (var line : java.util.List.of(ModBlocks.COPPER_FLUID_LINE, ModBlocks.BRASS_FLUID_LINE, ModBlocks.COPPER_POWER_LINE, ModBlocks.BRASS_POWER_LINE)) {
 			DisplaySource.BY_BLOCK.add(line.get(), LINE_METER_FLOW.get());

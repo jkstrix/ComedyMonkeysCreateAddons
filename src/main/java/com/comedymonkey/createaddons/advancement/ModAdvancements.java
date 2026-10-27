@@ -38,6 +38,10 @@ public final class ModAdvancements {
 	public static final String PEN_CULL = "pen_cull";
 	public static final String PEN_FULL = "pen_full";
 	public static final String BRASS_PEN_FULL = "brass_pen_full";
+	public static final String CAGE_MONSTER = "cage_monster";
+	public static final String CAGE_WITHER = "cage_wither";
+	/** A blue axolotl born in a Fish Tank (1 in 1,200). */
+	public static final String TANK_BLUE_AXOLOTL = "tank_blue_axolotl";
 	public static final String CLOCK_RESTOCK = "clock_restock";
 	public static final String CLOCK_NOON = "clock_noon";
 	public static final String CLOCK_MARKET = "clock_market";

@@ -89,6 +89,11 @@ public final class ModBlockEntities {
 				ModBlocks.BRASS_FLOODED_MONSTER_CAGE.get(), ModBlocks.NETHERITE_MONSTER_CAGE.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.tank.FishTankBlockEntity>> FISH_TANK =
+		BLOCK_ENTITY_TYPES.register("fish_tank",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.tank.FishTankBlockEntity::new, ModBlocks.FISH_TANK.get(), ModBlocks.BRASS_FISH_TANK.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<IncineratorBlockEntity>> INCINERATOR =
 		BLOCK_ENTITY_TYPES.register("incinerator",
 			() -> BlockEntityType.Builder.of(IncineratorBlockEntity::new, ModBlocks.INCINERATOR.get()).build(null));

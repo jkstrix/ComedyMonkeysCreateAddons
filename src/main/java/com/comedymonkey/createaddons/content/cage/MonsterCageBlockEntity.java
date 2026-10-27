@@ -12,7 +12,9 @@ import java.util.function.Consumer;
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
+import com.comedymonkey.createaddons.content.FillOnly;
 import com.comedymonkey.createaddons.content.FixedStress;
 import com.comedymonkey.createaddons.content.MachineEnchantments;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
@@ -130,6 +132,7 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	private final ChowHandler chow;
 	private final ItemStackHandler output;
 	private final FluidTank water;
+	private final IFluidHandler waterIn;
 	private final CageEnergy energy;
 	private final IItemHandler automation = new AutomationHandler();
 	private final IItemHandlerModifiable captiveSlot = new CaptiveHandler();
@@ -184,6 +187,7 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 				return isFlooded() ? super.fill(resource, action) : 0;
 			}
 		};
+		waterIn = new FillOnly(water);
 		energy = new CageEnergy(tier == CageTier.NETHERITE ? CMConfig.Server.get(CMConfig.SERVER.cageFeBuffer) : 0);
 	}
 
@@ -281,7 +285,38 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 			amount -= chow.extractItem(i, amount, false).getCount();
 	}
 
+	/** Ponder only: this monster, so many of them (armed drowned among them). */
+	public void setPonderHorde(ItemStack jar, int monsters, int armedOnes) {
+		if (!ItemStack.isSameItemSameComponents(jar, captive) || armedOnes != armed) {
+			sample = null;
+			shown.clear();
+		}
+		captive = jar.copyWithCount(1);
+		count = jar.isEmpty() ? 0 : monsters;
+		armed = Math.min(armedOnes, count);
+	}
+
+	/** Ponder only: what's in the bowl, and a Flooded cage's water. */
+	public void setPonderSupplies(ItemStack food, int waterMb) {
+		for (int i = 0; i < chow.getSlots(); i++)
+			chow.setStackInSlot(i, i == 0 ? food.copy() : ItemStack.EMPTY);
+		water.setFluid(waterMb > 0 ? new FluidStack(Fluids.WATER, Math.min(waterMb, water.getCapacity())) : FluidStack.EMPTY);
+	}
+
+	/** Ponder only: the Netherite cage's field up, or down with so many ticks to the next escape. */
+	public void setPonderField(boolean up, int ticksToEscape) {
+		fieldUp = up;
+		escapeIn = up ? -1 : ticksToEscape;
+		paused = false;
+	}
+
 	private void setCaptive(ItemStack jar) {
+		// the first caged monster, and the first caged Wither: to whoever's near, however the jar went in
+		if (!jar.isEmpty() && level != null && !level.isClientSide) {
+			ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.CAGE_MONSTER, ItemStack.EMPTY, 1);
+			if (CageRules.kindOf(MonsterJarItem.typeOf(jar)) == CageRules.Kind.WITHER)
+				ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.CAGE_WITHER, ItemStack.EMPTY, 1);
+		}
 		captive = jar;
 		count = jar.isEmpty() ? 0 : 1;
 		armed = 0;
@@ -361,10 +396,9 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 				else if (type == null || !CageRules.fits(getTier(), isFlooded(), type))
 					player.displayClientMessage(tr("wrong_cage", type == null ? Component.empty() : type.getDescription()), true);
 				else {
+					// the jar goes in with its monster and comes back out with it (handing back an empty one duplicated jars)
 					setCaptive(stack.split(1));
 					level.playSound(null, worldPosition, ModSounds.cage("jar_in"), SoundSource.BLOCKS, 1, 1);
-					if (!player.getAbilities().instabuild || player instanceof FakePlayer)
-						player.getInventory().placeItemBackInInventory(((MonsterJarItem) captive.getItem()).empty());
 				}
 			}
 			return true;
@@ -687,8 +721,9 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 		return water;
 	}
 
+	/** What pipes see of a Flooded cage's water: it goes in, nothing comes out. */
 	public IFluidHandler getWaterHandler() {
-		return water;
+		return waterIn;
 	}
 
 	// ---------------------------------------------------------------- the Netherite cage's field
@@ -947,6 +982,11 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	private void clientTick() {
 		if (canGrow())
 			progress = Math.min(progress + Math.abs(getSpeed()) / getTier().referenceRpm(), interval() - 1);
+		// the drowning counts on here too, between syncs (the server only sends the conversion itself)
+		if (isDrowning() && water.getFluidAmount() > 0)
+			drownTicks = Math.min(drownTicks + 1, DROWN_TICKS - 1);
+		else
+			drownTicks = 0;
 		int want = hasMonster() ? Math.min(count, isNetherite() ? 1 : SHOWN) : 0;
 		while (shown.size() > want)
 			shown.removeLast();
@@ -1011,13 +1051,20 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 		return armed > 0 ? tr("horde_armed", name, count, getCapacity(), armed) : tr("horde", name, count, getCapacity());
 	}
 
+	/** The Netherite cage's field: up, down, counting down to an escape, or the clock to the next one. */
+	public Component getContainment() {
+		if (fieldUp)
+			return tr("field_up");
+		return escapeIn < 0 ? tr("field_down")
+			: paused ? tr("alarm_paused", time(escapeIn))
+			: isWarning() ? tr("alarm", time(escapeIn)) : tr("next_escape", time(escapeIn));
+	}
+
 	public Component getStatus() {
 		if (!hasMonster())
 			return tr("empty");
 		if (isNetherite() && !fieldUp)
-			return escapeIn < 0 ? tr("field_down")
-				: paused ? tr("alarm_paused", time(escapeIn))
-				: isWarning() ? tr("alarm", time(escapeIn)) : tr("next_escape", time(escapeIn));
+			return getContainment();
 		if (isDrowning())
 			return water.getFluidAmount() > 0 ? tr("drowning", Math.round(100f * drownTicks / DROWN_TICKS)) : tr("needs_water");
 		if (getSpeed() == 0 || isOverStressed())

@@ -39,5 +39,8 @@ public final class ModMenus {
 	public static final DeferredHolder<MenuType<?>, MenuType<com.comedymonkey.createaddons.content.cage.MonsterCageMenu>> MONSTER_CAGE =
 		MENUS.register("monster_cage", () -> IMenuTypeExtension.create(com.comedymonkey.createaddons.content.cage.MonsterCageMenu::new));
 
+	public static final DeferredHolder<MenuType<?>, MenuType<com.comedymonkey.createaddons.content.tank.FishTankMenu>> FISH_TANK =
+		MENUS.register("fish_tank", () -> IMenuTypeExtension.create(com.comedymonkey.createaddons.content.tank.FishTankMenu::new));
+
 	private ModMenus() {}
 }

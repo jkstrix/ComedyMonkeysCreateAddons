@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:cage_monster",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:netherite_monster_cage"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.cage_wither"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.cage_wither.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "cage_wither"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

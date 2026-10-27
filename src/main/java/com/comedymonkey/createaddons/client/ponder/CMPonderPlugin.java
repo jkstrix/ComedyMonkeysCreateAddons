@@ -98,6 +98,17 @@ public class CMPonderPlugin implements PonderPlugin {
 			.addStoryBoard("auto_harvester", FarmScenes::harvester);
 		helper.forComponents(ModBlocks.ANIMAL_PEN.getId(), ModBlocks.BRASS_ANIMAL_PEN.getId(), ModItems.CAPTURE_BOTTLE.getId())
 			.addStoryBoard("animal_pen", FarmScenes::animalPen);
+		// the Monster Cages: the dry ones and the jar, the Flooded ones, the Netherite one; then the Fish Tanks
+		helper.forComponents(ModBlocks.MONSTER_CAGE.getId(), ModBlocks.BRASS_MONSTER_CAGE.getId(), ModItems.IRON_JAR.getId(),
+				ModItems.MONSTER_CHOW.getId())
+			.addStoryBoard("monster_cage", CageScenes::monsterCage);
+		helper.forComponents(ModBlocks.FLOODED_MONSTER_CAGE.getId(), ModBlocks.BRASS_FLOODED_MONSTER_CAGE.getId())
+			.addStoryBoard("flooded_monster_cage", CageScenes::floodedCage)
+			.addStoryBoard("monster_cage", CageScenes::monsterCage);
+		helper.forComponents(ModBlocks.NETHERITE_MONSTER_CAGE.getId(), ModItems.NETHERITE_JAR.getId())
+			.addStoryBoard("netherite_monster_cage", CageScenes::containment);
+		helper.forComponents(ModBlocks.FISH_TANK.getId(), ModBlocks.BRASS_FISH_TANK.getId(), ModItems.FISH_FOOD.getId())
+			.addStoryBoard("fish_tank", CageScenes::fishTank);
 		helper.forComponents(ModBlocks.TRADE_BOT.getId())
 			.addStoryBoard("trade_bot", TradeBotScenes::station)
 			.addStoryBoard("trade_bot_linking", TradeBotScenes::linking)
@@ -129,6 +140,13 @@ public class CMPonderPlugin implements PonderPlugin {
 			.add(ModBlocks.AUTO_HARVESTER.getId())
 			.add(ModBlocks.ANIMAL_PEN.getId())
 			.add(ModBlocks.BRASS_ANIMAL_PEN.getId())
+			.add(ModBlocks.MONSTER_CAGE.getId())
+			.add(ModBlocks.BRASS_MONSTER_CAGE.getId())
+			.add(ModBlocks.FLOODED_MONSTER_CAGE.getId())
+			.add(ModBlocks.BRASS_FLOODED_MONSTER_CAGE.getId())
+			.add(ModBlocks.NETHERITE_MONSTER_CAGE.getId())
+			.add(ModBlocks.FISH_TANK.getId())
+			.add(ModBlocks.BRASS_FISH_TANK.getId())
 			.add(ModBlocks.CUCKOO_CLOCK.getId());
 		helper.addToTag(CREATE_KINETIC_SOURCES_TAG)
 			.add(ModBlocks.MAGMA_ENGINE.getId())

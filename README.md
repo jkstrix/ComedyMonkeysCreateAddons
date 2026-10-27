@@ -8,6 +8,8 @@ A NeoForge add-on for **Create** (Minecraft 1.21.1). Mod id: `comedymonkeysaddon
 - **Cobblestone, Basalt, Blackstone and Tuff Generators**: one-block stone generators powered by rotation, in Andesite, Brass and Wireless versions.
 - **Auto Harvester**: a Create-style botany pot that grows and harvests any crop or sapling (modded crops too) at a fixed stress, sped up by the new **Bountiful** enchantment from Librarians.
 - **Animal Pen** and **Brass Animal Pen**: catch one animal in a **Capture Bottle** and breed a whole herd of it (128 or 512) in one block, with vanilla breeding and growing-up times, sped up by the new **Fruitful** enchantment.
+- **Monster Cages**: catch one monster in an **Iron Jar** and farm a horde of it in one block, fed on **Monster Chow**: Andesite and Brass, Flooded ones for drowned and guardians, and a **Netherite** cage that holds Withers in an FE containment field. Sped up by the new **Monstrous** enchantment.
+- **Fish Tank** and **Brass Fish Tank**: the Animal Pen for fish, squid and axolotls, breeding underwater on **Fish Food**, with the rare blue axolotl.
 - **Cuckoo Clock**: a Black Forest wall clock that sets the villagers around it to restock at **8:00 and 12:00**, and chimes the hour with a cuckoo and a carved villager.
 - **Trade Bot**: a one-wheeled clockwork robot who sells the goods in your chests to **villagers sitting on Create seats**, brings home the emeralds (and the trades' XP as Nuggets of Experience), and lives in a winding station charged with FE.
 - **Magma Engine** and **Supercharged Magma Engine**: lava-burning engines with four and eight Portable Engines' worth of power.
@@ -169,6 +171,39 @@ A replacement for sprawling mob pens: one block that keeps a herd of one kind of
 - **Fruitful** (I to III): an enchantment for the pens only, put on with an anvil and kept when the pen is broken. Each level breeds and grows the herd 50% faster (2.5x at III). Buy the book from a **Librarian**.
 - Recipes: Animal Pen: andesite alloy corners, wooden fences, Andesite Casing and a hay bale. Brass Animal Pen: Mechanical Crafting around an Animal Pen, with brass sheets, Brass Casing, electron tubes and hay bales.
 
+## Monster Cages
+
+The Animal Pen for monsters: one block that keeps a horde of one kind of monster and brings in more of it, with its real drops and none of a mob farm's spawning rules. Same box as the pens, with bars across the front, a stone cell, a dog bowl under a chow chute and a padlock on the post; the monsters pace behind the bars.
+
+- **Iron Jar**: use it on any monster a cage takes, at any health, to catch it (not ridden ones, nor the Wither). The jar shows the monster inside. Use a full jar on the ground to let the monster out again (never on Peaceful). Recipe: a Deployer puts an Iron Sheet on a Glass Bottle.
+- **Starting a horde**: use the full jar on a cage, then put **Monster Chow** in its bowl by hand or with a funnel. The jar goes in with the monster and comes back out with it.
+- **Arrivals**: with a shaft turning in the back, a new monster arrives every **20 seconds** at 64 RPM in the Andesite cages (**10** in the Brass ones), sooner the faster it turns, times its chow cost. Each one eats **1** Monster Chow (Overworld monsters), **2** (Nether, End, ocean and pillager-type, and modded ones) or **4** (rare ones: evokers, ravagers, shulkers). Faster shafts eat chow faster too.
+- **Tiers**: the **Monster Cage** holds **64** common Overworld monsters; the **Brass Monster Cage** holds **256** and also takes Nether, End and rare monsters.
+- **Sword**: use a sword on the cage to cull **half** (always leaving one), with the monster's real loot table, so **Looting** and **Fire Aspect** count, and its XP. A Deployer's cull gives no XP. Slimes and magma cubes stay small.
+- **Flooded Monster Cage** and **Flooded Brass Monster Cage**: full of water, for **drowned** (and in the Brass one **guardians** and **elder guardians**). Pipe water in on any side but the back; each new monster uses **250 mB**. A **zombie** or husk put in one drowns into a drowned. Now and then a drowned arrives **armed**, and the cage **throws its trident** out of the front at the nearest player in sight within 16 blocks, every 3 seconds at most: cull the armed ones first (they go first), or stand behind it.
+- **Netherite Monster Cage**: holds up to **3 Withers**, caught in a **Netherite Jar** (a Wither only ever goes into this cage). It needs **FE** on any side but the back: **2,048 FE/t** holds them in a blue **containment field**, and up to **1,024 FE/t** more brings a new Wither in every **20 minutes** at 256 RPM, eating **64 Monster Chow**. Cull them for Nether Stars. It's blast-proof, and only its owner (or their team) can open or break it.
+- **When the power fails**: every player within 128 blocks gets **5 minutes** of warning, in chat and on the action bar, with a klaxon. Then **one Wither breaks out** of the front, and another every **game day** until the power is back. The countdown stops while nobody is near, even if the chunk stays loaded. The cage can't be broken or emptied while its field is down.
+- **Monster Chow**: mixed in a Mixer from Wheat Flour, Cinder Flour and Bone Meal (3 at a time). It's edible, badly: like rotten flesh, with a chance of a **Monster Belch** or **Chow Breath**.
+- **Monstrous** (I to III): an enchantment for the cages only, put on with an anvil and kept when the cage is broken; each level makes it 50% faster. Buy the book from a **Librarian**.
+- **Automation**: Deployers cull with swords and catch and release with jars; Dispensers catch with an empty jar and let monsters out with a full one (never a Wither). Funnels, chutes and arms empty the output (9 slots, 18 on the Brass cages). A comparator reads how full of monsters it is (15 during a countdown), and **Display Links** show the horde, what it's doing, the water and the Netherite cage's containment and escape clock.
+- **Power**: stress per RPM while it works (4 SU per RPM for the Andesite cages, 16 for the others), none while it's empty, full, out of chow or overstressed.
+- **Wrench screen**: the jar (take it out to empty the cage; the others are culled into the output), the chow, an arrival gauge, the water or FE gauge, the output, and the horde.
+- Recipes: Monster Cage: andesite alloy corners, iron bars, a chain and Andesite Casing. Brass Monster Cage: Mechanical Crafting around a Monster Cage, with brass sheets, Brass Casing, electron tubes and iron bars. Flooded cages: a cage of the same tier with a Fluid Tank and two Framed Glass. Netherite Monster Cage: Mechanical Crafting around a Brass cage with netherite ingots, Precision Mechanisms, FE Coils and obsidian. Netherite Jar: smithing, a Netherite Upgrade on an Iron Jar. Only empty cages can be upgraded.
+
+## Fish Tanks
+
+The Animal Pen for water creatures: one block that keeps a school of one kind of fish, squid or axolotl and breeds it underwater, glazed on three sides, with gravel, kelp, an air pump that bobs with the shaft, and Create's own cogwheel sunk in the gravel.
+
+- **Catching**: the **Capture Bottle** catches **cod, salmon, tropical fish, pufferfish, squid, glow squid and axolotls** (not tadpoles or dolphins). Use the bottle on a tank to start it; the Animal Pens refuse water creatures, with a hint.
+- **Water and food**: pipe water in on any side but the back, or pour in water buckets, and feed it **Fish Food**, mixed in a Mixer from Wheat Flour, Dried Kelp and Bone Meal (4 at a time). Fish Food breeds axolotls in the world too, and fish swim after you while you hold it.
+- **Breeding**: with a shaft turning in the back, every **five minutes** at 64 RPM (sooner the faster it turns) each adult eats one Fish Food and has young, each birth using **250 mB** of water. Fish and squid young arrive grown; axolotl young grow up in twenty minutes. Without water it stops breeding, and the window shows the level dropping. The **Fish Tank** holds **128**, the **Brass Fish Tank** **512**.
+- **Variants**: young copy their parent's tropical fish pattern or axolotl colour, and one axolotl in **1,200** is born **blue**.
+- **Sword** culls half for drops (cod, salmon, pufferfish, ink sacs, glow ink sacs, bone meal), always leaving one; a **water bucket** scoops one adult out alive as a Bucket of Fish (a blue axolotl first). Deployers can do both.
+- **Glow**: a tank of glow squid gives light level 6.
+- **Fruitful** works on the tanks as on the pens.
+- **Automation and readouts**: as the cages: funnels for food and drops, a comparator, Display Links for the school, what it's doing and the water, and stress per RPM while it works (4 SU per RPM, 16 for the Brass tank).
+- Recipes: Fish Tank: andesite alloy corners, three Framed Glass, a Fluid Tank and Andesite Casing. Brass Fish Tank: Mechanical Crafting around a Fish Tank, with brass sheets, Brass Casing, electron tubes and Framed Glass.
+
 ## Cuckoo Clock
 
 A Black Forest cuckoo clock, two blocks tall, in dark walnut and brass: a shingled roof, a dial whose hands keep the game's time, a window above it where a sun and moon disc turns once a day, a brass cog turning behind a porthole on each side, and a pendulum and pine-cone weights hanging into the block below.
@@ -298,9 +333,9 @@ Copycat-style covers for Pipez pipes, to hide pipework inside walls and floors. 
 - **Curios + Aviator's Goggles**: wear them in the head slot (over a helmet if you like); they still count as goggles for Create's overlays.
 - **Modded crops** (Supplementaries, Farmer's Delight and others): any crop built on vanilla's crop or bush blocks grows in the Auto Harvester with its own drops, growth stages and model. Two-block crops like flax show both halves once they're tall enough.
 
-Ponder scenes (hold **W**) cover the Wellspring, the chest and barrel upgrades, the Pressure Crucible, the generators (Basalt, Blackstone and Tuff get their own scenes too), both Magma Engines, the Incinerator, the String Tangler, the Stone Infuser, the Lava Generator, the Electric Motor, the Geothermal Turbine, the Auto Harvester and the Animal Pens, and with Sable the Compact Gyroscope, Torque Rotor and Flight Instruments.
+Ponder scenes (hold **W**) cover the Wellspring, the chest and barrel upgrades, the Pressure Crucible, the generators (Basalt, Blackstone and Tuff get their own scenes too), both Magma Engines, the Incinerator, the String Tangler, the Stone Infuser, the Lava Generator, the Electric Motor, the Geothermal Turbine, the Auto Harvester, the Animal Pens, the Monster Cages (dry, Flooded and Containment) and the Fish Tanks, and with Sable the Compact Gyroscope, Torque Rotor and Flight Instruments.
 
-An advancement tab follows the mod from the first Upgrade Template to a maxed-out Wellspring, a Netherite chest, a full-power Electric Motor, the Auto Harvester and a Brass Animal Pen of 512.
+An advancement tab follows the mod from the first Upgrade Template to a maxed-out Wellspring, a Netherite chest, a full-power Electric Motor, the Auto Harvester, a Brass Animal Pen of 512, a caged monster, a caged Wither and a blue axolotl born in a Fish Tank.
 
 ## Configuration
 
@@ -313,6 +348,8 @@ Mods → Create → Config → *Access configs of other mods* → ComedyMonkey's
 - **Cobblestone Generators**: Andesite and Brass stress impacts (also used by the Basalt and Blackstone ones).
 - **Auto Harvester**: stress (SU, at any speed), crop and tree grow times, Bountiful's speed bonus per level, logs per tree and leaf drop rolls.
 - **Animal Pens**: stress and max animals for each pen, seconds per breeding and to grow up, Fruitful's speed bonus per level, wool regrowth, egg time and milk per animal.
+- **Monster Cages**: capacity and seconds per monster for each tier, stress per RPM, chow per kind of monster, Monstrous's bonus, water per monster and the Flooded tanks, the Netherite cage's FE (field, farming, buffer), the warning, the time between escapes, the alarm range, whether Withers escape at all, and how loud the caged monsters are.
+- **Fish Tanks**: capacity, seconds per breeding, water per birth, water held and stress per RPM, for each tank.
 - **Cuckoo Clock**: stress (SU, at any speed) and how far it reaches villagers (blocks).
 - **Trade Bot**: his range from the station, bots per player, the station's charge rate and buffer, a full charge, FE per block and per trade, and how near a monster has to be to scare him.
 - **Magma Engine** and **Supercharged Magma Engine**: each has its own speed, stress capacity per RPM and lava burned per second.

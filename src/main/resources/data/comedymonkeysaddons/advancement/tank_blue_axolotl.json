@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:fish_tank",
+  "display": {
+    "icon": {
+      "id": "minecraft:axolotl_bucket"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.tank_blue_axolotl"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.tank_blue_axolotl.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "tank_blue_axolotl"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

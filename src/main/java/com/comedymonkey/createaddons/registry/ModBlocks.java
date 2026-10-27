@@ -175,6 +175,11 @@ public final class ModBlocks {
 	public static final DeferredBlock<MonsterCageBlock> BRASS_FLOODED_MONSTER_CAGE = BLOCKS.register("brass_flooded_monster_cage",
 		() -> new MonsterCageBlock(BlockBehaviour.Properties.ofFullCopy(BRASS_COBBLE_GENERATOR.get()).lightLevel(state -> 0),
 			CageTier.BRASS, true));
+	/** Breeds one kind of fish, squid or axolotl, underwater. */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.tank.FishTankBlock> FISH_TANK = BLOCKS.register("fish_tank",
+		() -> new com.comedymonkey.createaddons.content.tank.FishTankBlock(BlockBehaviour.Properties.ofFullCopy(AUTO_HARVESTER.get()).sound(SoundType.GLASS), false));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.tank.FishTankBlock> BRASS_FISH_TANK = BLOCKS.register("brass_fish_tank",
+		() -> new com.comedymonkey.createaddons.content.tank.FishTankBlock(BlockBehaviour.Properties.ofFullCopy(BRASS_COBBLE_GENERATOR.get()).sound(SoundType.GLASS), true));
 	/** Withers in a containment field on FE; blast-proof. */
 	public static final DeferredBlock<MonsterCageBlock> NETHERITE_MONSTER_CAGE = BLOCKS.register("netherite_monster_cage",
 		() -> new MonsterCageBlock(BlockBehaviour.Properties.ofFullCopy(BRASS_COBBLE_GENERATOR.get()).lightLevel(state -> 0)

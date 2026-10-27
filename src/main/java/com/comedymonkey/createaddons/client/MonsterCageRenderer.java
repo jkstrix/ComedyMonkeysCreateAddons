@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -86,9 +87,37 @@ public class MonsterCageRenderer extends SafeBlockEntityRenderer<MonsterCageBloc
 		if (!state.hasProperty(MonsterCageBlock.FACING))
 			return;
 		Direction front = state.getValue(MonsterCageBlock.FACING);
-		PartSink sink = PartSink.screen(buffer, state, overlay);
-		CobbleGeneratorRenderer.shaft(be, front.getOpposite(), ms, sink, light);
 		CameraView camera = CameraView.of(be, ms);
+		parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
+		// Translucent things stay here: drawn by Flywheel, they'd hide the monsters behind them. They go last, into the
+		// sorted translucent sheet the items use: the plain translucent type writes depth before the items are drawn.
+		PartSink sink = PartSink.screen(buffer, state, overlay);
+		ms.pushPose();
+		ms.translate(0.5, 0.5, 0.5);
+		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
+		ms.translate(-0.5, -0.5, -0.5);
+		if (!camera.behindGlass(front)) {
+			renderChow(be, ms, buffer, light, overlay);
+			renderMonsters(be, partialTicks, ms, buffer, light, camera);
+			TrayItems.render(be.getOutput(), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
+		}
+		if (be.isFlooded())
+			water(be, ms, sink, light);
+		ms.popPose();
+		if (be.isNetherite())
+			shield(be, ms, sink);
+	}
+
+	/**
+	 * The part models (for this renderer, or Flywheel's visual): the shaft end; a flooded cage's water gauge and trident
+	 * hatch; the Netherite cage's coil tips, beacon lens and reflector.
+	 */
+	public static void parts(MonsterCageBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
+		BlockState state = be.getBlockState();
+		if (!state.hasProperty(MonsterCageBlock.FACING))
+			return;
+		Direction front = state.getValue(MonsterCageBlock.FACING);
+		CobbleGeneratorRenderer.shaft(be, front.getOpposite(), ms, sink, light);
 		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5);
 		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
@@ -97,27 +126,31 @@ public class MonsterCageRenderer extends SafeBlockEntityRenderer<MonsterCageBloc
 			flooded(be, partialTicks, ms, sink, light);
 		if (be.isNetherite())
 			netherite(be, partialTicks, ms, sink, light);
-		if (!camera.behindGlass(front)) {
-			renderChow(be, ms, buffer, light, overlay);
-			renderMonsters(be, partialTicks, ms, buffer, light, camera);
-			TrayItems.render(be.getOutput(), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
-		}
 		ms.popPose();
-		if (be.isNetherite())
-			shield(be, ms, sink);
 	}
 
 	// ---------------------------------------------------------------- Flooded
 
-	private static void flooded(MonsterCageBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
+	private static float waterLevel(MonsterCageBlockEntity be) {
 		FluidTank water = be.getWater();
-		float level = Math.min(1, water.getFluidAmount() / (float) water.getCapacity());
+		return Math.min(1, water.getFluidAmount() / (float) water.getCapacity());
+	}
+
+	/** The water in the cage, to the tank's level. */
+	private static void water(MonsterCageBlockEntity be, PoseStack ms, PartSink sink, int light) {
+		float level = waterLevel(be);
+		if (level <= 0)
+			return;
+		ms.pushPose();
+		ms.translate(0, FLOOR_Y / 16, 0);
+		ms.scale(1, (WATER_TOP - FLOOR_Y) * level, 1);
+		sink.part(WATER, ms, light, Sheets.translucentCullBlockSheet());
+		ms.popPose();
+	}
+
+	private static void flooded(MonsterCageBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
+		float level = waterLevel(be);
 		if (level > 0) {
-			ms.pushPose();
-			ms.translate(0, FLOOR_Y / 16, 0);
-			ms.scale(1, (WATER_TOP - FLOOR_Y) * level, 1);
-			sink.part(WATER, ms, light, RenderType.translucent());
-			ms.popPose();
 			ms.pushPose();
 			ms.translate(0, GAUGE_Y / 16, 0);
 			ms.scale(1, GAUGE_H * level, 1);
@@ -177,7 +210,7 @@ public class MonsterCageRenderer extends SafeBlockEntityRenderer<MonsterCageBloc
 			BlockPos next = pos.relative(d);
 			if (level.getBlockState(next).isSolidRender(level, next))
 				continue;
-			sink.part(SHIELD[d.get3DDataValue()], ms, LightTexture.FULL_BRIGHT, RenderType.translucent());
+			sink.part(SHIELD[d.get3DDataValue()], ms, LightTexture.FULL_BRIGHT, Sheets.translucentCullBlockSheet());
 		}
 	}
 

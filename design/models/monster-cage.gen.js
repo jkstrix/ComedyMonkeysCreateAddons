@@ -634,11 +634,12 @@ for (const [name, , kind] of SCENES) {
 }
 clip('clearance', 3, 'loop', {}, clear);
 
-write(OUT, outliner);
-{
+function writePreview() {
+  write(OUT, outliner);
   const fs = require('fs'), bb = JSON.parse(fs.readFileSync(OUT, 'utf8'));
   for (const e of bb.elements) if (e.name === 'shield') e.render_order = 'in_front';
   for (const t of bb.textures) if (t.name.includes('shield')) { t.render_mode = 'additive'; t.height = 16 * SHIELD_FRAMES; t.frame_time = 2; }
   fs.writeFileSync(OUT, JSON.stringify(bb));
 }
-module.exports = { cageModel, CAGE, BRASS, NETH, ITEMS, JARS, GAUGE, VENT, WANDER, GLASS_Z, hatch, beacon, beaconLit, reflector, tips, shield, water, waterCols, jar };
+if (require.main === module) writePreview();
+module.exports = { writePreview, cageModel, CAGE, BRASS, NETH, ITEMS, JARS, GAUGE, VENT, WANDER, GLASS_Z, hatch, beacon, beaconLit, reflector, tips, shield, water, waterCols, jar };

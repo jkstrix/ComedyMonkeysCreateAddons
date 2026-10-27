@@ -68,7 +68,8 @@ public class BottledAnimalItem extends Item {
 		EntityType<?> type = typeOf(stack);
 		if (type == null || type.is(AnimalCapture.BLACKLIST))
 			return Optional.empty();
-		return EntityType.create(data.copyTag(), level).filter(entity -> entity instanceof Animal);
+		return EntityType.create(data.copyTag(), level).filter(entity -> entity instanceof Animal
+			|| com.comedymonkey.createaddons.content.tank.TankRules.isTankCreature(entity));
 	}
 
 	@Override

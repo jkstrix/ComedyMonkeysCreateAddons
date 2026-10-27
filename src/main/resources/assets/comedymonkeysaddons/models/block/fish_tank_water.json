@@ -1,0 +1,64 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:translucent",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fish_tank_water",
+    "fish_tank_water": "comedymonkeysaddons:block/fish_tank_water",
+    "fish_tank_water_top": "comedymonkeysaddons:block/fish_tank_water_top"
+  },
+  "elements": [
+    {
+      "name": "water",
+      "from": [
+        1,
+        0,
+        0.75
+      ],
+      "to": [
+        15,
+        1,
+        13.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#fish_tank_water"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#fish_tank_water"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#fish_tank_water"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#fish_tank_water_top"
+        }
+      }
+    }
+  ]
+}

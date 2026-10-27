@@ -1,7 +1,7 @@
 // Fish Tanks generator -> design/models/fish-tank.bbmodel (Generic Model preview with clips).
 // Built in the game's model space (window north), on the family kit; see design/briefs/fish-tank.md.
 // Sister to the Animal Pens: same frame proportions, back socket and front catch; glass on the front AND both sides.
-// Renderer contract (new): water volume x 0.75-15.25, z 0.75-13.75 from the gravel to level (max y 13.5); swim volume
+// Renderer contract (new): water volume x 1-15, z 0.75-13.75 from the gravel to level (max y 13.5); swim volume
 // x 3-13, z 4.5-12, y (gravel + 1) to (surface - 1); food under the lid feeder at (3.4 / 4.2 / 5.0, 12, 3.6); the pump piston
 // rises 0-1.5 px with the shaft angle; catch net items via TrayItems at the pens' tray positions.
 const path = require('path');
@@ -61,7 +61,8 @@ TANK.paint('kelp', (x, y) => (x >= 5 && x <= 10 && (x + (y >> 1)) % 3 !== 0 ? mo
 TANK.paint('seagrass', (x, y) => (x % 3 === 1 && y > 4 ? mot('kelp', x, y, 120) : null));
 TANK.paint('water', (x, y) => (hash(x, y, 121) > 0.8 ? '#336a7780' : '#2a5a6678'));
 TANK.paint('water_top', (x, y) => ((x + y * 3) % 7 === 0 ? '#4a7f8c98' : '#336a7788'));
-TANK.paint('glow', (x, y) => (hash(x, y, 122) > 0.6 ? '#3fa08c50' : '#2f806e38'));
+// premultiplied (the old #3fa08c50 / #2f806e38 at their alpha): the game draws it additively, as the preview does
+TANK.paint('glow', (x, y) => (hash(x, y, 122) > 0.6 ? '#14322c' : '#0a1c18'));
 TANK.paint('bubble', (x, y) => (edge(x, y) <= 2 ? '#a3c0c8b0' : null));
 // preview-only creature stand-ins
 TANK.paint('cod', (x, y) => mot('cod', x, y, 123));
@@ -75,17 +76,17 @@ function tank(tier) {
   const T = (k) => `${tier}:${k}`, F = T('frame');
   const out = [
     C('lid', [0, 14, 0], [16, 16, 16], { north: F, east: F, west: F, south: T('back'), up: T('lid'), down: 'tank:ceiling' }),
-    C('base', [0, 0, 0], [16, 2, 16], { north: F, east: F, west: F, south: T('back'), down: T('bottom'), up: null }),
+    C('base', [0, 0, 0], [16, 2, 16], { north: F, east: F, west: F, south: T('back'), down: T('bottom'), up: F }),
     C('back_wall', [0, 2, 14], [16, 14, 16], { south: T('back'), north: 'tank:tiles', east: F, west: F, up: null, down: null }),
     C('post_west', [0, 2, 0], [2, 14, 2], { north: F, west: F, south: 'tank:dark', east: 'tank:dark', up: null, down: null }),
     C('post_east', [14, 2, 0], [16, 14, 2], { north: F, east: F, south: 'tank:dark', west: 'tank:dark', up: null, down: null }),
     C('glass_front', [2, 2, 0.5], [14, 14, 0.5], { north: 'tank:glass', south: 'tank:glass', all: null }, { shade: false }),
     C('glass_west', [0.5, 2, 2], [0.5, 14, 14], { west: 'tank:glass', east: 'tank:glass', all: null }, { shade: false }),
     C('glass_east', [15.5, 2, 2], [15.5, 14, 14], { west: 'tank:glass', east: 'tank:glass', all: null }, { shade: false }),
-    // gravel, rising in two steps towards the back
-    C('gravel', [0.5, 2, 0.5], [15.5, FLOOR_Y, 14], { up: 'tank:gravel', north: 'tank:gravel', east: 'tank:gravel', west: 'tank:gravel', all: null }),
-    C('gravel_2', [0.5, FLOOR_Y, 9], [15.5, 3, 14], { up: 'tank:gravel', north: 'tank:gravel', east: 'tank:gravel', west: 'tank:gravel', all: null }),
-    C('gravel_3', [0.5, 3, 11.5], [15.5, 3.5, 14], { up: 'tank:gravel', north: 'tank:gravel', east: 'tank:gravel', west: 'tank:gravel', all: null }),
+    // gravel, rising in two steps towards the back (0.25 px in from the glass, so they don't z-fight)
+    C('gravel', [0.75, 2, 0.75], [15.25, FLOOR_Y, 14], { up: 'tank:gravel', north: 'tank:gravel', east: 'tank:gravel', west: 'tank:gravel', all: null }),
+    C('gravel_2', [0.75, FLOOR_Y, 9], [15.25, 3, 14], { up: 'tank:gravel', north: 'tank:gravel', east: 'tank:gravel', west: 'tank:gravel', all: null }),
+    C('gravel_3', [0.75, 3, 11.5], [15.25, 3.5, 14], { up: 'tank:gravel', north: 'tank:gravel', east: 'tank:gravel', west: 'tank:gravel', all: null }),
     // the air pump round the shaft stub, with its copper air line down to the air stone
     C('pump', [5.5, 5, 12.4], [10.5, 10.5, 14], { all: 'tank:steel', up: T('pump_cap'), south: null }),
     C('pipe_down', [3, 3.5, 12.9], [3.6, 8, 13.5], { all: 'tank:copper', south: null }),
@@ -134,7 +135,7 @@ const piston = () => [
   C('rod', [7.6, 10.5, 12.85], [8.4, 11.8, 13.55], { all: 'tank:steel', down: null }),
   C('head', [7, 11.8, 12.7], [9, 12.3, 13.7], { all: 'tank:steel' }),
 ];
-const water = () => [C('water', [0.75, 2.6, 0.75], [15.25, TOP, 13.75], { north: 'tank:water', east: 'tank:water', west: 'tank:water', up: 'tank:water_top', all: null }, { shade: false })];
+const water = () => [C('water', [1, 2.6, 0.75], [15, TOP, 13.75], { north: 'tank:water', east: 'tank:water', west: 'tank:water', up: 'tank:water_top', all: null }, { shade: false })];
 const glow = () => [C('glow', [2, 3.6, 13.75], [14, 13.4, 13.75], { north: 'tank:glow', all: null }, { shade: false, uv: { north: [0, 0, 16, 16] } })];
 const food = () => [[3.4, 12.2, 3.6], [4.2, 11.6, 4.4], [5.0, 12.4, 3.2]].map(([x, y, z], i) =>
   C(`food_${i}`, [x - 0.8, y, z - 0.8], [x + 0.8, y, z + 0.8], { up: 'item:fish_food', down: 'item:fish_food', all: null }, { uv: { up: [0, 0, 16, 16], down: [0, 0, 16, 16] }, rot: ['y', [20, -35, 60][i], [x, y, z]], shade: false }));
@@ -244,4 +245,4 @@ write(OUT, outliner);
   for (const g of bb.groups) if (g.name.endsWith('_cog')) g.rotation = COG.rot;
   fs.writeFileSync(OUT, JSON.stringify(bb));
 }
-module.exports = { tank, TANK, BTANK };
+module.exports = { tank, piston, glow, TANK, BTANK, COG, TOP };

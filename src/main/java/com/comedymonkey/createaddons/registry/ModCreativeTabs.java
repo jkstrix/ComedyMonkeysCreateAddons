@@ -60,6 +60,9 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.IRON_JAR.get());
 				output.accept(ModItems.NETHERITE_JAR.get());
 				output.accept(ModItems.MONSTER_CHOW.get());
+				output.accept(ModItems.FISH_TANK.get());
+				output.accept(ModItems.BRASS_FISH_TANK.get());
+				output.accept(ModItems.FISH_FOOD.get());
 				output.accept(ModItems.CUCKOO_CLOCK.get());
 				output.accept(ModItems.TRADE_BOT.get());
 				output.accept(ModItems.STRING_TANGLER.get());

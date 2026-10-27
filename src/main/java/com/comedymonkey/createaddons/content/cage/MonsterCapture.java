@@ -41,7 +41,7 @@ public final class MonsterCapture {
 		}
 		if (!CageRules.isCageable(target) || target.isVehicle())
 			return;
-		if (!jar.holds(target.getType())) {
+		if (!canCatch(jar, target)) {
 			hint(event, player, jar.isNetherite() ? "iron_jar_needed" : "netherite_jar_needed");
 			return;
 		}
@@ -52,13 +52,24 @@ public final class MonsterCapture {
 		catchInto(level, player, event.getHand(), held, jar, target);
 	}
 
-	/** Catches the monster into one of the held empty jars; shared with Deployers. */
-	public static void catchInto(ServerLevel level, Player player, InteractionHand hand, ItemStack held, MonsterJarItem jar,
-								 Entity target) {
+	/** Whether this empty jar takes the monster: one a cage takes, not ridden, and the Wither only in a Netherite Jar. */
+	public static boolean canCatch(MonsterJarItem jar, Entity target) {
+		return !(target instanceof Animal) && CageRules.isCageable(target) && !target.isVehicle() && jar.holds(target.getType());
+	}
+
+	/** Takes the monster out of the world into a filled jar (by hand, a Deployer or a Dispenser). */
+	public static ItemStack jar(ServerLevel level, MonsterJarItem jar, Entity target) {
 		ItemStack filled = jar.fill(target);
 		target.discard();
 		level.playSound(null, target.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 1, 0.8f);
 		level.playSound(null, target.blockPosition(), ModSounds.cage("jar_catch"), SoundSource.PLAYERS, 1, 1);
+		return filled;
+	}
+
+	/** Catches the monster into one of the held empty jars; shared with Deployers. */
+	public static void catchInto(ServerLevel level, Player player, InteractionHand hand, ItemStack held, MonsterJarItem jar,
+								 Entity target) {
+		ItemStack filled = jar(level, jar, target);
 		if (player.getAbilities().instabuild) {
 			player.getInventory().placeItemBackInInventory(filled);
 		} else if (held.getCount() == 1) {

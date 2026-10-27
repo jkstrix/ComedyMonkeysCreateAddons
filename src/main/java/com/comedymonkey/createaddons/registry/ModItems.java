@@ -70,6 +70,10 @@ public final class ModItems {
 	/** Catches the Wither, for the Netherite cage only. Fireproof. */
 	public static final DeferredItem<com.comedymonkey.createaddons.content.cage.MonsterJarItem> NETHERITE_JAR = ITEMS.register("netherite_jar",
 		() -> new com.comedymonkey.createaddons.content.cage.MonsterJarItem(new Item.Properties().stacksTo(16).fireResistant(), true));
+	public static final DeferredItem<BlockItem> FISH_TANK = ITEMS.registerSimpleBlockItem(ModBlocks.FISH_TANK);
+	public static final DeferredItem<BlockItem> BRASS_FISH_TANK = ITEMS.registerSimpleBlockItem(ModBlocks.BRASS_FISH_TANK);
+	/** What the Fish Tanks' creatures eat; it breeds axolotls, and fish follow it. */
+	public static final DeferredItem<Item> FISH_FOOD = ITEMS.registerSimpleItem("fish_food");
 	/** What the cages' monsters eat. Edible, badly. */
 	public static final DeferredItem<com.comedymonkey.createaddons.content.cage.MonsterChowItem> MONSTER_CHOW = ITEMS.register("monster_chow",
 		() -> new com.comedymonkey.createaddons.content.cage.MonsterChowItem(new Item.Properties()));

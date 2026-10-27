@@ -50,6 +50,9 @@ public final class MachineVisuals {
 		visual(ModBlockEntities.AUTO_HARVESTER, AutoHarvesterRenderer::parts, false);
 		visual(ModBlockEntities.WELLSPRING, WellspringRenderer::parts, false);
 		visual(ModBlockEntities.ANIMAL_PEN, AnimalPenRenderer::parts, false);
+		// the cages' and tanks' water and the Netherite shield stay with their renderers (translucent)
+		visual(ModBlockEntities.MONSTER_CAGE, com.comedymonkey.createaddons.client.MonsterCageRenderer::parts, false);
+		visual(ModBlockEntities.FISH_TANK, com.comedymonkey.createaddons.client.FishTankRenderer::parts, false);
 		visual(ModBlockEntities.CUCKOO_CLOCK, CuckooClockRenderer::parts, false);
 		// the lines' fittings; a Fluid Line's fluid stays with its renderer, a Power Line has nothing else
 		// (most pieces carry no fitting: their visuals do nothing a frame)

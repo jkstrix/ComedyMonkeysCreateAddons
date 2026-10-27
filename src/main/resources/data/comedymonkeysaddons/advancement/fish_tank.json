@@ -1,0 +1,38 @@
+{
+  "parent": "comedymonkeysaddons:bottled_animal",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:fish_tank"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.fish_tank"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.fish_tank.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "got": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "comedymonkeysaddons:fish_tank",
+              "comedymonkeysaddons:brass_fish_tank"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "got"
+    ]
+  ]
+}

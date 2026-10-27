@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,glowing=false": {
+      "model": "comedymonkeysaddons:block/fish_tank"
+    },
+    "facing=north,glowing=true": {
+      "model": "comedymonkeysaddons:block/fish_tank"
+    },
+    "facing=east,glowing=false": {
+      "model": "comedymonkeysaddons:block/fish_tank",
+      "y": 90
+    },
+    "facing=east,glowing=true": {
+      "model": "comedymonkeysaddons:block/fish_tank",
+      "y": 90
+    },
+    "facing=south,glowing=false": {
+      "model": "comedymonkeysaddons:block/fish_tank",
+      "y": 180
+    },
+    "facing=south,glowing=true": {
+      "model": "comedymonkeysaddons:block/fish_tank",
+      "y": 180
+    },
+    "facing=west,glowing=false": {
+      "model": "comedymonkeysaddons:block/fish_tank",
+      "y": 270
+    },
+    "facing=west,glowing=true": {
+      "model": "comedymonkeysaddons:block/fish_tank",
+      "y": 270
+    }
+  }
+}

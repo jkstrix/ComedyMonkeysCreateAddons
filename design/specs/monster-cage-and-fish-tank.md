@@ -312,7 +312,7 @@ Clarified: the water-creature member of the family. Keep fish, squid and axolotl
 | # | Area | Decision | Source |
 |---|---|---|---|
 | F1 | What it is | A block that keeps water creatures, working like the Flooded Monster Cage (water piped in) | user, 2026-10-27 |
-| F2 | Pens | The Animal Pens never hold fish (true today: the Capture Bottle only takes vanilla `Animal`s). When the tank ships, **axolotls** move to it and join `pen_blacklist`; pens that already hold one keep it. Turtles and frogs stay in the pens | user, what-if round 4 (D54) |
+| F2 | Pens | The Animal Pens never hold fish (true today: the Capture Bottle only takes vanilla `Animal`s). When the tank ships, **axolotls** move to it: the pens refuse every tank creature in code (`TankRules.livesInTank`), with a hint naming the Fish Tank, rather than through `pen_blacklist`, which also stops the Capture Bottle and so would lock them out of tanks too; pens that already hold one keep it. Turtles and frogs stay in the pens | user, what-if round 4 (D54) |
 | F3 | Family rules | Unless decided otherwise, it follows the cages: shaft into the back, speed sets the rate (D19), items out of every face, wrench screen with the GUI kit and quick moves, comparator, kept on contraptions, Carry On via a BlockItem, look previewed in Blockbench first | existing mod rules; Monster Cage D4–D7, D19 |
 | F4 | Same spec | Designed in this spec and on the same quick-read page as the Monster Cage | user, 2026-10-27 |
 | F5 | Core loop | **Breeds like the pens**: each adult eats food and has young on the breeding interval, so the school doubles up to a cap | user, Fish Tank round 1 |
@@ -387,7 +387,7 @@ Early–mid, beside the Animal Pen: andesite alloy, Framed Glass, a Fluid Tank a
 ## Technical Notes
 
 - Build on the Animal Pen (`content/pen/`): one block class with a `brass` flag, its breeding, young, culling, output and menu; add the fluid tank (reuse the Flooded cage's) and speed-scaled timing.
-- `AnimalCapture.canCapture`: accept `AbstractFish` and `Squid` as well as `Animal`, minus a new `fish_tank_blacklist` tag (tadpoles) and `pen_blacklist`; route by type: tank creatures to tanks, axolotls to tanks (added to `pen_blacklist`, F2).
+- `AnimalCapture.canCapture`: accept `AbstractFish` and `Squid` as well as `Animal`, minus a new `fish_tank_blacklist` tag (tadpoles) and `pen_blacklist`; route by type: tank creatures, axolotls included, to tanks (refused by the pens in code, F2).
 - Renderer: up to 4 real creatures swimming in the water volume (swim paths instead of walk paths), water surface at the tank's level.
 - Saving: bottle NBT, school (adults, young timers), food, water, output, progress. Sync the same set.
 - Config ("Fish Tanks"): caps, breeding and growing seconds at 64 RPM, SU per RPM, tank sizes, water per birth, glow light level.
@@ -453,7 +453,7 @@ A shaft-driven glass tank that breeds one kind of water creature, in two sizes (
 
 - [ ] Blocks: Fish Tank, Brass Fish Tank (one class, brass flag), BlockItems, loot tables keeping contents
 - [ ] Block entity: school, young timers, speed-scaled breeding, Fish Food, water tank, output, culling, scooping, per-RPM stress, saving
-- [ ] Capture Bottle catches fish, squid and glow squid; `fish_tank_blacklist` tag; axolotls added to `pen_blacklist`
+- [ ] Capture Bottle catches fish, squid and glow squid; `fish_tank_blacklist` tag (tadpoles); pens refuse tank creatures, axolotls included
 - [ ] Fish Food item and Mixer recipe; in the world it breeds axolotls and fish swim after a player holding it (D65)
 - [ ] Variant rules: copy pattern or colour; 1-in-1,200 blue axolotl
 - [ ] Light level 6 with glow squid

@@ -98,6 +98,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.MachineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.BatteryGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.TankGameTests::register);
 		if (SableCompat.LOADED)
 			modBus.addListener(com.comedymonkey.createaddons.gametest.SableGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
@@ -120,6 +121,8 @@ public class ComedyMonkeysCreateAddons {
 		NeoForge.EVENT_BUS.addListener(AnimalCapture::onEntityInteract);
 		// Iron and Netherite Jars catch monsters for the Monster Cages
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.cage.MonsterCapture::onEntityInteract);
+		// fish follow Fish Food
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.tank.FishFood::onEntityJoin);
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> CuckooClocks.clear());
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.FluidLines::onLevelTick);
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.PowerLines::onLevelTick);
@@ -143,8 +146,8 @@ public class ComedyMonkeysCreateAddons {
 
 	/** The face a cage's shaft goes into, which takes nothing else. */
 	private static boolean isBack(net.minecraft.world.level.block.state.BlockState state, @org.jetbrains.annotations.Nullable net.minecraft.core.Direction side) {
-		return side != null && state.hasProperty(com.comedymonkey.createaddons.content.cage.MonsterCageBlock.FACING)
-			&& side == state.getValue(com.comedymonkey.createaddons.content.cage.MonsterCageBlock.FACING).getOpposite();
+		var facing = net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
+		return side != null && state.hasProperty(facing) && side == state.getValue(facing).getOpposite();
 	}
 
 	private void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -173,6 +176,11 @@ public class ComedyMonkeysCreateAddons {
 			(be, side) -> be.isFlooded() && !isBack(be.getBlockState(), side) ? be.getWaterHandler() : null);
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.MONSTER_CAGE.get(),
 			(be, side) -> be.isNetherite() && !isBack(be.getBlockState(), side) ? be.getEnergy() : null);
+		// Fish Food in and drops out from any side; water on every side but the back
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.FISH_TANK.get(),
+			(be, side) -> be.getAutomationHandler());
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.FISH_TANK.get(),
+			(be, side) -> !isBack(be.getBlockState(), side) ? be.getWaterHandler() : null);
 		// Trade Bot's station takes FE from underneath only (D16)
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.TRADE_BOT_STATION.get(),
 			(be, side) -> be.getEnergy(side));
@@ -301,6 +309,9 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.IRON_JAR.get());
 			registerCreateTooltip(ModItems.NETHERITE_JAR.get());
 			registerCreateTooltip(ModItems.MONSTER_CHOW.get());
+			registerCreateTooltip(ModItems.FISH_TANK.get());
+			registerCreateTooltip(ModItems.BRASS_FISH_TANK.get());
+			registerCreateTooltip(ModItems.FISH_FOOD.get());
 			registerCreateTooltip(ModItems.INCINERATOR.get());
 			registerCreateTooltip(ModItems.STRING_TANGLER.get());
 			registerCreateTooltip(ModItems.STONE_INFUSER.get());
@@ -331,6 +342,8 @@ public class ComedyMonkeysCreateAddons {
 			}
 
 			ModDisplaySources.bindBlocks();
+			// Dispensers catch and release with the jars and the Capture Bottle
+			com.comedymonkey.createaddons.content.cage.CatcherDispensing.register();
 
 			// Upgraded chests keep their oversized stacks, and Wellsprings keep generating, on Create contraptions
 			ModMountedStorage.bindBlocks();

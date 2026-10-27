@@ -391,6 +391,12 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 		if (!hasAnimal()) {
 			if (!(stack.getItem() instanceof BottledAnimalItem) || BottledAnimalItem.typeOf(stack) == null)
 				return false;
+			// Fish, squid and axolotls live in Fish Tanks now (F2); a pen that already holds one keeps it
+			if (com.comedymonkey.createaddons.content.tank.TankRules.livesInTank(stack, level)) {
+				if (!client)
+					player.displayClientMessage(lang().translate("gui.animal_pen.fish_tank_needed").component(), true);
+				return true;
+			}
 			if (!client)
 				setCaptive(stack.split(1));
 			return true;
@@ -1134,7 +1140,8 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
-			return stack.getItem() instanceof BottledAnimalItem && BottledAnimalItem.typeOf(stack) != null;
+			return stack.getItem() instanceof BottledAnimalItem && BottledAnimalItem.typeOf(stack) != null
+				&& !com.comedymonkey.createaddons.content.tank.TankRules.livesInTank(stack, level);
 		}
 	}
 

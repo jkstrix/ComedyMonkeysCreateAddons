@@ -1,0 +1,36 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:translucent",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/fish_tank_glow",
+    "fish_tank_glow": "comedymonkeysaddons:block/fish_tank_glow"
+  },
+  "elements": [
+    {
+      "name": "glow",
+      "from": [
+        2,
+        3.6,
+        13.75
+      ],
+      "to": [
+        14,
+        13.4,
+        13.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#fish_tank_glow"
+        }
+      }
+    }
+  ]
+}

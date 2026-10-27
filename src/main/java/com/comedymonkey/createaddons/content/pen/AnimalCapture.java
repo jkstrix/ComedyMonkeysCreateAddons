@@ -29,12 +29,17 @@ public final class AnimalCapture {
 
 	private AnimalCapture() {}
 
-	public static boolean canCapture(Player player, net.minecraft.world.entity.Entity target) {
+	public static boolean canCapture(@org.jetbrains.annotations.Nullable Player player, net.minecraft.world.entity.Entity target) {
+		// Fish, squid and the like, for the Fish Tanks (axolotls are animals, and caught as one)
+		if (target != null && !(target instanceof Animal) && target.isAlive() && !target.isVehicle()
+			&& com.comedymonkey.createaddons.content.tank.TankRules.isTankCreature(target))
+			return true;
 		if (!(target instanceof Animal animal) || !animal.isAlive() || animal.getType().is(BLACKLIST) || animal.isVehicle())
 			return false;
 		// Horses and the like aren't TamableAnimals, but they have owners too
 		UUID owner = animal instanceof OwnableEntity ownable ? ownable.getOwnerUUID() : null;
-		return owner == null || owner.equals(player.getUUID());
+		// no player (a Dispenser): never someone's pet
+		return owner == null || player != null && owner.equals(player.getUUID());
 	}
 
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
@@ -46,15 +51,20 @@ public final class AnimalCapture {
 		event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
 		if (event.getLevel().isClientSide)
 			return;
-		Animal animal = (Animal) event.getTarget();
-		ItemStack bottle = BottledAnimalItem.of(animal);
-		// A removed animal never ticks its lead again, so it would just vanish
-		if (animal.isLeashed())
-			animal.dropLeash(true, true);
-		animal.discard();
-		event.getLevel().playSound(null, animal.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 1, 1);
+		ItemStack bottle = bottle(event.getLevel(), event.getTarget());
 		if (!player.getAbilities().instabuild)
 			held.shrink(1);
 		player.getInventory().placeItemBackInInventory(bottle);
+	}
+
+	/** Takes the animal out of the world into a bottle (by hand or a Dispenser). */
+	public static ItemStack bottle(net.minecraft.world.level.Level level, net.minecraft.world.entity.Entity animal) {
+		ItemStack bottle = BottledAnimalItem.of(animal);
+		// A removed animal never ticks its lead again, so it would just vanish
+		if (animal instanceof net.minecraft.world.entity.Leashable leashable && leashable.isLeashed())
+			leashable.dropLeash(true, true);
+		animal.discard();
+		level.playSound(null, animal.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 1, 1);
+		return bottle;
 	}
 }

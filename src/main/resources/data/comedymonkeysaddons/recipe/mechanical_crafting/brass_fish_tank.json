@@ -1,0 +1,33 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "pattern": [
+    " SBS ",
+    "SEHES",
+    "BHPHB",
+    "SEHES",
+    " SBS "
+  ],
+  "key": {
+    "S": {
+      "item": "create:brass_sheet"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "H": {
+      "item": "create:framed_glass"
+    },
+    "P": {
+      "item": "comedymonkeysaddons:fish_tank"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:brass_fish_tank"
+  },
+  "show_notification": true
+}
