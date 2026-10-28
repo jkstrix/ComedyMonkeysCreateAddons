@@ -1,5 +1,5 @@
 // Copies a block's approved real sounds into the mod and writes their sounds.json entries and subtitles.
-// Usage: node design/sound/export-block.js <lava-generator|electric-motor|magma-engine|pressure-crucible|battery>   (run that folder's make-loops.js first)
+// Usage: node design/sound/export-block.js <lava-generator|electric-motor|magma-engine|pressure-crucible|battery|electric-lights>   (run that folder's make-loops.js first)
 // Every cue-file event becomes comedymonkeysaddons:<namespace>.<id> with all its variants; loops use their seamless
 // _loop files; the running sounds carry only 8 blocks (they run all day); an event marked "vanilla" points at
 // Minecraft's own sound event instead of a file. Only <namespace>.* entries are touched in sounds.json and the lang file.
@@ -15,6 +15,9 @@ const BLOCKS = {
   'pressure-crucible': { loops: ['whirr', 'fire', 'fire_soul'], quiet: ['whirr', 'creak', 'crunch', 'fire', 'fire_soul'] },
   // the Industrial Battery is a multiblock: its hum carries 12 blocks, the switching and the strike 16
   battery: { loops: ['hum'], quiet: [], range: { hum: 12, form: 16, unform: 16, strike: 16 } },
+  // Electric Lights: every sound is small and close (8 blocks); the Floodlight swinging round carries 12
+  'electric-lights': { loops: ['beacon_whirr'], quiet: ['switch_on', 'switch_off', 'flicker', 'warm_up', 'beacon_whirr', 'brightness_step'],
+    range: { floodlight_aim: 12 } },
 };
 const slug = process.argv[2];
 const conf = BLOCKS[slug];

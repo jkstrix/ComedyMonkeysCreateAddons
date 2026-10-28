@@ -349,6 +349,27 @@ public final class ModBlocks {
 			.pushReaction(PushReaction.BLOCK)
 			.lightLevel(state -> state.getValue(TradeBotStationBlock.GLOW) ? 4 : 0)));
 
+	// ---- Electric Lights (design/specs/electric-lights.md): break fast with a pickaxe (P30), never pushed (they hold a block entity)
+	public static final java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>> LIGHTS =
+		registerLights();
+
+	private static java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>> registerLights() {
+		var out = new java.util.EnumMap<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>>(
+			com.comedymonkey.createaddons.content.light.LightKind.class);
+		for (var kind : com.comedymonkey.createaddons.content.light.LightKind.values()) {
+			boolean floor = kind == com.comedymonkey.createaddons.content.light.LightKind.FLOOR_LIGHT;
+			boolean small = kind == com.comedymonkey.createaddons.content.light.LightKind.INDICATOR;
+			out.put(kind, BLOCKS.register(kind.id(), () -> new com.comedymonkey.createaddons.content.light.LightBlock(kind, BlockBehaviour.Properties.of()
+				.mapColor(MapColor.METAL)
+				.strength(floor ? 3.0f : 1.0f, floor ? 6.0f : 3.0f)
+				.sound(floor ? SoundType.METAL : small ? SoundType.COPPER : SoundType.LANTERN)
+				.requiresCorrectToolForDrops()
+				.noOcclusion()
+				.lightLevel(state -> com.comedymonkey.createaddons.content.light.LightBlock.lightLevel(kind, state)))));
+		}
+		return java.util.Collections.unmodifiableMap(out);
+	}
+
 	private static BlockBehaviour.Properties machine() {
 		return BlockBehaviour.Properties.of()
 			.mapColor(MapColor.METAL)

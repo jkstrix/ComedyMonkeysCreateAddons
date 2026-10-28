@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "comedymonkeysaddons:light_assembly"
+  },
+  "result": {
+    "id": "comedymonkeysaddons:cage_lamp",
+    "count": 1
+  }
+}

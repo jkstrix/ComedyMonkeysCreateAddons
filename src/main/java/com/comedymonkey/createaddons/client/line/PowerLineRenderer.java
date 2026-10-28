@@ -29,14 +29,15 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 public class PowerLineRenderer implements BlockEntityRenderer<PowerLineBlockEntity> {
 	public static final ModelResourceLocation BREAKER = part("breaker"), LEVER = part("breaker_lever"), METER = part("wire_meter"),
 		NEEDLE = part("wire_meter_needle"), SPLITTER = part("wire_splitter"), DIAL_EVEN = part("wire_splitter_dial_even"),
-		DIAL_NEAREST = part("wire_splitter_dial_nearest"), DIAL_ROBIN = part("wire_splitter_dial_robin"), DIAL_FIRST = part("wire_splitter_dial_first");
+		DIAL_NEAREST = part("wire_splitter_dial_nearest"), DIAL_ROBIN = part("wire_splitter_dial_robin"), DIAL_FIRST = part("wire_splitter_dial_first"),
+		SWITCH = part("light_switch"), SWITCH_TOGGLE = part("light_switch_toggle");
 
 	private static ModelResourceLocation part(String name) {
 		return ModelResourceLocation.standalone(ComedyMonkeysCreateAddons.asResource("block/line_fitting/" + name));
 	}
 
 	public static void registerModels(ModelEvent.RegisterAdditional event) {
-		for (ModelResourceLocation m : new ModelResourceLocation[] {BREAKER, LEVER, METER, NEEDLE, SPLITTER, DIAL_EVEN, DIAL_NEAREST, DIAL_ROBIN, DIAL_FIRST})
+		for (ModelResourceLocation m : new ModelResourceLocation[] {BREAKER, LEVER, METER, NEEDLE, SPLITTER, DIAL_EVEN, DIAL_NEAREST, DIAL_ROBIN, DIAL_FIRST, SWITCH, SWITCH_TOGGLE})
 			event.register(m);
 	}
 
@@ -77,6 +78,12 @@ public class PowerLineRenderer implements BlockEntityRenderer<PowerLineBlockEnti
 				float target = -90 + 180 * be.meterLevel();
 				float shown = be.easeShown(target, 0.12f);
 				rotated(ms, 8, 1.75f, 8, Axis.YP, -shown, () -> sink.part(NEEDLE, ms, light));
+			}
+			case SWITCH -> {
+				// the Light Switch's plate over the wire; its toggle tilts along the run, snapping over to the other side
+				sink.part(SWITCH, ms, light);
+				float shown = be.easeShown(be.leverOn() ? -30 : 30, 0.6f);
+				rotated(ms, 8, 2, 8, Axis.ZP, shown, () -> sink.part(SWITCH_TOGGLE, ms, light));
 			}
 			case SPLITTER -> {
 				sink.part(SPLITTER, ms, light);

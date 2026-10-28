@@ -19,21 +19,28 @@ import net.neoforged.neoforge.client.model.data.ModelData;
  */
 @FunctionalInterface
 public interface PartSink {
-	/** Draws {@code model} at the pose's current transform, lit at {@code light} (the block's, or full-bright). */
-	void part(ModelResourceLocation model, PoseStack ms, int light, RenderType type);
+	/**
+	 * Draws {@code model} at the pose's current transform, lit at {@code light} (the block's, or full-bright), its
+	 * colours multiplied by {@code rgb} (0xFFFFFF: as painted).
+	 */
+	void part(ModelResourceLocation model, PoseStack ms, int light, RenderType type, int rgb);
+
+	default void part(ModelResourceLocation model, PoseStack ms, int light, RenderType type) {
+		part(model, ms, light, type, 0xFFFFFF);
+	}
 
 	default void part(ModelResourceLocation model, PoseStack ms, int light) {
-		part(model, ms, light, RenderType.cutout());
+		part(model, ms, light, RenderType.cutout(), 0xFFFFFF);
 	}
 
 	/** Draws nothing: Flywheel has these parts. */
-	PartSink NONE = (model, ms, light, type) -> {};
+	PartSink NONE = (model, ms, light, type, rgb) -> {};
 
 	/** Draws straight to the screen, as a block entity renderer does. */
 	static PartSink screen(MultiBufferSource buffers, BlockState state, int overlay) {
-		return (model, ms, light, type) -> Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
-			ms.last(), buffers.getBuffer(type), state, Minecraft.getInstance().getModelManager().getModel(model), 1, 1, 1,
-			light, overlay, ModelData.EMPTY, type);
+		return (model, ms, light, type, rgb) -> Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
+			ms.last(), buffers.getBuffer(type), state, Minecraft.getInstance().getModelManager().getModel(model),
+			(rgb >> 16 & 255) / 255f, (rgb >> 8 & 255) / 255f, (rgb & 255) / 255f, light, overlay, ModelData.EMPTY, type);
 	}
 
 	/** Where a renderer should send its parts: nowhere when Flywheel draws them, else the screen. */

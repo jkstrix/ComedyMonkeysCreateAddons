@@ -1,0 +1,406 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/brass",
+    "brass": "comedymonkeysaddons:block/light/brass",
+    "glow": "comedymonkeysaddons:block/light/glow"
+  },
+  "elements": [
+    {
+      "name": "f_body_a",
+      "from": [
+        3,
+        14.5,
+        4.5
+      ],
+      "to": [
+        13,
+        16,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            0,
+            13,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            3,
+            0,
+            13,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            3,
+            4.5,
+            13,
+            11.5
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "f_body_b",
+      "from": [
+        4.5,
+        14.5,
+        3
+      ],
+      "to": [
+        11.5,
+        16,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            3,
+            0,
+            13,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            3,
+            0,
+            13,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            4.5,
+            3,
+            11.5,
+            13
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "f_body_c",
+      "from": [
+        3.75,
+        14.5,
+        3.75
+      ],
+      "to": [
+        12.25,
+        16,
+        12.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.75,
+            0,
+            12.25,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            3.75,
+            0,
+            12.25,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            3.75,
+            0,
+            12.25,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            3.75,
+            0,
+            12.25,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            3.75,
+            3.75,
+            12.25,
+            12.25
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "f_glow_a",
+      "from": [
+        4,
+        14.25,
+        5.5
+      ],
+      "to": [
+        12,
+        14.5,
+        10.5
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            1.5,
+            12,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "east": {
+          "uv": [
+            5.5,
+            1.5,
+            10.5,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "south": {
+          "uv": [
+            4,
+            1.5,
+            12,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            1.5,
+            10.5,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "down": {
+          "uv": [
+            4,
+            5.5,
+            12,
+            10.5
+          ],
+          "texture": "#glow"
+        }
+      }
+    },
+    {
+      "name": "f_glow_b",
+      "from": [
+        5.5,
+        14.25,
+        4
+      ],
+      "to": [
+        10.5,
+        14.5,
+        12
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            1.5,
+            10.5,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "east": {
+          "uv": [
+            4,
+            1.5,
+            12,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            1.5,
+            10.5,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "west": {
+          "uv": [
+            4,
+            1.5,
+            12,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            4,
+            10.5,
+            12
+          ],
+          "texture": "#glow"
+        }
+      }
+    },
+    {
+      "name": "f_glow_c",
+      "from": [
+        4.75,
+        14.25,
+        4.75
+      ],
+      "to": [
+        11.25,
+        14.5,
+        11.25
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4.75,
+            1.5,
+            11.25,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "east": {
+          "uv": [
+            4.75,
+            1.5,
+            11.25,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "south": {
+          "uv": [
+            4.75,
+            1.5,
+            11.25,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "west": {
+          "uv": [
+            4.75,
+            1.5,
+            11.25,
+            1.75
+          ],
+          "texture": "#glow"
+        },
+        "down": {
+          "uv": [
+            4.75,
+            4.75,
+            11.25,
+            11.25
+          ],
+          "texture": "#glow"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        -7.678,
+        0
+      ],
+      "scale": [
+        1.223,
+        1.223,
+        1.223
+      ]
+    }
+  }
+}

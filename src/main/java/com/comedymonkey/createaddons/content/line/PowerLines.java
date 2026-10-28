@@ -93,6 +93,15 @@ public final class PowerLines {
 		}
 	}
 
+	/**
+	 * A light at a line's end: told at each update whether its circuit reaches any generator or battery at all, so it
+	 * can go out at once when it's switched off, rather than flicker as it does when it starves.
+	 */
+	public interface Lamp {
+		/** {@code network}: which network says so (a light can touch several). */
+		void supplied(boolean source, Object network);
+	}
+
 	/** Something at pos changed: it and the blocks round it (corners, and through a wall) are read again. */
 	public void changed(BlockPos pos) {
 		changedAt.add(pos.immutable());
@@ -369,7 +378,7 @@ public final class PowerLines {
 	private Piece readWire(PowerLineBlockEntity be) {
 		LineTier tier = be.tier();
 		DyeColor dye = be.dye();
-		Piece p = new Piece(tier, be.fitting(), be.fitting() != Fitting.BREAKER || be.passes() > 0);
+		Piece p = new Piece(tier, be.fitting(), !be.fitting().cuts() || be.passes() > 0);
 		p.dye = dye;
 		if (be.fitting() == Fitting.SPLITTER)
 			p.priority = be.priorities();
@@ -602,7 +611,7 @@ public final class PowerLines {
 				int id = tiers.size();
 				tiers.add(t);
 				seg.put(first, id);
-				if (grid.piece(m).fitting == Fitting.BREAKER)
+				if (grid.piece(m).fitting.cuts())
 					continue;
 				ArrayDeque<Sub> walk = new ArrayDeque<>();
 				walk.add(first);
@@ -618,7 +627,7 @@ public final class PowerLines {
 						for (PowerGrid.Link l : grid.linksTo(s.node(), o))
 							if (l.tier() == t && (anyColour || l.dye() == dye))
 								joined = true;
-						if (!joined || (op.tier != null && (op.tier != t || !op.stale && op.dye != dye)) || op.fitting == Fitting.BREAKER)
+						if (!joined || (op.tier != null && (op.tier != t || !op.stale && op.dye != dye)) || op.fitting.cuts())
 							continue;
 						if (op.stale && op.tier != null && op.dye == null)
 							op.dye = dye;
@@ -659,7 +668,8 @@ public final class PowerLines {
 			}
 			int s = seg.get(new Sub(m, p.tier, p.dye));
 			n.segOf.put(m, s);
-			if (p.fitting == Fitting.BREAKER) {
+			// a Breaker or a Light Switch: joins the segments either side while it's on
+			if (p.fitting.cuts()) {
 				n.breakers.add(m);
 				for (Node o : grid.neighbours(m)) {
 					Piece op = grid.piece(o);
@@ -987,6 +997,7 @@ public final class PowerLines {
 			List<Source> sources = new ArrayList<>();
 			List<Taker> takers = new ArrayList<>();
 			double[] gen = new double[count], stored = new double[count], want = new double[count], room = new double[count];
+			boolean[] canGive = new boolean[count];
 			// one share a machine, however many wires meet it: by its block (a generator by its key, a store by its own)
 			Set<BlockPos> seen = new HashSet<>();
 			Map<BlockPos, StoreAt> stores = new LinkedHashMap<>();
@@ -1028,6 +1039,9 @@ public final class PowerLines {
 				if (e == null)
 					continue;
 				boolean in = e.canReceive(), out = e.canExtract();
+				// something that can give (another mod's battery or generator, even empty or idle) is a source for the lights
+				if (out)
+					canGive[c] = true;
 				if (out) {
 					int offer = e.extractEnergy(rate, true);
 					if (offer > 0) {
@@ -1139,6 +1153,31 @@ public final class PowerLines {
 						null, p, k.immutable());
 				}
 			}
+			// lights learn whether their circuit reaches any power at all: none (a Breaker or switch open, or no generator)
+			// and they go out at once; some, but too little, and they starve and flicker out
+			boolean[] reaches = new boolean[count];
+			for (int c = 0; c < count; c++)
+				reaches[c] = generating[c] || canGive[c] || gen[c] > 0 || stored[c] > 0;
+			for (Source s : sources)
+				reaches[s.circuit()] = true;
+			for (StoreAt s : stores.values())
+				for (int c : s.circuits)
+					reaches[c] = true;
+			for (boolean grew = true; grew;) {
+				grew = false;
+				for (Feed f : active)
+					if (reaches[f.from()] && !reaches[f.to()]) {
+						reaches[f.to()] = true;
+						grew = true;
+					}
+			}
+			// once per light, reached if any of its circuits on this network is (one touching two circuits isn't switched off)
+			Map<BlockPos, Boolean> lamps = new LinkedHashMap<>();
+			for (Device d : ends)
+				lamps.merge(d.end().target(), reaches[circuitOf[d.seg()]], Boolean::logicalOr);
+			for (Map.Entry<BlockPos, Boolean> l : lamps.entrySet())
+				if (level.isLoaded(l.getKey()) && level.getBlockEntity(l.getKey()) instanceof Lamp lamp)
+					lamp.supplied(l.getValue(), this);
 			use.clear();
 			use.putAll(nextUse);
 			lastMakes = makes;

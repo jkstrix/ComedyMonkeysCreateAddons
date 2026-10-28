@@ -52,7 +52,15 @@ public final class ModSounds {
 	/** The Clockwork Juggernaut's sounds, from the entries {@code design/sound/clockwork-juggernaut/export-game.js} writes. */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> JUGGERNAUT = registerPrefixed("clockwork_juggernaut.");
 
+	/** The Electric Lights' sounds (design/sound/electric-lights): lit lights are silent, these mark changes. */
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> LIGHTS = registerPrefixed("lights.");
+
 	private ModSounds() {}
+
+	/** One of the Electric Lights' sounds; throws for an unknown id. */
+	public static SoundEvent light(String id) {
+		return get(LIGHTS, id, "Electric Lights");
+	}
 
 	/** One of the Clockwork Juggernaut's sounds, or null for an id the sound design doesn't have. */
 	@org.jetbrains.annotations.Nullable

@@ -425,13 +425,13 @@
             "src": "lt_antenna_run",
             "trim": [
               0,
-              1.5
+              1.75
             ],
             "gain": 0.7,
             "pitch": 0.75,
             "lowpass": 1800,
-            "fadeIn": 0.03,
-            "fadeOut": 0.03
+            "fadeIn": 0,
+            "fadeOut": 0
           },
           {
             "src": "tick_004",
@@ -443,6 +443,13 @@
           {
             "src": "tick_004",
             "at": 1,
+            "gain": 0.3,
+            "pitch": 0.6,
+            "lowpass": 3000
+          },
+          {
+            "src": "tick_004",
+            "at": 2,
             "gain": 0.3,
             "pitch": 0.6,
             "lowpass": 3000

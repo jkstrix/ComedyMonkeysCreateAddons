@@ -61,6 +61,9 @@ public final class MachineVisuals {
 		// (most pieces carry no fitting: theirs is an idle visual, made again when a fitting goes on)
 		visualWhen(ModBlockEntities.FLUID_LINE, FluidLineRenderer::parts, false, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
 		visualWhen(ModBlockEntities.POWER_LINE, PowerLineRenderer::parts, true, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
+		// an Electric Light's lens, only while it's lit (dark, its glass is in the block model)
+		visualWhen(ModBlockEntities.LIGHT, com.comedymonkey.createaddons.client.LightRenderer::parts, true,
+			com.comedymonkey.createaddons.client.LightRenderer::active);
 		// an Upgraded Chest's lid, only while it's open (closed, it's part of the block model)
 		visualWhen(ModBlockEntities.UPGRADED_CHEST, com.comedymonkey.createaddons.client.UpgradedChestRenderer::parts, true,
 			com.comedymonkey.createaddons.client.UpgradedChestRenderer::open);

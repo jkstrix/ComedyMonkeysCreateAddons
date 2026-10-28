@@ -1,0 +1,113 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/steel",
+    "glass_off": "comedymonkeysaddons:block/light/glass_off"
+  },
+  "elements": [
+    {
+      "name": "bo_core_a",
+      "from": [
+        6,
+        7,
+        7
+      ],
+      "to": [
+        10,
+        10,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            6,
+            10,
+            9
+          ],
+          "texture": "#glass_off"
+        },
+        "east": {
+          "uv": [
+            7,
+            6,
+            9,
+            9
+          ],
+          "texture": "#glass_off"
+        },
+        "south": {
+          "uv": [
+            6,
+            6,
+            10,
+            9
+          ],
+          "texture": "#glass_off"
+        },
+        "west": {
+          "uv": [
+            7,
+            6,
+            9,
+            9
+          ],
+          "texture": "#glass_off"
+        }
+      }
+    },
+    {
+      "name": "bo_core_b",
+      "from": [
+        7,
+        7,
+        6
+      ],
+      "to": [
+        9,
+        10,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            6,
+            9,
+            9
+          ],
+          "texture": "#glass_off"
+        },
+        "east": {
+          "uv": [
+            6,
+            6,
+            10,
+            9
+          ],
+          "texture": "#glass_off"
+        },
+        "south": {
+          "uv": [
+            7,
+            6,
+            9,
+            9
+          ],
+          "texture": "#glass_off"
+        },
+        "west": {
+          "uv": [
+            6,
+            6,
+            10,
+            9
+          ],
+          "texture": "#glass_off"
+        }
+      }
+    }
+  ]
+}

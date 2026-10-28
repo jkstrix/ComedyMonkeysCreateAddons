@@ -24,7 +24,12 @@ public enum Fitting implements StringRepresentable {
 	/** Fluid or power: how what passes it is shared between the ends beyond it. */
 	SPLITTER("splitter", true, true, ModItems.SPLITTER),
 	/** Power: a switch that cuts the line, with a lever or by redstone. */
-	BREAKER("breaker", false, true, ModItems.BREAKER);
+	BREAKER("breaker", false, true, ModItems.BREAKER),
+	/**
+	 * Power: a Light Switch (design/specs/electric-lights.md, D15, P9), a wall plate flipped by hand that cuts the line like
+	 * a Breaker, but with no redstone in and never joining brass to copper.
+	 */
+	SWITCH("switch", false, true, ModItems.LIGHT_SWITCH);
 
 	private final String name;
 	private final boolean fluid, power;
@@ -43,6 +48,11 @@ public enum Fitting implements StringRepresentable {
 
 	public boolean fitsPowerLines() {
 		return power;
+	}
+
+	/** It can cut the line, so the grid treats it as a switch between the segments either side (Breaker, Light Switch). */
+	public boolean cuts() {
+		return this == BREAKER || this == SWITCH;
 	}
 
 	public Item item() {

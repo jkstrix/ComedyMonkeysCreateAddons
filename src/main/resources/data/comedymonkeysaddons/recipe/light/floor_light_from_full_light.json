@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": [
+    {
+      "item": "comedymonkeysaddons:bulkhead_light"
+    },
+    {
+      "item": "comedymonkeysaddons:wall_sconce"
+    },
+    {
+      "item": "comedymonkeysaddons:gooseneck_lamp"
+    },
+    {
+      "item": "comedymonkeysaddons:cage_lamp"
+    },
+    {
+      "item": "comedymonkeysaddons:flush_ceiling_light"
+    },
+    {
+      "item": "comedymonkeysaddons:bollard_light"
+    },
+    {
+      "item": "comedymonkeysaddons:lantern_head"
+    },
+    {
+      "item": "comedymonkeysaddons:cobra_head"
+    },
+    {
+      "item": "comedymonkeysaddons:globe_head"
+    },
+    {
+      "item": "comedymonkeysaddons:yard_light_head"
+    }
+  ],
+  "result": {
+    "id": "comedymonkeysaddons:floor_light",
+    "count": 1
+  }
+}

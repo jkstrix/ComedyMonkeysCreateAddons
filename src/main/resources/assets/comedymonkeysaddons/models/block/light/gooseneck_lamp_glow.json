@@ -1,0 +1,81 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/glow_white",
+    "glow_white": "comedymonkeysaddons:block/light/glow_white"
+  },
+  "elements": [
+    {
+      "name": "g_lamp",
+      "from": [
+        6.5,
+        7.5,
+        10.75
+      ],
+      "to": [
+        9.5,
+        8,
+        13.75
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            8,
+            9.5,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            2.25,
+            8,
+            5.25,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            6.5,
+            8,
+            9.5,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            10.75,
+            8,
+            13.75,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            6.5,
+            2.25,
+            9.5,
+            5.25
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

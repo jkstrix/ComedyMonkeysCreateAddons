@@ -1,0 +1,17 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/flush_ceiling_light"
+      }
+    },
+    {
+      "when": {
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/flush_ceiling_light_glass"
+      }
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp"
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp_glass"
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp_glass",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp_glass",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp_glass",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp"
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp_glass"
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp"
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/gooseneck_lamp_glass"
+      }
+    }
+  ]
+}

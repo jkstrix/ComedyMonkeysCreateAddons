@@ -1,0 +1,17 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/bollard_light"
+      }
+    },
+    {
+      "when": {
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/bollard_light_glass"
+      }
+    }
+  ]
+}

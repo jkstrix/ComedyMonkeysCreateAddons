@@ -33,6 +33,11 @@ neoForge {
             client()
             programArguments.addAll('--quickPlayMultiplayer', 'localhost:25565')
         }
+        // a dev client that opens run/'s world straight away (-Pworld=<name>, default "New World"), for ShotRunner's screenshots
+        clientWorld {
+            client()
+            systemProperty 'cmaddons.openWorld', project.findProperty('world') ?: 'New World'
+        }
         // Trade Bot's test courses, headless: builds each course, runs it, exits with the failures
         gameTestServer {
             type = "gameTestServer"
@@ -93,6 +98,8 @@ configurations {
 var extractSableCompanion = tasks.register('extractSableCompanion', Copy) {
     from({ zipTree(configurations.sableJar.singleFile) }) {
         include 'META-INF/jarjar/sable-companion-common-*.jar'
+        // Veil (Sable's rendering library): Electric Lights cast coloured light through it when it's installed
+        include 'META-INF/jarjar/veil-neoforge-*.jar'
         eachFile { path = name }
     }
     includeEmptyDirs = false
@@ -146,7 +153,7 @@ dependencies {
     // Sable API: the Compact Gyroscope and Torque Rotor act on physics objects (only registered when Sable is present)
     compileOnly("maven.modrinth:sable:${sable_version}") { transitive = false }
     sableJar("maven.modrinth:sable:${sable_version}") { transitive = false }
-    // Sable's companion API ships inside the Sable jar; pulled out to compile against
+    // Sable's companion API and Veil ship inside the Sable jar; pulled out to compile against
     compileOnly(fileTree(layout.buildDirectory.dir('sableCompanion')) {
         include '*.jar'
         builtBy extractSableCompanion

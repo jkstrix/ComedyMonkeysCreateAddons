@@ -99,6 +99,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.StorageGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.MachineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LineGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.LightGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.BatteryGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.TankGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.CagePerformanceGameTests::register);
@@ -112,8 +113,11 @@ public class ComedyMonkeysCreateAddons {
 		// Helper Bot's test courses (/helperbot testsetup), and the follow-up once Create has registered their stations
 		// Helper Bot's test railway and shop: the command is a dev tool (testtrain go gives every train a schedule), so
 		// not in releases; its queue runs everywhere, for the game tests
-		if (!net.neoforged.fml.loading.FMLEnvironment.production)
+		// ...and the Electric Lights' test street (/lights testsetup), likewise a dev tool
+		if (!net.neoforged.fml.loading.FMLEnvironment.production) {
 			NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.helperbot.HelperBotTestSetup::register);
+			NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.light.LightTestSetup::register);
+		}
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.helperbot.HelperBotTestSetup::onLevelTick);
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.helperbot.HelperBotTestSetup::onServerStopped);
 		// picking containers for Trade Bot: the server takes over the picker's clicks on blocks
@@ -225,6 +229,8 @@ public class ComedyMonkeysCreateAddons {
 			(be, side) -> side == null || LavaGeneratorBlock.isTerminal(be.getBlockState(), side) ? be.getEnergyOut() : null);
 		// A Battery takes and gives on its four sides; an Industrial Battery only through its insulators, to the network
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.BATTERY.get(), (be, side) -> be.energy(side));
+		// An Electric Light takes power from a line on any side, including one hidden in the block it's fixed to (D11)
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.LIGHT.get(), (be, side) -> be.energy());
 		// The turbine connects only through the port flanges under its base (the bottom faces of its bottom casings);
 		// the controller, in the middle of the front, offers nothing to a side
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.GEOTHERMAL_CONTROLLER.get(),

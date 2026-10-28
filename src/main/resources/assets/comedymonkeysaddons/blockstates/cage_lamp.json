@@ -1,0 +1,17 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cage_lamp"
+      }
+    },
+    {
+      "when": {
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cage_lamp_glass"
+      }
+    }
+  ]
+}

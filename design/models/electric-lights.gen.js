@@ -7,7 +7,9 @@
 const path = require('path');
 const { C, hash, textureSet, preview } = require('./process-box.lib.js');
 
-const GROUP = process.argv[2] || 'street';
+// required as a library (by electric-lights.export.js): the geometry only, no scene written
+const LIB = require.main !== module;
+const GROUP = LIB ? 'lib' : process.argv[2] || 'street';
 const OUT = path.resolve(__dirname, `electric-lights-${GROUP}.bbmodel`);
 
 // ---------- palette ----------
@@ -374,6 +376,8 @@ T.paint('amber_glass', (x, y) => ((x + y) % 6 === 0 ? '#d9a35cb0' : '#c47f3c90')
 T.paint('bezel', (x, y) => (x >= 6 && x <= 9 && y >= 6 && y <= 9 && (x === 6 || x === 9 || y === 6 || y === 9) ? BRASS[1] : STEEL[1]));
 // the Light Switch plate (block x 5-11, y 4-12 -> u 5-10, v 4-11): andesite grey, two screws above and below the toggle
 T.paint('switch_plate', (x, y) => ((x === 7 || x === 8) && (y === 5 || y === 10) ? (x === 7 ? '#6b6e6a' : '#5f625f') : x === 5 || x === 10 || y === 4 || y === 11 ? STEEL[0] : mott(STEEL, 17)(x, y)));
+// ...and laid on the floor across a wire along x, as line fittings are (block x 4-12 along the wire, z 5-11 across it)
+T.paint('switch_plate_floor', (x, y) => ((y === 7 || y === 8) && (x === 5 || x === 10) ? (y === 7 ? '#6b6e6a' : '#5f625f') : y === 5 || y === 10 || x === 4 || x === 11 ? STEEL[0] : mott(STEEL, 17)(y, x)));
 T.paint('bolt_plate', (x, y) => ((x === 5 || x === 10) && (y === 5 || y === 10) ? STEEL[0] : mott(STEEL, 18)(x, y)));
 
 // A square ring of four bars round an opening: outer o, inner i, centred on (cx, cz), from y0 to y1
@@ -489,6 +493,24 @@ function stripFloor(a, b, capA, capB) {
   if (capB) out.push(box('st_capB', [b - 0.5, 0, 6.75], [b + 0.25, 1.5, 9.25], 'alu'));
   return out;
 }
+// The Light Strip in the game: parts a strip block is built from, as Power Line wires are (StripModel turns them onto
+// each face and direction): lying on the floor and running north from the middle. Each is its aluminium channel and,
+// separately, its diffuser (lit and tinted, or the unlit glass). A strip goes straight through a block to its edges; at
+// a junction or a turn it's the middle and an arm to each strip it meets. Up the next face of the same block (inside
+// corner) the arm stops a pixel short, and one of the two draws the corner; over an edge (outside corner) both draw the
+// fold, as wires do. An open end gets a cap at the block's edge.
+function stripParts() {
+  const chan = (n, f, t) => box(n, f, t, { all: 'alu', down: null });
+  return {
+    centre: { body: [chan('st_centre', [7, 0, 7], [9, 1, 9])], diffuser: [glowBox('st_centre_d', [7.5, 1, 7.5], [8.5, 1.25, 8.5], 'glow', ['down'])] },
+    arm: { body: [chan('st_arm', [7, 0, 0], [9, 1, 7])], diffuser: [glowBox('st_arm_d', [7.5, 1, 0], [8.5, 1.25, 7], 'glow', ['down'])] },
+    arm_inner: { body: [chan('st_arm_in', [7, 0, 1], [9, 1, 7])], diffuser: [glowBox('st_arm_in_d', [7.5, 1, 1], [8.5, 1.25, 7], 'glow', ['down'])] },
+    corner: { body: [box('st_corner', [7, 0, 0], [9, 1, 1], { all: 'alu', down: null, north: null })], diffuser: [] },
+    fold: { body: [box('st_fold', [7, 0, -1], [9, 1, 0], { all: 'alu', down: null, south: null })],
+      diffuser: [glowBox('st_fold_d', [7.5, 0, -1.25], [8.5, 1.25, 0], 'glow', ['down', 'south'])] },
+    cap: { body: [box('st_cap', [6.75, 0, -0.25], [9.25, 1.5, 0.5], { all: 'alu', down: null })], diffuser: [] },
+  };
+}
 // Edge Light: an aluminium angle along the north-bottom edge of the block (sitting on the face below, at its north edge),
 // a lit bar along its outer edge; x from a to b
 function edgeX(a, b) {
@@ -547,6 +569,16 @@ function lightSwitch() {
     plate: [box('sw_plate', [5, 4, 0], [11, 12, 1], { all: 'steel', south: 'switch_plate', north: null }), box('sw_boss', [7, 7, 1], [9, 9, 1.5], 'alu'),
       box('sw_gland_b', [7, 3, 0], [9, 4, 1], 'steel'), box('sw_gland_t', [7, 12, 0], [9, 13, 1], 'steel')],
     toggle: [box('sw_toggle', [7.5, 7.5, 1.5], [8.5, 8.5, 4.5], 'steel'), box('sw_tip', [7.5, 7.5, 4.5], [8.5, 8.5, 5], 'brass')],
+  };
+}
+// The Light Switch as a line fitting: the same plate, boss, glands and toggle laid on the floor over a wire running along
+// x (line fittings are authored so, and turned onto the wire's face by PowerLineRenderer). The plate stands 1.5 px proud so
+// it covers the 1 px wire; the glands are 1.25 px so their tops clear the wire's. The toggle pivots at (8, 2, 8) about z.
+function lightSwitchFloor() {
+  return {
+    plate: [box('sw_plate', [4, 0, 5], [12, 1.5, 11], { all: 'steel', up: 'switch_plate_floor', down: null }), box('sw_boss', [7, 1.5, 7], [9, 2, 9], { all: 'alu', down: null }),
+      box('sw_gland_w', [3, 0, 7], [4, 1.25, 9], { all: 'steel', down: null }), box('sw_gland_e', [12, 0, 7], [13, 1.25, 9], { all: 'steel', down: null })],
+    toggle: [box('sw_toggle', [7.5, 2, 7.5], [8.5, 5, 8.5], { all: 'steel', down: null }), box('sw_tip', [7.5, 5, 7.5], [8.5, 5.5, 8.5], 'brass')],
   };
 }
 const wallWire = (y0, y1) => box('wire', [7.5, y0, 0], [8.5, y1, 0.5], { all: 'copper', north: null });
@@ -686,5 +718,7 @@ if (GROUP === 'runs') {
   clip('brightness', 2.0, 'loop', {}, swap('floor_light_2', ['full', 'b80', 'b50', 'b25'], [[0, 'full'], [0.2, 'b80'], [0.7, 'b50'], [1.2, 'b25'], [1.7, 'full']]), cueSounds('brightness'));
 }
 
-write(OUT, outliner);
-module.exports = { T, DYE_GLOW, C, box, disc, glowBox, move, reglow, turn, insulatorStack };
+if (!LIB) write(OUT, outliner);
+module.exports = { T, DYE_GLOW, GLOW, SODIUM_LOW, C, box, disc, zdisc, glowBox, move, reglow, turn, toWall, insulatorStack, isGlow,
+  castIronPost, steelPost, arm, armHead, ARM_TIP, lantern, cobraTop, globe, yardTop, bulkhead, sconce, gooseneck, highBay, cageLamp, flush,
+  pendantShade, chandelierBody, rose, flexSeg, stripFloor, edgeZ, bollard, floorLight, floodlight, beacon, indicator, lightSwitch, lightSwitchFloor, stripParts };

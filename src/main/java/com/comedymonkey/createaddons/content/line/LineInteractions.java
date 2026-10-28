@@ -110,6 +110,14 @@ public final class LineInteractions {
 					level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.6f, be.leverOn() ? 0.6f : 0.5f);
 				}
 			}
+			case SWITCH -> {
+				if (!level.isClientSide) {
+					be.flipLever();
+					tell(player, be.leverOn() ? "switch_on" : "switch_off");
+					level.playSound(null, pos, com.comedymonkey.createaddons.registry.ModSounds.light(be.leverOn() ? "switch_on" : "switch_off"),
+						SoundSource.BLOCKS, 0.7f, 1f);
+				}
+			}
 			default -> {
 				return InteractionResult.PASS;
 			}

@@ -2682,5 +2682,92 @@
     "sounds": [
       "comedymonkeysaddons:clockwork_juggernaut/engine_empty"
     ]
+  },
+  "lights.switch_on": {
+    "subtitle": "subtitles.comedymonkeysaddons.lights.switch_on",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:lights/switch_on_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:lights/switch_on_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "lights.switch_off": {
+    "subtitle": "subtitles.comedymonkeysaddons.lights.switch_off",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:lights/switch_off_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:lights/switch_off_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "lights.flicker": {
+    "subtitle": "subtitles.comedymonkeysaddons.lights.flicker",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:lights/flicker_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:lights/flicker_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:lights/flicker_3",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "lights.warm_up": {
+    "subtitle": "subtitles.comedymonkeysaddons.lights.warm_up",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:lights/warm_up_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:lights/warm_up_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "lights.beacon_whirr": {
+    "subtitle": "subtitles.comedymonkeysaddons.lights.beacon_whirr",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:lights/beacon_whirr_loop",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "lights.floodlight_aim": {
+    "subtitle": "subtitles.comedymonkeysaddons.lights.floodlight_aim",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:lights/floodlight_aim_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "comedymonkeysaddons:lights/floodlight_aim_2",
+        "attenuation_distance": 12
+      }
+    ]
+  },
+  "lights.brightness_step": {
+    "subtitle": "subtitles.comedymonkeysaddons.lights.brightness_step",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:lights/brightness_step",
+        "attenuation_distance": 8
+      }
+    ]
   }
 }

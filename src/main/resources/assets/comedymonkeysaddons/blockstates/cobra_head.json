@@ -1,0 +1,112 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head_glass"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head_glass",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head_glass",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head_glass",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head"
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head_glass"
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head"
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/cobra_head_glass"
+      }
+    }
+  ]
+}

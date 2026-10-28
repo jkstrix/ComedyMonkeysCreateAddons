@@ -117,6 +117,8 @@ public final class ModItems {
 	public static final DeferredItem<FittingItem> METER = ITEMS.register("meter", () -> new FittingItem(Fitting.METER, new Item.Properties()));
 	public static final DeferredItem<FittingItem> SPLITTER = ITEMS.register("splitter", () -> new FittingItem(Fitting.SPLITTER, new Item.Properties()));
 	public static final DeferredItem<FittingItem> BREAKER = ITEMS.register("breaker", () -> new FittingItem(Fitting.BREAKER, new Item.Properties()));
+	/** Electric Lights: a wall-plate switch that clips onto a Power Line (a Breaker by hand, without redstone or tier joins). */
+	public static final DeferredItem<FittingItem> LIGHT_SWITCH = ITEMS.register("light_switch", () -> new FittingItem(Fitting.SWITCH, new Item.Properties()));
 	public static final DeferredItem<BlockItem> STRING_TANGLER = ITEMS.registerSimpleBlockItem(ModBlocks.STRING_TANGLER);
 	public static final DeferredItem<BlockItem> STONE_INFUSER = ITEMS.registerSimpleBlockItem(ModBlocks.STONE_INFUSER);
 	public static final DeferredItem<BlockItem> TUFF_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.TUFF_GENERATOR);
@@ -135,6 +137,18 @@ public final class ModItems {
 	public static final DeferredItem<BlockItem> GEOTHERMAL_CORE = ITEMS.registerSimpleBlockItem(ModBlocks.GEOTHERMAL_CORE);
 	public static final DeferredItem<BlockItem> GEOTHERMAL_CONTROLLER =
 		ITEMS.registerSimpleBlockItem(ModBlocks.GEOTHERMAL_CONTROLLER);
+
+	/** Electric Lights: the Light Assembly every light is cut from in a stonecutter (D23), and the lights themselves. */
+	public static final DeferredItem<Item> LIGHT_ASSEMBLY = ITEMS.registerSimpleItem("light_assembly");
+	public static final java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredItem<BlockItem>> LIGHTS = registerLights();
+
+	private static java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredItem<BlockItem>> registerLights() {
+		var out = new java.util.EnumMap<com.comedymonkey.createaddons.content.light.LightKind, DeferredItem<BlockItem>>(
+			com.comedymonkey.createaddons.content.light.LightKind.class);
+		for (var kind : com.comedymonkey.createaddons.content.light.LightKind.values())
+			out.put(kind, ITEMS.registerSimpleBlockItem(ModBlocks.LIGHTS.get(kind)));
+		return java.util.Collections.unmodifiableMap(out);
+	}
 
 	/** Small chance from crushing cobblestone; nine are pressed into an Emerald. */
 	public static final DeferredItem<Item> EMERALD_DUST = ITEMS.registerSimpleItem("emerald_dust");

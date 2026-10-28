@@ -77,6 +77,10 @@ public class CMJeiPlugin implements IModPlugin {
 		info(registration, "meter", ModItems.METER.get());
 		info(registration, "splitter", ModItems.SPLITTER.get());
 		info(registration, "breaker", ModItems.BREAKER.get());
+		info(registration, "light_switch", ModItems.LIGHT_SWITCH.get());
+		// the Electric Lights: dyed in place, so there are no colour recipes to show it (P20)
+		info(registration, "light", ModItems.LIGHTS.values().stream().map(net.neoforged.neoforge.registries.DeferredItem::get)
+			.toArray(net.minecraft.world.level.ItemLike[]::new));
 	}
 
 	private static void info(IRecipeRegistration registration, String key, net.minecraft.world.level.ItemLike... items) {

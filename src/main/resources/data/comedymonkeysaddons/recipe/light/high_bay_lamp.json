@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "comedymonkeysaddons:light_assembly"
+    },
+    {
+      "tag": "c:plates/iron"
+    }
+  ],
+  "result": {
+    "id": "comedymonkeysaddons:high_bay_lamp",
+    "count": 1
+  }
+}

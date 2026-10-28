@@ -18,7 +18,8 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
  * both of its backends (the machines' visuals draw them), to check the instanced parts look exactly like the drawn
  * ones. Write a label into {@code cmca-shots.txt} in the game folder; it switches the backend, waits for the world to
  * settle, saves {@code screenshots/cmca/<label>-<backend>.png} and appends the frame rate to {@code cmca-shots.fps},
- * then puts the backend and the settings it changed back and writes {@code cmca-shots.done}.
+ * then puts the backend and the settings it changed back and writes {@code cmca-shots.done}. Commands written into
+ * {@code cmca-commands.txt}, one a line, are run as the player first (to set the time or the view).
  */
 public final class ShotRunner {
 	private static final String[] BACKENDS = {"flywheel:off", "flywheel:instancing", "flywheel:indirect"};
@@ -44,11 +45,50 @@ public final class ShotRunner {
 	@javax.annotation.Nullable
 	private static net.createmod.ponder.foundation.ui.PonderUI ponderUi;
 
+	/**
+	 * Whether the world named by -Dcmaddons.openWorld has been opened (once the title screen is up: runClientWorld); a
+	 * name with no save makes a new flat creative world by that name.
+	 */
+	private static boolean worldOpened;
+
 	public static void onClientTick(ClientTickEvent.Post event) {
 		Minecraft mc = Minecraft.getInstance();
+		String world = System.getProperty("cmaddons.openWorld");
+		if (world != null && !worldOpened && !FMLEnvironment.production && mc.getOverlay() == null
+			&& mc.screen instanceof net.minecraft.client.gui.screens.TitleScreen) {
+			// from the title screen, not quick play: Inventory Profiles Next needs its screens set up first
+			worldOpened = true;
+			if (mc.getLevelSource().levelExists(world)) {
+				mc.createWorldOpenFlows().openWorld(world, () -> mc.setScreen(new net.minecraft.client.gui.screens.TitleScreen()));
+				return;
+			}
+			// no such save: a new flat creative world with cheats, by that name (for test streets and courses)
+			var settings = new net.minecraft.world.level.LevelSettings(world, net.minecraft.world.level.GameType.CREATIVE, false,
+				net.minecraft.world.Difficulty.PEACEFUL, true, new net.minecraft.world.level.GameRules(),
+				net.minecraft.world.level.WorldDataConfiguration.DEFAULT);
+			mc.createWorldOpenFlows().createFreshLevel(world, settings, new net.minecraft.world.level.levelgen.WorldOptions(0, false, false),
+				registries -> registries.registryOrThrow(net.minecraft.core.registries.Registries.WORLD_PRESET)
+					.getHolderOrThrow(net.minecraft.world.level.levelgen.presets.WorldPresets.FLAT).value().createWorldDimensions(),
+				new net.minecraft.client.gui.screens.TitleScreen());
+			return;
+		}
 		if (FMLEnvironment.production || mc.level == null || mc.player == null)
 			return;
 		Path request = mc.gameDirectory.toPath().resolve("cmca-shots.txt");
+		// commands to run as the player first (time, teleport, which way to look), one a line: cmca-commands.txt
+		Path commands = mc.gameDirectory.toPath().resolve("cmca-commands.txt");
+		if (step < 0 && !ponder && Files.exists(commands)) {
+			try {
+				// read and deleted before they're run, so a file that can't be deleted isn't run every tick
+				java.util.List<String> lines = Files.readAllLines(commands);
+				Files.delete(commands);
+				for (String line : lines)
+					if (!line.isBlank())
+						mc.player.connection.sendCommand(line.strip().replaceFirst("^/", ""));
+			} catch (IOException e) {
+				return;
+			}
+		}
 		if (ponder) {
 			ponderTick(mc);
 			return;

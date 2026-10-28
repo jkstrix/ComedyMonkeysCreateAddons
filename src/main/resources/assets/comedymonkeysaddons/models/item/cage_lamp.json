@@ -1,0 +1,921 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/steel",
+    "steel": "comedymonkeysaddons:block/light/steel",
+    "iron": "comedymonkeysaddons:block/light/iron",
+    "glow": "comedymonkeysaddons:block/light/glow"
+  },
+  "elements": [
+    {
+      "name": "k_plate_a",
+      "from": [
+        5,
+        15,
+        6
+      ],
+      "to": [
+        11,
+        16,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            0,
+            11,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            6,
+            0,
+            10,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            5,
+            0,
+            11,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            6,
+            0,
+            10,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            5,
+            6,
+            11,
+            10
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            5,
+            6,
+            11,
+            10
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "k_plate_b",
+      "from": [
+        6,
+        15,
+        5
+      ],
+      "to": [
+        10,
+        16,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            0,
+            10,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            5,
+            0,
+            11,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            6,
+            0,
+            10,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            5,
+            0,
+            11,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "k_plate_c",
+      "from": [
+        5.5,
+        15,
+        5.5
+      ],
+      "to": [
+        10.5,
+        16,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            1
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "k_bar_w",
+      "from": [
+        5,
+        10,
+        7.5
+      ],
+      "to": [
+        6,
+        15,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            1,
+            11,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            1,
+            8.5,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            5,
+            1,
+            6,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            1,
+            8.5,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            5,
+            7.5,
+            6,
+            8.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            5,
+            7.5,
+            6,
+            8.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "k_bar_e",
+      "from": [
+        10,
+        10,
+        7.5
+      ],
+      "to": [
+        11,
+        15,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            1,
+            6,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            1,
+            8.5,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            10,
+            1,
+            11,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            1,
+            8.5,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            10,
+            7.5,
+            11,
+            8.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            10,
+            7.5,
+            11,
+            8.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "k_bar_n",
+      "from": [
+        7.5,
+        10,
+        5
+      ],
+      "to": [
+        8.5,
+        15,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            1,
+            8.5,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            10,
+            1,
+            11,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            1,
+            8.5,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            5,
+            1,
+            6,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            7.5,
+            10,
+            8.5,
+            11
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "k_bar_s",
+      "from": [
+        7.5,
+        10,
+        10
+      ],
+      "to": [
+        8.5,
+        15,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            1,
+            8.5,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            5,
+            1,
+            6,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            1,
+            8.5,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            10,
+            1,
+            11,
+            6
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            10,
+            8.5,
+            11
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            6
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "k_ring_a",
+      "from": [
+        5,
+        9,
+        6
+      ],
+      "to": [
+        11,
+        10,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            6,
+            11,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            6,
+            6,
+            10,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            5,
+            6,
+            11,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            6,
+            6,
+            10,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            5,
+            6,
+            11,
+            10
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            5,
+            6,
+            11,
+            10
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "k_ring_b",
+      "from": [
+        6,
+        9,
+        5
+      ],
+      "to": [
+        10,
+        10,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            6,
+            10,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            5,
+            6,
+            11,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            6,
+            6,
+            10,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            5,
+            6,
+            11,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "k_ring_c",
+      "from": [
+        5.5,
+        9,
+        5.5
+      ],
+      "to": [
+        10.5,
+        10,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            6,
+            10.5,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            5.5,
+            6,
+            10.5,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            6,
+            10.5,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            6,
+            10.5,
+            7
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "k_cap",
+      "from": [
+        7.5,
+        8.5,
+        7.5
+      ],
+      "to": [
+        8.5,
+        9,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            7,
+            8.5,
+            7.5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            7,
+            8.5,
+            7.5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            7,
+            8.5,
+            7.5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            7,
+            8.5,
+            7.5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            7.5,
+            8.5,
+            8.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            7.5,
+            7.5,
+            8.5,
+            8.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "k_glass_a",
+      "from": [
+        6,
+        10,
+        7
+      ],
+      "to": [
+        10,
+        15,
+        9
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            1,
+            10,
+            6
+          ],
+          "texture": "#glow"
+        },
+        "east": {
+          "uv": [
+            7,
+            1,
+            9,
+            6
+          ],
+          "texture": "#glow"
+        },
+        "south": {
+          "uv": [
+            6,
+            1,
+            10,
+            6
+          ],
+          "texture": "#glow"
+        },
+        "west": {
+          "uv": [
+            7,
+            1,
+            9,
+            6
+          ],
+          "texture": "#glow"
+        },
+        "down": {
+          "uv": [
+            6,
+            7,
+            10,
+            9
+          ],
+          "texture": "#glow"
+        }
+      }
+    },
+    {
+      "name": "k_glass_b",
+      "from": [
+        7,
+        10,
+        6
+      ],
+      "to": [
+        9,
+        15,
+        10
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            1,
+            9,
+            6
+          ],
+          "texture": "#glow"
+        },
+        "east": {
+          "uv": [
+            6,
+            1,
+            10,
+            6
+          ],
+          "texture": "#glow"
+        },
+        "south": {
+          "uv": [
+            7,
+            1,
+            9,
+            6
+          ],
+          "texture": "#glow"
+        },
+        "west": {
+          "uv": [
+            6,
+            1,
+            10,
+            6
+          ],
+          "texture": "#glow"
+        },
+        "down": {
+          "uv": [
+            7,
+            6,
+            9,
+            10
+          ],
+          "texture": "#glow"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        -5.969,
+        0
+      ],
+      "scale": [
+        1.532,
+        1.532,
+        1.532
+      ]
+    }
+  }
+}

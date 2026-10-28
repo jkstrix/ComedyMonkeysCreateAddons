@@ -1,0 +1,71 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/alu",
+    "glass_off": "comedymonkeysaddons:block/light/glass_off"
+  },
+  "elements": [
+    {
+      "name": "st_arm_d",
+      "from": [
+        7.5,
+        1,
+        0
+      ],
+      "to": [
+        8.5,
+        1.25,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            14.75,
+            8.5,
+            15
+          ],
+          "texture": "#glass_off"
+        },
+        "east": {
+          "uv": [
+            9,
+            14.75,
+            16,
+            15
+          ],
+          "texture": "#glass_off"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            14.75,
+            8.5,
+            15
+          ],
+          "texture": "#glass_off"
+        },
+        "west": {
+          "uv": [
+            0,
+            14.75,
+            7,
+            15
+          ],
+          "texture": "#glass_off"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            7
+          ],
+          "texture": "#glass_off"
+        }
+      }
+    }
+  ]
+}

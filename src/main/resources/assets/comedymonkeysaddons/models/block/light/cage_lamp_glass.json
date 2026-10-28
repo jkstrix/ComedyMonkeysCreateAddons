@@ -1,0 +1,131 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/steel",
+    "glass_off": "comedymonkeysaddons:block/light/glass_off"
+  },
+  "elements": [
+    {
+      "name": "k_glass_a",
+      "from": [
+        6,
+        10,
+        7
+      ],
+      "to": [
+        10,
+        15,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            1,
+            10,
+            6
+          ],
+          "texture": "#glass_off"
+        },
+        "east": {
+          "uv": [
+            7,
+            1,
+            9,
+            6
+          ],
+          "texture": "#glass_off"
+        },
+        "south": {
+          "uv": [
+            6,
+            1,
+            10,
+            6
+          ],
+          "texture": "#glass_off"
+        },
+        "west": {
+          "uv": [
+            7,
+            1,
+            9,
+            6
+          ],
+          "texture": "#glass_off"
+        },
+        "down": {
+          "uv": [
+            6,
+            7,
+            10,
+            9
+          ],
+          "texture": "#glass_off"
+        }
+      }
+    },
+    {
+      "name": "k_glass_b",
+      "from": [
+        7,
+        10,
+        6
+      ],
+      "to": [
+        9,
+        15,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            1,
+            9,
+            6
+          ],
+          "texture": "#glass_off"
+        },
+        "east": {
+          "uv": [
+            6,
+            1,
+            10,
+            6
+          ],
+          "texture": "#glass_off"
+        },
+        "south": {
+          "uv": [
+            7,
+            1,
+            9,
+            6
+          ],
+          "texture": "#glass_off"
+        },
+        "west": {
+          "uv": [
+            6,
+            1,
+            10,
+            6
+          ],
+          "texture": "#glass_off"
+        },
+        "down": {
+          "uv": [
+            7,
+            6,
+            9,
+            10
+          ],
+          "texture": "#glass_off"
+        }
+      }
+    }
+  ]
+}

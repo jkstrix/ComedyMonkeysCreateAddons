@@ -1,0 +1,131 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/glow_white",
+    "glow_white": "comedymonkeysaddons:block/light/glow_white"
+  },
+  "elements": [
+    {
+      "name": "bo_core_a",
+      "from": [
+        6,
+        7,
+        7
+      ],
+      "to": [
+        10,
+        10,
+        9
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            6,
+            10,
+            9
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            7,
+            6,
+            9,
+            9
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            6,
+            6,
+            10,
+            9
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            7,
+            6,
+            9,
+            9
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "bo_core_b",
+      "from": [
+        7,
+        7,
+        6
+      ],
+      "to": [
+        9,
+        10,
+        10
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            6,
+            9,
+            9
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            6,
+            6,
+            10,
+            9
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            7,
+            6,
+            9,
+            9
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            6,
+            6,
+            10,
+            9
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

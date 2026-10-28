@@ -1,0 +1,191 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/brass",
+    "brass": "comedymonkeysaddons:block/light/brass"
+  },
+  "elements": [
+    {
+      "name": "f_body_a",
+      "from": [
+        3,
+        14.5,
+        4.5
+      ],
+      "to": [
+        13,
+        16,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            0,
+            13,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            3,
+            0,
+            13,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            3,
+            4.5,
+            13,
+            11.5
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "f_body_b",
+      "from": [
+        4.5,
+        14.5,
+        3
+      ],
+      "to": [
+        11.5,
+        16,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            3,
+            0,
+            13,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            3,
+            0,
+            13,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            4.5,
+            3,
+            11.5,
+            13
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "f_body_c",
+      "from": [
+        3.75,
+        14.5,
+        3.75
+      ],
+      "to": [
+        12.25,
+        16,
+        12.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.75,
+            0,
+            12.25,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            3.75,
+            0,
+            12.25,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            3.75,
+            0,
+            12.25,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            3.75,
+            0,
+            12.25,
+            1.5
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            3.75,
+            3.75,
+            12.25,
+            12.25
+          ],
+          "texture": "#brass"
+        }
+      }
+    }
+  ]
+}

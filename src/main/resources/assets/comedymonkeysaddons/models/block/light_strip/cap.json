@@ -1,0 +1,71 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/alu",
+    "alu": "comedymonkeysaddons:block/light/alu"
+  },
+  "elements": [
+    {
+      "name": "st_cap",
+      "from": [
+        6.75,
+        0,
+        -0.25
+      ],
+      "to": [
+        9.25,
+        1.5,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.75,
+            14.5,
+            9.25,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "east": {
+          "uv": [
+            0,
+            14.5,
+            0.75,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "south": {
+          "uv": [
+            6.75,
+            14.5,
+            9.25,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "west": {
+          "uv": [
+            15.25,
+            14.5,
+            16,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "up": {
+          "uv": [
+            6.75,
+            15.25,
+            9.25,
+            16
+          ],
+          "texture": "#alu"
+        }
+      }
+    }
+  ]
+}

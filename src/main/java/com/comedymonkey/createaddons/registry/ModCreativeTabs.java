@@ -101,6 +101,9 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.METER.get());
 				output.accept(ModItems.SPLITTER.get());
 				output.accept(ModItems.BREAKER.get());
+				output.accept(ModItems.LIGHT_SWITCH.get());
+				output.accept(ModItems.LIGHT_ASSEMBLY.get());
+				ModItems.LIGHTS.values().forEach(light -> output.accept(light.get()));
 				if (SableCompat.LOADED)
 					AeronauticsContent.addToTab(output);
 				output.accept(ModItems.EMERALD_DUST.get());

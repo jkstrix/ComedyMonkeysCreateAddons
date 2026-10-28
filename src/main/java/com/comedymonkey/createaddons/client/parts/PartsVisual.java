@@ -55,9 +55,10 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 	private final List<ModelResourceLocation> models = new ArrayList<>();
 	private final List<RenderType> types = new ArrayList<>();
 	private final List<TransformedInstance> instances = new ArrayList<>();
-	/** What each instance was last sent as: its pose, light, and whether it's showing. */
+	/** What each instance was last sent as: its pose, light and colour, and whether it's showing. */
 	private final List<org.joml.Matrix4f> poses = new ArrayList<>();
 	private final List<int[]> lights = new ArrayList<>();
+	private final List<int[]> colours = new ArrayList<>();
 	private final List<boolean[]> showing = new ArrayList<>();
 	private final PoseStack ms = new PoseStack();
 	private final PartSink sink = this::place;
@@ -149,13 +150,13 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 			hide(i);
 	}
 
-	private void place(ModelResourceLocation model, PoseStack pose, int partLight, RenderType type) {
+	private void place(ModelResourceLocation model, PoseStack pose, int partLight, RenderType type, int rgb) {
 		TransformedInstance instance;
 		int i = next++;
 		if (i < instances.size() && models.get(i).equals(model) && types.get(i) == type) {
 			instance = instances.get(i);
-			// standing still, same light, already showing: nothing to send
-			if (showing.get(i)[0] && lights.get(i)[0] == partLight && poses.get(i).equals(pose.last().pose()))
+			// standing still, same light and colour, already showing: nothing to send
+			if (showing.get(i)[0] && lights.get(i)[0] == partLight && colours.get(i)[0] == rgb && poses.get(i).equals(pose.last().pose()))
 				return;
 		} else {
 			instance = instancerProvider().instancer(InstanceTypes.TRANSFORMED, PartModels.get(model, type)).createInstance();
@@ -170,14 +171,17 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 				types.add(type);
 				poses.add(new org.joml.Matrix4f());
 				lights.add(new int[1]);
+				colours.add(new int[] {0xFFFFFF});
 				showing.add(new boolean[1]);
 			}
 		}
 		poses.get(i).set(pose.last().pose());
 		lights.get(i)[0] = partLight;
+		colours.get(i)[0] = rgb;
 		showing.get(i)[0] = true;
 		instance.setTransform(pose.last());
 		instance.light(partLight);
+		instance.colorRgb(rgb);
 		instance.setVisible(true);
 		instance.setChanged();
 	}
@@ -195,6 +199,7 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 		types.clear();
 		poses.clear();
 		lights.clear();
+		colours.clear();
 		showing.clear();
 	}
 }

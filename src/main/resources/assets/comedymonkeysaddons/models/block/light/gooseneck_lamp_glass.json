@@ -1,0 +1,71 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/steel",
+    "glass_off": "comedymonkeysaddons:block/light/glass_off"
+  },
+  "elements": [
+    {
+      "name": "g_lamp",
+      "from": [
+        6.5,
+        7.5,
+        10.75
+      ],
+      "to": [
+        9.5,
+        8,
+        13.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            8,
+            9.5,
+            8.5
+          ],
+          "texture": "#glass_off"
+        },
+        "east": {
+          "uv": [
+            2.25,
+            8,
+            5.25,
+            8.5
+          ],
+          "texture": "#glass_off"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            8,
+            9.5,
+            8.5
+          ],
+          "texture": "#glass_off"
+        },
+        "west": {
+          "uv": [
+            10.75,
+            8,
+            13.75,
+            8.5
+          ],
+          "texture": "#glass_off"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            2.25,
+            9.5,
+            5.25
+          ],
+          "texture": "#glass_off"
+        }
+      }
+    }
+  ]
+}

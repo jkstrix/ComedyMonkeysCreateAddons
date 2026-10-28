@@ -118,6 +118,11 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue powerLineBrassFePerTick;
 		public final ModConfigSpec.IntValue spanReachCopper;
 		public final ModConfigSpec.IntValue spanReachBrass;
+		public final ModConfigSpec.DoubleValue lightIndicatorFePerTick;
+		public final ModConfigSpec.DoubleValue lightSmallFePerTick;
+		public final ModConfigSpec.DoubleValue lightCeilingFePerTick;
+		public final ModConfigSpec.DoubleValue lightLargeFePerTick;
+		public final ModConfigSpec.IntValue lightBufferSeconds;
 
 		public final ModConfigSpec.DoubleValue gyroStrength;
 		public final ModConfigSpec.DoubleValue gyroDamping;
@@ -527,6 +532,29 @@ public final class CMConfig {
 				.defineInRange("spanReachBrass", 32, 2, 64);
 			builder.pop();
 
+			builder.comment("Electric Lights: lamps fed by Power Lines. FE each draws per tick at full brightness (less when dimmed).").push("lights");
+			lightIndicatorFePerTick = builder
+				.comment("The Indicator Lamp.")
+				.translation("comedymonkeysaddons.configuration.lightIndicatorFePerTick")
+				.defineInRange("indicatorFePerTick", 1.0, 0.05, 10000.0);
+			lightSmallFePerTick = builder
+				.comment("Wall lights, the Bollard and the Floor Light.")
+				.translation("comedymonkeysaddons.configuration.lightSmallFePerTick")
+				.defineInRange("smallFePerTick", 2.0, 0.05, 10000.0);
+			lightCeilingFePerTick = builder
+				.comment("The Cage Lamp and the Flush Ceiling Light.")
+				.translation("comedymonkeysaddons.configuration.lightCeilingFePerTick")
+				.defineInRange("ceilingFePerTick", 3.0, 0.05, 10000.0);
+			lightLargeFePerTick = builder
+				.comment("The High-Bay Lamp and each street lamp head.")
+				.translation("comedymonkeysaddons.configuration.lightLargeFePerTick")
+				.defineInRange("largeFePerTick", 8.0, 0.05, 10000.0);
+			lightBufferSeconds = builder
+				.comment("Seconds of power a light holds: how long it stays lit after its power stops, before it flickers out.")
+				.translation("comedymonkeysaddons.configuration.lightBufferSeconds")
+				.defineInRange("bufferSeconds", 2, 1, 60);
+			builder.pop();
+
 			builder.comment("Create Aeronautics blocks (only present when Sable is installed)").push("aeronautics");
 			builder.comment("Compact Gyroscope: holds a ship level, like the Gyroscope Stabilizers' Gyroscope, whose",
 					"defaults these match. Effectiveness grows with speed up to the reference RPM.")
@@ -890,6 +918,26 @@ public final class CMConfig {
 			return get(spanReachBrass);
 		}
 
+		public double lightIndicatorFePerTick() {
+			return get(lightIndicatorFePerTick);
+		}
+
+		public double lightSmallFePerTick() {
+			return get(lightSmallFePerTick);
+		}
+
+		public double lightCeilingFePerTick() {
+			return get(lightCeilingFePerTick);
+		}
+
+		public double lightLargeFePerTick() {
+			return get(lightLargeFePerTick);
+		}
+
+		public int lightBufferSeconds() {
+			return get(lightBufferSeconds);
+		}
+
 		public double gyroStrength() {
 			return get(gyroStrength);
 		}
@@ -975,6 +1023,8 @@ public final class CMConfig {
 		public final ModConfigSpec.BooleanValue renderCurioGoggles;
 		public final ModConfigSpec.BooleanValue renderOverHelmet;
 		public final ModConfigSpec.IntValue helperBotVoiceCooldown;
+		public final ModConfigSpec.BooleanValue lightColouredLight;
+		public final ModConfigSpec.BooleanValue lightColouredLightShadows;
 
 		Client(ModConfigSpec.Builder builder) {
 			builder.comment("Aviator's Goggles worn in the Curios head slot").push("aviatorsGoggles");
@@ -996,6 +1046,19 @@ public final class CMConfig {
 				.comment("Seconds each Helper Bot waits between voice sounds (chirps, grumbles, sighs). Trains are loud enough.")
 				.translation("comedymonkeysaddons.configuration.helperBotVoiceCooldown")
 				.defineInRange("helperBotVoiceCooldown", 20, 0, 600);
+			builder.pop();
+
+			builder.comment("Electric Lights").push("lights");
+			lightColouredLight = builder
+				.comment("With Veil installed (it comes with Sable and Create Aeronautics), lit Electric Lights cast light in their",
+					"glow's colour on the world around them. Vanilla's light has no colour: without Veil, only the lens takes the dye.",
+					"Not used with Iris (Veil's lights don't work under it) or with Colorful Lighting, which colours their light itself.")
+				.translation("comedymonkeysaddons.configuration.lightColouredLight")
+				.define("lightColouredLight", true);
+			lightColouredLightShadows = builder
+				.comment("Solid blocks stop the coloured light, so it doesn't shine through walls. Costs more with many lights in view.")
+				.translation("comedymonkeysaddons.configuration.lightColouredLightShadows")
+				.define("lightColouredLightShadows", true);
 			builder.pop();
 		}
 	}

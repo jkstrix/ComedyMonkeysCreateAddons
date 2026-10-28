@@ -51,6 +51,19 @@
     "comedymonkeysaddons:brass_fish_tank",
     "comedymonkeysaddons:helper_bot",
     "comedymonkeysaddons:winding_key",
-    "comedymonkeysaddons:spring_engine"
+    "comedymonkeysaddons:spring_engine",
+    "comedymonkeysaddons:bulkhead_light",
+    "comedymonkeysaddons:wall_sconce",
+    "comedymonkeysaddons:gooseneck_lamp",
+    "comedymonkeysaddons:high_bay_lamp",
+    "comedymonkeysaddons:cage_lamp",
+    "comedymonkeysaddons:flush_ceiling_light",
+    "comedymonkeysaddons:bollard_light",
+    "comedymonkeysaddons:floor_light",
+    "comedymonkeysaddons:indicator_lamp",
+    "comedymonkeysaddons:lantern_head",
+    "comedymonkeysaddons:cobra_head",
+    "comedymonkeysaddons:globe_head",
+    "comedymonkeysaddons:yard_light_head"
   ]
 }

@@ -1,0 +1,62 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/alu",
+    "alu": "comedymonkeysaddons:block/light/alu"
+  },
+  "elements": [
+    {
+      "name": "st_fold",
+      "from": [
+        7,
+        0,
+        -1
+      ],
+      "to": [
+        9,
+        1,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            15,
+            9,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "east": {
+          "uv": [
+            0,
+            15,
+            1,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "west": {
+          "uv": [
+            15,
+            15,
+            16,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "up": {
+          "uv": [
+            7,
+            15,
+            9,
+            16
+          ],
+          "texture": "#alu"
+        }
+      }
+    }
+  ]
+}

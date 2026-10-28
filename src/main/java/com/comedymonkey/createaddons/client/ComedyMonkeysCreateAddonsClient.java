@@ -100,6 +100,8 @@ public class ComedyMonkeysCreateAddonsClient {
 					dev.engine_room.flywheel.lib.visualization.VisualizationHelper.queueUpdate(post);
 		};
 		com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity.clientTicker = ElectricSounds::tickMotor;
+		// Electric Lights: flicker and warm-up sounds (capped nearby), and a lit light's visual made when it comes on
+		com.comedymonkey.createaddons.content.light.LightBlockEntity.clientCue = LightSounds::cue;
 		// The Industrial Battery's hum runs from its master's client tick
 		com.comedymonkey.createaddons.content.electric.BatteryBlockEntity.clientTicker = ElectricSounds::tickBattery;
 		// The Magma Engines' sounds and exhaust puffs run from their client ticks
@@ -119,6 +121,11 @@ public class ComedyMonkeysCreateAddonsClient {
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMousePressed);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseDragged);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseReleased);
+		// Electric Lights cast light in their glow's colour where Veil can draw it (it comes with Sable): not with Iris (its
+		// light pass fails there, shader pack or not), nor with Colorful Lighting (which colours their light itself)
+		if (net.neoforged.fml.ModList.get().isLoaded("veil") && !net.neoforged.fml.ModList.get().isLoaded("iris")
+			&& !net.neoforged.fml.ModList.get().isLoaded("colorful_lighting"))
+			com.comedymonkey.createaddons.compat.veil.LightGlow.install(modBus);
 		// Pipez Covers: covered pipes are drawn as their cover, tinted like its block
 		if (net.neoforged.fml.ModList.get().isLoaded("pipez")) {
 			modBus.addListener(com.comedymonkey.createaddons.compat.pipez.cover.client.CoveredPipeModel::wrapPipes);
@@ -199,6 +206,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.SPRING_ENGINE.get(), com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.BATTERY.get(), BatteryRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.LIGHT.get(), LightRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.GEOTHERMAL_CONTROLLER.get(), ElectricRenderers.Turbine::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.STRING_TANGLER.get(), MachineRenderers.Tangler::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.STONE_INFUSER.get(), MachineRenderers.Infuser::new);
@@ -212,7 +220,7 @@ public class ComedyMonkeysCreateAddonsClient {
 	}
 
 	/** A block entity's Flywheel visual made again (it needs a different one now: a fitting went on, a chest opened). */
-	private static void revisualize(net.minecraft.world.level.block.entity.BlockEntity be) {
+	static void revisualize(net.minecraft.world.level.block.entity.BlockEntity be) {
 		if (be.getLevel() != null && dev.engine_room.flywheel.api.visualization.VisualizationManager.supportsVisualization(be.getLevel())) {
 			var visuals = dev.engine_room.flywheel.api.visualization.VisualizationManager.get(be.getLevel()).blockEntities();
 			visuals.queueRemove(be);
@@ -245,6 +253,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		MagmaEngineRenderer.registerModels(event);
 		ElectricRenderers.registerModels(event);
 		BatteryRenderer.registerModels(event);
+		LightRenderer.registerModels(event);
 		BatteryTowerModel.registerModels(event);
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerModels(event);

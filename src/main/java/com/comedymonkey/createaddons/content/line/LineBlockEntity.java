@@ -215,6 +215,8 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 		return switch (fitting) {
 			case VALVE -> powered ? 0 : rate() * valveOpen / 10;
 			case BREAKER -> powered || !leverOn ? 0 : Integer.MAX_VALUE;
+			// a Light Switch: by hand only
+			case SWITCH -> leverOn ? Integer.MAX_VALUE : 0;
 			default -> Integer.MAX_VALUE;
 		};
 	}
@@ -585,6 +587,7 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 			line(tooltip, Component.translatable(key("holding_back")));
 		switch (fitting) {
 			case BREAKER -> line(tooltip, Component.translatable(key(powered ? "breaker_redstone" : leverOn ? "breaker_on" : "breaker_off")));
+			case SWITCH -> line(tooltip, Component.translatable(key(leverOn ? "switch_on" : "switch_off")));
 			case SPLITTER -> line(tooltip, splitterLine());
 			case METER -> line(tooltip, Component.translatable(key(meterUnitKey()), meterFlow));
 			default -> {}
