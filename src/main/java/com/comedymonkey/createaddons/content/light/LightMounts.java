@@ -22,6 +22,8 @@ public final class LightMounts {
 
 	/** The light (Light Strip, Edge Light) at pos, in {@code state}, is fixed to the block at {@code support}. */
 	public static boolean fixedTo(BlockGetter level, BlockState state, BlockPos pos, BlockPos support) {
+		if (state.getBlock() instanceof HangingLampBlock)
+			return support.equals(HangingLampBlock.ceiling(level, state, pos));
 		if (state.getBlock() instanceof EdgeLightBlock) {
 			int edges = EdgeLinks.edgesAt(level, pos);
 			for (Direction face : Direction.values())
@@ -48,7 +50,17 @@ public final class LightMounts {
 			BlockPos p = support.relative(d);
 			if (p.equals(except) || !level.hasChunkAt(p))
 				continue;
-			if (fixedTo(level, level.getBlockState(p), p, support))
+			BlockState there = level.getBlockState(p);
+			// a hanging lamp's cable: the lamp at its foot is fixed to this block
+			if (there.getBlock() instanceof HangingCableBlock) {
+				BlockPos q = p.below();
+				for (int i = 0; i < HangingLampBlock.MAX_DROP && level.hasChunkAt(q) && level.getBlockState(q).getBlock() instanceof HangingCableBlock; i++)
+					q = q.below();
+				if (level.hasChunkAt(q) && fixedTo(level, level.getBlockState(q), q, support))
+					out.add(q);
+				continue;
+			}
+			if (fixedTo(level, there, p, support))
 				out.add(p);
 		}
 		return out;
@@ -58,6 +70,13 @@ public final class LightMounts {
 	static void relinkBehind(Level level, BlockState state, BlockPos pos) {
 		if (level.isClientSide)
 			return;
+		// a hanging lamp is fixed to the ceiling at the top of its cable, not to a neighbour
+		if (state.getBlock() instanceof HangingLampBlock) {
+			BlockPos ceiling = HangingLampBlock.ceiling(level, state, pos);
+			if (ceiling != null)
+				PowerLineBlock.refreshAround(level, ceiling);
+			return;
+		}
 		for (Direction d : Direction.values()) {
 			BlockPos support = pos.relative(d);
 			if (fixedTo(level, state, pos, support))

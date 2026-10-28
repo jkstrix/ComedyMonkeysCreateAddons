@@ -185,6 +185,37 @@ for (const [id, f] of Object.entries(POSTS)) {
   writeJson(`models/item/${id}.json`, blockModel(f.post('single'), f.particle, { gui: true }));
 }
 
+// ---------- hanging lamps: right under the ceiling on a short flex from its rose, or lowered on cable (hung) ----------
+// (HangingLampBlock; the cable above a hung lamp is HangingCableBlock, its top block with the lamp's rose)
+const HANGING = {
+  pendant_lamp: { lamp: G.pendantShade, top: 9, rose: 'steel' },
+  chandelier: { lamp: G.chandelierBody, top: 12, rose: 'brass' },
+};
+for (const [id, h] of Object.entries(HANGING)) {
+  const lamp = h.lamp(), rose = G.rose(3, h.rose);
+  const body = lamp.filter((c) => !G.isGlow(c)), glass = lamp.filter(G.isGlow);
+  if (!glass.length) throw new Error(id + ' has no glow parts');
+  const under = [...rose, G.flexSeg(h.top, 15.5), ...body];
+  writeJson(`models/block/light/${id}.json`, blockModel(under, h.rose));
+  writeJson(`models/block/light/${id}_hung.json`, blockModel([G.flexSeg(h.top, 16), ...body], h.rose));
+  writeJson(`models/block/light/${id}_glass.json`, blockModel(lens(glass, 'glass_off'), h.rose));
+  writeJson(`models/block/light/${id}_glow.json`, blockModel(lens(glass, 'glow_white'), 'glow_white', { glow: 'tint' }));
+  writeJson(`models/item/${id}.json`, blockModel([...under, ...glass], h.rose, { glow: true, gui: true }));
+  const model = (part) => `${NS}:block/light/${id}${part}`;
+  writeJson(`blockstates/${id}.json`, { multipart: [
+    { when: { hung: 'false' }, apply: { model: model('') } },
+    { when: { hung: 'true' }, apply: { model: model('_hung') } },
+    { when: { light: '0' }, apply: { model: model('_glass') } }] });
+}
+// the cable: a plain length, or its top block with the lamp's rose against the ceiling
+writeJson('models/block/light/hanging_cable.json', blockModel([G.flexSeg(0, 16)], 'flex'));
+for (const r of ['steel', 'brass'])
+  writeJson(`models/block/light/hanging_cable_rose_${r}.json`, blockModel([...G.rose(3, r), G.flexSeg(0, 15.5)], 'flex'));
+writeJson('blockstates/hanging_cable.json', { variants: {
+  'rose=none': { model: `${NS}:block/light/hanging_cable` },
+  'rose=steel': { model: `${NS}:block/light/hanging_cable_rose_steel` },
+  'rose=brass': { model: `${NS}:block/light/hanging_cable_rose_brass` } } });
+
 // ---------- the colour each light casts, for Colorful Lighting (it reads emitters by block state) ----------
 // As LightColours.castHex (checked by LightColoursTest): the lens colour at full; a dyed one strengthened so it reads over
 // vanilla's white light, black as a deep ultraviolet, green from a cooler green than its olive lens, undyed the warm lens as it is. Dark lights emit nothing anyway.
@@ -205,7 +236,7 @@ function castHex(dye) {
   return '#' + rgb.map((v) => Math.floor(f(v * 255) + 0.5).toString(16).toUpperCase().padStart(2, '0')).join('');
 }
 const emitters = {};
-for (const id of [...Object.keys(KINDS), 'light_strip', 'edge_light']) {
+for (const id of [...Object.keys(KINDS), ...Object.keys(HANGING), 'light_strip', 'edge_light']) {
   emitters[`${NS}:${id}`] = castHex(null);
   for (const dye of DYES) emitters[`${NS}:${id}[color=${dye}]`] = castHex(dye);
 }
@@ -243,7 +274,7 @@ const writeData = (rel, obj) => {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, JSON.stringify(obj, null, 2) + '\n');
 };
-const ids = Object.keys(KINDS);
+const ids = [...Object.keys(KINDS), ...Object.keys(HANGING)];
 for (const id of ids)
   writeData(`${NS}/loot_table/blocks/${id}.json`, { type: 'minecraft:block', pools: [{ rolls: 1,
     entries: [{ type: 'minecraft:item', name: `${NS}:${id}` }], conditions: [{ condition: 'minecraft:survives_explosion' }] }] });
@@ -273,6 +304,10 @@ writeData(`${NS}/recipe/light/cast_iron_lamp_post_from_steel.json`, { type: 'min
 writeData(`${NS}/recipe/light/steel_lamp_post_from_cast_iron.json`, { type: 'minecraft:stonecutting',
   ingredient: { item: `${NS}:cast_iron_lamp_post` }, result: { id: `${NS}:steel_lamp_post`, count: 1 } });
 
+// each block of hanging cable gives back the Power Line it was lowered with
+writeData(`${NS}/loot_table/blocks/hanging_cable.json`, { type: 'minecraft:block', pools: [{ rolls: 1,
+  entries: [{ type: 'minecraft:item', name: `${NS}:copper_power_line` }], conditions: [{ condition: 'minecraft:survives_explosion' }] }] });
+
 // an edge-light block drops one for each edge it has (EdgeLightBlock.getDrops counts them; the table gives the one)
 writeData(`${NS}/loot_table/blocks/edge_light.json`, { type: 'minecraft:block', pools: [{ rolls: 1,
   entries: [{ type: 'minecraft:item', name: `${NS}:edge_light` }], conditions: [{ condition: 'minecraft:survives_explosion' }] }] });
@@ -281,11 +316,11 @@ writeData(`${NS}/loot_table/blocks/edge_light.json`, { type: 'minecraft:block', 
 // A light goes back in to become another of its yield group, 1:1 (P23). The bigger lights are crafted instead (D26).
 const GROUPS = {
   full: ['bulkhead_light', 'wall_sconce', 'gooseneck_lamp', 'cage_lamp', 'flush_ceiling_light', 'bollard_light', 'floor_light',
-    'lantern_head', 'cobra_head', 'globe_head', 'yard_light_head'],
+    'lantern_head', 'cobra_head', 'globe_head', 'yard_light_head', 'pendant_lamp'],
   small: ['indicator_lamp', 'light_strip', 'edge_light'],
 };
 const YIELD = { full: 1, small: 8 };
-const CRAFTED = { high_bay_lamp: [{ tag: 'c:plates/iron' }] };
+const CRAFTED = { high_bay_lamp: [{ tag: 'c:plates/iron' }], chandelier: [{ tag: 'c:plates/brass' }] };
 fs.rmSync(path.join(DATA, NS, 'recipe/light'), { recursive: true, force: true });
 writeData(`${NS}/recipe/light_assembly.json`, { type: 'minecraft:crafting_shapeless', category: 'misc',
   ingredients: [{ item: 'minecraft:glass' }, { tag: 'c:plates/copper' }, { item: 'minecraft:redstone' }],

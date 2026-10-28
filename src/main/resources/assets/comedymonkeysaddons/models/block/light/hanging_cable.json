@@ -1,0 +1,62 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/flex",
+    "flex": "comedymonkeysaddons:block/light/flex"
+  },
+  "elements": [
+    {
+      "name": "flex",
+      "from": [
+        7.5,
+        0,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            16
+          ],
+          "texture": "#flex"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            16
+          ],
+          "texture": "#flex"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            16
+          ],
+          "texture": "#flex"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            16
+          ],
+          "texture": "#flex"
+        }
+      }
+    }
+  ]
+}

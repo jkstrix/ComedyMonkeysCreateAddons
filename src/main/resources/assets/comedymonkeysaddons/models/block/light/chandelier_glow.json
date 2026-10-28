@@ -1,0 +1,687 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/glow_white",
+    "glow_white": "comedymonkeysaddons:block/light/glow_white"
+  },
+  "elements": [
+    {
+      "name": "north_arm_bulb",
+      "from": [
+        7.5,
+        9,
+        1.5
+      ],
+      "to": [
+        8.5,
+        11,
+        2.5
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            13.5,
+            5,
+            14.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            1.5,
+            5,
+            2.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            7.5,
+            1.5,
+            8.5,
+            2.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            7.5,
+            13.5,
+            8.5,
+            14.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "east_arm_bulb",
+      "from": [
+        13.5,
+        9,
+        7.5
+      ],
+      "to": [
+        14.5,
+        11,
+        8.5
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            1.5,
+            5,
+            2.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            13.5,
+            5,
+            14.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            13.5,
+            7.5,
+            14.5,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            13.5,
+            7.5,
+            14.5,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "south_arm_bulb",
+      "from": [
+        7.5,
+        9,
+        13.5
+      ],
+      "to": [
+        8.5,
+        11,
+        14.5
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            1.5,
+            5,
+            2.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            13.5,
+            5,
+            14.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            7.5,
+            13.5,
+            8.5,
+            14.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            7.5,
+            1.5,
+            8.5,
+            2.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "west_arm_bulb",
+      "from": [
+        1.5,
+        9,
+        7.5
+      ],
+      "to": [
+        2.5,
+        11,
+        8.5
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.5,
+            5,
+            14.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            1.5,
+            5,
+            2.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            1.5,
+            7.5,
+            2.5,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            1.5,
+            7.5,
+            2.5,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "dnorth_arm_bulb",
+      "from": [
+        7.5,
+        9,
+        1.5
+      ],
+      "to": [
+        8.5,
+        11,
+        2.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          5,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            13.5,
+            5,
+            14.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            1.5,
+            5,
+            2.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            7.5,
+            1.5,
+            8.5,
+            2.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            7.5,
+            13.5,
+            8.5,
+            14.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "deast_arm_bulb",
+      "from": [
+        13.5,
+        9,
+        7.5
+      ],
+      "to": [
+        14.5,
+        11,
+        8.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          5,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            1.5,
+            5,
+            2.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            13.5,
+            5,
+            14.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            13.5,
+            7.5,
+            14.5,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            13.5,
+            7.5,
+            14.5,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "dsouth_arm_bulb",
+      "from": [
+        7.5,
+        9,
+        13.5
+      ],
+      "to": [
+        8.5,
+        11,
+        14.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          5,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            1.5,
+            5,
+            2.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            13.5,
+            5,
+            14.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            7.5,
+            13.5,
+            8.5,
+            14.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            7.5,
+            1.5,
+            8.5,
+            2.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "dwest_arm_bulb",
+      "from": [
+        1.5,
+        9,
+        7.5
+      ],
+      "to": [
+        2.5,
+        11,
+        8.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          5,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.5,
+            5,
+            14.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            1.5,
+            5,
+            2.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            1.5,
+            7.5,
+            2.5,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            1.5,
+            7.5,
+            2.5,
+            8.5
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

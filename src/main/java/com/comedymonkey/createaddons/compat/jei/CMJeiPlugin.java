@@ -81,6 +81,8 @@ public class CMJeiPlugin implements IModPlugin {
 		info(registration, "light_strip", ModItems.LIGHT_STRIP.get());
 		info(registration, "edge_light", ModItems.EDGE_LIGHT.get());
 		info(registration, "lamp_post", ModItems.CAST_IRON_LAMP_POST.get(), ModItems.STEEL_LAMP_POST.get());
+		info(registration, "hanging_lamp", ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.PENDANT).get(),
+			ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.CHANDELIER).get());
 		// the Electric Lights: dyed in place, so there are no colour recipes to show it (P20)
 		info(registration, "light", ModItems.LIGHTS.values().stream().map(net.neoforged.neoforge.registries.DeferredItem::get)
 			.toArray(net.minecraft.world.level.ItemLike[]::new));

@@ -25,7 +25,11 @@ public enum LightKind {
 	LANTERN_HEAD("lantern_head", Mount.TOP, 15, () -> CMConfig.SERVER.lightLargeFePerTick(), false, box(4.5, 0, 4.5, 11.5, 15, 11.5)),
 	COBRA_HEAD("cobra_head", Mount.TOP_FACING, 15, () -> CMConfig.SERVER.lightLargeFePerTick(), false, box(5.5, 0, -6.5, 10.5, 10, 9.5)),
 	GLOBE_HEAD("globe_head", Mount.TOP, 15, () -> CMConfig.SERVER.lightLargeFePerTick(), false, box(4, 0, 4, 12, 11, 12)),
-	YARD_HEAD("yard_light_head", Mount.TOP_FACING, 15, () -> CMConfig.SERVER.lightLargeFePerTick(), true, box(2, 0, 1, 14, 8, 13));
+	YARD_HEAD("yard_light_head", Mount.TOP_FACING, 15, () -> CMConfig.SERVER.lightLargeFePerTick(), true, box(2, 0, 1, 14, 8, 13)),
+	/** Hung under a ceiling, lowered on cable (HangingLampBlock). */
+	PENDANT("pendant_lamp", Mount.CEILING, 15, () -> CMConfig.SERVER.lightCeilingFePerTick(), false, box(4.5, 4.5, 4.5, 11.5, 16, 11.5)),
+	/** Hung like the Pendant; brass, several arms, twice its draw (P2). */
+	CHANDELIER("chandelier", Mount.CEILING, 15, () -> CMConfig.SERVER.lightCeilingFePerTick() * 2, false, box(1, 3.5, 1, 15, 16, 15));
 
 	/** Where a light is fixed, and so which ways it can face. */
 	public enum Mount {

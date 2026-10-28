@@ -1,0 +1,28 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "hung": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/chandelier"
+      }
+    },
+    {
+      "when": {
+        "hung": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/chandelier_hung"
+      }
+    },
+    {
+      "when": {
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/chandelier_glass"
+      }
+    }
+  ]
+}

@@ -57,6 +57,8 @@ public final class LightTestSetup {
 	private static final int EDGE_RUN = 6;
 	/** The Lamp Posts' stretch of street. */
 	private static final int POSTS = 10;
+	/** The hanging lamps' stretch. */
+	private static final int HANGS = 4;
 
 	private LightTestSetup() {}
 
@@ -70,7 +72,7 @@ public final class LightTestSetup {
 		ServerLevel level = source.getLevel();
 		BlockPos o = BlockPos.containing(source.getPosition());
 		int kinds = LightKind.values().length, dyes = DyeColor.values().length / 2, steps = LightKind.STEPS.length;
-		int length = 2 + SPACING * (kinds + dyes) + BAY * steps + 1 + STRIP_RUN + 1 + EDGE_RUN + 1 + POSTS + 3;
+		int length = 2 + SPACING * (kinds + dyes) + BAY * steps + 1 + STRIP_RUN + 1 + EDGE_RUN + 1 + POSTS + 1 + HANGS + 3;
 		street(level, o, length);
 		power(level, o);
 
@@ -129,6 +131,11 @@ public final class LightTestSetup {
 		sign(level, o.offset(x + 3, 1, 1), Direction.NORTH, "Cast Iron", "Lamp Post");
 		sign(level, o.offset(x + 3, 1, -1), Direction.SOUTH, "Steel", "Lamp Post");
 		x += POSTS + 1;
+
+		// hanging lamps: a Pendant Lamp and a Chandelier lowered two blocks from a beam across the street, fed through the beam
+		// by a wire up the wall beside it
+		hung(level, o.offset(x + 1, 0, 0), wires);
+		x += HANGS + 1;
 
 		// the line links up once its blocks are all in; again a moment later, as the game tests do
 		wires.forEach(p -> PowerLineBlock.relinkAround(level, p));
@@ -193,6 +200,35 @@ public final class LightTestSetup {
 			for (RunLightBlockEntity piece : be.run())
 				piece.setDye(dye);
 		sign(level, start.offset(2, 1, wallZ > 0 ? 1 : -1), toWall.getOpposite(), "Edge Light", dye == null ? "" : "Pink");
+	}
+
+	/**
+	 * A beam across the street at {@code at} (x of the line), four up, with a Pendant Lamp south and a Chandelier north of the
+	 * line lowered two blocks under it; each fed by a wire climbing the wall just west and lying on the beam's west face.
+	 */
+	private static void hung(ServerLevel level, BlockPos at, List<BlockPos> wires) {
+		for (int z = -2; z <= 2; z++)
+			level.setBlock(at.offset(0, 4, z), BEAM, Block.UPDATE_ALL);
+		for (int side : new int[] {1, -1}) {
+			Direction toWall = side > 0 ? Direction.SOUTH : Direction.NORTH;
+			BlockPos climb = at.offset(-1, 0, side);
+			for (int y = 0; y <= 4; y++) {
+				level.setBlock(climb.offset(0, y, side), WALL, Block.UPDATE_ALL);
+				BlockState w = ModBlocks.COPPER_POWER_LINE.get().defaultBlockState().setValue(PowerLineBlock.FACES.get(toWall), true);
+				if (y == 0)
+					w = w.setValue(PowerLineBlock.FACES.get(Direction.DOWN), true);
+				if (y == 4)
+					w = w.setValue(PowerLineBlock.FACES.get(Direction.EAST), true);
+				level.setBlock(climb.above(y), w, Block.UPDATE_ALL);
+				wires.add(climb.above(y));
+			}
+			LightKind kind = side > 0 ? LightKind.PENDANT : LightKind.CHANDELIER;
+			BlockPos lamp = at.offset(0, 3, side);
+			level.setBlock(lamp, ModBlocks.LIGHTS.get(kind).get().defaultBlockState(), Block.UPDATE_ALL);
+			HangingLampBlock.lower(level, lamp);
+			HangingLampBlock.lower(level, lamp.below());
+			sign(level, at.offset(2, 1, side), toWall.getOpposite(), name(kind), "Lowered 2");
+		}
 	}
 
 	/**

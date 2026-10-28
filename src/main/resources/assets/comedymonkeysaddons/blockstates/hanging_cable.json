@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "rose=none": {
+      "model": "comedymonkeysaddons:block/light/hanging_cable"
+    },
+    "rose=steel": {
+      "model": "comedymonkeysaddons:block/light/hanging_cable_rose_steel"
+    },
+    "rose=brass": {
+      "model": "comedymonkeysaddons:block/light/hanging_cable_rose_brass"
+    }
+  }
+}

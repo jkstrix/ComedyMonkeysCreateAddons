@@ -379,9 +379,22 @@ public final class ModBlocks {
 	/** A street head can hang on a Lamp Post's arm (LampHeadBlock); every other light is a plain LightBlock. */
 	private static com.comedymonkey.createaddons.content.light.LightBlock lightBlock(com.comedymonkey.createaddons.content.light.LightKind kind, boolean head,
 																				   BlockBehaviour.Properties properties) {
-		return head ? new com.comedymonkey.createaddons.content.light.LampHeadBlock(kind, properties)
-			: new com.comedymonkey.createaddons.content.light.LightBlock(kind, properties);
+		if (head)
+			return new com.comedymonkey.createaddons.content.light.LampHeadBlock(kind, properties);
+		if (kind == com.comedymonkey.createaddons.content.light.LightKind.PENDANT || kind == com.comedymonkey.createaddons.content.light.LightKind.CHANDELIER)
+			return new com.comedymonkey.createaddons.content.light.HangingLampBlock(kind, properties);
+		return new com.comedymonkey.createaddons.content.light.LightBlock(kind, properties);
 	}
+
+	/** Electric Lights: the cable a Pendant Lamp or Chandelier is lowered on (no item: it's made by lowering the lamp). */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.light.HangingCableBlock> HANGING_CABLE = BLOCKS.register("hanging_cable",
+		() -> new com.comedymonkey.createaddons.content.light.HangingCableBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.METAL)
+			.strength(0.3f, 1.0f)
+			.sound(SoundType.WOOL)
+			.noOcclusion()
+			.noCollission()
+			.pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
 
 	/** Electric Lights: the Lamp Posts, a pole of cast iron or steel for street lamps. */
 	public static final DeferredBlock<com.comedymonkey.createaddons.content.light.LampPostBlock> CAST_IRON_LAMP_POST = lampPost("cast_iron_lamp_post",

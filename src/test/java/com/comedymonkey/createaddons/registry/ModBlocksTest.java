@@ -48,6 +48,10 @@ class ModBlocksTest {
 				assertSame(Items.AIR, item, "the clock's weights are not an item");
 				continue;
 			}
+			if (entry.getId().equals(ModBlocks.HANGING_CABLE.getId())) {
+				assertSame(Items.AIR, item, "a hanging lamp's cable is made by lowering it, not an item");
+				continue;
+			}
 			assertTrue(item instanceof BlockItem, entry.getId() + " has no block item");
 			assertSame(entry.get(), ((BlockItem) item).getBlock());
 			assertEquals(entry.getId(), BuiltInRegistries.ITEM.getKey(item));

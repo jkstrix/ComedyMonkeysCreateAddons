@@ -194,6 +194,9 @@ public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWa
 		BlockPos post = LampHeadBlock.post(state, pos);
 		if (post != null)
 			return post;
+		// (a hung lamp's ceiling is found by LightMounts, through its cable)
+		if (state.hasProperty(HangingLampBlock.HUNG) && state.getValue(HangingLampBlock.HUNG))
+			return null;
 		return switch (light.kind.mount()) {
 			case WALL, ANY -> pos.relative(state.getValue(FACING).getOpposite());
 			case CEILING -> pos.above();

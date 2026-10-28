@@ -600,6 +600,100 @@ public final class LightGameTests {
 		});
 	}
 
+	// ---------- hanging lamps ----------
+
+	/** Lowers the hanging lamp at {@code lamp} a block, as a player clicking it with a Copper Power Line; returns the stack. */
+	private static ItemStack lower(GameTestHelper helper, BlockPos lamp, ItemStack wire) {
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		player.setItemInHand(InteractionHand.MAIN_HAND, wire);
+		BlockPos at = helper.absolutePos(lamp);
+		helper.getBlockState(lamp).useItemOn(wire, helper.getLevel(), player, InteractionHand.MAIN_HAND,
+			new BlockHitResult(Vec3.atCenterOf(at), Direction.NORTH, at, false));
+		return wire;
+	}
+
+	/**
+	 * A Pendant Lamp under a ceiling, clicked twice with a Power Line, hangs two blocks lower on cable (the rose at the top),
+	 * keeps its dye, and uses a wire a block; it can't go through the floor.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void pendantLowersOnCable(GameTestHelper helper) {
+		BlockPos ceiling = new BlockPos(3, 4, 3), lamp = ceiling.below();
+		helper.setBlock(ceiling, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.PENDANT).get());
+		// (the course floor isn't solid: a block for it to stop at)
+		helper.setBlock(lamp.below(3), net.minecraft.world.level.block.Blocks.STONE);
+		var wire = new ItemStack(ModItems.COPPER_POWER_LINE.get(), 4);
+		helper.runAtTickTime(2, () -> {
+			be(helper, lamp).setDye(DyeColor.BLUE);
+			lower(helper, lamp, wire);
+			lower(helper, lamp.below(), wire);
+			lower(helper, lamp.below(2), wire);
+		});
+		helper.runAtTickTime(4, () -> {
+			var hb = com.comedymonkey.createaddons.content.light.HangingCableBlock.class;
+			var rose = com.comedymonkey.createaddons.content.light.HangingCableBlock.ROSE;
+			BlockState top = helper.getBlockState(lamp), mid = helper.getBlockState(lamp.below()), foot = helper.getBlockState(lamp.below(2));
+			if (!hb.isInstance(top.getBlock()) || top.getValue(rose) != com.comedymonkey.createaddons.content.light.HangingCableBlock.Rose.STEEL)
+				helper.fail("the top of the cable isn't cable with a steel rose: " + top);
+			if (!hb.isInstance(mid.getBlock()) || mid.getValue(rose) != com.comedymonkey.createaddons.content.light.HangingCableBlock.Rose.NONE)
+				helper.fail("the cable's second block isn't plain cable: " + mid);
+			if (!foot.is(ModBlocks.LIGHTS.get(LightKind.PENDANT).get()) || !foot.getValue(com.comedymonkey.createaddons.content.light.HangingLampBlock.HUNG))
+				helper.fail("the lamp isn't hung two blocks down: " + foot);
+			if (be(helper, lamp.below(2)).dye() != DyeColor.BLUE)
+				helper.fail("the lamp lost its dye on the way down");
+			if (wire.getCount() != 2)
+				helper.fail("lowering two blocks left " + wire.getCount() + " of 4 wires, not 2");
+			helper.succeed();
+		});
+	}
+
+	/** A Pendant Lamp lowered a block lights from a wire on its ceiling block's side (fed down its cable). */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void hungLampFedThroughItsCeiling(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 4, 1), w = gen.east(), ceiling = w.south(), lamp = ceiling.below();
+		LineGameTests.generator(helper, gen);
+		helper.setBlock(ceiling, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.PENDANT).get());
+		LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), w, Direction.SOUTH);
+		helper.runAtTickTime(2, () -> LineGameTests.relink(helper, w));
+		helper.runAtTickTime(4, () -> lower(helper, lamp, new ItemStack(ModItems.COPPER_POWER_LINE.get())));
+		helper.runAtTickTime(140, () -> {
+			if (!(helper.getBlockEntity(lamp.below()) instanceof LightBlockEntity be) || be.phase() != LightBlockEntity.Phase.LIT)
+				helper.fail("the hung lamp didn't light from the wire beside its ceiling");
+			helper.succeed();
+		});
+	}
+
+	/** Breaking the top of a Chandelier's cable brings it all down: the lamp drops, each block of cable gives its wire back. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void hangingLampComesDownWithItsCable(GameTestHelper helper) {
+		BlockPos ceiling = new BlockPos(3, 4, 3), lamp = ceiling.below();
+		helper.setBlock(ceiling, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.CHANDELIER).get());
+		var wire = new ItemStack(ModItems.COPPER_POWER_LINE.get(), 2);
+		helper.runAtTickTime(2, () -> {
+			lower(helper, lamp, wire);
+			lower(helper, lamp.below(), wire);
+		});
+		helper.runAtTickTime(4, () -> helper.getLevel().destroyBlock(helper.absolutePos(lamp), true));
+		helper.runAtTickTime(7, () -> {
+			for (int i = 0; i < 3; i++)
+				if (!helper.getBlockState(lamp.below(i)).isAir())
+					helper.fail("something was left hanging " + i + " below the ceiling: " + helper.getBlockState(lamp.below(i)));
+			int wires = 0, lamps = 0;
+			for (var e : helper.getEntities(net.minecraft.world.entity.EntityType.ITEM, lamp, 4)) {
+				if (e.getItem().is(ModItems.COPPER_POWER_LINE.get()))
+					wires += e.getItem().getCount();
+				if (e.getItem().is(ModItems.LIGHTS.get(LightKind.CHANDELIER).get()))
+					lamps += e.getItem().getCount();
+			}
+			if (wires != 2 || lamps != 1)
+				helper.fail("it came down as " + wires + " wires and " + lamps + " chandeliers, not 2 and 1");
+			helper.succeed();
+		});
+	}
+
 	/** Starved (power stops coming, its circuit still has a source), it stays lit for its store, flickers, then goes dark. */
 	@GameTest(template = COURSE, timeoutTicks = 140)
 	public static void starvedLightFlickersOut(GameTestHelper helper) {
