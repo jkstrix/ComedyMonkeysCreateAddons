@@ -42,7 +42,7 @@ Clarified: **a family of cheap, Create-styled electric lights, one for each plac
 ## Defaults (P1–P20 approved by the user, 2026-10-28)
 | # | Area | Proposal |
 |---|---|---|
-| P1 | Light levels | At full brightness: Indicator Lamp 4; Light Strip and Edge Light 10; Festoon 10; Warning Beacon 10; Floor Light 12; Bollard 13; wall lights 14; ceiling lights, Pendant, Chandelier, street heads and Floodlight 15 |
+| P1 | Light levels | At full brightness: Indicator Lamp 4; Light Strip and Edge Light 12 (10 in the first draft; strips read dim in game); Festoon 10; Warning Beacon 10; Floor Light 12; Bollard 13; wall lights 14; ceiling lights, Pendant, Chandelier, street heads and Floodlight 15 |
 | P2 | Draw (FE/t, full) | Indicator 1; Strip and Edge 1 per block; Festoon 1 per 2 blocks of string; Floor, Bollard and wall lights 2; Flush and Cage ceiling lights and Pendant 3; Warning Beacon 4; Chandelier 6; High-Bay and each street head 8; Floodlight 32. All in config |
 | P3 | Flicker | Each light holds 2 s of power (covers the grid's once-a-second updates). When that runs dry it flickers for about a second with a faint buzz, then goes dark; power back, it flickers on. **Switched off** (Light Switch or Breaker) it just goes out, no flicker |
 | P4 | Warm-up | The High-Bay and the Yard Light head warm up like sodium lamps: a dim amber glow rising to full over 4 s. Every other light is instant |

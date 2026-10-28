@@ -197,6 +197,57 @@ public final class LightGameTests {
 		});
 	}
 
+	// ---------- fed through the block, and flat to the foot ----------
+
+	/** A Bulkhead on the south face of a stone block lights from a wire lying on the block's north face (hidden behind it). */
+	@GameTest(template = COURSE, timeoutTicks = 140)
+	public static void lightFedThroughItsWall(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 1), wire = gen.east(), wall = wire.south(), lamp = wall.south();
+		LineGameTests.generator(helper, gen);
+		helper.setBlock(wall, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.BULKHEAD).get().defaultBlockState().setValue(LightBlock.FACING, Direction.SOUTH));
+		LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), wire, Direction.SOUTH);
+		helper.runAtTickTime(2, () -> LineGameTests.relink(helper, wire));
+		helper.runAtTickTime(120, () -> {
+			if (be(helper, lamp).phase() != LightBlockEntity.Phase.LIT)
+				helper.fail("the Bulkhead didn't light from the wire behind its wall");
+			helper.succeed();
+		});
+	}
+
+	/** A Light Strip on top of a block lights from a wire on the block's underside (above the ceiling below). */
+	@GameTest(template = COURSE, timeoutTicks = 140)
+	public static void stripFedThroughItsFloor(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 2), wire = gen.east(), floor = wire.above(), top = floor.above();
+		LineGameTests.generator(helper, gen);
+		helper.setBlock(floor, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(top, ModBlocks.LIGHT_STRIP.get().defaultBlockState()
+			.setValue(com.comedymonkey.createaddons.content.light.LightStripBlock.FACES.get(Direction.DOWN), true));
+		LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), wire, Direction.UP);
+		helper.runAtTickTime(2, () -> LineGameTests.relink(helper, wire));
+		helper.runAtTickTime(120, () -> {
+			if (strip(helper, top).phase() != LightBlockEntity.Phase.LIT)
+				helper.fail("the strip didn't light from the wire under its floor");
+			helper.succeed();
+		});
+	}
+
+	/** A floor wire meets a Bollard on the same floor flat (under its foot); it still climbs a machine's face to its socket. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void wireMeetsALightFlat(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 2);
+		BlockPos lamp = fedBollard(helper, gen, true);
+		helper.runAtTickTime(4, () -> {
+			if (!(helper.getBlockEntity(lamp.west()) instanceof com.comedymonkey.createaddons.content.line.PowerLineBlockEntity w)
+				|| w.link(Direction.DOWN, Direction.EAST) != com.comedymonkey.createaddons.content.line.WireLink.LAMP)
+				helper.fail("the wire doesn't meet the Bollard flat");
+			if (!(helper.getBlockEntity(gen.east()) instanceof com.comedymonkey.createaddons.content.line.PowerLineBlockEntity g)
+				|| g.link(Direction.DOWN, Direction.WEST) != com.comedymonkey.createaddons.content.line.WireLink.TERMINAL)
+				helper.fail("the wire no longer climbs to the generator's socket");
+			helper.succeed();
+		});
+	}
+
 	// ---------- Light Strips ----------
 
 	/** A run of {@code length} floor strips along +x from {@code from}. */

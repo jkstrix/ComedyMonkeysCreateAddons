@@ -187,6 +187,33 @@ public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWa
 		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 
+	/** The block it's fixed to (on its wall, ceiling or floor), or null for one that's a whole block itself. */
+	public static @Nullable BlockPos support(BlockState state, BlockPos pos) {
+		if (!(state.getBlock() instanceof LightBlock light))
+			return null;
+		return switch (light.kind.mount()) {
+			case WALL, ANY -> pos.relative(state.getValue(FACING).getOpposite());
+			case CEILING -> pos.above();
+			case FLOOR, TOP, TOP_FACING -> pos.below();
+			case FULL -> null;
+		};
+	}
+
+	/** Placed or taken away: the wires round the block it's fixed to work their links out again (they may feed it through it). */
+	@Override
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState old, boolean moving) {
+		super.onPlace(state, level, pos, old, moving);
+		if (!old.is(this))
+			LightMounts.relinkBehind(level, state, pos);
+	}
+
+	@Override
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
+		super.onRemove(state, level, pos, newState, moving);
+		if (!newState.is(this))
+			LightMounts.relinkBehind(level, state, pos);
+	}
+
 	// ---------- shape ----------
 
 	@Override

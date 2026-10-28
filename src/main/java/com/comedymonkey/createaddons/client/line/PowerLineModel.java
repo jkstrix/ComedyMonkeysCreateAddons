@@ -145,8 +145,8 @@ public class PowerLineModel extends EncasedLineModel {
 				add(out, style, link == WireLink.INSIDE || link == WireLink.TERMINAL ? "arm_inner" : "arm", face, d);
 				if (link == WireLink.OUTSIDE)
 					add(out, style, "fold", face, d);
-				// on into a Line Post's block, under its foot, so it meets the pole
-				if (link == WireLink.POST)
+				// on into a Line Post's block, or a light's standing on the same surface, under its foot
+				if (link == WireLink.POST || link == WireLink.LAMP)
 					add(out, style, "post_reach", face, d);
 				if (link == WireLink.TERMINAL) {
 					add(out, style, "rise", face, d);

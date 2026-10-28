@@ -73,10 +73,13 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 				packed = WireLink.with(packed, face, d, linkFor(level, state, face, d));
 			BlockPos support = worldPosition.relative(face);
 			if (!level.isLoaded(support))
-				packed |= links[face.ordinal()] & WireLink.BASE;
+				packed |= links[face.ordinal()] & (WireLink.BASE | WireLink.BEHIND);
 			else if (!(level.getBlockState(support).getBlock() instanceof LineBlock)
 				&& level.getCapability(Capabilities.EnergyStorage.BLOCK, support, face.getOpposite()) != null)
 				packed |= WireLink.BASE;
+			// lights fixed to the block it lies on, on its other faces: fed through the block
+			else if (!com.comedymonkey.createaddons.content.light.LightMounts.fixedAround(level, support, worldPosition).isEmpty())
+				packed |= WireLink.BEHIND;
 			// a machine across the block (over a floor wire, under a ceiling one) that takes power on the face towards it;
 			// not from a wall wire (it would catch whatever stood across from a passing cable), nor when a wire lies on it already
 			BlockPos across = worldPosition.relative(face.getOpposite());
@@ -164,11 +167,13 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 				runs++;
 			if ((p & WireLink.RISE) != 0)
 				runs++;
+			if ((p & WireLink.BEHIND) != 0)
+				runs++;
 			if (WireLink.hole(p) != 0 && f != toward)
 				runs++;
 			for (Direction e : WireLink.across(f)) {
 				WireLink l = WireLink.get(p, f, e);
-				if (l == WireLink.LINE || l == WireLink.OUTSIDE || l == WireLink.TERMINAL || l == WireLink.POST || (l == WireLink.THROUGH && e != toward))
+				if (l == WireLink.LINE || l == WireLink.OUTSIDE || l == WireLink.TERMINAL || l == WireLink.LAMP || l == WireLink.POST || (l == WireLink.THROUGH && e != toward))
 					runs++;
 			}
 		}
@@ -225,8 +230,9 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 		if (there.getBlock() instanceof LinePostBlock && there.getValue(LinePostBlock.FACING) == face.getOpposite()
 			&& there.getValue(LinePostBlock.ROLE).isFoot())
 			return WireLink.POST;
+		// a light standing on the same surface: flat under its foot; a machine: up its face to its socket
 		if (!(there.getBlock() instanceof LineBlock) && level.getCapability(Capabilities.EnergyStorage.BLOCK, next, d.getOpposite()) != null)
-			return WireLink.TERMINAL;
+			return com.comedymonkey.createaddons.content.light.LightMounts.fixedTo(there, next, next.relative(face)) ? WireLink.LAMP : WireLink.TERMINAL;
 		// over the edge: the next block is open, and a wire runs down the far side of the block this one lies on
 		if (!there.isCollisionShapeFullBlock(level, next)) {
 			BlockPos round = next.relative(face);
@@ -390,10 +396,10 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 	/** Some wire here meets a machine or lies on one: where the network's work starts. */
 	public boolean hasTerminal() {
 		for (Direction face : Direction.values()) {
-			if ((links[face.ordinal()] & (WireLink.BASE | WireLink.RISE)) != 0)
+			if ((links[face.ordinal()] & (WireLink.BASE | WireLink.RISE | WireLink.BEHIND)) != 0)
 				return true;
 			for (Direction d : WireLink.across(face))
-				if (link(face, d) == WireLink.TERMINAL)
+				if (link(face, d) == WireLink.TERMINAL || link(face, d) == WireLink.LAMP)
 					return true;
 		}
 		return false;

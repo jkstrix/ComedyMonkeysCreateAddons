@@ -22,7 +22,9 @@ public enum WireLink {
 	/** Under the foot of a Line Post. */
 	POST,
 	/** Into the solid block at that edge, through a drilled hole, to the wire behind it (a floor wire into a wall). */
-	THROUGH;
+	THROUGH,
+	/** Into a light standing on the same surface as the wire: flat along it and on under the light's foot. */
+	LAMP;
 
 	public boolean connected() {
 		return this != NONE;
@@ -58,6 +60,12 @@ public enum WireLink {
 	 * The bits: 0-11 the four links (3 each), 12 BASE, 13-15 the hole, 16 RISE.
 	 */
 	public static final int RISE = 1 << 16;
+
+	/**
+	 * Set on a face's packed links when the block the wire lies on has lights fixed to its other faces: the wire feeds
+	 * them through the block, hidden (a cable behind a wall lighting the lamps on its far side).
+	 */
+	public static final int BEHIND = 1 << 17;
 
 	private static final int HOLE_SHIFT = 13;
 

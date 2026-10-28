@@ -406,6 +406,12 @@ public final class PowerLines {
 			// up (or down) through the block into a machine across it
 			if ((links & WireLink.RISE) != 0)
 				p.ends.add(new End(pos.relative(face.getOpposite()), face));
+			// through the block it lies on, into the lights fixed to its other faces
+			if ((links & WireLink.BEHIND) != 0) {
+				BlockPos support = pos.relative(face);
+				for (BlockPos light : com.comedymonkey.createaddons.content.light.LightMounts.fixedAround(level, support, pos))
+					p.ends.add(new End(light, Direction.getNearest(support.getX() - light.getX(), support.getY() - light.getY(), support.getZ() - light.getZ())));
+			}
 			// through the wall it lies on, to the wire behind
 			if (WireLink.hole(links) != 0)
 				link(p, new Node(pos.relative(face, 2), Node.WIRE), tier, dye, face);
@@ -420,7 +426,7 @@ public final class PowerLines {
 						if (head != null)
 							link(p, new Node(head, Node.POLE), tier, dye, d);
 					}
-					case TERMINAL -> p.ends.add(new End(to, d.getOpposite()));
+					case TERMINAL, LAMP -> p.ends.add(new End(to, d.getOpposite()));
 					default -> {}
 				}
 			}
