@@ -10,6 +10,8 @@ import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -17,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -111,10 +112,18 @@ public class HangingCableBlock extends Block implements SimpleWaterloggedBlock, 
 	protected BlockState updateShape(BlockState state, Direction dir, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
 		if (state.getValue(WATERLOGGED))
 			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-		// (air, so it breaks with its drop: the game puts its water back)
+		// it looks again a tick later, so a hanging lamp set down a block at a time (a Create contraption landing, a
+		// schematicannon) isn't brought down before its last block is in
 		if (!canSurvive(state, level, pos))
-			return Blocks.AIR.defaultBlockState();
+			level.scheduleTick(pos, this, 1);
 		return state;
+	}
+
+	/** Still nothing to hang from, or nothing hanging: it comes down, giving its wire back (the game puts its water back). */
+	@Override
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		if (!canSurvive(state, level, pos))
+			level.destroyBlock(pos, true);
 	}
 
 	/** The top of a cable taken away: the wires meeting its rose and on its ceiling let the lamp go. */

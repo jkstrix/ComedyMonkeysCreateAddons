@@ -8,16 +8,20 @@ import com.comedymonkey.createaddons.registry.ModDataComponents;
 import com.comedymonkey.createaddons.registry.ModItems;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -80,6 +84,27 @@ public class HangingLampBlock extends LightBlock {
 		if (state.getValue(HUNG))
 			return level.getBlockState(pos.above()).getBlock() instanceof HangingCableBlock;
 		return super.canSurvive(state, level, pos);
+	}
+
+	/** Hung, it looks for its cable again a tick later (as the cable does: HangingCableBlock.updateShape). */
+	@Override
+	protected BlockState updateShape(BlockState state, Direction dir, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
+		if (state.getValue(HUNG) && !canSurvive(state, level, pos)) {
+			if (state.getValue(WATERLOGGED))
+				level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+			level.scheduleTick(pos, this, 1);
+			return state;
+		}
+		return super.updateShape(state, dir, neighbour, level, pos, neighbourPos);
+	}
+
+	@Override
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		if (state.getValue(HUNG) && !canSurvive(state, level, pos)) {
+			level.destroyBlock(pos, true);
+			return;
+		}
+		super.tick(state, level, pos, random);
 	}
 
 	/** A plain Power Line in hand lowers the lamp a block (D19), leaving cable in its place; the wire is used. */

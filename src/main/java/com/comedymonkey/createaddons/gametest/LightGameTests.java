@@ -668,6 +668,7 @@ public final class LightGameTests {
 	/** Breaking the top of a Chandelier's cable brings it all down: the lamp drops, each block of cable gives its wire back. */
 	@GameTest(template = COURSE, timeoutTicks = 20)
 	public static void hangingLampComesDownWithItsCable(GameTestHelper helper) {
+		// (it comes down a block a tick)
 		BlockPos ceiling = new BlockPos(3, 4, 3), lamp = ceiling.below();
 		helper.setBlock(ceiling, net.minecraft.world.level.block.Blocks.STONE);
 		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.CHANDELIER).get());
@@ -677,7 +678,7 @@ public final class LightGameTests {
 			lower(helper, lamp.below(), wire);
 		});
 		helper.runAtTickTime(4, () -> helper.getLevel().destroyBlock(helper.absolutePos(lamp), true));
-		helper.runAtTickTime(7, () -> {
+		helper.runAtTickTime(10, () -> {
 			for (int i = 0; i < 3; i++)
 				if (!helper.getBlockState(lamp.below(i)).isAir())
 					helper.fail("something was left hanging " + i + " below the ceiling: " + helper.getBlockState(lamp.below(i)));
@@ -713,7 +714,7 @@ public final class LightGameTests {
 				helper.fail("the cable lowered through water isn't waterlogged");
 			helper.getLevel().destroyBlock(helper.absolutePos(ceiling), false);
 		});
-		helper.runAtTickTime(7, () -> {
+		helper.runAtTickTime(10, () -> {
 			int wires = 0;
 			for (var e : helper.getEntities(net.minecraft.world.entity.EntityType.ITEM, lamp, 4))
 				if (e.getItem().is(ModItems.COPPER_POWER_LINE.get()))
@@ -783,6 +784,30 @@ public final class LightGameTests {
 		helper.runAtTickTime(5, () -> {
 			if (!helper.getBlockState(lamp.below(2)).is(ModBlocks.LIGHTS.get(LightKind.CHANDELIER).get()))
 				helper.fail("the Chandelier came down from its chain: " + helper.getBlockState(lamp.below(2)));
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * A hanging lamp set down a block at a time in the worst order (as a Create contraption lands, its blocks in no order):
+	 * the rose, then its ceiling, the lamp, and last the cable between. It stays up whole.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void hangingLampSetDownOutOfOrderStaysUp(GameTestHelper helper) {
+		BlockPos ceiling = new BlockPos(3, 4, 3), rose = ceiling.below(), mid = rose.below(), lamp = mid.below();
+		var cable = ModBlocks.HANGING_CABLE.get().defaultBlockState();
+		helper.setBlock(rose, cable.setValue(com.comedymonkey.createaddons.content.light.HangingCableBlock.ROSE,
+			com.comedymonkey.createaddons.content.light.HangingCableBlock.Rose.STEEL));
+		helper.setBlock(ceiling, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.PENDANT).get().defaultBlockState()
+			.setValue(com.comedymonkey.createaddons.content.light.HangingLampBlock.HUNG, true));
+		helper.setBlock(mid, cable);
+		helper.runAtTickTime(5, () -> {
+			for (BlockPos p : new BlockPos[] {rose, mid})
+				if (!helper.getBlockState(p).is(ModBlocks.HANGING_CABLE.get()))
+					helper.fail("the cable came down at " + p + ": " + helper.getBlockState(p));
+			if (!helper.getBlockState(lamp).is(ModBlocks.LIGHTS.get(LightKind.PENDANT).get()))
+				helper.fail("the lamp came down: " + helper.getBlockState(lamp));
 			helper.succeed();
 		});
 	}
