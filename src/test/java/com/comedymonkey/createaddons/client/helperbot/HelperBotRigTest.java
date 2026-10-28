@@ -186,7 +186,13 @@ class HelperBotRigTest {
 	void preloadLeavesEverythingReady() throws Exception {
 		Thread caller = Thread.currentThread();
 		Thread[] ran = new Thread[1];
-		HelperBotRig.preload().thenRun(() -> ran[0] = Thread.currentThread()).get(30, TimeUnit.SECONDS);
+		// the thread the work itself runs on (a stage chained after it runs on the caller when the work is already done,
+		// as it is when another test compiled the clips first)
+		java.util.concurrent.Executor background = net.minecraft.Util.backgroundExecutor();
+		HelperBotRig.preload(work -> background.execute(() -> {
+			ran[0] = Thread.currentThread();
+			work.run();
+		})).get(30, TimeUnit.SECONDS);
 		assertTrue(ran[0] != caller, "preloaded on the calling thread");
 		assertEquals(38, HelperBotRig.bones());
 		for (Clip clip : HelperBotModels.clips().all())

@@ -83,7 +83,12 @@ public final class HelperBotRig {
 
 	/** Reads his clips and compiles them off the render thread (the clip file is big enough to hitch a frame). */
 	public static CompletableFuture<Void> preload() {
-		return CompletableFuture.runAsync(Compiled::touch, Util.backgroundExecutor());
+		return preload(Util.backgroundExecutor());
+	}
+
+	/** As {@link #preload()}, on {@code executor} (a test sees which thread the work runs on). */
+	static CompletableFuture<Void> preload(java.util.concurrent.Executor executor) {
+		return CompletableFuture.runAsync(Compiled::touch, executor);
 	}
 
 	// ---------- posing ----------
