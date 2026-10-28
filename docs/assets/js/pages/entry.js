@@ -98,8 +98,8 @@ function hero(e) {
   return `<div class="d-hero ${e.cat.id === 'mobs' ? 'mob' : ''}">
     <div class="hero-pic">${picture(shots[0].images, { alt: e.name, zoom: 'entry', caption: e.name, eager: true })}</div>
     <button class="zoom" data-zoom-for=".d-hero .hero-pic img">${icon('zoom')}zoom</button>
-    ${shots.length > 1 ? `<div class="thumbs">${shots.map((s, i) => `<button class="${i ? '' : 'on'}" data-shot="${i}" title="${esc(s.caption)}">${picture(s.images, { alt: s.caption, zoom: 'entry', caption: s.caption })}</button>`).join('')}</div>` : ''}
-  </div>`;
+  </div>
+  ${shots.length > 1 ? `<div class="thumbs">${shots.map((s, i) => `<button class="${i ? '' : 'on'}" data-shot="${i}" title="${esc(s.caption)}">${picture(s.images, { alt: s.caption, zoom: 'entry', caption: s.caption })}</button>`).join('')}</div>` : ''}`;
 }
 
 function wireHero(view) {
