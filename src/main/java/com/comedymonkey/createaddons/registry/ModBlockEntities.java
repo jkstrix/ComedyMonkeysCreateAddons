@@ -168,6 +168,16 @@ public final class ModBlockEntities {
 				ModBlocks.LIGHTS.values().stream().map(net.neoforged.neoforge.registries.DeferredBlock::get).toArray(net.minecraft.world.level.block.Block[]::new)).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.light.FestoonBlockEntity>> FESTOON =
+		BLOCK_ENTITY_TYPES.register("festoon",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.light.FestoonBlockEntity::new, ModBlocks.FESTOON_HOOK.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.light.LightSpotBlockEntity>> LIGHT_SPOT =
+		BLOCK_ENTITY_TYPES.register("light_spot",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.light.LightSpotBlockEntity::new, ModBlocks.LIGHT_SPOT.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.light.LightStripBlockEntity>> LIGHT_STRIP =
 		BLOCK_ENTITY_TYPES.register("light_strip",
 			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.light.LightStripBlockEntity::new, ModBlocks.LIGHT_STRIP.get()).build(null));

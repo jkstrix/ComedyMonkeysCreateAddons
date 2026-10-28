@@ -31,7 +31,9 @@ public enum LightKind {
 	/** Hung like the Pendant; brass, several arms, twice its draw (P2). */
 	CHANDELIER("chandelier", Mount.CEILING, 15, () -> CMConfig.SERVER.lightCeilingFePerTick() * 2, false, box(1, 3.5, 1, 15, 16, 15)),
 	/** On any face; its rotor turns while it's lit (LightRenderer). Built on the north wall facing south, as the Indicator. */
-	WARNING_BEACON("warning_beacon", Mount.ANY, 10, () -> CMConfig.SERVER.lightBeaconFePerTick(), false, box(4.5, 4.5, 0, 11.5, 11.5, 8));
+	WARNING_BEACON("warning_beacon", Mount.ANY, 10, () -> CMConfig.SERVER.lightBeaconFePerTick(), false, box(4.5, 4.5, 0, 11.5, 11.5, 8)),
+	/** On any face; aimed at a block with the wrench, it lights a spot there (Floodlights). Built as the Indicator. */
+	FLOODLIGHT("floodlight", Mount.ANY, 15, () -> CMConfig.SERVER.lightFloodlightFePerTick(), false, box(1.5, 1.5, 0, 14.5, 14.5, 12.5));
 
 	/** Where a light is fixed, and so which ways it can face. */
 	public enum Mount {

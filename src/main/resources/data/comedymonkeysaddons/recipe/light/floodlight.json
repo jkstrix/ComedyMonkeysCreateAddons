@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "comedymonkeysaddons:light_assembly"
+    },
+    {
+      "tag": "c:plates/iron"
+    },
+    {
+      "tag": "c:plates/iron"
+    }
+  ],
+  "result": {
+    "id": "comedymonkeysaddons:floodlight",
+    "count": 1
+  }
+}

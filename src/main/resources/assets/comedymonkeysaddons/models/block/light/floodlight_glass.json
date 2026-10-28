@@ -1,0 +1,191 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/steel",
+    "glass_off": "comedymonkeysaddons:block/light/glass_off"
+  },
+  "elements": [
+    {
+      "name": "fd_lens_a",
+      "from": [
+        5,
+        5.5,
+        4.25
+      ],
+      "to": [
+        11,
+        9.5,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            6.5,
+            11,
+            10.5
+          ],
+          "texture": "#glass_off"
+        },
+        "east": {
+          "uv": [
+            11.5,
+            6.5,
+            11.75,
+            10.5
+          ],
+          "texture": "#glass_off"
+        },
+        "west": {
+          "uv": [
+            4.25,
+            6.5,
+            4.5,
+            10.5
+          ],
+          "texture": "#glass_off"
+        },
+        "up": {
+          "uv": [
+            5,
+            4.25,
+            11,
+            4.5
+          ],
+          "texture": "#glass_off"
+        },
+        "down": {
+          "uv": [
+            5,
+            11.5,
+            11,
+            11.75
+          ],
+          "texture": "#glass_off"
+        }
+      }
+    },
+    {
+      "name": "fd_lens_b",
+      "from": [
+        6,
+        4.5,
+        4.25
+      ],
+      "to": [
+        10,
+        10.5,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            5.5,
+            10,
+            11.5
+          ],
+          "texture": "#glass_off"
+        },
+        "east": {
+          "uv": [
+            11.5,
+            5.5,
+            11.75,
+            11.5
+          ],
+          "texture": "#glass_off"
+        },
+        "west": {
+          "uv": [
+            4.25,
+            5.5,
+            4.5,
+            11.5
+          ],
+          "texture": "#glass_off"
+        },
+        "up": {
+          "uv": [
+            6,
+            4.25,
+            10,
+            4.5
+          ],
+          "texture": "#glass_off"
+        },
+        "down": {
+          "uv": [
+            6,
+            11.5,
+            10,
+            11.75
+          ],
+          "texture": "#glass_off"
+        }
+      }
+    },
+    {
+      "name": "fd_lens_c",
+      "from": [
+        5.5,
+        5,
+        4.25
+      ],
+      "to": [
+        10.5,
+        10,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            6,
+            10.5,
+            11
+          ],
+          "texture": "#glass_off"
+        },
+        "east": {
+          "uv": [
+            11.5,
+            6,
+            11.75,
+            11
+          ],
+          "texture": "#glass_off"
+        },
+        "west": {
+          "uv": [
+            4.25,
+            6,
+            4.5,
+            11
+          ],
+          "texture": "#glass_off"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            4.25,
+            10.5,
+            4.5
+          ],
+          "texture": "#glass_off"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            11.5,
+            10.5,
+            11.75
+          ],
+          "texture": "#glass_off"
+        }
+      }
+    }
+  ]
+}

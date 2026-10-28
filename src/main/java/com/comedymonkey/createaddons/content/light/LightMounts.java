@@ -22,6 +22,8 @@ public final class LightMounts {
 
 	/** The light (Light Strip, Edge Light) at pos, in {@code state}, is fixed to the block at {@code support}. */
 	public static boolean fixedTo(BlockGetter level, BlockState state, BlockPos pos, BlockPos support) {
+		if (state.getBlock() instanceof FestoonHookBlock)
+			return support.equals(pos.relative(state.getValue(FestoonHookBlock.FACING).getOpposite()));
 		if (state.getBlock() instanceof HangingLampBlock)
 			return support.equals(HangingLampBlock.ceiling(level, state, pos));
 		if (state.getBlock() instanceof EdgeLightBlock) {

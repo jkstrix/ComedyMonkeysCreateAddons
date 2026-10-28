@@ -46,6 +46,20 @@ public class CMPonderPlugin implements PonderPlugin {
 		helper.forComponents(ModItems.COPPER_POWER_LINE.getId(), ModItems.BRASS_POWER_LINE.getId(), ModItems.LINE_POST.getId(), ModItems.BREAKER.getId())
 			.addStoryBoard("power_lines", LineScenes::powerLines)
 			.addStoryBoard("power_networks", LineScenes::powerNetworks);
+
+		// Electric Lights: the basics, Lamp Posts, the Floodlight and Festoons (P17)
+		var lights = new java.util.ArrayList<ResourceLocation>();
+		ModItems.LIGHTS.values().forEach(l -> lights.add(l.getId()));
+		lights.add(ModItems.LIGHT_STRIP.getId());
+		lights.add(ModItems.EDGE_LIGHT.getId());
+		lights.add(ModItems.LIGHT_SWITCH.getId());
+		helper.forComponents(lights).addStoryBoard("lights", LightScenes::basics);
+		helper.forComponents(ModItems.CAST_IRON_LAMP_POST.getId(), ModItems.STEEL_LAMP_POST.getId(),
+				ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.LANTERN_HEAD).getId(), ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.COBRA_HEAD).getId(),
+				ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.GLOBE_HEAD).getId(), ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.YARD_HEAD).getId())
+			.addStoryBoard("lamp_posts", LightScenes::lampPosts);
+		helper.forComponents(ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.FLOODLIGHT).getId(), ModItems.FESTOON_LIGHTS.getId())
+			.addStoryBoard("floodlight_festoons", LightScenes::floodlightFestoons);
 		// the Splitter fits both kinds of line: on a Power Line, its branch priority
 		helper.forComponents(ModItems.SPLITTER.getId())
 			.addStoryBoard("power_networks", LineScenes::powerNetworks);

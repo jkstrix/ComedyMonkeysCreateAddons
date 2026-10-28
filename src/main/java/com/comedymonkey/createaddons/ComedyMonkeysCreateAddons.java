@@ -109,6 +109,7 @@ public class ComedyMonkeysCreateAddons {
 		if (SableCompat.LOADED)
 			modBus.addListener(com.comedymonkey.createaddons.gametest.SableGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.light.Floodlights::onRightClickBlock);
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.juggernaut.ClockworkJuggernaut::onMobGriefing);
 		// Helper Bot's test courses (/helperbot testsetup), and the follow-up once Create has registered their stations
 		// Helper Bot's test railway and shop: the command is a dev tool (testtrain go gives every train a schedule), so
@@ -234,6 +235,7 @@ public class ComedyMonkeysCreateAddons {
 		// A Light Strip takes power for its whole run, through whichever piece a line touches (P7)
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.LIGHT_STRIP.get(), (be, side) -> be.runEnergy());
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.EDGE_LIGHT.get(), (be, side) -> be.runEnergy());
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.FESTOON.get(), (be, side) -> be.runEnergy());
 		// The turbine connects only through the port flanges under its base (the bottom faces of its bottom casings);
 		// the controller, in the middle of the front, offers nothing to a side
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.GEOTHERMAL_CONTROLLER.get(),
@@ -305,6 +307,7 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.LIGHT_SWITCH.get());
 			registerCreateTooltip(ModItems.LIGHT_STRIP.get());
 			registerCreateTooltip(ModItems.EDGE_LIGHT.get());
+			registerCreateTooltip(ModItems.FESTOON_LIGHTS.get());
 			registerCreateTooltip(ModItems.CAST_IRON_LAMP_POST.get());
 			registerCreateTooltip(ModItems.STEEL_LAMP_POST.get());
 			registerCreateTooltip(ModItems.SPLITTER.get());

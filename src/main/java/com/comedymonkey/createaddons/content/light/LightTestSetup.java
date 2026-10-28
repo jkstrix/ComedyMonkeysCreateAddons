@@ -128,6 +128,8 @@ public final class LightTestSetup {
 		lampPost(level, o.offset(x + 1, 0, -1), ModBlocks.STEEL_LAMP_POST.get(), LightKind.YARD_HEAD, LightKind.COBRA_HEAD, Direction.SOUTH);
 		lampPost(level, o.offset(x + 7, 0, 1), ModBlocks.CAST_IRON_LAMP_POST.get(), LightKind.GLOBE_HEAD, LightKind.LANTERN_HEAD, Direction.NORTH);
 		lampPost(level, o.offset(x + 7, 0, -1), ModBlocks.STEEL_LAMP_POST.get(), LightKind.COBRA_HEAD, LightKind.YARD_HEAD, Direction.SOUTH);
+		// Festoon Lights from the Cast Iron post's head across to the Steel one's, over the line (fed by the posts)
+		Festoons.hang(level, o.offset(x + 1, 3, 0), Direction.NORTH, o.offset(x + 7, 3, 0), Direction.SOUTH, null);
 		sign(level, o.offset(x + 3, 1, 1), Direction.NORTH, "Cast Iron", "Lamp Post");
 		sign(level, o.offset(x + 3, 1, -1), Direction.SOUTH, "Steel", "Lamp Post");
 		x += POSTS + 1;
@@ -304,6 +306,9 @@ public final class LightTestSetup {
 				be.setDye(dye);
 			for (int s = 0; s < step; s++)
 				be.stepBrightness();
+			// a Floodlight lights the wall across the street, a few blocks along
+			if (kind == LightKind.FLOODLIGHT)
+				Floodlights.aim(level, be, pos.relative(facing, 3).offset(4, 1, 0));
 		}
 		// on the street's wall, one block along and at head height
 		sign(level, pos.east().above(), facing, line1, line2);

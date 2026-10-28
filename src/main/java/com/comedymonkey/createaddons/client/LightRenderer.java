@@ -42,6 +42,10 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 
 	/** The Warning Beacon's rotor (cog, spindle, reflector), turned about its dome's axis. */
 	private static final ModelResourceLocation BEACON_ROTOR = model("warning_beacon_rotor");
+	/** The Floodlight's yoke and head (built on the floor, the head facing north), turned to its target. */
+	private static final ModelResourceLocation FLOOD_YOKE = model("floodlight_yoke"), FLOOD_HEAD = model("floodlight_head");
+	/** The height of the Floodlight's head pins above its plate (blocks). */
+	private static final float PIN = 7.5f / 16;
 
 	/** How much darker each brightness step's lens is (Full, Bright, Dim, Glow). */
 	private static final float[] STEP_SHADE = {1f, 0.7f, 0.45f, 0.25f};
@@ -72,6 +76,8 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 		GLOW.values().forEach(event::register);
 		GLASS.values().forEach(event::register);
 		event.register(BEACON_ROTOR);
+		event.register(FLOOD_YOKE);
+		event.register(FLOOD_HEAD);
 		for (LightKind k : LightKind.values())
 			if (onArms(k))
 				for (var f : new com.comedymonkey.createaddons.content.light.ArmFinish[] {com.comedymonkey.createaddons.content.light.ArmFinish.IRON,
@@ -84,6 +90,8 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 	@Override
 	protected void renderSafe(LightBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
 		parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
+		if (be.kind() == LightKind.FLOODLIGHT)
+			cone(be, ms, buffer, partialTicks);
 	}
 
 	/** A lit light has no lens in its block model: it's drawn this far, so a street keeps its lamps (the visual reads this too). */
@@ -95,7 +103,9 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 	/** Parts reach a block beyond their own (a Cobra Head leans out over the street). */
 	@Override
 	public net.minecraft.world.phys.AABB getRenderBoundingBox(LightBlockEntity be) {
-		return new net.minecraft.world.phys.AABB(be.getBlockPos()).inflate(1);
+		var box = new net.minecraft.world.phys.AABB(be.getBlockPos()).inflate(1);
+		// a Floodlight's cone reaches its target
+		return be.aim() != null ? box.minmax(new net.minecraft.world.phys.AABB(be.aim())) : box;
 	}
 
 	/**
@@ -103,7 +113,7 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 	 * Beacon always has its rotor.
 	 */
 	public static boolean active(LightBlockEntity be) {
-		return be.phase() != LightBlockEntity.Phase.DARK || be.kind() == LightKind.WARNING_BEACON;
+		return be.phase() != LightBlockEntity.Phase.DARK || be.kind() == LightKind.WARNING_BEACON || be.kind() == LightKind.FLOODLIGHT;
 	}
 
 	public static void parts(LightBlockEntity be, float pt, PoseStack ms, PartSink sink, int light) {
@@ -124,6 +134,8 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 				sink.part(armLens(kind, arm, true), ms, LightTexture.FULL_BRIGHT, RenderType.cutout(), tint(be, time, pt));
 			else
 				sink.part(armLens(kind, arm, false), ms, light);
+		} else if (kind == LightKind.FLOODLIGHT) {
+			floodlight(be, facing, ms, sink, light, lit, time, pt);
 		} else {
 			turn(ms, kind, facing);
 			if (kind == LightKind.WARNING_BEACON) {
@@ -150,6 +162,114 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 		int c = LightColours.lens(state.getValue(LightBlock.COLOR).dye());
 		float s = state.getValue(LightBlock.LIGHT) > 0 ? 1f : 0.72f;
 		return rgb((c >> 16 & 255) * s, (c >> 8 & 255) * s, (c & 255) * s);
+	}
+
+	/**
+	 * The Floodlight's yoke, turned about the face it's on, and its head, tilted on the yoke's pins, both pointing at its
+	 * target (straight out with none), with its lens.
+	 */
+	private static void floodlight(LightBlockEntity be, Direction facing, PoseStack ms, PartSink sink, int light, boolean lit, long time, float pt) {
+		float[] want = aimAngles(be, facing);
+		float[] aim = be.aimShown(time, pt, want[0], want[1]);
+		ms.translate(0.5, 0.5, 0.5);
+		ms.mulPose(mount(facing));
+		ms.translate(-0.5, -0.5, -0.5);
+		ms.translate(0.5, 0, 0.5);
+		ms.mulPose(Axis.YP.rotationDegrees(aim[0]));
+		ms.translate(-0.5, 0, -0.5);
+		sink.part(FLOOD_YOKE, ms, light);
+		ms.translate(0.5, PIN, 0.5);
+		ms.mulPose(Axis.XP.rotationDegrees(aim[1]));
+		ms.translate(-0.5, -PIN, -0.5);
+		sink.part(FLOOD_HEAD, ms, light);
+		if (lit)
+			sink.part(GLOW.get(LightKind.FLOODLIGHT), ms, LightTexture.FULL_BRIGHT, RenderType.cutout(), tint(be, time, pt));
+		else
+			sink.part(GLASS.get(LightKind.FLOODLIGHT), ms, light);
+	}
+
+	/** Turns the Floodlight's floor-built parts onto the face it's on (up to the way it faces). */
+	private static org.joml.Quaternionf mount(Direction facing) {
+		org.joml.Vector3f n = facing.step();
+		return new org.joml.Quaternionf().rotationTo(0, 1, 0, n.x(), n.y(), n.z());
+	}
+
+	/** The yaw (about its face) and pitch (on its pins) that point a Floodlight's head at its target; straight out with none. */
+	static float[] aimAngles(LightBlockEntity be, Direction facing) {
+		BlockPos target = be.aim();
+		if (target == null)
+			return new float[] {0, 0};
+		org.joml.Quaternionf mount = mount(facing);
+		org.joml.Vector3f pin = mount.transform(new org.joml.Vector3f(0, PIN - 0.5f, 0));
+		BlockPos pos = be.getBlockPos();
+		org.joml.Vector3f d = new org.joml.Vector3f(target.getX() - pos.getX() - pin.x(), target.getY() - pos.getY() - pin.y(),
+			target.getZ() - pos.getZ() - pin.z());
+		// into its own frame: up is the way it faces, the head built facing north
+		mount.conjugate(new org.joml.Quaternionf()).transform(d);
+		float yaw = (float) Math.toDegrees(Math.atan2(-d.x(), -d.z()));
+		float pitch = (float) Math.toDegrees(Math.atan2(d.y(), Math.sqrt(d.x() * d.x() + d.z() * d.z())));
+		return new float[] {yaw, Mth.clamp(pitch, -60, 90)};
+	}
+
+	/** Sides of the Floodlight's cone. */
+	private static final int CONE_SIDES = 12;
+
+	/**
+	 * The Floodlight's faint cone of light (D18): from its lens along where its head points, out to where its beam lands,
+	 * widening; added to what's behind it and never hiding it.
+	 */
+	private static void cone(LightBlockEntity be, PoseStack ms, MultiBufferSource buffer, float pt) {
+		if (be.getLevel() == null || be.phase() == LightBlockEntity.Phase.DARK)
+			return;
+		long time = be.getLevel().getGameTime();
+		BlockPos end = be.spot() != null ? be.spot() : be.aim();
+		if (end == null || !lit(be, time, pt))
+			return;
+		Direction facing = be.getBlockState().getValue(LightBlock.FACING);
+		org.joml.Quaternionf mount = mount(facing);
+		org.joml.Vector3f fwd = mount.transform(new org.joml.Vector3f(0, 0, -1).rotateX((float) Math.toRadians(be.pitchShown()))
+			.rotateY((float) Math.toRadians(be.yawShown())));
+		org.joml.Vector3f apex = mount.transform(new org.joml.Vector3f(0, PIN - 0.5f, 0)).add(0.5f, 0.5f, 0.5f).add(new org.joml.Vector3f(fwd).mul(0.3f));
+		BlockPos pos = be.getBlockPos();
+		org.joml.Vector3f far = new org.joml.Vector3f(end.getX() - pos.getX() + 0.5f, end.getY() - pos.getY() + 0.5f, end.getZ() - pos.getZ() + 0.5f);
+		float len = Math.min(apex.distance(far), (float) com.comedymonkey.createaddons.content.light.Floodlights.range() + 2);
+		org.joml.Vector3f u = new org.joml.Vector3f(fwd).cross(Math.abs(fwd.y()) < 0.9f ? new org.joml.Vector3f(0, 1, 0) : new org.joml.Vector3f(1, 0, 0)).normalize();
+		org.joml.Vector3f v = new org.joml.Vector3f(fwd).cross(u).normalize();
+		int c = tint(be, time, pt);
+		float r = (c >> 16 & 255) / 255f, g = (c >> 8 & 255) / 255f, b = (c & 255) / 255f;
+		float near = 0.22f, wide = near + len * 0.12f, alpha = 0.14f;
+		com.mojang.blaze3d.vertex.VertexConsumer vc = buffer.getBuffer(ConeType.CONE);
+		PoseStack.Pose pose = ms.last();
+		for (int i = 0; i < CONE_SIDES; i++) {
+			double a0 = Math.PI * 2 * i / CONE_SIDES, a1 = Math.PI * 2 * (i + 1) / CONE_SIDES;
+			org.joml.Vector3f o0 = new org.joml.Vector3f(u).mul((float) Math.cos(a0)).add(new org.joml.Vector3f(v).mul((float) Math.sin(a0)));
+			org.joml.Vector3f o1 = new org.joml.Vector3f(u).mul((float) Math.cos(a1)).add(new org.joml.Vector3f(v).mul((float) Math.sin(a1)));
+			org.joml.Vector3f tip = new org.joml.Vector3f(fwd).mul(len).add(apex);
+			vertex(vc, pose, new org.joml.Vector3f(o0).mul(near).add(apex), r, g, b, alpha);
+			vertex(vc, pose, new org.joml.Vector3f(o0).mul(wide).add(tip), r, g, b, 0);
+			vertex(vc, pose, new org.joml.Vector3f(o1).mul(wide).add(tip), r, g, b, 0);
+			vertex(vc, pose, new org.joml.Vector3f(o1).mul(near).add(apex), r, g, b, alpha);
+		}
+	}
+
+	private static void vertex(com.mojang.blaze3d.vertex.VertexConsumer vc, PoseStack.Pose pose, org.joml.Vector3f p, float r, float g, float b, float a) {
+		vc.addVertex(pose, p.x(), p.y(), p.z()).setColor(r, g, b, a);
+	}
+
+	/** The cone's look: added to what's behind it (as lightning is), both sides, writing no depth so nothing behind it hides. */
+	private static final class ConeType extends RenderType {
+		static final RenderType CONE = create(ComedyMonkeysCreateAddons.MOD_ID + "_floodlight_cone", com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR,
+			com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, 1536, false, true, CompositeState.builder()
+				.setShaderState(RENDERTYPE_LIGHTNING_SHADER)
+				.setTransparencyState(LIGHTNING_TRANSPARENCY)
+				.setWriteMaskState(COLOR_WRITE)
+				.setCullState(NO_CULL)
+				.createCompositeState(false));
+
+		private ConeType(String name, com.mojang.blaze3d.vertex.VertexFormat format, com.mojang.blaze3d.vertex.VertexFormat.Mode mode, int size,
+						 boolean crumbling, boolean sort, Runnable setup, Runnable clear) {
+			super(name, format, mode, size, crumbling, sort, setup, clear);
+		}
 	}
 
 	/** Lit this frame: steady, or in a flicker frame that's on (more of them on as it comes back, fewer as it goes). */

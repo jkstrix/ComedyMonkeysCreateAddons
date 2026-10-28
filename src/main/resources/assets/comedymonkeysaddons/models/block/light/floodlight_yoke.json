@@ -1,0 +1,218 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/iron",
+    "iron": "comedymonkeysaddons:block/light/iron"
+  },
+  "elements": [
+    {
+      "name": "fd_yoke_bar",
+      "from": [
+        2.5,
+        2,
+        7.5
+      ],
+      "to": [
+        13.5,
+        3,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            13,
+            13.5,
+            14
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            13,
+            8.5,
+            14
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            13,
+            13.5,
+            14
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            13,
+            8.5,
+            14
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            7.5,
+            13.5,
+            8.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            2.5,
+            7.5,
+            13.5,
+            8.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "fd_yoke_w",
+      "from": [
+        2.5,
+        3,
+        7.5
+      ],
+      "to": [
+        3.5,
+        8.5,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.5,
+            7.5,
+            13.5,
+            13
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            7.5,
+            8.5,
+            13
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            7.5,
+            3.5,
+            13
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            7.5,
+            8.5,
+            13
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            7.5,
+            3.5,
+            8.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            2.5,
+            7.5,
+            3.5,
+            8.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "fd_yoke_e",
+      "from": [
+        12.5,
+        3,
+        7.5
+      ],
+      "to": [
+        13.5,
+        8.5,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            7.5,
+            3.5,
+            13
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            7.5,
+            8.5,
+            13
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            12.5,
+            7.5,
+            13.5,
+            13
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            7.5,
+            8.5,
+            13
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            12.5,
+            7.5,
+            13.5,
+            8.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            12.5,
+            7.5,
+            13.5,
+            8.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    }
+  ]
+}

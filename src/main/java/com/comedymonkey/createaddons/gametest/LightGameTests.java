@@ -830,6 +830,129 @@ public final class LightGameTests {
 		});
 	}
 
+	// ---------- Floodlight ----------
+
+	/**
+	 * A Floodlight on the floor, fed and aimed at a block six away, lights a light-15 spot at that block's face; a block put
+	 * in the beam moves the spot to its face; broken, it takes its spot with it. Aiming through a block is refused.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 220)
+	public static void floodlightLightsWhereItsBeamLands(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 2), lamp = gen.east(4), target = lamp.south(6), wall = lamp.south(3);
+		LineGameTests.generator(helper, gen);
+		for (int i = 1; i <= 3; i++)
+			LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		helper.setBlock(lamp.below(), net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.FLOODLIGHT).get().defaultBlockState().setValue(LightBlock.FACING, Direction.UP));
+		helper.setBlock(target, net.minecraft.world.level.block.Blocks.STONE);
+		helper.runAtTickTime(2, () -> LineGameTests.relink(helper, gen.east(1), gen.east(3)));
+		helper.runAtTickTime(4, () -> {
+			var result = com.comedymonkey.createaddons.content.light.Floodlights.aim(helper.getLevel(), be(helper, lamp), helper.absolutePos(target));
+			if (result != com.comedymonkey.createaddons.content.light.Floodlights.Result.AIMED)
+				helper.fail("aiming at a block in clear sight gave " + result);
+		});
+		helper.runAtTickTime(130, () -> {
+			BlockState spot = helper.getBlockState(target.north());
+			if (!spot.is(ModBlocks.LIGHT_SPOT.get()) || spot.getValue(com.comedymonkey.createaddons.content.light.LightSpotBlock.LIGHT) != 15)
+				helper.fail("no light-15 spot at the target's face: " + spot);
+			helper.setBlock(wall, net.minecraft.world.level.block.Blocks.STONE);
+		});
+		helper.runAtTickTime(160, () -> {
+			if (!helper.getBlockState(wall.north()).is(ModBlocks.LIGHT_SPOT.get()))
+				helper.fail("the spot didn't move to the face of the block put in the beam: " + helper.getBlockState(wall.north()));
+			if (helper.getBlockState(target.north()).is(ModBlocks.LIGHT_SPOT.get()))
+				helper.fail("the old spot stayed behind the block in the beam");
+			var refused = com.comedymonkey.createaddons.content.light.Floodlights.aim(helper.getLevel(), be(helper, lamp), helper.absolutePos(target));
+			if (refused != com.comedymonkey.createaddons.content.light.Floodlights.Result.BLOCKED)
+				helper.fail("aiming through a block gave " + refused);
+			helper.getLevel().destroyBlock(helper.absolutePos(lamp), false);
+		});
+		helper.runAtTickTime(163, () -> {
+			if (helper.getBlockState(wall.north()).is(ModBlocks.LIGHT_SPOT.get()))
+				helper.fail("the spot stayed after its Floodlight was broken");
+			helper.succeed();
+		});
+	}
+
+	// ---------- Festoon Lights ----------
+
+	/** Two walls, a Festoon five blocks long hung between them, fed by a wire behind the west wall; returns the hooks. */
+	private static BlockPos[] festoon(GameTestHelper helper, boolean fed) {
+		// (the generator gives power out of its east side: a wire on a ledge beside it turns up the wall's back)
+		BlockPos gen = new BlockPos(0, 3, 3), w = gen.east(), west = w.east(), a = west.east(), b = a.east(5), east = b.east();
+		helper.setBlock(west, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(east, net.minecraft.world.level.block.Blocks.STONE);
+		if (fed) {
+			LineGameTests.generator(helper, gen);
+			helper.setBlock(w.below(), net.minecraft.world.level.block.Blocks.STONE);
+			helper.setBlock(w, ModBlocks.COPPER_POWER_LINE.get().defaultBlockState().setValue(com.comedymonkey.createaddons.content.line.PowerLineBlock.FACES.get(Direction.EAST), true)
+				.setValue(com.comedymonkey.createaddons.content.line.PowerLineBlock.FACES.get(Direction.DOWN), true));
+		}
+		var result = com.comedymonkey.createaddons.content.light.Festoons.hang(helper.getLevel(), helper.absolutePos(a), Direction.EAST,
+			helper.absolutePos(b), Direction.WEST, null);
+		if (result != com.comedymonkey.createaddons.content.light.Festoons.Result.HUNG)
+			helper.fail("the festoon didn't hang: " + result);
+		if (fed)
+			helper.runAtTickTime(2, () -> LineGameTests.relink(helper, w));
+		return new BlockPos[] {a, b};
+	}
+
+	private static int spots(GameTestHelper helper, BlockPos from, BlockPos to) {
+		int n = 0;
+		for (BlockPos p : BlockPos.betweenClosed(from.offset(0, -2, 0), to.offset(0, 0, 0)))
+			if (helper.getBlockState(p).is(ModBlocks.LIGHT_SPOT.get()))
+				n++;
+		return n;
+	}
+
+	/**
+	 * A Festoon fed through one wall lights spots of light along its string; its far wall taken away, both hooks come down
+	 * with it, its Festoon Lights given back and its spots gone.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 170)
+	public static void festoonLightsAlongItsString(GameTestHelper helper) {
+		BlockPos[] hooks = festoon(helper, true);
+		helper.runAtTickTime(130, () -> {
+			if (spots(helper, hooks[0], hooks[1]) == 0)
+				helper.fail("no spots of light along the lit festoon");
+			for (BlockPos p : BlockPos.betweenClosed(hooks[0].below(2), hooks[1]))
+				if (helper.getBlockState(p).is(ModBlocks.LIGHT_SPOT.get()) && helper.getBlockState(p).getValue(com.comedymonkey.createaddons.content.light.LightSpotBlock.LIGHT) != 10)
+					helper.fail("a festoon spot isn't light 10: " + helper.getBlockState(p));
+			helper.getLevel().destroyBlock(helper.absolutePos(hooks[1].east()), false);
+		});
+		helper.runAtTickTime(134, () -> {
+			for (BlockPos hook : hooks)
+				if (helper.getBlockState(hook).is(ModBlocks.FESTOON_HOOK.get()))
+					helper.fail("a hook stayed up at " + hook);
+			if (spots(helper, hooks[0], hooks[1]) != 0)
+				helper.fail("spots stayed after the festoon came down");
+			int items = 0;
+			for (var e : helper.getEntities(net.minecraft.world.entity.EntityType.ITEM, hooks[0].east(3), 6))
+				if (e.getItem().is(ModItems.FESTOON_LIGHTS.get()))
+					items += e.getItem().getCount();
+			if (items != 2)
+				helper.fail("the five-block festoon gave back " + items + " Festoon Lights, not 2");
+			helper.succeed();
+		});
+	}
+
+	/** A Festoon carries no power: a Warning Beacon on its unfed end's wall, with a wire on that wall, stays dark. */
+	@GameTest(template = COURSE, timeoutTicks = 150)
+	public static void festoonPowersNothingElse(GameTestHelper helper) {
+		BlockPos[] hooks = festoon(helper, true);
+		BlockPos east = hooks[1].east(), beacon = east.above();
+		LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), east.east(), Direction.WEST);
+		helper.setBlock(beacon, ModBlocks.LIGHTS.get(LightKind.WARNING_BEACON).get().defaultBlockState().setValue(LightBlock.FACING, Direction.UP));
+		helper.runAtTickTime(3, () -> LineGameTests.relink(helper, east.east()));
+		helper.runAtTickTime(130, () -> {
+			if (spots(helper, hooks[0], hooks[1]) == 0)
+				helper.fail("the festoon didn't light");
+			if (be(helper, beacon).phase() != LightBlockEntity.Phase.DARK)
+				helper.fail("power came through the festoon to a light on its far wall");
+			helper.succeed();
+		});
+	}
+
 	/** Starved (power stops coming, its circuit still has a source), it stays lit for its store, flickers, then goes dark. */
 	@GameTest(template = COURSE, timeoutTicks = 140)
 	public static void starvedLightFlickersOut(GameTestHelper helper) {

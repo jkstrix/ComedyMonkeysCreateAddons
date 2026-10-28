@@ -1,0 +1,82 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "south",
+        "post": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/festoon_hook"
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "post": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/festoon_hook_post"
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "post": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/festoon_hook",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "post": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/festoon_hook_post",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "post": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/festoon_hook",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "post": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/festoon_hook_post",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "post": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/festoon_hook",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "post": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/festoon_hook_post",
+        "y": 270
+      }
+    }
+  ]
+}

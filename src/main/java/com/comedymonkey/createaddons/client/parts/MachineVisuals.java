@@ -62,8 +62,9 @@ public final class MachineVisuals {
 		visualWhen(ModBlockEntities.FLUID_LINE, FluidLineRenderer::parts, false, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
 		visualWhen(ModBlockEntities.POWER_LINE, PowerLineRenderer::parts, true, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
 		// an Electric Light's lens, only while it's lit (dark, its glass is in the block model)
-		visualWhen(ModBlockEntities.LIGHT, com.comedymonkey.createaddons.client.LightRenderer::parts, true,
-			com.comedymonkey.createaddons.client.LightRenderer::active);
+		// (the Floodlight's renderer still runs, for its cone)
+		visualWhen(ModBlockEntities.LIGHT, com.comedymonkey.createaddons.client.LightRenderer::parts,
+			be -> be.kind() != com.comedymonkey.createaddons.content.light.LightKind.FLOODLIGHT, com.comedymonkey.createaddons.client.LightRenderer::active);
 		// an Upgraded Chest's lid, only while it's open (closed, it's part of the block model)
 		visualWhen(ModBlockEntities.UPGRADED_CHEST, com.comedymonkey.createaddons.client.UpgradedChestRenderer::parts, true,
 			com.comedymonkey.createaddons.client.UpgradedChestRenderer::open);
@@ -93,10 +94,16 @@ public final class MachineVisuals {
 	 */
 	public static <T extends BlockEntity> void visualWhen(Supplier<BlockEntityType<T>> type, PartsVisual.Parts<T> parts, boolean partsOnly,
 															java.util.function.Predicate<T> active) {
+		visualWhen(type, parts, be -> partsOnly, active);
+	}
+
+	/** As above, {@code partsOnly} asked of each block entity (one whose renderer draws something more keeps it). */
+	public static <T extends BlockEntity> void visualWhen(Supplier<BlockEntityType<T>> type, PartsVisual.Parts<T> parts,
+															java.util.function.Predicate<T> partsOnly, java.util.function.Predicate<T> active) {
 		SimpleBlockEntityVisualizer.builder(type.get())
 			.factory((context, be, partialTick) -> active.test(be) ? new PartsVisual<>(context, be, partialTick, parts, active)
 				: new IdleVisual<>(context, be, partialTick))
-			.skipVanillaRender(be -> partsOnly)
+			.skipVanillaRender(partsOnly::test)
 			.apply();
 	}
 

@@ -386,6 +386,28 @@ public final class ModBlocks {
 		return new com.comedymonkey.createaddons.content.light.LightBlock(kind, properties);
 	}
 
+	/** Electric Lights: a Festoon's hook, put up by hanging Festoon Lights (no item of its own). */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.light.FestoonHookBlock> FESTOON_HOOK = BLOCKS.register("festoon_hook",
+		() -> new com.comedymonkey.createaddons.content.light.FestoonHookBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.METAL)
+			.strength(0.5f, 1.0f)
+			.sound(SoundType.CHAIN)
+			.noOcclusion()
+			.noCollission()
+			.noLootTable()
+			.pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
+
+	/** Electric Lights: the invisible spot of light a Floodlight puts where its beam lands (no item). */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.light.LightSpotBlock> LIGHT_SPOT = BLOCKS.register("light_spot",
+		() -> new com.comedymonkey.createaddons.content.light.LightSpotBlock(BlockBehaviour.Properties.of()
+			.replaceable()
+			.strength(-1.0f, 3600000.8f)
+			.noLootTable()
+			.noOcclusion()
+			.noCollission()
+			.pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)
+			.lightLevel(state -> state.getValue(com.comedymonkey.createaddons.content.light.LightSpotBlock.LIGHT))));
+
 	/** Electric Lights: the cable a Pendant Lamp or Chandelier is lowered on (no item: it's made by lowering the lamp). */
 	public static final DeferredBlock<com.comedymonkey.createaddons.content.light.HangingCableBlock> HANGING_CABLE = BLOCKS.register("hanging_cable",
 		() -> new com.comedymonkey.createaddons.content.light.HangingCableBlock(BlockBehaviour.Properties.of()

@@ -75,6 +75,12 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 	private long sourceAt = Long.MIN_VALUE / 2, cutAt = Long.MIN_VALUE / 2;
 	@Nullable
 	private Object sourceFrom;
+	/** A Floodlight's target, and the spot of light it put where its beam lands (Floodlights). */
+	@Nullable
+	private BlockPos aim, spot;
+	/** On the client: where a Floodlight's yoke and head were last drawn turned to, and when (game time, part ticks). */
+	private float yawShown, pitchShown;
+	private double aimShownAt = Double.NaN;
 	/** On the client: switched off (for the goggles). */
 	private boolean cutShown;
 
@@ -355,6 +361,21 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 	/** Lit at its brightness step, or dark: the light it casts on the world. */
 	private void show(boolean lit) {
 		setState(LightBlock.LIGHT, lit ? step + 1 : 0);
+		shown(lit);
+	}
+
+	/**
+	 * Lit or dark, as each wake finds it (at least once a second while lit): what it lights besides itself follows. A
+	 * Floodlight's spot goes where its beam lands now while it's lit, none while it's dark.
+	 */
+	protected void shown(boolean lit) {
+		if (kind() == LightKind.FLOODLIGHT && !isRemoved())
+			Floodlights.beam(this, lit);
+	}
+
+	/** A remote spot of light at p is this light's (LightSpotBlock asks, to know it's still wanted). */
+	public boolean ownsSpot(BlockPos p) {
+		return p.equals(spot);
 	}
 
 	private <T extends Comparable<T>> void setState(net.minecraft.world.level.block.state.properties.Property<T> property, T value) {
@@ -374,6 +395,60 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 
 	public void setDye(@Nullable DyeColor dye) {
 		setState(LightBlock.COLOR, LightDye.of(dye));
+		// its spots of light (a Floodlight's, a Festoon's) take the colour too
+		if (phase == Phase.LIT)
+			show(true);
+	}
+
+	// ---------- the Floodlight ----------
+
+	public @Nullable BlockPos aim() {
+		return aim;
+	}
+
+	public @Nullable BlockPos spot() {
+		return spot;
+	}
+
+	/** Aimed at a block (Floodlights.aim has checked it's in range and sight): it turns there, and its spot moves. */
+	void setAim(BlockPos target) {
+		aim = target.immutable();
+		if (phase != Phase.DARK)
+			show(true);
+		sync();
+	}
+
+	void setSpot(@Nullable BlockPos at) {
+		if (java.util.Objects.equals(spot, at))
+			return;
+		spot = at;
+		sync();
+	}
+
+	/**
+	 * On the client: the yaw and pitch a Floodlight's yoke and head are drawn at, easing toward {@code want} over about
+	 * half a second (the brief), so a re-aimed light swings round.
+	 */
+	public float[] aimShown(long time, float pt, float yaw, float pitch) {
+		double t = time + (double) pt;
+		if (Double.isNaN(aimShownAt)) {
+			yawShown = yaw;
+			pitchShown = pitch;
+		} else {
+			float k = (float) (1 - Math.exp(-Math.max(0, t - aimShownAt) / 3.0));
+			yawShown += net.minecraft.util.Mth.wrapDegrees(yaw - yawShown) * k;
+			pitchShown += (pitch - pitchShown) * k;
+		}
+		aimShownAt = t;
+		return new float[] {yawShown, pitchShown};
+	}
+
+	public float yawShown() {
+		return yawShown;
+	}
+
+	public float pitchShown() {
+		return pitchShown;
 	}
 
 	/** The wrench: the next brightness step (D22), with a click pitched by the step (Full highest). */
@@ -429,6 +504,10 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 		tag.putLong("FlickerAt", flickerAt);
 		tag.putBoolean("FlickerOn", flickerOn);
 		tag.putLong("WarmAt", warmAt);
+		if (aim != null)
+			tag.putLong("Aim", aim.asLong());
+		if (spot != null)
+			tag.putLong("Spot", spot.asLong());
 	}
 
 	/** The Warning Beacon's rotor: a turn a second (D16, brief). */
@@ -463,6 +542,8 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 		flickerAt = tag.contains("FlickerAt") ? tag.getLong("FlickerAt") : Long.MIN_VALUE / 2;
 		flickerOn = tag.getBoolean("FlickerOn");
 		warmAt = tag.contains("WarmAt") ? tag.getLong("WarmAt") : Long.MIN_VALUE / 2;
+		aim = tag.contains("Aim") ? BlockPos.of(tag.getLong("Aim")) : null;
+		spot = tag.contains("Spot") ? BlockPos.of(tag.getLong("Spot")) : null;
 		if (level != null && level.isClientSide) {
 			long now = level.getGameTime();
 			if (flickerAt != oldFlicker && now - flickerAt < FLICKER_TICKS)
@@ -519,6 +600,12 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 		Component colour = dye == null ? Component.translatable(ComedyMonkeysCreateAddons.MOD_ID + ".gui.goggles.light.plain")
 			: Component.translatable("color.minecraft." + dye.getName());
 		lang().translate("gui.goggles.light.colour", colour).style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
+		if (kind() == LightKind.FLOODLIGHT) {
+			if (aim == null)
+				lang().translate("gui.goggles.light.not_aimed").style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
+			else
+				lang().translate("gui.goggles.light.aimed", aim.getX(), aim.getY(), aim.getZ()).style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
+		}
 		return true;
 	}
 

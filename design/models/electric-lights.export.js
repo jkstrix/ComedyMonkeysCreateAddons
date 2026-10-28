@@ -238,6 +238,48 @@ const BEACON = 'warning_beacon';
   writeJson(`blockstates/${BEACON}.json`, { multipart });
 }
 
+// ---------- the Floodlight: on any face, its base turned as the Indicator's is; its yoke and head, built on the floor with
+// the head facing north, are set by the renderer to point at its target (LightRenderer.floodlight)
+const FLOOD = 'floodlight';
+{
+  const fd = G.floodlight();
+  const head = fd.head.filter((c) => !G.isGlow(c)), glass = fd.head.filter(G.isGlow);
+  writeJson(`models/block/light/${FLOOD}.json`, blockModel(G.toWall(fd.base), 'steel'));
+  writeJson(`models/block/light/${FLOOD}_yoke.json`, blockModel(fd.yoke, 'iron'));
+  writeJson(`models/block/light/${FLOOD}_head.json`, blockModel(head, 'steel'));
+  writeJson(`models/block/light/${FLOOD}_glass.json`, blockModel(lens(glass, 'glass_off'), 'steel'));
+  writeJson(`models/block/light/${FLOOD}_glow.json`, blockModel(lens(glass, 'glow_white'), 'glow_white', { glow: 'tint' }));
+  writeJson(`models/item/${FLOOD}.json`, blockModel([...fd.base, ...fd.yoke, ...fd.head], 'steel', { glow: true, gui: true }));
+  writeJson(`blockstates/${FLOOD}.json`, { multipart: Object.entries(ROTATIONS.any).map(([facing, rot]) => ({ when: { facing }, apply: { model: `${NS}:block/light/${FLOOD}`, ...rot } })) });
+}
+// the spot of light it puts where its beam lands: invisible (an empty model for its particle)
+writeJson('models/block/light/light_spot.json', { parent: 'block/block', textures: { particle: ref('glow_white') }, elements: [] });
+writeJson('blockstates/light_spot.json', { variants: { '': { model: `${NS}:block/light/light_spot` } } });
+
+// ---------- Festoon Lights: the hook a string hangs from (built on the north wall facing south; on a post, a bracket
+// reaching into the post's block), and the item (a short sagging string of bulbs). The strings are drawn by FestoonRenderer.
+{
+  const eye = G.box('hk_eye', [7.5, 11.5, 0.5], [8.5, 12.5, 1.5], 'iron');
+  writeJson('models/block/light/festoon_hook.json', blockModel([G.box('hk_plate', [7, 11, 0], [9, 13, 0.5], { all: 'iron', north: null }), eye], 'iron'));
+  writeJson('models/block/light/festoon_hook_post.json', blockModel([G.box('hk_bracket', [7.5, 11.75, -7], [8.5, 12.25, 0.5], 'iron'), eye], 'iron'));
+  const multipart = [];
+  for (const [facing, rot] of Object.entries(ROTATIONS.wall)) {
+    if (facing === 'up' || facing === 'down') continue;
+    multipart.push({ when: { facing, post: 'false' }, apply: { model: `${NS}:block/light/festoon_hook`, ...rot } });
+    multipart.push({ when: { facing, post: 'true' }, apply: { model: `${NS}:block/light/festoon_hook_post`, ...rot } });
+  }
+  writeJson('blockstates/festoon_hook.json', { multipart });
+  const item = [];
+  const sagY = (x) => 11 - 3 * (1 - ((x - 8) / 7) ** 2);
+  for (let x = 1; x < 15; x += 2) item.push(G.box('fs_' + x, [x, sagY(x + 1) - 0.5, 7.5], [x + 2, sagY(x + 1) + 0.5, 8.5], 'flex'));
+  for (const x of [4, 8, 12]) {
+    const y = sagY(x);
+    item.push(G.box('fs_sock_' + x, [x - 0.5, y - 1.5, 7.5], [x + 0.5, y - 0.5, 8.5], 'steel'));
+    item.push(G.glowBox('fs_bulb_' + x, [x - 1.25, y - 4, 6.75], [x + 1.25, y - 1.5, 9.25]));
+  }
+  writeJson('models/item/festoon_lights.json', blockModel(item, 'flex', { glow: true, gui: true }));
+}
+
 // ---------- the colour each light casts, for Colorful Lighting (it reads emitters by block state) ----------
 // As LightColours.castHex (checked by LightColoursTest): the lens colour at full; a dyed one strengthened so it reads over
 // vanilla's white light, black as a deep ultraviolet, green from a cooler green than its olive lens, undyed the warm lens as it is. Dark lights emit nothing anyway.
@@ -258,7 +300,7 @@ function castHex(dye) {
   return '#' + rgb.map((v) => Math.floor(f(v * 255) + 0.5).toString(16).toUpperCase().padStart(2, '0')).join('');
 }
 const emitters = {};
-for (const id of [...Object.keys(KINDS), ...Object.keys(HANGING), BEACON, 'light_strip', 'edge_light']) {
+for (const id of [...Object.keys(KINDS), ...Object.keys(HANGING), BEACON, FLOOD, 'light_spot', 'light_strip', 'edge_light']) {
   emitters[`${NS}:${id}`] = castHex(null);
   for (const dye of DYES) emitters[`${NS}:${id}[color=${dye}]`] = castHex(dye);
 }
@@ -296,7 +338,7 @@ const writeData = (rel, obj) => {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, JSON.stringify(obj, null, 2) + '\n');
 };
-const ids = [...Object.keys(KINDS), ...Object.keys(HANGING), BEACON];
+const ids = [...Object.keys(KINDS), ...Object.keys(HANGING), BEACON, FLOOD];
 for (const id of ids)
   writeData(`${NS}/loot_table/blocks/${id}.json`, { type: 'minecraft:block', pools: [{ rolls: 1,
     entries: [{ type: 'minecraft:item', name: `${NS}:${id}` }], conditions: [{ condition: 'minecraft:survives_explosion' }] }] });
@@ -342,7 +384,8 @@ const GROUPS = {
   small: ['indicator_lamp', 'light_strip', 'edge_light'],
 };
 const YIELD = { full: 1, small: 8 };
-const CRAFTED = { high_bay_lamp: [{ tag: 'c:plates/iron' }], chandelier: [{ tag: 'c:plates/brass' }], warning_beacon: [{ item: 'create:cogwheel' }] };
+const CRAFTED = { high_bay_lamp: [{ tag: 'c:plates/iron' }], chandelier: [{ tag: 'c:plates/brass' }], warning_beacon: [{ item: 'create:cogwheel' }],
+  floodlight: [{ tag: 'c:plates/iron' }, { tag: 'c:plates/iron' }] };
 fs.rmSync(path.join(DATA, NS, 'recipe/light'), { recursive: true, force: true });
 writeData(`${NS}/recipe/light_assembly.json`, { type: 'minecraft:crafting_shapeless', category: 'misc',
   ingredients: [{ item: 'minecraft:glass' }, { tag: 'c:plates/copper' }, { item: 'minecraft:redstone' }],
@@ -361,6 +404,9 @@ for (const [group, members] of Object.entries(GROUPS)) {
 for (const [m, parts] of Object.entries(CRAFTED))
   writeData(`${NS}/recipe/light/${m}.json`, { type: 'minecraft:crafting_shapeless', category: 'misc',
     ingredients: [{ item: `${NS}:light_assembly` }, ...parts], result: { id: `${NS}:${m}`, count: 1 } });
+// Festoon Lights: four from an assembly (P22), 16 blocks of string; they don't swap (P23)
+writeData(`${NS}/recipe/light/festoon_lights.json`, { type: 'minecraft:stonecutting',
+  ingredient: { item: `${NS}:light_assembly` }, result: { id: `${NS}:festoon_lights`, count: 4 } });
 // the Light Switch is a control, not a light: lever + copper sheet -> 2 (P25)
 writeData(`${NS}/recipe/light_switch.json`, { type: 'minecraft:crafting_shapeless', category: 'redstone',
   ingredients: [{ item: 'minecraft:lever' }, { tag: 'c:plates/copper' }], result: { id: `${NS}:light_switch`, count: 2 } });

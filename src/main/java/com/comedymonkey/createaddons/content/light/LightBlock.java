@@ -220,6 +220,9 @@ public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWa
 
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
+		// a Floodlight's spot goes with it
+		if (!level.isClientSide && !newState.is(this) && level.getBlockEntity(pos) instanceof LightBlockEntity be && be.spot() != null)
+			LightSpotBlock.remove(level, be.spot(), pos);
 		super.onRemove(state, level, pos, newState, moving);
 		if (!newState.is(this))
 			LightMounts.relinkBehind(level, state, pos);
@@ -315,6 +318,12 @@ public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWa
 	@Override
 	public net.minecraft.world.InteractionResult onWrenched(BlockState state, UseOnContext ctx) {
 		Level level = ctx.getLevel();
+		// the Floodlight has no steps: the wrench aims it (P26, D18)
+		if (kind == LightKind.FLOODLIGHT) {
+			if (ctx.getPlayer() != null)
+				Floodlights.startAiming(level, ctx.getPlayer(), ctx.getClickedPos());
+			return net.minecraft.world.InteractionResult.SUCCESS;
+		}
 		if (!level.isClientSide && level.getBlockEntity(ctx.getClickedPos()) instanceof LightBlockEntity be)
 			be.stepBrightness();
 		return net.minecraft.world.InteractionResult.SUCCESS;

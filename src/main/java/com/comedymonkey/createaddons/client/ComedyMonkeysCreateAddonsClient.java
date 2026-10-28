@@ -215,6 +215,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.BATTERY.get(), BatteryRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LIGHT.get(), LightRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.FESTOON.get(), FestoonRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.GEOTHERMAL_CONTROLLER.get(), ElectricRenderers.Turbine::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.STRING_TANGLER.get(), MachineRenderers.Tangler::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.STONE_INFUSER.get(), MachineRenderers.Infuser::new);

@@ -48,6 +48,14 @@ class ModBlocksTest {
 				assertSame(Items.AIR, item, "the clock's weights are not an item");
 				continue;
 			}
+			if (entry.getId().equals(ModBlocks.FESTOON_HOOK.getId())) {
+				assertSame(Items.AIR, item, "a Festoon's hook is put up by Festoon Lights, not an item");
+				continue;
+			}
+			if (entry.getId().equals(ModBlocks.LIGHT_SPOT.getId())) {
+				assertSame(Items.AIR, item, "a Floodlight's spot of light is not an item");
+				continue;
+			}
 			if (entry.getId().equals(ModBlocks.HANGING_CABLE.getId())) {
 				assertSame(Items.AIR, item, "a hanging lamp's cable is made by lowering it, not an item");
 				continue;

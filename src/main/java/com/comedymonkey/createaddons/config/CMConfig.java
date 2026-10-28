@@ -123,6 +123,10 @@ public final class CMConfig {
 		public final ModConfigSpec.DoubleValue lightCeilingFePerTick;
 		public final ModConfigSpec.DoubleValue lightLargeFePerTick;
 		public final ModConfigSpec.DoubleValue lightBeaconFePerTick;
+		public final ModConfigSpec.DoubleValue lightFloodlightFePerTick;
+		public final ModConfigSpec.IntValue floodlightRange;
+		public final ModConfigSpec.DoubleValue lightFestoonFePerTick;
+		public final ModConfigSpec.IntValue festoonReach;
 		public final ModConfigSpec.DoubleValue lightRunFePerTick;
 		public final ModConfigSpec.IntValue lightBufferSeconds;
 
@@ -551,6 +555,22 @@ public final class CMConfig {
 				.comment("The Warning Beacon (its little motor too).")
 				.translation("comedymonkeysaddons.configuration.lightBeaconFePerTick")
 				.defineInRange("beaconFePerTick", 4.0, 0.05, 10000.0);
+			lightFloodlightFePerTick = builder
+				.comment("The Floodlight.")
+				.translation("comedymonkeysaddons.configuration.lightFloodlightFePerTick")
+				.defineInRange("floodlightFePerTick", 32.0, 0.05, 10000.0);
+			floodlightRange = builder
+				.comment("How far a Floodlight reaches to the block it's aimed at, in blocks.")
+				.translation("comedymonkeysaddons.configuration.floodlightRange")
+				.defineInRange("floodlightRange", 32, 4, 64);
+			lightFestoonFePerTick = builder
+				.comment("Festoon Lights, for each block of string.")
+				.translation("comedymonkeysaddons.configuration.lightFestoonFePerTick")
+				.defineInRange("festoonFePerTick", 0.5, 0.01, 10000.0);
+			festoonReach = builder
+				.comment("The longest string of Festoon Lights, in blocks.")
+				.translation("comedymonkeysaddons.configuration.festoonReach")
+				.defineInRange("festoonReach", 16, 2, 32);
 			lightLargeFePerTick = builder
 				.comment("The High-Bay Lamp and each street lamp head.")
 				.translation("comedymonkeysaddons.configuration.lightLargeFePerTick")
@@ -938,6 +958,22 @@ public final class CMConfig {
 
 		public double lightCeilingFePerTick() {
 			return get(lightCeilingFePerTick);
+		}
+
+		public double lightFloodlightFePerTick() {
+			return get(lightFloodlightFePerTick);
+		}
+
+		public double lightFestoonFePerTick() {
+			return get(lightFestoonFePerTick);
+		}
+
+		public int festoonReach() {
+			return get(festoonReach);
+		}
+
+		public int floodlightRange() {
+			return get(floodlightRange);
 		}
 
 		public double lightBeaconFePerTick() {

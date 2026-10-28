@@ -141,6 +141,8 @@ public final class ModItems {
 	/** Electric Lights: the Light Assembly every light is cut from in a stonecutter (D23), and the lights themselves. */
 	public static final DeferredItem<Item> LIGHT_ASSEMBLY = ITEMS.registerSimpleItem("light_assembly");
 	public static final DeferredItem<BlockItem> LIGHT_STRIP = ITEMS.registerSimpleBlockItem(ModBlocks.LIGHT_STRIP);
+	public static final DeferredItem<com.comedymonkey.createaddons.content.light.FestoonItem> FESTOON_LIGHTS = ITEMS.register("festoon_lights",
+		() -> new com.comedymonkey.createaddons.content.light.FestoonItem(new Item.Properties()));
 	public static final DeferredItem<BlockItem> CAST_IRON_LAMP_POST = ITEMS.registerSimpleBlockItem(ModBlocks.CAST_IRON_LAMP_POST);
 	public static final DeferredItem<BlockItem> STEEL_LAMP_POST = ITEMS.registerSimpleBlockItem(ModBlocks.STEEL_LAMP_POST);
 	public static final DeferredItem<com.comedymonkey.createaddons.content.light.EdgeLightItem> EDGE_LIGHT = ITEMS.register("edge_light",
