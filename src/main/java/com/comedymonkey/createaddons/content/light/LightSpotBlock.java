@@ -34,7 +34,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * A light's remote spot (design/specs/electric-lights.md, P13): the light a Floodlight puts where its beam lands. Invisible,
  * in air or water only, never picked, targeted or broken by a player, and gone when anything is put in its place. It
  * belongs to the light that placed it (LightSpotBlockEntity) and looks every two seconds that it still does, so one left
- * behind (its light broken in a way that didn't take it) goes out by itself.
+ * behind (its light broken in a way that didn't take it, or unloaded) goes out by itself.
  */
 public class LightSpotBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 	public static final MapCodec<LightSpotBlock> CODEC = simpleCodec(LightSpotBlock::new);
@@ -101,12 +101,15 @@ public class LightSpotBlock extends BaseEntityBlock implements SimpleWaterlogged
 			level.scheduleTick(pos, this, CHECK);
 	}
 
-	/** Still its light's spot (or its light is out of reach, unloaded): it stays; else it goes out. */
+	/**
+	 * Still its light's spot, and its light is loaded: it stays; else it goes out. (A light unloaded can't say whether it's
+	 * lit: its spot goes, and it puts it back when it's loaded and lit again.)
+	 */
 	@Override
 	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		BlockPos owner = owner(level, pos);
-		boolean kept = owner != null && (!level.isLoaded(owner)
-			|| level.getBlockEntity(owner) instanceof LightBlockEntity light && light.ownsSpot(pos));
+		boolean kept = owner != null && level.isLoaded(owner)
+			&& level.getBlockEntity(owner) instanceof LightBlockEntity light && light.ownsSpot(pos);
 		if (kept)
 			level.scheduleTick(pos, this, CHECK);
 		else
