@@ -694,6 +694,99 @@ public final class LightGameTests {
 		});
 	}
 
+	/** Lowered into water, its cable is waterlogged; brought down, every block of it still gives its wire back. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void waterloggedCableGivesItsWireBack(GameTestHelper helper) {
+		BlockPos ceiling = new BlockPos(3, 4, 3), lamp = ceiling.below();
+		helper.setBlock(ceiling, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp.below(3), net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.PENDANT).get());
+		for (int i = 1; i <= 2; i++)
+			helper.setBlock(lamp.below(i), net.minecraft.world.level.block.Blocks.WATER);
+		ItemStack wire = new ItemStack(ModItems.COPPER_POWER_LINE.get(), 2);
+		helper.runAtTickTime(2, () -> {
+			lower(helper, lamp, wire);
+			lower(helper, lamp.below(), wire);
+		});
+		helper.runAtTickTime(4, () -> {
+			if (!helper.getBlockState(lamp.below()).getValue(com.comedymonkey.createaddons.content.light.HangingCableBlock.WATERLOGGED))
+				helper.fail("the cable lowered through water isn't waterlogged");
+			helper.getLevel().destroyBlock(helper.absolutePos(ceiling), false);
+		});
+		helper.runAtTickTime(7, () -> {
+			int wires = 0;
+			for (var e : helper.getEntities(net.minecraft.world.entity.EntityType.ITEM, lamp, 4))
+				if (e.getItem().is(ModItems.COPPER_POWER_LINE.get()))
+					wires += e.getItem().getCount();
+			if (wires != 2)
+				helper.fail("the cable came down as " + wires + " wires, not 2");
+			helper.succeed();
+		});
+	}
+
+	/** A Pendant fed by a wire meeting it flat on its ceiling still lights, lowered: the wire meets its rose and feeds it down the cable. */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void flatCeilingWireFeedsALoweredLamp(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 3, 2), w = gen.east(), lamp = w.east();
+		LineGameTests.generator(helper, gen);
+		helper.setBlock(w.above(), net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp.above(), net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.PENDANT).get());
+		LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), w, Direction.UP);
+		helper.runAtTickTime(2, () -> LineGameTests.relink(helper, w));
+		helper.runAtTickTime(4, () -> lower(helper, lamp, new ItemStack(ModItems.COPPER_POWER_LINE.get())));
+		helper.runAtTickTime(140, () -> {
+			if (!(helper.getBlockEntity(lamp.below()) instanceof LightBlockEntity be) || be.phase() != LightBlockEntity.Phase.LIT)
+				helper.fail("the lowered lamp didn't light from the wire meeting its rose");
+			helper.succeed();
+		});
+	}
+
+	/** A Chandelier under a line encased in its ceiling still lights, lowered: fed down its cable from the line. */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void encasedLineFeedsALoweredLamp(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 4, 2), w = gen.east(), lamp = w.below();
+		LineGameTests.generator(helper, gen);
+		helper.setBlock(lamp.below(2), net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(w.above(), net.minecraft.world.level.block.Blocks.STONE);
+		LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), w, Direction.UP);
+		if (helper.getBlockEntity(w) instanceof com.comedymonkey.createaddons.content.line.LineBlockEntity line)
+			line.setEncasing(net.minecraft.world.level.block.Blocks.STONE_BRICKS.defaultBlockState());
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.CHANDELIER).get());
+		helper.runAtTickTime(2, () -> LineGameTests.relink(helper, w));
+		helper.runAtTickTime(4, () -> lower(helper, lamp, new ItemStack(ModItems.COPPER_POWER_LINE.get())));
+		helper.runAtTickTime(140, () -> {
+			if (!helper.getBlockState(lamp.below()).is(ModBlocks.LIGHTS.get(LightKind.CHANDELIER).get()))
+				helper.fail("no lamp where it was lowered to: " + helper.getBlockState(w) + " / " + helper.getBlockState(lamp) + " / " + helper.getBlockState(lamp.below()));
+			if (!(helper.getBlockEntity(lamp.below()) instanceof LightBlockEntity be) || be.phase() != LightBlockEntity.Phase.LIT)
+				helper.fail("the lowered lamp didn't light from the line encased in its ceiling: " + helper.getBlockState(w) + " / " + helper.getBlockState(lamp) + " / " + helper.getBlockState(lamp.below()));
+			helper.succeed();
+		});
+	}
+
+	/** A Chandelier hung from a chain lowers on cable and stays up, its rose hanging from the chain as the lamp did. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void lampLowersFromAChain(GameTestHelper helper) {
+		BlockPos chain = new BlockPos(3, 4, 3), lamp = chain.below();
+		helper.setBlock(chain.above(), net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(chain, net.minecraft.world.level.block.Blocks.CHAIN);
+		helper.setBlock(lamp.below(3), net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.CHANDELIER).get());
+		ItemStack wire = new ItemStack(ModItems.COPPER_POWER_LINE.get(), 2);
+		helper.runAtTickTime(2, () -> {
+			lower(helper, lamp, wire);
+			lower(helper, lamp.below(), wire);
+			// a neighbour changing makes every block of it look again whether it can hang
+			helper.setBlock(lamp.east(), net.minecraft.world.level.block.Blocks.STONE);
+			helper.setBlock(lamp.below().east(), net.minecraft.world.level.block.Blocks.STONE);
+		});
+		helper.runAtTickTime(5, () -> {
+			if (!helper.getBlockState(lamp.below(2)).is(ModBlocks.LIGHTS.get(LightKind.CHANDELIER).get()))
+				helper.fail("the Chandelier came down from its chain: " + helper.getBlockState(lamp.below(2)));
+			helper.succeed();
+		});
+	}
+
 	/** Starved (power stops coming, its circuit still has a source), it stays lit for its store, flickers, then goes dark. */
 	@GameTest(template = COURSE, timeoutTicks = 140)
 	public static void starvedLightFlickersOut(GameTestHelper helper) {

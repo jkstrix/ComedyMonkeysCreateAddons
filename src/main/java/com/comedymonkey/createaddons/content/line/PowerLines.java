@@ -388,6 +388,16 @@ public final class PowerLines {
 				touched.add(l.to());
 	}
 
+	/** Where power at pos goes in: a hanging lamp's cable carries it down to the lamp. */
+	private BlockPos device(BlockPos pos) {
+		if (level.isLoaded(pos) && level.getBlockState(pos).getBlock() instanceof com.comedymonkey.createaddons.content.light.HangingCableBlock) {
+			BlockPos lamp = com.comedymonkey.createaddons.content.light.HangingCableBlock.foot(level, pos);
+			if (lamp != null)
+				return lamp;
+		}
+		return pos;
+	}
+
 	private Piece readWire(PowerLineBlockEntity be) {
 		LineTier tier = be.tier();
 		DyeColor dye = be.dye();
@@ -402,10 +412,10 @@ public final class PowerLines {
 				continue;
 			int links = be.links(face);
 			if ((links & WireLink.BASE) != 0)
-				p.ends.add(new End(pos.relative(face), face.getOpposite()));
+				p.ends.add(new End(device(pos.relative(face)), face.getOpposite()));
 			// up (or down) through the block into a machine across it
 			if ((links & WireLink.RISE) != 0)
-				p.ends.add(new End(pos.relative(face.getOpposite()), face));
+				p.ends.add(new End(device(pos.relative(face.getOpposite())), face));
 			// through the block it lies on, into the lights fixed to its other faces
 			if ((links & WireLink.BEHIND) != 0) {
 				BlockPos support = pos.relative(face);
@@ -426,7 +436,7 @@ public final class PowerLines {
 						if (head != null)
 							link(p, new Node(head, Node.POLE), tier, dye, d);
 					}
-					case TERMINAL, LAMP -> p.ends.add(new End(to, d.getOpposite()));
+					case TERMINAL, LAMP -> p.ends.add(new End(device(to), d.getOpposite()));
 					default -> {}
 				}
 			}

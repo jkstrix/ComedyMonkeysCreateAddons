@@ -77,6 +77,9 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 			else if (!(level.getBlockState(support).getBlock() instanceof LineBlock)
 				&& level.getCapability(Capabilities.EnergyStorage.BLOCK, support, face.getOpposite()) != null)
 				packed |= WireLink.BASE;
+			// lying on a hanging lamp's rose, from the line in its ceiling: into the lamp down its cable
+			else if (com.comedymonkey.createaddons.content.light.HangingCableBlock.lampUnder(level, support, worldPosition) != null)
+				packed |= WireLink.BASE;
 			// lights fixed to the block it lies on, on its other faces: fed through the block
 			else if (!com.comedymonkey.createaddons.content.light.LightMounts.fixedAround(level, support, worldPosition).isEmpty())
 				packed |= WireLink.BEHIND;
@@ -87,7 +90,8 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 				if (!level.isLoaded(across))
 					packed |= links[face.ordinal()] & WireLink.RISE;
 				else if (!(level.getBlockState(across).getBlock() instanceof LineBlock)
-					&& level.getCapability(Capabilities.EnergyStorage.BLOCK, across, face) != null)
+					&& (level.getCapability(Capabilities.EnergyStorage.BLOCK, across, face) != null
+						|| com.comedymonkey.createaddons.content.light.HangingCableBlock.lampUnder(level, across, worldPosition) != null))
 					packed |= WireLink.RISE;
 			}
 			next[face.ordinal()] = packed;
@@ -230,6 +234,14 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 		if (there.getBlock() instanceof LinePostBlock && there.getValue(LinePostBlock.FACING) == face.getOpposite()
 			&& there.getValue(LinePostBlock.ROLE).isFoot())
 			return WireLink.POST;
+		// a hanging lamp's rose on the same ceiling: flat to it, as to a light right under it; the line in its ceiling: down
+		// into it (either way into the lamp down its cable)
+		if (there.getBlock() instanceof com.comedymonkey.createaddons.content.light.HangingCableBlock) {
+			if (com.comedymonkey.createaddons.content.light.HangingCableBlock.lampUnder(level, next, next.relative(face)) != null)
+				return WireLink.LAMP;
+			if (com.comedymonkey.createaddons.content.light.HangingCableBlock.lampUnder(level, next, worldPosition) != null)
+				return WireLink.TERMINAL;
+		}
 		// a light standing on the same surface: flat under its foot; a machine: up its face to its socket
 		if (!(there.getBlock() instanceof LineBlock) && level.getCapability(Capabilities.EnergyStorage.BLOCK, next, d.getOpposite()) != null)
 			return com.comedymonkey.createaddons.content.light.LightMounts.fixedTo(level, there, next, next.relative(face)) ? WireLink.LAMP : WireLink.TERMINAL;

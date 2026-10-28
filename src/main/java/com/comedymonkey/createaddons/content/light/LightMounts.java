@@ -53,10 +53,8 @@ public final class LightMounts {
 			BlockState there = level.getBlockState(p);
 			// a hanging lamp's cable: the lamp at its foot is fixed to this block
 			if (there.getBlock() instanceof HangingCableBlock) {
-				BlockPos q = p.below();
-				for (int i = 0; i < HangingLampBlock.MAX_DROP && level.hasChunkAt(q) && level.getBlockState(q).getBlock() instanceof HangingCableBlock; i++)
-					q = q.below();
-				if (level.hasChunkAt(q) && fixedTo(level, level.getBlockState(q), q, support))
+				BlockPos q = HangingCableBlock.foot(level, p);
+				if (q != null && fixedTo(level, level.getBlockState(q), q, support))
 					out.add(q);
 				continue;
 			}

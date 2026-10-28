@@ -155,7 +155,7 @@ public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWa
 				Direction facing = state.getValue(FACING);
 				yield sturdy(level, pos.relative(facing.getOpposite()), facing);
 			}
-			case CEILING -> encased(level, pos.above()) || canSupportCenter(level, pos.above(), Direction.DOWN);
+			case CEILING -> hangsUnder(level, pos.above());
 			case FLOOR, TOP, TOP_FACING -> encased(level, pos.below()) || canSupportCenter(level, pos.below(), Direction.UP);
 			case FULL -> true;
 		};
@@ -167,6 +167,11 @@ public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWa
 	 */
 	static boolean sturdy(LevelReader level, BlockPos pos, Direction face) {
 		return encased(level, pos) || level.getBlockState(pos).isFaceSturdy(level, pos, face);
+	}
+
+	/** A ceiling light (or a hanging lamp's rose) can hang under the block at pos: by its centre, or a line encased in it. */
+	static boolean hangsUnder(LevelReader level, BlockPos pos) {
+		return encased(level, pos) || canSupportCenter(level, pos, Direction.DOWN);
 	}
 
 	private static boolean encased(LevelReader level, BlockPos pos) {

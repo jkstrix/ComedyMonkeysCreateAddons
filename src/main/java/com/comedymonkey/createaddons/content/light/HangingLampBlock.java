@@ -2,13 +2,16 @@ package com.comedymonkey.createaddons.content.light;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.comedymonkey.createaddons.content.line.PowerLineBlock;
 import com.comedymonkey.createaddons.registry.ModBlocks;
+import com.comedymonkey.createaddons.registry.ModDataComponents;
 import com.comedymonkey.createaddons.registry.ModItems;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -20,14 +23,17 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 /**
  * A Pendant Lamp or Chandelier (design/specs/electric-lights.md, D19): hung under a ceiling on a short flex from a rose,
  * and lowered a block at a time with a Power Line (right-click it with one: up to 16), the gap filled with hanging cable
  * that carries its power (HangingCableBlock). HUNG: it hangs from cable, the rose up at the ceiling; else it's right under
- * the ceiling with its rose. It's fed through the ceiling it hangs from, as any light fixed to a block is (LightMounts).
+ * the ceiling with its rose. It's fed through the ceiling it hangs from, as any light fixed to a block is (LightMounts),
+ * by a wire meeting its rose flat on that ceiling, or by the line encased in it.
  */
 public class HangingLampBlock extends LightBlock {
 	public static final BooleanProperty HUNG = BooleanProperty.create("hung");
@@ -50,11 +56,14 @@ public class HangingLampBlock extends LightBlock {
 		return kind() == LightKind.CHANDELIER ? HangingCableBlock.Rose.BRASS : HangingCableBlock.Rose.STEEL;
 	}
 
-	/** The block the lamp at pos hangs from: the ceiling above it, or above the top of its cable. */
+	/** The block the lamp at pos hangs from: the ceiling above it, or above the top of its cable; null if it hangs from nothing. */
 	public static @Nullable BlockPos ceiling(BlockGetter level, BlockState state, BlockPos pos) {
 		if (!state.hasProperty(HUNG))
 			return null;
 		BlockPos p = pos.above();
+		// (hung with no cable over it: set down by a command or a contraption; it falls at the next update)
+		if (state.getValue(HUNG) && !(level.getBlockState(p).getBlock() instanceof HangingCableBlock))
+			return null;
 		for (int i = 0; i <= MAX_DROP; i++) {
 			// (never loads a chunk to look)
 			if (level instanceof LevelReader reader && !reader.hasChunkAt(p))
@@ -73,26 +82,36 @@ public class HangingLampBlock extends LightBlock {
 		return super.canSurvive(state, level, pos);
 	}
 
-	/** A Power Line in hand lowers the lamp a block (D19), leaving cable in its place; the wire is used. */
+	/** A plain Power Line in hand lowers the lamp a block (D19), leaving cable in its place; the wire is used. */
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
 											  BlockHitResult hit) {
-		if (!stack.is(ModItems.COPPER_POWER_LINE.get()))
+		// (a dyed wire would come back plain from the cable: it's laid as a wire instead)
+		if (!stack.is(ModItems.COPPER_POWER_LINE.get()) || stack.has(ModDataComponents.LINE_DYE.get()))
 			return super.useItemOn(stack, state, level, pos, player, hand, hit);
-		if (!player.mayBuild() || !canLower(level, state, pos))
+		if (!player.mayBuild())
 			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+		// as low as it goes: nothing happens (not a wire laid on the lamp instead)
+		if (!canLower(level, state, pos))
+			return ItemInteractionResult.FAIL;
 		if (level.isClientSide)
 			return ItemInteractionResult.SUCCESS;
-		lower(level, pos);
+		if (!lower(level, pos))
+			return ItemInteractionResult.FAIL;
 		if (!player.getAbilities().instabuild)
 			stack.shrink(1);
 		level.playSound(null, pos, SoundEvents.CHAIN_PLACE, SoundSource.BLOCKS, 0.6f, 1.2f);
 		return ItemInteractionResult.SUCCESS;
 	}
 
-	/** Room under it, and short of its longest drop. */
+	/** Room under it (air or water, inside the world, nobody standing there), and short of its longest drop. */
 	static boolean canLower(Level level, BlockState state, BlockPos pos) {
-		return level.getBlockState(pos.below()).canBeReplaced() && drop(level, state, pos) < MAX_DROP;
+		BlockPos below = pos.below();
+		if (level.isOutsideBuildHeight(below) || drop(level, state, pos) >= MAX_DROP)
+			return false;
+		FluidState fluid = level.getFluidState(below);
+		return level.getBlockState(below).canBeReplaced() && (fluid.isEmpty() || fluid.is(FluidTags.WATER))
+			&& level.isUnobstructed(state.setValue(HUNG, true), below, CollisionContext.empty());
 	}
 
 	/** Moves the hanging lamp at pos down a block, cable left where it hung; false if it can't go. */
@@ -101,18 +120,26 @@ public class HangingLampBlock extends LightBlock {
 		if (!(state.getBlock() instanceof HangingLampBlock lamp) || !canLower(level, state, pos))
 			return false;
 		BlockPos below = pos.below();
+		boolean top = !(level.getBlockState(pos.above()).getBlock() instanceof HangingCableBlock);
 		// the lamp moves down with everything it was (colour, brightness, its store)
 		CompoundTag data = level.getBlockEntity(pos) instanceof LightBlockEntity be ? be.saveCustomOnly(level.registryAccess()) : null;
 		BlockState lowered = state.setValue(HUNG, true).setValue(WATERLOGGED, level.getFluidState(below).getType() == Fluids.WATER);
-		level.setBlock(below, lowered, Block.UPDATE_ALL);
+		if (!level.setBlock(below, lowered, Block.UPDATE_ALL))
+			return false;
 		if (data != null && level.getBlockEntity(below) instanceof LightBlockEntity be) {
 			be.loadCustomOnly(data, level.registryAccess());
 			be.setChanged();
 			level.sendBlockUpdated(below, lowered, lowered, Block.UPDATE_ALL);
 		}
 		level.setBlock(pos, ModBlocks.HANGING_CABLE.get().defaultBlockState()
-			.setValue(HangingCableBlock.ROSE, state.getValue(HUNG) ? HangingCableBlock.Rose.NONE : lamp.rose())
+			.setValue(HangingCableBlock.ROSE, top ? lamp.rose() : HangingCableBlock.Rose.NONE)
 			.setValue(HangingCableBlock.WATERLOGGED, state.getValue(WATERLOGGED)), Block.UPDATE_ALL);
+		// the wires meeting its rose, and on its ceiling, feed it where it hangs now
+		BlockPos ceiling = ceiling(level, lowered, below);
+		if (ceiling != null) {
+			PowerLineBlock.refreshAround(level, ceiling);
+			PowerLineBlock.refreshAround(level, ceiling.below());
+		}
 		return true;
 	}
 
