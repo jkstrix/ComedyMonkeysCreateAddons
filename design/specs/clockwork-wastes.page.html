@@ -1,0 +1,332 @@
+<title>Clockwork Wastes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the house quick-read column: material band, idiot test first, the city map as the centrepiece, then waking a district, the Star Reactor, numbers, rules, what-ifs, scores */
+:root {
+  --bg: #e6e6e1; --surface: #f2f2ee; --fg: #22231f; --muted: #5f6058; --line: #c9c8c0;
+  --accent: #8a6626; --accent-soft: #e9dcc0; --iron: #4a4d50; --iron-hi: #5d6164;
+  --copper: #8a5233; --glow: #b9772f; --rail: #6b6e6a;
+  --ok: #4c7a46; --warn: #a3712a;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
+  --copper: #b9764d; --glow: #d99a4a; --rail: #8a8c86;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
+  --copper: #b9764d; --glow: #d99a4a; --rail: #8a8c86;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.15rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+code { font: .85em var(--mono) }
+
+header { display: grid; gap: 14px }
+.band { height: 10px; border-radius: 2px; background: linear-gradient(90deg, var(--iron) 0 46%, var(--bg) 46% 48%, var(--rail) 48% 66%, var(--bg) 66% 68%, var(--accent) 68% 86%, var(--bg) 86% 88%, var(--copper) 88% 100%) }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { padding: 8px 0 8px 14px; border-left: 3px solid var(--accent); font-weight: 500 }
+
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: step }
+.loop li { counter-increment: step; display: grid; gap: 6px; align-content: start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.loop li::before { content: counter(step); font: 600 1.4rem/1 var(--display); color: var(--accent) }
+
+.diagram { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 12px 8px }
+.diagram svg { display: block; width: 100%; min-width: 620px; height: auto }
+.lbl { font: 500 11px var(--mono); fill: var(--fg) }
+.lbl.dim { fill: var(--muted) }
+.lbl.big { font: 600 15px var(--display); }
+.lbl.ok { fill: var(--ok) }
+.lbl.warn { fill: var(--warn) }
+
+.react { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px }
+.react div { padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--iron-hi); border-radius: 3px; display: grid; gap: 4px; align-content: start }
+.react div.go { border-left-color: var(--ok) }
+.react div.bad { border-left-color: var(--warn) }
+.react .when { font: 500 .75rem/1.3 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em }
+
+.dyes { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px }
+.dye { display: grid; gap: 6px; justify-items: center; font: 500 .72rem/1.2 var(--mono); color: var(--muted); text-align: center }
+.dye i { display: block; width: 100%; height: 30px; border-radius: 3px; border: 1px solid var(--line) }
+
+.numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px }
+.num { padding: 12px 14px; border-top: 3px solid var(--accent); background: var(--surface); display: grid; gap: 2px }
+.num b { font: 600 1.4rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.num span { color: var(--muted); font-size: .85rem }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.pairs ul { margin: 0; padding: 14px 16px 14px 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 6px }
+.pairs h3 { margin-bottom: 4px }
+.does h3 { color: var(--ok) }
+.doesnt h3 { color: var(--warn) }
+
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 24px }
+.qa div { display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.qa b { font-weight: 600 }
+.qa span { color: var(--muted) }
+
+.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.watch { display: grid; gap: 8px; align-content: start; padding: 14px 16px; border: 1px dashed var(--warn); border-radius: 3px }
+.watch.ok { border-color: var(--accent) }
+.watch h3 { color: var(--warn) }
+.watch.ok h3 { color: var(--accent) }
+.watch ul { margin: 0; padding-left: 18px; display: grid; gap: 4px }
+
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center }
+.score .track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden }
+.score .fill { height: 100%; background: var(--ok) }
+.score .why { grid-column: 2 / -1; color: var(--muted); font-size: .85rem; margin-top: -6px }
+.score b { text-align: right; font: 500 .85rem var(--mono); font-variant-numeric: tabular-nums }
+@media (max-width: 520px) { .score { grid-template-columns: 1fr 44px } .score .track { grid-column: 1 / -1; order: 3 } .score .why { grid-column: 1 / -1; margin-top: 0 } }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px }
+</style>
+<style>
+/* Clockwork Wastes additions: the city map */
+.void { fill: var(--bg) }
+.isle { fill: var(--line); stroke: var(--rail); stroke-width: 1 }
+.dist { fill: var(--surface); stroke: var(--iron-hi); stroke-width: 1.5 }
+.heart { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2 }
+.sub { fill: var(--iron); stroke: var(--fg); stroke-width: 1 }
+.lamp { fill: var(--glow) }
+.street { stroke: var(--rail); stroke-width: 2; stroke-dasharray: 2 4 }
+.ring { fill: none; stroke: var(--warn); stroke-width: 1.5; stroke-dasharray: 6 4 }
+.lbl.sub-l { fill: var(--muted) }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 .78rem/1.3 var(--mono); color: var(--muted) }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -2px; border: 1px solid var(--line) }
+.loop b { font-weight: 600 }
+.loop span { color: var(--muted) }
+</style>
+<div class="wrap">
+  <header>
+    <div class="band" aria-hidden="true"></div>
+    <p class="eyebrow">ComedyMonkey's Create Addons · Biomes · End 1 of 3</p>
+    <h1>Clockwork Wastes</h1>
+    <p class="pitch">A dead clockwork city of unknown make, out on the End's big islands. Wrench its wrecks for parts. Bring power and its streets light up, its vaults unlock, and its sleeping bots wake to fight. Light the heart for the Elytra, and for the parts to turn a Nether Star into 8 hours of power.</p>
+    <div class="chips">
+      <span class="chip ready">Design ready: 90%</span>
+      <span class="chip">End game · after the dragon</span>
+      <span class="chip">1 in 10 outer islands</span>
+      <span class="chip">Needs TerraBlender</span>
+      <span class="chip">Never near an End city</span>
+      <span class="chip">Look: brief to come</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>In ten lines</h2>
+    <ul class="idiot">
+      <li>Dead clockwork cities on one End island in ten.</li>
+      <li>Never near End cities.</li>
+      <li>Wrench wrecks for parts; pickaxe gives only scrap.</li>
+      <li>1M FE into a Substation wakes its district.</li>
+      <li>Waking opens locks and wakes the bots.</li>
+      <li>Cut its power: lamps and Sentries go dark.</li>
+      <li>Four districts awake wakes the Custodian.</li>
+      <li>Break its four pylons, then kill it.</li>
+      <li>Its death opens the vault: Elytra inside.</li>
+      <li>Nether Star in a Star Reactor: 8h of power.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>The city</h2>
+    <p class="sub">About 144 blocks across: four districts round a heart. Each district has its own Substation, vault and bots. Cities stand 32 chunks apart, 3–4 to a Wastes patch, so the Elytra they hold match the End-city ships they replace.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 660 380" role="img" aria-label="Map of a Clockwork Wastes city: four districts round a central heart, each with a Substation, on an End island, with End cities kept outside a six-chunk ring">
+        <rect class="void" x="0" y="0" width="660" height="380"/>
+        <ellipse class="ring" cx="330" cy="196" rx="318" ry="172"/>
+        <text class="lbl warn" x="330" y="16" text-anchor="middle">no End city inside this ring (6 chunks)</text>
+        <path class="isle" d="M120 110 Q150 50 260 48 Q360 40 450 60 Q560 80 548 180 Q560 290 450 322 Q330 348 220 326 Q110 300 112 200 Z"/>
+        <line class="street" x1="200" y1="190" x2="460" y2="190"/>
+        <line class="street" x1="330" y1="80" x2="330" y2="300"/>
+        <rect class="dist" x="168" y="74" width="140" height="96" rx="3"/>
+        <text class="lbl big" x="182" y="98">Foundry</text>
+        <rect class="dist" x="352" y="74" width="140" height="96" rx="3"/>
+        <text class="lbl big" x="366" y="98">Workshops</text>
+        <rect class="dist" x="168" y="210" width="140" height="96" rx="3"/>
+        <text class="lbl big" x="182" y="234">Rail Yard</text>
+        <rect class="dist" x="352" y="210" width="140" height="96" rx="3"/>
+        <text class="lbl big" x="366" y="234">Quarters</text>
+        <rect class="sub" x="278" y="136" width="18" height="22" rx="2"/>
+        <text class="lbl sub-l" x="182" y="152">Substation ›</text>
+        <rect class="sub" x="462" y="136" width="18" height="22" rx="2"/>
+        <rect class="sub" x="278" y="272" width="18" height="22" rx="2"/>
+        <rect class="sub" x="462" y="272" width="18" height="22" rx="2"/>
+        <circle class="lamp" cx="190" cy="120" r="3"/><circle class="lamp" cx="220" cy="120" r="3"/><circle class="lamp" cx="250" cy="120" r="3"/>
+        <circle class="lamp" cx="374" cy="120" r="3"/><circle class="lamp" cx="404" cy="120" r="3"/><circle class="lamp" cx="434" cy="120" r="3"/>
+        <circle class="lamp" cx="190" cy="256" r="3"/><circle class="lamp" cx="220" cy="256" r="3"/><circle class="lamp" cx="250" cy="256" r="3"/>
+        <circle class="lamp" cx="374" cy="256" r="3"/><circle class="lamp" cx="404" cy="256" r="3"/><circle class="lamp" cx="434" cy="256" r="3"/>
+        <circle class="heart" cx="330" cy="190" r="38"/>
+        <text class="lbl big" x="330" y="186" text-anchor="middle">Heart</text>
+        <text class="lbl dim" x="330" y="202" text-anchor="middle">Star Reactor</text>
+        <text class="lbl dim" x="330" y="215" text-anchor="middle">vault · Custodian</text>
+        <text class="lbl dim" x="600" y="352" text-anchor="end">struts and bridges over the void</text>
+      </svg>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--iron)"></i>Substation, one per district</span>
+      <span><i style="background:var(--glow)"></i>Derelict street lamps</span>
+      <span><i style="background:var(--accent-soft);border-color:var(--accent)"></i>Heart: Elytra, Unknown Devices</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>One visit</h2>
+    <ol class="loop">
+      <li><b>Find it</b><span>A rust-brown haze and drifting brass dust out past the gateways.</span></li>
+      <li><b>Salvage</b><span>Wrench broken machines and bot shells for Create parts and Clockwork Scrap.</span></li>
+      <li><b>Wake a district</b><span>Put 1,000,000 FE into its Substation. A charged Battery does it.</span></li>
+      <li><b>Fight, loot</b><span>Lamps ripple on, locks open, Sentries and Scuttlers wake. Clear them, open the vault.</span></li>
+      <li><b>Light the heart</b><span>Wake all four, or one Nether Star in the heart wakes everything. The Custodian rises.</span></li>
+      <li><b>Take it home</b><span>The Elytra, plus Unknown Devices to build your own Star Reactor.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>When a district wakes</h2>
+    <div class="react">
+      <div class="go"><span class="when">Lamps</span>Ripple on down the streets. Stay lit while fed 500 FE/t.</div>
+      <div class="go"><span class="when">Locks</span>Doors and the vault unlock for good, even if the power is cut later.</div>
+      <div class="bad"><span class="when">Sentries</span>Unfold and fire bolts. Fold up again while the district is dark.</div>
+      <div class="bad"><span class="when">Scuttlers</span>Wake in packs of 3–5 and stay awake, power or not.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The Custodian</h2>
+    <p class="sub">The heart's guardian, wired to the city's grid. Its death opens the heart vault. There's no grabbing the Elytra and running.</p>
+    <ol class="loop">
+      <li><b>It wakes</b><span>Four districts awake: the heart's doors open and it rises from its dais.</span></li>
+      <li><b>Shielded</b><span>While any of its four pylons stands, it takes no damage and mends.</span></li>
+      <li><b>Short the pylons</b><span>6 hits each, melee or arrows. Each one broken calls 2 Scuttlers.</span></li>
+      <li><b>Overload</b><span>At half health it speeds up, sparks, and re-lights one pylon. Break it again.</span></li>
+      <li><b>Down</b><span>The vault clunks open: the Elytra and 2 Unknown Devices. It drops one more.</span></li>
+    </ol>
+    <div class="numbers">
+      <div class="num"><b>400</b><span>health, +50% per extra player</span></div>
+      <div class="num"><b>20 / 12 / 8</b><span>slam / shockwave / each bolt</span></div>
+      <div class="num"><b>10</b><span>chain arc after overload, jumps to a second player</span></div>
+      <div class="num"><b>30 s</b><span>with nobody near: it resets, pylons and all</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The Nether Star's new job: Star Reactor</h2>
+    <p class="sub">A star becomes power with no fuel line, lava or water. Small enough for an airship.</p>
+    <div class="numbers">
+      <div class="num"><b>8,192 FE/t</b><span>flat out, like every generator</span></div>
+      <div class="num"><b>8 hours</b><span>of running per star, then it's gone</span></div>
+      <div class="num"><b>3 Unknown Devices</b><span>to build one (Mechanical Crafter)</span></div>
+      <div class="num"><b>+1 device</b><span>fitted: 12 hours a star</span></div>
+      <div class="num"><b>7 devices</b><span>per city: two reactors and one upgrade</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Numbers</h2>
+    <div class="numbers">
+      <div class="num"><b>1 in 10</b><span>of outer big islands are Wastes</span></div>
+      <div class="num"><b>~144 blocks</b><span>a city: heart + 4 districts</span></div>
+      <div class="num"><b>32 chunks</b><span>between cities</span></div>
+      <div class="num"><b>1,000,000 FE</b><span>wakes one district</span></div>
+      <div class="num"><b>500 FE/t</b><span>keeps its lamps lit</span></div>
+      <div class="num"><b>12 / 30 / 400</b><span>health: Scuttler / Sentry / Custodian</span></div>
+      <div class="num"><b>5 / 7</b><span>damage: Scuttler bite / Sentry bolt</span></div>
+      <div class="num"><b>1 Elytra</b><span>per city, shared</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Rules</h2>
+    <div class="pairs">
+      <div class="does"><h3>Does</h3><ul>
+        <li>Keep 6 chunks clear of End cities.</li>
+        <li>Put an Elytra in every city's heart vault.</li>
+        <li>Wake a district for good at 1M FE.</li>
+        <li>Fold Sentries while their district is dark.</li>
+        <li>Turn scrap into nuggets on Crushing Wheels.</li>
+        <li>Let a Deployer with a Wrench salvage, and arms or packages feed stars.</li>
+        <li>Run Star Reactors on airships.</li>
+      </ul></div>
+      <div class="doesnt"><h3>Doesn't</h3><ul>
+        <li>Spawn on the central island.</li>
+        <li>Give free Electric Lights or Power Lines: city lamps break into scrap.</li>
+        <li>Let you break, blast or drill a locked vault or door.</li>
+        <li>Place a city on too little land: under half on End Stone, it's outskirts only.</li>
+        <li>Respawn its bots or refill its loot.</li>
+        <li>Wake bots on Peaceful.</li>
+        <li>Have shulkers: End cities are still the source.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What if…?</h2>
+    <div class="qa">
+      <div><b>Two players power one Substation?</b><span>Their FE adds up; it wakes for everyone.</span></div>
+      <div><b>The power gets cut after waking?</b><span>Lamps go dark, Sentries fold, locks stay open.</span></div>
+      <div><b>A star lights the heart after some districts woke?</b><span>Woken districts stay woken; nothing wakes twice.</span></div>
+      <div><b>Part of a district is unloaded when it wakes?</b><span>The city's record holds it; those blocks catch up when loaded.</span></div>
+      <div><b>Everyone flees the Custodian?</b><span>30 s later it resets: pylons re-lit, health full, vault still locked.</span></div>
+      <div><b>An admin /kills the Custodian?</b><span>The vault opens, but it drops nothing.</span></div>
+      <div><b>Another End mod hides the biome?</b><span>A warning in the log; a config option puts cities in vanilla highlands.</span></div>
+      <div><b>Someone digs round a locked door?</b><span>The loot's inside the vault block, which can't be broken while locked.</span></div>
+      <div><b>A Star Reactor is broken mid-burn?</b><span>It drops with the star's burn left inside.</span></div>
+      <div><b>A Wither farm feeds reactors?</b><span>It gains power, held back by chow, the 20-minute pace and finite devices. Accepted.</span></div>
+      <div><b>Peaceful?</b><span>Nothing wakes, but the locks still open.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Still to settle</h2>
+    <div class="open">
+      <div class="watch ok"><h3>Next</h3><ul>
+        <li>Looks: the city, derelict lamps, pylons, Scuttler, Sentry, Custodian, Star Reactor (art director, Blockbench first).</li>
+        <li>First build: run the Elytra-parity and island-fit tests.</li>
+        <li>Fight the Custodian and tune the numbers.</li>
+      </ul></div>
+      <div class="watch"><h3>Later</h3><ul>
+        <li>End biomes two and three share the placement rules and Unknown Devices.</li>
+        <li>Shulker shells, if End cities ever feel scarce.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Readiness</h2>
+    <div class="scores">
+      <div class="score"><span>Gameplay</span><div class="track"><div class="fill" style="width:100%"></div></div><b>100%</b><span class="why">Every system has its rules, the Custodian's fight included.</span></div>
+      <div class="score"><span>World integration</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">API confirmed; island fit and Elytra parity have tests, not results yet.</span></div>
+      <div class="score"><span>Balance</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><span class="why">Numbers set with the Juggernaut lesson, but not yet fought.</span></div>
+      <div class="score"><span>Progression</span><div class="track"><div class="fill" style="width:100%"></div></div><b>100%</b><span class="why">Every reward has a use in v1, the 7th device included.</span></div>
+      <div class="score"><span>Automation</span><div class="track"><div class="fill" style="width:100%"></div></div><b>100%</b><span class="why">Every Create system has a stated interaction.</span></div>
+      <div class="score"><span>Edge cases</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><span class="why">All rules written; multi-chunk waking proven only by its test.</span></div>
+      <div class="score"><span><b style="text-align:left">Overall</b></span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><span class="why">The lowest area sets it. The rest comes from the first build and a real fight.</span></div>
+    </div>
+  </section>
+
+  <footer>Full record: <code>design/specs/clockwork-wastes.md</code> · 35 decisions, 56 approved defaults · 2026-10-28</footer>
+</div>

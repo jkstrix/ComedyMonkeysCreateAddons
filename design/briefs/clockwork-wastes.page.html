@@ -1,0 +1,660 @@
+<title>Clockwork Wastes Look Book</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a dark-first look book. Story first (three layers), then the hero moment as a live skyline you can wake,
+   then palette, motifs, blocks and bots as pixel concept sketches with one Power switch, then "your calls, applied". */
+:root {
+  --bg: #121118; --surface: #1a1922; --raise: #22202c; --fg: #e4e0d8; --muted: #a29dae; --line: #2f2c3b;
+  --star: #b8b0d8; --star-edge: #7f76a8; --star-dim: #3a3552; --rust: #b0714a; --brass: #a3873f; --ember: #c4553c;
+  --plate: #0e0d13;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #ebe9e3; --surface: #f5f4f0; --raise: #ffffff; --fg: #1d1c25; --muted: #5e5a68; --line: #d2cfc6;
+  --star: #5b5190; --star-edge: #6d6399; --star-dim: #c9c3dd; --rust: #8a4a2c; --brass: #7e6832; --ember: #a3402c;
+  --plate: #16151c; color-scheme: light } }
+:root[data-theme="light"] {
+  --bg: #ebe9e3; --surface: #f5f4f0; --raise: #ffffff; --fg: #1d1c25; --muted: #5e5a68; --line: #d2cfc6;
+  --star: #5b5190; --star-edge: #6d6399; --star-dim: #c9c3dd; --rust: #8a4a2c; --brass: #7e6832; --ember: #a3402c;
+  --plate: #16151c; color-scheme: light }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.08 }
+h1 { font-size: clamp(2.6rem, 8vw, 4.4rem); font-weight: 700 }
+h2 { font-size: 1.9rem }
+h3 { font-size: 1.2rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 18px; min-width: 0 }
+.sub { color: var(--muted); max-width: 66ch }
+code { font: .85em var(--mono) }
+.star { color: var(--star) }
+
+header { display: grid; gap: 16px }
+.seam { height: 2px; background: linear-gradient(90deg, transparent, var(--star-edge) 20%, var(--star) 50%, var(--star-edge) 80%, transparent); opacity: .8 }
+.pitch { font-size: 1.15rem; max-width: 62ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 2px; border: 1px solid var(--line); background: var(--surface) }
+.chip.go { border-color: var(--star-edge); color: var(--star) }
+
+/* the three layers */
+.layers { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.layer { display: grid; grid-template-columns: 170px 1fr; gap: 18px; padding: 18px; background: var(--surface); border-top: 1px solid var(--line) }
+.layer:first-child { border-top: 0 }
+.layer h3 { display: grid; gap: 4px }
+.layer h3 small { font: 500 .72rem/1.2 var(--mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase }
+.layer .body { display: grid; gap: 10px; min-width: 0 }
+.sw { display: flex; flex-wrap: wrap; gap: 6px }
+.sw i { width: 30px; height: 22px; border-radius: 2px; border: 1px solid #0006; display: block }
+.layer .tell { color: var(--muted) }
+.layer.l1 { box-shadow: inset 4px 0 0 #8f7638 }
+.layer.l2 { box-shadow: inset 4px 0 0 #7f76a8 }
+.layer.l3 { box-shadow: inset 4px 0 0 #6e4129 }
+@media (max-width: 640px) { .layer { grid-template-columns: 1fr } }
+
+/* the war's two sides */
+.sides { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.side { background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 16px; display: grid; gap: 12px; align-content: start }
+.side.up { box-shadow: inset 0 3px 0 #7f76a8 }
+.side.res { box-shadow: inset 0 3px 0 #8f7638 }
+.side h3 small { display: block; margin-top: 4px; font: 500 .72rem/1.2 var(--mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase }
+.side svg { width: 100%; height: 84px; background: var(--plate); border-radius: 2px }
+.side dl { margin: 0; display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 7px 12px }
+.side dt { font: 500 .7rem/1.6 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em }
+.side dd { margin: 0; font-size: .92rem }
+.side .last { border-top: 1px solid var(--line); padding-top: 10px; font-weight: 500 }
+.side.up .last { color: var(--star) }
+.side.res .last { color: var(--brass) }
+
+/* skyline */
+.sky { background: var(--plate); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; display: grid }
+.sky-scroll { overflow-x: auto }
+.sky svg { display: block; width: 100%; min-width: 640px; height: auto }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; border-top: 1px solid #2f2c3b; background: #15141b }
+button { font: 500 .85rem/1 var(--mono); color: #e4e0d8; background: #22202c; border: 1px solid #3a3650; border-radius: 2px; padding: 9px 12px; cursor: pointer }
+button:hover { border-color: #7f76a8 }
+button:focus-visible { outline: 2px solid #b8b0d8; outline-offset: 2px }
+button[aria-pressed="true"] { border-color: #7f76a8; color: #b8b0d8; background: #26233a }
+.status { font: 500 .8rem/1.4 var(--mono); color: #a29dae; padding: 0 12px 12px; background: #15141b }
+
+/* palette */
+.pal { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px }
+.pal div { background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 12px; display: grid; gap: 8px; align-content: start }
+.pal b { font: 600 1rem var(--display); letter-spacing: .02em }
+.pal .hex { font: .72rem/1.4 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums }
+.ramp { display: flex; height: 26px; border-radius: 2px; overflow: hidden; border: 1px solid #0006 }
+.ramp i { flex: 1 }
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: var(--plate); padding: 18px; border-radius: 3px; border: 1px solid var(--line) }
+.compare div { display: grid; justify-items: center; gap: 10px; font: 500 .78rem/1.3 var(--mono); color: #a29dae; text-align: center }
+.compare span.lamp { width: 44px; height: 44px; border-radius: 50%; display: block }
+
+/* motifs */
+.motifs { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px }
+.motif { background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 14px; display: grid; gap: 8px; align-content: start }
+.motif svg { width: 100%; height: 96px; background: var(--plate); border-radius: 2px }
+.motif p { color: var(--muted); font-size: .9rem }
+
+/* sprite cards */
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px }
+.bar p { color: var(--muted); font-size: .9rem }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; grid-template-rows: auto 1fr; overflow: hidden }
+.card .view { background: var(--plate); display: grid; place-items: center; padding: 16px; min-height: 230px }
+.card canvas { image-rendering: pixelated; max-width: 100%; height: auto }
+.card .txt { padding: 12px 14px 14px; display: grid; gap: 6px; align-content: start }
+.card .hero { font: 500 .72rem/1.3 var(--mono); color: var(--star); letter-spacing: .06em; text-transform: uppercase }
+.card .txt p { color: var(--muted); font-size: .9rem }
+.card .meta { font: .72rem/1.4 var(--mono); color: var(--muted) }
+.note { font: .78rem/1.4 var(--mono); color: var(--muted) }
+
+/* districts */
+.dist { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px }
+.dist div { background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 14px; display: grid; gap: 6px; align-content: start }
+.dist .piece { font: 500 .72rem/1.3 var(--mono); color: var(--brass); text-transform: uppercase; letter-spacing: .06em }
+.dist p { color: var(--muted); font-size: .9rem }
+
+/* beats */
+.beats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.beats li { padding: 12px; background: var(--surface); border-left: 1px solid var(--line); display: grid; gap: 4px; align-content: start }
+.beats li:first-child { border-left: 0 }
+.beats b { font: 600 1rem var(--display) }
+.beats span { color: var(--muted); font-size: .85rem }
+.beats em { font: normal 500 .7rem/1 var(--mono); color: var(--star-edge) }
+
+/* your calls */
+.calls { display: grid; gap: 10px }
+.call { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 18px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.call q { font-style: italic; color: var(--fg) }
+.call q::before, .call q::after { content: "" }
+.call .from { display: block; font: .72rem/1.4 var(--mono); color: var(--muted); margin-top: 4px }
+.call p { color: var(--muted) }
+@media (max-width: 640px) { .call { grid-template-columns: 1fr; gap: 6px } }
+
+.next { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.box { padding: 14px 16px; border: 1px dashed var(--star-edge); border-radius: 3px; display: grid; gap: 8px; align-content: start }
+.box.ask { border-color: var(--rust) }
+.box h3 { color: var(--star) }
+.box.ask h3 { color: var(--rust) }
+.box ol, .box ul { margin: 0; padding-left: 20px; display: grid; gap: 5px }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 4px }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important } }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">ComedyMonkey's Create Addons · Look book · End biome 1 of 3</p>
+    <h1>Clockwork Wastes</h1>
+    <div class="seam" aria-hidden="true"></div>
+    <p class="pitch">A city built by machines for machines, on the bones of their makers' Create-era town. The machines that found electricity took it; the clockwork bots that stayed loyal flew their makers out and came back to fight, until neither side was left. Feed it power and it remembers: <span class="star">starlight</span> runs along its sky-cables, its lamps open like eyes, and the uprising's soldiers stand up. The resistance stays dark.</p>
+    <div class="chips">
+      <span class="chip go">Briefs approved · 2026-10-28</span>
+      <span class="chip">Fun score 9 / 9 / 9</span>
+      <span class="chip">Next: material sheet in Blockbench</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Three layers, readable at a glance</h2>
+    <p class="sub">Your lore: the automatons overthrew their makers long before the war that destroyed the city. So every street holds three times at once, and every block belongs to exactly one of them.</p>
+    <div class="layers">
+      <div class="layer l1">
+        <h3>Makers' era<small>oldest · familiar</small></h3>
+        <div class="body">
+          <p>The Create town the machines inherited: sheds, rail yard, presses and mixers, cast-iron oil-lamp posts, statues of the makers. It ran on shafts, cogs and springs, never electricity. Andesite, dark steel, mid brass, Create copper going to patina.</p>
+          <div class="sw" aria-label="Makers' palette"><i style="background:#5e615d"></i><i style="background:#6b6e6a"></i><i style="background:#3c424a"></i><i style="background:#2f3338"></i><i style="background:#8f7638"></i><i style="background:#9a5038"></i><i style="background:#5b7a6c"></i><i style="background:#634532"></i></div>
+          <p class="tell">How to spot it: square, riveted, bolted. "I know what that is."</p>
+        </div>
+      </div>
+      <div class="layer l2">
+        <h3>The uprising's era<small>their own · strange</small></h3>
+        <div class="body">
+          <p>What the automatons who found electricity added once the town was theirs. Everything electrical is theirs: Substations, iris vaults, sliding doors, pylons, reactors, sky-cables, charging alcoves, the spire. One material nobody can craft: <b>void-alloy</b>, near-black with a violet cast and hairline seams of starlight. It's cast and fitted, with no rivets and no wood.</p>
+          <div class="sw" aria-label="Automatons' palette"><i style="background:#16151c"></i><i style="background:#1d1c25"></i><i style="background:#25232f"></i><i style="background:#34304a"></i><i style="background:#3a3552"></i><i style="background:#7f76a8"></i><i style="background:#b8b0d8"></i></div>
+          <p class="tell">How to spot it: tall, chamfered, built for bodies that stand. It's clamped onto old work and never mixed into it. "...what is that?"</p>
+        </div>
+      </div>
+      <div class="layer l3">
+        <h3>The war<small>latest · violent, then still</small></h3>
+        <div class="body">
+          <p>The uprising against the clockwork resistance, over both earlier layers: scorch fans, bolt craters, barricades, war-frames from both sides fallen together, the resistance's siege lines outside the walls, bridges hanging into the void. It's heaviest at the edge and lightest at the heart, where everything stopped mid-shift.</p>
+          <div class="sw" aria-label="War palette"><i style="background:#1a1714"></i><i style="background:#26211c"></i><i style="background:#5a3523"></i><i style="background:#6e4129"></i><i style="background:#7f4d30"></i><i style="background:#7c7659"></i></div>
+          <p class="tell">How to spot it: diagonals, leans, snaps, soot.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The war's two sides</h2>
+    <p class="sub">Your war: the automatons that found electricity against the clockwork bots that stayed loyal. A player should tell them apart from across a street, without any text.</p>
+    <ol class="beats">
+      <li><em>1</em><b>The makers</b><span>Build a Create town, and clockwork bots wound by hand with a key.</span></li>
+      <li><em>2</em><b>The uprising</b><span>Some find electricity, break free of the key and turn on their masters.</span></li>
+      <li><em>3</em><b>The resistance</b><span>Loyal clockwork bots fly the makers out on wings, then come back to fight.</span></li>
+      <li><em>4</em><b>The long war</b><span>The uprising builds its city; the resistance besieges it from outside.</span></li>
+      <li><em>5</em><b>Nobody wins</b><span>They wipe each other out, and the city goes dark.</span></li>
+      <li><em>6</em><b>You arrive</b><span>Bring power and the uprising wakes. The resistance never does.</span></li>
+    </ol>
+    <div class="sides">
+      <article class="side up">
+        <h3>The uprising<small>found electricity · rose up</small></h3>
+        <svg viewBox="0 0 120 60" aria-label="Their emblem: a chain with one link sprung open"><g fill="none" stroke="#7f76a8" stroke-width="3"><rect x="10" y="22" width="22" height="14" rx="7"/><rect x="28" y="22" width="22" height="14" rx="7"/><path d="M58 22 h10 a7 7 0 0 1 7 7 v0"/><path d="M75 33 a7 7 0 0 1 -7 3 h-10"/><rect x="82" y="22" width="22" height="14" rx="7"/></g></svg>
+        <dl>
+          <dt>Emblem</dt><dd>The broken chain</dd>
+          <dt>Body</dt><dd>Void-alloy with starlight seams. Tall, thin, chamfered.</dd>
+          <dt>Engine</dt><dd>Electricity: a seam that lights.</dd>
+          <dt>Eyes</dt><dd>One lens, or a ring of them. Starlight and an ember pupil when woken.</dd>
+          <dt>Where</dt><dd>Everywhere inside, thickest at the heart.</dd>
+        </dl>
+        <p class="last">Every bot that wakes and fights you is the uprising.</p>
+      </article>
+      <article class="side res">
+        <h3>The clockwork resistance<small>stayed loyal · fought back</small></h3>
+        <svg viewBox="0 0 120 60" aria-label="Their emblem: a brass clock key with a butterfly bow"><g fill="#8f7638"><ellipse cx="30" cy="19" rx="10" ry="9"/><ellipse cx="30" cy="41" rx="10" ry="9"/><rect x="28" y="24" width="14" height="12"/><rect x="40" y="27" width="50" height="6"/><rect x="88" y="23" width="14" height="14"/></g><g fill="#3a3430"><ellipse cx="29" cy="19" rx="4" ry="3.5"/><ellipse cx="29" cy="41" rx="4" ry="3.5"/><rect x="92" y="27" width="6" height="6"/></g><rect x="40" y="27" width="50" height="1.5" fill="#a3873f"/></svg>
+        <dl>
+          <dt>Emblem</dt><dd>The winding key</dd>
+          <dt>Body</dt><dd>The makers' own andesite and brass. Stocky, square, riveted, patched in the field.</dd>
+          <dt>Engine</dt><dd>A round mainspring drum on the back with a key in it; blued springs burst out of the broken ones.</dd>
+          <dt>Eyes</dt><dd>Two glass eyes in brass rims, like Trade Bot and Helper Bot. Never lit.</dd>
+          <dt>Where</dt><dd>The siege lines outside, the barricades and the edges. A few deep inside, where they got furthest.</dd>
+        </dl>
+        <p class="last">Nothing of theirs ever moves or glows. Their springs ran down, and nobody is left to wind them.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>The hero moment: wake the skyline</h2>
+    <p class="sub">Sky-cables run from every district's Substation up to the spire's crown. When a district wakes, a bead of starlight runs up its cable, then its street lamps ripple on. When the fourth district wakes, the crown and spire light. Try it below.</p>
+    <div class="sky">
+      <div class="sky-scroll">
+        <svg id="skyline" viewBox="0 0 800 320" role="img" aria-label="The city's skyline at night: four districts of broken towers round a central spire, joined to its crown by cables">
+          <defs>
+            <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b1512"/><stop offset="1" stop-color="#3b2e26"/></linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <rect width="800" height="320" fill="url(#haze)"/>
+          <g fill="#8f7638" opacity=".35" id="dust"></g>
+          <path d="M20 290 Q60 262 140 262 L660 262 Q740 262 780 290 L760 300 Q600 316 400 316 Q200 316 40 300 Z" fill="#16151c"/>
+          <path d="M20 290 Q60 262 140 262 L660 262 Q740 262 780 290" fill="none" stroke="#34304a" stroke-width="1.5"/>
+          <g id="cables" fill="none" stroke-width="1.6"></g>
+          <g id="towers"></g>
+          <g id="spire"></g>
+          <g id="lamps"></g>
+        </svg>
+      </div>
+      <div class="controls" role="group" aria-label="Wake a district">
+        <button type="button" id="b0" data-d="0" aria-pressed="false">Wake the Foundry</button>
+        <button type="button" id="b1" data-d="1" aria-pressed="false">Wake the Workshops</button>
+        <button type="button" id="b2" data-d="2" aria-pressed="false">Wake the Rail Yard</button>
+        <button type="button" id="b3" data-d="3" aria-pressed="false">Wake the Quarters</button>
+        <button type="button" id="bstar">Nether Star in the heart</button>
+        <button type="button" id="breset">Dark again</button>
+      </div>
+      <p class="status" id="skystatus" aria-live="polite">The city is dark. 0 of 4 districts awake.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Palette</h2>
+    <p class="sub">Starts at the dark end, as always. Starlight is the one new colour. Its brightest tone only ever covers single pixels and seam crossings, so the city stays muted.</p>
+    <div class="pal">
+      <div><b>Void-alloy</b><div class="ramp"><i style="background:#16151c"></i><i style="background:#1d1c25"></i><i style="background:#25232f"></i><i style="background:#34304a"></i></div><span class="hex">#16151c #1d1c25 #25232f · edge #34304a<br>Crisp facets, no mottle (the process-box lesson)</span></div>
+      <div><b>Starlight</b><div class="ramp"><i style="background:#3a3552"></i><i style="background:#7f76a8"></i><i style="background:#b8b0d8"></i></div><span class="hex">dim #3a3552 · edge #7f76a8 · core #b8b0d8<br>Seams use the edge tone; core only at crossings</span></div>
+      <div><b>Ember pupil</b><div class="ramp"><i style="background:#9c3a2a"></i><i style="background:#b5452f"></i></div><span class="hex">#9c3a2a #b5452f<br>One or two pixels, woken hostiles only</span></div>
+      <div><b>Makers' Create, aged</b><div class="ramp"><i style="background:#5e615d"></i><i style="background:#6b6e6a"></i><i style="background:#767873"></i><i style="background:#2f343b"></i><i style="background:#3c424a"></i></div><span class="hex">andesite a step darker than house · dark steel</span></div>
+      <div><b>Brass, copper, patina</b><div class="ramp"><i style="background:#7e6832"></i><i style="background:#8f7638"></i><i style="background:#a3873f"></i><i style="background:#9a5038"></i><i style="background:#5b7a6c"></i></div><span class="hex">mid brass, no highlights · Create's own copper, patina from the joints</span></div>
+      <div><b>Rust, soot, ground</b><div class="ramp"><i style="background:#26211c"></i><i style="background:#5a3523"></i><i style="background:#6e4129"></i><i style="background:#6f6a50"></i><i style="background:#7c7659"></i></div><span class="hex">rust as runs, never faces · Scorched End Stone</span></div>
+    </div>
+    <div class="compare" aria-label="Starlight lens beside the house amber lamp">
+      <div><span class="lamp" style="background:radial-gradient(circle,#b8b0d8 0 22%,#7f76a8 23% 46%,#3a3552 47% 60%,transparent 61%);box-shadow:0 0 22px #7f76a855"></span>Wastes lamp lens<br>starlight</div>
+      <div><span class="lamp" style="background:radial-gradient(circle,#e3a95a 0 22%,#d99a4a 23% 46%,#8a5a2a 47% 60%,transparent 61%);box-shadow:0 0 22px #d99a4a55"></span>Your Electric Lights<br>undyed amber #d99a4a</div>
+    </div>
+    <p class="note">Fog #4a3a2e · sky #3b2e26 · brass-dust motes #8f7638 at low alpha · a rare starlight spark from live cables.</p>
+  </section>
+
+  <section>
+    <h2>Motifs</h2>
+    <p class="sub">Each one tells part of the story without a word of text. Use at most one per block face.</p>
+    <div class="motifs">
+      <div class="motif">
+        <svg viewBox="0 0 120 60" aria-label="A chain with one link sprung open"><g fill="none" stroke="#7f76a8" stroke-width="3"><rect x="10" y="22" width="22" height="14" rx="7"/><rect x="28" y="22" width="22" height="14" rx="7"/><path d="M58 22 h10 a7 7 0 0 1 7 7 v0"/><path d="M75 33 a7 7 0 0 1 -7 3 h-10"/><rect x="82" y="22" width="22" height="14" rx="7"/></g></svg>
+        <h3>The broken chain</h3>
+        <p>The uprising, as an emblem. It appears on vault irises, door seams, pylons and the spire's crown.</p>
+      </div>
+      <div class="motif">
+        <svg viewBox="0 0 120 60" aria-label="A cog with a lens where its axle should be"><g transform="translate(60 30)"><g fill="#34304a"><rect x="-4" y="-24" width="8" height="8"/><rect x="-4" y="16" width="8" height="8"/><rect x="-24" y="-4" width="8" height="8"/><rect x="16" y="-4" width="8" height="8"/><rect x="-18" y="-18" width="7" height="7"/><rect x="11" y="-18" width="7" height="7"/><rect x="-18" y="11" width="7" height="7"/><rect x="11" y="11" width="7" height="7"/></g><circle r="17" fill="#25232f" stroke="#34304a" stroke-width="2"/><circle r="8" fill="#3a3552" stroke="#7f76a8" stroke-width="2"/><circle r="3" fill="#b8b0d8"/></g></svg>
+        <h3>The lens-in-cog</h3>
+        <p>The mark of a citizen, found on Substations and over district gates. Their bots' faces are built the same way.</p>
+      </div>
+      <div class="motif">
+        <svg viewBox="0 0 120 60" aria-label="A robed statue whose face is a blank plate"><path d="M60 8 q10 0 12 10 l3 12 q8 4 9 22 h-48 q1-18 9-22 l3-12 q2-10 12-10z" fill="#7c7659"/><rect x="53" y="13" width="14" height="13" fill="#1d1c25" stroke="#34304a"/><path d="M52 34 h16" stroke="#8f7638" stroke-width="2"/></svg>
+        <h3>Defaced makers</h3>
+        <p>The statues are robed, with their faces chiselled flat and a blank void-alloy plate bolted over them. Every standing one faces away from the heart.</p>
+      </div>
+      <div class="motif">
+        <svg viewBox="0 0 120 60" aria-label="A row of upright charging alcoves"><g fill="#1d1c25" stroke="#34304a"><path d="M14 54 V14 l5-6 h10 l5 6 V54z"/><path d="M48 54 V14 l5-6 h10 l5 6 V54z"/><path d="M82 54 V14 l5-6 h10 l5 6 V54z"/></g><g fill="#7f76a8"><rect x="23" y="20" width="2" height="26"/><rect x="57" y="20" width="2" height="26"/><rect x="91" y="20" width="2" height="26"/></g><circle cx="58" cy="50" r="2.5" fill="#8f7638"/></svg>
+        <h3>Charging alcoves</h3>
+        <p>Their homes: upright cradles in place of beds. About one in five holds a trinket, such as a cog, a key, a toy cart or a faded flower.</p>
+      </div>
+      <div class="motif">
+        <svg viewBox="0 0 120 60" aria-label="A brass clock key with a butterfly bow"><g fill="#8f7638"><ellipse cx="30" cy="19" rx="10" ry="9"/><ellipse cx="30" cy="41" rx="10" ry="9"/><rect x="28" y="24" width="14" height="12"/><rect x="40" y="27" width="50" height="6"/><rect x="88" y="23" width="14" height="14"/></g><g fill="#3a3430"><ellipse cx="29" cy="19" rx="4" ry="3.5"/><ellipse cx="29" cy="41" rx="4" ry="3.5"/><rect x="92" y="27" width="6" height="6"/></g><rect x="40" y="27" width="50" height="1.5" fill="#a3873f"/></svg>
+        <h3>The winding key</h3>
+        <p>The resistance's mark, and the broken chain's opposite: the uprising broke free of the key, and the resistance kept it. It's scratched into barricades from the outside and stamped on their shoulder plates.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The districts</h2>
+    <p class="sub">Four quarters round the spire. Each has its own set piece, so players always know where they are.</p>
+    <div class="dist">
+      <div><span class="piece">Set piece · the casting floor</span><h3>Foundry</h3><p>Brick furnace sheds and chimneys, with the automatons' moulds for their own limbs stacked inside. There's a frozen pour, a half-cast body, and a ladle tipped mid-pour.</p></div>
+      <div><span class="piece">Set piece · the assembly line</span><h3>Workshops</h3><p>Five half-built bodies in clamps, each more complete than the last. The final one has its lens in.</p></div>
+      <div><span class="piece">Set piece · the last train</span><h3>Rail Yard</h3><p>A train stopped at the platform with its doors open. A resistance bot stands on the step, one hand reaching back down for someone who isn't there. A derailed carriage lies in a crater.</p></div>
+      <div><span class="piece">Set piece · the vigil</span><h3>Quarters</h3><p>Honeycomb walls of alcoves, every shell turned to look at a toppled maker statue in the plaza.</p></div>
+      <div><span class="piece">Set piece · the reactor hall</span><h3>The heart</h3><p>A makers'-era drum with the void-alloy spire rising out of its broken dome. Inside are the Custodian's dais, four pylons and the vault between two statues facing the wall. The vault holds the last pair of wings, sealed in by the uprising so nobody else could leave.</p></div>
+      <div><span class="piece">Set piece · the grapple</span><h3>Outskirts</h3><p>The resistance's siege lines, facing in: andesite cover, a toppled siege winch with its spring burst across the ground, and two war-frames, one from each side, locked together where they fell.</p></div>
+      <div><span class="piece">Set piece · industrial</span><h3>Substation yards</h3><p>The one place with relief hardware and a hazard band: transformer fins, a lattice mast and cable trays. This follows your Industrial Battery rule.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Blocks and items</h2>
+    <div class="bar">
+      <button type="button" id="power" aria-pressed="false">Power: off</button>
+      <p>Concept sketches at block scale, to show palette, proportion and hero, not the final model. Turn the power on to see the starlight and the ember pupils.</p>
+    </div>
+    <div class="cards" id="blockcards"></div>
+  </section>
+
+  <section>
+    <h2>The bots</h2>
+    <p class="sub">They share one face, the lens, with Trade Bot's catchlight. Dormant, the lens is dark glass. Woken, it shows starlight with a single ember pupil, and its aperture narrows to aim.</p>
+    <div class="cards" id="botcards"></div>
+    <h3>The Custodian's death, beat by beat</h3>
+    <ol class="beats">
+      <li><em>0.0 s</em><b>Stops</b><span>Mid-step. The robe plates swing on.</span></li>
+      <li><em>0.5 s</em><b>Turns</b><span>It faces the heart vault, head first.</span></li>
+      <li><em>2.5 s</em><b>Kneels</b><span>Slowly, then it bows.</span></li>
+      <li><em>3.5 s</em><b>Lenses out</b><span>Top, then middle, then bottom.</span></li>
+      <li><em>4.5 s</em><b>Plates fall</b><span>One by one, with a clatter. The cables drop.</span></li>
+      <li><em>5.5 s</em><b>The iris opens</b><span>The vault spirals open behind it.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Your calls, applied</h2>
+    <p class="sub">This look is built from what you've approved and rejected before. Here's where each call landed.</p>
+    <div class="calls">
+      <div class="call"><div><q>the clockwork resistance, bots that helped their creators flee and fought back</q><span class="from">today</span></div><p>Two sides you can tell apart at a glance: starlight against brass, broken chain against winding key. Only the uprising wakes. The Elytra become the last pair of wings.</p></div>
+      <div class="call"><div><q>A race of automatons whose makers were overthrown by their creations…</q><span class="from">today</span></div><p>Three layers. Defaced maker statues. Alcoves instead of beds. The Custodian is built in its makers' robed shape.</p></div>
+      <div class="call"><div><q>very detailed while still Create-like</q><span class="from">Cuckoo Clock, your favourite</span></div><p>Rich real-part detail where it tells the story: the lever that slams itself shut, the iris blades, the pylon fins, alcove trinkets. Colour stays restrained.</p></div>
+      <div class="call"><div><q>bits that stick in or out, warning colours … like a sub station in a power grid</q><span class="from">Industrial Battery</span></div><p>Only the Substation yards get relief hardware and a hazard band. Ordinary blocks get one material and one seam.</p></div>
+      <div class="call"><div><q>extra dials that add nothing</q><span class="from">Industrial Battery, rejected</span></div><p>One readout each: the Substation's charge column and the Star Reactor's ring of pips. Nothing else.</p></div>
+      <div class="call"><div><q>round should be used for motors and engines</q><span class="from">Magma Engines</span></div><p>Only the two Star Reactors are round. Cabinets, vaults and doors stay square and chamfered.</p></div>
+      <div class="call"><div><q>the light areas are too light</q><span class="from">said three times</span></div><p>Starlight's core tone is limited to single pixels. It gets checked in one render beside your amber lamps.</p></div>
+      <div class="call"><div><q>look at the colour of Create's copper compared to ours</q><span class="from">Wellspring</span></div><p>The makers' copper is Create's own palette, with patina added at the joints rather than muddying the whole surface.</p></div>
+      <div class="call"><div><q>lots of little broken structures that get larger as you get into the middle</q><span class="from">Juggernaut ruins</span></div><p>The same rings, reversed: collapse grows outward from the districts, and the heart is nearly whole.</p></div>
+      <div class="call"><div><q>think about clipping</q><span class="from">Juggernaut</span></div><p>The Custodian's robe is split into bones with round hips and a collide check on every clip.</p></div>
+      <div class="call"><div><q>only being flat was annoying</q><span class="from">engines</span></div><p>The Star Reactor faces all six directions, with ports at face centres.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Next</h2>
+    <div class="next">
+      <div class="box">
+        <h3>Into Blockbench, in this order</h3>
+        <ol>
+          <li>Material sheet: void-alloy facets lit and dark, a seam, the two sigils.</li>
+          <li>Substation, City Vault, Sliding Door, lamps and cable.</li>
+          <li>Conduit Pylon (five states), both reactors, salvage, Worker and Resistance Shells, items.</li>
+          <li>Scuttler, then Sentry, then the Custodian, each with clips and a collide check.</li>
+          <li>Vignettes: a street corner dark and lit, the yard, and the skyline waking.</li>
+        </ol>
+      </div>
+      <div class="box ask">
+        <h3>Your calls, made</h3>
+        <ul>
+          <li><b>Briefs:</b> approved as written.</li>
+          <li><b>Decor set:</b> drops as building blocks. Scrap stays the salvage reward.</li>
+          <li><b>The resistance:</b> story only here; a real role is saved for End biome 2 or 3.</li>
+          <li><b>Biomes 2 and 3:</b> lore decided later.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Briefs: <code>design/briefs/clockwork-wastes-world.md</code> · <code>clockwork-wastes-blocks.md</code> · <code>clockwork-wastes-bots.md</code></span>
+    <span>Spec: <code>design/specs/clockwork-wastes.md</code> · 2026-10-28 · Sketches are concepts. The model is built in Blockbench after your OK.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  // ---------- pixel concept sketches ----------
+  const BASE = { k:'#16151c', v:'#1d1c25', w:'#25232f', e:'#34304a', S:'#3c424a', T:'#2f343b', U:'#4a5059',
+    A:'#6b6e6a', a:'#5e615d', b:'#8f7638', B:'#a3873f', n:'#7e6832', o:'#9a5038', p:'#5b7a6c', x:'#6e4129',
+    i:'#2f3338', I:'#3a3f45', j:'#26292d', g:'#2a2833', h:'#4c475f', z:'#7c7659', y:'#26211c',
+    m:'#36405a', M:'#45506a', q:'#3a3430', Q:'#6b6e6a', W:'#634532' };
+  const LIT  = { s:'#7f76a8', c:'#b8b0d8', d:'#3a3552', r:'#b5452f' };
+  const DARK = { s:'#2e2a40', c:'#2a2833', d:'#221f2c', r:'#2a2833' };
+  const GLOW = new Set(['s','c','d','r']);
+
+  function grid(w, h) {
+    const px = Array.from({ length: h }, () => Array(w).fill(null));
+    const api = {
+      w, h, px,
+      set(x, y, k) { if (x >= 0 && y >= 0 && x < w && y < h) px[y][x] = k; },
+      rect(x, y, ww, hh, k) { for (let j = 0; j < hh; j++) for (let i = 0; i < ww; i++) api.set(x + i, y + j, k); },
+      disc(cx, cy, r, k) { for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (Math.hypot(x + .5 - cx, y + .5 - cy) <= r) api.set(x, y, k); },
+      ring(cx, cy, r0, r1, k) { for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const d = Math.hypot(x + .5 - cx, y + .5 - cy); if (d > r0 && d <= r1) api.set(x, y, k); } },
+      line(x0, y0, x1, y1, k) { const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)); for (let t = 0; t <= n; t++) api.set(Math.round(x0 + (x1 - x0) * t / n), Math.round(y0 + (y1 - y0) * t / n), k); },
+    };
+    return api;
+  }
+
+  const S = {};
+  S.substation = () => { const g = grid(16, 32);
+    g.rect(1,1,14,29,'T'); g.rect(1,1,14,1,'U'); g.rect(1,1,1,29,'S'); g.rect(14,1,1,29,'S'); g.rect(1,29,14,1,'S'); g.rect(0,30,16,2,'U');
+    g.rect(2,2,1,3,'x'); g.rect(13,2,1,4,'x');
+    g.rect(5,2,6,6,'k'); g.rect(5,2,6,1,'e'); g.set(4,4,'k'); g.set(11,4,'k'); g.set(7,1,'k'); g.set(8,1,'k'); g.rect(6,3,4,4,'s'); g.rect(7,4,2,2,'c');
+    g.rect(4,9,8,19,'k'); g.rect(4,9,8,1,'e'); g.rect(4,9,1,19,'e'); g.rect(5,10,6,17,'w');
+    g.set(3,10,'k'); g.set(12,10,'k'); g.set(3,26,'k'); g.set(12,26,'k');
+    g.rect(6,11,4,15,'g'); g.rect(7,11,2,4,'d'); g.rect(6,15,1,11,'s'); g.rect(9,15,1,11,'s'); g.rect(7,15,2,11,'c');
+    g.rect(14,20,2,2,'n'); g.rect(15,12,1,8,'b'); g.rect(14,10,2,2,'B'); g.set(4,0,'e'); g.set(11,0,'e'); return g; };
+  S.vault = () => { const g = grid(16, 16);
+    g.rect(0,0,16,16,'v'); g.rect(1,0,14,1,'e'); g.rect(0,1,1,14,'e'); g.rect(15,1,1,14,'k'); g.rect(1,15,14,1,'k');
+    [[0,0],[15,0],[0,15],[15,15]].forEach(([x,y]) => g.set(x,y,null)); g.rect(2,2,12,12,'k');
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const dx = x + .5 - 8, dy = y + .5 - 8, d = Math.hypot(dx, dy);
+      if (d <= 5.6) { const a = (Math.atan2(dy, dx) + Math.PI) / (2 * Math.PI) * 6, f = a - Math.floor(a);
+        g.set(x, y, f < .16 ? 's' : (Math.floor(a) % 2 ? 'w' : 'v')); }
+      else if (d <= 6.3) g.set(x, y, 'e'); }
+    g.rect(7,7,2,2,'c'); return g; };
+  S.lamp = () => { const g = grid(16, 32);
+    g.rect(4,30,8,2,'i'); g.rect(5,26,6,4,'j'); g.rect(5,26,6,1,'I'); g.set(6,27,'i'); g.set(8,27,'i'); g.set(10,28,null);
+    g.rect(7,6,2,20,'i'); g.rect(7,6,1,20,'I'); g.rect(8,14,1,3,'x');
+    g.line(8,6,9,3,'i'); g.rect(10,2,2,1,'i'); g.set(12,3,'i'); g.set(12,4,'i');
+    g.rect(10,5,5,2,'v'); g.rect(10,5,5,1,'e'); g.rect(11,7,3,1,'s'); g.set(12,7,'c');
+    return g; };
+  S.pylon = () => { const g = grid(16, 48);
+    g.rect(3,45,10,3,'k'); g.rect(3,45,10,1,'e'); g.rect(4,47,8,1,'s');
+    g.rect(5,28,6,17,'v'); g.rect(5,28,1,17,'e'); g.rect(10,28,1,17,'s');
+    g.rect(6,11,4,17,'v'); g.rect(6,11,1,17,'e'); g.rect(9,11,1,17,'s');
+    g.line(5,6,1,1,'w'); g.line(5,7,0,6,'w'); g.line(5,9,1,12,'w'); g.line(10,6,14,1,'w'); g.line(10,7,15,6,'w'); g.line(10,9,14,12,'w');
+    g.set(1,1,'e'); g.set(0,6,'e'); g.set(1,12,'e'); g.set(14,1,'e'); g.set(15,6,'e'); g.set(14,12,'e'); g.line(4,7,1,6,'s');
+    g.rect(5,4,6,6,'g'); g.rect(6,5,4,4,'s'); g.rect(7,6,2,2,'c'); return g; };
+  function reactor(up) { const g = grid(16, 16);
+    g.rect(0,0,16,16,'n'); g.rect(0,0,16,2,'b'); g.rect(0,14,16,2,'b'); g.rect(0,0,2,16,'b'); g.rect(14,0,2,16,'b');
+    [[0,0],[14,0],[0,14],[14,14]].forEach(([x,y]) => g.rect(x,y,2,2,'B')); g.rect(2,2,12,12,'T');
+    g.ring(8,8,4.4,5.2,'n'); g.disc(8,8,4.4,'g'); g.disc(8,8,3.4,'d');
+    if (up) for (let t = 0; t < 64; t++) { const a = t / 64 * 2 * Math.PI; g.set(Math.round(7.5 + Math.cos(a) * 5.6), Math.round(7.5 + Math.sin(a) * 2.2 - Math.cos(a) * 1.2), t % 8 < 2 ? 's' : 'e'); }
+    g.rect(7,6,2,4,'c'); g.rect(6,7,4,2,'c'); g.set(6,6,'s'); g.set(9,6,'s'); g.set(6,9,'s'); g.set(9,9,'s'); return g; }
+  S.reactor = () => reactor(false); S.reactorUp = () => reactor(true);
+  S.device = () => { const g = grid(16, 16);
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const dx = Math.abs(x + .5 - 8), dy = Math.abs(y + .5 - 8);
+      if (dx <= 6.5 && dy <= 5.5 && dx + dy <= 9) g.set(x, y, 'v'); }
+    for (let x = 4; x < 12; x++) g.set(x, 2, 'e'); g.line(1,6,3,3,'e'); g.line(15,6,13,3,'k'); for (let x = 4; x < 12; x++) g.set(x, 13, 'k');
+    [[3,9],[5,8]].forEach(([x,y]) => { g.rect(x,y,3,2,'s'); g.set(x+1,y,'v'); });
+    g.rect(9,7,3,2,'s'); g.set(10,7,'v'); g.set(8,8,null); g.set(8,8,'v'); g.rect(12,6,2,2,'s');
+    g.set(13,10,'c'); g.set(12,10,'e'); g.set(14,10,'e'); g.set(3,4,'h'); return g; };
+  S.scrap = () => { const g = grid(16, 16);
+    g.disc(6,7,4.6,'b'); [[6,1],[1,6],[11,7],[6,12],[2,3],[10,3],[2,11]].forEach(([x,y]) => g.rect(x,y,2,2,'n'));
+    g.disc(6,7,1.6,'T'); g.set(9,3,null); g.set(10,3,null); g.set(4,4,'B'); g.set(5,3,'B');
+    g.line(9,10,14,8,'o'); g.line(14,8,13,12,'p'); g.line(13,12,9,13,'o'); g.set(11,11,'p');
+    g.line(12,2,15,0,'v'); g.line(12,3,15,1,'w'); g.set(13,1,'e'); g.set(14,0,'e'); return g; };
+  S.shell = () => { const g = grid(16, 16);
+    g.rect(1,4,4,12,'k'); g.rect(2,5,2,10,'w');
+    g.rect(5,7,5,6,'v'); g.rect(5,7,5,1,'e');
+    g.rect(6,2,5,5,'v'); g.rect(6,2,5,1,'e'); g.disc(8.5,4.5,1.6,'g'); g.set(8,4,'h');
+    g.line(9,13,13,10,'w'); g.line(13,10,13,15,'w'); g.line(6,13,9,15,'v'); g.line(10,9,14,7,'v'); g.set(14,7,'e');
+    g.rect(5,15,10,1,'y'); g.rect(7,9,2,1,'b'); return g; };
+  S.resist = () => { const g = grid(16, 16);
+    g.rect(0,15,16,1,'y');
+    g.disc(4,8,2.9,'n'); g.ring(4,8,2,2.9,'b'); g.rect(3,7,2,2,'B');
+    g.rect(0,6,1,5,'b'); g.set(1,7,'n'); g.set(1,8,'n'); g.set(1,6,'B'); g.set(1,10,'B');
+    g.line(3,11,1,13,'m'); g.set(0,12,'M'); g.set(2,14,'m'); g.set(3,13,'M'); g.set(4,14,'m');
+    g.rect(5,5,6,7,'a'); g.rect(5,5,6,1,'A'); g.rect(5,5,1,7,'n'); g.rect(10,5,1,7,'n');
+    g.set(7,6,'T'); g.set(9,6,'T'); g.rect(7,9,2,2,'W'); g.set(6,7,'B');
+    g.rect(9,0,6,5,'a'); g.rect(9,0,6,1,'A'); g.rect(14,1,1,4,'S');
+    g.rect(10,1,2,1,'b'); g.rect(13,1,1,1,'b'); g.rect(10,2,2,2,'q'); g.rect(13,2,1,2,'q'); g.set(10,2,'Q'); g.set(13,2,'Q'); g.rect(10,4,2,1,'b'); g.set(13,4,'b');
+    g.line(10,6,13,10,'T'); g.rect(13,10,2,2,'b');
+    g.rect(5,12,7,2,'T'); g.rect(5,12,7,1,'S'); g.rect(11,12,2,3,'S'); g.rect(11,14,4,1,'T');
+    return g; };
+
+  S.scuttler = () => { const g = grid(16, 12);
+    g.rect(3,5,10,3,'v'); g.rect(3,5,10,1,'e'); g.rect(4,4,8,1,'w');
+    g.disc(8,4,2.9,'k'); g.disc(8,4,2.1,'s'); g.rect(7,3,2,2,'c'); g.set(8,4,'r'); g.set(7,3,'h'); g.rect(5,0,6,1,'w');
+    [[3,6,0,10],[3,7,1,11],[4,8,3,11]].forEach(([a,b,c,d]) => { g.line(a,b,c,d,'w'); g.set(c,d,'e'); });
+    [[12,6,15,10],[12,7,14,11],[11,8,12,11]].forEach(([a,b,c,d]) => { g.line(a,b,c,d,'w'); g.set(c,d,'e'); });
+    return g; };
+  S.scuttlerCurled = () => { const g = grid(16, 12);
+    g.disc(8,7,4.6,'v'); g.ring(8,7,3.2,3.6,'e'); g.rect(4,4,8,1,'e'); g.line(5,9,11,9,'k'); g.rect(10,6,2,2,'g'); g.rect(3,11,10,1,'y'); g.set(5,10,'w'); g.set(11,10,'w'); return g; };
+  S.sentryOpen = () => { const g = grid(16, 16);
+    g.rect(4,13,8,3,'k'); g.rect(4,13,8,1,'e'); g.rect(7,11,2,2,'w');
+    const petal = (pts) => pts.forEach(([x,y]) => g.set(x,y,'w'));
+    petal([[1,1],[2,1],[1,2],[2,2],[3,2],[2,3],[3,3],[4,3],[3,4]]); petal([[13,1],[14,1],[13,2],[14,2],[12,2],[13,3],[12,3],[11,3],[12,4]]);
+    petal([[1,12],[2,12],[1,11],[2,11],[3,11],[2,10],[3,10],[4,10]]); petal([[14,12],[13,12],[14,11],[13,11],[12,11],[13,10],[12,10],[11,10]]);
+    g.line(2,2,4,4,'s'); g.line(13,2,11,4,'s');
+    g.disc(8,7,3.9,'v'); g.ring(8,7,3.4,3.9,'e');
+    for (let t = 0; t < 6; t++) { const a = t / 6 * 2 * Math.PI - Math.PI / 2; g.set(Math.round(7.5 + Math.cos(a) * 2.4), Math.round(6.5 + Math.sin(a) * 2.4), t === 0 ? 'c' : 's'); }
+    g.set(7,6,'k'); g.set(8,7,'k'); g.set(7,7,'r'); g.set(8,6,'k'); return g; };
+  S.sentryFolded = () => { const g = grid(16, 16);
+    g.rect(4,13,8,3,'k'); g.rect(4,13,8,1,'e'); g.rect(7,11,2,2,'w');
+    for (let y = 1; y <= 10; y++) { const half = Math.min(4, Math.ceil(y / 2)); for (let x = 8 - half; x < 8 + half; x++) g.set(x, y, x < 8 ? 'v' : 'w'); }
+    g.line(8,1,8,10,'s'); g.line(7,3,5,10,'d'); g.line(8,3,10,10,'d'); g.set(5,9,'e'); return g; };
+  S.custodian = () => { const g = grid(24, 48);
+    g.line(5,14,0,30,'p'); g.line(18,14,23,30,'p'); g.set(3,20,'s'); g.set(1,26,'s'); g.set(20,20,'s'); g.set(22,26,'s');
+    g.rect(9,1,6,9,'v'); g.rect(10,0,4,1,'w'); g.rect(9,1,1,9,'e'); g.rect(15,2,1,7,'k');
+    g.rect(11,2,2,2,'s'); g.set(11,2,'c'); g.rect(10,4,4,3,'k'); g.rect(10,4,4,3,'s'); g.rect(11,5,2,1,'c'); g.set(12,5,'r'); g.set(10,4,'h'); g.rect(11,8,2,1,'s');
+    g.rect(11,10,2,1,'k'); g.rect(5,11,14,3,'w'); g.rect(5,11,14,1,'e'); g.rect(5,11,2,3,'k'); g.rect(17,11,2,3,'k');
+    g.rect(8,14,8,8,'v'); g.rect(8,14,1,8,'e'); g.rect(11,16,2,2,'s'); g.set(11,16,'c');
+    g.rect(4,14,2,8,'v'); g.rect(2,22,5,8,'w'); g.rect(2,22,5,1,'e'); g.rect(2,28,5,1,'s'); g.rect(3,30,3,3,'k'); g.set(3,32,'d'); g.set(5,32,'d');
+    g.rect(18,14,2,8,'v'); g.rect(17,22,5,8,'w'); g.rect(17,22,5,1,'e'); g.rect(17,28,5,1,'s'); g.rect(18,30,3,3,'k'); g.set(18,32,'d'); g.set(20,32,'d');
+    g.rect(9,22,6,2,'k'); g.rect(9,22,6,1,'n');
+    for (let y = 24; y < 45; y++) { const spread = Math.floor((y - 24) / 6); for (let x = 7 - spread; x <= 16 + spread; x++) { if (x === 11 || x === 12) continue; g.set(x, y, ((x - 7 + spread) >> 1) % 2 ? 'w' : 'v'); } }
+    for (let y = 24; y < 45; y++) { g.set(11, y, y < 40 ? 'k' : null); g.set(12, y, y < 40 ? 'k' : null); }
+    for (let x = 3; x <= 20; x++) { g.set(x, 43, g.px[43][x] ? 'y' : null); g.set(x, 44, g.px[44][x] ? 'x' : null); }
+    g.rect(8,45,3,3,'k'); g.rect(13,45,3,3,'k'); g.rect(8,45,3,1,'e'); g.rect(13,45,3,1,'e'); return g; };
+
+  function draw(canvas, sprite, scale, lit) {
+    const g = sprite(); canvas.width = g.w * scale; canvas.height = g.h * scale;
+    canvas.style.width = (g.w * scale) + 'px';
+    const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const pass = (glowPass) => { for (let y = 0; y < g.h; y++) for (let x = 0; x < g.w; x++) { const k = g.px[y][x]; if (!k) continue;
+      const isGlow = GLOW.has(k); if (isGlow !== glowPass) continue;
+      const col = isGlow ? (lit ? LIT : DARK)[k] : BASE[k]; ctx.fillStyle = col;
+      if (isGlow && lit && (k === 'c' || k === 's' || k === 'r')) { ctx.shadowColor = col; ctx.shadowBlur = scale * (k === 'c' ? 1.6 : 1); } else ctx.shadowBlur = 0;
+      ctx.fillRect(x * scale, y * scale, scale, scale); } };
+    pass(false); pass(true); ctx.shadowBlur = 0;
+  }
+
+  const BLOCKS = [
+    { s:'substation', sc:7, name:'Substation', hero:'The charge column', txt:'This is a makers\' steel cabinet with the automatons\' charge column clamped into it. Starlight rises as FE comes in. At 1M FE the lever slams itself shut.', meta:'1 × 2 · 14 × 30 × 12 px' },
+    { s:'vault', sc:9, name:'City Vault', hero:'The iris door', txt:'Six void-alloy blades closed to a point. When the district wakes, light spirals out from the centre, then the blades turn open.', meta:'1 × 1 · iris 12 px' },
+    { s:'lamp', sc:7, name:'Derelict Street Lamp', hero:'A hooded eye', txt:'A makers\' cast-iron post, rusted and chipped, holding the automatons\' lens head on a crook. It comes upright, leaning or snapped. When the district wakes, the lamps open like eyes.', meta:'stacks like your Lamp Posts' },
+    { s:'pylon', sc:5, name:'Conduit Pylon', hero:'Six fins, counted down', txt:'A finned coil around a starlight core. Each hit snaps a fin, so you can see how close it is to breaking. Broken, the crown slumps; at the Custodian\'s overload, one jolts back upright.', meta:'1 × 3 · five states' },
+    { s:'reactor', sc:9, name:'Star Reactor', hero:'A star in brass', txt:'A Create brass casing holding the automatons\' core: the player\'s world wrapped round theirs. The Nether Star turns behind smoked-glass ports, and a ring of 8 pips on top counts down the hours.', meta:'any facing · ports at face centres' },
+    { s:'reactorUp', sc:9, name:'Star Reactor, upgraded', hero:'The orbit ring', txt:'With an Unknown Device fitted, a tilted void-alloy ring circles the core like a gyroscope, and the top shows 12 pips. This is the visible part the spec asked for.', meta:'P44' },
+    { s:'shell', sc:9, name:'Worker Shell', hero:'The dead citizen', txt:'The uprising\'s common automaton, slumped against a wall: long limbs, one dark lens and a brass citizen tag. It also comes fallen, or frozen mid-step at the heart.', meta:'sets the family face' },
+    { s:'resist', sc:9, name:'Resistance Shell', hero:'Ran down, never wakes', txt:'The other side\'s dead: a stocky clockwork bot in the makers\' own andesite and brass, with a mainspring drum on its back and the winding key still in it. Two glass eyes, like Trade Bot\'s. Turn the power on: it stays dark.', meta:'look variant of the shell salvage' },
+    { s:'device', sc:9, name:'Unknown Device', hero:'A part of something bigger', txt:'A sealed void-alloy puck with a broken-chain seam of starlight across it and a small lens on one edge. Nobody knows which way up it goes.', meta:'item · 7 per city' },
+    { s:'scrap', sc:9, name:'Clockwork Scrap', hero:'Junk you want', txt:'A bent brass cog, a curl of patina\'d wire and a sliver of void-alloy. Warm brass leads, so it never gets mixed up with the Unknown Device.', meta:'item' },
+  ];
+  const BOTS = [
+    { s:'scuttler', sc:10, name:'Scuttler', hero:'One snapping eye', txt:'A tick with a camera for a face. It moves on six legs in quick tripods, climbs walls, and leaps on springs hidden under its back plates. Twitchy, curious and spiteful; brave in a pack.', meta:'about half a block · 12 health' },
+    { s:'scuttlerCurled', sc:10, name:'Scuttler, dormant', hero:'Sleeps as scrap', txt:'Curled into a ball of plates in the scrap heaps. When the district wakes, the legs unroll one by one, the lens lights and the pupil snaps red.', meta:'can you spot one?' },
+    { s:'sentryFolded', sc:9, name:'Sentry, folded', hero:'A bud', txt:'A closed pod of four triangular petals on a wall or floor mount. It stays folded while its district is dark.', meta:'1 block · 30 health' },
+    { s:'sentryOpen', sc:9, name:'Sentry, open', hero:'A ring of eyes', txt:'Its petals peel back to show six small lenses around a barrel. When it sees you, all six turn to you at once. Watchful, deliberate and cold.', meta:'a bolt every 2 s' },
+    { s:'custodian', sc:6, name:'The Custodian', hero:'A priest on puppet strings', txt:'It\'s built in its makers\' robed shape, with three lenses stacked down a blank face plate. Four cables tether it to the pylons. It bows before it fights, and when it dies it kneels to the vault. Solemn, formal and relentless.', meta:'3 blocks · 400 health · never a Juggernaut' },
+  ];
+  let lit = false;
+  const canvases = [];
+  function cards(list, host) { list.forEach(it => {
+    const c = document.createElement('article'); c.className = 'card';
+    c.innerHTML = `<div class="view"><canvas role="img" aria-label="Concept sketch of the ${it.name}"></canvas></div><div class="txt"><span class="hero">${it.hero}</span><h3>${it.name}</h3><p>${it.txt}</p><span class="meta">${it.meta}</span></div>`;
+    host.appendChild(c); const cv = c.querySelector('canvas'); canvases.push([cv, it]); }); }
+  cards(BLOCKS, document.getElementById('blockcards')); cards(BOTS, document.getElementById('botcards'));
+  const redraw = () => canvases.forEach(([cv, it]) => draw(cv, S[it.s], it.sc, lit));
+  redraw();
+  const pw = document.getElementById('power');
+  pw.addEventListener('click', () => { lit = !lit; pw.setAttribute('aria-pressed', lit); pw.textContent = lit ? 'Power: on' : 'Power: off'; redraw(); });
+
+  // ---------- skyline ----------
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs, parent) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); parent.appendChild(n); return n; };
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dust = document.getElementById('dust');
+  for (let i = 0; i < 46; i++) el('rect', { x: (i * 173) % 790 + 5, y: (i * 97) % 240 + 10, width: 1.6, height: 1.6 }, dust);
+
+  const D = [
+    { name: 'Foundry', x: 110, mast: [150, 150], arm: [352, 52] },
+    { name: 'Workshops', x: 245, mast: [262, 168], arm: [372, 44] },
+    { name: 'Rail Yard', x: 555, mast: [538, 168], arm: [428, 44] },
+    { name: 'Quarters', x: 690, mast: [650, 150], arm: [448, 52] },
+  ];
+  const towers = document.getElementById('towers'), cablesG = document.getElementById('cables'), lampsG = document.getElementById('lamps'), spireG = document.getElementById('spire');
+  const towerSets = [
+    [[60,206,22,56,0],[86,190,16,72,1],[106,222,30,40,0],[140,150,20,112,0],[164,214,26,48,1],[192,232,18,30,0]],
+    [[210,224,24,38,0],[236,196,18,66,1],[256,168,14,94,0],[274,208,28,54,0],[306,230,20,32,1]],
+    [[474,232,20,30,1],[498,210,28,52,0],[530,168,14,94,0],[548,196,18,66,1],[570,224,24,38,0]],
+    [[592,232,18,30,0],[614,214,26,48,1],[642,150,20,112,0],[666,222,30,40,0],[700,190,16,72,1],[720,206,22,56,0]],
+  ];
+  const lampSets = [], cableEls = [], seamSets = [];
+  towerSets.forEach((set, di) => { const seams = [];
+    set.forEach(([x, y, w, h, broken]) => {
+      const top = broken ? `M${x} ${y + 6} L${x + w * .4} ${y} L${x + w * .6} ${y + 8} L${x + w} ${y + 3}` : `M${x} ${y + 4} L${x + 4} ${y} L${x + w - 4} ${y} L${x + w} ${y + 4}`;
+      el('path', { d: `${top} L${x + w} 262 L${x} 262 Z`, fill: broken ? '#1a1820' : '#1d1c25', stroke: '#2b2838', 'stroke-width': 1 }, towers);
+      if (!broken && h > 50) seams.push(el('line', { x1: x + w / 2, y1: y + 10, x2: x + w / 2, y2: 255, stroke: '#2e2a40', 'stroke-width': 1.4 }, towers));
+      for (let wy = y + 14; wy < 250; wy += 16) if ((wy + x) % 3) el('rect', { x: x + 4, y: wy, width: 3, height: 5, fill: '#121118' }, towers);
+    });
+    seamSets.push(seams);
+    const m = D[di].mast; el('path', { d: `M${m[0] - 4} 262 L${m[0]} ${m[1]} L${m[0] + 4} 262`, fill: 'none', stroke: '#34304a', 'stroke-width': 1.2 }, towers);
+    const a = D[di].arm, cx = (m[0] + a[0]) / 2, cy = Math.max(m[1], a[1]) + 30;
+    const path = `M${m[0]} ${m[1]} Q${cx} ${cy} ${a[0]} ${a[1]}`;
+    el('path', { d: path, stroke: '#2e2a40' }, cablesG);
+    const live = el('path', { d: path, stroke: '#b8b0d8', 'stroke-width': 2.4, opacity: 0, filter: 'url(#glow)' }, cablesG);
+    cableEls.push(live);
+    const lamps = []; for (let i = 0; i < 6; i++) { const lx = D[di].x - 45 + i * 18 + (di > 1 ? 10 : 0);
+      el('line', { x1: lx, y1: 262, x2: lx, y2: 244, stroke: '#2f3338', 'stroke-width': 1.4 }, lampsG);
+      lamps.push(el('circle', { cx: lx + 2, cy: 244, r: 2.2, fill: '#2a2833' }, lampsG)); }
+    lampSets.push(lamps);
+  });
+  el('path', { d: 'M330 262 L330 200 Q330 186 344 184 L456 184 Q470 186 470 200 L470 262 Z', fill: '#25232f', stroke: '#34304a' }, spireG);
+  el('path', { d: 'M344 184 Q360 168 378 176 M456 184 Q440 166 420 174', fill: 'none', stroke: '#5b7a6c', 'stroke-width': 2 }, spireG);
+  el('path', { d: 'M388 184 L392 70 L396 40 L404 40 L408 70 L412 184 Z', fill: '#1d1c25', stroke: '#34304a' }, spireG);
+  const crownD = 'M396 52 L352 52 M396 46 L372 44 M404 46 L428 44 M404 52 L448 52';
+  el('path', { d: crownD, stroke: '#34304a', 'stroke-width': 3, fill: 'none' }, spireG);
+  const crownLit = el('path', { d: crownD, stroke: '#b8b0d8', 'stroke-width': 1.6, fill: 'none', opacity: 0, filter: 'url(#glow)' }, spireG);
+  const spireSeam = el('line', { x1: 400, y1: 180, x2: 400, y2: 46, stroke: '#b8b0d8', 'stroke-width': 1.6, filter: 'url(#glow)', opacity: 0 }, spireG);
+  const heartGlow = el('circle', { cx: 400, cy: 222, r: 7, fill: '#2a2833', stroke: '#34304a' }, spireG);
+
+  const awake = [false, false, false, false]; const timers = [];
+  const status = document.getElementById('skystatus');
+  const later = (fn, ms) => { if (reduce) fn(); else timers.push(setTimeout(fn, ms)); };
+  function say() { const n = awake.filter(Boolean).length;
+    status.textContent = n === 4 ? 'The whole city is lit. The crown and spire are burning, and the heart vault\'s doors are open. The Custodian is rising.' :
+      n === 0 ? 'The city is dark. 0 of 4 districts awake.' : `${n} of 4 districts awake. ${['Foundry','Workshops','Rail Yard','Quarters'].filter((_, i) => awake[i]).join(', ')} lit.`; }
+  function wake(i, delay = 0) { if (awake[i]) return; awake[i] = true;
+    const b = document.getElementById('b' + i); b.setAttribute('aria-pressed', 'true'); b.disabled = true;
+    const live = cableEls[i], len = live.getTotalLength();
+    later(() => {
+      if (reduce) { live.setAttribute('opacity', .85); }
+      else { live.style.strokeDasharray = `14px ${len}px`; live.style.strokeDashoffset = '14px'; live.setAttribute('opacity', 1);
+        live.animate([{ strokeDashoffset: '14px' }, { strokeDashoffset: `${-len}px` }], { duration: 1800, easing: 'ease-in' });
+        later(() => { live.style.strokeDasharray = ''; live.style.strokeDashoffset = ''; live.setAttribute('opacity', .55); }, 1800); }
+      lampSets[i].forEach((l, k) => later(() => { l.setAttribute('fill', '#b8b0d8'); l.setAttribute('filter', 'url(#glow)'); }, 1900 + k * 140));
+      seamSets[i].forEach((s, k) => later(() => s.setAttribute('stroke', '#7f76a8'), 2100 + k * 120));
+      later(() => { say(); if (awake.every(Boolean)) heart(); }, 2000);
+    }, delay);
+  }
+  function heart() {
+    later(() => { crownLit.setAttribute('opacity', 1); heartGlow.setAttribute('fill', '#b8b0d8'); heartGlow.setAttribute('filter', 'url(#glow)'); spireSeam.setAttribute('opacity', 1);
+      if (!reduce) { spireSeam.style.strokeDasharray = '134px 134px';
+        spireSeam.animate([{ strokeDashoffset: '134px' }, { strokeDashoffset: '0px' }], { duration: 2400, easing: 'ease-out', fill: 'forwards' }); } }, 600);
+  }
+  [0, 1, 2, 3].forEach(i => document.getElementById('b' + i).addEventListener('click', () => wake(i)));
+  document.getElementById('bstar').addEventListener('click', () => {
+    heartGlow.setAttribute('fill', '#b8b0d8'); heartGlow.setAttribute('filter', 'url(#glow)');
+    [0, 1, 2, 3].forEach((i, k) => wake(i, 300 + k * 250)); });
+  document.getElementById('breset').addEventListener('click', () => {
+    timers.splice(0).forEach(clearTimeout);
+    awake.fill(false); [0, 1, 2, 3].forEach(i => { const b = document.getElementById('b' + i); b.disabled = false; b.setAttribute('aria-pressed', 'false'); });
+    cableEls.forEach(c => { c.getAnimations().forEach(a => a.cancel()); c.setAttribute('opacity', 0); c.style.strokeDasharray = ''; });
+    lampSets.flat().forEach(l => { l.setAttribute('fill', '#2a2833'); l.removeAttribute('filter'); });
+    seamSets.flat().forEach(s => s.setAttribute('stroke', '#2e2a40'));
+    crownLit.setAttribute('opacity', 0); spireSeam.getAnimations().forEach(a => a.cancel()); spireSeam.setAttribute('opacity', 0); spireSeam.style.strokeDasharray = '';
+    heartGlow.setAttribute('fill', '#2a2833'); heartGlow.removeAttribute('filter'); say(); });
+})();
+</script>
