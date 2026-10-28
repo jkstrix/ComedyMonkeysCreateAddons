@@ -227,7 +227,8 @@
       "battery",
       "power-lines",
       "line-post",
-      "lines-and-networks"
+      "lines-and-networks",
+      "electric-lights"
     ]
   },
   {
@@ -480,7 +481,8 @@
       "fluid-splitter",
       "power-splitter",
       "breaker",
-      "electricity"
+      "electricity",
+      "electric-lights"
     ]
   },
   {

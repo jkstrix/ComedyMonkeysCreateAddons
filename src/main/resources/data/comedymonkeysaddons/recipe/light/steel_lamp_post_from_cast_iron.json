@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "comedymonkeysaddons:cast_iron_lamp_post"
+  },
+  "result": {
+    "id": "comedymonkeysaddons:steel_lamp_post",
+    "count": 1
+  }
+}

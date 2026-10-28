@@ -1865,10 +1865,55 @@
       "power-lines",
       "line-post",
       "power-splitter",
-      "lines-and-networks"
+      "lines-and-networks",
+      "electric-lights"
     ],
     "tips": [
       "A Breaker with a lever is the quickest way to shut off a whole machine room while you rebuild it."
+    ]
+  },
+  {
+    "id": "light-assembly",
+    "name": "Light Assembly",
+    "registry": [
+      "comedymonkeysaddons:light_assembly"
+    ],
+    "summary": "Glass, a copper sheet and redstone make two: the part every Electric Light is cut or crafted from.",
+    "tags": [
+      "crafting component",
+      "power",
+      "lighting"
+    ],
+    "stage": "early",
+    "teach": {
+      "what": "A small lamp unit. On its own it does nothing; in a stonecutter it becomes one of the [[electric-lights|Electric Lights]].",
+      "why": "Every light starts here, and it's cheap: one assembly makes one lamp, or 8 Light Strips, Edge Lights or Indicator Lamps.",
+      "when": "As soon as you can press copper sheets. The lights it makes run on a [[power-lines|Power Line]] network, so they wait for your first generator.",
+      "interacts": "The stonecutter, or Create's Mechanical Saw, cuts it into most lights. With an iron sheet, 2 iron sheets, a brass sheet or a Cogwheel, a crafting table makes the High-Bay Lamp, Floodlight, Chandelier or Warning Beacon.",
+      "mistakes": [
+        "Worrying about cutting the wrong light. Put it back in the stonecutter and pick another of its group, one for one."
+      ]
+    },
+    "specs": [
+      [
+        "Recipe",
+        "Glass + copper sheet + redstone make 2"
+      ],
+      [
+        "Used in",
+        "Stonecutter and crafting table"
+      ]
+    ],
+    "obtain": [
+      "Shapeless crafting: glass, a copper sheet and redstone dust make 2."
+    ],
+    "uses": [
+      "Stonecutter: 1 lamp of the full group, or 8 Light Strips, Edge Lights or Indicator Lamps, or 4 Festoon Lights.",
+      "Crafting table: with an iron sheet a High-Bay Lamp, with 2 iron sheets a Floodlight, with a brass sheet a Chandelier, with a Cogwheel a Warning Beacon."
+    ],
+    "related": [
+      "electric-lights",
+      "power-lines"
     ]
   },
   {

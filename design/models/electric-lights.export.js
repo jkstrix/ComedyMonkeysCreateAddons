@@ -363,10 +363,6 @@ writeData(`${NS}/recipe/cast_iron_lamp_post.json`, { type: 'minecraft:crafting_s
 writeData(`${NS}/recipe/steel_lamp_post.json`, { type: 'minecraft:crafting_shaped', category: 'building',
   pattern: ['P', 'P', 'PA'].map((r) => r.padEnd(2, ' ')), key: { P: { tag: 'c:plates/iron' }, A: { item: 'create:andesite_alloy' } },
   result: { id: `${NS}:steel_lamp_post`, count: 4 } });
-writeData(`${NS}/recipe/light/cast_iron_lamp_post_from_steel.json`, { type: 'minecraft:stonecutting',
-  ingredient: { item: `${NS}:steel_lamp_post` }, result: { id: `${NS}:cast_iron_lamp_post`, count: 1 } });
-writeData(`${NS}/recipe/light/steel_lamp_post_from_cast_iron.json`, { type: 'minecraft:stonecutting',
-  ingredient: { item: `${NS}:cast_iron_lamp_post` }, result: { id: `${NS}:steel_lamp_post`, count: 1 } });
 
 // each block of hanging cable gives back the Power Line it was lowered with
 writeData(`${NS}/loot_table/blocks/hanging_cable.json`, { type: 'minecraft:block', pools: [{ rolls: 1,
@@ -387,6 +383,11 @@ const YIELD = { full: 1, small: 8 };
 const CRAFTED = { high_bay_lamp: [{ tag: 'c:plates/iron' }], chandelier: [{ tag: 'c:plates/brass' }], warning_beacon: [{ item: 'create:cogwheel' }],
   floodlight: [{ tag: 'c:plates/iron' }, { tag: 'c:plates/iron' }] };
 fs.rmSync(path.join(DATA, NS, 'recipe/light'), { recursive: true, force: true });
+// the Lamp Posts swap finish in a stonecutter, 1:1 (written after the folder is cleared, or they'd go with it)
+writeData(`${NS}/recipe/light/cast_iron_lamp_post_from_steel.json`, { type: 'minecraft:stonecutting',
+  ingredient: { item: `${NS}:steel_lamp_post` }, result: { id: `${NS}:cast_iron_lamp_post`, count: 1 } });
+writeData(`${NS}/recipe/light/steel_lamp_post_from_cast_iron.json`, { type: 'minecraft:stonecutting',
+  ingredient: { item: `${NS}:cast_iron_lamp_post` }, result: { id: `${NS}:steel_lamp_post`, count: 1 } });
 writeData(`${NS}/recipe/light_assembly.json`, { type: 'minecraft:crafting_shapeless', category: 'misc',
   ingredients: [{ item: 'minecraft:glass' }, { tag: 'c:plates/copper' }, { item: 'minecraft:redstone' }],
   result: { id: `${NS}:light_assembly`, count: 2 } });

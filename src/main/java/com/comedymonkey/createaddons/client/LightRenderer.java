@@ -219,7 +219,8 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 	 * widening; added to what's behind it and never hiding it.
 	 */
 	private static void cone(LightBlockEntity be, PoseStack ms, MultiBufferSource buffer, float pt) {
-		if (be.getLevel() == null || be.phase() == LightBlockEntity.Phase.DARK)
+		// (not in the website's renders: a faint haze only widens the cut-out picture)
+		if (be.getLevel() == null || be.phase() == LightBlockEntity.Phase.DARK || com.comedymonkey.createaddons.client.dev.RenderExporter.running())
 			return;
 		long time = be.getLevel().getGameTime();
 		BlockPos end = be.spot() != null ? be.spot() : be.aim();

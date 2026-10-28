@@ -590,7 +590,8 @@
       "battery",
       "lava-generator",
       "electricity",
-      "lines-and-networks"
+      "lines-and-networks",
+      "electric-lights"
     ]
   },
   {
@@ -662,7 +663,918 @@
       "power-lines",
       "battery",
       "breaker",
-      "lines-and-networks"
+      "lines-and-networks",
+      "electric-lights"
+    ]
+  },
+  {
+    "id": "electric-lights",
+    "name": "Electric Lights",
+    "registry": [
+      "comedymonkeysaddons:cast_iron_lamp_post",
+      "comedymonkeysaddons:steel_lamp_post",
+      "comedymonkeysaddons:lantern_head",
+      "comedymonkeysaddons:cobra_head",
+      "comedymonkeysaddons:globe_head",
+      "comedymonkeysaddons:yard_light_head",
+      "comedymonkeysaddons:bulkhead_light",
+      "comedymonkeysaddons:wall_sconce",
+      "comedymonkeysaddons:gooseneck_lamp",
+      "comedymonkeysaddons:high_bay_lamp",
+      "comedymonkeysaddons:cage_lamp",
+      "comedymonkeysaddons:flush_ceiling_light",
+      "comedymonkeysaddons:pendant_lamp",
+      "comedymonkeysaddons:chandelier",
+      "comedymonkeysaddons:bollard_light",
+      "comedymonkeysaddons:floor_light",
+      "comedymonkeysaddons:light_strip",
+      "comedymonkeysaddons:edge_light",
+      "comedymonkeysaddons:festoon_lights",
+      "comedymonkeysaddons:floodlight",
+      "comedymonkeysaddons:warning_beacon",
+      "comedymonkeysaddons:indicator_lamp",
+      "comedymonkeysaddons:light_switch"
+    ],
+    "summary": "Create-style lights for every place you build: lamp posts, wall, ceiling and hanging lamps, strips, edges, festoons and a Floodlight, run on FE from a Power Line and coloured with a dye that isn't used up.",
+    "tags": [
+      "lighting",
+      "power",
+      "lines"
+    ],
+    "stage": "mid",
+    "requires": [
+      "power-lines",
+      "light-assembly"
+    ],
+    "teach": {
+      "what": "A family of electric lights, each shaped for one place: street heads on Lamp Posts, wall lights, industrial and homely ceiling lights, hanging lamps, strips and trim that run along a build, festoons between posts, a Floodlight that lights a far spot, a turning Warning Beacon and a tiny Indicator Lamp. Each one lights while a [[power-lines|Power Line]] touching it has power.",
+      "why": "Vanilla light has no colour, no dimming and no switch. These take any of 16 dyes, step through four brightnesses and switch a whole circuit at once, with a shape for each street, wall, ceiling and edge.",
+      "when": "Once you have a generator and Power Lines. The [[light-assembly]] needs only glass, a copper sheet and redstone, and the lights draw so little that one [[lava-generator]] runs a few hundred.",
+      "interacts": "They're ordinary FE devices on the Power Line network. A Light Switch or a [[breaker]] on the feed line switches them. Lamp Posts join the grid like [[line-post|Line Posts]] and take spans. The stonecutter, or Create's Mechanical Saw on a belt, cuts them from a Light Assembly.",
+      "mistakes": [
+        "Expecting a light to pass power on. Only Light Strips, Edge Lights and Festoons share power, and only along their own run.",
+        "Placing a light with no Power Line touching it. A line on another face of the block it's fixed to counts, so the cable can hide behind the wall.",
+        "Looking for colour recipes. There are none: right-click a placed light with a dye.",
+        "Trying to step a Floodlight's brightness. The Wrench aims it instead.",
+        "Putting a Floodlight, Chandelier, Warning Beacon or High-Bay Lamp in the stonecutter. They're crafted, and they don't swap."
+      ]
+    },
+    "specs": [
+      [
+        "Power",
+        "FE from a Power Line touching it"
+      ],
+      [
+        "Draw",
+        "1 to 32 FE a tick at full brightness"
+      ],
+      [
+        "Store",
+        "2 seconds of power"
+      ],
+      [
+        "Brightness",
+        "Full, Bright, Dim, Glow (100, 80, 50, 25%)"
+      ],
+      [
+        "Colours",
+        "16 dyes, or plain; the dye isn't used up"
+      ],
+      [
+        "Switched by",
+        "A Light Switch or a Breaker on its line"
+      ],
+      [
+        "Made from",
+        "A Light Assembly"
+      ]
+    ],
+    "variants": [
+      {
+        "id": "cast-iron-lamp-post",
+        "name": "Cast Iron Lamp Post",
+        "registry": [
+          "comedymonkeysaddons:cast_iron_lamp_post"
+        ],
+        "summary": "The old-town street lamp pole: dark iron with a fluted foot, and scroll brackets on its arms.",
+        "specs": [
+          [
+            "Recipe",
+            "3 iron ingots + coal or charcoal make 4"
+          ],
+          [
+            "Arms",
+            "Up to 4, in cast iron"
+          ]
+        ]
+      },
+      {
+        "id": "steel-lamp-post",
+        "name": "Steel Lamp Post",
+        "registry": [
+          "comedymonkeysaddons:steel_lamp_post"
+        ],
+        "summary": "The modern pole: a plain round steel tube, with plain arms.",
+        "specs": [
+          [
+            "Recipe",
+            "3 iron sheets + Andesite Alloy make 4"
+          ],
+          [
+            "Arms",
+            "Up to 4, in steel"
+          ]
+        ]
+      },
+      {
+        "id": "lantern-head",
+        "name": "Lantern Head",
+        "registry": [
+          "comedymonkeysaddons:lantern_head"
+        ],
+        "summary": "An old-town glass lantern, for squares and old streets.",
+        "specs": [
+          [
+            "Light",
+            "15"
+          ],
+          [
+            "Draw",
+            "8 FE a tick"
+          ],
+          [
+            "Fits",
+            "Top of a Lamp Post or any block, or on an arm"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "cobra-head",
+        "name": "Cobra Head",
+        "registry": [
+          "comedymonkeysaddons:cobra_head"
+        ],
+        "summary": "The modern road light, leaning out the way you place it.",
+        "specs": [
+          [
+            "Light",
+            "15"
+          ],
+          [
+            "Draw",
+            "8 FE a tick"
+          ],
+          [
+            "Fits",
+            "Top of a Lamp Post or any block, or on an arm"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "globe-head",
+        "name": "Globe Head",
+        "registry": [
+          "comedymonkeysaddons:globe_head"
+        ],
+        "summary": "A frosted ball, for parks and paths.",
+        "specs": [
+          [
+            "Light",
+            "15"
+          ],
+          [
+            "Draw",
+            "8 FE a tick"
+          ],
+          [
+            "Fits",
+            "Top of a Lamp Post or any block, or on an arm"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "yard-light-head",
+        "name": "Yard Light Head",
+        "registry": [
+          "comedymonkeysaddons:yard_light_head"
+        ],
+        "summary": "A boxy sodium head for depots and rail yards. It warms up from a dim amber over 4 seconds.",
+        "specs": [
+          [
+            "Light",
+            "15"
+          ],
+          [
+            "Draw",
+            "8 FE a tick"
+          ],
+          [
+            "Warm-up",
+            "4 seconds"
+          ],
+          [
+            "Fits",
+            "Top of a Lamp Post or any block, or on an arm"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "bulkhead-light",
+        "name": "Bulkhead Light",
+        "registry": [
+          "comedymonkeysaddons:bulkhead_light"
+        ],
+        "summary": "A caged oval wall light for tunnels and factories.",
+        "specs": [
+          [
+            "Light",
+            "14"
+          ],
+          [
+            "Draw",
+            "2 FE a tick"
+          ],
+          [
+            "Fits",
+            "The side of a block"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "wall-sconce",
+        "name": "Wall Sconce",
+        "registry": [
+          "comedymonkeysaddons:wall_sconce"
+        ],
+        "summary": "Brass with a glass shade, for homes and halls.",
+        "specs": [
+          [
+            "Light",
+            "14"
+          ],
+          [
+            "Draw",
+            "2 FE a tick"
+          ],
+          [
+            "Fits",
+            "The side of a block"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "gooseneck-lamp",
+        "name": "Gooseneck Lamp",
+        "registry": [
+          "comedymonkeysaddons:gooseneck_lamp"
+        ],
+        "summary": "A curved arm shining down, for shop fronts and doorways.",
+        "specs": [
+          [
+            "Light",
+            "14"
+          ],
+          [
+            "Draw",
+            "2 FE a tick"
+          ],
+          [
+            "Fits",
+            "The side of a block"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "high-bay-lamp",
+        "name": "High-Bay Lamp",
+        "registry": [
+          "comedymonkeysaddons:high_bay_lamp"
+        ],
+        "summary": "A big industrial dome on a short rod, for factories and warehouses. It warms up like a sodium lamp.",
+        "specs": [
+          [
+            "Light",
+            "15"
+          ],
+          [
+            "Draw",
+            "8 FE a tick"
+          ],
+          [
+            "Warm-up",
+            "4 seconds"
+          ],
+          [
+            "Fits",
+            "Under a block"
+          ],
+          [
+            "Made",
+            "Crafted: a Light Assembly and an iron sheet"
+          ]
+        ]
+      },
+      {
+        "id": "cage-lamp",
+        "name": "Cage Lamp",
+        "registry": [
+          "comedymonkeysaddons:cage_lamp"
+        ],
+        "summary": "An industrial ceiling lamp in a wire cage, for workshops.",
+        "specs": [
+          [
+            "Light",
+            "15"
+          ],
+          [
+            "Draw",
+            "3 FE a tick"
+          ],
+          [
+            "Fits",
+            "Under a block"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "flush-ceiling-light",
+        "name": "Flush Ceiling Light",
+        "registry": [
+          "comedymonkeysaddons:flush_ceiling_light"
+        ],
+        "summary": "A low, plain ceiling light for homes.",
+        "specs": [
+          [
+            "Light",
+            "15"
+          ],
+          [
+            "Draw",
+            "3 FE a tick"
+          ],
+          [
+            "Fits",
+            "Under a block"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "pendant-lamp",
+        "name": "Pendant Lamp",
+        "registry": [
+          "comedymonkeysaddons:pendant_lamp"
+        ],
+        "summary": "An enamel shade on a flex, lowered on cable for workshops and stairwells.",
+        "specs": [
+          [
+            "Light",
+            "15"
+          ],
+          [
+            "Draw",
+            "3 FE a tick"
+          ],
+          [
+            "Fits",
+            "Under a block; lowered up to 16 blocks"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "chandelier",
+        "name": "Chandelier",
+        "registry": [
+          "comedymonkeysaddons:chandelier"
+        ],
+        "summary": "Brass, with several arms, lowered on cable for halls.",
+        "specs": [
+          [
+            "Light",
+            "15"
+          ],
+          [
+            "Draw",
+            "6 FE a tick"
+          ],
+          [
+            "Fits",
+            "Under a block; lowered up to 16 blocks"
+          ],
+          [
+            "Made",
+            "Crafted: a Light Assembly and a brass sheet"
+          ]
+        ]
+      },
+      {
+        "id": "bollard-light",
+        "name": "Bollard Light",
+        "registry": [
+          "comedymonkeysaddons:bollard_light"
+        ],
+        "summary": "A knee-high post for paths, gardens and platform edges.",
+        "specs": [
+          [
+            "Light",
+            "13"
+          ],
+          [
+            "Draw",
+            "2 FE a tick"
+          ],
+          [
+            "Fits",
+            "On top of a block"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "floor-light",
+        "name": "Floor Light",
+        "registry": [
+          "comedymonkeysaddons:floor_light"
+        ],
+        "summary": "A full block set flush in the floor, and you can walk on it.",
+        "specs": [
+          [
+            "Light",
+            "12"
+          ],
+          [
+            "Draw",
+            "2 FE a tick"
+          ],
+          [
+            "Fits",
+            "A whole block"
+          ],
+          [
+            "Made",
+            "Stonecutter: 1 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "light-strip",
+        "name": "Light Strip",
+        "registry": [
+          "comedymonkeysaddons:light_strip"
+        ],
+        "summary": "A thin line of light on any face of a block. Strips that touch are one run, lit from one feed.",
+        "specs": [
+          [
+            "Light",
+            "15"
+          ],
+          [
+            "Draw",
+            "1 FE a tick per block"
+          ],
+          [
+            "Fits",
+            "Any face, several faces in one block"
+          ],
+          [
+            "Made",
+            "Stonecutter: 8 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "edge-light",
+        "name": "Edge Light",
+        "registry": [
+          "comedymonkeysaddons:edge_light"
+        ],
+        "summary": "Lit trim along the edge of a block's face. Trim that joins is one run, lit from one feed.",
+        "specs": [
+          [
+            "Light",
+            "15"
+          ],
+          [
+            "Draw",
+            "1 FE a tick per block"
+          ],
+          [
+            "Fits",
+            "Any edge, several edges in one block"
+          ],
+          [
+            "Made",
+            "Stonecutter: 8 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "festoon-lights",
+        "name": "Festoon Lights",
+        "registry": [
+          "comedymonkeysaddons:festoon_lights"
+        ],
+        "summary": "A string of bulbs hung between two wall faces or post sides, up to 16 blocks apart.",
+        "specs": [
+          [
+            "Light",
+            "10, every 4 blocks along the string"
+          ],
+          [
+            "Draw",
+            "1 FE a tick per 2 blocks of string"
+          ],
+          [
+            "Cost",
+            "1 per 4 blocks of string, rounded up, given back when it comes down"
+          ],
+          [
+            "Made",
+            "Stonecutter: 4 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "floodlight",
+        "name": "Floodlight",
+        "registry": [
+          "comedymonkeysaddons:floodlight"
+        ],
+        "summary": "Lights a spot far off: wrench it, then wrench the block to light, up to 32 blocks away.",
+        "specs": [
+          [
+            "Light",
+            "15, at its target"
+          ],
+          [
+            "Draw",
+            "32 FE a tick"
+          ],
+          [
+            "Reach",
+            "32 blocks, in clear sight"
+          ],
+          [
+            "Fits",
+            "Any face"
+          ],
+          [
+            "Made",
+            "Crafted: a Light Assembly and 2 iron sheets"
+          ]
+        ]
+      },
+      {
+        "id": "warning-beacon",
+        "name": "Warning Beacon",
+        "registry": [
+          "comedymonkeysaddons:warning_beacon"
+        ],
+        "summary": "A dome whose reflector turns while it's lit, for crossings and machines.",
+        "specs": [
+          [
+            "Light",
+            "10"
+          ],
+          [
+            "Draw",
+            "4 FE a tick"
+          ],
+          [
+            "Fits",
+            "Floor, wall or ceiling"
+          ],
+          [
+            "Made",
+            "Crafted: a Light Assembly and a Cogwheel"
+          ]
+        ]
+      },
+      {
+        "id": "indicator-lamp",
+        "name": "Indicator Lamp",
+        "registry": [
+          "comedymonkeysaddons:indicator_lamp"
+        ],
+        "summary": "A tiny panel light that shows whether a circuit has power.",
+        "specs": [
+          [
+            "Light",
+            "4"
+          ],
+          [
+            "Draw",
+            "1 FE a tick"
+          ],
+          [
+            "Fits",
+            "Any face"
+          ],
+          [
+            "Made",
+            "Stonecutter: 8 from a Light Assembly"
+          ]
+        ]
+      },
+      {
+        "id": "light-switch",
+        "name": "Light Switch",
+        "registry": [
+          "comedymonkeysaddons:light_switch"
+        ],
+        "summary": "A wall plate clipped onto a Power Line: flip it by hand and everything fed through it goes dark.",
+        "specs": [
+          [
+            "Fits",
+            "A straight Power Line, on a wall, floor or ceiling"
+          ],
+          [
+            "Control",
+            "By hand only, no redstone"
+          ],
+          [
+            "Recipe",
+            "Lever + copper sheet make 2"
+          ]
+        ]
+      }
+    ],
+    "uses": [
+      "Street lighting on Lamp Posts, switched at dusk by a Daylight Detector and a Breaker.",
+      "Bulkhead Lights and Cage Lamps along tunnels and workshops, High-Bay Lamps over a machine hall.",
+      "Light Strips along corridors and shelves; Edge Lights tracing a building's outline or the edges of steps.",
+      "Festoons over a market or a garden; a Floodlight lighting a farm or a yard from one corner.",
+      "An Indicator Lamp on a control board to show which circuits are live."
+    ],
+    "mechanics": [
+      "A light is lit while it has power and its circuit is switched on. It draws its kind's FE a tick, less as it dims.",
+      "It holds 2 seconds of power. Short of power, it flickers for about a second, then goes dark; when power comes back, it flickers on. Switched off, it just goes out.",
+      "Lights switched on together come on spread over up to a second, so a street lights in a ripple.",
+      "The High-Bay Lamp and the Yard Light Head warm up from a dim amber to full over 4 seconds. Every other light is instant.",
+      "A lit light stops mobs spawning like any light; a dark one doesn't.",
+      "Breaking a light, or picking it up with sneak + Wrench, drops it plain."
+    ],
+    "automation": [
+      "A [[breaker]] on the feed line switches lights by redstone. With a Daylight Detector beside it, a street comes on at dusk.",
+      "Create's Mechanical Saw runs stonecutting recipes, so a belt can turn Light Assemblies into strips or lamps.",
+      "Engineer's Goggles on a light show whether it's lit, short of power, switched off or without power, its draw, its brightness and colour, and a Floodlight's target."
+    ],
+    "sections": [
+      {
+        "id": "feeding",
+        "title": "Feeding lights",
+        "body": [
+          "Every light runs on FE from a [[power-lines|Power Line]] touching it: on the floor, the wall or the ceiling beside it. A line on any other face of the block a light is fixed to feeds it too, so the cable can hide behind the wall or above the ceiling. A line encased in that block counts.",
+          {
+            "list": [
+              "**Lamp Posts:** run a line to the foot of the pole and every lamp on it lights. Spans tie to the small insulator under the top, as on a [[line-post|Line Post]].",
+              "**Lamp heads** also stand on top of any block, fed by a Power Line touching them.",
+              "**Hanging lamps** are fed through the ceiling they hang from: a line on top of that block, or beside it.",
+              "**Festoons** are fed at either end, through the wall a hook is on or by the head of its post."
+            ]
+          },
+          {
+            "table": {
+              "head": [
+                "Light",
+                "FE a tick at full"
+              ],
+              "rows": [
+                [
+                  "Indicator Lamp",
+                  "1"
+                ],
+                [
+                  "Light Strip, Edge Light",
+                  "1 per block"
+                ],
+                [
+                  "Festoon Lights",
+                  "1 per 2 blocks of string"
+                ],
+                [
+                  "Wall lights, Bollard Light, Floor Light",
+                  "2"
+                ],
+                [
+                  "Cage Lamp, Flush Ceiling Light, Pendant Lamp",
+                  "3"
+                ],
+                [
+                  "Warning Beacon",
+                  "4"
+                ],
+                [
+                  "Chandelier",
+                  "6"
+                ],
+                [
+                  "High-Bay Lamp, each street head",
+                  "8"
+                ],
+                [
+                  "Floodlight",
+                  "32"
+                ]
+              ]
+            }
+          },
+          {
+            "tip": "The draw is tiny: one [[lava-generator]] makes 1,024 FE a tick, enough for a few hundred lights."
+          }
+        ]
+      },
+      {
+        "id": "runs",
+        "title": "Runs",
+        "body": [
+          "Light Strips, Edge Lights and Festoons are **runs**. Pieces that join are one run, and a Power Line touching any piece lights all of it.",
+          {
+            "list": [
+              "**Light Strip:** lay it on any face of a block, floors, walls or ceilings, several faces in one block. Strips that touch join, round corners too.",
+              "**Edge Light:** click near an edge of a block's face to lay trim along it; click near another edge to add more. Trim along the same edge of blocks in a row joins up, and mitres where two edges meet.",
+              "**Festoon Lights:** click one wall face or post side, then the other, up to 16 blocks apart. It takes one Festoon Lights for every 4 blocks of string, given back when shears take it down. Its light falls every 4 blocks along the string."
+            ]
+          },
+          {
+            "warning": "A run powers only itself. It never passes power to another light, a machine or another network, so it can't be used as cable."
+          }
+        ]
+      },
+      {
+        "id": "dye-and-brightness",
+        "title": "Dye and brightness",
+        "body": [
+          "Right-click a light with a dye to colour its glow. **The dye isn't used up**, and there are no colour recipes, so the recipe book shows each light once. A water bucket washes a light plain, and the bucket stays full. Breaking a light takes the colour off.",
+          "On a run, a dye colours the whole run; sneak to colour one block. A run can hold several colours and stay one run. Dye a Festoon's hook to colour the whole string.",
+          "Right-click a light with the Wrench to step its brightness: **Full, Bright, Dim, Glow**, about 100, 80, 50 and 25% of its light. It draws less as it dims. On a run the Wrench steps the whole run (sneak for one block). The Floodlight has no steps: the Wrench aims it.",
+          {
+            "heading": "Coloured light"
+          },
+          "Undyed, a light glows a warm incandescent tone. With the **Colorful Lighting** mod installed, a dyed light also casts light of its colour on the world. Without it, and without Iris, **Veil** (it comes with Create Aeronautics) does it instead; the client config can turn that off. Otherwise the light cast is white and only the glow takes the colour.",
+          {
+            "fact": "Black can't cast light, so a black lens casts a deep ultraviolet."
+          }
+        ]
+      },
+      {
+        "id": "switching",
+        "title": "Switching",
+        "body": [
+          "Lights have no redstone input of their own: you switch the circuit that feeds them.",
+          {
+            "list": [
+              "**Light Switch:** clip it onto a straight Power Line, on a wall, floor or ceiling, and right-click it. Off, everything fed through it goes dark at once. Two switches in a row both have to be on. It never joins brass to copper, and redstone doesn't work it.",
+              "**[[breaker|Breaker]]:** switches by its lever or by redstone. Put one in a street's feed line with a Daylight Detector beside it, and the street comes on at dusk."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "special",
+        "title": "Posts, hanging lamps and the Floodlight",
+        "body": [
+          {
+            "heading": "Lamp Posts"
+          },
+          "Stack Lamp Posts into a pole of any height, in Cast Iron or Steel. Put a lamp head on top, and click a side of the top post with a head to hang it on an arm, up to four. Arms take the post's finish. Sneak + Wrench takes a head or arm off.",
+          {
+            "heading": "Hanging lamps"
+          },
+          "Hang a Pendant Lamp or Chandelier under a ceiling, then click it with a Copper Power Line to lower it a block on cable, as far as 16. Take away the lamp, any of its cable or the ceiling and it all comes down, the cable giving its Power Lines back.",
+          {
+            "heading": "Floodlight"
+          },
+          "Wrench the Floodlight, then wrench the block to light, up to 32 blocks away in clear sight. It swings round to face it and lights the air in front of that face, with a faint beam. A block put in the beam takes the light instead, until it's cleared. Re-aim it any time.",
+          {
+            "heading": "Warning Beacon"
+          },
+          "Its reflector turns inside the dome while it's lit, with a soft whirr. A dye colours the dome and its light."
+        ]
+      },
+      {
+        "id": "crafting",
+        "title": "Crafting",
+        "body": [
+          "Craft a [[light-assembly]] (glass, a copper sheet and redstone make 2), then put it in a stonecutter and pick your light. A light goes back in the stonecutter to become another of its own group, one for one.",
+          {
+            "table": {
+              "head": [
+                "Group",
+                "From one assembly",
+                "Lights"
+              ],
+              "rows": [
+                [
+                  "Full",
+                  "1",
+                  "Bulkhead Light, Wall Sconce, Gooseneck Lamp, Cage Lamp, Flush Ceiling Light, Pendant Lamp, Bollard Light, Floor Light, Lantern Head, Cobra Head, Globe Head, Yard Light Head"
+                ],
+                [
+                  "Small",
+                  "8",
+                  "Light Strip, Edge Light, Indicator Lamp"
+                ],
+                [
+                  "Festoon",
+                  "4",
+                  "Festoon Lights (16 blocks of string); they don't swap"
+                ]
+              ]
+            }
+          },
+          "The four bigger lights are crafted from an assembly and a part, and don't swap:",
+          {
+            "table": {
+              "head": [
+                "Light",
+                "Light Assembly and"
+              ],
+              "rows": [
+                [
+                  "High-Bay Lamp",
+                  "an iron sheet"
+                ],
+                [
+                  "Floodlight",
+                  "2 iron sheets"
+                ],
+                [
+                  "Chandelier",
+                  "a brass sheet"
+                ],
+                [
+                  "Warning Beacon",
+                  "a Cogwheel"
+                ]
+              ]
+            }
+          },
+          "Lamp Posts and the Light Switch have their own recipes: 3 iron ingots and coal or charcoal make 4 Cast Iron Lamp Posts; 3 iron sheets and Andesite Alloy make 4 Steel Lamp Posts; a Lever and a copper sheet make 2 Light Switches."
+        ]
+      }
+    ],
+    "tips": [
+      "Change your mind about a style later: put the light back in the stonecutter and pick another of its group.",
+      "Hide the feed: lay the Power Line on the far side of the wall or ceiling a light is fixed to, or encase it in that block.",
+      "An Indicator Lamp on a machine room's circuit shows from the control board whether it's live."
+    ],
+    "related": [
+      "light-assembly",
+      "power-lines",
+      "line-post",
+      "breaker",
+      "lava-generator",
+      "lines-and-networks",
+      "electricity"
+    ],
+    "gallery": [
+      {
+        "src": "renders/electric-lights--colours.png",
+        "caption": "One run of Light Strip, each block dyed its own colour"
+      }
     ]
   },
   {

@@ -23,7 +23,7 @@
       "title": "The guide",
       "description": "The mod from your first Upgrade Template to a caged Wither, in order. Each chapter ends with what to build next." },
     { "id": "blocks", "label": "Blocks", "single": "Block", "icon": "cube", "file": "blocks.json",
-      "description": "Storage, lines, posts and instruments: the blocks you build with, rather than the ones that do the work." },
+      "description": "Storage, lines, posts, lights and instruments: the blocks you build with, rather than the ones that do the work." },
     { "id": "machines", "label": "Machines", "single": "Machine", "icon": "cog", "file": "machines.json",
       "description": "Everything that turns, burns, grows or makes. Each one taught from the first block to full automation." },
     { "id": "items", "label": "Items", "single": "Item", "icon": "gem", "file": "items.json",
@@ -44,6 +44,7 @@
     "mechanical_crafting": { "label": "Mechanical Crafting", "machine": "create:mechanical_crafter" },
     "sequenced_assembly": { "label": "Sequenced Assembly", "machine": "create:deployer" },
     "smithing_transform": { "label": "Smithing", "machine": "minecraft:smithing_table" },
+    "stonecutting": { "label": "Stonecutting", "machine": "minecraft:stonecutter" },
     "pressure_crucible": { "label": "Pressure Crucible", "machine": "comedymonkeysaddons:pressure_crucible", "timeAt": "16 RPM" },
     "mixing": { "label": "Mixing", "machine": "create:mechanical_mixer" },
     "crushing": { "label": "Crushing", "machine": "create:crushing_wheel" },
@@ -62,7 +63,7 @@
       "accent": "& machinery",
       "text": "Stone from nothing, herds in a single block, lava turned into grid power, and a clockwork shopkeeper who sells your goods to villagers. Every machine here is taught from the first block to full automation."
     },
-    "latest": ["ruin-sleeper", "clockwork-ruins", "spring-engine", "helper-bot", "fish-tank", "monster-cage", "netherite-monster-cage", "battery", "fluid-lines", "power-lines"],
+    "latest": ["electric-lights", "light-assembly", "ruin-sleeper", "clockwork-ruins", "spring-engine", "helper-bot", "fish-tank", "monster-cage", "netherite-monster-cage", "battery", "fluid-lines", "power-lines"],
     "featuredMachines": ["pressure-crucible", "geothermal-turbine", "magma-engine", "auto-harvester", "animal-pen", "cobblestone-generator", "electric-motor", "cuckoo-clock"],
     "featuredBlocks": ["upgraded-chest", "fluid-lines", "power-lines", "flight-instruments"],
     "featuredMobs": ["trade-bot", "helper-bot", "contained-wither", "armed-drowned", "blue-axolotl"],
@@ -75,6 +76,7 @@
       ]
     },
     "notes": [
+      { "date": "2026-10-28", "title": "Electric Lights", "body": "Lamp posts, wall, ceiling and hanging lamps, strips, edge trim, festoons and a Floodlight, all run off the Power Lines. Cut them from a **Light Assembly** in a stonecutter, colour them with a dye that isn't used up, and switch whole circuits with a **Light Switch**." },
       { "date": "2026-10-28", "title": "Something in the ruins", "body": "Rings of broken walls, in the Overworld and on the End's outer islands. Something kneels at the middle of each. It is not a statue." },
       { "date": "2026-10-27", "title": "Fish Tanks", "body": "Fish, squid and axolotls now breed underwater in one block on **Fish Food**. Cages and tanks got their Ponder scenes, Display Links, Dispensers and advancements." },
       { "date": "2026-10-27", "title": "Monster Cages", "body": "Five cages, from a zombie horde to three Withers in a containment field, with Iron Jars, **Monster Chow** and the **Monstrous** enchantment." },

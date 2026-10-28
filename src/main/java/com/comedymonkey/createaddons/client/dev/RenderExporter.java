@@ -103,6 +103,11 @@ public final class RenderExporter {
 	private static int shot, shotStep;
 	private static final List<String> report = new ArrayList<>();
 
+	/** This game was started to make the website's renders (effects that would only blur a cut-out picture leave themselves out). */
+	public static boolean running() {
+		return ROOT != null;
+	}
+
 	/** One scene: {@code settle} is how many ticks it runs after it's built, before it's drawn. */
 	private record Shot(String id, BlockPos origin, List<String> setup, BlockPos min, BlockPos max, float yaw, float pitch, int settle,
 		int pixelsPerBlock, boolean silhouette) {}

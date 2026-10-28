@@ -481,6 +481,47 @@
   ]
  },
  {
+  "id": "comedymonkeysaddons:cast_iron_lamp_post",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "minecraft:iron_ingot",
+     "tag": "c:ingots/iron",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "minecraft:iron_ingot",
+     "tag": "c:ingots/iron",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "minecraft:iron_ingot",
+     "tag": "c:ingots/iron",
+     "count": 1
+    },
+    {
+     "item": "minecraft:coal",
+     "tag": "minecraft:coals",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:cast_iron_lamp_post",
+    "count": 4
+   }
+  ]
+ },
+ {
   "id": "comedymonkeysaddons:compact_gyroscope",
   "type": "crafting_shapeless",
   "machine": "minecraft",
@@ -924,29 +965,6 @@
     "item": "comedymonkeysaddons:copper_power_line",
     "count": 8,
     "dyed": true
-   }
-  ],
-  "note": "Any of the 16 dyes: it takes that colour."
- },
- {
-  "id": "comedymonkeysaddons:dyed/helper_bot",
-  "type": "crafting_shapeless",
-  "machine": "minecraft",
-  "inputs": [
-   {
-    "item": "comedymonkeysaddons:helper_bot",
-    "count": 1
-   },
-   {
-    "item": "minecraft:red_dye",
-    "tag": "c:dyes",
-    "count": 1
-   }
-  ],
-  "outputs": [
-   {
-    "item": "comedymonkeysaddons:helper_bot",
-    "count": 1
    }
   ],
   "note": "Any of the 16 dyes: it takes that colour."
@@ -1721,6 +1739,447 @@
   "outputs": [
    {
     "item": "comedymonkeysaddons:lava_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light_assembly",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "minecraft:glass",
+    "count": 1
+   },
+   {
+    "item": "create:copper_sheet",
+    "tag": "c:plates/copper",
+    "count": 1
+   },
+   {
+    "item": "minecraft:redstone",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 2
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light_switch",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "minecraft:lever",
+    "count": 1
+   },
+   {
+    "item": "create:copper_sheet",
+    "tag": "c:plates/copper",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:light_switch",
+    "count": 2
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/bollard_light",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:bollard_light",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/bulkhead_light",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:bulkhead_light",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/cage_lamp",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:cage_lamp",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/cast_iron_lamp_post_from_steel",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:steel_lamp_post",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:cast_iron_lamp_post",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/chandelier",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   },
+   {
+    "item": "create:brass_sheet",
+    "tag": "c:plates/brass",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:chandelier",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/cobra_head",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:cobra_head",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/edge_light",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:edge_light",
+    "count": 8
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/festoon_lights",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:festoon_lights",
+    "count": 4
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/floodlight",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   },
+   {
+    "item": "create:iron_sheet",
+    "tag": "c:plates/iron",
+    "count": 2
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:floodlight",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/floor_light",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:floor_light",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/flush_ceiling_light",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:flush_ceiling_light",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/globe_head",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:globe_head",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/gooseneck_lamp",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:gooseneck_lamp",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/high_bay_lamp",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   },
+   {
+    "item": "create:iron_sheet",
+    "tag": "c:plates/iron",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:high_bay_lamp",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/indicator_lamp",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:indicator_lamp",
+    "count": 8
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/lantern_head",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:lantern_head",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/light_strip",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:light_strip",
+    "count": 8
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/pendant_lamp",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:pendant_lamp",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/steel_lamp_post_from_cast_iron",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:cast_iron_lamp_post",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:steel_lamp_post",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/wall_sconce",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wall_sconce",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/warning_beacon",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   },
+   {
+    "item": "create:cogwheel",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:warning_beacon",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:light/yard_light_head",
+  "type": "stonecutting",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:light_assembly",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:yard_light_head",
     "count": 1
    }
   ]
@@ -2858,6 +3317,61 @@
   "outputs": [
    {
     "item": "comedymonkeysaddons:trade_bot",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/winding_key",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "minecraft:netherite_ingot",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:winding_key",
     "count": 1
    }
   ]
@@ -4136,6 +4650,98 @@
   ]
  },
  {
+  "id": "comedymonkeysaddons:spring_engine",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:shaft",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:mainspring",
+     "count": 1
+    },
+    {
+     "item": "create:shaft",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:spring_engine",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:steel_lamp_post",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:iron_sheet",
+     "tag": "c:plates/iron",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:iron_sheet",
+     "tag": "c:plates/iron",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:iron_sheet",
+     "tag": "c:plates/iron",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:steel_lamp_post",
+    "count": 4
+   }
+  ]
+ },
+ {
   "id": "comedymonkeysaddons:stone_infuser",
   "type": "crafting_shaped",
   "machine": "minecraft",
@@ -4888,110 +5494,26 @@
   "time": 250
  },
  {
-  "id": "comedymonkeysaddons:mechanical_crafting/winding_key",
-  "type": "mechanical_crafting",
-  "machine": "create",
-  "grid": [
-   [
-    {
-     "item": "create:brass_sheet",
-     "count": 1
-    },
-    {
-     "item": "create:precision_mechanism",
-     "count": 1
-    },
-    {
-     "item": "create:brass_sheet",
-     "count": 1
-    }
-   ],
-   [
-    {
-     "item": "create:precision_mechanism",
-     "count": 1
-    },
-    {
-     "item": "minecraft:netherite_ingot",
-     "count": 1
-    },
-    {
-     "item": "create:precision_mechanism",
-     "count": 1
-    }
-   ],
-   [
-    {
-     "item": "create:brass_sheet",
-     "count": 1
-    },
-    {
-     "item": "create:precision_mechanism",
-     "count": 1
-    },
-    {
-     "item": "create:brass_sheet",
-     "count": 1
-    }
-   ]
-  ],
-  "outputs": [
-   {
-    "item": "comedymonkeysaddons:winding_key",
-    "count": 1
-   }
-  ]
- },
- {
-  "id": "comedymonkeysaddons:spring_engine",
-  "type": "crafting_shaped",
+  "id": "comedymonkeysaddons:dyed/helper_bot",
+  "type": "crafting_shapeless",
   "machine": "minecraft",
-  "grid": [
-   [
-    {
-     "item": "create:brass_sheet",
-     "count": 1
-    },
-    {
-     "item": "create:brass_casing",
-     "count": 1
-    },
-    {
-     "item": "create:brass_sheet",
-     "count": 1
-    }
-   ],
-   [
-    {
-     "item": "create:shaft",
-     "count": 1
-    },
-    {
-     "item": "comedymonkeysaddons:mainspring",
-     "count": 1
-    },
-    {
-     "item": "create:shaft",
-     "count": 1
-    }
-   ],
-   [
-    {
-     "item": "create:brass_sheet",
-     "count": 1
-    },
-    null,
-    {
-     "item": "create:brass_sheet",
-     "count": 1
-    }
-   ]
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:helper_bot",
+    "count": 1
+   },
+   {
+    "item": "minecraft:red_dye",
+    "tag": "c:dyes",
+    "count": 1
+   }
   ],
   "outputs": [
    {
-    "item": "comedymonkeysaddons:spring_engine",
+    "item": "comedymonkeysaddons:helper_bot",
     "count": 1
    }
-  ]
+  ],
+  "note": "Any of the 16 dyes: it takes that colour."
  }
 ]

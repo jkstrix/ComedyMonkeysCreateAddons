@@ -17,6 +17,7 @@ const TAG_ITEMS = {
   'c:gems/diamond': 'minecraft:diamond',
   'c:glass_blocks': 'minecraft:glass',
   'c:ingots/copper': 'minecraft:copper_ingot',
+  'c:ingots/iron': 'minecraft:iron_ingot',
   'c:ingots/netherite': 'minecraft:netherite_ingot',
   'c:nuggets/copper': 'create:copper_nugget',
   'c:nuggets/gold': 'minecraft:gold_nugget',
@@ -28,6 +29,7 @@ const TAG_ITEMS = {
   'c:plates/iron': 'create:iron_sheet',
   'c:slime_balls': 'minecraft:slime_ball',
   'c:dyes': 'minecraft:red_dye',
+  'minecraft:coals': 'minecraft:coal',
   'minecraft:logs': 'minecraft:oak_log',
   'minecraft:wooden_fences': 'minecraft:oak_fence',
 };
@@ -91,6 +93,9 @@ function conditions(j) {
   return { ...(needs.size ? { requiresMods: [...needs] } : {}), ...(unless.size ? { unlessMods: [...unless] } : {}) };
 }
 
+/** A stonecutting recipe that takes any of a group (Electric Lights swapping style): left off the site. */
+const SWAP = Symbol('swap');
+
 function convert(j) {
   const t = j.type;
   const base = { type: t.split(':')[1], machine: t.split(':')[0] };
@@ -100,6 +105,10 @@ function convert(j) {
       return { ...base, grid: grid(j.pattern, j.key), outputs: [result(j.result)] };
     case 'minecraft:crafting_shapeless':
       return { ...base, inputs: merge(j.ingredients.map(i => ingredient(i))), outputs: [result(j.result)] };
+    case 'minecraft:stonecutting':
+      // a light swapped for another of its group takes any of them: the site shows the cut from the part, not every swap
+      if (Array.isArray(j.ingredient) && j.ingredient.length > 1) return SWAP;
+      return { ...base, inputs: [ingredient(j.ingredient)], outputs: [result(j.result)] };
     case 'minecraft:smithing_transform':
       return { ...base, inputs: [ingredient(j.template), ingredient(j.base), ingredient(j.addition)], outputs: [result(j.result)] };
     case 'create:sequenced_assembly':
@@ -137,11 +146,13 @@ function convert(j) {
 
 const recipes = [];
 const skipped = [];
+let swaps = 0;
 for (const file of files) {
   const j = JSON.parse(readFileSync(file, 'utf8'));
   const rel = relative(DATA, file).split(sep);           // [namespace, 'recipe', ...path]
   const id = `${rel[0]}:${rel.slice(2).join('/').replace(/\.json$/, '')}`;
   const r = convert(j);
+  if (r === SWAP) { swaps++; continue; }
   if (!r) { skipped.push(`${id} (${j.type})`); continue; }
   recipes.push({ id, ...r, ...conditions(j) });
 }
@@ -198,4 +209,5 @@ for (const id of items) {
 writeFileSync(NAMES, JSON.stringify(Object.fromEntries(Object.entries(names).sort()), null, 1) + '\n');
 
 console.log(`${final.length} recipes (${recipes.length - final.length} dye recipes folded), ${items.size} items, ${added} names guessed from ids`);
+if (swaps) console.log(`${swaps} stonecutter swaps between lights of one group left out`);
 if (skipped.length) console.log('Skipped (unknown type):\n  ' + skipped.join('\n  '));
