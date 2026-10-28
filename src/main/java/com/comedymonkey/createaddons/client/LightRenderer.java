@@ -56,9 +56,25 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 		return GLOW.get(kind);
 	}
 
+	/** A head's lens on an arm of a finish (lit or the unlit glass). */
+	private static ModelResourceLocation armLens(LightKind kind, com.comedymonkey.createaddons.content.light.ArmFinish finish, boolean lit) {
+		return model(kind.id() + "_arm_" + finish.getSerializedName() + (lit ? "_glow" : "_glass"));
+	}
+
+	private static boolean onArms(LightKind kind) {
+		return kind == LightKind.LANTERN_HEAD || kind == LightKind.GLOBE_HEAD || kind == LightKind.COBRA_HEAD || kind == LightKind.YARD_HEAD;
+	}
+
 	public static void registerModels(ModelEvent.RegisterAdditional event) {
 		GLOW.values().forEach(event::register);
 		GLASS.values().forEach(event::register);
+		for (LightKind k : LightKind.values())
+			if (onArms(k))
+				for (var f : new com.comedymonkey.createaddons.content.light.ArmFinish[] {com.comedymonkey.createaddons.content.light.ArmFinish.IRON,
+					com.comedymonkey.createaddons.content.light.ArmFinish.STEEL}) {
+					event.register(armLens(k, f, true));
+					event.register(armLens(k, f, false));
+				}
 	}
 
 	@Override
@@ -91,11 +107,23 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 		long time = be.getLevel().getGameTime();
 		boolean lit = lit(be, time, pt);
 		ms.pushPose();
-		turn(ms, kind, state.hasProperty(LightBlock.FACING) ? state.getValue(LightBlock.FACING) : Direction.UP);
-		if (lit)
-			sink.part(GLOW.get(kind), ms, LightTexture.FULL_BRIGHT, RenderType.cutout(), tint(be, time, pt));
-		else
-			sink.part(GLASS.get(kind), ms, light);
+		Direction facing = state.hasProperty(LightBlock.FACING) ? state.getValue(LightBlock.FACING) : Direction.UP;
+		var arm = state.hasProperty(com.comedymonkey.createaddons.content.light.LampHeadBlock.ARM)
+			? state.getValue(com.comedymonkey.createaddons.content.light.LampHeadBlock.ARM) : com.comedymonkey.createaddons.content.light.ArmFinish.NONE;
+		if (arm != com.comedymonkey.createaddons.content.light.ArmFinish.NONE) {
+			// on a Lamp Post's arm: built facing north, away from the post, turned as a leaning head is
+			turnAway(ms, facing);
+			if (lit)
+				sink.part(armLens(kind, arm, true), ms, LightTexture.FULL_BRIGHT, RenderType.cutout(), tint(be, time, pt));
+			else
+				sink.part(armLens(kind, arm, false), ms, light);
+		} else {
+			turn(ms, kind, facing);
+			if (lit)
+				sink.part(GLOW.get(kind), ms, LightTexture.FULL_BRIGHT, RenderType.cutout(), tint(be, time, pt));
+			else
+				sink.part(GLASS.get(kind), ms, light);
+		}
 		ms.popPose();
 	}
 
@@ -170,6 +198,21 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 	 * Turns a part to face its way, as the blockstate turns the block model (design/models/electric-lights.export.js):
 	 * wall and face lights are built facing south, leaning heads pointing north, the rest don't turn.
 	 */
+	/** Turns a part built facing north to face {@code facing} (a head on an arm, facing away from its post). */
+	static void turnAway(PoseStack ms, Direction facing) {
+		int y = switch (facing) {
+			case EAST -> 90;
+			case SOUTH -> 180;
+			case WEST -> 270;
+			default -> 0;
+		};
+		if (y == 0)
+			return;
+		ms.translate(0.5, 0.5, 0.5);
+		ms.mulPose(Axis.YP.rotationDegrees(-y));
+		ms.translate(-0.5, -0.5, -0.5);
+	}
+
 	public static void turn(PoseStack ms, LightKind kind, Direction facing) {
 		int x = 0, y = 0;
 		switch (kind.mount()) {

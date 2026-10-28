@@ -103,6 +103,8 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.BREAKER.get());
 				output.accept(ModItems.LIGHT_SWITCH.get());
 				output.accept(ModItems.LIGHT_ASSEMBLY.get());
+				output.accept(ModItems.CAST_IRON_LAMP_POST.get());
+				output.accept(ModItems.STEEL_LAMP_POST.get());
 				ModItems.LIGHTS.values().forEach(light -> output.accept(light.get()));
 				output.accept(ModItems.LIGHT_STRIP.get());
 				output.accept(ModItems.EDGE_LIGHT.get());

@@ -191,6 +191,9 @@ public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWa
 	public static @Nullable BlockPos support(BlockState state, BlockPos pos) {
 		if (!(state.getBlock() instanceof LightBlock light))
 			return null;
+		BlockPos post = LampHeadBlock.post(state, pos);
+		if (post != null)
+			return post;
 		return switch (light.kind.mount()) {
 			case WALL, ANY -> pos.relative(state.getValue(FACING).getOpposite());
 			case CEILING -> pos.above();

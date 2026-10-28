@@ -61,7 +61,12 @@ public final class LightMounts {
 		for (Direction d : Direction.values()) {
 			BlockPos support = pos.relative(d);
 			if (fixedTo(level, state, pos, support))
+			{
 				PowerLineBlock.refreshAround(level, support);
+				if (level instanceof net.minecraft.server.level.ServerLevel server
+					&& level.getBlockState(support).getBlock() instanceof com.comedymonkey.createaddons.content.line.LinePostBlock)
+					com.comedymonkey.createaddons.content.line.PowerLines.of(server).changed(support);
+			}
 		}
 	}
 }

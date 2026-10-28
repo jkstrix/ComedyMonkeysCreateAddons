@@ -440,6 +440,12 @@ public final class PowerLines {
 		if (level.getBlockEntity(head) instanceof LinePostBlockEntity post)
 			for (Span s : post.spans())
 				link(p, new Node(head.offset(s.offset()), Node.POLE), s.tier(), s.dye(), null);
+		// lamps fixed to the head (a lamp head on top, heads on a Lamp Post's arms): fed by the pole
+		for (Direction d : Direction.values()) {
+			BlockPos lamp = head.relative(d);
+			if (level.isLoaded(lamp) && com.comedymonkey.createaddons.content.light.LightMounts.fixedTo(level, level.getBlockState(lamp), lamp, head))
+				p.ends.add(new End(lamp, d.getOpposite()));
+		}
 		BlockPos foot = LinePostBlock.foot(level, head);
 		if (foot == null)
 			return p;

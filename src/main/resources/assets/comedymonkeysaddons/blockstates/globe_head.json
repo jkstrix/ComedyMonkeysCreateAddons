@@ -1,16 +1,184 @@
 {
   "multipart": [
     {
+      "when": {
+        "arm": "none"
+      },
       "apply": {
         "model": "comedymonkeysaddons:block/light/globe_head"
       }
     },
     {
       "when": {
+        "arm": "none",
         "light": "0"
       },
       "apply": {
         "model": "comedymonkeysaddons:block/light/globe_head_glass"
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_iron"
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "north",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_iron_glass"
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_iron",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "east",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_iron_glass",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_iron",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "south",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_iron_glass",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_iron",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "west",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_iron_glass",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_steel"
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "north",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_steel_glass"
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_steel",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "east",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_steel_glass",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_steel",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "south",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_steel_glass",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_steel",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "west",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/globe_head_arm_steel_glass",
+        "y": 270
       }
     }
   ]

@@ -117,7 +117,8 @@ public final class ModBlockEntities {
 	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LinePostBlockEntity>> LINE_POST =
 		BLOCK_ENTITY_TYPES.register("line_post",
-			() -> BlockEntityType.Builder.of(LinePostBlockEntity::new, ModBlocks.LINE_POST.get()).build(null));
+			() -> BlockEntityType.Builder.of(LinePostBlockEntity::new, ModBlocks.LINE_POST.get(), ModBlocks.CAST_IRON_LAMP_POST.get(),
+				ModBlocks.STEEL_LAMP_POST.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MagmaEngineBlockEntity>> MAGMA_ENGINE =

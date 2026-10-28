@@ -526,6 +526,80 @@ public final class LightGameTests {
 		});
 	}
 
+	// ---------- Lamp Posts ----------
+
+	/** A Lamp Post pole of {@code height} at {@code foot}, upright; returns its head. */
+	private static BlockPos lampPost(GameTestHelper helper, BlockPos foot, int height) {
+		// (on stone: the test course's floor isn't sturdy enough to stand on)
+		helper.setBlock(foot.below(), net.minecraft.world.level.block.Blocks.STONE);
+		for (int i = 0; i < height; i++)
+			helper.setBlock(foot.above(i), ModBlocks.CAST_IRON_LAMP_POST.get());
+		return foot.above(height - 1);
+	}
+
+	/**
+	 * A three-high Cast Iron Lamp Post fed by a wire at its foot lights a Lantern Head on top and a Cobra Head on an arm on
+	 * its north side.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void lampPostFeedsItsHeads(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 4), foot = gen.east(3);
+		LineGameTests.generator(helper, gen);
+		for (int i = 1; i <= 2; i++)
+			LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		BlockPos head = lampPost(helper, foot, 3);
+		helper.runAtTickTime(3, () -> {
+			helper.setBlock(head.above(), ModBlocks.LIGHTS.get(LightKind.LANTERN_HEAD).get());
+			helper.setBlock(head.north(), ModBlocks.LIGHTS.get(LightKind.COBRA_HEAD).get().defaultBlockState()
+				.setValue(com.comedymonkey.createaddons.content.light.LampHeadBlock.ARM, com.comedymonkey.createaddons.content.light.ArmFinish.IRON)
+				.setValue(LightBlock.FACING, Direction.NORTH));
+			LineGameTests.relink(helper, gen.east(1), gen.east(2));
+		});
+		helper.runAtTickTime(6, () -> {
+			if (!helper.getBlockState(head).getValue(com.comedymonkey.createaddons.content.line.LinePostBlock.BRANCHES.get(Direction.NORTH)))
+				helper.fail("the post didn't grow an arm for the head on its north side");
+		});
+		helper.runAtTickTime(150, () -> {
+			if (be(helper, head.above()).phase() != LightBlockEntity.Phase.LIT)
+				helper.fail("the Lantern Head on top of the pole isn't lit");
+			if (be(helper, head.north()).phase() != LightBlockEntity.Phase.LIT)
+				helper.fail("the Cobra Head on the arm isn't lit");
+			helper.succeed();
+		});
+	}
+
+	/** Taking a head off its arm takes the arm off the post with it. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void armGoesWithItsHead(GameTestHelper helper) {
+		BlockPos head = lampPost(helper, new BlockPos(2, 1, 2), 2);
+		helper.runAtTickTime(2, () -> helper.setBlock(head.east(), ModBlocks.LIGHTS.get(LightKind.GLOBE_HEAD).get().defaultBlockState()
+			.setValue(com.comedymonkey.createaddons.content.light.LampHeadBlock.ARM, com.comedymonkey.createaddons.content.light.ArmFinish.IRON)
+			.setValue(LightBlock.FACING, Direction.EAST)));
+		helper.runAtTickTime(4, () -> helper.setBlock(head.east(), net.minecraft.world.level.block.Blocks.AIR));
+		helper.runAtTickTime(6, () -> {
+			if (helper.getBlockState(head).getValue(com.comedymonkey.createaddons.content.line.LinePostBlock.BRANCHES.get(Direction.EAST)))
+				helper.fail("the arm stayed after its head was taken off");
+			helper.succeed();
+		});
+	}
+
+	/** A Lamp Post stacked on a Line Post doesn't join its pole: each is a pole of its own kind. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void lampPostDoesntJoinALinePost(GameTestHelper helper) {
+		BlockPos line = new BlockPos(2, 1, 2);
+		helper.setBlock(line.below(), net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(line, ModBlocks.LINE_POST.get());
+		helper.setBlock(line.above(), ModBlocks.CAST_IRON_LAMP_POST.get());
+		helper.runAtTickTime(4, () -> {
+			var role = com.comedymonkey.createaddons.content.line.LinePostBlock.ROLE;
+			if (helper.getBlockState(line).getValue(role) != com.comedymonkey.createaddons.content.line.PostRole.SINGLE)
+				helper.fail("the Line Post took the Lamp Post above it as its pole (" + helper.getBlockState(line).getValue(role) + ")");
+			if (helper.getBlockState(line.above()).getValue(role) != com.comedymonkey.createaddons.content.line.PostRole.SINGLE)
+				helper.fail("the Lamp Post took the Line Post below it as its pole");
+			helper.succeed();
+		});
+	}
+
 	/** Starved (power stops coming, its circuit still has a source), it stays lit for its store, flickers, then goes dark. */
 	@GameTest(template = COURSE, timeoutTicks = 140)
 	public static void starvedLightFlickersOut(GameTestHelper helper) {

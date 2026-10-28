@@ -1,0 +1,619 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/steel",
+    "steel": "comedymonkeysaddons:block/light/steel",
+    "steel_fins": "comedymonkeysaddons:block/light/steel_fins",
+    "iron": "comedymonkeysaddons:block/light/iron"
+  },
+  "elements": [
+    {
+      "name": "y_box",
+      "from": [
+        3,
+        11.55,
+        2.4
+      ],
+      "to": [
+        13,
+        14.55,
+        9.4
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          13.05,
+          10.4
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            1.45,
+            13,
+            4.45
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            6.6,
+            1.45,
+            13.6,
+            4.45
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            3,
+            1.45,
+            13,
+            4.45
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            2.4,
+            1.45,
+            9.4,
+            4.45
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            3,
+            2.4,
+            13,
+            9.4
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            3,
+            6.6,
+            13,
+            13.6
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "y_fin1",
+      "from": [
+        4,
+        14.55,
+        3.4
+      ],
+      "to": [
+        5,
+        15.55,
+        8.4
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          13.05,
+          10.4
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            0.45,
+            12,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "east": {
+          "uv": [
+            7.6,
+            0.45,
+            12.6,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "south": {
+          "uv": [
+            4,
+            0.45,
+            5,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "west": {
+          "uv": [
+            3.4,
+            0.45,
+            8.4,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "up": {
+          "uv": [
+            4,
+            3.4,
+            5,
+            8.4
+          ],
+          "texture": "#steel_fins"
+        },
+        "down": {
+          "uv": [
+            4,
+            7.6,
+            5,
+            12.6
+          ],
+          "texture": "#steel_fins"
+        }
+      }
+    },
+    {
+      "name": "y_fin2",
+      "from": [
+        7.5,
+        14.55,
+        3.4
+      ],
+      "to": [
+        8.5,
+        15.55,
+        8.4
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          13.05,
+          10.4
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            0.45,
+            8.5,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "east": {
+          "uv": [
+            7.6,
+            0.45,
+            12.6,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            0.45,
+            8.5,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "west": {
+          "uv": [
+            3.4,
+            0.45,
+            8.4,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            3.4,
+            8.5,
+            8.4
+          ],
+          "texture": "#steel_fins"
+        },
+        "down": {
+          "uv": [
+            7.5,
+            7.6,
+            8.5,
+            12.6
+          ],
+          "texture": "#steel_fins"
+        }
+      }
+    },
+    {
+      "name": "y_fin3",
+      "from": [
+        11,
+        14.55,
+        3.4
+      ],
+      "to": [
+        12,
+        15.55,
+        8.4
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          13.05,
+          10.4
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            0.45,
+            5,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "east": {
+          "uv": [
+            7.6,
+            0.45,
+            12.6,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "south": {
+          "uv": [
+            11,
+            0.45,
+            12,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "west": {
+          "uv": [
+            3.4,
+            0.45,
+            8.4,
+            1.45
+          ],
+          "texture": "#steel_fins"
+        },
+        "up": {
+          "uv": [
+            11,
+            3.4,
+            12,
+            8.4
+          ],
+          "texture": "#steel_fins"
+        },
+        "down": {
+          "uv": [
+            11,
+            7.6,
+            12,
+            12.6
+          ],
+          "texture": "#steel_fins"
+        }
+      }
+    },
+    {
+      "name": "y_yoke_l",
+      "from": [
+        2.25,
+        12.05,
+        8.9
+      ],
+      "to": [
+        3,
+        14.05,
+        10.9
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          13.05,
+          10.4
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13,
+            1.95,
+            13.75,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            5.1,
+            1.95,
+            7.1,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            2.25,
+            1.95,
+            3,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            8.9,
+            1.95,
+            10.9,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            2.25,
+            8.9,
+            3,
+            10.9
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            2.25,
+            5.1,
+            3,
+            7.1
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "y_yoke_r",
+      "from": [
+        13,
+        12.05,
+        8.9
+      ],
+      "to": [
+        13.75,
+        14.05,
+        10.9
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          13.05,
+          10.4
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2.25,
+            1.95,
+            3,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            5.1,
+            1.95,
+            7.1,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            13,
+            1.95,
+            13.75,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            8.9,
+            1.95,
+            10.9,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            13,
+            8.9,
+            13.75,
+            10.9
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            13,
+            5.1,
+            13.75,
+            7.1
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "y_yoke_bar",
+      "from": [
+        2.25,
+        12.05,
+        10.9
+      ],
+      "to": [
+        13.75,
+        13.05,
+        11.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.25,
+            2.95,
+            13.75,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            4.1,
+            2.95,
+            5.1,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            2.25,
+            2.95,
+            13.75,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            10.9,
+            2.95,
+            11.9,
+            3.95
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            2.25,
+            10.9,
+            13.75,
+            11.9
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            2.25,
+            4.1,
+            13.75,
+            5.1
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "y_ballast",
+      "from": [
+        6.5,
+        12.05,
+        11.9
+      ],
+      "to": [
+        9.5,
+        14.8,
+        14.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            1.2,
+            9.5,
+            3.95
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            1.6,
+            1.2,
+            4.1,
+            3.95
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            1.2,
+            9.5,
+            3.95
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            11.9,
+            1.2,
+            14.4,
+            3.95
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            11.9,
+            9.5,
+            14.4
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            1.6,
+            9.5,
+            4.1
+          ],
+          "texture": "#steel"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/steel",
+    "glass_off": "comedymonkeysaddons:block/light/glass_off"
+  },
+  "elements": [
+    {
+      "name": "c_lens",
+      "from": [
+        6.5,
+        11.5,
+        1
+      ],
+      "to": [
+        9.5,
+        12.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            3.5,
+            9.5,
+            4.5
+          ],
+          "texture": "#glass_off"
+        },
+        "east": {
+          "uv": [
+            7,
+            3.5,
+            15,
+            4.5
+          ],
+          "texture": "#glass_off"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            3.5,
+            9.5,
+            4.5
+          ],
+          "texture": "#glass_off"
+        },
+        "west": {
+          "uv": [
+            1,
+            3.5,
+            9,
+            4.5
+          ],
+          "texture": "#glass_off"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            7,
+            9.5,
+            15
+          ],
+          "texture": "#glass_off"
+        }
+      }
+    }
+  ]
+}

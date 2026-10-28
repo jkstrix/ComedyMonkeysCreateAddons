@@ -1,0 +1,90 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/glow_white",
+    "glow_white": "comedymonkeysaddons:block/light/glow_white"
+  },
+  "elements": [
+    {
+      "name": "y_lens",
+      "from": [
+        4,
+        10.25,
+        1
+      ],
+      "to": [
+        12,
+        10.75,
+        6
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          12.25,
+          8.5
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            5.25,
+            12,
+            5.75
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            10,
+            5.25,
+            15,
+            5.75
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            4,
+            5.25,
+            12,
+            5.75
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            5.25,
+            6,
+            5.75
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            4,
+            10,
+            12,
+            15
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

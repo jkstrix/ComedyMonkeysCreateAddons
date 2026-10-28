@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "P ",
+    "P ",
+    "PA"
+  ],
+  "key": {
+    "P": {
+      "tag": "c:plates/iron"
+    },
+    "A": {
+      "item": "create:andesite_alloy"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:steel_lamp_post",
+    "count": 4
+  }
+}

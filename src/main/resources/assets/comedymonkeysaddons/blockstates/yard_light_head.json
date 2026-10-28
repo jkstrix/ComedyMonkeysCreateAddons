@@ -2,6 +2,7 @@
   "multipart": [
     {
       "when": {
+        "arm": "none",
         "facing": "north"
       },
       "apply": {
@@ -10,6 +11,7 @@
     },
     {
       "when": {
+        "arm": "none",
         "facing": "north",
         "light": "0"
       },
@@ -19,6 +21,7 @@
     },
     {
       "when": {
+        "arm": "none",
         "facing": "east"
       },
       "apply": {
@@ -28,6 +31,7 @@
     },
     {
       "when": {
+        "arm": "none",
         "facing": "east",
         "light": "0"
       },
@@ -38,6 +42,7 @@
     },
     {
       "when": {
+        "arm": "none",
         "facing": "south"
       },
       "apply": {
@@ -47,6 +52,7 @@
     },
     {
       "when": {
+        "arm": "none",
         "facing": "south",
         "light": "0"
       },
@@ -57,6 +63,7 @@
     },
     {
       "when": {
+        "arm": "none",
         "facing": "west"
       },
       "apply": {
@@ -66,6 +73,7 @@
     },
     {
       "when": {
+        "arm": "none",
         "facing": "west",
         "light": "0"
       },
@@ -76,6 +84,7 @@
     },
     {
       "when": {
+        "arm": "none",
         "facing": "up"
       },
       "apply": {
@@ -84,6 +93,7 @@
     },
     {
       "when": {
+        "arm": "none",
         "facing": "up",
         "light": "0"
       },
@@ -93,6 +103,7 @@
     },
     {
       "when": {
+        "arm": "none",
         "facing": "down"
       },
       "apply": {
@@ -101,11 +112,176 @@
     },
     {
       "when": {
+        "arm": "none",
         "facing": "down",
         "light": "0"
       },
       "apply": {
         "model": "comedymonkeysaddons:block/light/yard_light_head_glass"
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_iron"
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "north",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_iron_glass"
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_iron",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "east",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_iron_glass",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_iron",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "south",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_iron_glass",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_iron",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "arm": "iron",
+        "facing": "west",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_iron_glass",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_steel"
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "north",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_steel_glass"
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_steel",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "east",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_steel_glass",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_steel",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "south",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_steel_glass",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_steel",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "arm": "steel",
+        "facing": "west",
+        "light": "0"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/yard_light_head_arm_steel_glass",
+        "y": 270
       }
     }
   ]

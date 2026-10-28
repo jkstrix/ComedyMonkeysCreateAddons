@@ -1,0 +1,62 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/iron",
+    "glass_off": "comedymonkeysaddons:block/light/glass_off"
+  },
+  "elements": [
+    {
+      "name": "l_panes",
+      "from": [
+        5.5,
+        -1.99,
+        8.5
+      ],
+      "to": [
+        10.5,
+        3.01,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            5
+          ],
+          "texture": "#glass_off"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            0,
+            7.5,
+            5
+          ],
+          "texture": "#glass_off"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            5
+          ],
+          "texture": "#glass_off"
+        },
+        "west": {
+          "uv": [
+            8.5,
+            0,
+            13.5,
+            5
+          ],
+          "texture": "#glass_off"
+        }
+      }
+    }
+  ]
+}

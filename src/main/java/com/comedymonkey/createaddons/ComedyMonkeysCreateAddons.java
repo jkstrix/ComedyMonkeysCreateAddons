@@ -293,6 +293,8 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.LIGHT_SWITCH.get());
 			registerCreateTooltip(ModItems.LIGHT_STRIP.get());
 			registerCreateTooltip(ModItems.EDGE_LIGHT.get());
+			registerCreateTooltip(ModItems.CAST_IRON_LAMP_POST.get());
+			registerCreateTooltip(ModItems.STEEL_LAMP_POST.get());
 			registerCreateTooltip(ModItems.SPLITTER.get());
 			registerCreateTooltip(ModItems.BREAKER.get());
 			registerCreateTooltip(ModItems.UPGRADE_TEMPLATE.get());

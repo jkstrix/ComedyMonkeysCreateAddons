@@ -37,6 +37,9 @@ const KINDS = {
   yard_light_head: { mount: 'leaning', parts: G.yardTop, particle: 'steel' },
 };
 
+// The street heads that also hang on a Lamp Post's arm, by the name the generator's arm heads use
+const HEADS = { lantern_head: 'lantern', globe_head: 'globe', cobra_head: 'cobra', yard_light_head: 'yard' };
+
 // The blockstate rotation for each facing, as LightBlock.turn and LightRenderer turn shapes and parts
 const ROTATIONS = {
   wall: { south: {}, west: { y: 90 }, north: { y: 180 }, east: { y: 270 }, up: {}, down: {} },
@@ -99,14 +102,33 @@ for (const [id, k] of Object.entries(KINDS)) {
   // multipart: the body always, the unlit glass only while it's dark; both turned to face its way
   const model = (part) => `${NS}:block/light/${id}${part}`;
   const multipart = [];
+  // a street head also hangs on a Lamp Post's arm (arm: the post's finish), else stands on its own (arm: none)
+  const head = HEADS[id], standing = head ? { arm: 'none' } : {};
   if (k.mount === 'fixed') {
-    multipart.push({ apply: { model: model('') } }, { when: { light: '0' }, apply: { model: model('_glass') } });
+    multipart.push({ ...(head ? { when: standing } : {}), apply: { model: model('') } }, { when: { ...standing, light: '0' }, apply: { model: model('_glass') } });
   } else {
     for (const [facing, rot] of Object.entries(ROTATIONS[k.mount])) {
-      multipart.push({ when: { facing }, apply: { model: model(''), ...rot } });
-      multipart.push({ when: { facing, light: '0' }, apply: { model: model('_glass'), ...rot } });
+      multipart.push({ when: { ...standing, facing }, apply: { model: model(''), ...rot } });
+      multipart.push({ when: { ...standing, facing, light: '0' }, apply: { model: model('_glass'), ...rot } });
     }
   }
+  if (head)
+    for (const finish of ['iron', 'steel']) {
+      // the head as approved on the arm (with its hook or cup), in the block beyond the post, built facing north (away
+      // from the post, which is south of it)
+      const tip = G.arm(finish, G.ARM_TIP[head]).filter((c) => ['hook', 'hook_ring', 'cup'].includes(c.name));
+      const onArm = G.move([...tip, ...G.armHead(head, finish)], [0, 0, 16]);
+      const aBody = onArm.filter((c) => !G.isGlow(c)), aGlass = onArm.filter(G.isGlow);
+      writeJson(`models/block/light/${id}_arm_${finish}.json`, blockModel(aBody, k.particle));
+      writeJson(`models/block/light/${id}_arm_${finish}_glass.json`, blockModel(lens(aGlass, 'glass_off'), k.particle));
+      writeJson(`models/block/light/${id}_arm_${finish}_glow.json`, blockModel(lens(aGlass, 'glow_white'), 'glow_white', { glow: 'tint' }));
+      for (const [facing, rot] of Object.entries(ROTATIONS.leaning)) {
+        if (facing === 'up' || facing === 'down')
+          continue;
+        multipart.push({ when: { arm: finish, facing }, apply: { model: model(`_arm_${finish}`), ...rot } });
+        multipart.push({ when: { arm: finish, facing, light: '0' }, apply: { model: model(`_arm_${finish}_glass`), ...rot } });
+      }
+    }
   writeJson(`blockstates/${id}.json`, { multipart });
 }
 
@@ -145,6 +167,22 @@ for (const [id, k] of Object.entries(KINDS)) {
   const e = G.edgeParts();
   writeJson('models/item/edge_light.json', blockModel([...e.cap_w.body, ...e.cap_w.diffuser, ...e.mid.body, ...e.mid.diffuser, ...e.cap_e.body, ...e.cap_e.diffuser]
     .map((c) => ({ ...c, from: [c.from[0], c.from[1], c.from[2] + 6.75], to: [c.to[0], c.to[1], c.to[2] + 6.75] })), 'alu', { glow: true, gui: true }));
+}
+
+// ---------- Lamp Posts: a pole of either finish, standing upright, its head with up to four arms ----------
+const POSTS = { cast_iron_lamp_post: { post: G.castIronPost, arm: 'iron', particle: 'iron' }, steel_lamp_post: { post: G.steelPost, arm: 'steel', particle: 'galv' } };
+for (const [id, f] of Object.entries(POSTS)) {
+  const multipart = [];
+  for (const role of ['single', 'foot', 'pole', 'head']) {
+    writeJson(`models/block/lamp_post/${id}_${role}.json`, blockModel(f.post(role), f.particle));
+    multipart.push({ when: { role }, apply: { model: `${NS}:block/lamp_post/${id}_${role}` } });
+  }
+  // an arm (built pointing north) on each side that has one, turned to it; its head is the light block beyond it
+  writeJson(`models/block/lamp_post/${id}_arm.json`, blockModel(G.arm(f.arm, null), f.particle));
+  for (const [side, y] of [['north', 0], ['east', 90], ['south', 180], ['west', 270]])
+    multipart.push({ when: { [side]: 'true', role: 'head|single' }, apply: { model: `${NS}:block/lamp_post/${id}_arm`, ...(y ? { y } : {}) } });
+  writeJson(`blockstates/${id}.json`, { multipart });
+  writeJson(`models/item/${id}.json`, blockModel(f.post('single'), f.particle, { gui: true }));
 }
 
 // ---------- the colour each light casts, for Colorful Lighting (it reads emitters by block state) ----------
@@ -218,6 +256,23 @@ writeData(`${NS}/loot_table/blocks/light_strip.json`, { type: 'minecraft:block',
   pools: ['down', 'up', 'north', 'south', 'west', 'east'].map((face) => ({ rolls: 1, entries: [{ type: 'minecraft:item', name: `${NS}:light_strip` }],
     conditions: [{ condition: 'minecraft:block_state_property', block: `${NS}:light_strip`, properties: { [face]: 'true' } },
       { condition: 'minecraft:survives_explosion' }] })) });
+for (const id of ['cast_iron_lamp_post', 'steel_lamp_post']) {
+  writeData(`${NS}/loot_table/blocks/${id}.json`, { type: 'minecraft:block', pools: [{ rolls: 1,
+    entries: [{ type: 'minecraft:item', name: `${NS}:${id}` }], conditions: [{ condition: 'minecraft:survives_explosion' }] }] });
+  if (!pickTag.values.includes(`${NS}:${id}`)) pickTag.values.push(`${NS}:${id}`);
+}
+fs.writeFileSync(pick, JSON.stringify(pickTag, null, 2) + '\n');
+writeData(`${NS}/recipe/cast_iron_lamp_post.json`, { type: 'minecraft:crafting_shaped', category: 'building',
+  pattern: ['I', 'I', 'IC'].map((r) => r.padEnd(2, ' ')), key: { I: { tag: 'c:ingots/iron' }, C: { tag: 'minecraft:coals' } },
+  result: { id: `${NS}:cast_iron_lamp_post`, count: 4 } });
+writeData(`${NS}/recipe/steel_lamp_post.json`, { type: 'minecraft:crafting_shaped', category: 'building',
+  pattern: ['P', 'P', 'PA'].map((r) => r.padEnd(2, ' ')), key: { P: { tag: 'c:plates/iron' }, A: { item: 'create:andesite_alloy' } },
+  result: { id: `${NS}:steel_lamp_post`, count: 4 } });
+writeData(`${NS}/recipe/light/cast_iron_lamp_post_from_steel.json`, { type: 'minecraft:stonecutting',
+  ingredient: { item: `${NS}:steel_lamp_post` }, result: { id: `${NS}:cast_iron_lamp_post`, count: 1 } });
+writeData(`${NS}/recipe/light/steel_lamp_post_from_cast_iron.json`, { type: 'minecraft:stonecutting',
+  ingredient: { item: `${NS}:cast_iron_lamp_post` }, result: { id: `${NS}:steel_lamp_post`, count: 1 } });
+
 // an edge-light block drops one for each edge it has (EdgeLightBlock.getDrops counts them; the table gives the one)
 writeData(`${NS}/loot_table/blocks/edge_light.json`, { type: 'minecraft:block', pools: [{ rolls: 1,
   entries: [{ type: 'minecraft:item', name: `${NS}:edge_light` }], conditions: [{ condition: 'minecraft:survives_explosion' }] }] });

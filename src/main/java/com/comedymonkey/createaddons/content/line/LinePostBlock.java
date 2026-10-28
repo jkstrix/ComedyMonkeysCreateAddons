@@ -128,6 +128,9 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 			case 4 -> new Vector3f(2.5f, 15.1f, 8);
 			default -> new Vector3f(8, 16.5f, 8);
 		};
+		// a Lamp Post's one insulator: on its bracket under the top, on the north side
+		if (state.getBlock() instanceof com.comedymonkey.createaddons.content.light.LampPostBlock && insulator == 0)
+			local = new Vector3f(8, 9.1f, 2.5f);
 		local.sub(8, 8, 8).div(16);
 		Direction facing = state.hasProperty(FACING) ? state.getValue(FACING) : Direction.UP;
 		Vector3f w = toWorld(local, facing);
@@ -138,6 +141,9 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 	public static boolean hasInsulator(BlockState state, int insulator) {
 		if (!(state.getBlock() instanceof LinePostBlock) || !state.getValue(ROLE).isHead())
 			return false;
+		// a Lamp Post's sides are arms for lamps, not branches with insulators
+		if (state.getBlock() instanceof com.comedymonkey.createaddons.content.light.LampPostBlock)
+			return insulator == 0;
 		return insulator == 0 || (insulator >= 1 && insulator <= 4 && state.getValue(BRANCHES.get(LinePostBlockEntity.branchSide(insulator))));
 	}
 
@@ -169,7 +175,7 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 			if (!level.hasChunkAt(p))
 				return null;
 			BlockState s = level.getBlockState(p);
-			if (!(s.getBlock() instanceof LinePostBlock) || s.getValue(FACING) != facing)
+			if (s.getBlock() != state.getBlock() || s.getValue(FACING) != facing)
 				return null;
 			if (s.getValue(ROLE).isHead())
 				return p;
@@ -190,7 +196,7 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 			if (!level.hasChunkAt(p))
 				return null;
 			BlockState s = level.getBlockState(p);
-			if (!(s.getBlock() instanceof LinePostBlock) || s.getValue(FACING) != facing)
+			if (s.getBlock() != state.getBlock() || s.getValue(FACING) != facing)
 				return null;
 			if (s.getValue(ROLE).isFoot())
 				return p;
@@ -210,7 +216,7 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 		BlockPos below = pos.relative(facing.getOpposite());
 		BlockState belowState = level.getBlockState(below);
 		// a head with spans hung from it can't be built over: take them down first
-		if (belowState.getBlock() instanceof LinePostBlock && belowState.getValue(FACING) == facing
+		if (belowState.getBlock() == this && belowState.getValue(FACING) == facing
 			&& level.getBlockEntity(below) instanceof LinePostBlockEntity post && !post.spans().isEmpty())
 			return null;
 		BlockState state = defaultBlockState().setValue(FACING, facing).setValue(WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER);
@@ -221,8 +227,9 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 	private static BlockState withRole(BlockState state, LevelReader level, BlockPos pos) {
 		Direction facing = state.getValue(FACING);
 		BlockState below = level.getBlockState(pos.relative(facing.getOpposite())), above = level.getBlockState(pos.relative(facing));
-		boolean b = below.getBlock() instanceof LinePostBlock && below.getValue(FACING) == facing;
-		boolean a = above.getBlock() instanceof LinePostBlock && above.getValue(FACING) == facing;
+		// (a pole is posts of one kind: a Lamp Post doesn't join a Line Post's pole)
+		boolean b = below.getBlock() == state.getBlock() && below.getValue(FACING) == facing;
+		boolean a = above.getBlock() == state.getBlock() && above.getValue(FACING) == facing;
 		return state.setValue(ROLE, PostRole.of(b, a));
 	}
 
@@ -231,7 +238,7 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 		Direction facing = state.getValue(FACING);
 		BlockPos support = pos.relative(facing.getOpposite());
 		BlockState s = level.getBlockState(support);
-		if (s.getBlock() instanceof LinePostBlock && s.getValue(FACING) == facing)
+		if (s.getBlock() == state.getBlock() && s.getValue(FACING) == facing)
 			return true;
 		return s.isFaceSturdy(level, support, facing);
 	}
@@ -247,10 +254,12 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 			// standing in water the block turns to water, not air, so no loot: the post and its branches drop by hand
 			if (level instanceof Level l && !l.isClientSide) {
 				int posts = 1;
-				for (BooleanProperty b : BRANCHES.values())
-					if (state.getValue(b))
-						posts++;
-				Block.popResource(l, pos, new ItemStack(ModItems.LINE_POST.get(), posts));
+				// (a Lamp Post's arms are its heads', which drop themselves)
+				if (!(this instanceof com.comedymonkey.createaddons.content.light.LampPostBlock))
+					for (BooleanProperty b : BRANCHES.values())
+						if (state.getValue(b))
+							posts++;
+				Block.popResource(l, pos, new ItemStack(asItem(), posts));
 			}
 			return Blocks.WATER.defaultBlockState();
 		}
@@ -298,7 +307,8 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
 											  InteractionHand hand, BlockHitResult hit) {
-		if (stack.is(ModItems.LINE_POST.get()) && !player.isShiftKeyDown() && state.getValue(ROLE).isHead()) {
+		if (stack.is(ModItems.LINE_POST.get()) && !player.isShiftKeyDown() && state.getValue(ROLE).isHead()
+			&& !(this instanceof com.comedymonkey.createaddons.content.light.LampPostBlock)) {
 			Direction local = localSide(hit.getDirection(), state.getValue(FACING));
 			if (local == null || state.getValue(BRANCHES.get(local)))
 				return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;

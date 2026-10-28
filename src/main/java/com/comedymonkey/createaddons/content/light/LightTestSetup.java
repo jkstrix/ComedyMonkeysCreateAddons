@@ -55,6 +55,8 @@ public final class LightTestSetup {
 	private static final int STRIP_RUN = 5;
 	/** Blocks of Edge Light in each run along a wall top. */
 	private static final int EDGE_RUN = 6;
+	/** The Lamp Posts' stretch of street. */
+	private static final int POSTS = 10;
 
 	private LightTestSetup() {}
 
@@ -68,7 +70,7 @@ public final class LightTestSetup {
 		ServerLevel level = source.getLevel();
 		BlockPos o = BlockPos.containing(source.getPosition());
 		int kinds = LightKind.values().length, dyes = DyeColor.values().length / 2, steps = LightKind.STEPS.length;
-		int length = 2 + SPACING * (kinds + dyes) + BAY * steps + 1 + STRIP_RUN + 1 + EDGE_RUN + 3;
+		int length = 2 + SPACING * (kinds + dyes) + BAY * steps + 1 + STRIP_RUN + 1 + EDGE_RUN + 1 + POSTS + 3;
 		street(level, o, length);
 		power(level, o);
 
@@ -118,6 +120,15 @@ public final class LightTestSetup {
 		edgeRun(level, o.offset(x, 0, 0), 2, null, wires);
 		edgeRun(level, o.offset(x, 0, 0), -2, DyeColor.PINK, wires);
 		x += EDGE_RUN + 1;
+
+		// Lamp Posts: four poles beside the line (fed at their feet), every head on top and on the arms either side
+		lampPost(level, o.offset(x + 1, 0, 1), ModBlocks.CAST_IRON_LAMP_POST.get(), LightKind.LANTERN_HEAD, LightKind.GLOBE_HEAD, Direction.NORTH);
+		lampPost(level, o.offset(x + 1, 0, -1), ModBlocks.STEEL_LAMP_POST.get(), LightKind.YARD_HEAD, LightKind.COBRA_HEAD, Direction.SOUTH);
+		lampPost(level, o.offset(x + 7, 0, 1), ModBlocks.CAST_IRON_LAMP_POST.get(), LightKind.GLOBE_HEAD, LightKind.LANTERN_HEAD, Direction.NORTH);
+		lampPost(level, o.offset(x + 7, 0, -1), ModBlocks.STEEL_LAMP_POST.get(), LightKind.COBRA_HEAD, LightKind.YARD_HEAD, Direction.SOUTH);
+		sign(level, o.offset(x + 3, 1, 1), Direction.NORTH, "Cast Iron", "Lamp Post");
+		sign(level, o.offset(x + 3, 1, -1), Direction.SOUTH, "Steel", "Lamp Post");
+		x += POSTS + 1;
 
 		// the line links up once its blocks are all in; again a moment later, as the game tests do
 		wires.forEach(p -> PowerLineBlock.relinkAround(level, p));
@@ -184,12 +195,29 @@ public final class LightTestSetup {
 		sign(level, start.offset(2, 1, wallZ > 0 ? 1 : -1), toWall.getOpposite(), "Edge Light", dye == null ? "" : "Pink");
 	}
 
+	/**
+	 * A Lamp Post four high at {@code foot} (beside the line, which feeds it), {@code top} on its head facing {@code over}
+	 * (over the street), and {@code arms} on arms to the east and west.
+	 */
+	private static void lampPost(ServerLevel level, BlockPos foot, LampPostBlock post, LightKind top, LightKind arms, Direction over) {
+		for (int y = 0; y < 4; y++)
+			level.setBlock(foot.above(y), post.defaultBlockState(), Block.UPDATE_ALL);
+		BlockPos head = foot.above(3);
+		BlockState t = ModBlocks.LIGHTS.get(top).get().defaultBlockState();
+		if (top.mount() == LightKind.Mount.TOP_FACING)
+			t = t.setValue(LightBlock.FACING, over);
+		level.setBlock(head.above(), t, Block.UPDATE_ALL);
+		for (Direction side : new Direction[] {Direction.EAST, Direction.WEST})
+			level.setBlock(head.relative(side), ModBlocks.LIGHTS.get(arms).get().defaultBlockState()
+				.setValue(LampHeadBlock.ARM, post.finish()).setValue(LightBlock.FACING, side), Block.UPDATE_ALL);
+	}
+
 	/** Clears the street's space and lays its floor and walls (two blocks out from the line, three high). */
 	private static void street(ServerLevel level, BlockPos o, int length) {
 		for (int x = -4; x <= length + 1; x++)
 			for (int z = -4; z <= 4; z++) {
 				level.setBlock(o.offset(x, -1, z), FLOOR, Block.UPDATE_CLIENTS);
-				for (int y = 0; y <= 5; y++)
+				for (int y = 0; y <= 7; y++)
 					level.setBlock(o.offset(x, y, z), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
 				if (x >= 1 && x < length && Math.abs(z) == 2)
 					for (int y = 0; y <= 2; y++)

@@ -1,0 +1,219 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/brass",
+    "iron": "comedymonkeysaddons:block/light/iron",
+    "brass": "comedymonkeysaddons:block/light/brass"
+  },
+  "elements": [
+    {
+      "name": "cup",
+      "from": [
+        6.5,
+        15.05,
+        11.65
+      ],
+      "to": [
+        9.5,
+        16.05,
+        14.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            1.35,
+            0,
+            4.35,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            11.65,
+            0,
+            14.65,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            11.65,
+            9.5,
+            14.65
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            1.35,
+            9.5,
+            4.35
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "g_neck",
+      "from": [
+        7,
+        16.05,
+        11.9
+      ],
+      "to": [
+        9,
+        18.05,
+        13.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            13.95,
+            9,
+            15.95
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            2.1,
+            13.95,
+            4.1,
+            15.95
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            7,
+            13.95,
+            9,
+            15.95
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            11.9,
+            13.95,
+            13.9,
+            15.95
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            7,
+            11.9,
+            9,
+            13.9
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            7,
+            2.1,
+            9,
+            4.1
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "g_collar",
+      "from": [
+        6,
+        18.05,
+        10.9
+      ],
+      "to": [
+        10,
+        19.05,
+        14.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            12.95,
+            10,
+            13.95
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            1.1,
+            12.95,
+            5.1,
+            13.95
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            6,
+            12.95,
+            10,
+            13.95
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            10.9,
+            12.95,
+            14.9,
+            13.95
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            6,
+            10.9,
+            10,
+            14.9
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            6,
+            1.1,
+            10,
+            5.1
+          ],
+          "texture": "#brass"
+        }
+      }
+    }
+  ]
+}

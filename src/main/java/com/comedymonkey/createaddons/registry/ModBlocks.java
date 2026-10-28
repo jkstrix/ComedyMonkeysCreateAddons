@@ -376,13 +376,41 @@ public final class ModBlocks {
 			.pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)
 			.lightLevel(com.comedymonkey.createaddons.content.light.EdgeLightBlock::lightLevel)));
 
+	/** A street head can hang on a Lamp Post's arm (LampHeadBlock); every other light is a plain LightBlock. */
+	private static com.comedymonkey.createaddons.content.light.LightBlock lightBlock(com.comedymonkey.createaddons.content.light.LightKind kind, boolean head,
+																				   BlockBehaviour.Properties properties) {
+		return head ? new com.comedymonkey.createaddons.content.light.LampHeadBlock(kind, properties)
+			: new com.comedymonkey.createaddons.content.light.LightBlock(kind, properties);
+	}
+
+	/** Electric Lights: the Lamp Posts, a pole of cast iron or steel for street lamps. */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.light.LampPostBlock> CAST_IRON_LAMP_POST = lampPost("cast_iron_lamp_post",
+		com.comedymonkey.createaddons.content.light.ArmFinish.IRON);
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.light.LampPostBlock> STEEL_LAMP_POST = lampPost("steel_lamp_post",
+		com.comedymonkey.createaddons.content.light.ArmFinish.STEEL);
+
+	private static DeferredBlock<com.comedymonkey.createaddons.content.light.LampPostBlock> lampPost(String id, com.comedymonkey.createaddons.content.light.ArmFinish finish) {
+		return BLOCKS.register(id, () -> new com.comedymonkey.createaddons.content.light.LampPostBlock(finish, BlockBehaviour.Properties.of()
+			.mapColor(MapColor.METAL)
+			.strength(2.0f, 6.0f)
+			.sound(SoundType.METAL)
+			.requiresCorrectToolForDrops()
+			.noOcclusion()
+			.isSuffocating((state, level, pos) -> false)
+			.isViewBlocking((state, level, pos) -> false)));
+	}
+
 	private static java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>> registerLights() {
 		var out = new java.util.EnumMap<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>>(
 			com.comedymonkey.createaddons.content.light.LightKind.class);
 		for (var kind : com.comedymonkey.createaddons.content.light.LightKind.values()) {
 			boolean floor = kind == com.comedymonkey.createaddons.content.light.LightKind.FLOOR_LIGHT;
 			boolean small = kind == com.comedymonkey.createaddons.content.light.LightKind.INDICATOR;
-			out.put(kind, BLOCKS.register(kind.id(), () -> new com.comedymonkey.createaddons.content.light.LightBlock(kind, BlockBehaviour.Properties.of()
+			boolean head = kind == com.comedymonkey.createaddons.content.light.LightKind.LANTERN_HEAD
+				|| kind == com.comedymonkey.createaddons.content.light.LightKind.GLOBE_HEAD
+				|| kind == com.comedymonkey.createaddons.content.light.LightKind.COBRA_HEAD
+				|| kind == com.comedymonkey.createaddons.content.light.LightKind.YARD_HEAD;
+			out.put(kind, BLOCKS.register(kind.id(), () -> lightBlock(kind, head, BlockBehaviour.Properties.of()
 				.mapColor(MapColor.METAL)
 				.strength(floor ? 3.0f : 1.0f, floor ? 6.0f : 3.0f)
 				.sound(floor ? SoundType.METAL : small ? SoundType.COPPER : SoundType.LANTERN)

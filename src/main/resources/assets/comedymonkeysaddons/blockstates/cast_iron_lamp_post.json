@@ -1,0 +1,75 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "role": "single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/lamp_post/cast_iron_lamp_post_single"
+      }
+    },
+    {
+      "when": {
+        "role": "foot"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/lamp_post/cast_iron_lamp_post_foot"
+      }
+    },
+    {
+      "when": {
+        "role": "pole"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/lamp_post/cast_iron_lamp_post_pole"
+      }
+    },
+    {
+      "when": {
+        "role": "head"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/lamp_post/cast_iron_lamp_post_head"
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/lamp_post/cast_iron_lamp_post_arm"
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/lamp_post/cast_iron_lamp_post_arm",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/lamp_post/cast_iron_lamp_post_arm",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "role": "head|single"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/lamp_post/cast_iron_lamp_post_arm",
+        "y": 270
+      }
+    }
+  ]
+}

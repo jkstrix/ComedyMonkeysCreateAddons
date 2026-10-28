@@ -1,0 +1,113 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/galv",
+    "galv": "comedymonkeysaddons:block/light/galv"
+  },
+  "elements": [
+    {
+      "name": "tube_a",
+      "from": [
+        6.5,
+        0,
+        7.25
+      ],
+      "to": [
+        9.5,
+        16,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            16
+          ],
+          "texture": "#galv"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            0,
+            8.75,
+            16
+          ],
+          "texture": "#galv"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            16
+          ],
+          "texture": "#galv"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            0,
+            8.75,
+            16
+          ],
+          "texture": "#galv"
+        }
+      }
+    },
+    {
+      "name": "tube_b",
+      "from": [
+        7.25,
+        0,
+        6.5
+      ],
+      "to": [
+        8.75,
+        16,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.25,
+            0,
+            8.75,
+            16
+          ],
+          "texture": "#galv"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            16
+          ],
+          "texture": "#galv"
+        },
+        "south": {
+          "uv": [
+            7.25,
+            0,
+            8.75,
+            16
+          ],
+          "texture": "#galv"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            16
+          ],
+          "texture": "#galv"
+        }
+      }
+    }
+  ]
+}
