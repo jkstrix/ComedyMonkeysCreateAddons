@@ -90,6 +90,8 @@ public class ComedyMonkeysCreateAddons {
 		ModAttachments.ATTACHMENT_TYPES.register(modBus);
 		ModSounds.SOUND_EVENTS.register(modBus);
 		ModEntities.ENTITY_TYPES.register(modBus);
+		com.comedymonkey.createaddons.registry.ModStructures.TYPES.register(modBus);
+		com.comedymonkey.createaddons.registry.ModStructures.PIECES.register(modBus);
 		ModDataComponents.DATA_COMPONENTS.register(modBus);
 		modBus.addListener(ModEntities::registerAttributes);
 		// Trade Bot's test courses (run with ./gradlew runGameTestServer, or /test in a dev world)

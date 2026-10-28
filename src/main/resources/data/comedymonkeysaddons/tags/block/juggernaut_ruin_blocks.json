@@ -1,0 +1,16 @@
+{
+  "values": [
+    "minecraft:deepslate_bricks",
+    "minecraft:cracked_deepslate_bricks",
+    "minecraft:deepslate_tiles",
+    "minecraft:cracked_deepslate_tiles",
+    "minecraft:cobbled_deepslate",
+    "minecraft:polished_deepslate",
+    "minecraft:mossy_cobblestone",
+    "minecraft:deepslate_tile_slab",
+    "minecraft:vine",
+    "minecraft:moss_carpet",
+    "minecraft:end_stone_bricks",
+    "minecraft:end_stone_brick_slab"
+  ]
+}

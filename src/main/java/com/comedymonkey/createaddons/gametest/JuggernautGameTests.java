@@ -191,6 +191,107 @@ public final class JuggernautGameTests {
 		helper.succeedWhen(() -> helper.assertTrue(!Float.isNaN(yaw[0]) && !j.isNoGravity(), "he should have leapt and landed"));
 	}
 
+	/** D61: woken in his ruin, he bursts up through the beam over his head, leaving the stone beside it, and comes down fighting. */
+	@GameTest(template = COURSE, timeoutTicks = 260)
+	public static void heBreaksOutOfHisRuin(GameTestHelper helper) {
+		for (int x = 8; x <= 16; x++)
+			helper.setBlock(new BlockPos(x, 9, 5), Blocks.DARK_OAK_LOG.defaultBlockState().setValue(
+				net.minecraft.world.level.block.RotatedPillarBlock.AXIS, Direction.Axis.X));
+		helper.setBlock(new BlockPos(12, 5, 1), Blocks.STONE); // and a block of wall beside his way up, which he leaves be
+		ClockworkJuggernaut j = helper.spawn(ModEntities.CLOCKWORK_JUGGERNAUT.get(), new BlockPos(12, 0, 5));
+		j.setYRot(0);
+		j.wakeFromRuin();
+		helper.succeedWhen(() -> {
+			helper.assertBlockPresent(Blocks.AIR, new BlockPos(12, 9, 5));
+			helper.assertBlockPresent(Blocks.STONE, new BlockPos(12, 5, 1));
+			// the test arena's barrier ceiling (about 12 up) is no way over: he comes back down where he knelt, roof gone
+			helper.assertTrue(!j.isNoGravity() && j.phase() == ClockworkJuggernaut.Phase.WOUND && j.getY() < helper.absolutePos(BlockPos.ZERO).getY() + 1, "he should be back on his feet, fighting");
+		});
+	}
+
+	/** The real ruin's hall: its Juggernaut kneels there, dormant, marked to break out when he wakes (D31, D61). */
+	@GameTest(template = COURSE)
+	public static void theRuinsJuggernautKneelsReadyToBreakOut(GameTestHelper helper) {
+		var template = helper.getLevel().getStructureManager().getOrCreate(ComedyMonkeysCreateAddons.asResource("juggernaut_ruin"));
+		BlockPos at = helper.absolutePos(new BlockPos(4, 0, 4));
+		template.placeInWorld(helper.getLevel(), at, at, new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(),
+			helper.getLevel().getRandom(), 2);
+		List<ClockworkJuggernaut> found = juggernauts(helper);
+		helper.assertTrue(found.size() == 1, "the hall should hold one Juggernaut, holds " + found.size());
+		helper.assertTrue(found.get(0).phase() == ClockworkJuggernaut.Phase.DORMANT, "he should kneel dormant, is " + found.get(0).phase());
+		helper.assertTrue(found.get(0).fromRuin(), "he should break out when he wakes");
+		helper.succeed();
+	}
+
+	/** D61 in the real hall, hemmed in by its walls: a hit wakes him and he still bursts up through the beam over his head. */
+	@GameTest(template = COURSE, timeoutTicks = 240)
+	public static void theRuinsJuggernautBurstsThroughItsRoof(GameTestHelper helper) {
+		var template = helper.getLevel().getStructureManager().getOrCreate(ComedyMonkeysCreateAddons.asResource("juggernaut_ruin"));
+		BlockPos at = helper.absolutePos(new BlockPos(4, 0, 4));
+		template.placeInWorld(helper.getLevel(), at, at, new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(),
+			helper.getLevel().getRandom(), 2);
+		BlockPos beam = new BlockPos(11, 10, 9); // the hall's front beam, over his head
+		helper.assertBlockPresent(net.minecraft.world.level.block.Blocks.DARK_OAK_LOG, beam);
+		ClockworkJuggernaut j = juggernauts(helper).get(0);
+		Player waker = player(helper, j, 8);
+		j.hurt(j.damageSources().playerAttack(waker), 1);
+		helper.succeedWhen(() -> helper.assertBlockPresent(Blocks.AIR, beam));
+	}
+
+	/** D62: in his own ruin, its walls don't stop him: he walks through a wall of its brick in his way, and it crumbles. */
+	@GameTest(template = COURSE, timeoutTicks = 300)
+	public static void heWalksThroughHisRuinsWalls(GameTestHelper helper) {
+		var template = helper.getLevel().getStructureManager().getOrCreate(ComedyMonkeysCreateAddons.asResource("juggernaut_ruin"));
+		BlockPos at = helper.absolutePos(new BlockPos(4, 0, 4));
+		template.placeInWorld(helper.getLevel(), at, at, new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(),
+			helper.getLevel().getRandom(), 2);
+		// a wall of the ruin's brick across the hall, between him and the doorway, and a stone pillar beside it he leaves be
+		for (int x = 6; x <= 16; x++)
+			for (int y = 2; y <= 5; y++)
+				helper.setBlock(new BlockPos(x, y, 7), Blocks.DEEPSLATE_BRICKS);
+		helper.setBlock(new BlockPos(6, 6, 7), Blocks.STONE);
+		ClockworkJuggernaut j = juggernauts(helper).get(0);
+		j.forcePhase(ClockworkJuggernaut.Phase.WOUND);
+		ArmorStand dummy = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(11, 1, 1));
+		dummy.setInvulnerable(true);
+		j.setTarget(dummy);
+		helper.succeedWhen(() -> {
+			helper.assertBlockPresent(Blocks.AIR, new BlockPos(11, 3, 7));
+			helper.assertBlockPresent(Blocks.STONE, new BlockPos(6, 6, 7));
+		});
+	}
+
+	/** D2: one that wasn't found in a ruin (summoned, an egg) never crumbles anything, ruin brick included. */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void aSummonedOneNeverCrumblesBrick(GameTestHelper helper) {
+		for (int x = 6; x <= 18; x++)
+			for (int y = 0; y <= 3; y++)
+				helper.setBlock(new BlockPos(x, y, 17), Blocks.DEEPSLATE_BRICKS);
+		ClockworkJuggernaut j = spawn(helper);
+		ArmorStand dummy = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(12, 0, 21));
+		dummy.setInvulnerable(true);
+		j.setTarget(dummy);
+		helper.runAfterDelay(140, () -> {
+			for (int x = 6; x <= 18; x++)
+				for (int y = 0; y <= 3; y++)
+					helper.assertBlockPresent(Blocks.DEEPSLATE_BRICKS, new BlockPos(x, y, 17));
+			helper.succeed();
+		});
+	}
+
+	/** Saved while he gets up out of his ruin, he loads without the break-out pending: a later waking elsewhere breaks nothing. */
+	@GameTest(template = COURSE)
+	public static void aReloadWhileHeWakesClearsTheBreakOut(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		j.wakeFromRuin();
+		CompoundTag tag = new CompoundTag();
+		j.saveWithoutId(tag);
+		ClockworkJuggernaut loaded = ModEntities.CLOCKWORK_JUGGERNAUT.get().create(helper.getLevel());
+		loaded.load(tag);
+		helper.assertFalse(loaded.fromRuin(), "a reload while he wakes should leave no break-out pending");
+		helper.succeed();
+	}
+
 	/** He never leaps through a wall: with no clear arc to them, he straightens up instead. */
 	@GameTest(template = COURSE, timeoutTicks = 100)
 	public static void heNeverLeapsThroughAWall(GameTestHelper helper) {

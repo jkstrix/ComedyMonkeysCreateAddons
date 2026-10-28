@@ -169,6 +169,19 @@ public class ClockworkJuggernaut extends Monster {
 	// ---- server state (saved)
 	private int phaseTicks, woundTicks, rewindTicks, aloneTicks, keyHits, graceTicks;
 	private boolean feinted, jammed, scaled, overdrive;
+	/** Found kneeling in a ruin and not yet woken: his first waking ends with him bursting up through its roof (D61). */
+	private boolean ruin;
+	/** The leap that breaks him out of his ruin, and where it comes down. */
+	private boolean bursting;
+	/** A hop over a wall in his way: the break-out's path (up, across, down), lower, and breaking nothing. */
+	private boolean hopping;
+	/** Within his own ruin (looked up once a second): its walls crumble under him (D62). */
+	private boolean inRuin;
+	/** Where his ruin's hall stands, if he was found in one; its field reaches about 40 blocks round it. */
+	@Nullable
+	private BlockPos home;
+	private int hopCooldown;
+	private Vec3 burstTo = Vec3.ZERO;
 	/** Extra players when he woke (D14): every hit is divided by this. */
 	private float toughness = 1;
 	/** When he last killed a player (not saved). */
@@ -215,7 +228,7 @@ public class ClockworkJuggernaut extends Monster {
 			.add(Attributes.KNOCKBACK_RESISTANCE, 1)
 			.add(Attributes.EXPLOSION_KNOCKBACK_RESISTANCE, 1) // nobody blasts him off a cliff (D56)
 			.add(Attributes.FOLLOW_RANGE, LOSE)
-			.add(Attributes.STEP_HEIGHT, 2);
+			.add(Attributes.STEP_HEIGHT, 3); // his big feet step over anything 3 high: a ruin's stubs and broken walls
 	}
 
 	public static ClipLibrary clips() {
@@ -387,6 +400,9 @@ public class ClockworkJuggernaut extends Monster {
 		}
 		if (overdrive && phase() != Phase.DYING)
 			overdriveSteam();
+		if (tickCount % 20 == 0)
+			inRuin = inRuin();
+		crumbleAhead();
 		// a beat after the wipe (the death screen), he kneels; mid-shed or mid-wake he finishes that first
 		if (wipePending > 0 && --wipePending == 0) {
 			Phase p = phase();
@@ -404,8 +420,12 @@ public class ClockworkJuggernaut extends Monster {
 			case STIRRING -> tickStirring();
 			case WAKING -> {
 				heartbeat();
-				if (clipDone())
-					startWound();
+				if (clipDone()) {
+					if (ruin)
+						breakOut();
+					else
+						startWound();
+				}
 			}
 			case WOUND -> tickWound();
 			case FEINT -> tickFeint();
@@ -574,6 +594,10 @@ public class ClockworkJuggernaut extends Monster {
 		double d = horizontalDistance(target);
 		boolean reachable = canReach(target);
 		stuckTicks = reachable ? 0 : stuckTicks + 1;
+		if (hopCooldown > 0)
+			hopCooldown--;
+		if (move == null && stuckTicks >= HOP_AFTER && tryHop(target))
+			return;
 		if (restTicks > 0) {
 			restTicks--;
 			approach(target, d);
@@ -674,6 +698,8 @@ public class ClockworkJuggernaut extends Monster {
 	/** The next part of a move that comes in parts (the gear spin), or the end of the combo's move. */
 	private void endMove() {
 		grabbed = null;
+		bursting = false;
+		hopping = false;
 		charging = false;
 		if (leaping) {
 			// cut off mid-air (overdrive, a wipe, peaceful): he comes down where he was going, a spot known to be clear,
@@ -813,8 +839,8 @@ public class ClockworkJuggernaut extends Monster {
 
 	private void tickLeap(@Nullable LivingEntity target, float t) {
 		// he aims where they're running to, and marks it (frost-blue ring on the ground) so it can be dodged
-		if (t < 1.5f && target != null) {
-			Vec3 aim = leapLanding(target, (1.5f - t) / clipSpeed() + LEAP_FLIGHT);
+		if (t < 1.5f && (target != null || bursting || hopping)) {
+			Vec3 aim = bursting || hopping ? burstTo : leapLanding(target, (1.5f - t) / clipSpeed() + LEAP_FLIGHT);
 			turnToward(aim != null ? aim : target.position(), 6);
 			if (aim != null && t > 0.3f && tickCount % 2 == 0)
 				markLanding(aim);
@@ -822,7 +848,8 @@ public class ClockworkJuggernaut extends Monster {
 		if (leaping && tickCount % 2 == 0)
 			markLanding(leapTo);
 		if (at(1.5f)) {
-			Vec3 landing = target == null ? null : leapLanding(target, LEAP_FLIGHT);
+			Vec3 landing = bursting ? stillClear(burstTo, BURST_RISE) : hopping ? (stillClear(burstTo, HOP_RISE) != null ? burstTo : target == null ? null
+				: hopLanding(target)) : target == null ? null : leapLanding(target, LEAP_FLIGHT);
 			if (landing == null) {
 				// nowhere to come down (they ran under cover, or died): he straightens up instead, no landing
 				endMove();
@@ -840,20 +867,32 @@ public class ClockworkJuggernaut extends Monster {
 			// a long hang in the air, so the landing can be dodged: the clip's airborne stretch plays slowly (and so does
 			// the move's clock, which follows the clip), so he still touches down on its landing frame and sound
 			playClip("leap", LEAP_AIR / LEAP_FLIGHT, 1.52f);
+			if (bursting) {
+				ruin = false;
+				breakRoof();
+			}
 		}
 		if (leaping) {
 			float u = Mth.clamp((t - 1.55f) / 0.53f, 0, 1);
-			Vec3 at = leapFrom.lerp(leapTo, u).add(0, 6 * Mth.sin(u * Mth.PI), 0);
+			Vec3 at = bursting || hopping ? burstPath(u) : leapFrom.lerp(leapTo, u).add(0, 6 * Mth.sin(u * Mth.PI), 0);
 			setDeltaMovement(Vec3.ZERO);
 			setPos(at.x, at.y, at.z);
 			if (u >= 1) {
+				boolean wasHop = hopping;
 				leaping = false;
+				bursting = false;
+				hopping = false;
 				noPhysics = false;
 				setNoGravity(false);
 				setPos(leapTo.x, leapTo.y, leapTo.z);
 				playClip("leap", speed(), 2.1f); // back to his own pace for the recovery
-				stomp(5, LEAP_DAMAGE);
-				freezeAround(5); // the ground shakes (client, on the leap_land cue) and they're held still
+				if (wasHop) {
+					stuckTicks = 0;
+					crumbleAround(2);
+				} else {
+					stomp(5, LEAP_DAMAGE);
+					freezeAround(5); // the ground shakes (client, on the leap_land cue) and they're held still
+				}
 			}
 		}
 	}
@@ -874,6 +913,11 @@ public class ClockworkJuggernaut extends Monster {
 
 	@Nullable
 	private Vec3 leapLanding(Vec3 spot) {
+		return leapLanding(spot, true);
+	}
+
+	@Nullable
+	private Vec3 leapLanding(Vec3 spot, boolean arc) {
 		BlockPos feet = BlockPos.containing(spot.x, spot.y + 0.5, spot.z);
 		for (int dy = 0; dy >= -4; dy--) {
 			BlockPos below = feet.offset(0, dy - 1, 0);
@@ -882,7 +926,7 @@ public class ClockworkJuggernaut extends Monster {
 				AABB box = getDimensions(getPose()).makeBoundingBox(land);
 				// room to stand, ground under all of him (not a pillar top), no higher or lower than he could walk
 				// back from (D56), and a clear arc there: he never leaps through a hill or a cave roof
-				return level().noCollision(this, box) && Math.abs(land.y - getY()) <= 3 && footing(land) && arcClear(position(), land)
+				return level().noCollision(this, box) && Math.abs(land.y - getY()) <= 3 && footing(land) && (!arc || arcClear(position(), land))
 					? land : null;
 			}
 		}
@@ -912,6 +956,194 @@ public class ClockworkJuggernaut extends Monster {
 				return false;
 		}
 		return true;
+	}
+
+	/**
+	 * D61: woken in his ruin, he bursts up through its roof and comes down by whoever woke him (or out in front of the
+	 * doorway): straight up, breaking the beams, chains and vines above him, across above the walls, and down.
+	 */
+	private void breakOut() {
+		startWound();
+		LivingEntity target = updateTarget();
+		startMove(Move.LEAP, target);
+		bursting = true;
+		burstTo = burstLanding(target);
+	}
+
+	/**
+	 * Where the break-out comes down: by whoever woke him, or failing that the nearest spot all round with room for him
+	 * and ground under him (up to 26 blocks out, uphill or down), nearest to them first; or, hemmed in by the ruin's walls,
+	 * back on his dais: through the roof regardless.
+	 */
+	private Vec3 burstLanding(@Nullable LivingEntity target) {
+		Vec3 toward = target != null ? target.position() : position().add(forward().scale(16));
+		Vec3 best = burstSpot(toward.x, toward.z);
+		double bestD = best == null ? Double.MAX_VALUE : 0;
+		for (int r = 10; r <= 26; r += 2)
+			for (int k = 0; k < 24; k++) {
+				double a = k * Math.PI * 2 / 24;
+				Vec3 at = burstSpot(getX() + Math.cos(a) * r, getZ() + Math.sin(a) * r);
+				if (at != null && at.distanceToSqr(toward) < bestD) {
+					best = at;
+					bestD = at.distanceToSqr(toward);
+				}
+			}
+		return best != null ? best : position();
+	}
+
+	/** Standing room on the ground at (x, z), found from the top down, within 8 blocks of his height; or null. */
+	@Nullable
+	private Vec3 burstSpot(double x, double z) {
+		int y = level().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(x), Mth.floor(z));
+		Vec3 land = new Vec3(x, y, z);
+		return Math.abs(y - getY()) <= 8 && level().noCollision(this, getDimensions(getPose()).makeBoundingBox(land)) && footing(land) ? land : null;
+	}
+
+	/** How high above the higher end the break-out climbs (over the hall's walls with room to spare), and a hop (a ruin's walls). */
+	private static final double BURST_RISE = 10, HOP_RISE = 7;
+	/** Unable to reach them this long, he hops (before, at STUCK_TICKS, he gives up and throws a cog). */
+	static final int HOP_AFTER = 40;
+
+	/** Springs over whatever's in his way to come down by {@code target}, if there's a clear way over and somewhere to land. */
+	private boolean tryHop(LivingEntity target) {
+		if (hopCooldown > 0 || move != null)
+			return false;
+		hopCooldown = 60; // looked for at most every 3 s, found or not
+		Vec3 landing = hopLanding(target);
+		if (landing == null)
+			return false;
+		startMove(Move.LEAP, target);
+		hopping = true;
+		burstTo = landing;
+		return true;
+	}
+
+	/** Where a hop comes down: by them, or the nearest spot to them with room for him, with a clear way up, over and down. */
+	@Nullable
+	private Vec3 hopLanding(LivingEntity target) {
+		Vec3 best = null;
+		double bestD = Double.MAX_VALUE;
+		for (int r = 4; r <= 10; r += 2)
+			for (int k = 0; k < 12; k++) {
+				double a = k * Math.PI * 2 / 12;
+				Vec3 at = burstSpot(target.getX() + Math.cos(a) * r, target.getZ() + Math.sin(a) * r);
+				if (at == null || Math.abs(at.y - getY()) > 3 || horizontalDistanceTo(at) < 3)
+					continue;
+				double d = at.distanceToSqr(target.position());
+				if (d < bestD && hopClear(at)) {
+					best = at;
+					bestD = d;
+				}
+			}
+		return best;
+	}
+
+	private double horizontalDistanceTo(Vec3 at) {
+		return Math.sqrt((at.x - getX()) * (at.x - getX()) + (at.z - getZ()) * (at.z - getZ()));
+	}
+
+	/** {@code to}, if he can still come down there by a clear way up, over and down; else null (a break-out lands back home). */
+	@Nullable
+	private Vec3 stillClear(Vec3 to, double rise) {
+		if (bursting)
+			breakRoof(); // his way up is through it
+		boolean room = to.equals(position()) || level().noCollision(this, getDimensions(getPose()).makeBoundingBox(to));
+		if (room && pathClear(to, rise))
+			return to;
+		return bursting ? position() : null;
+	}
+
+	/** Nothing solid in the hop's way: straight up, across at the top, and down onto {@code to}. */
+	private boolean hopClear(Vec3 to) {
+		return pathClear(to, HOP_RISE);
+	}
+
+	private boolean pathClear(Vec3 to, double rise) {
+		Vec3 from = position();
+		double top = Math.max(from.y, to.y) + rise;
+		for (int i = 1; i < 12; i++) {
+			float u = i / 12f;
+			Vec3 at = u < 0.35f ? new Vec3(from.x, Mth.lerp(smooth(u / 0.35f), from.y, top), from.z)
+				: u < 0.7f ? from.lerp(to, smooth((u - 0.35f) / 0.35f)).with(net.minecraft.core.Direction.Axis.Y, top)
+				: new Vec3(to.x, Mth.lerp(smooth((u - 0.7f) / 0.3f), top, to.y), to.z);
+			if (!level().noCollision(this, getDimensions(getPose()).makeBoundingBox(at).deflate(0.3)))
+				return false;
+		}
+		return true;
+	}
+
+	/** The break-out's path: straight up, across at the top, then down onto the landing. */
+	private Vec3 burstPath(float u) {
+		double top = Math.max(leapFrom.y, leapTo.y) + (hopping ? HOP_RISE : BURST_RISE);
+		if (u < 0.35f)
+			return new Vec3(leapFrom.x, Mth.lerp(smooth(u / 0.35f), leapFrom.y, top), leapFrom.z);
+		if (u < 0.7f) {
+			double k = smooth((u - 0.35f) / 0.35f);
+			return new Vec3(Mth.lerp(k, leapFrom.x, leapTo.x), top, Mth.lerp(k, leapFrom.z, leapTo.z));
+		}
+		return new Vec3(leapTo.x, Mth.lerp(smooth((u - 0.7f) / 0.3f), top, leapTo.y), leapTo.z);
+	}
+
+	private static double smooth(float f) {
+		return f * f * (3 - 2 * f);
+	}
+
+	/** The one time he breaks blocks (D61): the ruin's roof beams, chains, vines and slabs straight above him. */
+	private void breakRoof() {
+		if (home == null || !home.closerToCenterThan(position(), 12))
+			return; // only ever his own hall's roof
+		AABB column = getBoundingBox().setMinY(getY() + 1).setMaxY(getY() + BURST_RISE + getBbHeight() + 8); // up past the climb, landing uphill or not
+		for (BlockPos p : BlockPos.betweenClosed(BlockPos.containing(column.minX, column.minY, column.minZ),
+			BlockPos.containing(column.maxX - 1e-3, column.maxY, column.maxZ - 1e-3)))
+			if (level().getBlockState(p).is(BREAKS_OUT))
+				level().destroyBlock(p, true, this);
+		sound("plates_burst", 0.8f);
+		sound("stage_roar", 1);
+		((ServerLevel) level()).sendParticles(ParticleTypes.CLOUD, getX(), getY() + 7, getZ(), 30, 2, 1, 2, 0.1);
+	}
+
+	/** What his break-out may smash on the way up (D61). */
+	public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> BREAKS_OUT = net.minecraft.tags.TagKey.create(
+		net.minecraft.core.registries.Registries.BLOCK, com.comedymonkey.createaddons.ComedyMonkeysCreateAddons.asResource("juggernaut_breaks_out"));
+
+	/** What of a Juggernaut Ruin crumbles under him (D62): its own building blocks, never the ground or its brass. */
+	public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> RUIN_BLOCKS = net.minecraft.tags.TagKey.create(
+		net.minecraft.core.registries.Registries.BLOCK, com.comedymonkey.createaddons.ComedyMonkeysCreateAddons.asResource("juggernaut_ruin_blocks"));
+
+	/** Within his own ruin: the hall he was found in and the field of broken walls round it (placed by world generation or
+	 * a command alike). */
+	private boolean inRuin() {
+		return home != null && home.closerToCenterThan(position(), RUIN_REACH);
+	}
+
+	/** How far from his hall his ruin reaches (its field's radius, and a little). */
+	static final double RUIN_REACH = 45;
+
+	/** A block of the ruin he's in, which crumbles as he walks into it or stomps by it (D62). */
+	boolean crumbles(BlockPos p) {
+		return home != null && home.closerToCenterThan(Vec3.atCenterOf(p), RUIN_REACH) && level().getBlockState(p).is(RUIN_BLOCKS);
+	}
+
+	/** Walking or charging, he goes through the ruin's walls: whatever of it is just ahead of him, above his feet. */
+	private void crumbleAhead() {
+		if (!inRuin || !(zza > 0 || charging) || leaping)
+			return;
+		AABB ahead = getBoundingBox().move(forward().scale(0.9)).setMinY(getY() + 1);
+		for (BlockPos p : BlockPos.betweenClosed(BlockPos.containing(ahead.minX, ahead.minY, ahead.minZ),
+			BlockPos.containing(ahead.maxX - 1e-3, ahead.maxY - 1e-3, ahead.maxZ - 1e-3)))
+			if (crumbles(p))
+				level().destroyBlock(p, false, this);
+	}
+
+	/** His stomp brings down the ruin within {@code radius} blocks of his footprint, from his feet up to his knees. */
+	private void crumbleAround(double radius) {
+		if (!inRuin)
+			return;
+		AABB round = getBoundingBox().inflate(radius, 0, radius).setMinY(getY() + 1).setMaxY(getY() + 3);
+		for (BlockPos p : BlockPos.betweenClosed(BlockPos.containing(round.minX, round.minY, round.minZ),
+			BlockPos.containing(round.maxX - 1e-3, round.maxY - 1e-3, round.maxZ - 1e-3)))
+			if (crumbles(p))
+				level().destroyBlock(p, false, this);
 	}
 
 	/** Follows his target's ground speed (players' own motion isn't known to the server, so from their positions). */
@@ -1114,9 +1346,14 @@ public class ClockworkJuggernaut extends Monster {
 	// ---- walking and facing
 
 	private void approach(LivingEntity target, double d) {
-		if (d > CLOSE - 1.5 && turnToward(target.position(), 5) && safeAhead(forward(), 1)) {
-			walkForward();
-			return;
+		if (d > CLOSE - 1.5 && turnToward(target.position(), 5)) {
+			if (safeAhead(forward(), 1)) {
+				walkForward();
+				return;
+			}
+			// a wall too tall to step, or a gap: he springs over it, to come down by them
+			if (tryHop(target))
+				return;
 		}
 		stopWalking();
 		if (d <= CLOSE - 1.5)
@@ -1184,8 +1421,8 @@ public class ClockworkJuggernaut extends Monster {
 				ground = solid(base.offset(0, dy, 0));
 			if (!ground) // water over a drop is still a drop
 				return false;
-			for (int dy = 2; dy <= 5; dy++)
-				if (solid(base.offset(0, dy, 0)))
+			for (int dy = 3; dy <= 6; dy++)
+				if (solid(base.offset(0, dy, 0)) && !crumbles(base.offset(0, dy, 0)))
 					return false;
 		}
 		return true;
@@ -1230,6 +1467,7 @@ public class ClockworkJuggernaut extends Monster {
 	/** The stomp ring (D21, D45): everyone on the ground within the radius is thrown up; jump it to dodge. */
 	private void stomp(double radius, float damage) {
 		ServerLevel server = (ServerLevel) level();
+		crumbleAround(3);
 		BlockState ground = level().getBlockState(blockPosition().below());
 		ParticleOptions dust = ground.isAir() ? ParticleTypes.POOF : new BlockParticleOption(ParticleTypes.BLOCK, ground);
 		for (int ring = 1; ring <= 3; ring++)
@@ -1565,6 +1803,13 @@ public class ClockworkJuggernaut extends Monster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData data) {
 		SpawnGroupData out = super.finalizeSpawn(level, difficulty, reason, data);
+		// found in a ruin (D31): he stays kneeling until someone comes near (D32)
+		if (reason == MobSpawnType.STRUCTURE) {
+			ruin = true;
+			home = blockPosition();
+			goDormant();
+			return out;
+		}
 		// summoned (the ritual, an egg, the summon command): he unfolds and salutes
 		beginWaking("wake_ritual");
 		return out;
@@ -1587,6 +1832,9 @@ public class ClockworkJuggernaut extends Monster {
 		tag.putInt("KeyHits", keyHits);
 		tag.putBoolean("Scaled", scaled);
 		tag.putBoolean("Overdrive", overdrive);
+		tag.putBoolean("Ruin", ruin);
+		if (home != null)
+			tag.putLong("Home", home.asLong());
 		tag.putFloat("Toughness", toughness);
 		tag.putInt("WipePending", wipePending);
 		ListTag fallenTag = new ListTag();
@@ -1612,6 +1860,9 @@ public class ClockworkJuggernaut extends Monster {
 		jammed = tag.getBoolean("Jammed");
 		keyHits = tag.getInt("KeyHits");
 		scaled = tag.getBoolean("Scaled");
+		ruin = tag.getBoolean("Ruin") && (phase == Phase.DORMANT || phase == Phase.STIRRING);
+		// found in a ruin, he remembers it: placed from its template (which carries Ruin but no Home), where he kneels is home
+		home = tag.contains("Home") ? BlockPos.of(tag.getLong("Home")) : ruin ? blockPosition() : null;
 		toughness = tag.contains("Toughness") ? Math.max(1, tag.getFloat("Toughness")) : 1;
 		fallen.clear();
 		for (Tag id : tag.getList("Fallen", Tag.TAG_INT_ARRAY))
@@ -1664,6 +1915,18 @@ public class ClockworkJuggernaut extends Monster {
 	/** Skips to a stage, its plates already shed (game tests). */
 	public void forceStage(int stage) {
 		entityData.set(STAGE, (byte) Mth.clamp(stage, 1, 3));
+	}
+
+	/** Found kneeling in a ruin and not woken yet: he breaks out when he wakes (D61). */
+	public boolean fromRuin() {
+		return ruin;
+	}
+
+	/** Wakes him as a ruin one would be woken, to break out (game tests). */
+	public void wakeFromRuin() {
+		ruin = true;
+		home = blockPosition();
+		beginWaking("wake");
 	}
 
 	/** Springs at {@code target} now (game tests). */

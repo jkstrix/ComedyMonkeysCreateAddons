@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "comedymonkeysaddons:juggernaut_ruin",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 64,
+    "separation": 24,
+    "salt": 193118274,
+    "exclusion_zone": {
+      "other_set": "minecraft:villages",
+      "chunk_count": 6
+    }
+  }
+}

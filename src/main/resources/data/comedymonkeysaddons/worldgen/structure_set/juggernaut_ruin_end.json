@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "comedymonkeysaddons:juggernaut_ruin_end",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 48,
+    "separation": 16,
+    "salt": 193118275,
+    "exclusion_zone": {
+      "other_set": "minecraft:end_cities",
+      "chunk_count": 6
+    }
+  }
+}

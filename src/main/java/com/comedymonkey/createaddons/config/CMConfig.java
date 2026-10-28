@@ -150,6 +150,8 @@ public final class CMConfig {
 		public final ModConfigSpec.LongValue springEngineCapacity;
 		public final ModConfigSpec.IntValue springEngineMaxStress;
 		public final ModConfigSpec.IntValue springEngineMaxWindStress;
+		public final ModConfigSpec.BooleanValue juggernautRuins;
+		public final ModConfigSpec.BooleanValue juggernautEndRuins;
 
 		public final ModConfigSpec.BooleanValue pipezFeedsBlazeBurners;
 		public final ModConfigSpec.BooleanValue blazeBurnerPipezOnly;
@@ -646,6 +648,10 @@ public final class CMConfig {
 				.translation("comedymonkeysaddons.configuration.springEngineMaxStress").defineInRange("springEngineMaxStress", 16_384, 256, 1_000_000);
 			springEngineMaxWindStress = builder.comment("The most stress a Spring Engine's winding end can be set to take, in SU (in steps of 1,024). At the default,", "262,144, a full wind takes under 4 minutes.")
 				.translation("comedymonkeysaddons.configuration.springEngineMaxWindStress").defineInRange("springEngineMaxWindStress", 262_144, 1_024, 4_194_304);
+			juggernautRuins = builder.comment("Juggernaut Ruins in the Overworld: rings of broken walls round a hall where a dormant Juggernaut kneels.", "Their spacing is in the data pack (worldgen/structure_set/juggernaut_ruin.json).")
+				.translation("comedymonkeysaddons.configuration.juggernautRuins").define("juggernautRuins", true);
+			juggernautEndRuins = builder.comment("Juggernaut Ruins on the End's outer islands (spacing in worldgen/structure_set/juggernaut_ruin_end.json).")
+				.translation("comedymonkeysaddons.configuration.juggernautEndRuins").define("juggernautEndRuins", true);
 			builder.pop();
 
 			builder.comment("Compatibility with other mods").push("modCompatibility");

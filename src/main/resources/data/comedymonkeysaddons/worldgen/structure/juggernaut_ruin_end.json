@@ -1,0 +1,8 @@
+{
+  "type": "comedymonkeysaddons:juggernaut_ruin",
+  "biomes": "#comedymonkeysaddons:has_structure/juggernaut_ruin_end",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "end": true
+}

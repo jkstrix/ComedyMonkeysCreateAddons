@@ -1856,5 +1856,7 @@
   "comedymonkeysaddons.ponder.spring_engine.text_3": "The coil in its portholes and the runes along its top show how wound it is",
   "comedymonkeysaddons.ponder.spring_engine.text_4": "Its output end turns at its set speed, offering up to 16,384 SU, and runs down only by what's actually used. It can wind and give at once",
   "comedymonkeysaddons.ponder.spring_engine.text_5": "A redstone signal on the output end stops it giving. A comparator on either end reads how wound it is",
-  "comedymonkeysaddons.ponder.spring_engine.text_6": "Broken or picked up with a Wrench, it keeps all its wind"
+  "comedymonkeysaddons.ponder.spring_engine.text_6": "Broken or picked up with a Wrench, it keeps all its wind",
+  "comedymonkeysaddons.configuration.juggernautRuins": "Juggernaut Ruins",
+  "comedymonkeysaddons.configuration.juggernautEndRuins": "Juggernaut Ruins in the End"
 }
