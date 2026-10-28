@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,part=output": {
+      "model": "comedymonkeysaddons:block/spring_engine_output"
+    },
+    "facing=north,part=winding": {
+      "model": "comedymonkeysaddons:block/spring_engine_winding"
+    },
+    "facing=east,part=output": {
+      "model": "comedymonkeysaddons:block/spring_engine_output",
+      "y": 90
+    },
+    "facing=east,part=winding": {
+      "model": "comedymonkeysaddons:block/spring_engine_winding",
+      "y": 90
+    },
+    "facing=south,part=output": {
+      "model": "comedymonkeysaddons:block/spring_engine_output",
+      "y": 180
+    },
+    "facing=south,part=winding": {
+      "model": "comedymonkeysaddons:block/spring_engine_winding",
+      "y": 180
+    },
+    "facing=west,part=output": {
+      "model": "comedymonkeysaddons:block/spring_engine_output",
+      "y": 270
+    },
+    "facing=west,part=winding": {
+      "model": "comedymonkeysaddons:block/spring_engine_winding",
+      "y": 270
+    }
+  }
+}

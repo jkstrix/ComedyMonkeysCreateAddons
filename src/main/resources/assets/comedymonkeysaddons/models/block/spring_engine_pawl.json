@@ -1,0 +1,150 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/spring_engine_iron",
+    "spring_engine_iron": "comedymonkeysaddons:block/spring_engine_iron",
+    "spring_engine_bronze": "comedymonkeysaddons:block/spring_engine_bronze"
+  },
+  "elements": [
+    {
+      "name": "pawl_bar",
+      "from": [
+        16.5,
+        13,
+        2
+      ],
+      "to": [
+        17.5,
+        14,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.5,
+            2,
+            15.5,
+            3
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "east": {
+          "uv": [
+            8,
+            2,
+            14,
+            3
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            2,
+            1.5,
+            3
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "west": {
+          "uv": [
+            2,
+            2,
+            8,
+            3
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            2,
+            1.5,
+            8
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            8,
+            1.5,
+            14
+          ],
+          "texture": "#spring_engine_iron"
+        }
+      }
+    },
+    {
+      "name": "pawl_pin",
+      "from": [
+        16.5,
+        13,
+        1.5
+      ],
+      "to": [
+        18,
+        15,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            1,
+            15.5,
+            3
+          ],
+          "texture": "#spring_engine_bronze"
+        },
+        "east": {
+          "uv": [
+            13,
+            1,
+            14.5,
+            3
+          ],
+          "texture": "#spring_engine_bronze"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            1,
+            2,
+            3
+          ],
+          "texture": "#spring_engine_bronze"
+        },
+        "west": {
+          "uv": [
+            1.5,
+            1,
+            3,
+            3
+          ],
+          "texture": "#spring_engine_bronze"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            1.5,
+            2,
+            3
+          ],
+          "texture": "#spring_engine_bronze"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            13,
+            2,
+            14.5
+          ],
+          "texture": "#spring_engine_bronze"
+        }
+      }
+    }
+  ]
+}

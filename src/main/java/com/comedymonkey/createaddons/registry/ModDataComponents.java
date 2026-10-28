@@ -32,6 +32,10 @@ public final class ModDataComponents {
 	public static final Supplier<DataComponentType<SpanStart>> SPAN_START = DATA_COMPONENTS.registerComponentType("span_start",
 		builder -> builder.persistent(SpanStart.CODEC).networkSynchronized(SpanStart.STREAM_CODEC));
 
+	/** On a Spring Engine: the SU-ticks of wind it holds (D38). */
+	public static final Supplier<DataComponentType<Long>> SPRING_WIND = DATA_COMPONENTS.registerComponentType("spring_wind",
+		builder -> builder.persistent(com.mojang.serialization.Codec.LONG).networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_LONG));
+
 	/** On a Battery: the FE it holds. */
 	public static final Supplier<DataComponentType<Integer>> BATTERY_CHARGE = DATA_COMPONENTS.registerComponentType("battery_charge",
 		builder -> builder.persistent(com.mojang.serialization.Codec.INT).networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));

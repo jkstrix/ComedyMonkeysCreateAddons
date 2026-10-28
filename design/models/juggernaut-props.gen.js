@@ -154,8 +154,8 @@ const keyTurning = [
 // one block's drum section (z0..z1 in that block's own model space), with bands at both ends
 function drum(z0, z1) {
   return [
-    C('drum_core', [1, 6, z0], [15, 12, z1], { up: null, down: null, all: K + 'drum' }),
-    C('drum_mid_top', [2, 12, z0], [14, 14.5, z1], { down: null, up: null, all: K + 'drum' }),
+    C('drum_core', [1, 6, z0], [15, 12, z1], { all: K + 'drum' }),
+    C('drum_mid_top', [2, 12, z0], [14, 14.5, z1], { down: null, all: K + 'drum' }),
     C('drum_top', [4, 14.5, z0], [12, 16, z1], { down: null, up: K + 'drum_top', all: K + 'drum' }),
     C('drum_mid_bottom', [2, 3.5, z0], [14, 6, z1], { up: null, down: null, all: K + 'drum' }),
   ];
@@ -178,9 +178,9 @@ function endWindow(z, dir) {
   const [p0, p1] = lo(0, 2), [g] = lo(0.75, 0.75), [c] = lo(1.5, 1.5);
   const face = s > 0 ? 'north' : 'south';
   return {
-    plate: [C('end_plate', [1, 2, p0], [15, 16, p1], { [face]: K + 'end_plate', [s > 0 ? 'south' : 'north']: null, all: K + 'iron' }, { uv: { [face]: [0, 0, 16, 16] } })],
-    glass: [C('end_glass', [1, 2, g], [15, 16, g], { north: K + 'glass', south: K + 'glass', all: null }, { uv: { north: [0, 0, 16, 16], south: [0, 0, 16, 16] } })],
-    coil: COILS.map((_, k) => [C('coil_' + k, [1, 2, c - s * 0.05 * [0, 1, 3, 2][k]], [15, 16, c - s * 0.05 * [0, 1, 3, 2][k]], { north: K + 'coil_' + k, south: K + 'coil_' + k, all: null }, { uv: { north: [0, 0, 16, 16], south: [0, 0, 16, 16] } })]),
+    plate: [C('end_plate', [1, 1, p0], [15, 15, p1], { [face]: K + 'end_plate', [s > 0 ? 'south' : 'north']: null, all: K + 'iron' }, { uv: { [face]: [0, 0, 16, 16] } })],
+    glass: [C('end_glass', [1, 1, g], [15, 15, g], { north: K + 'glass', south: K + 'glass', all: null }, { uv: { north: [0, 0, 16, 16], south: [0, 0, 16, 16] } })],
+    coil: COILS.map((_, k) => [C('coil_' + k, [1, 1, c - s * 0.05 * [0, 1, 3, 2][k]], [15, 15, c - s * 0.05 * [0, 1, 3, 2][k]], { north: K + 'coil_' + k, south: K + 'coil_' + k, all: null }, { uv: { north: [0, 0, 16, 16], south: [0, 0, 16, 16] } })]),
   };
 }
 // a wheel on the drum's east side (the ratchet on the winding end, the escape wheel on the output end), turning about x
@@ -216,11 +216,11 @@ outliner.push(group('winding_key', [8, 24, 8], EFF, [
 ]));
 // 2. the Spring Engine, a little to the right; the output end at the front, the winding end behind, shafts at both ends
 const ENG = [56, 0, 0];
-const shaftF = shaftStub().map((c) => ({ ...c, from: [6, 7, -10], to: [10, 11, 2], name: 'out_shaft' }));
-const shaftB = shaftStub().map((c) => ({ ...c, from: [6, 7, 30], to: [10, 11, 42], name: 'in_shaft' }));
+const shaftF = shaftStub().map((c) => ({ ...c, from: [6, 6, -10], to: [10, 10, 0], name: 'out_shaft' }));
+const shaftB = shaftStub().map((c) => ({ ...c, from: [6, 6, 32], to: [10, 10, 42], name: 'in_shaft' }));
 outliner.push(group('spring_engine', [8, 8, 16], ENG, [
   ...at(engineFront, ENG), ...at(engineBack, ENG, [0, 0, 16]),
-  group('out_shaft', [8, 9, 0], ENG, at(shaftF, ENG)), group('in_shaft', [8, 9, 32], ENG, at(shaftB, ENG)),
+  group('out_shaft', [8, 8, 0], ENG, at(shaftF, ENG)), group('in_shaft', [8, 8, 32], ENG, at(shaftB, ENG)),
   ...COILS.map((_, k) => group('front_coil_' + k, [8, 9, 1.5], ENG, at(frontWin.coil[k], ENG))),
   ...COILS.map((_, k) => group('back_coil_' + k, [8, 9, 30.5], ENG, at(backWin.coil[k], ENG, [0, 0, 16]))),
   group('escape_wheel', [15.75, 9, 8], ENG, at(escapeWheel, ENG)),

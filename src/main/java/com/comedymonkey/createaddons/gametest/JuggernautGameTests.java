@@ -5,6 +5,8 @@ import java.util.Set;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.juggernaut.ClockworkJuggernaut;
+import com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlock;
+import com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlockEntity;
 import com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlock;
 import com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlockEntity;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
@@ -466,6 +468,88 @@ public final class JuggernautGameTests {
 			ClockworkJuggernaut j = found.get(0);
 			helper.assertTrue(j.getY() >= helper.absolutePos(new BlockPos(0, 6, 0)).getY(), "he should be on the roof, at y " + j.getY());
 			helper.assertTrue(j.phase() == ClockworkJuggernaut.Phase.DORMANT, "on the surface he kneels, is " + j.phase());
+		});
+	}
+
+	// ---- the Spring Engine (D13, D34-D38)
+
+	/** A Spring Engine with its output end at {@code out}, giving north; its winding end is the block south of it. */
+	private static SpringEngineBlockEntity springEngine(GameTestHelper helper, BlockPos out) {
+		BlockState state = ModBlocks.SPRING_ENGINE.get().defaultBlockState().setValue(SpringEngineBlock.HORIZONTAL_FACING, Direction.NORTH);
+		helper.setBlock(out, state.setValue(SpringEngineBlock.PART, SpringEngineBlock.Part.OUTPUT));
+		helper.setBlock(out.south(), state.setValue(SpringEngineBlock.PART, SpringEngineBlock.Part.WINDING));
+		return helper.getBlockEntity(out);
+	}
+
+	private static BlockState creativeMotor(Direction facing) {
+		return BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("create", "creative_motor")).defaultBlockState()
+			.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, facing);
+	}
+
+	/** D13: full, it holds an hour at 16,384 SU; picked up, it keeps every bit of its wind (D38). */
+	@GameTest(template = COURSE)
+	public static void theSpringEngineKeepsItsWind(GameTestHelper helper) {
+		helper.assertTrue(SpringEngineBlockEntity.capacity() == 3600L * 16_384 * 20, "full should be an hour at 16,384 SU, is " + SpringEngineBlockEntity.capacity());
+		BlockPos out = new BlockPos(12, 0, 10);
+		SpringEngineBlockEntity engine = springEngine(helper, out);
+		engine.setStored(SpringEngineBlockEntity.capacity() / 2 + 7);
+		List<net.minecraft.world.item.ItemStack> drops = net.minecraft.world.level.block.Block.getDrops(helper.getBlockState(out), helper.getLevel(),
+			helper.absolutePos(out), engine);
+		helper.assertTrue(drops.size() == 1 && drops.get(0).is(ModItems.SPRING_ENGINE.get()), "it should drop one Spring Engine, drops " + drops);
+		helper.assertTrue(drops.get(0).getOrDefault(com.comedymonkey.createaddons.registry.ModDataComponents.SPRING_WIND.get(), 0L)
+			== SpringEngineBlockEntity.capacity() / 2 + 7, "the item should keep its wind exactly");
+		helper.succeed();
+	}
+
+	/** Broken from its winding end, the engine still drops once, wind and all, and the output end goes with it. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void breakingTheWindingEndDropsTheEngineOnce(GameTestHelper helper) {
+		BlockPos out = new BlockPos(12, 0, 10), back = out.south();
+		SpringEngineBlockEntity engine = springEngine(helper, out);
+		engine.setStored(12_345);
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		BlockState state = helper.getBlockState(back);
+		state.getBlock().playerWillDestroy(helper.getLevel(), helper.absolutePos(back), state, player);
+		helper.getLevel().destroyBlock(helper.absolutePos(back), false);
+		helper.succeedWhen(() -> {
+			helper.assertBlockPresent(Blocks.AIR, out);
+			List<ItemEntity> items = helper.getLevel().getEntitiesOfClass(ItemEntity.class, new net.minecraft.world.phys.AABB(helper.absolutePos(out)).inflate(3),
+				e -> e.getItem().is(ModItems.SPRING_ENGINE.get()));
+			helper.assertTrue(items.size() == 1, "one Spring Engine should drop, " + items.size() + " did");
+			helper.assertTrue(items.get(0).getItem().getOrDefault(com.comedymonkey.createaddons.registry.ModDataComponents.SPRING_WIND.get(), 0L) == 12_345,
+				"it should keep its wind");
+		});
+	}
+
+	/** D35: a motor turning its winding end stores exactly the stress it's set to take (1,024 SU) every tick, lossless. */
+	@GameTest(template = COURSE, timeoutTicks = 140)
+	public static void aMotorWindsTheSpringEngine(GameTestHelper helper) {
+		BlockPos out = new BlockPos(12, 0, 10);
+		SpringEngineBlockEntity engine = springEngine(helper, out);
+		helper.setBlock(out.south(2), creativeMotor(Direction.NORTH));
+		helper.runAfterDelay(100, () -> {
+			long stored = engine.stored();
+			helper.assertTrue(stored > 0 && stored % 1024 == 0 && stored <= 1024L * 100, "it should store 1,024 SU a tick it turns, holds " + stored);
+			helper.assertTrue(stored >= 1024L * 60, "it should have wound most of those 5 s, holds " + stored);
+			helper.succeed();
+		});
+	}
+
+	/** D36/D37: wound, it turns its shaft; nothing drawing on it, it loses nothing; a redstone signal stops it. */
+	@GameTest(template = COURSE, timeoutTicks = 100)
+	public static void theSpringEngineGivesOnlyWhatIsUsed(GameTestHelper helper) {
+		BlockPos out = new BlockPos(12, 0, 10);
+		SpringEngineBlockEntity engine = springEngine(helper, out);
+		engine.setStored(1_000_000);
+		helper.runAfterDelay(40, () -> {
+			helper.assertTrue(engine.getSpeed() != 0, "wound, it should turn its shaft");
+			helper.assertTrue(engine.stored() == 1_000_000, "with nothing drawing on it, it should lose nothing, holds " + engine.stored());
+			helper.assertTrue(engine.comparatorLevel() > 0, "a comparator should read some wind");
+			helper.setBlock(out.east(), Blocks.REDSTONE_BLOCK);
+		});
+		helper.runAfterDelay(60, () -> {
+			helper.assertTrue(engine.getSpeed() == 0, "a redstone signal should stop it");
+			helper.succeed();
 		});
 	}
 

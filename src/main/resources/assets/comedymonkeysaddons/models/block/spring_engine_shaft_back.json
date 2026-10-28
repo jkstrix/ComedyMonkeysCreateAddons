@@ -1,0 +1,83 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/spring_engine_iron",
+    "axis_top": "create:block/axis_top",
+    "axis": "create:block/axis"
+  },
+  "elements": [
+    {
+      "name": "shaft_in",
+      "from": [
+        6,
+        6,
+        16
+      ],
+      "to": [
+        10,
+        10,
+        22
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#axis_top"
+        },
+        "east": {
+          "uv": [
+            6,
+            0,
+            10,
+            6
+          ],
+          "texture": "#axis",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#axis_top"
+        },
+        "west": {
+          "uv": [
+            6,
+            0,
+            10,
+            6
+          ],
+          "texture": "#axis",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            6,
+            0,
+            10,
+            6
+          ],
+          "texture": "#axis"
+        },
+        "down": {
+          "uv": [
+            6,
+            0,
+            10,
+            6
+          ],
+          "texture": "#axis"
+        }
+      }
+    }
+  ]
+}

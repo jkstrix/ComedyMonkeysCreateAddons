@@ -147,6 +147,9 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue ritualWindSeconds;
 		public final ModConfigSpec.IntValue ritualMinSpeed;
 		public final ModConfigSpec.DoubleValue windingKeyStressImpact;
+		public final ModConfigSpec.LongValue springEngineCapacity;
+		public final ModConfigSpec.IntValue springEngineMaxStress;
+		public final ModConfigSpec.IntValue springEngineMaxWindStress;
 
 		public final ModConfigSpec.BooleanValue pipezFeedsBlazeBurners;
 		public final ModConfigSpec.BooleanValue blazeBurnerPipezOnly;
@@ -637,6 +640,12 @@ public final class CMConfig {
 				.translation("comedymonkeysaddons.configuration.ritualMinSpeed").defineInRange("ritualMinSpeed", 32, 1, 256);
 			windingKeyStressImpact = builder.comment("Stress a Winding Key puts on its network, per RPM. At a Hand Crank's 32 RPM the default of 4 needs 128 of its 256 stress units.")
 				.translation("comedymonkeysaddons.configuration.windingKeyStressImpact").defineInRange("windingKeyStressImpact", 4.0, 0.0, 1024.0);
+			springEngineCapacity = builder.comment("What a Spring Engine holds, in SU-seconds. The default, 58,982,400, is an hour at 16,384 SU.")
+				.translation("comedymonkeysaddons.configuration.springEngineCapacity").defineInRange("springEngineCapacity", 58_982_400L, 1L, 10_000_000_000L);
+			springEngineMaxStress = builder.comment("The most stress a Spring Engine gives out, in SU.")
+				.translation("comedymonkeysaddons.configuration.springEngineMaxStress").defineInRange("springEngineMaxStress", 16_384, 256, 1_000_000);
+			springEngineMaxWindStress = builder.comment("The most stress a Spring Engine's winding end can be set to take, in SU (in steps of 1,024). At the default,", "262,144, a full wind takes under 4 minutes.")
+				.translation("comedymonkeysaddons.configuration.springEngineMaxWindStress").defineInRange("springEngineMaxWindStress", 262_144, 1_024, 4_194_304);
 			builder.pop();
 
 			builder.comment("Compatibility with other mods").push("modCompatibility");
@@ -733,6 +742,11 @@ public final class CMConfig {
 
 		/** An int setting, or its default before the server config has loaded. */
 		public static int get(ModConfigSpec.IntValue value) {
+			return SERVER_SPEC.isLoaded() ? value.get() : value.getDefault();
+		}
+
+		/** A long setting, or its default before the server config has loaded. */
+		public static long get(ModConfigSpec.LongValue value) {
 			return SERVER_SPEC.isLoaded() ? value.get() : value.getDefault();
 		}
 

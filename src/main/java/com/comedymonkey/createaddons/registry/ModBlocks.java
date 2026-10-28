@@ -309,6 +309,9 @@ public final class ModBlocks {
 	/** The Clockwork Juggernaut's ritual key (D16-D18): fitted to a T of Brass Blocks and wound with a shaft. */
 	public static final DeferredBlock<com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlock> WINDING_KEY = BLOCKS.register("winding_key",
 		() -> new com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlock(machine()));
+	/** The Mainspring's use (D34-D39): a two-block engine that stores rotation, wound in behind and let out in front. */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlock> SPRING_ENGINE = BLOCKS.register("spring_engine",
+		() -> new com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlock(machine()));
 	public static final DeferredBlock<LavaGeneratorBlock> LAVA_GENERATOR = BLOCKS.register("lava_generator",
 		() -> new LavaGeneratorBlock(machine().lightLevel(state -> state.getValue(LavaGeneratorBlock.LIT) ? 9
 			: state.getValue(LavaGeneratorBlock.FUELLED) ? 4 : 0)));

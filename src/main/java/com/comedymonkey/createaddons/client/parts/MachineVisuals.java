@@ -36,6 +36,7 @@ public final class MachineVisuals {
 		visual(ModBlockEntities.MAGMA_ENGINE, MagmaEngineRenderer::parts, true);
 		visual(ModBlockEntities.ELECTRIC_MOTOR, ElectricRenderers.Motor::parts, true);
 		visual(ModBlockEntities.WINDING_KEY, com.comedymonkey.createaddons.client.juggernaut.WindingKeyRenderer::parts, true);
+		visual(ModBlockEntities.SPRING_ENGINE, com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer::parts, true);
 		visual(ModBlockEntities.LAVA_GENERATOR, ElectricRenderers.Generator::parts, true);
 		visual(ModBlockEntities.GEOTHERMAL_CONTROLLER, ElectricRenderers.Turbine::parts, true);
 		// a Battery's tubes and lamps; formed, only the master draws (a 9-high tower's column and arcs, 11 blocks up)

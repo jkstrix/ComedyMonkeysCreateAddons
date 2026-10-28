@@ -1,0 +1,44 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/spring_engine_iron",
+    "spring_engine_coil_2": "comedymonkeysaddons:block/spring_engine_coil_2"
+  },
+  "elements": [
+    {
+      "name": "coil_2",
+      "from": [
+        1,
+        1,
+        14.65
+      ],
+      "to": [
+        15,
+        15,
+        14.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#spring_engine_coil_2"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#spring_engine_coil_2"
+        }
+      }
+    }
+  ]
+}

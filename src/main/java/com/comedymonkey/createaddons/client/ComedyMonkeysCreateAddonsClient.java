@@ -196,6 +196,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.MAGMA_ENGINE.get(), MagmaEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ELECTRIC_MOTOR.get(), ElectricRenderers.Motor::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.WINDING_KEY.get(), com.comedymonkey.createaddons.client.juggernaut.WindingKeyRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.SPRING_ENGINE.get(), com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.BATTERY.get(), BatteryRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.GEOTHERMAL_CONTROLLER.get(), ElectricRenderers.Turbine::new);
@@ -232,6 +233,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		PressureCrucibleRenderer.registerModels(event);
 		CobbleGeneratorRenderer.registerModels(event);
 		com.comedymonkey.createaddons.client.juggernaut.WindingKeyRenderer.registerModels(event);
+		com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer.registerModels(event);
 		MachineRenderers.registerModels(event);
 		AutoHarvesterRenderer.registerModels(event);
 		event.register(AnimalPenRenderer.MILK);

@@ -46,7 +46,7 @@ Clarified: a summoned boss, a huge war automaton and the bots' grim ancestor. It
 | D32 | Waking a ruin one | A player within 16 blocks who can see it starts a 5 s warning (eyes light, ticking starts). Back off beyond 32 blocks during the warning and it settles again | defaults round 3 |
 | D33 | Ruin chest | Brass, zinc, Andesite Alloy and a few Precision Mechanisms. Never a Winding Key | defaults round 3 |
 | D34 | Spring Engine recipe | The Mainspring with a Brass Casing, 4 Brass Sheets and 2 Shafts, at a crafting table | defaults round 3 |
-| D35 | Winding the engine | A shaft into its back. A value box sets the stress it takes to wind (default 1,024 SU, up to 16,384); each second it stores that many SU-seconds. Lossless | defaults round 3 |
+| D35 | Winding the engine | A shaft into its back. A value box sets the stress it takes to wind (default 1,024 SU, up to 262,144 in steps of 1,024; raised from 16,384 in play, 2026-10-28, when a full wind took an hour): each second it stores that many SU-seconds, so at the top a full wind takes under 4 minutes. Lossless | defaults round 3 |
 | D36 | Unwinding | A shaft out of its front. A value box sets the speed (1-256 RPM, like the Creative Motor); it offers 16,384 SU and drains by the stress actually used, so a light load lasts longer. It can wind and unwind at once | defaults round 3 |
 | D37 | Redstone | A signal stops the output; a comparator reads how wound it is | defaults round 3 |
 | D38 | Keeping wind | Broken or picked up, it keeps its wind as an item. One Mainspring per engine; engines don't join. Unloaded, it pauses like any Create machine | defaults round 3 |

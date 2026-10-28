@@ -1,0 +1,36 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/spring_engine_iron",
+    "spring_engine_runes_band_2": "comedymonkeysaddons:block/spring_engine_runes_band_2"
+  },
+  "elements": [
+    {
+      "name": "runes_2",
+      "from": [
+        4,
+        16.31,
+        2
+      ],
+      "to": [
+        12,
+        16.31,
+        14
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "uv": [
+            4,
+            2,
+            12,
+            14
+          ],
+          "texture": "#spring_engine_runes_band_2"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BCB",
+    "AMA",
+    "B B"
+  ],
+  "key": {
+    "B": {
+      "item": "create:brass_sheet"
+    },
+    "C": {
+      "item": "create:brass_casing"
+    },
+    "A": {
+      "item": "create:shaft"
+    },
+    "M": {
+      "item": "comedymonkeysaddons:mainspring"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "comedymonkeysaddons:spring_engine"
+  }
+}

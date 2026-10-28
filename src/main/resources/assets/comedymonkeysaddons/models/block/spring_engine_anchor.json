@@ -1,0 +1,288 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/spring_engine_iron",
+    "spring_engine_iron": "comedymonkeysaddons:block/spring_engine_iron",
+    "spring_engine_bronze": "comedymonkeysaddons:block/spring_engine_bronze"
+  },
+  "elements": [
+    {
+      "name": "anchor_arm",
+      "from": [
+        16.5,
+        12,
+        4
+      ],
+      "to": [
+        17.5,
+        13,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.5,
+            3,
+            15.5,
+            4
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "east": {
+          "uv": [
+            4,
+            3,
+            12,
+            4
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            3,
+            1.5,
+            4
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "west": {
+          "uv": [
+            4,
+            3,
+            12,
+            4
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            4,
+            1.5,
+            12
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            4,
+            1.5,
+            12
+          ],
+          "texture": "#spring_engine_iron"
+        }
+      }
+    },
+    {
+      "name": "anchor_pallet_a",
+      "from": [
+        16.5,
+        9.5,
+        4
+      ],
+      "to": [
+        17.5,
+        12,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.5,
+            4,
+            15.5,
+            6.5
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            4,
+            12,
+            6.5
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            4,
+            1.5,
+            6.5
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "west": {
+          "uv": [
+            4,
+            4,
+            5.5,
+            6.5
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            4,
+            1.5,
+            5.5
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            10.5,
+            1.5,
+            12
+          ],
+          "texture": "#spring_engine_iron"
+        }
+      }
+    },
+    {
+      "name": "anchor_pallet_b",
+      "from": [
+        16.5,
+        9.5,
+        10.5
+      ],
+      "to": [
+        17.5,
+        12,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.5,
+            4,
+            15.5,
+            6.5
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "east": {
+          "uv": [
+            4,
+            4,
+            5.5,
+            6.5
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            4,
+            1.5,
+            6.5
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "west": {
+          "uv": [
+            10.5,
+            4,
+            12,
+            6.5
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            10.5,
+            1.5,
+            12
+          ],
+          "texture": "#spring_engine_iron"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            4,
+            1.5,
+            5.5
+          ],
+          "texture": "#spring_engine_iron"
+        }
+      }
+    },
+    {
+      "name": "anchor_pivot",
+      "from": [
+        16.5,
+        13,
+        7
+      ],
+      "to": [
+        18,
+        15,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            1,
+            15.5,
+            3
+          ],
+          "texture": "#spring_engine_bronze"
+        },
+        "east": {
+          "uv": [
+            7,
+            1,
+            9,
+            3
+          ],
+          "texture": "#spring_engine_bronze"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            1,
+            2,
+            3
+          ],
+          "texture": "#spring_engine_bronze"
+        },
+        "west": {
+          "uv": [
+            7,
+            1,
+            9,
+            3
+          ],
+          "texture": "#spring_engine_bronze"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            7,
+            2,
+            9
+          ],
+          "texture": "#spring_engine_bronze"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            7,
+            2,
+            9
+          ],
+          "texture": "#spring_engine_bronze"
+        }
+      }
+    }
+  ]
+}

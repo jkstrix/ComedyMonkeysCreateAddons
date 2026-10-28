@@ -1,0 +1,81 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/spring_engine_iron",
+    "spring_engine_bronze_teeth": "comedymonkeysaddons:block/spring_engine_bronze_teeth",
+    "spring_engine_wheel": "comedymonkeysaddons:block/spring_engine_wheel"
+  },
+  "elements": [
+    {
+      "name": "escape_wheel",
+      "from": [
+        15,
+        5,
+        4
+      ],
+      "to": [
+        16.5,
+        13,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            3,
+            1.5,
+            11
+          ],
+          "texture": "#spring_engine_bronze_teeth"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#spring_engine_wheel"
+        },
+        "south": {
+          "uv": [
+            14.5,
+            3,
+            16,
+            11
+          ],
+          "texture": "#spring_engine_bronze_teeth"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#spring_engine_wheel"
+        },
+        "up": {
+          "uv": [
+            14.5,
+            4,
+            16,
+            12
+          ],
+          "texture": "#spring_engine_bronze_teeth"
+        },
+        "down": {
+          "uv": [
+            14.5,
+            4,
+            16,
+            12
+          ],
+          "texture": "#spring_engine_bronze_teeth"
+        }
+      }
+    }
+  ]
+}

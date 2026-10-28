@@ -1,6 +1,7 @@
 package com.comedymonkey.createaddons.client.ponder;
 
 import com.comedymonkey.createaddons.content.juggernaut.ClockworkJuggernaut;
+import com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlockEntity;
 import com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlockEntity;
 import com.comedymonkey.createaddons.registry.ModEntities;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
@@ -113,6 +114,81 @@ public final class JuggernautScenes {
 		scene.overlay().showText(80)
 			.text("The key never takes in the Nether, and in Peaceful he never wakes")
 			.pointAt(util.vector().of(4.5, 7, 3.5))
+			.placeNearTarget();
+		scene.idle(90);
+	}
+
+	/** Both ends of the engine shown wound to {@code fill}. */
+	private static void fill(CreateSceneBuilder scene, BlockPos winding, BlockPos output, float fill) {
+		scene.world().modifyBlockEntity(winding, SpringEngineBlockEntity.class, be -> be.showFill(fill));
+		scene.world().modifyBlockEntity(output, SpringEngineBlockEntity.class, be -> be.showFill(fill));
+	}
+
+	/** The Spring Engine (spring_engine.nbt): winding it from behind, giving from the front, redstone, keeping its wind. */
+	public static void springEngine(SceneBuilder builder, SceneBuildingUtil util) {
+		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+		scene.title("spring_engine", "Storing Rotation in a Spring Engine");
+		scene.configureBasePlate(0, 0, 7);
+		scene.showBasePlate();
+		scene.idle(10);
+
+		BlockPos motor = util.grid().at(1, 1, 2), shaftIn = util.grid().at(2, 1, 2), winding = util.grid().at(3, 1, 2);
+		BlockPos output = util.grid().at(4, 1, 2), shaftOut = util.grid().at(5, 1, 2), fan = util.grid().at(6, 1, 2);
+		BlockPos lever = util.grid().at(4, 1, 3);
+		scene.world().showSection(util.select().fromTo(winding, output), Direction.DOWN);
+		scene.idle(15);
+		scene.overlay().showText(90)
+			.text("The Spring Engine holds the Mainspring: the only block that stores rotation. Full, it runs 16,384 SU for an hour")
+			.pointAt(util.vector().topOf(output))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(100);
+
+		// wound from behind: the ratchet turns, the coil packs tighter round the shaft, the runes rise
+		scene.world().showSection(util.select().fromTo(motor, shaftIn), Direction.EAST);
+		scene.idle(10);
+		Selection in = util.select().fromTo(motor, winding);
+		scene.world().setKineticSpeed(in, 32);
+		scene.overlay().showText(100)
+			.text("Turn its winding end from behind. It takes the stress set on its value box, from 1,024 to 262,144 SU, and stores every bit of it")
+			.pointAt(util.vector().blockSurface(winding, Direction.NORTH))
+			.placeNearTarget()
+			.attachKeyFrame();
+		for (int i = 1; i <= 20; i++) {
+			fill(scene, winding, output, i * 0.04f);
+			scene.idle(5);
+		}
+		scene.overlay().showText(80)
+			.text("The coil in its portholes and the runes along its top show how wound it is")
+			.pointAt(util.vector().topOf(winding))
+			.placeNearTarget();
+		scene.idle(90);
+
+		// giving from the front
+		scene.world().showSection(util.select().fromTo(shaftOut, fan), Direction.WEST);
+		scene.idle(10);
+		scene.world().setKineticSpeed(util.select().fromTo(output, fan), 32);
+		scene.overlay().showText(100)
+			.text("Its output end turns at its set speed, offering up to 16,384 SU, and runs down only by what's actually used. It can wind and give at once")
+			.pointAt(util.vector().blockSurface(output, Direction.NORTH))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(110);
+
+		// redstone
+		scene.world().showSection(util.select().position(lever), Direction.DOWN);
+		scene.idle(10);
+		scene.world().toggleRedstonePower(util.select().position(lever));
+		scene.world().setKineticSpeed(util.select().fromTo(output, fan), 0);
+		scene.overlay().showText(90)
+			.text("A redstone signal on the output end stops it giving. A comparator on either end reads how wound it is")
+			.pointAt(util.vector().blockSurface(lever, Direction.SOUTH))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(100);
+		scene.overlay().showText(80)
+			.text("Broken or picked up with a Wrench, it keeps all its wind")
+			.pointAt(util.vector().topOf(output))
 			.placeNearTarget();
 		scene.idle(90);
 	}

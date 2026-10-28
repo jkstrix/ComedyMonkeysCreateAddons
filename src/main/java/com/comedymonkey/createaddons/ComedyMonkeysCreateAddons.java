@@ -303,6 +303,7 @@ public class ComedyMonkeysCreateAddons {
 			BlockStressValues.IMPACTS.register(ModBlocks.PRESSURE_CRUCIBLE.get(), CMConfig.SERVER::crucibleStressImpact);
 			BlockStressValues.IMPACTS.register(ModBlocks.WINDING_KEY.get(), CMConfig.SERVER::windingKeyStressImpact);
 			registerCreateTooltip(ModItems.WINDING_KEY.get());
+			registerCreateTooltip(ModItems.SPRING_ENGINE.get());
 			// Every generator, by tier: the Brass ones make 16 at a time and load the network to match
 			for (var generator : ModBlocks.generators()) {
 				CobbleGeneratorBlock block = generator.get();
