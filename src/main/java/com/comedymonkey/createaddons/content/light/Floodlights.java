@@ -37,7 +37,7 @@ public final class Floodlights {
 	/** How long a wrenched Floodlight waits for its target (ticks). */
 	private static final int AIM_TICKS = 600;
 
-	private record Aiming(ResourceKey<Level> dimension, BlockPos light, long until) {}
+	private record Aiming(ResourceKey<Level> dimension, BlockPos light, long from, long until) {}
 
 	/** Who's aiming which Floodlight, on each side (an integrated server shares these statics with its client). */
 	private static final Map<UUID, Aiming> SERVER = new HashMap<>(), CLIENT = new HashMap<>();
@@ -54,7 +54,8 @@ public final class Floodlights {
 
 	/** The wrench on a Floodlight: its next click on a block (with the wrench) is its target. */
 	public static void startAiming(Level level, Player player, BlockPos light) {
-		aiming(level).put(player.getUUID(), new Aiming(level.dimension(), light.immutable(), level.getGameTime() + AIM_TICKS));
+		long now = level.getGameTime();
+		aiming(level).put(player.getUUID(), new Aiming(level.dimension(), light.immutable(), now, now + AIM_TICKS));
 		if (!level.isClientSide)
 			player.displayClientMessage(Component.translatable(KEY + "aiming"), true);
 	}
@@ -75,13 +76,18 @@ public final class Floodlights {
 			return;
 		event.setCanceled(true);
 		event.setCancellationResult(InteractionResult.SUCCESS);
-		if (level.isClientSide)
-			return;
 		if (event.getPos().equals(a.light())) {
-			player.displayClientMessage(Component.translatable(KEY + "stopped"), true);
+			// (a held click repeats: only a fresh one stops it)
+			if (level.getGameTime() - a.from() < 10) {
+				map.put(player.getUUID(), a);
+				return;
+			}
+			if (!level.isClientSide)
+				player.displayClientMessage(Component.translatable(KEY + "stopped"), true);
 			return;
 		}
-		if (!(level.getBlockEntity(a.light()) instanceof LightBlockEntity be) || be.kind() != LightKind.FLOODLIGHT)
+		if (level.isClientSide || !level.isLoaded(a.light()) || !(level.getBlockEntity(a.light()) instanceof LightBlockEntity be)
+			|| be.kind() != LightKind.FLOODLIGHT)
 			return;
 		Result result = aim(level, be, event.getPos(), event.getFace());
 		player.displayClientMessage(Component.translatable(KEY + result.name().toLowerCase(java.util.Locale.ROOT), (int) range()), true);
@@ -107,6 +113,8 @@ public final class Floodlights {
 		Vec3 from = lens(be);
 		if (from.distanceTo(Vec3.atCenterOf(target)) > range())
 			return Result.TOO_FAR;
+		if (!loadedBetween(level, be.getBlockPos(), target))
+			return Result.BLOCKED;
 		Direction face = clicked != null && sees(level, be, target, clicked) ? clicked : null;
 		double best = 0;
 		if (face == null)
@@ -128,6 +136,17 @@ public final class Floodlights {
 	static Vec3 lens(LightBlockEntity be) {
 		Direction facing = be.getBlockState().getValue(LightBlock.FACING);
 		return Vec3.atCenterOf(be.getBlockPos()).add(Vec3.atLowerCornerOf(facing.getNormal()).scale(0.55));
+	}
+
+	/** Every chunk between a and b is loaded (corners in order: the game's own check assumes it). */
+	private static boolean loadedBetween(Level level, BlockPos a, BlockPos b) {
+		return level.hasChunksAt(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()),
+			Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
+	}
+
+	/** A world closed: nobody's aiming any more. */
+	public static void forget(boolean client) {
+		(client ? CLIENT : SERVER).clear();
 	}
 
 	private static Vec3 normal(Direction d) {
@@ -169,7 +188,8 @@ public final class Floodlights {
 	 */
 	static @Nullable BlockPos landing(Level level, LightBlockEntity be) {
 		BlockPos target = be.aim();
-		if (target == null || !level.hasChunksAt(be.getBlockPos(), target))
+		// (and still in reach: a light carried off by a contraption, or the reach made shorter)
+		if (target == null || !loadedBetween(level, be.getBlockPos(), target) || lens(be).distanceTo(Vec3.atCenterOf(target)) > range() + 1)
 			return null;
 		Direction face = be.aimFace();
 		BlockHitResult hit = clip(level, be, face != null ? facePoint(target, face) : Vec3.atCenterOf(target));

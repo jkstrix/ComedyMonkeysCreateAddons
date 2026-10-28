@@ -513,8 +513,9 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 		tag.putLong("FlickerAt", flickerAt);
 		tag.putBoolean("FlickerOn", flickerOn);
 		tag.putLong("WarmAt", warmAt);
+		// (from the light: one carried off by a contraption keeps pointing the same way from where it is)
 		if (aim != null)
-			tag.putLong("Aim", aim.asLong());
+			tag.putLong("AimOffset", aim.subtract(worldPosition).asLong());
 		if (aimFace != null)
 			tag.putInt("AimFace", aimFace.get3DDataValue());
 		if (spot != null)
@@ -553,7 +554,7 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 		flickerAt = tag.contains("FlickerAt") ? tag.getLong("FlickerAt") : Long.MIN_VALUE / 2;
 		flickerOn = tag.getBoolean("FlickerOn");
 		warmAt = tag.contains("WarmAt") ? tag.getLong("WarmAt") : Long.MIN_VALUE / 2;
-		aim = tag.contains("Aim") ? BlockPos.of(tag.getLong("Aim")) : null;
+		aim = tag.contains("AimOffset") ? worldPosition.offset(BlockPos.of(tag.getLong("AimOffset"))) : null;
 		aimFace = tag.contains("AimFace") ? Direction.from3DDataValue(tag.getInt("AimFace")) : null;
 		spot = tag.contains("Spot") ? BlockPos.of(tag.getLong("Spot")) : null;
 		if (level != null && level.isClientSide) {

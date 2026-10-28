@@ -81,6 +81,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		// The ground shakes under the Juggernaut's spring leap
 		com.comedymonkey.createaddons.client.juggernaut.JuggernautShake.register();
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ComedyMonkeysCreateAddonsClient::forgetMachineSounds);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ElectricSounds::tickBeacons);
 		// Development only: Flywheel on/off A/B screenshots on request
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.dev.ShotRunner::onClientTick);
 		// The Geothermal Turbine's sounds run from its controller's client tick
@@ -174,6 +175,7 @@ public class ComedyMonkeysCreateAddonsClient {
 			return;
 		GeothermalTurbineSounds.forget();
 		ElectricSounds.forget();
+		com.comedymonkey.createaddons.content.light.Floodlights.forget(true);
 		MagmaEngineSounds.forget();
 		PressureCrucibleSounds.forget();
 		MonsterCageSounds.forget();

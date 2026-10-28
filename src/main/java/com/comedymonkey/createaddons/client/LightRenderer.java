@@ -139,7 +139,7 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 		} else {
 			turn(ms, kind, facing);
 			if (kind == LightKind.WARNING_BEACON) {
-				ElectricSounds.tickBeacon(be);
+				ElectricSounds.wantBeacon(be);
 				// the rotor turns about the dome's axis (z, through the dome's middle, as it's built on the north wall)
 				ms.translate(0.5, 0.5, 0);
 				ms.mulPose(Axis.ZP.rotationDegrees(be.spin(time, pt, be.phase() != LightBlockEntity.Phase.DARK)));

@@ -20,8 +20,11 @@ import net.minecraft.world.level.block.state.BlockState;
  * light along them while it's lit.
  */
 public class FestoonBlockEntity extends RunLightBlockEntity {
-	/** A string from this hook to the hook at {@code other} (facing out of its wall so); {@code held}: this hook holds it. */
-	public record Span(BlockPos other, Direction facing, boolean held) {}
+	/**
+	 * A string from this hook to the hook at {@code other} (facing out of its wall so); {@code held}: this hook holds it;
+	 * {@code paid}: hung with Festoon Lights (not free in creative), so it gives them back.
+	 */
+	public record Span(BlockPos other, Direction facing, boolean held, boolean paid) {}
 
 	private final List<Span> spans = new ArrayList<>();
 	/** The spots of light it put along the strings it holds. */
@@ -75,19 +78,43 @@ public class FestoonBlockEntity extends RunLightBlockEntity {
 		return getBlockState().getValue(FestoonHookBlock.FACING);
 	}
 
-	/** Blocks of string it holds. */
-	public double held() {
-		double blocks = 0;
-		for (Span s : spans)
-			if (s.held())
-				blocks += Festoons.eye(worldPosition, facing()).distanceTo(Festoons.eye(s.other(), s.facing()));
-		return blocks;
+	private double length(Span s) {
+		return Festoons.eye(worldPosition, facing()).distanceTo(Festoons.eye(s.other(), s.facing()));
 	}
 
-	/** Its strings' draw at its brightness step (P2: 1 FE/t per 2 blocks of string at full). */
+	/** Its strings' draw at its brightness step (P2: 1 FE/t per 2 blocks of string at full), half of each at either end. */
 	@Override
 	public double draw() {
-		return held() * CMConfig.SERVER.lightFestoonFePerTick() * LightKind.STEPS[step()];
+		double blocks = 0;
+		for (Span s : spans)
+			blocks += length(s) / 2;
+		return blocks * CMConfig.SERVER.lightFestoonFePerTick() * LightKind.STEPS[step()];
+	}
+
+	/**
+	 * Its strings whose far hook is gone (taken down while this one was unloaded) come down too, one it held giving back
+	 * its Festoon Lights here. False if it has none left: it goes.
+	 */
+	boolean check() {
+		if (level == null || level.isClientSide)
+			return true;
+		boolean changed = false;
+		for (java.util.Iterator<Span> it = spans.iterator(); it.hasNext();) {
+			Span s = it.next();
+			if (!level.isLoaded(s.other())
+				|| level.getBlockEntity(s.other()) instanceof FestoonBlockEntity far && far.partners().contains(worldPosition))
+				continue;
+			it.remove();
+			changed = true;
+			if (s.held() && s.paid())
+				net.minecraft.world.level.block.Block.popResource(level, worldPosition,
+					new net.minecraft.world.item.ItemStack(com.comedymonkey.createaddons.registry.ModItems.FESTOON_LIGHTS.get(), Festoons.cost(length(s))));
+		}
+		if (changed) {
+			RunLightBlockEntity.runsChanged();
+			changed();
+		}
+		return !spans.isEmpty();
 	}
 
 	/** Lit: a spot of light every 4 blocks along each string it holds, at its brightness and colour; dark: none. */
@@ -129,6 +156,7 @@ public class FestoonBlockEntity extends RunLightBlockEntity {
 			t.putLong("To", s.other().asLong());
 			t.putInt("Facing", s.facing().get3DDataValue());
 			t.putBoolean("Held", s.held());
+			t.putBoolean("Paid", s.paid());
 			list.add(t);
 		}
 		tag.put("Spans", list);
@@ -138,7 +166,7 @@ public class FestoonBlockEntity extends RunLightBlockEntity {
 		spans.clear();
 		for (Tag t : tag.getList("Spans", Tag.TAG_COMPOUND)) {
 			CompoundTag c = (CompoundTag) t;
-			spans.add(new Span(BlockPos.of(c.getLong("To")), Direction.from3DDataValue(c.getInt("Facing")), c.getBoolean("Held")));
+			spans.add(new Span(BlockPos.of(c.getLong("To")), Direction.from3DDataValue(c.getInt("Facing")), c.getBoolean("Held"), c.getBoolean("Paid")));
 		}
 	}
 

@@ -110,6 +110,7 @@ public class ComedyMonkeysCreateAddons {
 			modBus.addListener(com.comedymonkey.createaddons.gametest.SableGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.light.Floodlights::onRightClickBlock);
+		NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerStoppedEvent e) -> com.comedymonkey.createaddons.content.light.Floodlights.forget(false));
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.juggernaut.ClockworkJuggernaut::onMobGriefing);
 		// Helper Bot's test courses (/helperbot testsetup), and the follow-up once Create has registered their stations
 		// Helper Bot's test railway and shop: the command is a dev tool (testtrain go gives every train a schedule), so

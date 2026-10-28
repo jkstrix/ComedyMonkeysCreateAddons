@@ -98,7 +98,9 @@ public final class LightGlow {
 	private static void changed(LightBlockEntity be) {
 		// (not Light Strips: a point light a block along a whole run would be far too many)
 		if (be.getLevel() == null || be.getLevel() != Minecraft.getInstance().level
-			|| be instanceof com.comedymonkey.createaddons.content.light.LightStripBlockEntity)
+			|| be instanceof com.comedymonkey.createaddons.content.light.LightStripBlockEntity
+			// (nor Festoon hooks: their light is their spots)
+			|| be instanceof com.comedymonkey.createaddons.content.light.FestoonBlockEntity)
 			return;
 		if (!be.isRemoved() && be.phase() != LightBlockEntity.Phase.DARK)
 			GLOWS.computeIfAbsent(be, b -> new Glow());

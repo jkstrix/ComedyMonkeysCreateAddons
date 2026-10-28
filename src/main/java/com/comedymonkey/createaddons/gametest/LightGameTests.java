@@ -909,7 +909,7 @@ public final class LightGameTests {
 				.setValue(com.comedymonkey.createaddons.content.line.PowerLineBlock.FACES.get(Direction.DOWN), true));
 		}
 		var result = com.comedymonkey.createaddons.content.light.Festoons.hang(helper.getLevel(), helper.absolutePos(a), Direction.EAST,
-			helper.absolutePos(b), Direction.WEST, null);
+			helper.absolutePos(b), Direction.WEST, new ItemStack(ModItems.FESTOON_LIGHTS.get(), 8));
 		if (result != com.comedymonkey.createaddons.content.light.Festoons.Result.HUNG)
 			helper.fail("the festoon didn't hang: " + result);
 		if (fed)

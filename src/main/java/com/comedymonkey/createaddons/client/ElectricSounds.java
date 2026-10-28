@@ -34,6 +34,8 @@ public final class ElectricSounds {
 	private static final Map<ElectricMotorBlockEntity, Motor> MOTORS = new WeakHashMap<>();
 	private static final Map<BatteryBlockEntity, Battery> BATTERIES = new WeakHashMap<>();
 	private static final Map<com.comedymonkey.createaddons.content.light.LightBlockEntity, MachineLoop> BEACONS = new WeakHashMap<>();
+	/** Beacons drawn since the last tick that want their whirr (told from whichever thread draws them). */
+	private static final java.util.Set<com.comedymonkey.createaddons.content.light.LightBlockEntity> BEACONS_SEEN = java.util.concurrent.ConcurrentHashMap.newKeySet();
 
 	private ElectricSounds() {}
 
@@ -43,10 +45,25 @@ public final class ElectricSounds {
 		MOTORS.clear();
 		BATTERIES.clear();
 		BEACONS.clear();
+		BEACONS_SEEN.clear();
 	}
 
-	/** The Warning Beacon's soft whirr while its rotor turns (asked each frame it's drawn: lights don't tick). */
-	public static void tickBeacon(com.comedymonkey.createaddons.content.light.LightBlockEntity be) {
+	/** A Warning Beacon drawn this frame (lights don't tick): its whirr is seen to on the next client tick. */
+	public static void wantBeacon(com.comedymonkey.createaddons.content.light.LightBlockEntity be) {
+		if (be.phase() != com.comedymonkey.createaddons.content.light.LightBlockEntity.Phase.DARK)
+			BEACONS_SEEN.add(be);
+	}
+
+	/** Each client tick, on the main thread: the whirr of every turning beacon drawn since the last. */
+	public static void tickBeacons(net.neoforged.neoforge.client.event.ClientTickEvent.Post event) {
+		BEACONS.keySet().removeIf(BlockEntity::isRemoved);
+		for (var be : BEACONS_SEEN)
+			tickBeacon(be);
+		BEACONS_SEEN.clear();
+	}
+
+	/** The Warning Beacon's soft whirr while its rotor turns. */
+	private static void tickBeacon(com.comedymonkey.createaddons.content.light.LightBlockEntity be) {
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.level == null || be.getLevel() != mc.level)
 			return;

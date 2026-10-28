@@ -49,6 +49,10 @@ public class FestoonRenderer extends SafeBlockEntityRenderer<FestoonBlockEntity>
 		VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
 		TextureAtlasSprite flex = sprite("flex"), steel = sprite("steel"), bulb = sprite(lit ? "glow_white" : "glass_off");
 		Vec3 origin = Vec3.atLowerCornerOf(pos);
+		// (the light where each block of string passes, looked up once a frame)
+		java.util.Map<Long, Integer> lights = new java.util.HashMap<>();
+		java.util.function.Function<Vec3, Integer> lightAt = p -> lights.computeIfAbsent(BlockPos.containing(p).asLong(),
+			k -> LevelRenderer.getLightColor(be.getLevel(), BlockPos.of(k)));
 		for (FestoonBlockEntity.Span span : be.spans()) {
 			if (!span.held())
 				continue;
@@ -57,12 +61,12 @@ public class FestoonRenderer extends SafeBlockEntityRenderer<FestoonBlockEntity>
 			int segments = Math.max(8, (int) Math.ceil(length * 3));
 			for (int i = 0; i < segments; i++) {
 				Vec3 p0 = Festoons.along(a, b, (double) i / segments), p1 = Festoons.along(a, b, (double) (i + 1) / segments);
-				int l = LevelRenderer.getLightColor(be.getLevel(), BlockPos.containing(p0.add(p1).scale(0.5)));
+				int l = lightAt.apply(p0.add(p1).scale(0.5));
 				beam(vc, ms.last(), p0.subtract(origin), p1.subtract(origin), FLEX, flex, 0xFFFFFF, l);
 			}
 			for (double t : Festoons.bulbs(length)) {
 				Vec3 at = Festoons.along(a, b, t);
-				int l = LevelRenderer.getLightColor(be.getLevel(), BlockPos.containing(at));
+				int l = lightAt.apply(at);
 				Vec3 top = at.subtract(origin), neck = top.subtract(0, 1.25 / 16, 0), base = neck.subtract(0, 2.5 / 16, 0);
 				beam(vc, ms.last(), top, neck, SOCKET, steel, 0xFFFFFF, l);
 				beam(vc, ms.last(), neck, base, BULB, bulb, lit ? glow : 0xFFFFFF, lit ? LightTexture.FULL_BRIGHT : l);

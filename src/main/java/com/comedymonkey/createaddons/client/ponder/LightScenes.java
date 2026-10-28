@@ -189,7 +189,7 @@ public final class LightScenes {
 		scene.overlay().showControls(util.vector().topOf(flood), Pointing.DOWN, 30).rightClick().withItem(wrench());
 		scene.idle(35);
 		scene.overlay().showControls(util.vector().blockSurface(target, Direction.WEST), Pointing.LEFT, 30).rightClick().withItem(wrench());
-		scene.world().modifyBlockEntityNBT(util.select().position(flood), LightBlockEntity.class, nbt -> nbt.putLong("Aim", target.asLong()));
+		scene.world().modifyBlockEntityNBT(util.select().position(flood), LightBlockEntity.class, nbt -> nbt.putLong("AimOffset", target.subtract(flood).asLong()));
 		lit(scene, util.select().position(flood), true, 0);
 		scene.idle(50);
 		scene.overlay().showText(100)

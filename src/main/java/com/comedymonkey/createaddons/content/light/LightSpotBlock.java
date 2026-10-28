@@ -120,6 +120,22 @@ public class LightSpotBlock extends BaseEntityBlock implements SimpleWaterlogged
 		return state;
 	}
 
+	/** Any fluid flows in: water fills it as it would air (it stays, waterlogged); anything else takes its place. */
+	@Override
+	public boolean canPlaceLiquid(@Nullable net.minecraft.world.entity.player.Player player, BlockGetter level, BlockPos pos, BlockState state,
+								  net.minecraft.world.level.material.Fluid fluid) {
+		return !(state.getValue(WATERLOGGED) && fluid == Fluids.WATER);
+	}
+
+	@Override
+	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluid) {
+		if (fluid.getType() == Fluids.WATER && !state.getValue(WATERLOGGED))
+			return SimpleWaterloggedBlock.super.placeLiquid(level, pos, state, fluid);
+		if (!level.isClientSide())
+			level.setBlock(pos, fluid.createLegacyBlock(), Block.UPDATE_ALL);
+		return true;
+	}
+
 	@Override
 	protected FluidState getFluidState(BlockState state) {
 		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);

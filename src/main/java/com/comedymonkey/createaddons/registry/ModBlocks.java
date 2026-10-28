@@ -401,7 +401,8 @@ public final class ModBlocks {
 	public static final DeferredBlock<com.comedymonkey.createaddons.content.light.LightSpotBlock> LIGHT_SPOT = BLOCKS.register("light_spot",
 		() -> new com.comedymonkey.createaddons.content.light.LightSpotBlock(BlockBehaviour.Properties.of()
 			.replaceable()
-			.strength(-1.0f, 3600000.8f)
+			// (no obstacle: pistons, contraptions and explosions go through it; it's put back by its light)
+			.instabreak()
 			.noLootTable()
 			.noOcclusion()
 			.noCollission()

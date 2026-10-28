@@ -98,7 +98,9 @@ public final class Festoons {
 		BlockState there = level.getBlockState(cell);
 		if (there.getBlock() instanceof FestoonHookBlock)
 			return there.getValue(FestoonHookBlock.FACING) == facing;
-		return there.isAir() && FestoonHookBlock.holds(level, cell.relative(facing.getOpposite()), facing);
+		BlockPos support = cell.relative(facing.getOpposite());
+		return (there.isAir() || there.getBlock() instanceof LightSpotBlock) && level.isLoaded(support)
+			&& FestoonHookBlock.holds(level, support, facing);
 	}
 
 	/**
@@ -122,8 +124,8 @@ public final class Festoons {
 		putUp(level, b, fb);
 		if (!(level.getBlockEntity(a) instanceof FestoonBlockEntity ha) || !(level.getBlockEntity(b) instanceof FestoonBlockEntity hb))
 			return Result.NO_HOOK;
-		ha.addSpan(new FestoonBlockEntity.Span(b, fb, true));
-		hb.addSpan(new FestoonBlockEntity.Span(a, fa, false));
+		ha.addSpan(new FestoonBlockEntity.Span(b, fb, true, pay != null));
+		hb.addSpan(new FestoonBlockEntity.Span(a, fa, false, pay != null));
 		if (pay != null)
 			pay.shrink(cost);
 		RunLightBlockEntity.runsChanged();
@@ -140,15 +142,17 @@ public final class Festoons {
 	}
 
 	/**
-	 * The hook at pos is coming down: each string on it comes down too, giving back its Festoon Lights here; a hook left
-	 * with no string goes, and a hook that held one takes its spots away.
+	 * The hook at pos is coming down: each string on it comes down too, giving back the Festoon Lights it was hung with
+	 * (once: here, unless the far hook is unloaded and holds it, when it gives them back on finding it gone); a hook left
+	 * with no string goes.
 	 */
 	static void cut(Level level, BlockPos pos, FestoonBlockEntity be) {
 		Direction facing = be.getBlockState().getValue(FestoonHookBlock.FACING);
 		for (FestoonBlockEntity.Span span : be.spans()) {
-			double length = eye(pos, facing).distanceTo(eye(span.other(), span.facing()));
-			Block.popResource(level, pos, new ItemStack(ModItems.FESTOON_LIGHTS.get(), cost(length)));
-			if (!level.isLoaded(span.other()) || !(level.getBlockEntity(span.other()) instanceof FestoonBlockEntity other))
+			boolean there = level.isLoaded(span.other()) && level.getBlockEntity(span.other()) instanceof FestoonBlockEntity;
+			if (span.paid() && (there || span.held()))
+				Block.popResource(level, pos, new ItemStack(ModItems.FESTOON_LIGHTS.get(), cost(eye(pos, facing).distanceTo(eye(span.other(), span.facing())))));
+			if (!there || !(level.getBlockEntity(span.other()) instanceof FestoonBlockEntity other))
 				continue;
 			other.removeSpan(pos);
 			if (other.spans().isEmpty())
