@@ -76,8 +76,17 @@ public class EdgeModel extends BakedModelWrapper<BakedModel> {
 
 	@Override
 	public ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData data) {
+		return data.derive().with(EDGES, key(level, pos, state, RunLook.mode(level, pos, state))).build();
+	}
+
+	/** Its chamfers alone, lit or the unlit glass (a starving run's flicker: RunFlickerRenderer). */
+	static ModelData diffuser(BlockAndTintGetter level, BlockPos pos, BlockState state, boolean lit) {
+		return ModelData.builder().with(EDGES, key(level, pos, state, lit ? "glow" : "glass")).build();
+	}
+
+	private static String key(BlockAndTintGetter level, BlockPos pos, BlockState state, String mode) {
 		int edges = EdgeLinks.edgesAt(level, pos);
-		StringBuilder key = new StringBuilder(state.getValue(LightBlock.LIGHT) > 0 ? "lit" : "dark");
+		StringBuilder key = new StringBuilder(mode);
 		for (Direction face : Direction.values())
 			for (Direction side : WireLink.across(face)) {
 				if (!EdgeLinks.has(edges, face, side))
@@ -87,7 +96,7 @@ public class EdgeModel extends BakedModelWrapper<BakedModel> {
 					.append(EdgeLinks.end(level, pos, edges, face, side, east).ordinal()).append(',')
 					.append(EdgeLinks.end(level, pos, edges, face, side, east.getOpposite()).ordinal());
 			}
-		return data.derive().with(EDGES, key.toString()).build();
+		return key.toString();
 	}
 
 	@Override
@@ -105,7 +114,7 @@ public class EdgeModel extends BakedModelWrapper<BakedModel> {
 
 	private static List<BakedQuad> build(String key) {
 		String[] parts = key.split(";");
-		boolean lit = parts[0].equals("lit");
+		String lit = parts[0];
 		List<BakedQuad> out = new ArrayList<>();
 		for (int i = 1; i < parts.length; i++) {
 			String[] e = parts[i].split(",");
@@ -117,7 +126,7 @@ public class EdgeModel extends BakedModelWrapper<BakedModel> {
 		return out;
 	}
 
-	private static void end(List<BakedQuad> out, EdgeLinks.End end, String which, Direction face, Direction side, boolean lit) {
+	private static void end(List<BakedQuad> out, EdgeLinks.End end, String which, Direction face, Direction side, String lit) {
 		switch (end) {
 			case LINE, CORNER -> add(out, "join_" + which, face, side, lit);
 			case NONE -> add(out, "cap_" + which, face, side, lit);
@@ -127,9 +136,12 @@ public class EdgeModel extends BakedModelWrapper<BakedModel> {
 	}
 
 	/** A part's body and its chamfer (lit or unlit), turned from the floor's north edge onto face, along side. */
-	private static void add(List<BakedQuad> out, String part, Direction face, Direction side, boolean lit) {
-		turned(out, part(part), face, side);
-		turned(out, part(part + (lit ? "_glow" : "_glass")), face, side);
+	private static void add(List<BakedQuad> out, String part, Direction face, Direction side, String lit) {
+		if (RunLook.body(lit))
+			turned(out, part(part), face, side);
+		String diffuser = RunLook.diffuser(lit);
+		if (diffuser != null)
+			turned(out, part(part + diffuser), face, side);
 	}
 
 	private static void turned(List<BakedQuad> out, ModelResourceLocation location, Direction face, Direction side) {

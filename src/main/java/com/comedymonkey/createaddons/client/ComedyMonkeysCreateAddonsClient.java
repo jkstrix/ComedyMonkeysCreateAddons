@@ -218,6 +218,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.BATTERY.get(), BatteryRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LIGHT.get(), LightRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.FESTOON.get(), FestoonRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.LIGHT_STRIP.get(), com.comedymonkey.createaddons.client.line.RunFlickerRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.EDGE_LIGHT.get(), com.comedymonkey.createaddons.client.line.RunFlickerRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.GEOTHERMAL_CONTROLLER.get(), ElectricRenderers.Turbine::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.STRING_TANGLER.get(), MachineRenderers.Tangler::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.STONE_INFUSER.get(), MachineRenderers.Infuser::new);

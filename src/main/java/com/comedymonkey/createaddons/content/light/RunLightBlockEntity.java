@@ -135,6 +135,15 @@ public abstract class RunLightBlockEntity extends LightBlockEntity {
 		runsChanged();
 	}
 
+	/** On the client: flickering, its baked model leaves the diffuser to RunFlickerRenderer; steady again, it's baked back. */
+	@Override
+	protected void phaseShown() {
+		if (level == null)
+			return;
+		requestModelDataUpdate();
+		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 8);
+	}
+
 	private void heard(boolean source, Object network) {
 		super.supplied(source, network);
 	}

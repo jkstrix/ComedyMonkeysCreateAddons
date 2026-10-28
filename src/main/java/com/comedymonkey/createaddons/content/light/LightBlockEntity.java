@@ -377,6 +377,9 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 			Floodlights.beam(this, lit);
 	}
 
+	/** On the client: it went lit, flickering or dark (a run's baked model shows its flicker differently: RunLightBlockEntity). */
+	protected void phaseShown() {}
+
 	/** A remote spot of light at p is this light's (LightSpotBlock asks, to know it's still wanted). */
 	public boolean ownsSpot(BlockPos p) {
 		return p.equals(spot);
@@ -549,6 +552,7 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 	private void readLooks(CompoundTag tag) {
 		long oldFlicker = flickerAt, oldWarm = warmAt;
 		boolean wasDark = phase == Phase.DARK;
+		Phase before = phase;
 		step = Math.floorMod(tag.getInt("Step"), LightKind.STEPS.length);
 		phase = Phase.values()[Math.floorMod(tag.getInt("Phase"), Phase.values().length)];
 		flickerAt = tag.contains("FlickerAt") ? tag.getLong("FlickerAt") : Long.MIN_VALUE / 2;
@@ -565,6 +569,8 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 				clientCue.accept(this, CUE_WARM);
 			if (wasDark != (phase == Phase.DARK))
 				clientCue.accept(this, CUE_LIT);
+			if (before != phase)
+				phaseShown();
 			// re-dyed while lit: a colour change alone isn't a change of light to the light engine, so a coloured-light
 			// mod (Colorful Lighting) is asked to look at it again
 			DyeColor dye = dye();

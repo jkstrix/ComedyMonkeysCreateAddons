@@ -99,10 +99,19 @@ public class StripModel extends BakedModelWrapper<BakedModel> {
 
 	@Override
 	public ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData data) {
-		StringBuilder key = new StringBuilder(state.getValue(LightBlock.LIGHT) > 0 ? "lit" : "dark");
+		return data.derive().with(STRIPS, key(level, pos, state, RunLook.mode(level, pos, state))).build();
+	}
+
+	/** Its diffuser alone, lit or the unlit glass (a starving run's flicker: RunFlickerRenderer). */
+	static ModelData diffuser(BlockAndTintGetter level, BlockPos pos, BlockState state, boolean lit) {
+		return ModelData.builder().with(STRIPS, key(level, pos, state, lit ? "glow" : "glass")).build();
+	}
+
+	private static String key(BlockAndTintGetter level, BlockPos pos, BlockState state, String mode) {
+		StringBuilder key = new StringBuilder(mode);
 		for (Direction face : Direction.values())
 			key.append(';').append(LightStripBlock.hasFace(state, face) ? Integer.toString(StripLinks.links(level, pos, state, face)) : "x");
-		return data.derive().with(STRIPS, key.toString()).build();
+		return key.toString();
 	}
 
 	@Override
@@ -120,7 +129,7 @@ public class StripModel extends BakedModelWrapper<BakedModel> {
 
 	private static List<BakedQuad> build(String key) {
 		String[] parts = key.split(";");
-		boolean lit = parts[0].equals("lit");
+		String lit = parts[0];
 		List<BakedQuad> out = new ArrayList<>();
 		for (Direction face : Direction.values()) {
 			String packed = parts[1 + face.ordinal()];
@@ -154,7 +163,7 @@ public class StripModel extends BakedModelWrapper<BakedModel> {
 		return out;
 	}
 
-	private static void arm(List<BakedQuad> out, Direction face, Direction d, WireLink link, boolean lit) {
+	private static void arm(List<BakedQuad> out, Direction face, Direction d, WireLink link, String lit) {
 		switch (link) {
 			// up the next face of this block: stop short; the face that comes first draws the corner between them
 			case INSIDE -> {
@@ -174,11 +183,16 @@ public class StripModel extends BakedModelWrapper<BakedModel> {
 		}
 	}
 
-	/** A part's channel and, if it has one, its diffuser (lit or unlit), turned from the floor running north onto face, running d. */
-	private static void add(List<BakedQuad> out, String part, Direction face, Direction d, boolean lit) {
-		turned(out, part(part), face, d);
-		if (LIT.contains(part))
-			turned(out, part(part + (lit ? "_glow" : "_glass")), face, d);
+	/**
+	 * A part's channel and, if it has one, its diffuser (lit or unlit), as the mode shows them (RunLook), turned from the
+	 * floor running north onto face, running d.
+	 */
+	private static void add(List<BakedQuad> out, String part, Direction face, Direction d, String mode) {
+		if (RunLook.body(mode))
+			turned(out, part(part), face, d);
+		String diffuser = RunLook.diffuser(mode);
+		if (LIT.contains(part) && diffuser != null)
+			turned(out, part(part + diffuser), face, d);
 	}
 
 	private static void turned(List<BakedQuad> out, ModelResourceLocation location, Direction face, Direction d) {
