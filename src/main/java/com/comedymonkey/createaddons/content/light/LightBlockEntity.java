@@ -112,7 +112,16 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 	};
 
 	public LightBlockEntity(BlockPos pos, BlockState state) {
-		super(ModBlockEntities.LIGHT.get(), pos, state);
+		this(ModBlockEntities.LIGHT.get(), pos, state);
+	}
+
+	protected LightBlockEntity(net.minecraft.world.level.block.entity.BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
+	}
+
+	/** What its block draws and whether it warms up (a light, or a piece of a Light Strip). */
+	protected LitBlock lit() {
+		return getBlockState().getBlock() instanceof LitBlock b ? b : step -> 0;
 	}
 
 	public IEnergyStorage energy() {
@@ -157,7 +166,7 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 
 	/** FE a tick it draws while lit. */
 	public double draw() {
-		return kind().draw(step);
+		return lit().draw(step);
 	}
 
 	private double capacity() {
@@ -196,7 +205,7 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 		return energy >= (starved ? capacity() - 1 : capacity() / 2);
 	}
 
-	private int receive(int max, boolean simulate) {
+	protected int receive(int max, boolean simulate) {
 		if (level == null || level.isClientSide)
 			return 0;
 		long now = level.getGameTime();
@@ -317,7 +326,7 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 			flickerAt = now;
 			flickerOn = true;
 		}
-		if (fromDark && kind().warms())
+		if (fromDark && lit().warms())
 			warmAt = now;
 		show(true);
 		scheduleCheck();
@@ -369,14 +378,20 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 
 	/** The wrench: the next brightness step (D22), with a click pitched by the step (Full highest). */
 	public void stepBrightness() {
+		stepTo((step + 1) % LightKind.STEPS.length, true);
+	}
+
+	/** To a brightness step, with the step's click or quietly (the rest of a run stepped together). */
+	public void stepTo(int to, boolean sound) {
 		if (level == null)
 			return;
 		settle();
-		step = (step + 1) % LightKind.STEPS.length;
+		step = Math.floorMod(to, LightKind.STEPS.length);
 		energy = Math.min(energy, capacity());
 		if (phase == Phase.LIT)
 			show(true);
-		level.playSound(null, worldPosition, ModSounds.light("brightness_step"), SoundSource.BLOCKS, 0.8f, 1.2f - 0.1f * step);
+		if (sound)
+			level.playSound(null, worldPosition, ModSounds.light("brightness_step"), SoundSource.BLOCKS, 0.8f, 1.2f - 0.1f * step);
 		schedule(1);
 		sync();
 	}

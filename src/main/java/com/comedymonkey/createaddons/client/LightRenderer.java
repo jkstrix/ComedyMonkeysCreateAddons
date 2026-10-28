@@ -41,7 +41,7 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 	}
 
 	/** How much darker each brightness step's lens is (Full, Bright, Dim, Glow). */
-	private static final float[] STEP_SHADE = {1f, 0.82f, 0.58f, 0.4f};
+	private static final float[] STEP_SHADE = {1f, 0.7f, 0.45f, 0.25f};
 	/** Ticks a flicker frame lasts (the design's 90 ms). */
 	private static final float FRAME = 1.8f;
 
@@ -123,6 +123,13 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 	static int tint(LightBlockEntity be, long time, float pt) {
 		int c = warming(be, time, pt);
 		float s = STEP_SHADE[be.step()];
+		return rgb((c >> 16 & 255) * s, (c >> 8 & 255) * s, (c & 255) * s);
+	}
+
+	/** A lit lens's colour for a dye (or none) at a brightness step: what a Light Strip's lit diffuser is tinted. */
+	public static int lens(@org.jetbrains.annotations.Nullable net.minecraft.world.item.DyeColor dye, int step) {
+		int c = LightColours.lens(dye);
+		float s = STEP_SHADE[Math.floorMod(step, STEP_SHADE.length)];
 		return rgb((c >> 16 & 255) * s, (c >> 8 & 255) * s, (c & 255) * s);
 	}
 

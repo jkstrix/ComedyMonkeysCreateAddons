@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": [
+    {
+      "item": "comedymonkeysaddons:indicator_lamp"
+    }
+  ],
+  "result": {
+    "id": "comedymonkeysaddons:light_strip",
+    "count": 1
+  }
+}

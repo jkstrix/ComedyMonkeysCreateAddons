@@ -167,6 +167,11 @@ public final class ModBlockEntities {
 				ModBlocks.LIGHTS.values().stream().map(net.neoforged.neoforge.registries.DeferredBlock::get).toArray(net.minecraft.world.level.block.Block[]::new)).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.light.LightStripBlockEntity>> LIGHT_STRIP =
+		BLOCK_ENTITY_TYPES.register("light_strip",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.light.LightStripBlockEntity::new, ModBlocks.LIGHT_STRIP.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BatteryBlockEntity>> BATTERY =
 		BLOCK_ENTITY_TYPES.register("battery",
 			() -> BlockEntityType.Builder.of(BatteryBlockEntity::new, ModBlocks.BATTERY.get()).build(null));

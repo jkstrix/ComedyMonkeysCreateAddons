@@ -49,6 +49,10 @@ public final class LightTestSetup {
 	private static final DyeColor[] ROW_DYES = {DyeColor.RED, DyeColor.LIGHT_BLUE, DyeColor.LIME, DyeColor.ORANGE, DyeColor.PURPLE,
 		DyeColor.CYAN, DyeColor.YELLOW, DyeColor.PINK, DyeColor.BLUE, DyeColor.GREEN, DyeColor.MAGENTA, DyeColor.WHITE, DyeColor.BLACK};
 	private static final int SPACING = 3;
+	/** The width of each brightness step's bay. */
+	private static final int BAY = 7;
+	/** Blocks of floor strip in each run, before it turns up the wall. */
+	private static final int STRIP_RUN = 5;
 
 	private LightTestSetup() {}
 
@@ -62,7 +66,7 @@ public final class LightTestSetup {
 		ServerLevel level = source.getLevel();
 		BlockPos o = BlockPos.containing(source.getPosition());
 		int kinds = LightKind.values().length, dyes = DyeColor.values().length / 2, steps = LightKind.STEPS.length;
-		int length = 2 + SPACING * (kinds + dyes + steps) + 2;
+		int length = 2 + SPACING * (kinds + dyes) + BAY * steps + 1 + STRIP_RUN + 3;
 		street(level, o, length);
 		power(level, o);
 
@@ -87,12 +91,25 @@ public final class LightTestSetup {
 			light(level, o.offset(x, 0, -1), LightKind.BOLLARD, Direction.SOUTH, all[i + dyes], 0, dyeName(all[i + dyes]), "");
 			x += SPACING;
 		}
+		// each brightness step in a bay of its own, walled off from the next (a doorway over the line), so its light shows
+		// alone and not with its neighbours'
 		String[] stepNames = {"Full", "Bright", "Dim", "Glow"};
+		x += BAY / 2 - 1;
 		for (int s = 0; s < steps; s++) {
+			divider(level, o.offset(x - BAY / 2, 0, 0));
 			light(level, o.offset(x, 0, 1), LightKind.BULKHEAD, Direction.NORTH, null, s, "Brightness", stepNames[s]);
 			light(level, o.offset(x, 0, -1), LightKind.GLOBE_HEAD, Direction.SOUTH, null, s, "Brightness", stepNames[s]);
-			x += SPACING;
+			x += BAY;
 		}
+		divider(level, o.offset(x - BAY / 2, 0, 0));
+		x -= BAY / 2 - 1;
+
+		// Light Strips: a run along the floor beside the line, turning up the wall at its far end; plain south, dyed north
+		stripRun(level, o.offset(x, 0, 1), Direction.SOUTH, null);
+		stripRun(level, o.offset(x, 0, -1), Direction.NORTH, DyeColor.LIGHT_BLUE);
+		sign(level, o.offset(x, 1, 1), Direction.NORTH, "Light Strip", "");
+		sign(level, o.offset(x, 1, -1), Direction.SOUTH, "Light Strip", "Light Blue");
+		x += STRIP_RUN + 1;
 
 		// the line links up once its blocks are all in; again a moment later, as the game tests do
 		wires.forEach(p -> PowerLineBlock.relinkAround(level, p));
@@ -102,6 +119,34 @@ public final class LightTestSetup {
 		source.sendSuccess(() -> Component.literal("Built the Electric Lights test street: " + built + " lights along +x, powered by a lava "
 			+ "Wellspring and a Lava Generator at its west end. Plain lights on the south side, dyed on the north."), true);
 		return 1;
+	}
+
+	/**
+	 * A Light Strip run from {@code start} along +x on the floor, turning up the street's wall (towards {@code wall}) at its
+	 * last block and on up it; fed where it passes the line. Dyed the whole run if {@code dye} isn't null.
+	 */
+	private static void stripRun(ServerLevel level, BlockPos start, Direction wall, DyeColor dye) {
+		BlockState strip = ModBlocks.LIGHT_STRIP.get().defaultBlockState();
+		for (int i = 0; i < STRIP_RUN; i++) {
+			BlockState s = strip.setValue(LightStripBlock.FACES.get(Direction.DOWN), true);
+			// the last turns up the wall in the same block (an inside corner)
+			if (i == STRIP_RUN - 1)
+				s = s.setValue(LightStripBlock.FACES.get(wall), true);
+			level.setBlock(start.east(i), s, Block.UPDATE_ALL);
+		}
+		for (int y = 1; y <= 2; y++)
+			level.setBlock(start.east(STRIP_RUN - 1).above(y), strip.setValue(LightStripBlock.FACES.get(wall), true), Block.UPDATE_ALL);
+		if (dye != null && level.getBlockEntity(start) instanceof LightStripBlockEntity be)
+			for (LightStripBlockEntity piece : be.run())
+				piece.setDye(dye);
+	}
+
+	/** A wall across the street at x, three high, with a doorway one wide and two high over the line. */
+	private static void divider(ServerLevel level, BlockPos at) {
+		for (int z = -1; z <= 1; z++)
+			for (int y = 0; y <= 2; y++)
+				if (z != 0 || y == 2)
+					level.setBlock(at.offset(0, y, z), WALL, Block.UPDATE_ALL);
 	}
 
 	/** Clears the street's space and lays its floor and walls (two blocks out from the line, three high). */

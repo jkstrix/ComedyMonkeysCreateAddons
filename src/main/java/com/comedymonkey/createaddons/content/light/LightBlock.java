@@ -52,7 +52,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * its glow without being used (COLOR, in the state so coloured-light mods can colour its light); a water bucket washes it
  * plain; the wrench steps its brightness; breaking it drops it plain.
  */
-public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock {
+public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LitBlock {
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	/** Dark (0), or lit at brightness step {@code LIGHT - 1}: Full, Bright, Dim, Glow. */
 	public static final IntegerProperty LIGHT = IntegerProperty.create("light", 0, LightKind.STEPS.length);
@@ -73,6 +73,16 @@ public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWa
 
 	public LightKind kind() {
 		return kind;
+	}
+
+	@Override
+	public double draw(int step) {
+		return kind.draw(step);
+	}
+
+	@Override
+	public boolean warms() {
+		return kind.warms();
 	}
 
 	@Override
@@ -143,13 +153,24 @@ public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWa
 		return switch (kind.mount()) {
 			case WALL, ANY -> {
 				Direction facing = state.getValue(FACING);
-				BlockPos behind = pos.relative(facing.getOpposite());
-				yield level.getBlockState(behind).isFaceSturdy(level, behind, facing);
+				yield sturdy(level, pos.relative(facing.getOpposite()), facing);
 			}
-			case CEILING -> canSupportCenter(level, pos.above(), Direction.DOWN);
-			case FLOOR, TOP, TOP_FACING -> canSupportCenter(level, pos.below(), Direction.UP);
+			case CEILING -> encased(level, pos.above()) || canSupportCenter(level, pos.above(), Direction.DOWN);
+			case FLOOR, TOP, TOP_FACING -> encased(level, pos.below()) || canSupportCenter(level, pos.below(), Direction.UP);
 			case FULL -> true;
 		};
+	}
+
+	/**
+	 * The block at {@code pos} has a sturdy face towards {@code face}, or is a line encased in a block (D11: a light fixed to
+	 * the block its feed is hidden in; the line's shape isn't the block's, so the game wouldn't call it sturdy).
+	 */
+	static boolean sturdy(LevelReader level, BlockPos pos, Direction face) {
+		return encased(level, pos) || level.getBlockState(pos).isFaceSturdy(level, pos, face);
+	}
+
+	private static boolean encased(LevelReader level, BlockPos pos) {
+		return level.getBlockEntity(pos) instanceof com.comedymonkey.createaddons.content.line.LineBlockEntity line && line.encasing() != null;
 	}
 
 	@Override

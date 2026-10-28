@@ -219,5 +219,22 @@
   "comedymonkeysaddons:yard_light_head[color=brown]": "#FF7400",
   "comedymonkeysaddons:yard_light_head[color=green]": "#00FF03",
   "comedymonkeysaddons:yard_light_head[color=red]": "#FF1E00",
-  "comedymonkeysaddons:yard_light_head[color=black]": "#5207FF"
+  "comedymonkeysaddons:yard_light_head[color=black]": "#5207FF",
+  "comedymonkeysaddons:light_strip": "#FFB557",
+  "comedymonkeysaddons:light_strip[color=white]": "#FFF1BF",
+  "comedymonkeysaddons:light_strip[color=orange]": "#FF4300",
+  "comedymonkeysaddons:light_strip[color=magenta]": "#FF36D9",
+  "comedymonkeysaddons:light_strip[color=light_blue]": "#15AFFF",
+  "comedymonkeysaddons:light_strip[color=yellow]": "#FFA600",
+  "comedymonkeysaddons:light_strip[color=lime]": "#76FF00",
+  "comedymonkeysaddons:light_strip[color=pink]": "#FF5580",
+  "comedymonkeysaddons:light_strip[color=gray]": "#DEF2FF",
+  "comedymonkeysaddons:light_strip[color=light_gray]": "#FFF9D2",
+  "comedymonkeysaddons:light_strip[color=cyan]": "#00FFFF",
+  "comedymonkeysaddons:light_strip[color=purple]": "#9B37FF",
+  "comedymonkeysaddons:light_strip[color=blue]": "#2A50FF",
+  "comedymonkeysaddons:light_strip[color=brown]": "#FF7400",
+  "comedymonkeysaddons:light_strip[color=green]": "#00FF03",
+  "comedymonkeysaddons:light_strip[color=red]": "#FF1E00",
+  "comedymonkeysaddons:light_strip[color=black]": "#5207FF"
 }

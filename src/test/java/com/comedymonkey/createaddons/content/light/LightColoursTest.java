@@ -60,8 +60,12 @@ class LightColoursTest {
 	void emittersMatchTheCastColours() {
 		JsonObject emitters = ModResourceFiles.readJson(ModResourceFiles.find("assets", "comedymonkeysaddons", "light", "emitters.json"))
 			.getAsJsonObject();
-		for (LightKind kind : LightKind.values()) {
-			String id = "comedymonkeysaddons:" + kind.id();
+		java.util.List<String> lights = new java.util.ArrayList<>();
+		for (LightKind kind : LightKind.values())
+			lights.add(kind.id());
+		lights.add("light_strip");
+		for (String light : lights) {
+			String id = "comedymonkeysaddons:" + light;
 			assertEquals(LightColours.castHex(null), emitters.get(id).getAsString(), id);
 			for (DyeColor dye : DyeColor.values()) {
 				String key = id + "[color=" + dye.getSerializedName() + "]";

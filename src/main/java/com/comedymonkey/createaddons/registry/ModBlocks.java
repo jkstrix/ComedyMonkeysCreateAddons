@@ -353,6 +353,16 @@ public final class ModBlocks {
 	public static final java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>> LIGHTS =
 		registerLights();
 
+	/** Electric Lights: the Light Strip, on any face of a block, joining its neighbours like a Power Line. */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.light.LightStripBlock> LIGHT_STRIP = BLOCKS.register("light_strip",
+		() -> new com.comedymonkey.createaddons.content.light.LightStripBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.METAL)
+			.strength(0.5f, 1.0f)
+			.sound(SoundType.COPPER)
+			.noOcclusion()
+			.noCollission()
+			.lightLevel(com.comedymonkey.createaddons.content.light.LightStripBlock::lightLevel)));
+
 	private static java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>> registerLights() {
 		var out = new java.util.EnumMap<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>>(
 			com.comedymonkey.createaddons.content.light.LightKind.class);

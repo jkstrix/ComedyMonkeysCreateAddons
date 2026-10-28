@@ -422,6 +422,11 @@
   "item.comedymonkeysaddons.breaker.tooltip.control1": "R-Click",
   "item.comedymonkeysaddons.breaker.tooltip.action1": "Flips the lever.",
   "item.comedymonkeysaddons.light_switch": "Light Switch",
+  "block.comedymonkeysaddons.light_strip": "Light Strip",
+  "block.comedymonkeysaddons.light_strip.tooltip.summary": "A thin line of light on any face of a block, joining its neighbours and turning corners like a _Power Line_. Strips that join are one _run_: a Power Line touching _any_ piece lights the whole run.",
+  "block.comedymonkeysaddons.light_strip.tooltip.control1": "R-Click with a Dye",
+  "block.comedymonkeysaddons.light_strip.tooltip.action1": "Colours the whole run (sneak for one block). The dye isn't used up.",
+  "comedymonkeysaddons.gui.jei.info.light_strip": "Lay it on any face of a block, floors, walls or ceilings, several faces in one block. Strips that touch join into a run, round corners too, and a Power Line touching any piece lights the whole run (it never passes power on to anything else). A dye colours the whole run and the wrench steps its brightness; sneak to change just one block.",
   "item.comedymonkeysaddons.light_switch.tooltip.summary": "Clips onto a straight _Power Line_, on a wall, floor or ceiling: a _switch_ for the lights. Off, everything fed through it goes _dark_. No redstone: that's the _Breaker's_ job.",
   "item.comedymonkeysaddons.light_switch.tooltip.control1": "R-Click",
   "item.comedymonkeysaddons.light_switch.tooltip.action1": "Flips the switch.",
@@ -1908,6 +1913,7 @@
   "comedymonkeysaddons.configuration.lightSmallFePerTick": "Wall lights, Bollard and Floor Light: Power (FE per tick)",
   "comedymonkeysaddons.configuration.lightCeilingFePerTick": "Cage Lamp and Flush Ceiling Light: Power (FE per tick)",
   "comedymonkeysaddons.configuration.lightLargeFePerTick": "High-Bay Lamp and street lamp heads: Power (FE per tick)",
+  "comedymonkeysaddons.configuration.lightRunFePerTick": "Light Strip and Edge Light, each block: Power (FE per tick)",
   "comedymonkeysaddons.configuration.lightBufferSeconds": "Seconds of power a light holds",
   "comedymonkeysaddons.gui.jei.info.light": "Runs on FE from a Power Line touching it, even one hidden in the block it's fixed to. Right-click with a dye to colour its glow (the dye isn't used); a water bucket washes it plain, and breaking it takes the colour off. The wrench steps its brightness: Full, Bright, Dim, Glow. Switch it with a Breaker on its line. Every light is cut from a Light Assembly in a stonecutter, and goes back in to become another."
 }

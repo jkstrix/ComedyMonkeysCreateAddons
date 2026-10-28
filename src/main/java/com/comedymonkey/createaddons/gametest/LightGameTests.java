@@ -197,6 +197,168 @@ public final class LightGameTests {
 		});
 	}
 
+	// ---------- Light Strips ----------
+
+	/** A run of {@code length} floor strips along +x from {@code from}. */
+	private static void strips(GameTestHelper helper, BlockPos from, int length) {
+		for (int i = 0; i < length; i++)
+			helper.setBlock(from.east(i), ModBlocks.LIGHT_STRIP.get().defaultBlockState()
+				.setValue(com.comedymonkey.createaddons.content.light.LightStripBlock.FACES.get(Direction.DOWN), true));
+	}
+
+	/** A generator, two blocks of wire, then a run of five floor strips: only the first touches the wire. Returns the run's start. */
+	private static BlockPos fedRun(GameTestHelper helper, BlockPos gen) {
+		LineGameTests.generator(helper, gen);
+		for (int i = 1; i <= 2; i++)
+			LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		strips(helper, gen.east(3), 5);
+		helper.runAtTickTime(2, () -> LineGameTests.relink(helper, gen.east(1), gen.east(2)));
+		return gen.east(3);
+	}
+
+	private static com.comedymonkey.createaddons.content.light.LightStripBlockEntity strip(GameTestHelper helper, BlockPos pos) {
+		if (helper.getBlockEntity(pos) instanceof com.comedymonkey.createaddons.content.light.LightStripBlockEntity be)
+			return be;
+		throw new net.minecraft.gametest.framework.GameTestAssertException("no strip at " + pos);
+	}
+
+	/** A Power Line touching the first strip of a run lights the whole run, to its far end, at a strip's light level. */
+	@GameTest(template = COURSE, timeoutTicks = 140)
+	public static void stripRunLightsFromOneFeed(GameTestHelper helper) {
+		BlockPos start = fedRun(helper, new BlockPos(0, 1, 2));
+		helper.runAtTickTime(120, () -> {
+			for (int i = 0; i < 5; i++)
+				if (strip(helper, start.east(i)).phase() != LightBlockEntity.Phase.LIT)
+					helper.fail("strip " + i + " of the run isn't lit");
+			if (helper.getBlockState(start.east(4)).getLightEmission(helper.getLevel(), helper.absolutePos(start.east(4)))
+				!= com.comedymonkey.createaddons.content.light.LightStripBlock.LEVEL)
+				helper.fail("the run's far end doesn't cast a strip's light");
+			helper.succeed();
+		});
+	}
+
+	/** A run never passes power on (P7): a Bollard beside its far end, touching no line, stays dark. */
+	@GameTest(template = COURSE, timeoutTicks = 140)
+	public static void stripRunPowersNothingElse(GameTestHelper helper) {
+		BlockPos start = fedRun(helper, new BlockPos(0, 1, 2));
+		BlockPos lamp = start.east(5);
+		light(helper, LightKind.BOLLARD, lamp);
+		helper.runAtTickTime(120, () -> {
+			if (strip(helper, start.east(4)).phase() != LightBlockEntity.Phase.LIT)
+				helper.fail("the run didn't light");
+			if (be(helper, lamp).phase() != LightBlockEntity.Phase.DARK)
+				helper.fail("the run powered a Bollard beside it");
+			helper.succeed();
+		});
+	}
+
+	/** A dye colours the whole run (D24) and isn't used; sneaking, only the strip clicked; water washes the whole run. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void dyeColoursTheWholeRun(GameTestHelper helper) {
+		BlockPos start = new BlockPos(1, 1, 2);
+		strips(helper, start, 4);
+		helper.runAtTickTime(2, () -> {
+			ItemStack dye = use(helper, start.east(1), new ItemStack(Items.BLUE_DYE));
+			if (dye.getCount() != 1)
+				helper.fail("the dye was used up");
+			for (int i = 0; i < 4; i++)
+				if (strip(helper, start.east(i)).dye() != DyeColor.BLUE)
+					helper.fail("strip " + i + " wasn't coloured with the run");
+			Player sneaker = helper.makeMockPlayer(GameType.SURVIVAL);
+			sneaker.setShiftKeyDown(true);
+			sneaker.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.RED_DYE));
+			BlockPos abs = helper.absolutePos(start.east(3));
+			helper.getBlockState(start.east(3)).useItemOn(sneaker.getMainHandItem(), helper.getLevel(), sneaker, InteractionHand.MAIN_HAND,
+				new BlockHitResult(Vec3.atCenterOf(abs), Direction.UP, abs, false));
+			if (strip(helper, start.east(3)).dye() != DyeColor.RED || strip(helper, start.east(2)).dye() != DyeColor.BLUE)
+				helper.fail("sneaking didn't colour just the one strip");
+			use(helper, start, new ItemStack(Items.WATER_BUCKET));
+			for (int i = 0; i < 4; i++)
+				if (strip(helper, start.east(i)).dye() != null)
+					helper.fail("strip " + i + " wasn't washed with the run");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * A generator, six blocks of wire with a Light Switch part-way, and a strip run beside the whole wire: fed on both
+	 * sides of the switch. Returns the run's start (beside the first wire).
+	 */
+	private static BlockPos runBesideASwitch(GameTestHelper helper, BlockPos gen) {
+		LineGameTests.generator(helper, gen);
+		for (int i = 1; i <= 6; i++)
+			LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		strips(helper, gen.east().south(), 6);
+		helper.runAtTickTime(2, () -> {
+			LineGameTests.relink(helper, gen.east(1), gen.east(2), gen.east(3), gen.east(4), gen.east(5), gen.east(6));
+			if (helper.getBlockEntity(gen.east(3)) instanceof LineBlockEntity b)
+				b.setFitting(Fitting.SWITCH, Direction.EAST);
+		});
+		return gen.east().south();
+	}
+
+	/**
+	 * A run fed on both sides of a Light Switch is one lamp: switched off, the far side's word (no power) doesn't put it out
+	 * while the near side still reaches the generator. Not one piece goes dark, or blinks, for two seconds after.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 200)
+	public static void stripRunFedAcrossASwitchStaysLit(GameTestHelper helper) {
+		BlockPos start = runBesideASwitch(helper, new BlockPos(0, 1, 1));
+		helper.runAtTickTime(100, () -> {
+			for (int i = 0; i < 6; i++)
+				if (strip(helper, start.east(i)).phase() != LightBlockEntity.Phase.LIT)
+					helper.fail("strip " + i + " didn't light");
+			if (helper.getBlockEntity(new BlockPos(3, 1, 1)) instanceof LineBlockEntity b)
+				b.flipLever();
+		});
+		for (int t = 101; t <= 150; t++)
+			helper.runAtTickTime(t, () -> {
+				for (int i = 0; i < 6; i++)
+					if (strip(helper, start.east(i)).phase() == LightBlockEntity.Phase.DARK)
+						helper.fail("strip " + i + " went dark when a switch cut one of the run's feeds");
+			});
+		helper.runAtTickTime(150, helper::succeed);
+	}
+
+	/**
+	 * A run touching the line in many places is counted once: each piece the line feeds it through says it has only its
+	 * share of the run's room, so the network doesn't draw for the run once per piece.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 140)
+	public static void stripRunTouchingTheLineIsCountedOnce(GameTestHelper helper) {
+		BlockPos start = runBesideASwitch(helper, new BlockPos(0, 1, 1));
+		helper.runAtTickTime(120, () -> {
+			long room = 0, said = 0;
+			for (int i = 0; i < 6; i++) {
+				room += strip(helper, start.east(i)).energy().getMaxEnergyStored();
+				said += strip(helper, start.east(i)).runEnergy().getMaxEnergyStored();
+			}
+			// six feeds, each saying a sixth of the run (give or take rounding)
+			if (said > room + 6)
+				helper.fail("the run's feeds say " + said + " FE of room between them, more than the run's " + room);
+			helper.succeed();
+		});
+	}
+
+	/** The wrench steps the whole run's brightness together (P26). */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void wrenchStepsTheWholeRun(GameTestHelper helper) {
+		BlockPos start = new BlockPos(1, 1, 2);
+		strips(helper, start, 3);
+		helper.runAtTickTime(2, () -> {
+			Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+			player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STICK));
+			BlockPos abs = helper.absolutePos(start.east(1));
+			((com.comedymonkey.createaddons.content.light.LightStripBlock) ModBlocks.LIGHT_STRIP.get()).onWrenched(helper.getBlockState(start.east(1)),
+				new net.minecraft.world.item.context.UseOnContext(player, InteractionHand.MAIN_HAND,
+					new BlockHitResult(Vec3.atCenterOf(abs), Direction.UP, abs, false)));
+			for (int i = 0; i < 3; i++)
+				if (strip(helper, start.east(i)).step() != 1)
+					helper.fail("strip " + i + " didn't step with the run");
+			helper.succeed();
+		});
+	}
+
 	/** Starved (power stops coming, its circuit still has a source), it stays lit for its store, flickers, then goes dark. */
 	@GameTest(template = COURSE, timeoutTicks = 140)
 	public static void starvedLightFlickersOut(GameTestHelper helper) {

@@ -498,13 +498,14 @@ function stripFloor(a, b, capA, capB) {
 // separately, its diffuser (lit and tinted, or the unlit glass). A strip goes straight through a block to its edges; at
 // a junction or a turn it's the middle and an arm to each strip it meets. Up the next face of the same block (inside
 // corner) the arm stops a pixel short, and one of the two draws the corner; over an edge (outside corner) both draw the
-// fold, as wires do. An open end gets a cap at the block's edge.
+// fold, as wires do. An open end gets a cap at the block's edge. Each arm's diffuser runs to the middle, so two arms
+// meet there without a gap (the middle itself is only channel).
 function stripParts() {
   const chan = (n, f, t) => box(n, f, t, { all: 'alu', down: null });
   return {
-    centre: { body: [chan('st_centre', [7, 0, 7], [9, 1, 9])], diffuser: [glowBox('st_centre_d', [7.5, 1, 7.5], [8.5, 1.25, 8.5], 'glow', ['down'])] },
-    arm: { body: [chan('st_arm', [7, 0, 0], [9, 1, 7])], diffuser: [glowBox('st_arm_d', [7.5, 1, 0], [8.5, 1.25, 7], 'glow', ['down'])] },
-    arm_inner: { body: [chan('st_arm_in', [7, 0, 1], [9, 1, 7])], diffuser: [glowBox('st_arm_in_d', [7.5, 1, 1], [8.5, 1.25, 7], 'glow', ['down'])] },
+    centre: { body: [chan('st_centre', [7, 0, 7], [9, 1, 9])], diffuser: [] },
+    arm: { body: [chan('st_arm', [7, 0, 0], [9, 1, 7])], diffuser: [glowBox('st_arm_d', [7.5, 1, 0], [8.5, 1.25, 8], 'glow', ['down'])] },
+    arm_inner: { body: [chan('st_arm_in', [7, 0, 1], [9, 1, 7])], diffuser: [glowBox('st_arm_in_d', [7.5, 1, 1], [8.5, 1.25, 8], 'glow', ['down'])] },
     corner: { body: [box('st_corner', [7, 0, 0], [9, 1, 1], { all: 'alu', down: null, north: null })], diffuser: [] },
     fold: { body: [box('st_fold', [7, 0, -1], [9, 1, 0], { all: 'alu', down: null, south: null })],
       diffuser: [glowBox('st_fold_d', [7.5, 0, -1.25], [8.5, 1.25, 0], 'glow', ['down', 'south'])] },

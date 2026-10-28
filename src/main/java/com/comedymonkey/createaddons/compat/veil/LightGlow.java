@@ -96,7 +96,9 @@ public final class LightGlow {
 
 	/** A light was loaded or its looks changed: lit, it's followed; dark, it isn't. */
 	private static void changed(LightBlockEntity be) {
-		if (be.getLevel() == null || be.getLevel() != Minecraft.getInstance().level)
+		// (not Light Strips: a point light a block along a whole run would be far too many)
+		if (be.getLevel() == null || be.getLevel() != Minecraft.getInstance().level
+			|| be instanceof com.comedymonkey.createaddons.content.light.LightStripBlockEntity)
 			return;
 		if (!be.isRemoved() && be.phase() != LightBlockEntity.Phase.DARK)
 			GLOWS.computeIfAbsent(be, b -> new Glow());

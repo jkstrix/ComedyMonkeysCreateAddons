@@ -128,7 +128,7 @@ for (const [id, k] of Object.entries(KINDS)) {
     writeJson(`models/block/light_strip/${name}_glass.json`, blockModel(lens(p.diffuser, 'glass_off'), 'alu'));
   }
   // the block's own model is only its particle: StripModel draws the strips from the parts
-  writeJson('models/block/light_strip/base.json', { parent: 'block/block', textures: { particle: ref('alu') }, elements: [] });
+  writeJson('models/block/light_strip/base.json', { parent: 'block/block', render_type: 'minecraft:cutout', textures: { particle: ref('alu') }, elements: [] });
   writeJson('blockstates/light_strip.json', { variants: { '': { model: `${NS}:block/light_strip/base` } } });
   writeJson('models/item/light_strip.json', blockModel(G.stripFloor(0, 16, true, true), 'alu', { glow: true, gui: true }));
 }
@@ -153,7 +153,7 @@ function castHex(dye) {
   return '#' + rgb.map((v) => Math.floor(f(v * 255) + 0.5).toString(16).toUpperCase().padStart(2, '0')).join('');
 }
 const emitters = {};
-for (const id of Object.keys(KINDS)) {
+for (const id of [...Object.keys(KINDS), 'light_strip']) {
   emitters[`${NS}:${id}`] = castHex(null);
   for (const dye of DYES) emitters[`${NS}:${id}[color=${dye}]`] = castHex(dye);
 }
@@ -199,13 +199,18 @@ const pick = path.join(DATA, 'minecraft/tags/block/mineable/pickaxe.json');
 const pickTag = JSON.parse(fs.readFileSync(pick, 'utf8'));
 for (const id of ids) if (!pickTag.values.includes(`${NS}:${id}`)) pickTag.values.push(`${NS}:${id}`);
 fs.writeFileSync(pick, JSON.stringify(pickTag, null, 2) + '\n');
+// a block of Light Strip drops a strip for each face it has one on (as Power Lines drop a wire a face)
+writeData(`${NS}/loot_table/blocks/light_strip.json`, { type: 'minecraft:block',
+  pools: ['down', 'up', 'north', 'south', 'west', 'east'].map((face) => ({ rolls: 1, entries: [{ type: 'minecraft:item', name: `${NS}:light_strip` }],
+    conditions: [{ condition: 'minecraft:block_state_property', block: `${NS}:light_strip`, properties: { [face]: 'true' } },
+      { condition: 'minecraft:survives_explosion' }] })) });
 
 // The Light Assembly (P21), then each light from it in a stonecutter (P22): one of a full light, eight of a small one.
 // A light goes back in to become another of its yield group, 1:1 (P23). The bigger lights are crafted instead (D26).
 const GROUPS = {
   full: ['bulkhead_light', 'wall_sconce', 'gooseneck_lamp', 'cage_lamp', 'flush_ceiling_light', 'bollard_light', 'floor_light',
     'lantern_head', 'cobra_head', 'globe_head', 'yard_light_head'],
-  small: ['indicator_lamp'],
+  small: ['indicator_lamp', 'light_strip'],
 };
 const YIELD = { full: 1, small: 8 };
 const CRAFTED = { high_bay_lamp: [{ tag: 'c:plates/iron' }] };

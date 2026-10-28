@@ -78,6 +78,7 @@ public class CMJeiPlugin implements IModPlugin {
 		info(registration, "splitter", ModItems.SPLITTER.get());
 		info(registration, "breaker", ModItems.BREAKER.get());
 		info(registration, "light_switch", ModItems.LIGHT_SWITCH.get());
+		info(registration, "light_strip", ModItems.LIGHT_STRIP.get());
 		// the Electric Lights: dyed in place, so there are no colour recipes to show it (P20)
 		info(registration, "light", ModItems.LIGHTS.values().stream().map(net.neoforged.neoforge.registries.DeferredItem::get)
 			.toArray(net.minecraft.world.level.ItemLike[]::new));

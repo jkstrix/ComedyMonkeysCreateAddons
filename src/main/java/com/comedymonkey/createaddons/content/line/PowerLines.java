@@ -100,6 +100,19 @@ public final class PowerLines {
 	public interface Lamp {
 		/** {@code network}: which network says so (a light can touch several). */
 		void supplied(boolean source, Object network);
+
+		/**
+		 * Lights that are one lamp to the network (a Light Strip run): the network's word is merged across all of them and
+		 * given once, with how many of them it feeds. By default each light is its own.
+		 */
+		default Object lampGroup() {
+			return this;
+		}
+
+		/** The word for a group: {@code feeds} of its lights take power from this network. */
+		default void supplied(boolean source, Object network, int feeds) {
+			supplied(source, network);
+		}
 	}
 
 	/** Something at pos changed: it and the blocks round it (corners, and through a wall) are read again. */
@@ -1175,9 +1188,20 @@ public final class PowerLines {
 			Map<BlockPos, Boolean> lamps = new LinkedHashMap<>();
 			for (Device d : ends)
 				lamps.merge(d.end().target(), reaches[circuitOf[d.seg()]], Boolean::logicalOr);
+			// ...and once per group of lights that are one lamp (a strip run fed in several places, say either side of a
+			// switch, stays lit if any of its feeds reaches power)
+			Map<Object, Lamp> groups = new LinkedHashMap<>();
+			Map<Object, Boolean> groupReached = new HashMap<>();
+			Map<Object, Integer> groupFeeds = new HashMap<>();
 			for (Map.Entry<BlockPos, Boolean> l : lamps.entrySet())
-				if (level.isLoaded(l.getKey()) && level.getBlockEntity(l.getKey()) instanceof Lamp lamp)
-					lamp.supplied(l.getValue(), this);
+				if (level.isLoaded(l.getKey()) && level.getBlockEntity(l.getKey()) instanceof Lamp lamp) {
+					Object g = lamp.lampGroup();
+					groups.putIfAbsent(g, lamp);
+					groupReached.merge(g, l.getValue(), Boolean::logicalOr);
+					groupFeeds.merge(g, 1, Integer::sum);
+				}
+			for (Map.Entry<Object, Lamp> g : groups.entrySet())
+				g.getValue().supplied(groupReached.get(g.getKey()), this, groupFeeds.get(g.getKey()));
 			use.clear();
 			use.putAll(nextUse);
 			lastMakes = makes;

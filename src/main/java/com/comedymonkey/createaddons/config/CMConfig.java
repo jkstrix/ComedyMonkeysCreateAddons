@@ -122,6 +122,7 @@ public final class CMConfig {
 		public final ModConfigSpec.DoubleValue lightSmallFePerTick;
 		public final ModConfigSpec.DoubleValue lightCeilingFePerTick;
 		public final ModConfigSpec.DoubleValue lightLargeFePerTick;
+		public final ModConfigSpec.DoubleValue lightRunFePerTick;
 		public final ModConfigSpec.IntValue lightBufferSeconds;
 
 		public final ModConfigSpec.DoubleValue gyroStrength;
@@ -549,6 +550,10 @@ public final class CMConfig {
 				.comment("The High-Bay Lamp and each street lamp head.")
 				.translation("comedymonkeysaddons.configuration.lightLargeFePerTick")
 				.defineInRange("largeFePerTick", 8.0, 0.05, 10000.0);
+			lightRunFePerTick = builder
+				.comment("Each block of a Light Strip or an Edge Light.")
+				.translation("comedymonkeysaddons.configuration.lightRunFePerTick")
+				.defineInRange("runFePerTick", 1.0, 0.05, 10000.0);
 			lightBufferSeconds = builder
 				.comment("Seconds of power a light holds: how long it stays lit after its power stops, before it flickers out.")
 				.translation("comedymonkeysaddons.configuration.lightBufferSeconds")
@@ -932,6 +937,10 @@ public final class CMConfig {
 
 		public double lightLargeFePerTick() {
 			return get(lightLargeFePerTick);
+		}
+
+		public double lightRunFePerTick() {
+			return get(lightRunFePerTick);
 		}
 
 		public int lightBufferSeconds() {
