@@ -83,6 +83,9 @@ public class CMJeiPlugin implements IModPlugin {
 		info(registration, "lamp_post", ModItems.CAST_IRON_LAMP_POST.get(), ModItems.STEEL_LAMP_POST.get());
 		info(registration, "hanging_lamp", ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.PENDANT).get(),
 			ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.CHANDELIER).get());
+		info(registration, "floodlight", ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.FLOODLIGHT).get());
+		info(registration, "warning_beacon", ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.WARNING_BEACON).get());
+		info(registration, "festoon_lights", ModItems.FESTOON_LIGHTS.get());
 		// the Electric Lights: dyed in place, so there are no colour recipes to show it (P20)
 		info(registration, "light", ModItems.LIGHTS.values().stream().map(net.neoforged.neoforge.registries.DeferredItem::get)
 			.toArray(net.minecraft.world.level.ItemLike[]::new));
