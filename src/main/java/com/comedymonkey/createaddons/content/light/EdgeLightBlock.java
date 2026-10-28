@@ -51,7 +51,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * edges are in its block entity (EdgeLinks). Trim that joins is one run, fed through any piece a Power Line touches and
  * dyed, washed and stepped all at once, as Light Strips are; sneak for one block. One block is one light.
  */
-public class EdgeLightBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LitBlock {
+public class EdgeLightBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LitBlock,
+	com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement {
 	public static final MapCodec<EdgeLightBlock> CODEC = simpleCodec(EdgeLightBlock::new);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -70,7 +71,7 @@ public class EdgeLightBlock extends BaseEntityBlock implements IWrenchable, Simp
 		builder.add(LightBlock.LIGHT, LightBlock.COLOR, WATERLOGGED);
 	}
 
-	/** The light it casts: as a Light Strip's, 12 at full. */
+	/** The light it casts: as a Light Strip's, 15 at full. */
 	public static int lightLevel(BlockState state) {
 		return LightStripBlock.lightLevel(state);
 	}
@@ -106,6 +107,14 @@ public class EdgeLightBlock extends BaseEntityBlock implements IWrenchable, Simp
 				best = d;
 				side = s;
 			}
+		}
+		// in a corner where two faces meet, the trim could lie on either; it's always kept one way, so it can't be placed
+		// twice and its runs join whichever face was clicked: on a wall rather than a floor or ceiling (it shines down or
+		// up the wall), else on the face that comes first
+		if (supports(level, pos, side)) {
+			boolean swap = face.getAxis() == Direction.Axis.Y ? side.getAxis() != Direction.Axis.Y : side.getAxis() != Direction.Axis.Y && side.ordinal() < face.ordinal();
+			if (swap)
+				return new Direction[] {side, face};
 		}
 		return new Direction[] {face, side};
 	}
@@ -161,10 +170,14 @@ public class EdgeLightBlock extends BaseEntityBlock implements IWrenchable, Simp
 		if (level instanceof Level l && !l.isClientSide && l.getBlockEntity(pos) instanceof EdgeLightBlockEntity be
 			&& EdgeLinks.onFace(be.edges(), dir) && !supports(level, pos, dir)) {
 			int gone = be.removeEdgesOn(dir);
-			if (be.edges() == 0)
-				return state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
-			for (int i = 0; i < gone; i++)
+			// the trim that came off drops; with none left the block goes too, its loot table giving one of them (as air:
+			// broken), or none (as water: just replaced), so the rest are dropped by hand
+			boolean last = be.edges() == 0;
+			int byHand = last && !state.getValue(WATERLOGGED) ? gone - 1 : gone;
+			for (int i = 0; i < byHand; i++)
 				Block.popResource(l, pos, new ItemStack(this));
+			if (last)
+				return state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
 		}
 		return state;
 	}
@@ -237,10 +250,33 @@ public class EdgeLightBlock extends BaseEntityBlock implements IWrenchable, Simp
 		return RenderShape.MODEL;
 	}
 
+	/**
+	 * Its scheduled tick: a block with no trim (left by a command, a schematic, a move that lost its edges) goes, as does
+	 * trim whose block has gone (after a move, say); then the light wakes as any light does.
+	 */
 	@Override
 	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-		if (level.getBlockEntity(pos) instanceof LightBlockEntity be)
-			be.wake();
+		if (!(level.getBlockEntity(pos) instanceof EdgeLightBlockEntity be))
+			return;
+		for (Direction face : Direction.values())
+			if (EdgeLinks.onFace(be.edges(), face) && !supports(level, pos, face)) {
+				int gone = be.removeEdgesOn(face);
+				for (int i = 0; i < gone; i++)
+					Block.popResource(level, pos, new ItemStack(this));
+			}
+		if (be.edges() == 0) {
+			level.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+			return;
+		}
+		be.wake();
+	}
+
+	/** A Schematicannon prints it with one Edge Light for each edge. */
+	@Override
+	public com.simibubi.create.content.schematics.requirement.ItemRequirement getRequiredItems(BlockState state, @Nullable BlockEntity be) {
+		int edges = be instanceof EdgeLightBlockEntity e ? Integer.bitCount(e.edges()) : 1;
+		return new com.simibubi.create.content.schematics.requirement.ItemRequirement(
+			com.simibubi.create.content.schematics.requirement.ItemRequirement.ItemUseType.CONSUME, new ItemStack(this, Math.max(1, edges)));
 	}
 
 	@Override

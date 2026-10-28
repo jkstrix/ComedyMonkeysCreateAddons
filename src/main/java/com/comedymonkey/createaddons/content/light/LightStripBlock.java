@@ -59,8 +59,8 @@ public class LightStripBlock extends BaseEntityBlock implements IWrenchable, Sim
 	/** Per direction: a strip lies against that face of the block (the same properties as a Power Line's wires). */
 	public static final Map<Direction, BooleanProperty> FACES = PowerLineBlock.FACES;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-	/** Light level at full brightness (P1; raised from 10 after a look in game, 2026-10-28). */
-	public static final int LEVEL = 12;
+	/** Light level at full brightness (P1; raised from 10, then to the brightest, after looks in game, 2026-10-28). */
+	public static final int LEVEL = 15;
 
 	public LightStripBlock(Properties properties) {
 		super(properties);
@@ -94,7 +94,7 @@ public class LightStripBlock extends BaseEntityBlock implements IWrenchable, Sim
 		return n;
 	}
 
-	/** The light it casts: 12 at full, less by brightness step, none when dark. */
+	/** The light it casts: 15 at full, less by brightness step, none when dark. */
 	public static int lightLevel(BlockState state) {
 		int light = state.getValue(LightBlock.LIGHT);
 		return light == 0 ? 0 : Math.max(1, (int) Math.round(LEVEL * LightKind.STEPS[light - 1]));

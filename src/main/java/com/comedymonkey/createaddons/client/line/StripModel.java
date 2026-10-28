@@ -84,13 +84,13 @@ public class StripModel extends BakedModelWrapper<BakedModel> {
 		}
 	}
 
-	/** The lit diffuser takes the strip's dye (or warm) colour, darker by brightness step, as a lit lens does. */
+	/** The lit diffuser (and an Edge Light's chamfer) takes its dye's (or warm) colour at full strength, darker by brightness step. */
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
 		event.register((state, level, pos, tint) -> {
 			if (tint != 0 || !state.hasProperty(LightBlock.LIGHT))
 				return -1;
 			int light = state.getValue(LightBlock.LIGHT);
-			return LightRenderer.lens(state.getValue(LightBlock.COLOR).dye(), Math.max(0, light - 1));
+			return LightRenderer.runGlow(state.getValue(LightBlock.COLOR).dye(), Math.max(0, light - 1));
 		}, ModBlocks.LIGHT_STRIP.get(), ModBlocks.EDGE_LIGHT.get());
 	}
 

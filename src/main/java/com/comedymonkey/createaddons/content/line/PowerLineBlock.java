@@ -268,6 +268,19 @@ public class PowerLineBlock extends BaseEntityBlock implements IWrenchable, Simp
 	 * This wire and every wire that could run to it (beside it, round its corners, and through a wall beside it) work
 	 * their links out again.
 	 */
+	/**
+	 * The lights fixed to the block at pos changed: the wires on it work their links out again and tell the network, even
+	 * if their links didn't change (a wire already feeding through it feeds a new light too).
+	 */
+	public static void refreshAround(Level level, BlockPos pos) {
+		relinkAround(level, pos);
+		if (level.isClientSide)
+			return;
+		for (Direction d : Direction.values())
+			if (level.isLoaded(pos.relative(d)) && level.getBlockEntity(pos.relative(d)) instanceof PowerLineBlockEntity be)
+				be.devicesChanged();
+	}
+
 	public static void relinkAround(Level level, BlockPos pos) {
 		if (level.isClientSide)
 			return;

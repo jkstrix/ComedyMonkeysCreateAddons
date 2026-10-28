@@ -16,7 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
  * the blocks along. Its edges are kept here, not in its block state (24 of them would be far too many states); its model
  * reads them, so the client is told whenever they change.
  */
-public class EdgeLightBlockEntity extends RunLightBlockEntity {
+public class EdgeLightBlockEntity extends RunLightBlockEntity implements com.simibubi.create.api.contraption.transformable.TransformableBlockEntity,
+	com.simibubi.create.api.schematic.nbt.PartialSafeNBT {
 	private int edges;
 
 	public EdgeLightBlockEntity(BlockPos pos, BlockState state) {
@@ -56,6 +57,24 @@ public class EdgeLightBlockEntity extends RunLightBlockEntity {
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
 			LightMounts.relinkBehind(level, getBlockState(), worldPosition);
 		}
+	}
+
+	/** Turned with a contraption or schematic: each edge turns with the block. */
+	@Override
+	public void transform(net.minecraft.world.level.block.entity.BlockEntity be, com.simibubi.create.content.contraptions.StructureTransform transform) {
+		int turned = 0;
+		for (Direction face : Direction.values())
+			for (Direction side : com.comedymonkey.createaddons.content.line.WireLink.across(face))
+				if (EdgeLinks.has(edges, face, side))
+					turned |= EdgeLinks.bit(transform.rotateFacing(transform.mirrorFacing(face)), transform.rotateFacing(transform.mirrorFacing(side)));
+		edges = turned;
+		setChanged();
+	}
+
+	/** What a schematic keeps of it: its edges (so a Schematicannon prints the trim where it was). */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		tag.putInt("Edges", edges);
 	}
 
 	@Override

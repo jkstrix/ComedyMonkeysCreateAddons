@@ -61,7 +61,7 @@ public final class LightMounts {
 		for (Direction d : Direction.values()) {
 			BlockPos support = pos.relative(d);
 			if (fixedTo(level, state, pos, support))
-				PowerLineBlock.relinkAround(level, support);
+				PowerLineBlock.refreshAround(level, support);
 		}
 	}
 }

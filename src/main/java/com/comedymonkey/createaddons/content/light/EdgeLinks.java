@@ -62,10 +62,11 @@ public final class EdgeLinks {
 
 	/** How the edge on face along side, in a block with {@code edges}, meets what's beyond its end towards e. */
 	public static End end(BlockGetter level, BlockPos pos, int edges, Direction face, Direction side, Direction e) {
-		if (has(edgesAt(level, pos.relative(e)), face, side))
-			return End.LINE;
+		// an edge it meets in this block first: only one of the two may fill the corner, even where both run on beyond it
 		if (has(edges, face, e))
 			return side.ordinal() < e.ordinal() ? End.CORNER : End.MET;
+		if (has(edgesAt(level, pos.relative(e)), face, side))
+			return End.LINE;
 		return End.NONE;
 	}
 

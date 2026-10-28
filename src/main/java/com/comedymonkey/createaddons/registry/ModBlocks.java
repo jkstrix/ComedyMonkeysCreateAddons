@@ -361,6 +361,7 @@ public final class ModBlocks {
 			.sound(SoundType.COPPER)
 			.noOcclusion()
 			.noCollission()
+			.pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)
 			.lightLevel(com.comedymonkey.createaddons.content.light.LightStripBlock::lightLevel)));
 
 	/** Electric Lights: the Edge Light, trim along the edges of a block's faces, several edges in one block. */
@@ -372,6 +373,7 @@ public final class ModBlocks {
 			.noOcclusion()
 			.noCollission()
 			.dynamicShape()
+			.pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)
 			.lightLevel(com.comedymonkey.createaddons.content.light.EdgeLightBlock::lightLevel)));
 
 	private static java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>> registerLights() {

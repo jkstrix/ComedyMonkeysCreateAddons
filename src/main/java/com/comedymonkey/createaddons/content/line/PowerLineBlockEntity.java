@@ -393,6 +393,11 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 	@Override
 	protected void networkUnloaded(ServerLevel level) {}
 
+	/** The lights it feeds through its block changed: the network works its devices out again. */
+	public void devicesChanged() {
+		changed(false);
+	}
+
 	/** Some wire here meets a machine or lies on one: where the network's work starts. */
 	public boolean hasTerminal() {
 		for (Direction face : Direction.values()) {

@@ -426,6 +426,8 @@ public final class LightGameTests {
 		for (int i = 1; i <= 2; i++)
 			LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
 		for (int i = 3; i <= 7; i++) {
+			// (on stone: trim drops off a floor that isn't sturdy, as the test course's isn't)
+			helper.setBlock(gen.east(i).below(), net.minecraft.world.level.block.Blocks.STONE);
 			helper.setBlock(gen.east(i), ModBlocks.EDGE_LIGHT.get());
 			edge(helper, gen.east(i)).addEdge(Direction.DOWN, Direction.NORTH);
 		}
@@ -470,6 +472,56 @@ public final class LightGameTests {
 				helper.getBlockEntity(cell)).stream().mapToInt(ItemStack::getCount).sum();
 			if (dropped != 2)
 				helper.fail("broken, it dropped " + dropped + ", not 2");
+			helper.succeed();
+		});
+	}
+
+	/** A block of Edge Light with two edges on its floor drops both when the floor goes (the last edges too). */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void edgeLightDropsAllItsEdgesWhenItsFloorGoes(GameTestHelper helper) {
+		BlockPos floor = new BlockPos(2, 1, 2), cell = floor.above();
+		helper.setBlock(floor, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(cell, ModBlocks.EDGE_LIGHT.get());
+		edge(helper, cell).addEdge(Direction.DOWN, Direction.NORTH);
+		edge(helper, cell).addEdge(Direction.DOWN, Direction.EAST);
+		helper.runAtTickTime(2, () -> helper.setBlock(floor, net.minecraft.world.level.block.Blocks.AIR));
+		helper.runAtTickTime(6, () -> {
+			if (helper.getBlockState(cell).is(ModBlocks.EDGE_LIGHT.get()))
+				helper.fail("the Edge Light stayed without its floor");
+			int dropped = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+				new net.minecraft.world.phys.AABB(helper.absolutePos(cell)).inflate(2), e -> e.getItem().is(ModItems.EDGE_LIGHT.get()))
+				.stream().mapToInt(e -> e.getItem().getCount()).sum();
+			if (dropped != 2)
+				helper.fail("it dropped " + dropped + " Edge Lights for its 2 edges");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * In the corner of a floor and a wall the trim is one edge however it's clicked (on the wall, along its foot): clicking
+	 * the floor near the wall and the wall near the floor give the same edge, placed once.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void edgeLightInACornerIsOneEdge(GameTestHelper helper) {
+		BlockPos floor = new BlockPos(2, 1, 2), cell = floor.above(), wall = cell.north();
+		helper.setBlock(floor, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(wall, net.minecraft.world.level.block.Blocks.STONE);
+		helper.runAtTickTime(1, () -> {
+			Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+			player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.EDGE_LIGHT.get(), 4));
+			BlockPos f = helper.absolutePos(floor), w = helper.absolutePos(wall);
+			// the floor's top, near the wall; then the wall's south face, near the floor
+			ModItems.EDGE_LIGHT.get().useOn(new net.minecraft.world.item.context.UseOnContext(player, InteractionHand.MAIN_HAND,
+				new BlockHitResult(new Vec3(f.getX() + 0.5, f.getY() + 1, f.getZ() + 0.05), Direction.UP, f, false)));
+			ModItems.EDGE_LIGHT.get().useOn(new net.minecraft.world.item.context.UseOnContext(player, InteractionHand.MAIN_HAND,
+				new BlockHitResult(new Vec3(w.getX() + 0.5, w.getY() + 0.05, w.getZ() + 1), Direction.SOUTH, w, false)));
+			int edges = edge(helper, cell).edges();
+			if (Integer.bitCount(edges) != 1)
+				helper.fail("the corner has " + Integer.bitCount(edges) + " edges, not 1");
+			if (!com.comedymonkey.createaddons.content.light.EdgeLinks.has(edges, Direction.NORTH, Direction.DOWN))
+				helper.fail("the corner's trim isn't on the wall, along its foot");
+			if (player.getMainHandItem().getCount() != 3)
+				helper.fail("the second click used an Edge Light");
 			helper.succeed();
 		});
 	}

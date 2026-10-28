@@ -133,6 +133,16 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 		return rgb((c >> 16 & 255) * s, (c >> 8 & 255) * s, (c & 255) * s);
 	}
 
+	/**
+	 * A Light Strip's or Edge Light's lit line at a brightness step: as bright as its light, its dye's (or warm) colour at
+	 * full strength (the cast colour, not the muted lens), as runs are decoration as much as light.
+	 */
+	public static int runGlow(@org.jetbrains.annotations.Nullable net.minecraft.world.item.DyeColor dye, int step) {
+		float[] c = LightColours.cast(dye, LightColours.lens(dye));
+		float s = STEP_SHADE[Math.floorMod(step, STEP_SHADE.length)] * 255;
+		return rgb(c[0] * s, c[1] * s, c[2] * s);
+	}
+
 	/** Its lens's colour at full: its dye's (or warm), warming up from sodium red. */
 	public static int warming(LightBlockEntity be, long time, float pt) {
 		int c = LightColours.lens(be.dye());

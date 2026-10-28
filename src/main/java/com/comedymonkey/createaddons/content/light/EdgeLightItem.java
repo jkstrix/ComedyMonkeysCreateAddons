@@ -36,8 +36,13 @@ public class EdgeLightItem extends BlockItem {
 			if (EdgeLinks.has(be.edges(), edge[0], edge[1]))
 				return InteractionResult.FAIL;
 			if (!level.isClientSide) {
-				be.addEdge(edge[0], edge[1]);
 				Player player = ctx.getPlayer();
+				// as a placement, so protection mods can refuse it
+				if (player != null && net.neoforged.neoforge.event.EventHooks.onBlockPlace(player,
+					net.neoforged.neoforge.common.util.BlockSnapshot.create(level.dimension(), level, pos), ctx.getClickedFace()))
+					return InteractionResult.FAIL;
+				be.addEdge(edge[0], edge[1]);
+				level.gameEvent(player, net.minecraft.world.level.gameevent.GameEvent.BLOCK_PLACE, pos);
 				if (player == null || !player.getAbilities().instabuild)
 					ctx.getItemInHand().shrink(1);
 				SoundType sound = be.getBlockState().getSoundType(level, pos, player);
