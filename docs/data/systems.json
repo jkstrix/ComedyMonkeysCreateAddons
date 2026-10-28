@@ -2125,5 +2125,52 @@
       "electricity",
       "one-block-farming"
     ]
+  },
+  {
+    "id": "clockwork-ruins",
+    "name": "Clockwork Ruins",
+    "summary": "Rings of broken walls, five chunks across, that grow taller and closer the further in you go. Something kneels at the middle. It is not a statue.",
+    "tags": [
+      "exploration"
+    ],
+    "stage": "end",
+    "requires": [],
+    "sections": [
+      {
+        "id": "finding",
+        "title": "Finding them",
+        "body": [
+          "They lie on dry land in the Overworld (forests, plains, taiga, savanna, snow, desert, swamp, hills) and on the End's outer islands, about one in every 64 by 64 chunks in the Overworld and one in 48 by 48 in the End, never close to a village or an End city.",
+          "At the edge you notice only the odd fallen block. Walk inward and there are stubs of wall, then broken walls with vines on them, then tall ragged corners and heaps of rubble, with brass and old shafting among them. At the middle stands a roofless hall."
+        ]
+      },
+      {
+        "id": "inside",
+        "title": "The hall",
+        "body": [
+          "A chest in the back corner holds brass, zinc, Andesite Alloy, cogwheels and a Precision Mechanism or three.",
+          {
+            "warning": "Something kneels on the dais. Come close and it begins to wake."
+          }
+        ]
+      },
+      {
+        "id": "end",
+        "title": "In the End",
+        "body": [
+          "The same hall in End Stone and purpur, half sunk into its island, with chorus growing where the vines would be."
+        ]
+      }
+    ],
+    "gallery": [
+      {
+        "src": "renders/clockwork-ruins-hall.png",
+        "caption": "The hall at the middle, its dais empty for now"
+      }
+    ],
+    "related": [
+      "ruin-sleeper",
+      "winding-key"
+    ]
   }
 ]

@@ -2044,5 +2044,39 @@
     "tips": [
       "On the Netherite cage, Monstrous III takes a Wither from every 20 minutes to every 8 at 256 RPM."
     ]
+  },
+  {
+    "id": "mainspring",
+    "name": "Mainspring",
+    "registry": [
+      "comedymonkeysaddons:mainspring"
+    ],
+    "summary": "A coiled steel spring the size of a door, torn from something that should not have been running. The heart of the [[spring-engine]].",
+    "tags": [
+      "boss drop"
+    ],
+    "stage": "end",
+    "requires": [
+      "ruin-sleeper"
+    ],
+    "teach": {
+      "what": "A boss drop: exactly one every time [[ruin-sleeper]] is brought down by a player.",
+      "why": "It is what makes a [[spring-engine]], the only block that stores rotation.",
+      "when": "Late game, after the fight.",
+      "interacts": "Crafted with a Brass Casing, 4 Brass Sheets and 2 Shafts into the [[spring-engine]].",
+      "mistakes": [
+        "Expecting Looting to give more: it is always exactly one."
+      ]
+    },
+    "obtain": [
+      "Dropped, always exactly one, when a player defeats [[ruin-sleeper]]."
+    ],
+    "uses": [
+      "The [[spring-engine]]."
+    ],
+    "related": [
+      "spring-engine",
+      "ruin-sleeper"
+    ]
   }
 ]

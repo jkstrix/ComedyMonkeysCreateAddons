@@ -4886,5 +4886,112 @@
    }
   ],
   "time": 250
+ },
+ {
+  "id": "comedymonkeysaddons:mechanical_crafting/winding_key",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "minecraft:netherite_ingot",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:winding_key",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:spring_engine",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:shaft",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:mainspring",
+     "count": 1
+    },
+    {
+     "item": "create:shaft",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    },
+    null,
+    {
+     "item": "create:brass_sheet",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:spring_engine",
+    "count": 1
+   }
+  ]
  }
 ]

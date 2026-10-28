@@ -306,6 +306,45 @@
     ]
   },
   {
+    "id": "ruin-sleeper",
+    "name": "▓▓▓▓▓▓▓▓▓ ▓▓▓▓▓▓▓▓▓▓",
+    "mystery": true,
+    "summary": "Something kneels at the heart of the [[clockwork-ruins]]. It is not a statue.",
+    "tags": [
+      "boss"
+    ],
+    "stage": "end",
+    "requires": [
+      "winding-key"
+    ],
+    "kind": "Boss",
+    "threat": 5,
+    "rarity": 2,
+    "teach": {
+      "what": "Nobody who has seen it up close has a name for it.",
+      "why": "The [[mainspring]] comes from it, and from nowhere else.",
+      "when": "When you are ready. You will not be the first to think you were."
+    },
+    "specs": [
+      [
+        "Found",
+        "At the heart of the [[clockwork-ruins]]"
+      ],
+      [
+        "Name",
+        "Unknown"
+      ]
+    ],
+    "behaviour": [
+      "It sleeps. It does not stay asleep."
+    ],
+    "related": [
+      "clockwork-ruins",
+      "winding-key",
+      "mainspring"
+    ]
+  },
+  {
     "id": "contained-wither",
     "name": "Contained Wither",
     "registry": [],

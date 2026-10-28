@@ -265,3 +265,12 @@ figure.shot figcaption { font-size: 12.5px; color: var(--muted); padding: 8px 12
   .gauges, .bignums { grid-template-columns: repeat(2, 1fr); }
   .lb-nav { display: none; }
 }
+
+/* A mystery's name (assets/js/ui/obfuscate.js): Minecraft's obfuscated text, in a fixed-width face so it holds still
+   while its characters churn */
+.obf {
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+  white-space: pre;
+  user-select: none;
+}

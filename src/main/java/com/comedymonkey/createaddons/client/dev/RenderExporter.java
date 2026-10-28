@@ -105,7 +105,7 @@ public final class RenderExporter {
 
 	/** One scene: {@code settle} is how many ticks it runs after it's built, before it's drawn. */
 	private record Shot(String id, BlockPos origin, List<String> setup, BlockPos min, BlockPos max, float yaw, float pitch, int settle,
-		int pixelsPerBlock) {}
+		int pixelsPerBlock, boolean silhouette) {}
 
 	private RenderExporter() {}
 
@@ -222,6 +222,8 @@ public final class RenderExporter {
 					Files.deleteIfExists(out);
 					report.add("EMPTY " + s.id() + ": nothing was drawn (check its commands in the log)");
 				} else {
+					if (s.silhouette())
+						silhouette(image);
 					image.writeToFile(out);
 					report.add("render " + s.id() + " " + image.getWidth() + "x" + image.getHeight());
 				}
@@ -238,7 +240,9 @@ public final class RenderExporter {
 		ClientLevel level = mc.level;
 		BlockPos a = s.origin().offset(s.min()), b = s.origin().offset(s.max());
 		AABB box = new AABB(Vec3.atLowerCornerOf(a), Vec3.atLowerCornerOf(b).add(1, 1, 1));
-		List<Entity> entities = level.getEntities((Entity) null, box.inflate(0.25), e -> !(e instanceof Player));
+		// a mystery is only ever drawn as a silhouette: in any other scene it's left out, wherever it wandered to
+		List<Entity> entities = level.getEntities((Entity) null, box.inflate(0.25), e -> !(e instanceof Player)
+			&& (s.silhouette() || !isMystery(BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString())));
 
 		// the view: as the level renderer turns the world for a camera with this yaw and pitch
 		Matrix4f view = new Matrix4f().rotateX(s.pitch() * Mth.DEG_TO_RAD).rotateY((s.yaw() + 180) * Mth.DEG_TO_RAD);
@@ -341,10 +345,11 @@ public final class RenderExporter {
 			for (Path f : files.filter(p -> p.toString().endsWith(".json") && !p.endsWith("names.json")).toList())
 				collectIds(readJson(f), ids);
 		}
-		// nothing site.json lists as unreleased
+		// nothing site.json lists as unreleased, or renders.json as a mystery (no icon, no name: they'd give it away)
 		JsonObject site = readJson(Path.of(ROOT, "docs/data/site.json")).getAsJsonObject();
 		if (site.has("unreleased"))
 			site.getAsJsonArray("unreleased").forEach(u -> ids.remove(u.getAsString()));
+		ids.removeIf(RenderExporter::isMystery);
 		int size = config.has("iconSize") ? config.get("iconSize").getAsInt() : 128;
 		int supersample = config.has("supersample") ? config.get("supersample").getAsInt() : 2;
 		Path namesFile = Path.of(ROOT, "docs/data/names.json");
@@ -383,6 +388,80 @@ public final class RenderExporter {
 		}
 		Files.writeString(namesFile, new GsonBuilder().setPrettyPrinting().create().toJson(names) + "\n");
 		report.add("icons " + done + " of " + ids.size() + " ids");
+	}
+
+	/** Whether an item or entity id is one of renders.json's mysteries (kept in tools/, never published: the list would name them). */
+	private static boolean isMystery(String id) {
+		if (config.has("mysteries"))
+			for (JsonElement m : config.getAsJsonArray("mysteries"))
+				if (m.getAsString().equals(id))
+					return true;
+		return false;
+	}
+
+	/**
+	 * A mystery's picture: everything drawn goes a near-black silhouette, but for whatever glows frost-blue (his runes and the
+	 * slit of his eye), which stays lit. The file itself shows nothing more.
+	 */
+	private static void silhouette(NativeImage image) {
+		for (int y = 0; y < image.getHeight(); y++)
+			for (int x = 0; x < image.getWidth(); x++) {
+				int abgr = image.getPixelRGBA(x, y), a = abgr >>> 24;
+				if (a == 0)
+					continue;
+				int r = abgr & 0xFF, g = (abgr >> 8) & 0xFF, b = (abgr >> 16) & 0xFF;
+				boolean glow = b > 120 && b > r + 40 && g > r;
+				image.setPixelRGBA(x, y, glow ? abgr : (a << 24) | (0x1a << 16) | (0x17 << 8) | 0x15);
+			}
+		blur(image, Math.max(2, image.getWidth() / 160));
+	}
+
+	/** Softens a mystery's outline: two box passes each way (near enough a Gaussian), on premultiplied colour so edges don't fringe. */
+	private static void blur(NativeImage image, int radius) {
+		int w = image.getWidth(), h = image.getHeight();
+		float[][] c = new float[4][w * h];
+		for (int y = 0; y < h; y++)
+			for (int x = 0; x < w; x++) {
+				int abgr = image.getPixelRGBA(x, y), i = y * w + x;
+				float a = (abgr >>> 24) / 255f;
+				c[0][i] = (abgr & 0xFF) * a;
+				c[1][i] = ((abgr >> 8) & 0xFF) * a;
+				c[2][i] = ((abgr >> 16) & 0xFF) * a;
+				c[3][i] = a;
+			}
+		float[] tmp = new float[Math.max(w, h)];
+		for (int pass = 0; pass < 2; pass++)
+			for (float[] ch : c) {
+				for (int y = 0; y < h; y++)
+					boxLine(ch, y * w, 1, w, radius, tmp);
+				for (int x = 0; x < w; x++)
+					boxLine(ch, x, w, h, radius, tmp);
+			}
+		for (int y = 0; y < h; y++)
+			for (int x = 0; x < w; x++) {
+				int i = y * w + x;
+				float a = c[3][i];
+				if (a <= 1 / 255f) {
+					image.setPixelRGBA(x, y, 0);
+					continue;
+				}
+				int r = Math.min(255, Math.round(c[0][i] / a)), g = Math.min(255, Math.round(c[1][i] / a)),
+					b = Math.min(255, Math.round(c[2][i] / a));
+				image.setPixelRGBA(x, y, (Math.round(a * 255) << 24) | (b << 16) | (g << 8) | r);
+			}
+	}
+
+	/** One row or column of a box blur, in place: {@code n} values from {@code start}, {@code stride} apart. */
+	private static void boxLine(float[] v, int start, int stride, int n, int radius, float[] tmp) {
+		float sum = 0;
+		for (int k = -radius; k <= radius; k++)
+			sum += v[start + Mth.clamp(k, 0, n - 1) * stride];
+		for (int k = 0; k < n; k++) {
+			tmp[k] = sum / (2 * radius + 1);
+			sum += v[start + Math.min(k + radius + 1, n - 1) * stride] - v[start + Math.max(k - radius, 0) * stride];
+		}
+		for (int k = 0; k < n; k++)
+			v[start + k * stride] = tmp[k];
 	}
 
 	private static NativeImage renderItem(Minecraft mc, ItemStack stack, int pixels) {
@@ -510,7 +589,7 @@ public final class RenderExporter {
 				j.getAsJsonArray("setup").forEach(c -> setup.add(c.getAsString().replace("{block}", scene.getValue())));
 				list.add(new Shot(scene.getKey(), new BlockPos(list.size() * spacing, 100, 0), setup, min, max,
 					number(j, defaults, "yaw", 135), number(j, defaults, "pitch", 30), (int) number(j, defaults, "wait", 60),
-					(int) number(j, defaults, "pixelsPerBlock", 400)));
+					(int) number(j, defaults, "pixelsPerBlock", 400), j.has("silhouette") && j.get("silhouette").getAsBoolean()));
 			}
 		}
 		return list;

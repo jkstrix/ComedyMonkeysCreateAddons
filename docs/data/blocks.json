@@ -812,5 +812,74 @@
       "power-lines",
       "compatibility"
     ]
+  },
+  {
+    "id": "winding-key",
+    "name": "Winding Key",
+    "registry": [
+      "comedymonkeysaddons:winding_key"
+    ],
+    "summary": "A great brass key that winds up something best left asleep. Fit it to a T of Brass Blocks and turn it.",
+    "tags": [
+      "ritual"
+    ],
+    "stage": "end",
+    "requires": [],
+    "teach": {
+      "what": "A socket plate with a key standing out of it. Fixed to the back of the middle block of an upright T of four Brass Blocks and turned, it winds; fully wound, the effigy and key are gone and [[ruin-sleeper]] stands in front of where the T stood.",
+      "why": "It is how you call the boss that drops the [[mainspring]].",
+      "when": "Late game. Its Mechanical Crafting recipe needs a Netherite Ingot, 4 Precision Mechanisms and 4 Brass Sheets.",
+      "interacts": "A Hand Crank winds it in 20 seconds; any shaft at 32 RPM or more works, and at 64 RPM or more twice as fast. It loads its network with 4 SU per RPM.",
+      "mistakes": [
+        "Stopping halfway: the key slowly unwinds.",
+        "Trying in the Nether: the key turns but never takes.",
+        "Winding it where there is no room or open sky: it stops at halfway until there is somewhere for what comes to stand.",
+        "Winding it in Peaceful: it winds, but nothing wakes."
+      ]
+    },
+    "stats": [
+      {
+        "label": "By hand",
+        "value": "20",
+        "unit": "s",
+        "gauge": 0.6
+      },
+      {
+        "label": "At 64 RPM",
+        "value": "10",
+        "unit": "s",
+        "gauge": 0.3
+      }
+    ],
+    "specs": [
+      [
+        "Turned by",
+        "A Hand Crank or any shaft at 32 RPM or more"
+      ],
+      [
+        "Stress",
+        "4 SU per RPM"
+      ],
+      [
+        "Works in",
+        "The Overworld and the End"
+      ],
+      [
+        "Used up",
+        "When it wakes what it winds"
+      ]
+    ],
+    "uses": [
+      "Waking [[ruin-sleeper]], to win a [[mainspring]]."
+    ],
+    "mechanics": [
+      "The runes round its plate light as it winds, the ticking quickens, and steam escapes between the brass blocks. Everyone within 64 blocks is told something is being wound.",
+      "Summoned underground, what wakes rises on the surface above you, kneeling, and stands when someone comes near."
+    ],
+    "related": [
+      "ruin-sleeper",
+      "mainspring",
+      "clockwork-ruins"
+    ]
   }
 ]

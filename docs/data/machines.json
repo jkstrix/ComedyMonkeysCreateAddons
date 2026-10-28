@@ -2912,6 +2912,138 @@
     ]
   },
   {
+    "id": "spring-engine",
+    "name": "Spring Engine",
+    "registry": [
+      "comedymonkeysaddons:spring_engine"
+    ],
+    "summary": "A [[mainspring]] in a barrel: the only block that stores rotation. Wind it from behind with spare power, let it out in front when you need it. Full, it runs 16,384 SU for an hour.",
+    "tags": [
+      "power",
+      "rotation",
+      "storage"
+    ],
+    "stage": "end",
+    "requires": [
+      "mainspring"
+    ],
+    "teach": {
+      "what": "A two-block engine lying along its shafts. The winding end, behind, takes rotation and stores every bit of the stress it is set to take; the output end, in front, turns its shaft at its set speed and offers up to 16,384 SU, running down only by what your machines actually draw.",
+      "why": "Rotation you made when you did not need it, given back when you do: night-time for wind and water, bursts for a big contraption, power on a ship.",
+      "when": "Late game, after the fight that drops the [[mainspring]].",
+      "interacts": "It winds and gives at once. A redstone signal on the output end stops it giving; a comparator on either end reads how wound it is; Engineer's Goggles show how long what is in it lasts.",
+      "mistakes": [
+        "Setting the winding stress higher than your network can carry: it overstresses and winds nothing.",
+        "Breaking it in a hurry: no need, it keeps all its wind as an item."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Holds",
+        "value": "1",
+        "unit": "hour at 16,384 SU",
+        "gauge": 1
+      },
+      {
+        "label": "Gives",
+        "value": "16,384",
+        "unit": "SU",
+        "gauge": 0.6
+      },
+      {
+        "label": "Takes",
+        "value": "up to 262,144",
+        "unit": "SU",
+        "gauge": 1
+      }
+    ],
+    "specs": [
+      [
+        "Capacity",
+        "58,982,400 SU-seconds (config)"
+      ],
+      [
+        "Winding",
+        "1,024 to 262,144 SU, in steps of 1,024"
+      ],
+      [
+        "Output",
+        "1 to 256 RPM either way, up to 16,384 SU"
+      ],
+      [
+        "Losses",
+        "None"
+      ],
+      [
+        "Size",
+        "Two blocks: winding end behind, output end in front"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "makes": "Up to 16,384 SU at 1-256 RPM",
+      "draws": "1,024 to 262,144 SU while it winds"
+    },
+    "inputs": [
+      "Rotation into the shaft of the winding end, behind."
+    ],
+    "outputs": [
+      "Rotation from the shaft of the output end, in front."
+    ],
+    "throughput": [
+      "At the top winding setting, empty to full in under 4 minutes; at 16,384 SU, an hour."
+    ],
+    "rules": [
+      "The winding end's value box sets the stress it takes; the output end's sets its speed and direction.",
+      "Full, it stops taking stress from its winding network.",
+      "Unloaded, it simply waits, like any Create machine."
+    ],
+    "setups": [
+      {
+        "title": "Day into night",
+        "body": [
+          "Wind it from water wheels or windmills that run all day with power to spare, and let it out at night, or whenever your factory needs a push."
+        ]
+      },
+      {
+        "title": "Power to carry",
+        "body": [
+          "Picked up, it keeps its wind. Wind it at home and carry it to wherever you need rotation for an hour."
+        ]
+      }
+    ],
+    "efficiency": [
+      "Lossless: every SU-second wound in comes back out."
+    ],
+    "flows": [
+      {
+        "title": "Store spare rotation",
+        "steps": [
+          {
+            "label": "Spare rotation",
+            "kind": "source"
+          },
+          {
+            "ref": "spring-engine",
+            "kind": "machine",
+            "note": "winding end",
+            "via": "up to 262,144 SU"
+          },
+          {
+            "label": "Up to 16,384 SU, when you need it",
+            "kind": "result",
+            "via": "output end"
+          }
+        ]
+      }
+    ],
+    "related": [
+      "mainspring",
+      "ruin-sleeper",
+      "magma-engine"
+    ]
+  },
+  {
     "id": "string-tangler",
     "name": "String Tangler",
     "registry": [

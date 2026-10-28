@@ -8,6 +8,7 @@ import { installImageFallbacks } from './ui/components.js';
 import { installLightbox } from './ui/lightbox.js';
 import { injectIcons, icon } from './ui/icons.js';
 import { animate } from './ui/motion.js';
+import { installObfuscation } from './ui/obfuscate.js';
 import { homePage } from './pages/home.js';
 import { categoryPage } from './pages/category.js';
 import { entryPage } from './pages/entry.js';
@@ -32,6 +33,7 @@ async function boot() {
   renderShell(root);
   installImageFallbacks();
   installLightbox();
+  installObfuscation();
   const view = () => document.getElementById('view');
 
   route('', () => homePage(view()));
