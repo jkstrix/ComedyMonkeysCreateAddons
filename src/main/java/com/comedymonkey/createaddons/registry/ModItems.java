@@ -126,6 +126,7 @@ public final class ModItems {
 		ITEMS.registerSimpleBlockItem(ModBlocks.SUPERCHARGED_MAGMA_ENGINE);
 	public static final DeferredItem<BlockItem> ELECTRIC_MOTOR = ITEMS.registerSimpleBlockItem(ModBlocks.ELECTRIC_MOTOR);
 	public static final DeferredItem<BlockItem> LAVA_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.LAVA_GENERATOR);
+	public static final DeferredItem<BlockItem> WINDING_KEY = ITEMS.registerSimpleBlockItem(ModBlocks.WINDING_KEY, new Item.Properties().rarity(net.minecraft.world.item.Rarity.RARE));
 	public static final DeferredItem<com.comedymonkey.createaddons.content.electric.BatteryItem> BATTERY = ITEMS.register("battery",
 		() -> new com.comedymonkey.createaddons.content.electric.BatteryItem(ModBlocks.BATTERY.get(), new Item.Properties()));
 	public static final DeferredItem<BlockItem> GEOTHERMAL_CASING = ITEMS.registerSimpleBlockItem(ModBlocks.GEOTHERMAL_CASING);

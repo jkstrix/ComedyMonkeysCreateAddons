@@ -146,6 +146,11 @@ public final class ModBlockEntities {
 			() -> BlockEntityType.Builder.of(ElectricMotorBlockEntity::new, ModBlocks.ELECTRIC_MOTOR.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlockEntity>> WINDING_KEY =
+		BLOCK_ENTITY_TYPES.register("winding_key",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlockEntity::new, ModBlocks.WINDING_KEY.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LavaGeneratorBlockEntity>> LAVA_GENERATOR =
 		BLOCK_ENTITY_TYPES.register("lava_generator",
 			() -> BlockEntityType.Builder.of(LavaGeneratorBlockEntity::new, ModBlocks.LAVA_GENERATOR.get()).build(null));

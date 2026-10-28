@@ -4,6 +4,7 @@
     {
       "id": "comedymonkeysaddons:trade_bot",
       "required": false
-    }
+    },
+    "comedymonkeysaddons:clockwork_juggernaut"
   ]
 }

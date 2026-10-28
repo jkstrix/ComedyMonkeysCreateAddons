@@ -1,0 +1,45 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/winding_key_bronze",
+    "winding_key_runes_lit": "comedymonkeysaddons:block/winding_key_runes_lit"
+  },
+  "elements": [
+    {
+      "name": "runes",
+      "from": [
+        1.5,
+        1.5,
+        13.75
+      ],
+      "to": [
+        14.5,
+        14.5,
+        13.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            0.5,
+            13.5,
+            13.5
+          ],
+          "texture": "#winding_key_runes_lit"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            0.5,
+            13.5,
+            13.5
+          ],
+          "texture": "#winding_key_runes_lit"
+        }
+      }
+    }
+  ]
+}

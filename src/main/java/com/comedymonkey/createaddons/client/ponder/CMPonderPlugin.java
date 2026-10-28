@@ -30,6 +30,8 @@ public class CMPonderPlugin implements PonderPlugin {
 
 	@Override
 	public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+		helper.forComponents(ModBlocks.WINDING_KEY.getId())
+			.addStoryBoard("juggernaut_ritual", JuggernautScenes::ritual);
 		helper.forComponents(ModBlocks.WELLSPRING.getId())
 			.addStoryBoard("wellspring", WellspringScenes::wellspring);
 

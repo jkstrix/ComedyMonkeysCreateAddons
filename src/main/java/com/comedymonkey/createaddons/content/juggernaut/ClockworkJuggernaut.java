@@ -142,10 +142,12 @@ public class ClockworkJuggernaut extends Monster {
 		SPIN_DAMAGE = 12, LUNGE_DAMAGE = 22, COG_DAMAGE = 19;
 	/** He killed a player and nobody's left near: he sleeps this long, untouchable, so they can fetch their things. */
 	static final int WIPE_SLEEP_TICKS = 3600, WIPE_DELAY = 40, KILL_MEMORY = 1200;
-	/** Overdrive (stage 3, at 10% health): no more winding down, every hit lands in full, and he's quicker. */
-	static final float OVERDRIVE_SHARE = 0.1f, OVERDRIVE_SPEED = 1.3f;
+	/** Overdrive (stage 3, at 20% health): no more winding down, every hit lands in full, and he's quicker. */
+	static final float OVERDRIVE_SHARE = 0.2f, OVERDRIVE_SPEED = 1.3f;
 	/** How far ahead of a running target he aims his leap, at most. */
 	static final double LEAD_MAX = 8;
+	/** The leap clip's airborne stretch (seconds of clip), and how long he actually hangs in the air for it. */
+	static final float LEAP_AIR = 0.58f, LEAP_FLIGHT = 1.3f;
 	/** How long a leap's landing holds them still. */
 	static final int FREEZE_TICKS = 25;
 	/** The freeze is Slowness at this level (speed to nothing); the client knows it by it and keeps the view from zooming. */
@@ -255,7 +257,7 @@ public class ClockworkJuggernaut extends Monster {
 		return overdrive ? OVERDRIVE_SPEED : stage() >= 3 ? STAGE_3_SPEED : 1;
 	}
 
-	/** Under 10% in his last stage: fighting for his life (no winding down, full damage taken). */
+	/** Under 20% in his last stage: fighting for his life (no winding down, full damage taken). */
 	public boolean overdrive() {
 		return overdrive;
 	}
@@ -452,7 +454,7 @@ public class ClockworkJuggernaut extends Monster {
 		setPhase(Phase.DORMANT);
 		setTarget(null);
 		scaled = false; // whoever wakes him next sets his health (D14)
-		overdrive = false; // he mends out of it; a hit under 10% starts it again
+		overdrive = false; // he mends out of it; a hit under 20% starts it again
 		graceTicks = 0;
 		wipePending = 0;
 		fallen.clear(); // the fight's over
@@ -812,7 +814,7 @@ public class ClockworkJuggernaut extends Monster {
 	private void tickLeap(@Nullable LivingEntity target, float t) {
 		// he aims where they're running to, and marks it (frost-blue ring on the ground) so it can be dodged
 		if (t < 1.5f && target != null) {
-			Vec3 aim = leapLanding(target, 2.08f - t);
+			Vec3 aim = leapLanding(target, (1.5f - t) / clipSpeed() + LEAP_FLIGHT);
 			turnToward(aim != null ? aim : target.position(), 6);
 			if (aim != null && t > 0.3f && tickCount % 2 == 0)
 				markLanding(aim);
@@ -820,7 +822,7 @@ public class ClockworkJuggernaut extends Monster {
 		if (leaping && tickCount % 2 == 0)
 			markLanding(leapTo);
 		if (at(1.5f)) {
-			Vec3 landing = target == null ? null : leapLanding(target, 2.08f - 1.5f);
+			Vec3 landing = target == null ? null : leapLanding(target, LEAP_FLIGHT);
 			if (landing == null) {
 				// nowhere to come down (they ran under cover, or died): he straightens up instead, no landing
 				endMove();
@@ -829,9 +831,15 @@ public class ClockworkJuggernaut extends Monster {
 			}
 			leapFrom = position();
 			leapTo = landing;
+			// squared up to where he'll come down as he leaves the ground: in the air he can't turn, and he flies the way
+			// he faces (not off at an angle to where the coil had him aimed)
+			turnToward(landing, 360);
 			leaping = true;
 			noPhysics = true;
 			setNoGravity(true);
+			// a long hang in the air, so the landing can be dodged: the clip's airborne stretch plays slowly (and so does
+			// the move's clock, which follows the clip), so he still touches down on its landing frame and sound
+			playClip("leap", LEAP_AIR / LEAP_FLIGHT, 1.52f);
 		}
 		if (leaping) {
 			float u = Mth.clamp((t - 1.55f) / 0.53f, 0, 1);
@@ -843,6 +851,7 @@ public class ClockworkJuggernaut extends Monster {
 				noPhysics = false;
 				setNoGravity(false);
 				setPos(leapTo.x, leapTo.y, leapTo.z);
+				playClip("leap", speed(), 2.1f); // back to his own pace for the recovery
 				stomp(5, LEAP_DAMAGE);
 				freezeAround(5); // the ground shakes (client, on the leap_land cue) and they're held still
 			}
@@ -850,13 +859,13 @@ public class ClockworkJuggernaut extends Monster {
 	}
 
 	/**
-	 * Where a spring leap at {@code target} lands, {@code seconds} of clip before he comes down: where they'll be by then
+	 * Where a spring leap at {@code target} lands, {@code seconds} before he comes down: where they'll be by then
 	 * if they keep running (up to 8 blocks on), or else where they stand; null if neither has ground and room for him
 	 * (D45, D56).
 	 */
 	@Nullable
 	Vec3 leapLanding(LivingEntity target, float seconds) {
-		Vec3 lead = targetVelocity.scale(Math.max(0, seconds) * 20 / clipSpeed());
+		Vec3 lead = targetVelocity.scale(Math.max(0, seconds) * 20);
 		if (lead.length() > LEAD_MAX)
 			lead = lead.normalize().scale(LEAD_MAX);
 		Vec3 ahead = leapLanding(target.position().add(lead));
@@ -944,7 +953,7 @@ public class ClockworkJuggernaut extends Monster {
 
 	private static final DustParticleOptions RUNE_DUST = new DustParticleOptions(new Vector3f(0.31f, 0.56f, 0.68f), 1.6f);
 
-	/** Down to his last 10%: no more winding down, every hit lands in full, quicker; steam pours out of him. */
+	/** Down to his last 20%: no more winding down, every hit lands in full, quicker; steam pours out of him. */
 	private void beginOverdrive() {
 		overdrive = true;
 		endMove();
@@ -1259,7 +1268,7 @@ public class ClockworkJuggernaut extends Monster {
 	}
 
 	/** Is {@code e} within {@code halfAngle} degrees of where he faces? */
-	boolean inFront(Entity e, double halfAngle) {
+	public boolean inFront(Entity e, double halfAngle) {
 		Vec3 to = e.position().subtract(position()).multiply(1, 0, 1);
 		if (to.lengthSqr() < 1e-4)
 			return true;

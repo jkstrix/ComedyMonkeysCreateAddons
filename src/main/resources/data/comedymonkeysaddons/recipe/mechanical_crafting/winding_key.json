@@ -1,0 +1,25 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "pattern": [
+    "SPS",
+    "PNP",
+    "SPS"
+  ],
+  "key": {
+    "S": {
+      "item": "create:brass_sheet"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:winding_key"
+  },
+  "show_notification": true
+}

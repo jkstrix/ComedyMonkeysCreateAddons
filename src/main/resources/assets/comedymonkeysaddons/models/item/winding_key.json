@@ -1,0 +1,932 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/winding_key_bronze",
+    "winding_key_plate_front": "comedymonkeysaddons:block/winding_key_plate_front",
+    "winding_key_bronze": "comedymonkeysaddons:block/winding_key_bronze",
+    "winding_key_iron": "comedymonkeysaddons:block/winding_key_iron",
+    "winding_key_bronze_teeth": "comedymonkeysaddons:block/winding_key_bronze_teeth",
+    "winding_key_bronze_dark": "comedymonkeysaddons:block/winding_key_bronze_dark",
+    "winding_key_key_hub": "comedymonkeysaddons:block/winding_key_key_hub",
+    "winding_key_key_bar": "comedymonkeysaddons:block/winding_key_key_bar"
+  },
+  "elements": [
+    {
+      "name": "plate",
+      "from": [
+        1,
+        1,
+        14
+      ],
+      "to": [
+        15,
+        15,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#winding_key_plate_front"
+        },
+        "east": {
+          "uv": [
+            0,
+            1,
+            2,
+            15
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "west": {
+          "uv": [
+            14,
+            1,
+            16,
+            15
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "up": {
+          "uv": [
+            1,
+            14,
+            15,
+            16
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "down": {
+          "uv": [
+            1,
+            0,
+            15,
+            2
+          ],
+          "texture": "#winding_key_bronze"
+        }
+      }
+    },
+    {
+      "name": "collar",
+      "from": [
+        5,
+        5,
+        11.5
+      ],
+      "to": [
+        11,
+        11,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        },
+        "east": {
+          "uv": [
+            2,
+            5,
+            4.5,
+            11
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        },
+        "south": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        },
+        "west": {
+          "uv": [
+            11.5,
+            5,
+            14,
+            11
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        },
+        "up": {
+          "uv": [
+            5,
+            11.5,
+            11,
+            14
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        },
+        "down": {
+          "uv": [
+            5,
+            2,
+            11,
+            4.5
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        }
+      }
+    },
+    {
+      "name": "collar_teeth",
+      "from": [
+        5.4,
+        5.4,
+        11.75
+      ],
+      "to": [
+        10.6,
+        10.6,
+        13.75
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          12.75
+        ],
+        "axis": "z",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5.4,
+            5.4,
+            10.6,
+            10.6
+          ],
+          "texture": "#winding_key_bronze_dark"
+        },
+        "east": {
+          "uv": [
+            2.25,
+            5.4,
+            4.25,
+            10.6
+          ],
+          "texture": "#winding_key_bronze_dark"
+        },
+        "south": {
+          "uv": [
+            5.4,
+            5.4,
+            10.6,
+            10.6
+          ],
+          "texture": "#winding_key_bronze_dark"
+        },
+        "west": {
+          "uv": [
+            11.75,
+            5.4,
+            13.75,
+            10.6
+          ],
+          "texture": "#winding_key_bronze_dark"
+        },
+        "up": {
+          "uv": [
+            5.4,
+            11.75,
+            10.6,
+            13.75
+          ],
+          "texture": "#winding_key_bronze_dark"
+        },
+        "down": {
+          "uv": [
+            5.4,
+            2.25,
+            10.6,
+            4.25
+          ],
+          "texture": "#winding_key_bronze_dark"
+        }
+      }
+    },
+    {
+      "name": "pawl_bolt",
+      "from": [
+        12,
+        11,
+        12
+      ],
+      "to": [
+        14,
+        13,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "east": {
+          "uv": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "south": {
+          "uv": [
+            12,
+            3,
+            14,
+            5
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "west": {
+          "uv": [
+            12,
+            3,
+            14,
+            5
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "up": {
+          "uv": [
+            12,
+            12,
+            14,
+            14
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "down": {
+          "uv": [
+            12,
+            2,
+            14,
+            4
+          ],
+          "texture": "#winding_key_bronze"
+        }
+      }
+    },
+    {
+      "name": "pawl_arm",
+      "from": [
+        9.5,
+        11.5,
+        12.5
+      ],
+      "to": [
+        13,
+        12.5,
+        13.5
+      ],
+      "rotation": {
+        "origin": [
+          13,
+          12,
+          13
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            3.5,
+            6.5,
+            4.5
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            3.5,
+            3.5,
+            4.5
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "south": {
+          "uv": [
+            9.5,
+            3.5,
+            13,
+            4.5
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "west": {
+          "uv": [
+            12.5,
+            3.5,
+            13.5,
+            4.5
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "up": {
+          "uv": [
+            9.5,
+            12.5,
+            13,
+            13.5
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "down": {
+          "uv": [
+            9.5,
+            2.5,
+            13,
+            3.5
+          ],
+          "texture": "#winding_key_iron"
+        }
+      }
+    },
+    {
+      "name": "key_stem",
+      "from": [
+        6.75,
+        6.75,
+        7
+      ],
+      "to": [
+        9.25,
+        9.25,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.75,
+            6.75,
+            9.25,
+            9.25
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        },
+        "east": {
+          "uv": [
+            4.5,
+            6.75,
+            9,
+            9.25
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        },
+        "south": {
+          "uv": [
+            6.75,
+            6.75,
+            9.25,
+            9.25
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        },
+        "west": {
+          "uv": [
+            7,
+            6.75,
+            11.5,
+            9.25
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        },
+        "up": {
+          "uv": [
+            6.75,
+            7,
+            9.25,
+            11.5
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        },
+        "down": {
+          "uv": [
+            6.75,
+            4.5,
+            9.25,
+            9
+          ],
+          "texture": "#winding_key_bronze_teeth"
+        }
+      }
+    },
+    {
+      "name": "key_hub",
+      "from": [
+        5.5,
+        5.5,
+        4
+      ],
+      "to": [
+        10.5,
+        10.5,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#winding_key_key_hub"
+        },
+        "east": {
+          "uv": [
+            9,
+            5.5,
+            12,
+            10.5
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "west": {
+          "uv": [
+            4,
+            5.5,
+            7,
+            10.5
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            4,
+            10.5,
+            7
+          ],
+          "texture": "#winding_key_bronze"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            12
+          ],
+          "texture": "#winding_key_bronze"
+        }
+      }
+    },
+    {
+      "name": "loop_r_top",
+      "from": [
+        10.5,
+        10,
+        4.5
+      ],
+      "to": [
+        15,
+        11.5,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            4.5,
+            5.5,
+            6
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "east": {
+          "uv": [
+            9.5,
+            4.5,
+            11.5,
+            6
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "south": {
+          "uv": [
+            10.5,
+            4.5,
+            15,
+            6
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            4.5,
+            6.5,
+            6
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "up": {
+          "uv": [
+            10.5,
+            4.5,
+            15,
+            6.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "down": {
+          "uv": [
+            10.5,
+            9.5,
+            15,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        }
+      }
+    },
+    {
+      "name": "loop_r_bottom",
+      "from": [
+        10.5,
+        4.5,
+        4.5
+      ],
+      "to": [
+        15,
+        6,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            10,
+            5.5,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "east": {
+          "uv": [
+            9.5,
+            10,
+            11.5,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "south": {
+          "uv": [
+            10.5,
+            10,
+            15,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            10,
+            6.5,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "up": {
+          "uv": [
+            10.5,
+            4.5,
+            15,
+            6.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "down": {
+          "uv": [
+            10.5,
+            9.5,
+            15,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        }
+      }
+    },
+    {
+      "name": "loop_r_outer",
+      "from": [
+        13.5,
+        6,
+        4.5
+      ],
+      "to": [
+        15,
+        10,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            6,
+            2.5,
+            10
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "east": {
+          "uv": [
+            9.5,
+            6,
+            11.5,
+            10
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "south": {
+          "uv": [
+            13.5,
+            6,
+            15,
+            10
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            6,
+            6.5,
+            10
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "up": {
+          "uv": [
+            13.5,
+            4.5,
+            15,
+            6.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "down": {
+          "uv": [
+            13.5,
+            9.5,
+            15,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        }
+      }
+    },
+    {
+      "name": "loop_l_top",
+      "from": [
+        1,
+        10,
+        4.5
+      ],
+      "to": [
+        5.5,
+        11.5,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.5,
+            4.5,
+            15,
+            6
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "east": {
+          "uv": [
+            9.5,
+            4.5,
+            11.5,
+            6
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "south": {
+          "uv": [
+            1,
+            4.5,
+            5.5,
+            6
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            4.5,
+            6.5,
+            6
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "up": {
+          "uv": [
+            1,
+            4.5,
+            5.5,
+            6.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "down": {
+          "uv": [
+            1,
+            9.5,
+            5.5,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        }
+      }
+    },
+    {
+      "name": "loop_l_bottom",
+      "from": [
+        1,
+        4.5,
+        4.5
+      ],
+      "to": [
+        5.5,
+        6,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.5,
+            10,
+            15,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "east": {
+          "uv": [
+            9.5,
+            10,
+            11.5,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "south": {
+          "uv": [
+            1,
+            10,
+            5.5,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            10,
+            6.5,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "up": {
+          "uv": [
+            1,
+            4.5,
+            5.5,
+            6.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "down": {
+          "uv": [
+            1,
+            9.5,
+            5.5,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        }
+      }
+    },
+    {
+      "name": "loop_l_outer",
+      "from": [
+        1,
+        6,
+        4.5
+      ],
+      "to": [
+        2.5,
+        10,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.5,
+            6,
+            15,
+            10
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "east": {
+          "uv": [
+            9.5,
+            6,
+            11.5,
+            10
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "south": {
+          "uv": [
+            1,
+            6,
+            2.5,
+            10
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            6,
+            6.5,
+            10
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "up": {
+          "uv": [
+            1,
+            4.5,
+            2.5,
+            6.5
+          ],
+          "texture": "#winding_key_key_bar"
+        },
+        "down": {
+          "uv": [
+            1,
+            9.5,
+            2.5,
+            11.5
+          ],
+          "texture": "#winding_key_key_bar"
+        }
+      }
+    }
+  ]
+}

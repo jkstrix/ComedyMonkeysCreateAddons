@@ -5,17 +5,25 @@ import java.util.Set;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.juggernaut.ClockworkJuggernaut;
+import com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlock;
+import com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlockEntity;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
+import com.comedymonkey.createaddons.registry.ModBlocks;
 import com.comedymonkey.createaddons.registry.ModEntities;
 import com.comedymonkey.createaddons.registry.ModItems;
 import com.comedymonkey.createaddons.registry.ModSounds;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Pig;
@@ -160,6 +168,27 @@ public final class JuggernautGameTests {
 		helper.succeed();
 	}
 
+	/** In the air he can't turn: he leaves the ground facing where he'll land and holds that heading all the way down. */
+	@GameTest(template = COURSE, timeoutTicks = 100)
+	public static void heCantTurnInTheAir(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		Pig pig = helper.spawn(EntityType.PIG, new BlockPos(18, 0, 20));
+		pig.setInvulnerable(true);
+		pig.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 10));
+		j.forceLeap(pig);
+		float[] yaw = { Float.NaN };
+		helper.onEachTick(() -> {
+			if (!j.isNoGravity())
+				return;
+			if (Float.isNaN(yaw[0])) {
+				yaw[0] = j.getYRot();
+				helper.assertTrue(j.inFront(pig, 25), "he should take off facing where he'll land");
+			} else
+				helper.assertTrue(Math.abs(Mth.wrapDegrees(j.getYRot() - yaw[0])) < 0.01f, "he turned in the air");
+		});
+		helper.succeedWhen(() -> helper.assertTrue(!Float.isNaN(yaw[0]) && !j.isNoGravity(), "he should have leapt and landed"));
+	}
+
 	/** He never leaps through a wall: with no clear arc to them, he straightens up instead. */
 	@GameTest(template = COURSE, timeoutTicks = 100)
 	public static void heNeverLeapsThroughAWall(GameTestHelper helper) {
@@ -178,16 +207,16 @@ public final class JuggernautGameTests {
 		});
 	}
 
-	/** At 10% in his last stage he goes into overdrive: out of his rewind at once, and every hit (arrows too) lands in full. */
+	/** At 20% in his last stage he goes into overdrive: out of his rewind at once, and every hit (arrows too) lands in full. */
 	@GameTest(template = COURSE, timeoutTicks = 60)
-	public static void underTenPercentHeFightsInOverdrive(GameTestHelper helper) {
+	public static void underTwentyPercentHeFightsInOverdrive(GameTestHelper helper) {
 		ClockworkJuggernaut j = spawn(helper);
 		j.forceStage(3);
 		j.forcePhase(ClockworkJuggernaut.Phase.REWIND);
-		j.setHealth(j.getMaxHealth() * 0.12f);
+		j.setHealth(j.getMaxHealth() * 0.22f);
 		Player front = player(helper, j, 6);
 		hit(j, j.damageSources().playerAttack(front), j.getMaxHealth() * 0.04f);
-		helper.assertTrue(j.overdrive(), "he should be in overdrive under 10%");
+		helper.assertTrue(j.overdrive(), "he should be in overdrive under 20%");
 		helper.assertTrue(j.phase() == ClockworkJuggernaut.Phase.REWIND_END, "overdrive should end his rewind, is " + j.phase());
 		j.forcePhase(ClockworkJuggernaut.Phase.WOUND);
 		near(helper, hit(j, j.damageSources().playerAttack(front), 10), 10, "a hit in overdrive, wound");
@@ -215,14 +244,26 @@ public final class JuggernautGameTests {
 	@GameTest(template = COURSE, timeoutTicks = 100)
 	public static void theLeapFreezesWhoItLandsOn(GameTestHelper helper) {
 		ClockworkJuggernaut j = spawn(helper);
-		Pig pig = helper.spawn(EntityType.PIG, new BlockPos(12, 2, 20));
+		Pig pig = helper.spawn(EntityType.PIG, new BlockPos(12, 0, 20)); // held where it stands (a wandering pig is a moving target), still on its feet
 		pig.setInvulnerable(true);
+		pig.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 10));
 		j.forceLeap(pig);
 		helper.succeedWhen(() -> {
-			helper.assertTrue(pig.hasEffect(MobEffects.MOVEMENT_SLOWDOWN), "the landing should hold the pig still; he plays " + j.clip().name() + ", " + String.format("%.1f", j.horizontalDistance(pig)) + " away, y " + String.format("%.1f", j.getY()) + ", pig on ground " + pig.onGround() + ", phase " + j.phase());
-			helper.assertTrue(pig.getTicksFrozen() > 0, "the landing should frost the pig over");
+			helper.assertTrue(pig.getTicksFrozen() > 0, "the landing should frost the pig over and hold it; he plays " + j.clip().name() + ", " + String.format("%.1f", j.horizontalDistance(pig)) + " away, y " + String.format("%.1f", j.getY()) + ", pig on ground " + pig.onGround() + ", phase " + j.phase());
 			helper.assertTrue(j.horizontalDistance(pig) < 3, "he should have come down on the pig");
 		});
+	}
+
+	/** D15: no Capture Bottle, jar or cage takes him (he's a boss), so there's no Mainspring farm; Carry On can't lift him. */
+	@GameTest(template = COURSE)
+	public static void noBottleOrCageTakesHim(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		helper.assertTrue(j.getType().is(net.neoforged.neoforge.common.Tags.EntityTypes.BOSSES), "he should be tagged a boss");
+		helper.assertFalse(com.comedymonkey.createaddons.content.cage.CageRules.isCageable(j), "no cage or jar should take him");
+		helper.assertFalse(com.comedymonkey.createaddons.content.pen.AnimalCapture.canCapture(null, j), "the Capture Bottle shouldn't take him");
+		helper.assertTrue(j.getType().is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ENTITY_TYPE,
+			ResourceLocation.fromNamespaceAndPath("carryon", "entity_blacklist"))), "Carry On should leave him be");
+		helper.succeed();
 	}
 
 	/** Snowballs and other zero-damage hits on the key don't count toward a jam. */
@@ -333,6 +374,99 @@ public final class JuggernautGameTests {
 		j.setTarget(dummy);
 		helper.succeedWhen(() -> helper.assertTrue(j.horizontalDistance(dummy) < 7,
 			"he should have come within 7 blocks, is " + String.format("%.1f", j.horizontalDistance(dummy)) + " away, " + j.phase() + ", " + j.clip().name()));
+	}
+
+	// ---- the ritual (D16-D19, D52)
+
+	/** A T of Brass Blocks (its foot at {@code foot}, facing north) with a Winding Key on its back; returns the key. */
+	private static WindingKeyBlockEntity effigy(GameTestHelper helper, BlockPos foot, boolean whole) {
+		BlockState brass = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("create", "brass_block")).defaultBlockState();
+		BlockPos centre = foot.above();
+		helper.setBlock(foot, brass);
+		helper.setBlock(centre, brass);
+		helper.setBlock(centre.west(), brass);
+		if (whole)
+			helper.setBlock(centre.east(), brass);
+		BlockPos key = centre.south();
+		helper.setBlock(key, ModBlocks.WINDING_KEY.get().defaultBlockState().setValue(WindingKeyBlock.FACING, Direction.SOUTH));
+		return helper.getBlockEntity(key);
+	}
+
+	private static List<ClockworkJuggernaut> juggernauts(GameTestHelper helper) {
+		return helper.getLevel().getEntitiesOfClass(ClockworkJuggernaut.class, helper.getBounds().inflate(0, 10, 0));
+	}
+
+	/** Wound in full, the effigy and key are gone and he stands in front of where the T stood, facing its way (north). */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void theRitualWakesHim(GameTestHelper helper) {
+		BlockPos foot = new BlockPos(12, 0, 14);
+		WindingKeyBlockEntity key = effigy(helper, foot, true);
+		key.testSpeed = 64;
+		key.setWind(0.95f);
+		helper.succeedWhen(() -> {
+			List<ClockworkJuggernaut> found = juggernauts(helper);
+			helper.assertTrue(found.size() == 1, "he should have woken, found " + found.size());
+			ClockworkJuggernaut j = found.get(0);
+			helper.assertBlockNotPresent(ModBlocks.WINDING_KEY.get(), foot.above().south());
+			helper.assertBlockPresent(Blocks.AIR, foot.above());
+			helper.assertTrue(j.phase() != ClockworkJuggernaut.Phase.DORMANT, "in the effigy's place he wakes at once, is " + j.phase());
+			helper.assertTrue(j.getZ() < helper.absolutePos(foot).getZ(), "he should stand in front (north) of the T");
+		});
+	}
+
+	/** D18: a Hand Crank (32 RPM) winds it in 20 s, a quarter in 5 s; a shaft at 64 RPM winds twice as fast. */
+	@GameTest(template = COURSE, timeoutTicks = 140)
+	public static void aHandCrankWindsItInTwentySeconds(GameTestHelper helper) {
+		WindingKeyBlockEntity byHand = effigy(helper, new BlockPos(6, 0, 14), true);
+		WindingKeyBlockEntity byMotor = effigy(helper, new BlockPos(18, 0, 14), true);
+		byHand.testSpeed = 32;
+		byMotor.testSpeed = 64;
+		helper.runAfterDelay(100, () -> {
+			near(helper, byHand.wind(), 0.25f, "wound by hand for 5 s");
+			near(helper, byMotor.wind(), 0.5f, "wound at 64 RPM for 5 s");
+			helper.succeed();
+		});
+	}
+
+	/** Stopped, the key slowly unwinds (D18). */
+	@GameTest(template = COURSE, timeoutTicks = 60)
+	public static void aStoppedKeyUnwinds(GameTestHelper helper) {
+		WindingKeyBlockEntity key = effigy(helper, new BlockPos(12, 0, 14), true);
+		key.testSpeed = 0;
+		key.setWind(0.5f);
+		helper.runAfterDelay(40, () -> {
+			helper.assertTrue(key.wind() < 0.5f && key.wind() > 0.4f, "it should unwind slowly, is at " + key.wind());
+			helper.succeed();
+		});
+	}
+
+	/** Without the whole T, the key turns but never winds (D16). */
+	@GameTest(template = COURSE, timeoutTicks = 60)
+	public static void aBrokenEffigyNeverWinds(GameTestHelper helper) {
+		WindingKeyBlockEntity key = effigy(helper, new BlockPos(12, 0, 14), false);
+		key.testSpeed = 64;
+		helper.runAfterDelay(40, () -> {
+			helper.assertTrue(key.wind() == 0, "it shouldn't wind without the whole T, is at " + key.wind());
+			helper.succeed();
+		});
+	}
+
+	/** With a roof over the effigy, he appears on top of it instead, kneeling, and wakes when someone comes (D52). */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void summonedUnderARoofHeKneelsOnTop(GameTestHelper helper) {
+		for (int x = 1; x < 23; x++)
+			for (int z = 1; z < 23; z++)
+				helper.setBlock(new BlockPos(x, 5, z), Blocks.STONE);
+		WindingKeyBlockEntity key = effigy(helper, new BlockPos(12, 0, 14), true);
+		key.testSpeed = 64;
+		key.setWind(0.95f);
+		helper.succeedWhen(() -> {
+			List<ClockworkJuggernaut> found = juggernauts(helper);
+			helper.assertTrue(found.size() == 1, "he should have come, found " + found.size());
+			ClockworkJuggernaut j = found.get(0);
+			helper.assertTrue(j.getY() >= helper.absolutePos(new BlockPos(0, 6, 0)).getY(), "he should be on the roof, at y " + j.getY());
+			helper.assertTrue(j.phase() == ClockworkJuggernaut.Phase.DORMANT, "on the surface he kneels, is " + j.phase());
+		});
 	}
 
 	private static List<BlockState> snapshot(GameTestHelper helper) {

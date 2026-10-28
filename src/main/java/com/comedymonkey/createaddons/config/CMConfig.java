@@ -144,6 +144,9 @@ public final class CMConfig {
 		public final ModConfigSpec.ConfigValue<List<? extends Number>> juggernautWoundDamage;
 		public final ModConfigSpec.ConfigValue<List<? extends Number>> juggernautWoundSeconds;
 		public final ModConfigSpec.ConfigValue<List<? extends Number>> juggernautRewindSeconds;
+		public final ModConfigSpec.IntValue ritualWindSeconds;
+		public final ModConfigSpec.IntValue ritualMinSpeed;
+		public final ModConfigSpec.DoubleValue windingKeyStressImpact;
 
 		public final ModConfigSpec.BooleanValue pipezFeedsBlazeBurners;
 		public final ModConfigSpec.BooleanValue blazeBurnerPipezOnly;
@@ -624,10 +627,16 @@ public final class CMConfig {
 				.defineList("woundDamageTaken", List.of(0.10, 0.15, 0.20), () -> 0.1, o -> o instanceof Number n && n.doubleValue() >= 0 && n.doubleValue() <= 1);
 			juggernautWoundSeconds = builder.comment("Seconds he stays wound in stages 1, 2 and 3, the last 4 of them running down.")
 				.translation("comedymonkeysaddons.configuration.juggernautWoundSeconds")
-				.defineList("woundSeconds", List.of(19, 16, 13), () -> 16, o -> o instanceof Number n && n.intValue() >= 6 && n.intValue() <= 600);
+				.defineList("woundSeconds", List.of(38, 32, 26), () -> 32, o -> o instanceof Number n && n.intValue() >= 6 && n.intValue() <= 600);
 			juggernautRewindSeconds = builder.comment("Seconds he stands still rewinding, open to attack, in stages 1, 2 and 3.")
 				.translation("comedymonkeysaddons.configuration.juggernautRewindSeconds")
 				.defineList("rewindSeconds", List.of(6, 5, 4), () -> 5, o -> o instanceof Number n && n.intValue() >= 1 && n.intValue() <= 600);
+			ritualWindSeconds = builder.comment("Seconds a Winding Key takes to wind at the slowest speed that winds it (a Hand Crank's); twice that speed or more", "winds it twice as fast. Stopped, it unwinds at half the slow pace.")
+				.translation("comedymonkeysaddons.configuration.ritualWindSeconds").defineInRange("ritualWindSeconds", 20, 1, 600);
+			ritualMinSpeed = builder.comment("The slowest a shaft can turn a Winding Key and still wind it, in RPM (a Hand Crank turns at 32).")
+				.translation("comedymonkeysaddons.configuration.ritualMinSpeed").defineInRange("ritualMinSpeed", 32, 1, 256);
+			windingKeyStressImpact = builder.comment("Stress a Winding Key puts on its network, per RPM. At a Hand Crank's 32 RPM the default of 4 needs 128 of its 256 stress units.")
+				.translation("comedymonkeysaddons.configuration.windingKeyStressImpact").defineInRange("windingKeyStressImpact", 4.0, 0.0, 1024.0);
 			builder.pop();
 
 			builder.comment("Compatibility with other mods").push("modCompatibility");
@@ -730,6 +739,10 @@ public final class CMConfig {
 		/** A boolean setting, or its default before the server config has loaded. */
 		public static boolean get(ModConfigSpec.BooleanValue value) {
 			return SERVER_SPEC.isLoaded() ? value.get() : value.getDefault();
+		}
+
+		public double windingKeyStressImpact() {
+			return SERVER_SPEC.isLoaded() ? windingKeyStressImpact.get() : windingKeyStressImpact.getDefault();
 		}
 
 		public double crucibleStressImpact() {

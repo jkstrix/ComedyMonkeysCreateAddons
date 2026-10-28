@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=north": { "model": "comedymonkeysaddons:block/winding_key" },
+    "facing=east": { "model": "comedymonkeysaddons:block/winding_key", "y": 90 },
+    "facing=south": { "model": "comedymonkeysaddons:block/winding_key", "y": 180 },
+    "facing=west": { "model": "comedymonkeysaddons:block/winding_key", "y": 270 },
+    "facing=up": { "model": "comedymonkeysaddons:block/winding_key", "x": 270 },
+    "facing=down": { "model": "comedymonkeysaddons:block/winding_key", "x": 90 }
+  }
+}
