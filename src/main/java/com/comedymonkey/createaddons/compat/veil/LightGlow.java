@@ -53,8 +53,12 @@ import net.neoforged.neoforge.event.level.LevelEvent;
  * always on and on top, gives Veil's light buffer the matching depth (resourcepacks/veil_light_depth).
  */
 public final class LightGlow {
-	/** How bright a dyed light's colour is; an undyed light's warm white is gentler, over vanilla's white. */
-	private static final float DYED = 1.4f, PLAIN = 0.6f;
+	/**
+	 * How bright a dyed light's colour is; an undyed light's warm white is gentler, over vanilla's white. Faint, and short
+	 * (REACH of its own light): Veil's lights add up, and a street with a lamp every few blocks washed out to white at 1.4
+	 * and 0.6, reaching as far as each lamp's own light (2026-10-28).
+	 */
+	private static final float DYED = 0.5f, PLAIN = 0.2f, REACH = 0.55f;
 
 	/** Lit lights in the player's world, and the Veil light each has while coloured light is on. */
 	private static final Map<LightBlockEntity, Glow> GLOWS = new IdentityHashMap<>();
@@ -140,18 +144,20 @@ public final class LightGlow {
 		PointLightData light = glow.handle.getLightData();
 		boolean dirty = false;
 		if (glow.step != be.step()) {
-			// as far as its own light reaches at this step
-			light.setRadius(be.kind().level(be.step()) * 0.85f + 1);
+			// about half as far as its own light reaches at this step
+			light.setRadius(be.kind().level(be.step()) * REACH + 1);
 			glow.step = be.step();
 			glow.x = Double.NaN;
 			dirty = true;
 		}
-		// where its lens is: on a ship, out where the ship is now (its blocks are kept in a plot far away), every frame
-		Vec3 at = Vec3.atLowerCornerOf(be.getBlockPos()).add(lens(be));
-		boolean placed = true;
+		// where its lens is (a Floodlight's light is where its beam lands: its spot, none while it has none; at its lens it
+		// only lit up its own can): on a ship, out where the ship is now (its blocks are kept in a plot far away), every frame
+		net.minecraft.core.BlockPos spot = be.kind() == LightKind.FLOODLIGHT ? be.spot() : null;
+		Vec3 at = spot != null ? Vec3.atCenterOf(spot) : Vec3.atLowerCornerOf(be.getBlockPos()).add(lens(be));
+		boolean placed = be.kind() != LightKind.FLOODLIGHT || spot != null;
 		if (SABLE) {
 			Vec3 out = com.comedymonkey.createaddons.compat.sable.client.SableSoundPositions.heardFrom(at.x, at.y, at.z);
-			placed = out != null;
+			placed = placed && out != null;
 			if (out != null)
 				at = out;
 		}
