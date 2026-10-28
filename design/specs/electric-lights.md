@@ -219,30 +219,31 @@ A family of cheap electric lights fed by the mod's Power Lines, with a shape for
 - **Strip run with mixed colours?** Still one run; colours stay per block.
 
 # DEVELOPMENT CHECKLIST
-- [ ] Light Assembly item and recipe
-- [ ] 23 blocks with BlockItems: placement rules (P6), shapes, waterlogging (P12), hardness (P30)
-- [ ] Light block entity: colour, brightness, buffer, lit state; NBT and change-only sync
-- [ ] `LEVEL` block state for world light; one change per on/off or step (P28)
-- [ ] FE capability on lights (touching side and mounting face); grid delivery as ordinary devices
-- [ ] Runs: Light Strip and Edge Light run graphs; Festoon spans; power shared within the run only
-- [ ] Light Switch as a switched Power Line piece (P9)
-- [ ] Lamp Posts: two finishes, stacking roles, head on top, 4 arms in the BE, foot feed, span bracket, one junction per colour
-- [ ] Lamp heads standable on any block top
-- [ ] Pendant and Chandelier lowering with hanging cable (D19)
-- [ ] Floodlight pairing, beam check once a second, remote light block (D18, P27, P13)
-- [ ] Festoon hanging, wall hooks, light spots every 4 blocks, cost and refund (P14)
-- [ ] Warning Beacon turning part (Flywheel instance)
-- [ ] Dyeing in place (not consumed, whole run, sneak for one), water-bucket wash, plain drops
-- [ ] Wrench: brightness steps, sneak pick-up, head and arm removal, Floodlight aiming (P26)
-- [ ] Renderer glow overlay: dye colour, flicker, warm-up (P3, P4), ripple on switch-on (P5)
-- [ ] Contraption and Aeronautics behaviour (P11)
-- [ ] Recipes: stonecutting per light, yield-group tag swaps, crafted big lights (P29), Lamp Posts, Light Switch
-- [ ] Tags, loot tables, lang and subtitles, JEI info pages (P20)
-- [ ] Config keys (Technical Notes)
-- [ ] Goggle readouts (P16); three Ponder scenes (P17)
-- [ ] Sounds on the staging ladder: switch click, beacon whirr, flicker buzz, warm-up tick (P19)
-- [ ] Game tests (Technical Notes)
-- [ ] Art: a brief and Blockbench previews for every light before code (D8)
+All built by 2026-10-28 (commits 4cdb3d7 to cc70765), with game tests for each part.
+- [x] Light Assembly item and recipe
+- [x] 23 blocks with BlockItems: placement rules (P6), shapes, waterlogging (P12; the Chandelier is waterloggable too), hardness (P30)
+- [x] Light block entity: colour, brightness, buffer, lit state; NBT and change-only sync
+- [x] `LEVEL` block state for world light; one change per on/off or step (P28)
+- [x] FE capability on lights (touching side and mounting face); grid delivery as ordinary devices
+- [x] Runs: Light Strip and Edge Light run graphs; Festoon spans; power shared within the run only
+- [x] Light Switch as a switched Power Line piece (P9)
+- [x] Lamp Posts: two finishes, stacking roles, head on top, 4 arms in the BE, foot feed, span bracket, one junction per colour
+- [x] Lamp heads standable on any block top
+- [x] Pendant and Chandelier lowering with hanging cable (D19)
+- [x] Floodlight pairing, beam check once a second, remote light block (D18, P27, P13)
+- [x] Festoon hanging, wall hooks, light spots every 4 blocks, cost and refund (P14)
+- [x] Warning Beacon turning part (drawn as parts: Flywheel when it's on)
+- [x] Dyeing in place (not consumed, whole run, sneak for one), water-bucket wash, plain drops
+- [x] Wrench: brightness steps, sneak pick-up, head and arm removal, Floodlight aiming (P26)
+- [x] Renderer glow overlay: dye colour, flicker, warm-up (P3, P4), ripple on switch-on (P5)
+- [x] Contraption and Aeronautics behaviour (P11: lights move with their blocks on Create contraptions; Aeronautics ships not yet tried in game)
+- [x] Recipes: stonecutting per light, yield-group tag swaps, crafted big lights (P29), Lamp Posts, Light Switch
+- [x] Tags, loot tables, lang and subtitles, JEI info pages (P20)
+- [x] Config keys (Technical Notes)
+- [x] Goggle readouts (P16); three Ponder scenes (P17)
+- [x] Sounds on the staging ladder: switch click, beacon whirr, flicker buzz, warm-up tick (P19)
+- [x] Game tests (Technical Notes)
+- [x] Art: a brief and Blockbench previews for every light before code (D8)
 
 # "IDIOT TEST"
 - Lights run on FE from Power Lines.
