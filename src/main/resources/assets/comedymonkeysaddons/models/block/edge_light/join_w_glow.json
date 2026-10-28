@@ -12,12 +12,12 @@
       "from": [
         0,
         0.75,
-        0.25
+        1.5
       ],
       "to": [
         2.5,
         2.25,
-        1
+        2.25
       ],
       "shade": false,
       "neoforge_data": {
@@ -25,21 +25,21 @@
         "sky_light": 15
       },
       "faces": {
-        "north": {
+        "east": {
           "uv": [
-            13.5,
             13.75,
-            16,
+            13.75,
+            14.5,
             15.25
           ],
           "texture": "#glow_white",
           "tintindex": 0
         },
-        "east": {
+        "south": {
           "uv": [
-            15,
+            0,
             13.75,
-            15.75,
+            2.5,
             15.25
           ],
           "texture": "#glow_white",
@@ -47,9 +47,9 @@
         },
         "west": {
           "uv": [
-            0.25,
+            1.5,
             13.75,
-            1,
+            2.25,
             15.25
           ],
           "texture": "#glow_white",
@@ -58,9 +58,9 @@
         "up": {
           "uv": [
             0,
-            0.25,
+            1.5,
             2.5,
-            1
+            2.25
           ],
           "texture": "#glow_white",
           "tintindex": 0

@@ -158,27 +158,27 @@ public final class LightTestSetup {
 	}
 
 	/**
-	 * A run of Edge Light along the top inner edge of the wall at z {@code wallZ}, from {@code start} along +x, with a wire
-	 * from the line at start up the wall's inner face to the top: it feeds the trim through the wall block.
+	 * A run of Edge Light on the inner face of the wall at z {@code wallZ}, along its top edge (shining down onto the street),
+	 * from {@code start} along +x, with a wire from the line at start up the wall's face to just under it.
 	 */
 	private static void edgeRun(ServerLevel level, BlockPos start, int wallZ, DyeColor dye, List<BlockPos> wires) {
 		Direction toWall = wallZ > 0 ? Direction.SOUTH : Direction.NORTH;
+		BlockPos side = start.relative(toWall, Math.abs(wallZ) - 1);
 		for (int i = 0; i < EDGE_RUN; i++) {
-			BlockPos cell = start.offset(i, 3, wallZ);
+			BlockPos cell = side.offset(i, 2, 0);
 			level.setBlock(cell, ModBlocks.EDGE_LIGHT.get().defaultBlockState(), Block.UPDATE_ALL);
 			if (level.getBlockEntity(cell) instanceof EdgeLightBlockEntity be)
-				be.addEdge(Direction.DOWN, toWall.getOpposite());
+				be.addEdge(toWall, Direction.UP);
 		}
-		BlockPos side = start.relative(toWall, Math.abs(wallZ) - 1);
 		BlockState wire = ModBlocks.COPPER_POWER_LINE.get().defaultBlockState();
-		for (int y = 0; y <= 2; y++) {
+		for (int y = 0; y <= 1; y++) {
 			BlockState w = wire.setValue(PowerLineBlock.FACES.get(toWall), true);
 			if (y == 0)
 				w = w.setValue(PowerLineBlock.FACES.get(Direction.DOWN), true);
 			level.setBlock(side.above(y), w, Block.UPDATE_ALL);
 			wires.add(side.above(y));
 		}
-		if (dye != null && level.getBlockEntity(start.offset(0, 3, wallZ)) instanceof RunLightBlockEntity be)
+		if (dye != null && level.getBlockEntity(side.above(2)) instanceof RunLightBlockEntity be)
 			for (RunLightBlockEntity piece : be.run())
 				piece.setDye(dye);
 		sign(level, start.offset(2, 1, wallZ > 0 ? 1 : -1), toWall.getOpposite(), "Edge Light", dye == null ? "" : "Pink");

@@ -514,16 +514,18 @@ function stripParts() {
 }
 // Edge Light: an aluminium angle along the north-bottom edge of the block (sitting on the face below, at its north edge),
 // a lit bar along its outer edge; x from a to b
+// (the back stands at the edge and the lit chamfer faces in across the face, away from the edge: trim along a wall's top
+// edge shines down the wall, along its bottom edge up it; changed 2026-10-28, the first version faced out over the edge)
 function edgeX(a, b) {
-  return [box('e_back', [a, 0, 1], [b, 2, 2.5], 'alu'), box('e_lip', [a, 0, 0], [b, 0.75, 1], 'alu'), glowBox('e_glow', [a, 0.75, 0.25], [b, 2.25, 1], 'glow', ['south', 'down'])];
+  return [box('e_back', [a, 0, 0], [b, 2, 1.5], 'alu'), box('e_lip', [a, 0, 1.5], [b, 0.75, 2.5], 'alu'), glowBox('e_glow', [a, 0.75, 1.5], [b, 2.25, 2.25], 'glow', ['north', 'down'])];
 }
 // The Edge Light in the game: parts EdgeModel builds an edge-light block from, lying on the floor at its north edge and
 // running along x (turned onto each face and edge as wires' parts are). The profile as edgeX, split: the middle, and each
 // end as it meets the next block's edge (or the edge it mitres with in the same block), or capped where nothing meets it.
 // Each is its aluminium body and, separately, its lit chamfer (lit and tinted, or the unlit glass).
 function edgeParts() {
-  const body = (n, a, b) => [box(n + '_back', [a, 0, 1], [b, 2, 2.5], { all: 'alu', down: null }), box(n + '_lip', [a, 0, 0], [b, 0.75, 1], { all: 'alu', down: null })];
-  const chamfer = (n, a, b) => [glowBox(n + '_glow', [a, 0.75, 0.25], [b, 2.25, 1], 'glow', ['south', 'down'])];
+  const body = (n, a, b) => [box(n + '_back', [a, 0, 0], [b, 2, 1.5], { all: 'alu', down: null }), box(n + '_lip', [a, 0, 1.5], [b, 0.75, 2.5], { all: 'alu', down: null })];
+  const chamfer = (n, a, b) => [glowBox(n + '_glow', [a, 0.75, 1.5], [b, 2.25, 2.25], 'glow', ['north', 'down'])];
   const cap = (n, x0, x1) => [box(n, [x0, 0, 0], [x1, 2.5, 2.5], { all: 'alu', down: null })];
   return {
     mid: { body: body('ed_mid', 2.5, 13.5), diffuser: chamfer('ed_mid', 2.5, 13.5) },
@@ -534,7 +536,7 @@ function edgeParts() {
   };
 }
 function edgeZ(a, b) {
-  return [box('e_back', [1, 0, a], [2.5, 2, b], 'alu'), box('e_lip', [0, 0, a], [1, 0.75, b], 'alu'), glowBox('e_glow', [0.25, 0.75, a], [1, 2.25, b], 'glow', ['east', 'down'])];
+  return [box('e_back', [0, 0, a], [1.5, 2, b], 'alu'), box('e_lip', [1.5, 0, a], [2.5, 0.75, b], 'alu'), glowBox('e_glow', [1.5, 0.75, a], [2.25, 2.25, b], 'glow', ['west', 'down'])];
 }
 // ---------- group 3: ground ----------
 function bollard() {
@@ -657,7 +659,15 @@ if (GROUP === 'runs') {
   // a second run, dyed: along the floor by the wall's foot
   for (let x = 0; x <= 2; x++) rk.push(blockOf('strip_blue_' + x, reglow(move(stripFloor(0, 16, x === 0, x === 2), [0, 0, -5]), 'glow_light_blue'), x, 1, 1));
   // Edge Light: along the wall's top south edge, sitting on the top face of the wall blocks, turning along the west end
-  const edgeS = (a, b) => [box('e_back', [a, 0, 13.5], [b, 2, 15], 'alu'), box('e_lip', [a, 0, 15], [b, 0.75, 16], 'alu'), glowBox('e_glow', [a, 0.75, 15], [b, 2.25, 15.75], 'glow', ['north', 'down'])];
+  const edgeS = (a, b) => [box('e_back', [a, 0, 14.5], [b, 2, 16], 'alu'), box('e_lip', [a, 0, 13.5], [b, 0.75, 14.5], 'alu'), glowBox('e_glow', [a, 0.75, 13.75], [b, 2.25, 14.5], 'glow', ['south', 'down'])];
+  // on the wall's face (the cell in front of it, against its south face): along the top edge the chamfer faces down the
+  // wall, along the bottom edge up it
+  const faceTop = () => [box('ef_back', [0, 14.5, 0], [16, 16, 2], 'alu'), box('ef_lip', [0, 13.5, 0], [16, 14.5, 0.75], 'alu'), glowBox('ef_glow', [0, 13.75, 0.75], [16, 14.5, 2.25], 'glow', ['up', 'north'])];
+  const faceBottom = () => [box('ef_back', [0, 0, 0], [16, 1.5, 2], 'alu'), box('ef_lip', [0, 1.5, 0], [16, 2.5, 0.75], 'alu'), glowBox('ef_glow', [0, 1.5, 0.75], [16, 2.25, 2.25], 'glow', ['down', 'north'])];
+  for (let x = 5; x <= 6; x++) {
+    rk.push(blockOf('edge_face_top_' + x, faceTop(), x, 3, 1));
+    rk.push(blockOf('edge_face_bottom_' + x, faceBottom(), x, 1, 1));
+  }
   for (let x = 0; x <= 6; x++) rk.push(blockOf('edge_' + x, x === 0 ? [...edgeS(2.5, 16), ...edgeZ(0, 16)] : edgeS(0, 16), x, 4, 0));
   outliner.push(group('runs', [8, 0, 8], [0, 0, 0], rk));
 
