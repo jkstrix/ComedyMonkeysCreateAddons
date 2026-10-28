@@ -7,6 +7,7 @@ import com.comedymonkey.createaddons.content.line.PowerLineBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,8 +20,15 @@ import net.minecraft.world.level.block.state.BlockState;
 public final class LightMounts {
 	private LightMounts() {}
 
-	/** The light (or Light Strip) at pos, in {@code state}, is fixed to the block at {@code support}. */
-	public static boolean fixedTo(BlockState state, BlockPos pos, BlockPos support) {
+	/** The light (Light Strip, Edge Light) at pos, in {@code state}, is fixed to the block at {@code support}. */
+	public static boolean fixedTo(BlockGetter level, BlockState state, BlockPos pos, BlockPos support) {
+		if (state.getBlock() instanceof EdgeLightBlock) {
+			int edges = EdgeLinks.edgesAt(level, pos);
+			for (Direction face : Direction.values())
+				if (EdgeLinks.onFace(edges, face) && pos.relative(face).equals(support))
+					return true;
+			return false;
+		}
 		if (state.getBlock() instanceof LightStripBlock) {
 			for (Direction face : Direction.values())
 				if (LightStripBlock.hasFace(state, face) && pos.relative(face).equals(support))
@@ -40,7 +48,7 @@ public final class LightMounts {
 			BlockPos p = support.relative(d);
 			if (p.equals(except) || !level.hasChunkAt(p))
 				continue;
-			if (fixedTo(level.getBlockState(p), p, support))
+			if (fixedTo(level, level.getBlockState(p), p, support))
 				out.add(p);
 		}
 		return out;
@@ -52,7 +60,7 @@ public final class LightMounts {
 			return;
 		for (Direction d : Direction.values()) {
 			BlockPos support = pos.relative(d);
-			if (fixedTo(state, pos, support))
+			if (fixedTo(level, state, pos, support))
 				PowerLineBlock.relinkAround(level, support);
 		}
 	}

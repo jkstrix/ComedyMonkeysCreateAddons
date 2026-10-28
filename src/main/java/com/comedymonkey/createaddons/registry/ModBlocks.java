@@ -363,6 +363,17 @@ public final class ModBlocks {
 			.noCollission()
 			.lightLevel(com.comedymonkey.createaddons.content.light.LightStripBlock::lightLevel)));
 
+	/** Electric Lights: the Edge Light, trim along the edges of a block's faces, several edges in one block. */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.light.EdgeLightBlock> EDGE_LIGHT = BLOCKS.register("edge_light",
+		() -> new com.comedymonkey.createaddons.content.light.EdgeLightBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.METAL)
+			.strength(0.5f, 1.0f)
+			.sound(SoundType.COPPER)
+			.noOcclusion()
+			.noCollission()
+			.dynamicShape()
+			.lightLevel(com.comedymonkey.createaddons.content.light.EdgeLightBlock::lightLevel)));
+
 	private static java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>> registerLights() {
 		var out = new java.util.EnumMap<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>>(
 			com.comedymonkey.createaddons.content.light.LightKind.class);

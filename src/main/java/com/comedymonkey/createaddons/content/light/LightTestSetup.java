@@ -53,6 +53,8 @@ public final class LightTestSetup {
 	private static final int BAY = 7;
 	/** Blocks of floor strip in each run, before it turns up the wall. */
 	private static final int STRIP_RUN = 5;
+	/** Blocks of Edge Light in each run along a wall top. */
+	private static final int EDGE_RUN = 6;
 
 	private LightTestSetup() {}
 
@@ -66,7 +68,7 @@ public final class LightTestSetup {
 		ServerLevel level = source.getLevel();
 		BlockPos o = BlockPos.containing(source.getPosition());
 		int kinds = LightKind.values().length, dyes = DyeColor.values().length / 2, steps = LightKind.STEPS.length;
-		int length = 2 + SPACING * (kinds + dyes) + BAY * steps + 1 + STRIP_RUN + 3;
+		int length = 2 + SPACING * (kinds + dyes) + BAY * steps + 1 + STRIP_RUN + 1 + EDGE_RUN + 3;
 		street(level, o, length);
 		power(level, o);
 
@@ -111,6 +113,12 @@ public final class LightTestSetup {
 		sign(level, o.offset(x, 1, -1), Direction.SOUTH, "Light Strip", "Light Blue");
 		x += STRIP_RUN + 1;
 
+		// Edge Lights: trim along the top inner edge of each wall, fed by a wire up the wall from the line, through the
+		// wall block (a light fixed to a block is fed by a wire on any of its other faces); plain south, dyed north
+		edgeRun(level, o.offset(x, 0, 0), 2, null, wires);
+		edgeRun(level, o.offset(x, 0, 0), -2, DyeColor.PINK, wires);
+		x += EDGE_RUN + 1;
+
 		// the line links up once its blocks are all in; again a moment later, as the game tests do
 		wires.forEach(p -> PowerLineBlock.relinkAround(level, p));
 		MinecraftServer server = level.getServer();
@@ -137,7 +145,7 @@ public final class LightTestSetup {
 		for (int y = 1; y <= 2; y++)
 			level.setBlock(start.east(STRIP_RUN - 1).above(y), strip.setValue(LightStripBlock.FACES.get(wall), true), Block.UPDATE_ALL);
 		if (dye != null && level.getBlockEntity(start) instanceof LightStripBlockEntity be)
-			for (LightStripBlockEntity piece : be.run())
+			for (RunLightBlockEntity piece : be.run())
 				piece.setDye(dye);
 	}
 
@@ -147,6 +155,33 @@ public final class LightTestSetup {
 			for (int y = 0; y <= 2; y++)
 				if (z != 0 || y == 2)
 					level.setBlock(at.offset(0, y, z), WALL, Block.UPDATE_ALL);
+	}
+
+	/**
+	 * A run of Edge Light along the top inner edge of the wall at z {@code wallZ}, from {@code start} along +x, with a wire
+	 * from the line at start up the wall's inner face to the top: it feeds the trim through the wall block.
+	 */
+	private static void edgeRun(ServerLevel level, BlockPos start, int wallZ, DyeColor dye, List<BlockPos> wires) {
+		Direction toWall = wallZ > 0 ? Direction.SOUTH : Direction.NORTH;
+		for (int i = 0; i < EDGE_RUN; i++) {
+			BlockPos cell = start.offset(i, 3, wallZ);
+			level.setBlock(cell, ModBlocks.EDGE_LIGHT.get().defaultBlockState(), Block.UPDATE_ALL);
+			if (level.getBlockEntity(cell) instanceof EdgeLightBlockEntity be)
+				be.addEdge(Direction.DOWN, toWall.getOpposite());
+		}
+		BlockPos side = start.relative(toWall, Math.abs(wallZ) - 1);
+		BlockState wire = ModBlocks.COPPER_POWER_LINE.get().defaultBlockState();
+		for (int y = 0; y <= 2; y++) {
+			BlockState w = wire.setValue(PowerLineBlock.FACES.get(toWall), true);
+			if (y == 0)
+				w = w.setValue(PowerLineBlock.FACES.get(Direction.DOWN), true);
+			level.setBlock(side.above(y), w, Block.UPDATE_ALL);
+			wires.add(side.above(y));
+		}
+		if (dye != null && level.getBlockEntity(start.offset(0, 3, wallZ)) instanceof RunLightBlockEntity be)
+			for (RunLightBlockEntity piece : be.run())
+				piece.setDye(dye);
+		sign(level, start.offset(2, 1, wallZ > 0 ? 1 : -1), toWall.getOpposite(), "Edge Light", dye == null ? "" : "Pink");
 	}
 
 	/** Clears the street's space and lays its floor and walls (two blocks out from the line, three high). */

@@ -141,6 +141,8 @@ public final class ModItems {
 	/** Electric Lights: the Light Assembly every light is cut from in a stonecutter (D23), and the lights themselves. */
 	public static final DeferredItem<Item> LIGHT_ASSEMBLY = ITEMS.registerSimpleItem("light_assembly");
 	public static final DeferredItem<BlockItem> LIGHT_STRIP = ITEMS.registerSimpleBlockItem(ModBlocks.LIGHT_STRIP);
+	public static final DeferredItem<com.comedymonkey.createaddons.content.light.EdgeLightItem> EDGE_LIGHT = ITEMS.register("edge_light",
+		() -> new com.comedymonkey.createaddons.content.light.EdgeLightItem(ModBlocks.EDGE_LIGHT.get(), new Item.Properties()));
 	public static final java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredItem<BlockItem>> LIGHTS = registerLights();
 
 	private static java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredItem<BlockItem>> registerLights() {

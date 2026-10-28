@@ -133,6 +133,20 @@ for (const [id, k] of Object.entries(KINDS)) {
   writeJson('models/item/light_strip.json', blockModel(G.stripFloor(0, 16, true, true), 'alu', { glow: true, gui: true }));
 }
 
+// ---------- the Edge Light: the parts EdgeModel builds each edge-light block from, its item, its blockstate ----------
+{
+  for (const [name, p] of Object.entries(G.edgeParts())) {
+    writeJson(`models/block/edge_light/${name}.json`, blockModel(p.body, 'alu'));
+    writeJson(`models/block/edge_light/${name}_glow.json`, blockModel(lens(p.diffuser, 'glow_white'), 'glow_white', { glow: 'tint' }));
+    writeJson(`models/block/edge_light/${name}_glass.json`, blockModel(lens(p.diffuser, 'glass_off'), 'alu'));
+  }
+  writeJson('models/block/edge_light/base.json', { parent: 'block/block', render_type: 'minecraft:cutout', textures: { particle: ref('alu') }, elements: [] });
+  writeJson('blockstates/edge_light.json', { variants: { '': { model: `${NS}:block/edge_light/base` } } });
+  const e = G.edgeParts();
+  writeJson('models/item/edge_light.json', blockModel([...e.cap_w.body, ...e.cap_w.diffuser, ...e.mid.body, ...e.mid.diffuser, ...e.cap_e.body, ...e.cap_e.diffuser]
+    .map((c) => ({ ...c, from: [c.from[0], c.from[1], c.from[2] + 6.75], to: [c.to[0], c.to[1], c.to[2] + 6.75] })), 'alu', { glow: true, gui: true }));
+}
+
 // ---------- the colour each light casts, for Colorful Lighting (it reads emitters by block state) ----------
 // As LightColours.castHex (checked by LightColoursTest): the lens colour at full; a dyed one strengthened so it reads over
 // vanilla's white light, black as a deep ultraviolet, green from a cooler green than its olive lens, undyed the warm lens as it is. Dark lights emit nothing anyway.
@@ -153,7 +167,7 @@ function castHex(dye) {
   return '#' + rgb.map((v) => Math.floor(f(v * 255) + 0.5).toString(16).toUpperCase().padStart(2, '0')).join('');
 }
 const emitters = {};
-for (const id of [...Object.keys(KINDS), 'light_strip']) {
+for (const id of [...Object.keys(KINDS), 'light_strip', 'edge_light']) {
   emitters[`${NS}:${id}`] = castHex(null);
   for (const dye of DYES) emitters[`${NS}:${id}[color=${dye}]`] = castHex(dye);
 }
@@ -204,13 +218,16 @@ writeData(`${NS}/loot_table/blocks/light_strip.json`, { type: 'minecraft:block',
   pools: ['down', 'up', 'north', 'south', 'west', 'east'].map((face) => ({ rolls: 1, entries: [{ type: 'minecraft:item', name: `${NS}:light_strip` }],
     conditions: [{ condition: 'minecraft:block_state_property', block: `${NS}:light_strip`, properties: { [face]: 'true' } },
       { condition: 'minecraft:survives_explosion' }] })) });
+// an edge-light block drops one for each edge it has (EdgeLightBlock.getDrops counts them; the table gives the one)
+writeData(`${NS}/loot_table/blocks/edge_light.json`, { type: 'minecraft:block', pools: [{ rolls: 1,
+  entries: [{ type: 'minecraft:item', name: `${NS}:edge_light` }], conditions: [{ condition: 'minecraft:survives_explosion' }] }] });
 
 // The Light Assembly (P21), then each light from it in a stonecutter (P22): one of a full light, eight of a small one.
 // A light goes back in to become another of its yield group, 1:1 (P23). The bigger lights are crafted instead (D26).
 const GROUPS = {
   full: ['bulkhead_light', 'wall_sconce', 'gooseneck_lamp', 'cage_lamp', 'flush_ceiling_light', 'bollard_light', 'floor_light',
     'lantern_head', 'cobra_head', 'globe_head', 'yard_light_head'],
-  small: ['indicator_lamp', 'light_strip'],
+  small: ['indicator_lamp', 'light_strip', 'edge_light'],
 };
 const YIELD = { full: 1, small: 8 };
 const CRAFTED = { high_bay_lamp: [{ tag: 'c:plates/iron' }] };

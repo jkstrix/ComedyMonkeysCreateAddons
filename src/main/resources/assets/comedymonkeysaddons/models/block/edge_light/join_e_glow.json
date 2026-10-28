@@ -1,0 +1,71 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/glow_white",
+    "glow_white": "comedymonkeysaddons:block/light/glow_white"
+  },
+  "elements": [
+    {
+      "name": "ed_je_glow",
+      "from": [
+        13.5,
+        0.75,
+        0.25
+      ],
+      "to": [
+        16,
+        2.25,
+        1
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            13.75,
+            2.5,
+            15.25
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            15,
+            13.75,
+            15.75,
+            15.25
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            0.25,
+            13.75,
+            1,
+            15.25
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            13.5,
+            0.25,
+            16,
+            1
+          ],
+          "texture": "#glow_white",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

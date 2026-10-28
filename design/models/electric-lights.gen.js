@@ -517,6 +517,22 @@ function stripParts() {
 function edgeX(a, b) {
   return [box('e_back', [a, 0, 1], [b, 2, 2.5], 'alu'), box('e_lip', [a, 0, 0], [b, 0.75, 1], 'alu'), glowBox('e_glow', [a, 0.75, 0.25], [b, 2.25, 1], 'glow', ['south', 'down'])];
 }
+// The Edge Light in the game: parts EdgeModel builds an edge-light block from, lying on the floor at its north edge and
+// running along x (turned onto each face and edge as wires' parts are). The profile as edgeX, split: the middle, and each
+// end as it meets the next block's edge (or the edge it mitres with in the same block), or capped where nothing meets it.
+// Each is its aluminium body and, separately, its lit chamfer (lit and tinted, or the unlit glass).
+function edgeParts() {
+  const body = (n, a, b) => [box(n + '_back', [a, 0, 1], [b, 2, 2.5], { all: 'alu', down: null }), box(n + '_lip', [a, 0, 0], [b, 0.75, 1], { all: 'alu', down: null })];
+  const chamfer = (n, a, b) => [glowBox(n + '_glow', [a, 0.75, 0.25], [b, 2.25, 1], 'glow', ['south', 'down'])];
+  const cap = (n, x0, x1) => [box(n, [x0, 0, 0], [x1, 2.5, 2.5], { all: 'alu', down: null })];
+  return {
+    mid: { body: body('ed_mid', 2.5, 13.5), diffuser: chamfer('ed_mid', 2.5, 13.5) },
+    join_e: { body: body('ed_je', 13.5, 16), diffuser: chamfer('ed_je', 13.5, 16) },
+    join_w: { body: body('ed_jw', 0, 2.5), diffuser: chamfer('ed_jw', 0, 2.5) },
+    cap_e: { body: [...body('ed_ce', 13.5, 15.25), ...cap('ed_ce_cap', 15.25, 16)], diffuser: chamfer('ed_ce', 13.5, 15.25) },
+    cap_w: { body: [...body('ed_cw', 0.75, 2.5), ...cap('ed_cw_cap', 0, 0.75)], diffuser: chamfer('ed_cw', 0.75, 2.5) },
+  };
+}
 function edgeZ(a, b) {
   return [box('e_back', [1, 0, a], [2.5, 2, b], 'alu'), box('e_lip', [0, 0, a], [1, 0.75, b], 'alu'), glowBox('e_glow', [0.25, 0.75, a], [1, 2.25, b], 'glow', ['east', 'down'])];
 }
@@ -722,4 +738,4 @@ if (GROUP === 'runs') {
 if (!LIB) write(OUT, outliner);
 module.exports = { T, DYE_GLOW, GLOW, SODIUM_LOW, C, box, disc, zdisc, glowBox, move, reglow, turn, toWall, insulatorStack, isGlow,
   castIronPost, steelPost, arm, armHead, ARM_TIP, lantern, cobraTop, globe, yardTop, bulkhead, sconce, gooseneck, highBay, cageLamp, flush,
-  pendantShade, chandelierBody, rose, flexSeg, stripFloor, edgeZ, bollard, floorLight, floodlight, beacon, indicator, lightSwitch, lightSwitchFloor, stripParts };
+  pendantShade, chandelierBody, rose, flexSeg, stripFloor, edgeZ, bollard, floorLight, floodlight, beacon, indicator, lightSwitch, lightSwitchFloor, stripParts, edgeParts, edgeX };

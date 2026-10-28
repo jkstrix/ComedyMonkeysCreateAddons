@@ -175,7 +175,7 @@ public class LightStripBlock extends BaseEntityBlock implements IWrenchable, Sim
 	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState old, boolean moving) {
 		super.onPlace(state, level, pos, old, moving);
 		if (!old.is(this) || faces(old) != faces(state)) {
-			LightStripBlockEntity.runsChanged();
+			RunLightBlockEntity.runsChanged();
 			LightMounts.relinkBehind(level, state, pos);
 			if (old.is(this))
 				LightMounts.relinkBehind(level, old, pos);
@@ -185,7 +185,7 @@ public class LightStripBlock extends BaseEntityBlock implements IWrenchable, Sim
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
 		if (!newState.is(this))
-			LightStripBlockEntity.runsChanged();
+			RunLightBlockEntity.runsChanged();
 		super.onRemove(state, level, pos, newState, moving);
 		if (!newState.is(this))
 			LightMounts.relinkBehind(level, state, pos);
@@ -252,45 +252,13 @@ public class LightStripBlock extends BaseEntityBlock implements IWrenchable, Sim
 											  BlockHitResult hit) {
 		if (Wrenches.isWrench(stack))
 			return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
-		if (!(level.getBlockEntity(pos) instanceof LightStripBlockEntity be) || !player.mayBuild())
-			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-		DyeColor dye;
-		if (stack.getItem() instanceof DyeItem d)
-			dye = d.getDyeColor();
-		else if (stack.is(Items.WATER_BUCKET))
-			dye = null;
-		else
-			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-		// the client can't know the run (it only learns of changes the server makes), so it never uses the item itself
-		if (level.isClientSide)
-			return ItemInteractionResult.SUCCESS;
-		// the whole run (D24), or sneaking, just this block; the dye isn't used and the bucket stays full
-		boolean changed = false;
-		for (LightStripBlockEntity piece : player.isShiftKeyDown() ? java.util.List.of(be) : be.run())
-			if (piece.dye() != dye) {
-				changed = true;
-				if (!level.isClientSide)
-					piece.setDye(dye);
-			}
-		if (!changed)
-			return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
-		if (!level.isClientSide)
-			level.playSound(null, pos, dye != null ? SoundEvents.DYE_USE : SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, dye != null ? 0.7f : 0.5f,
-				dye != null ? 1.1f : 1.2f);
-		return ItemInteractionResult.sidedSuccess(level.isClientSide);
+		return RunLightBlockEntity.dyeRun(stack, level, pos, player);
 	}
 
 	/** The wrench steps the whole run's brightness together (P26); sneaking it picks the block up, as Create's do. */
 	@Override
 	public InteractionResult onWrenched(BlockState state, UseOnContext ctx) {
-		Level level = ctx.getLevel();
-		if (!level.isClientSide && level.getBlockEntity(ctx.getClickedPos()) instanceof LightStripBlockEntity be) {
-			int to = (be.step() + 1) % LightKind.STEPS.length;
-			be.stepTo(to, true);
-			for (LightStripBlockEntity piece : be.run())
-				if (piece != be)
-					piece.stepTo(to, false);
-		}
+		RunLightBlockEntity.stepRun(ctx.getLevel(), ctx.getClickedPos());
 		return InteractionResult.SUCCESS;
 	}
 

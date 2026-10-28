@@ -172,6 +172,11 @@ public final class ModBlockEntities {
 			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.light.LightStripBlockEntity::new, ModBlocks.LIGHT_STRIP.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.light.EdgeLightBlockEntity>> EDGE_LIGHT =
+		BLOCK_ENTITY_TYPES.register("edge_light",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.light.EdgeLightBlockEntity::new, ModBlocks.EDGE_LIGHT.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BatteryBlockEntity>> BATTERY =
 		BLOCK_ENTITY_TYPES.register("battery",
 			() -> BlockEntityType.Builder.of(BatteryBlockEntity::new, ModBlocks.BATTERY.get()).build(null));

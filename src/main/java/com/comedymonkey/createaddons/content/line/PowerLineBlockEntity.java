@@ -232,7 +232,7 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 			return WireLink.POST;
 		// a light standing on the same surface: flat under its foot; a machine: up its face to its socket
 		if (!(there.getBlock() instanceof LineBlock) && level.getCapability(Capabilities.EnergyStorage.BLOCK, next, d.getOpposite()) != null)
-			return com.comedymonkey.createaddons.content.light.LightMounts.fixedTo(there, next, next.relative(face)) ? WireLink.LAMP : WireLink.TERMINAL;
+			return com.comedymonkey.createaddons.content.light.LightMounts.fixedTo(level, there, next, next.relative(face)) ? WireLink.LAMP : WireLink.TERMINAL;
 		// over the edge: the next block is open, and a wire runs down the far side of the block this one lies on
 		if (!there.isCollisionShapeFullBlock(level, next)) {
 			BlockPos round = next.relative(face);

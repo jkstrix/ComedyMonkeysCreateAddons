@@ -55,6 +55,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		modBus.addListener(com.comedymonkey.createaddons.client.line.StripModel::registerBlockColors);
 		modBus.addListener(com.comedymonkey.createaddons.client.line.StripModel::registerModels);
 		modBus.addListener(com.comedymonkey.createaddons.client.line.StripModel::wrap);
+		modBus.addListener(com.comedymonkey.createaddons.client.line.EdgeModel::registerModels);
+		modBus.addListener(com.comedymonkey.createaddons.client.line.EdgeModel::wrap);
 		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::registerItemColors);
 		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::wrapModels);
 		// Helper Bot's flat icon: his chest panels in his dye
@@ -159,6 +161,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		com.comedymonkey.createaddons.client.parts.PartModels.forget();
 		com.comedymonkey.createaddons.client.line.PowerLineModel.forget();
 		com.comedymonkey.createaddons.client.line.StripModel.forget();
+		com.comedymonkey.createaddons.client.line.EdgeModel.forget();
 		BatteryTowerModel.forget();
 	}
 

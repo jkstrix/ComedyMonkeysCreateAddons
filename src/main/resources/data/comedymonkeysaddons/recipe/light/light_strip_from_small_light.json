@@ -3,6 +3,9 @@
   "ingredient": [
     {
       "item": "comedymonkeysaddons:indicator_lamp"
+    },
+    {
+      "item": "comedymonkeysaddons:edge_light"
     }
   ],
   "result": {

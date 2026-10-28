@@ -91,7 +91,7 @@ public class StripModel extends BakedModelWrapper<BakedModel> {
 				return -1;
 			int light = state.getValue(LightBlock.LIGHT);
 			return LightRenderer.lens(state.getValue(LightBlock.COLOR).dye(), Math.max(0, light - 1));
-		}, ModBlocks.LIGHT_STRIP.get());
+		}, ModBlocks.LIGHT_STRIP.get(), ModBlocks.EDGE_LIGHT.get());
 	}
 
 	@Override

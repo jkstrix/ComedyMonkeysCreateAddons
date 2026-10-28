@@ -1,0 +1,131 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/alu",
+    "alu": "comedymonkeysaddons:block/light/alu"
+  },
+  "elements": [
+    {
+      "name": "ed_je_back",
+      "from": [
+        13.5,
+        0,
+        1
+      ],
+      "to": [
+        16,
+        2,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            2.5,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "east": {
+          "uv": [
+            13.5,
+            14,
+            15,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "south": {
+          "uv": [
+            13.5,
+            14,
+            16,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "west": {
+          "uv": [
+            1,
+            14,
+            2.5,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "up": {
+          "uv": [
+            13.5,
+            1,
+            16,
+            2.5
+          ],
+          "texture": "#alu"
+        }
+      }
+    },
+    {
+      "name": "ed_je_lip",
+      "from": [
+        13.5,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        0.75,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            15.25,
+            2.5,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "east": {
+          "uv": [
+            15,
+            15.25,
+            16,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "south": {
+          "uv": [
+            13.5,
+            15.25,
+            16,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "west": {
+          "uv": [
+            0,
+            15.25,
+            1,
+            16
+          ],
+          "texture": "#alu"
+        },
+        "up": {
+          "uv": [
+            13.5,
+            0,
+            16,
+            1
+          ],
+          "texture": "#alu"
+        }
+      }
+    }
+  ]
+}

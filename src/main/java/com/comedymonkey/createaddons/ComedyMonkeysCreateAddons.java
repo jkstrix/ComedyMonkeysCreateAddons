@@ -233,6 +233,7 @@ public class ComedyMonkeysCreateAddons {
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.LIGHT.get(), (be, side) -> be.energy());
 		// A Light Strip takes power for its whole run, through whichever piece a line touches (P7)
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.LIGHT_STRIP.get(), (be, side) -> be.runEnergy());
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.EDGE_LIGHT.get(), (be, side) -> be.runEnergy());
 		// The turbine connects only through the port flanges under its base (the bottom faces of its bottom casings);
 		// the controller, in the middle of the front, offers nothing to a side
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.GEOTHERMAL_CONTROLLER.get(),
@@ -291,6 +292,7 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.METER.get());
 			registerCreateTooltip(ModItems.LIGHT_SWITCH.get());
 			registerCreateTooltip(ModItems.LIGHT_STRIP.get());
+			registerCreateTooltip(ModItems.EDGE_LIGHT.get());
 			registerCreateTooltip(ModItems.SPLITTER.get());
 			registerCreateTooltip(ModItems.BREAKER.get());
 			registerCreateTooltip(ModItems.UPGRADE_TEMPLATE.get());

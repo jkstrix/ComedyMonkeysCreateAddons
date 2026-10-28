@@ -410,6 +410,70 @@ public final class LightGameTests {
 		});
 	}
 
+	// ---------- Edge Lights ----------
+
+	private static com.comedymonkey.createaddons.content.light.EdgeLightBlockEntity edge(GameTestHelper helper, BlockPos pos) {
+		if (helper.getBlockEntity(pos) instanceof com.comedymonkey.createaddons.content.light.EdgeLightBlockEntity be)
+			return be;
+		throw new net.minecraft.gametest.framework.GameTestAssertException("no Edge Light at " + pos);
+	}
+
+	/** A run of Edge Light along the floor's north edge, five blocks along +x, fed at its west end: lit to its east end. */
+	@GameTest(template = COURSE, timeoutTicks = 140)
+	public static void edgeRunLightsFromOneFeed(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(0, 1, 2);
+		LineGameTests.generator(helper, gen);
+		for (int i = 1; i <= 2; i++)
+			LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		for (int i = 3; i <= 7; i++) {
+			helper.setBlock(gen.east(i), ModBlocks.EDGE_LIGHT.get());
+			edge(helper, gen.east(i)).addEdge(Direction.DOWN, Direction.NORTH);
+		}
+		helper.runAtTickTime(2, () -> LineGameTests.relink(helper, gen.east(1), gen.east(2)));
+		helper.runAtTickTime(120, () -> {
+			for (int i = 3; i <= 7; i++)
+				if (edge(helper, gen.east(i)).phase() != LightBlockEntity.Phase.LIT)
+					helper.fail("edge " + i + " of the run isn't lit");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Clicking a floor near its north edge lays trim on that edge; clicking near its east edge adds that edge to the same
+	 * block. Broken, it drops one Edge Light for each edge.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void edgeLightGoesOnTheEdgeClicked(GameTestHelper helper) {
+		BlockPos floor = new BlockPos(2, 1, 2), cell = floor.above();
+		helper.setBlock(floor, net.minecraft.world.level.block.Blocks.STONE);
+		helper.runAtTickTime(1, () -> {
+			Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+			player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.EDGE_LIGHT.get(), 4));
+			BlockPos abs = helper.absolutePos(floor);
+			Vec3 north = new Vec3(abs.getX() + 0.5, abs.getY() + 1, abs.getZ() + 0.1), east = new Vec3(abs.getX() + 0.9, abs.getY() + 1, abs.getZ() + 0.5);
+			net.minecraft.world.InteractionResult first = ModItems.EDGE_LIGHT.get().useOn(new net.minecraft.world.item.context.UseOnContext(player, InteractionHand.MAIN_HAND,
+				new BlockHitResult(north, Direction.UP, abs, false)));
+			if (!(helper.getLevel().getBlockEntity(helper.absolutePos(cell)) instanceof com.comedymonkey.createaddons.content.light.EdgeLightBlockEntity))
+				helper.fail("the first click placed nothing (" + first + ", floor " + helper.getBlockState(floor) + ", cell " + helper.getBlockState(cell) + ")");
+			ModItems.EDGE_LIGHT.get().useOn(new net.minecraft.world.item.context.UseOnContext(player, InteractionHand.MAIN_HAND,
+				new BlockHitResult(east, Direction.UP, abs, false)));
+			int edges = edge(helper, cell).edges();
+			if (!com.comedymonkey.createaddons.content.light.EdgeLinks.has(edges, Direction.DOWN, Direction.NORTH))
+				helper.fail("no trim on the north edge clicked");
+			if (!com.comedymonkey.createaddons.content.light.EdgeLinks.has(edges, Direction.DOWN, Direction.EAST))
+				helper.fail("the east edge clicked wasn't added to the same block");
+			if (Integer.bitCount(edges) != 2)
+				helper.fail("the block has " + Integer.bitCount(edges) + " edges, not 2");
+			if (player.getMainHandItem().getCount() != 2)
+				helper.fail("placing two edges used " + (4 - player.getMainHandItem().getCount()) + " Edge Lights");
+			int dropped = net.minecraft.world.level.block.Block.getDrops(helper.getBlockState(cell), helper.getLevel(), helper.absolutePos(cell),
+				helper.getBlockEntity(cell)).stream().mapToInt(ItemStack::getCount).sum();
+			if (dropped != 2)
+				helper.fail("broken, it dropped " + dropped + ", not 2");
+			helper.succeed();
+		});
+	}
+
 	/** Starved (power stops coming, its circuit still has a source), it stays lit for its store, flickers, then goes dark. */
 	@GameTest(template = COURSE, timeoutTicks = 140)
 	public static void starvedLightFlickersOut(GameTestHelper helper) {

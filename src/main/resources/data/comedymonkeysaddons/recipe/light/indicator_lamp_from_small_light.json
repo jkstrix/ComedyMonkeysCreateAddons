@@ -3,6 +3,9 @@
   "ingredient": [
     {
       "item": "comedymonkeysaddons:light_strip"
+    },
+    {
+      "item": "comedymonkeysaddons:edge_light"
     }
   ],
   "result": {

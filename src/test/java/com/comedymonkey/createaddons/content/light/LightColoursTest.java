@@ -64,6 +64,7 @@ class LightColoursTest {
 		for (LightKind kind : LightKind.values())
 			lights.add(kind.id());
 		lights.add("light_strip");
+		lights.add("edge_light");
 		for (String light : lights) {
 			String id = "comedymonkeysaddons:" + light;
 			assertEquals(LightColours.castHex(null), emitters.get(id).getAsString(), id);
