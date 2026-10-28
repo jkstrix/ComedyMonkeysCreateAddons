@@ -65,6 +65,8 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.FISH_FOOD.get());
 				output.accept(ModItems.CUCKOO_CLOCK.get());
 				output.accept(ModItems.TRADE_BOT.get());
+				output.accept(ModItems.MAINSPRING.get());
+				output.accept(ModItems.CLOCKWORK_JUGGERNAUT_SPAWN_EGG.get());
 				// Helper Bot, plain and in every dye
 				output.accept(ModItems.HELPER_BOT.get());
 				for (net.minecraft.world.item.DyeColor dye : net.minecraft.world.item.DyeColor.values()) {

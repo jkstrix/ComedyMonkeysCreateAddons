@@ -72,6 +72,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(TradeBotLinkPicking::onClientTick);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.tradebot.TradeBotLoopSounds::onClientTick);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ComedyMonkeysCreateAddonsClient::tickClipClock);
+		// The ground shakes under the Juggernaut's spring leap
+		com.comedymonkey.createaddons.client.juggernaut.JuggernautShake.register();
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ComedyMonkeysCreateAddonsClient::forgetMachineSounds);
 		// Development only: Flywheel on/off A/B screenshots on request
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.dev.ShotRunner::onClientTick);
@@ -201,6 +203,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerRenderers(event);
 		event.registerEntityRenderer(ModEntities.TRADE_BOT.get(), TradeBotRenderer::new);
+		event.registerEntityRenderer(ModEntities.CLOCKWORK_JUGGERNAUT.get(), com.comedymonkey.createaddons.client.juggernaut.JuggernautRenderer::new);
+		event.registerEntityRenderer(ModEntities.THROWN_COG.get(), context -> new net.minecraft.client.renderer.entity.ThrownItemRenderer<>(context, 2.5f, false));
 		event.registerBlockEntityRenderer(ModBlockEntities.TRADE_BOT_STATION.get(), TradeBotStationRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.HELPER_BOT.get(), com.comedymonkey.createaddons.client.helperbot.HelperBotRenderer::new);
 	}
@@ -289,6 +293,8 @@ public class ComedyMonkeysCreateAddonsClient {
 
 	private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(TradeBotGeometry.BOT_LAYER, TradeBotGeometry::botLayer);
+		event.registerLayerDefinition(com.comedymonkey.createaddons.client.juggernaut.JuggernautModel.LAYER,
+			com.comedymonkey.createaddons.client.juggernaut.JuggernautModel::layer);
 		event.registerLayerDefinition(com.comedymonkey.createaddons.client.helperbot.HelperBotModels.LAYER,
 			com.comedymonkey.createaddons.client.helperbot.HelperBotModels::layer);
 		event.registerLayerDefinition(TradeBotGeometry.STATION_LAYER, TradeBotGeometry::stationLayer);

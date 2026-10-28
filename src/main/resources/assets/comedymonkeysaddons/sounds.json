@@ -1693,5 +1693,994 @@
       "comedymonkeysaddons:trade_bot/shake_off_2",
       "comedymonkeysaddons:trade_bot/shake_off_3"
     ]
+  },
+  "clockwork_juggernaut.tick": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.tick",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/tick_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/tick_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/tick_3",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/tick_4",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.tock": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.tock",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/tock_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/tock_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/tock_3",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/tock_4",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.run_down_tick": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.run_down_tick",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/run_down_tick_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/run_down_tick_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/run_down_tick_3",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.key_ratchet": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.key_ratchet",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/key_ratchet_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/key_ratchet_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/key_ratchet_3",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.plate_ring": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.plate_ring",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plate_ring_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plate_ring_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plate_ring_3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plate_ring_4",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.glow_on": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.glow_on",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/glow_on_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/glow_on_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.steam_puff": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.steam_puff",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/steam_puff_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/steam_puff_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/steam_puff_3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/steam_puff_4",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.step": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.step",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/step_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/step_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/step_3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/step_4",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/step_5",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/step_6",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.step_run": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.step_run",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/step_run_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/step_run_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/step_run_3",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/step_run_4",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.foot_scrape": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.foot_scrape",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/foot_scrape_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/foot_scrape_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/foot_scrape_3",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.skid": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.skid",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/skid_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/skid_2",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.plates_settle": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.plates_settle",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plates_settle_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plates_settle_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plates_settle_3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plates_settle_4",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.joint_step": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.joint_step",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/joint_step_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/joint_step_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/joint_step_3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/joint_step_4",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.head_ratchet": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.head_ratchet",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/head_ratchet_1",
+      "comedymonkeysaddons:clockwork_juggernaut/head_ratchet_2",
+      "comedymonkeysaddons:clockwork_juggernaut/head_ratchet_3"
+    ]
+  },
+  "clockwork_juggernaut.joint_creak": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.joint_creak",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/joint_creak_1",
+      "comedymonkeysaddons:clockwork_juggernaut/joint_creak_2",
+      "comedymonkeysaddons:clockwork_juggernaut/joint_creak_3"
+    ]
+  },
+  "clockwork_juggernaut.knuckle_grind": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.knuckle_grind",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/knuckle_grind_1",
+      "comedymonkeysaddons:clockwork_juggernaut/knuckle_grind_2"
+    ]
+  },
+  "clockwork_juggernaut.claw_flex": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.claw_flex",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/claw_flex_1",
+      "comedymonkeysaddons:clockwork_juggernaut/claw_flex_2",
+      "comedymonkeysaddons:clockwork_juggernaut/claw_flex_3"
+    ]
+  },
+  "clockwork_juggernaut.steam_sigh": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.steam_sigh",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/steam_sigh_1",
+      "comedymonkeysaddons:clockwork_juggernaut/steam_sigh_2"
+    ]
+  },
+  "clockwork_juggernaut.charge_tell": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.charge_tell",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/charge_tell_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/charge_tell_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.swing_windup": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.swing_windup",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/swing_windup_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/swing_windup_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.swing_whoosh": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.swing_whoosh",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/swing_whoosh_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/swing_whoosh_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/swing_whoosh_3",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.stomp_raise": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.stomp_raise",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/stomp_raise_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/stomp_raise_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.stomp_impact": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.stomp_impact",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/stomp_impact_1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/stomp_impact_2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/stomp_impact_3",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/stomp_impact_4",
+        "attenuation_distance": 48
+      }
+    ]
+  },
+  "clockwork_juggernaut.grab_open": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.grab_open",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/grab_open_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/grab_open_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.grab_snap": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.grab_snap",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/grab_snap_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/grab_snap_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/grab_snap_3",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.grab_clang": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.grab_clang",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/grab_clang_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/grab_clang_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.throw_whoosh": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.throw_whoosh",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/throw_whoosh_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/throw_whoosh_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.grab_release": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.grab_release",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/grab_release_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/grab_release_2",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.leap_coil": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.leap_coil",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/leap_coil_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/leap_coil_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.leap_launch": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.leap_launch",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/leap_launch_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/leap_launch_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.leap_land": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.leap_land",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/leap_land_1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/leap_land_2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/leap_land_3",
+        "attenuation_distance": 48
+      }
+    ]
+  },
+  "clockwork_juggernaut.vent_tell": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.vent_tell",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/vent_tell_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/vent_tell_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.vent_blast": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.vent_blast",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/vent_blast_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/vent_blast_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.spin_windup": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.spin_windup",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/spin_windup_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/spin_windup_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.spin_loop": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.spin_loop",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/spin_loop",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.spin_down": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.spin_down",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/spin_down_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/spin_down_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.cog_draw": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.cog_draw",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/cog_draw_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/cog_draw_2",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.cog_throw": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.cog_throw",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/cog_throw_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/cog_throw_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.cog_fly": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.cog_fly",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/cog_fly",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.cog_hit": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.cog_hit",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/cog_hit_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/cog_hit_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/cog_hit_3",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.rewind_loop": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.rewind_loop",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/rewind_loop",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.rewind_end": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.rewind_end",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/rewind_end_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/rewind_end_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.feint_snap": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.feint_snap",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/feint_snap_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/feint_snap_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.key_jam": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.key_jam",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/key_jam_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/key_jam_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.plates_burst": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.plates_burst",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plates_burst_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plates_burst_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.stage_roar": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.stage_roar",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/stage_roar_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/stage_roar_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.plates_land": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.plates_land",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plates_land_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plates_land_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/plates_land_3",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.hit_wound": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.hit_wound",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/hit_wound_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/hit_wound_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/hit_wound_3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/hit_wound_4",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.hit_open": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.hit_open",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/hit_open_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/hit_open_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/hit_open_3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/hit_open_4",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.lightning": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.lightning",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/lightning",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.ember_flicker": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.ember_flicker",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/ember_flicker_1",
+      "comedymonkeysaddons:clockwork_juggernaut/ember_flicker_2",
+      "comedymonkeysaddons:clockwork_juggernaut/ember_flicker_3"
+    ]
+  },
+  "clockwork_juggernaut.steam_wisp": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.steam_wisp",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/steam_wisp_1",
+      "comedymonkeysaddons:clockwork_juggernaut/steam_wisp_2"
+    ]
+  },
+  "clockwork_juggernaut.key_turn": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.key_turn",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/key_turn_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/key_turn_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.salute_snap": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.salute_snap",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/salute_snap_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/salute_snap_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.glow_out": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.glow_out",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/glow_out",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.kneel_impact": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.kneel_impact",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/kneel_impact_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/kneel_impact_2",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.key_unwind": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.key_unwind",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/key_unwind",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.mainspring_burst": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.mainspring_burst",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/mainspring_burst",
+        "attenuation_distance": 48
+      }
+    ]
+  },
+  "clockwork_juggernaut.fist_thud": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.fist_thud",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/fist_thud_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/fist_thud_2",
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "clockwork_juggernaut.death_steam": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.death_steam",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/death_steam",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.key_fit": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.key_fit",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/key_fit_1",
+      "comedymonkeysaddons:clockwork_juggernaut/key_fit_2"
+    ]
+  },
+  "clockwork_juggernaut.ritual_click": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.ritual_click",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_click_1",
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_click_2",
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_click_3",
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_click_4"
+    ]
+  },
+  "clockwork_juggernaut.ritual_tick": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.ritual_tick",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_tick_1",
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_tick_2",
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_tick_3",
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_tick_4"
+    ]
+  },
+  "clockwork_juggernaut.ritual_runes": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.ritual_runes",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_runes"
+    ]
+  },
+  "clockwork_juggernaut.ritual_steam": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.ritual_steam",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_steam_1",
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_steam_2",
+      "comedymonkeysaddons:clockwork_juggernaut/ritual_steam_3"
+    ]
+  },
+  "clockwork_juggernaut.ritual_ready": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.ritual_ready",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/ritual_ready",
+        "attenuation_distance": 48
+      }
+    ]
+  },
+  "clockwork_juggernaut.ritual_unfold": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.ritual_unfold",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/ritual_unfold",
+        "attenuation_distance": 48
+      }
+    ]
+  },
+  "clockwork_juggernaut.ritual_collapse": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.ritual_collapse",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/ritual_collapse",
+        "attenuation_distance": 32
+      }
+    ]
+  },
+  "clockwork_juggernaut.engine_ratchet": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.engine_ratchet",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_ratchet_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_ratchet_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_ratchet_3",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_ratchet_4",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_juggernaut.engine_tick": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.engine_tick",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_tick_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_tick_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_tick_3",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_juggernaut.engine_tock": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.engine_tock",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_tock_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_tock_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_tock_3",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_juggernaut.engine_rune_up": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.engine_rune_up",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_rune_up",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_juggernaut.engine_rune_down": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.engine_rune_down",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_juggernaut/engine_rune_down",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_juggernaut.engine_full": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.engine_full",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/engine_full"
+    ]
+  },
+  "clockwork_juggernaut.engine_empty": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_juggernaut.engine_empty",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_juggernaut/engine_empty"
+    ]
   }
 }

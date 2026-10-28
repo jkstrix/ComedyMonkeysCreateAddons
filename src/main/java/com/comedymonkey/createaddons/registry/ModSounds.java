@@ -49,7 +49,17 @@ public final class ModSounds {
 	/** Helper Bot's sounds, from the {@code helper_bot.*} entries that {@code design/sound/helper-bot/export-game.js} writes. */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> HELPER_BOT = registerPrefixed("helper_bot.");
 
+	/** The Clockwork Juggernaut's sounds, from the entries {@code design/sound/clockwork-juggernaut/export-game.js} writes. */
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> JUGGERNAUT = registerPrefixed("clockwork_juggernaut.");
+
 	private ModSounds() {}
+
+	/** One of the Clockwork Juggernaut's sounds, or null for an id the sound design doesn't have. */
+	@org.jetbrains.annotations.Nullable
+	public static SoundEvent juggernaut(String id) {
+		DeferredHolder<SoundEvent, SoundEvent> holder = JUGGERNAUT.get(id);
+		return holder == null ? null : holder.get();
+	}
 
 	/** One of Helper Bot's sounds, or null for an id the sound design doesn't have. */
 	@org.jetbrains.annotations.Nullable

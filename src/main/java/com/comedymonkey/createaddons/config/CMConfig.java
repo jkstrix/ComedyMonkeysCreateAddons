@@ -1,5 +1,7 @@
 package com.comedymonkey.createaddons.config;
 
+import java.util.List;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.comedymonkey.createaddons.content.chest.ChestTier;
@@ -137,6 +139,11 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue tradeBotFePerTrade;
 		public final ModConfigSpec.IntValue tradeBotHostileRadius;
 		public final ModConfigSpec.BooleanValue helperBotShopKeeper;
+		public final ModConfigSpec.DoubleValue juggernautHealth;
+		public final ModConfigSpec.DoubleValue juggernautExtraPlayerHealth;
+		public final ModConfigSpec.ConfigValue<List<? extends Number>> juggernautWoundDamage;
+		public final ModConfigSpec.ConfigValue<List<? extends Number>> juggernautWoundSeconds;
+		public final ModConfigSpec.ConfigValue<List<? extends Number>> juggernautRewindSeconds;
 
 		public final ModConfigSpec.BooleanValue pipezFeedsBlazeBurners;
 		public final ModConfigSpec.BooleanValue blazeBurnerPipezOnly;
@@ -606,6 +613,23 @@ public final class CMConfig {
 				.define("helperBotShopKeeper", true);
 			builder.pop();
 
+			builder.comment("Clockwork Juggernaut: the boss. Armoured while wound; he takes full damage only while he stops to",
+					"rewind. Each stage (under 67% and 33% health) sheds plates and tightens his rhythm.").push("clockworkJuggernaut");
+			juggernautHealth = builder.comment("His health with one player near when he wakes.")
+				.translation("comedymonkeysaddons.configuration.juggernautHealth").defineInRange("health", 1000.0, 1.0, 1024.0);
+			juggernautExtraPlayerHealth = builder.comment("Extra health for each other player within 32 blocks when he wakes (0.5 = +50%).")
+				.translation("comedymonkeysaddons.configuration.juggernautExtraPlayerHealth").defineInRange("extraPlayerHealth", 0.5, 0.0, 10.0);
+			juggernautWoundDamage = builder.comment("Share of damage he takes while wound, in stages 1, 2 and 3 (rewinding he takes it all).")
+				.translation("comedymonkeysaddons.configuration.juggernautWoundDamage")
+				.defineList("woundDamageTaken", List.of(0.10, 0.15, 0.20), () -> 0.1, o -> o instanceof Number n && n.doubleValue() >= 0 && n.doubleValue() <= 1);
+			juggernautWoundSeconds = builder.comment("Seconds he stays wound in stages 1, 2 and 3, the last 4 of them running down.")
+				.translation("comedymonkeysaddons.configuration.juggernautWoundSeconds")
+				.defineList("woundSeconds", List.of(19, 16, 13), () -> 16, o -> o instanceof Number n && n.intValue() >= 6 && n.intValue() <= 600);
+			juggernautRewindSeconds = builder.comment("Seconds he stands still rewinding, open to attack, in stages 1, 2 and 3.")
+				.translation("comedymonkeysaddons.configuration.juggernautRewindSeconds")
+				.defineList("rewindSeconds", List.of(6, 5, 4), () -> 5, o -> o instanceof Number n && n.intValue() >= 1 && n.intValue() <= 600);
+			builder.pop();
+
 			builder.comment("Compatibility with other mods").push("modCompatibility");
 
 			pipezFeedsBlazeBurners = builder
@@ -723,6 +747,14 @@ public final class CMConfig {
 		/** A decimal setting, or its default before the server config has loaded. */
 		public static double get(ModConfigSpec.DoubleValue value) {
 			return SERVER_SPEC.isLoaded() ? value.get() : value.getDefault();
+		}
+
+		/** Entry {@code stage - 1} of a per-stage list setting (stages 1-3), or its default before the config loads. */
+		public static double perStage(ModConfigSpec.ConfigValue<List<? extends Number>> value, int stage) {
+			List<? extends Number> list = SERVER_SPEC.isLoaded() ? value.get() : value.getDefault();
+			if (list.isEmpty())
+				list = value.getDefault();
+			return list.get(Math.min(Math.max(stage, 1), list.size()) - 1).doubleValue();
 		}
 
 		public int magmaEngineSpeed() {

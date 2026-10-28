@@ -25,15 +25,15 @@ Clarified: a summoned boss, a huge war automaton and the bots' grim ancestor. It
 | D11 | Tier | Late game, beside the Wither: summoning needs brass, Precision Mechanisms and something hard-won, but not a Nether Star | user, round 1 |
 | D12 | Wild ones | Summoned, and also found dormant in rare ruins; a dormant one wakes when a player comes close | user, round 1 |
 | D13 | Spring size | A full Spring Engine holds an hour at 16,384 SU (58,982,400 SU-seconds) | user, round 2 |
-| D14 | Toughness | 400 health. Wound, it takes 10% of damage; rewinding (about 6 s in every 25) it takes full damage. About 4-6 rewinds, 2-3 minutes, for a geared player. +50% health for each extra player within 32 blocks when it wakes | user, round 2 |
+| D14 | Toughness | 1000 health (raised from 400 after the first fight, 2026-10-27: a Sharpness V netherite sword took a whole stage in one rewind). Wound, it takes 10% of damage; rewinding (about 6 s in every 25) it takes full damage. About 4-6 rewinds, 2-3 minutes, for a geared player. +50% health for each extra player within 32 blocks when it wakes, given as toughness (every hit divided by 1.5, 2, ...) because vanilla caps max health at 1024 | user, round 2; tuned in game |
 | D15 | Jars and cages | The Capture Bottle refuses it: no Juggernaut in a cage, no Mainspring farm | user, round 2 |
 | D16 | Effigy | Four Brass Blocks in a T (like the Wither's soul sand). The Winding Key is a block placed on the back of the T's centre | defaults round 3 |
 | D17 | Winding Key | Made in a Mechanical Crafter from a Netherite Ingot, 4 Precision Mechanisms and 4 Brass Sheets. Single use: the ritual consumes it with the effigy | defaults round 3 |
 | D18 | Winding | A shaft into the key at 64 RPM or more for 30 s of continuous turning. If the shaft stops, the key slowly unwinds back. The ticking grows louder; players within 64 blocks see "Something is being wound…" on the action bar. Fully wound, the effigy and key become the Juggernaut and the shaft pops off | defaults round 3 |
 | D19 | Peaceful | The key turns but never wakes it; dormant ones in ruins never wake | defaults round 3 |
 | D20 | Body | 7 blocks tall, twice the Wither (user, 2026-10-27: "he wants to be twice as big as a wither"; was 2 × 3½); hitbox about 6 wide to match his shield pauldrons (user, 2026-10-27: "widen hitbox to match"); steps up 2 blocks; knockback-immune; can't be leashed, picked up (Carry On), ride anything, or be pushed by pistons or contraptions | defaults round 3 |
-| D21 | Attacks | A charge (12 damage, big knockback), a sweeping arm swing (8), and a stomp shockwave ring you jump over (6, knocks up). Damage scales with difficulty as vanilla's does. No attack breaks or changes a block. More moves by stage: D44 | defaults round 3 |
-| D22 | Anti-cheese | No path to its target for 5 s: it hurls a heavy cog (8 damage, no block damage) | defaults round 3 |
+| D21 | Attacks | A charge (34 damage, big knockback), a sweeping arm swing (22), and a stomp shockwave ring you jump over (14, knocks up). Near Warden-scale: raised on 2026-10-27 because full diamond with Protection IV turned the first numbers into under a heart, eased about a fifth after playing, then raised 20% again (2026-10-28). A charge takes about 3.3 hearts through that gear on Normal. Damage scales with difficulty as vanilla's does. No attack breaks or changes a block. More moves by stage: D44 | defaults round 3; tuned in game |
+| D22 | Anti-cheese | No path to its target for 5 s: it hurls a heavy cog (19 damage, no block damage) | defaults round 3 |
 | D23 | Hits | Wound, arrows and tridents glance off. Rewinding, every hit does full damage, and hits on the key from behind do 1.5× | defaults round 3 |
 | D24 | Half health | Replaced by the three stages (D43) on 2026-10-27; "overwound" is now stage 3 | defaults round 3; revised round 4 |
 | D25 | Lightning | A strike rewinds it instantly, skipping its open window: storm fights are harder | defaults round 3 |
@@ -41,7 +41,7 @@ Clarified: a summoned boss, a huge war automaton and the bots' grim ancestor. It
 | D27 | Targets | Players, and anything that hits it; ignores villagers and golems unless they attack | defaults round 3 |
 | D28 | Boss bar | Brass-coloured, within 64 blocks, with a marker while it rewinds. No music: its ticking, faster as it runs down, is the tell | defaults round 3 |
 | D29 | Left alone | Never despawns. With no player within 64 blocks for 60 s it sits down dormant where it stands and slowly mends to full; coming close wakes it again, as a ruin one | defaults round 3 |
-| D30 | Drops | Always one Mainspring (Looting adds none), 4-8 Brass Ingots, 1-2 Precision Mechanisms, 50 XP; the same however it dies | defaults round 3 |
+| D30 | Drops | Always one Mainspring (Looting adds none), 4-8 Brass Ingots, 1-2 Precision Mechanisms, 500 XP (raised tenfold in play, 2026-10-28). Only a player's kill drops anything: /kill and the void give nothing (adversarial review) | defaults round 3; tuned in game |
 | D31 | Ruins | Juggernaut Ruins: an overgrown, collapsed hall (about 9 blocks high and 11 wide, room for him to kneel and stand) holding one dormant Juggernaut, kneeling under vines. Overworld land, about one per 64×64 chunks, and the End (D55); config toggle and spacing for each | defaults round 3 |
 | D32 | Waking a ruin one | A player within 16 blocks who can see it starts a 5 s warning (eyes light, ticking starts). Back off beyond 32 blocks during the warning and it settles again | defaults round 3 |
 | D33 | Ruin chest | Brass, zinc, Andesite Alloy and a few Precision Mechanisms. Never a Winding Key | defaults round 3 |
@@ -56,8 +56,8 @@ Clarified: a summoned boss, a huge war automaton and the bots' grim ancestor. It
 | D42 | Config | Health, damage taken while wound, rewind timings, per-player scaling, ritual wind time, ruins on/off and spacing (Overworld and End), Spring Engine capacity and maximum SU | defaults round 3 |
 | D43 | Stages | Stage 1 (100-67% health): 10% damage taken while wound, 19 s wound (last 4 running down) / 6 s rewind. Stage 2 (67-33%): sheds chest and shoulder plates, 15% while wound, 16 s / 5 s. Stage 3, overwound (under 33%): sheds the rest, 20% while wound, 13 s / 4 s, double stomps. Shed plates are clatter and particles only, no items, no blocks | user, round 4 ("his attack cycle should be more varied"); numbers approved |
 | D44 | Moves | Stage 1: charge, swing, stomp, grab and throw. Stage 2 adds spring leap and steam vent. Stage 3 adds gear spin. The cog throw stays for pathless targets (D22) | user, round 4 |
-| D45 | The new moves | Grab and throw: close player in front, 1 s wind-up (hand opens), 6 damage, hurled about 12 blocks; a raised shield blocks it. Spring leap: a player 14+ blocks away, 1.5 s coil, lands where they stood, 10 damage within 5 blocks plus a knockback ring. Stomp ring: 6 blocks. Steam vent: 2 s tell (hiss, chest grille glows), 9-block cone, 4 damage, sets players (never blocks) alight, 2 s blindness, knockback. Gear spin: 2 s wind-up, 4 s spin, pulls players within 10 blocks, 6 damage a hit, outrunnable | user, round 4; numbers approved |
-| D46 | Choosing | Situational combos: picks by distance (close under 6: swing, grab, stomp, spin; 6-14: charge, stomp, vent; far, over 14: leap, charge; scaled to his size 2026-10-27), chains 2 moves in stage 1 up to 3 in stage 3, never the same move twice in a row | user, round 4 |
+| D45 | The new moves | Grab and throw: close player in front, 1 s wind-up (hand opens), 17 damage, hurled about 12 blocks; a raised shield blocks it. Spring leap: a player 14+ blocks away, 1.5 s coil; only with a clear arc (never through a hill or cave roof), ground under his whole footprint and no more than 3 blocks up or down; it lands where they stood (where they will be if they keep running, up to 8 blocks on, marked by a frost-blue ring on the ground through the coil; any stage, and from 10 blocks at a strafing target), 12 damage within 5 blocks; the ground shakes (camera judder near the landing, scaled by Screen Effect Scale) and everyone it catches on the ground is frozen still for 1.25 s with frost on the screen (eased from a big hit to a stun after play, 2026-10-28). Stomp ring: 6 blocks. Steam vent: 2 s tell (hiss, chest grille glows), 9-block cone, 10 damage, sets players (never blocks) alight, 2 s blindness, knockback. Gear spin: 2 s wind-up, 4 s spin, pulls players within 10 blocks, 12 damage a hit, outrunnable | user, round 4; numbers approved, damage raised in game 2026-10-27 |
+| D46 | Choosing | Situational combos: picks by distance (close under 6: swing, grab, stomp, spin; 6-14: charge, stomp, vent; far, over 14: leap, charge; scaled to his size 2026-10-27), chains 2 moves in stage 1 up to 3 in stage 3, never the same move twice in a row. Circling him doesn't stall him (2026-10-27, found in game): the stomp and the gear spin reach all round and need no facing, a target kept circling within 8 blocks for 1.5 s gets stomped, he turns 9° a tick, and the swing tracks through its wind-up. | user, round 4 |
 | D47 | Feints | From stage 2: 25% of run-downs are fake (40% in stage 3). Tell: a sharp click instead of a slowing tick, and his eyes stay lit (a real run-down dims them). He lunges at anyone within 6 blocks; his real rewind follows 5 s later | user, round 4; numbers approved |
 | D48 | Key jam | 3 hits on the key from behind in one rewind jam it: that window gets 3 s longer, once per rewind, with sparks and grinding | user, round 4; numbers approved |
 | D50 | Immunities | Immune to suffocation, fall damage, fire and lava, and water (drowning; it sinks and walks the bottom). Extends D26 | user, 2026-10-27 |
@@ -69,6 +69,9 @@ Clarified: a summoned boss, a huge war automaton and the bots' grim ancestor. It
 | D56 | Ledges | He never steps off a drop higher than 3 blocks, so (being knockback-immune) he can't fall into the void and take the Mainspring with him. Players can still be knocked off | user, 2026-10-27 (with D55) |
 | D57 | Look | An ancient Norse-style clockwork construct: charcoal and blue-grey iron, tarnished bronze, gold only where it matters, cracked stone held with staples, frost on the edges, faint frost-blue runes; a carved mask with one glowing slit and an iron beard (the steam vent); Viking-shield pauldrons; chains and leather straps; a forge-maker's seal. The key and clockwork stay. See the brief's Revision 2 | user, 2026-10-27 (art direction) |
 | D49 | Rhythm | Fixed within a stage (variable wind length was not chosen): the rhythm is learnable and tightens stage by stage | user, round 4 |
+| D58 | After a wipe | He killed the last player fighting him (nobody else within 48 blocks who hasn't already fallen to him this fight; a respawned player is left be, and doesn't count, until they hit him again), wherever they respawn: 2 s later he kneels and sleeps for 3 minutes (2 minutes was too short in play, and a respawn point near the arena kept him awake). Walking up to him doesn't wake him, so players can come back for their things; the first hit does no damage and wakes him at once, so they can start again when ready (2026-10-28); he mends meanwhile (up to his stage's top, D29). After that he's an ordinary dormant Juggernaut | user, 2026-10-28 |
+| D59 | Relentless | Short breaths between moves (0.3 s in a combo, 0.8-1.8 s between combos). Far targets get the leap twice as often as the charge, and a target strafing 10+ blocks off gets leapt on | user, 2026-10-28 |
+| D60 | Overdrive | At 10% health in stage 3 he goes into overdrive with a jolt (the lightning clip) and a roar: no more running down or rewinding, every hit lands in full (arrows too), he plays 30% faster with almost no rest, steam pours from his back and shoulders, and the boss bar turns red. Mending in his sleep ends it | user, 2026-10-28 |
 
 ## Open Questions
 
@@ -115,10 +118,10 @@ None.
 - Key jam (D48): 3 hits on the key from behind in one rewind add 3 s to it, once per rewind.
 - Lightning: jumps straight from Rewinding (or Running down) to Wound (D25).
 - Left alone 60 s with nobody within 64 blocks: Dormant (D29). A player within 12 blocks who can see it: 5 s warning, then Waking (D32).
-- Health scaling: on waking, max health = 400 × (1 + 0.5 × extra players within 32 blocks) (D14). It doesn't rescale mid-fight.
+- Health scaling: on waking, max health = 1000 × (1 + 0.5 × extra players within 32 blocks) (D14). It doesn't rescale mid-fight.
 
 ### Drops
-One Mainspring always, 4-8 Brass Ingots, 1-2 Precision Mechanisms, 50 XP (D30).
+One Mainspring always, 4-8 Brass Ingots, 1-2 Precision Mechanisms, 500 XP, for a player's kill only (D30).
 
 ### Spring Engine
 - Back shaft: winding, at the stress set on its value box (D35). Front shaft: output, at the speed set on its value box, 16,384 SU offered (D36).
@@ -209,7 +212,7 @@ A summoned late-game boss whose fight is about rhythm: dodge while it's wound, p
 
 - It never breaks or changes blocks.
 - Wound: 10/15/20% damage by stage, arrows glance off. Rewinding: full, 1.5× on the key.
-- 400 health, +50% for each extra player nearby when it wakes.
+- 1000 health, +50% for each extra player nearby when it wakes.
 - Three stages at 67% and 33%: plates shed, new moves, tighter rhythm.
 - From stage 2, some run-downs are feints; three key hits in one rewind jam it for 3 s more.
 - Lightning rewinds it instantly; no path for 5 s, it throws a cog.
@@ -242,7 +245,7 @@ A summoned late-game boss whose fight is about rhythm: dodge while it's wound, p
 - [ ] Never despawns; dormant after 60 s alone; mends while dormant
 - [ ] Peaceful handling (ritual and ruins)
 - [ ] Capture Bottle refuses it
-- [ ] Loot table (Mainspring, brass, Precision Mechanisms, 50 XP)
+- [ ] Loot table (Mainspring, brass, Precision Mechanisms, 500 XP, killed by a player)
 - [ ] Winding Key: item, block, kinetic block entity, effigy pattern check, wind progress, unwind, action-bar warning, summon; arrival spot search (open sky, room), surface arrival kneeling, Nether refusal
 - [ ] Mechanical crafting recipe for the key
 - [ ] Mainspring item

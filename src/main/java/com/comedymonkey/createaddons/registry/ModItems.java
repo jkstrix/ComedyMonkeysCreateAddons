@@ -19,6 +19,7 @@ import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import com.comedymonkey.createaddons.compat.pipez.cover.PipeCover;
@@ -84,6 +85,13 @@ public final class ModItems {
 
 	public static final DeferredItem<TradeBotItem> TRADE_BOT = ITEMS.register("trade_bot",
 		() -> new TradeBotItem(ModBlocks.TRADE_BOT.get(), new Item.Properties().stacksTo(1)));
+
+	/** The Clockwork Juggernaut's spring, his only guaranteed drop (D30): the heart of the Spring Engine. */
+	public static final DeferredItem<Item> MAINSPRING = ITEMS.registerSimpleItem("mainspring",
+		new Item.Properties().stacksTo(16).rarity(Rarity.EPIC).fireResistant());
+
+	public static final DeferredItem<DeferredSpawnEggItem> CLOCKWORK_JUGGERNAUT_SPAWN_EGG = ITEMS.register("clockwork_juggernaut_spawn_egg",
+		() -> new DeferredSpawnEggItem(ModEntities.CLOCKWORK_JUGGERNAUT, 0x232629, 0x4f8fae, new Item.Properties()));
 	/** Catches an animal for the Animal Pens; given back when the animal is let out. Stacks while empty. */
 	public static final DeferredItem<Item> CAPTURE_BOTTLE = ITEMS.registerSimpleItem("capture_bottle");
 	/** An animal caught in a Capture Bottle, for the Animal Pens. One a stack: each holds its own animal. */

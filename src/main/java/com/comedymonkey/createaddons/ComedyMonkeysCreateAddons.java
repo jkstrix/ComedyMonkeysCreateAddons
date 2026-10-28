@@ -102,9 +102,11 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.CagePerformanceGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.CageFieldGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.HelperBotGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.JuggernautGameTests::register);
 		if (SableCompat.LOADED)
 			modBus.addListener(com.comedymonkey.createaddons.gametest.SableGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.juggernaut.ClockworkJuggernaut::onMobGriefing);
 		// Helper Bot's test courses (/helperbot testsetup), and the follow-up once Create has registered their stations
 		// Helper Bot's test railway and shop: the command is a dev tool (testtrain go gives every train a schedule), so
 		// not in releases; its queue runs everywhere, for the game tests

@@ -16,6 +16,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 
 /**
@@ -23,7 +24,7 @@ import net.minecraft.server.packs.resources.Resource;
  * the glow pass draws only those rather than the whole model a second time. Everywhere else the glow texture is
  * clear, and the cutout pass drops clear pixels, so it looks the same. If the texture can't be read, every cube is kept.
  */
-final class GlowModel {
+public final class GlowModel {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private final ModelPart root;
 	/** Each bone of the whole model and its twin here, in the same order. */
@@ -37,8 +38,12 @@ final class GlowModel {
 
 	/** The glowing cubes of the model built from these root bones, following {@code parts}, that model's bones by name. */
 	static GlowModel of(Map<String, ModelPart> parts, String... roots) {
-		TradeBotGeometry geometry = TradeBotGeometry.get();
-		ModelPart root = geometry.layer(glowing(geometry), roots).bakeRoot();
+		return of(TradeBotGeometry.get(), TradeBotRenderer.GLOW, parts, roots);
+	}
+
+	/** The same for another character's geometry and glow texture (the Clockwork Juggernaut's). */
+	public static GlowModel of(TradeBotGeometry geometry, ResourceLocation glowTexture, Map<String, ModelPart> parts, String... roots) {
+		ModelPart root = geometry.layer(glowing(geometry, glowTexture), roots).bakeRoot();
 		Map<String, ModelPart> glowParts = geometry.parts(root, roots);
 		ModelPart[] from = new ModelPart[parts.size()], to = new ModelPart[parts.size()];
 		int i = 0;
@@ -50,7 +55,7 @@ final class GlowModel {
 	}
 
 	/** Takes the whole model's current pose, then draws the glowing cubes at full brightness. */
-	void render(PoseStack ms, VertexConsumer vc, int overlay) {
+	public void render(PoseStack ms, VertexConsumer vc, int overlay) {
 		for (int i = 0; i < from.length; i++) {
 			ModelPart a = from[i], b = to[i];
 			b.x = a.x;
@@ -73,7 +78,11 @@ final class GlowModel {
 	 * rectangle its six faces are laid out in, so never fewer than the faces really cover).
 	 */
 	static Predicate<TradeBotGeometry.Cube> glowing(TradeBotGeometry geometry) {
-		Optional<Resource> resource = Minecraft.getInstance().getResourceManager().getResource(TradeBotRenderer.GLOW);
+		return glowing(geometry, TradeBotRenderer.GLOW);
+	}
+
+	static Predicate<TradeBotGeometry.Cube> glowing(TradeBotGeometry geometry, ResourceLocation glowTexture) {
+		Optional<Resource> resource = Minecraft.getInstance().getResourceManager().getResource(glowTexture);
 		if (resource.isEmpty())
 			return cube -> true;
 		try (InputStream in = resource.get().open(); NativeImage image = NativeImage.read(in)) {
@@ -95,7 +104,7 @@ final class GlowModel {
 				return false;
 			};
 		} catch (IOException | RuntimeException e) {
-			LOGGER.warn("Couldn't read Trade Bot's glow texture; drawing his whole model for the glow", e);
+			LOGGER.warn("Couldn't read the glow texture {}; drawing the whole model for the glow", glowTexture, e);
 			return cube -> true;
 		}
 	}

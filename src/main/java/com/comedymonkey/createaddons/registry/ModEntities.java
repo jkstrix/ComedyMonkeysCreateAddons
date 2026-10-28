@@ -1,6 +1,8 @@
 package com.comedymonkey.createaddons.registry;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.juggernaut.ClockworkJuggernaut;
+import com.comedymonkey.createaddons.content.juggernaut.ThrownCog;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotEntity;
 
 import net.minecraft.core.registries.Registries;
@@ -20,9 +22,20 @@ public final class ModEntities {
 		() -> EntityType.Builder.of(TradeBotEntity::new, MobCategory.MISC).sized(0.6f, 1.5f).clientTrackingRange(10)
 			.updateInterval(1).build("trade_bot"));
 
+	/** The boss: 6 wide to match his shield pauldrons, 7 blocks tall (D20); fire and lava can't touch him (D50). */
+	public static final DeferredHolder<EntityType<?>, EntityType<ClockworkJuggernaut>> CLOCKWORK_JUGGERNAUT = ENTITY_TYPES.register("clockwork_juggernaut",
+		() -> EntityType.Builder.of(ClockworkJuggernaut::new, MobCategory.MONSTER).sized(6f, 7f).fireImmune().clientTrackingRange(10)
+			.updateInterval(1).build("clockwork_juggernaut"));
+
+	/** The cog he throws at a target he can't reach (D22). */
+	public static final DeferredHolder<EntityType<?>, EntityType<ThrownCog>> THROWN_COG = ENTITY_TYPES.register("thrown_cog",
+		() -> EntityType.Builder.<ThrownCog>of(ThrownCog::new, MobCategory.MISC).sized(1.2f, 1.2f).clientTrackingRange(6)
+			.updateInterval(2).build("thrown_cog"));
+
 	private ModEntities() {}
 
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
 		event.put(TRADE_BOT.get(), TradeBotEntity.createAttributes().build());
+		event.put(CLOCKWORK_JUGGERNAUT.get(), ClockworkJuggernaut.createAttributes().build());
 	}
 }
