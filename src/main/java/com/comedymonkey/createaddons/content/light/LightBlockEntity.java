@@ -15,6 +15,7 @@ import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -78,6 +79,9 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 	/** A Floodlight's target, and the spot of light it put where its beam lands (Floodlights). */
 	@Nullable
 	private BlockPos aim, spot;
+	/** The face of its target it's aimed at. */
+	@Nullable
+	private Direction aimFace;
 	/** On the client: where a Floodlight's yoke and head were last drawn turned to, and when (game time, part ticks). */
 	private float yawShown, pitchShown;
 	private double aimShownAt = Double.NaN;
@@ -411,8 +415,13 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 	}
 
 	/** Aimed at a block (Floodlights.aim has checked it's in range and sight): it turns there, and its spot moves. */
-	void setAim(BlockPos target) {
+	public @Nullable Direction aimFace() {
+		return aimFace;
+	}
+
+	void setAim(BlockPos target, Direction face) {
 		aim = target.immutable();
+		aimFace = face;
 		if (phase != Phase.DARK)
 			show(true);
 		sync();
@@ -506,6 +515,8 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 		tag.putLong("WarmAt", warmAt);
 		if (aim != null)
 			tag.putLong("Aim", aim.asLong());
+		if (aimFace != null)
+			tag.putInt("AimFace", aimFace.get3DDataValue());
 		if (spot != null)
 			tag.putLong("Spot", spot.asLong());
 	}
@@ -543,6 +554,7 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 		flickerOn = tag.getBoolean("FlickerOn");
 		warmAt = tag.contains("WarmAt") ? tag.getLong("WarmAt") : Long.MIN_VALUE / 2;
 		aim = tag.contains("Aim") ? BlockPos.of(tag.getLong("Aim")) : null;
+		aimFace = tag.contains("AimFace") ? Direction.from3DDataValue(tag.getInt("AimFace")) : null;
 		spot = tag.contains("Spot") ? BlockPos.of(tag.getLong("Spot")) : null;
 		if (level != null && level.isClientSide) {
 			long now = level.getGameTime();

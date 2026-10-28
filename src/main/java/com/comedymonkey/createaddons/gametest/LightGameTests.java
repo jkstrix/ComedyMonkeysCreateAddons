@@ -862,6 +862,8 @@ public final class LightGameTests {
 				helper.fail("the spot didn't move to the face of the block put in the beam: " + helper.getBlockState(wall.north()));
 			if (helper.getBlockState(target.north()).is(ModBlocks.LIGHT_SPOT.get()))
 				helper.fail("the old spot stayed behind the block in the beam");
+			// (two high: over one, it would see the target's top)
+			helper.setBlock(wall.above(), net.minecraft.world.level.block.Blocks.STONE);
 			var refused = com.comedymonkey.createaddons.content.light.Floodlights.aim(helper.getLevel(), be(helper, lamp), helper.absolutePos(target));
 			if (refused != com.comedymonkey.createaddons.content.light.Floodlights.Result.BLOCKED)
 				helper.fail("aiming through a block gave " + refused);
@@ -870,6 +872,24 @@ public final class LightGameTests {
 		helper.runAtTickTime(163, () -> {
 			if (helper.getBlockState(wall.north()).is(ModBlocks.LIGHT_SPOT.get()))
 				helper.fail("the spot stayed after its Floodlight was broken");
+			helper.succeed();
+		});
+	}
+
+	/** A Floodlight aims at a block set in a wall, seen at a slant: it lights the air in front of that block's face. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void floodlightAimsIntoAWallAtASlant(GameTestHelper helper) {
+		BlockPos lamp = new BlockPos(5, 1, 2), target = new BlockPos(8, 1, 6);
+		helper.setBlock(lamp.below(), net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.FLOODLIGHT).get().defaultBlockState().setValue(LightBlock.FACING, Direction.UP));
+		for (int x = 3; x <= 9; x++)
+			helper.setBlock(new BlockPos(x, 1, 6), net.minecraft.world.level.block.Blocks.STONE);
+		helper.runAtTickTime(2, () -> {
+			var result = com.comedymonkey.createaddons.content.light.Floodlights.aim(helper.getLevel(), be(helper, lamp), helper.absolutePos(target));
+			if (result != com.comedymonkey.createaddons.content.light.Floodlights.Result.AIMED)
+				helper.fail("aiming at a block in a wall at a slant gave " + result);
+			if (be(helper, lamp).aimFace() != Direction.NORTH)
+				helper.fail("it aimed at the " + be(helper, lamp).aimFace() + " face, not the one facing it");
 			helper.succeed();
 		});
 	}

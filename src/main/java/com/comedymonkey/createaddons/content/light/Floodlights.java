@@ -83,7 +83,7 @@ public final class Floodlights {
 		}
 		if (!(level.getBlockEntity(a.light()) instanceof LightBlockEntity be) || be.kind() != LightKind.FLOODLIGHT)
 			return;
-		Result result = aim(level, be, event.getPos());
+		Result result = aim(level, be, event.getPos(), event.getFace());
 		player.displayClientMessage(Component.translatable(KEY + result.name().toLowerCase(java.util.Locale.ROOT), (int) range()), true);
 	}
 
@@ -93,15 +93,33 @@ public final class Floodlights {
 		BLOCKED
 	}
 
-	/** Aims the Floodlight at target, if it's in range and in clear sight. */
+	/** Aims the Floodlight at target (the face turned most toward it), if it's in range and in clear sight. */
 	public static Result aim(Level level, LightBlockEntity be, BlockPos target) {
-		Vec3 to = Vec3.atCenterOf(target);
-		if (lens(be).distanceTo(to) > range())
+		return aim(level, be, target, null);
+	}
+
+	/**
+	 * Aims the Floodlight at a face of target, if it's in range and it can see that face: the face clicked, else the one
+	 * turned most toward it. (A face, not the block's middle: a block set in a wall, seen at a slant, is reached past its
+	 * neighbours' faces only at its own.)
+	 */
+	public static Result aim(Level level, LightBlockEntity be, BlockPos target, @Nullable Direction clicked) {
+		Vec3 from = lens(be);
+		if (from.distanceTo(Vec3.atCenterOf(target)) > range())
 			return Result.TOO_FAR;
-		BlockHitResult hit = clip(level, be, to);
-		if (hit.getType() == HitResult.Type.BLOCK && !hit.getBlockPos().equals(target))
+		Direction face = clicked != null && sees(level, be, target, clicked) ? clicked : null;
+		double best = 0;
+		if (face == null)
+			for (Direction d : Direction.values()) {
+				double toward = normal(d).dot(from.subtract(facePoint(target, d)).normalize());
+				if (toward > best && sees(level, be, target, d)) {
+					best = toward;
+					face = d;
+				}
+			}
+		if (face == null)
 			return Result.BLOCKED;
-		be.setAim(target);
+		be.setAim(target, face);
 		level.playSound(null, be.getBlockPos(), ModSounds.light("floodlight_aim"), SoundSource.BLOCKS, 1f, 0.95f + level.random.nextFloat() * 0.1f);
 		return Result.AIMED;
 	}
@@ -110,6 +128,21 @@ public final class Floodlights {
 	static Vec3 lens(LightBlockEntity be) {
 		Direction facing = be.getBlockState().getValue(LightBlock.FACING);
 		return Vec3.atCenterOf(be.getBlockPos()).add(Vec3.atLowerCornerOf(facing.getNormal()).scale(0.55));
+	}
+
+	private static Vec3 normal(Direction d) {
+		return Vec3.atLowerCornerOf(d.getNormal());
+	}
+
+	/** The middle of target's face, just out in front of it. */
+	private static Vec3 facePoint(BlockPos target, Direction face) {
+		return Vec3.atCenterOf(target).add(normal(face).scale(0.51));
+	}
+
+	/** The light sees that face of target: turned toward it, nothing between (nor in front of the face). */
+	private static boolean sees(Level level, LightBlockEntity be, BlockPos target, Direction face) {
+		Vec3 point = facePoint(target, face);
+		return normal(face).dot(lens(be).subtract(point)) > 0 && clip(level, be, point).getType() == HitResult.Type.MISS;
 	}
 
 	private static BlockHitResult clip(Level level, LightBlockEntity be, Vec3 to) {
@@ -131,15 +164,17 @@ public final class Floodlights {
 	}
 
 	/**
-	 * The air (or water) its beam lands in: in front of the first block in its way, or its target if that's gone. Null when
+	 * The air (or water) its beam lands in: in front of its target's face, or of the first block in the way to it. Null when
 	 * it isn't aimed, or the beam's way isn't all loaded (it never loads a chunk to look).
 	 */
 	static @Nullable BlockPos landing(Level level, LightBlockEntity be) {
 		BlockPos target = be.aim();
 		if (target == null || !level.hasChunksAt(be.getBlockPos(), target))
 			return null;
-		BlockHitResult hit = clip(level, be, Vec3.atCenterOf(target));
-		BlockPos at = hit.getType() == HitResult.Type.BLOCK ? hit.getBlockPos().relative(hit.getDirection()) : target;
+		Direction face = be.aimFace();
+		BlockHitResult hit = clip(level, be, face != null ? facePoint(target, face) : Vec3.atCenterOf(target));
+		BlockPos at = hit.getType() == HitResult.Type.BLOCK ? hit.getBlockPos().relative(hit.getDirection())
+			: face != null ? target.relative(face) : target;
 		return at.equals(be.getBlockPos()) ? null : at;
 	}
 }

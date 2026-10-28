@@ -145,6 +145,13 @@ public class FestoonHookBlock extends BaseEntityBlock implements IWrenchable, Li
 		return new ItemStack(ModItems.FESTOON_LIGHTS.get());
 	}
 
+	/** Lights don't tick: a scheduled tick wakes its run's piece (to come on, run out, end a flicker). */
+	@Override
+	protected void tick(BlockState state, net.minecraft.server.level.ServerLevel level, BlockPos pos, net.minecraft.util.RandomSource random) {
+		if (level.getBlockEntity(pos) instanceof FestoonBlockEntity be)
+			be.wake();
+	}
+
 	@Override
 	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new FestoonBlockEntity(pos, state);
