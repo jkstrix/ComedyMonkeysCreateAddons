@@ -153,7 +153,8 @@ public class FestoonBlockEntity extends RunLightBlockEntity {
 		ListTag list = new ListTag();
 		for (Span s : spans) {
 			CompoundTag t = new CompoundTag();
-			t.putLong("To", s.other().asLong());
+			// (from this hook: carried off with its far hook by a contraption, the string still joins them)
+			t.putLong("Off", s.other().subtract(worldPosition).asLong());
 			t.putInt("Facing", s.facing().get3DDataValue());
 			t.putBoolean("Held", s.held());
 			t.putBoolean("Paid", s.paid());
@@ -166,7 +167,8 @@ public class FestoonBlockEntity extends RunLightBlockEntity {
 		spans.clear();
 		for (Tag t : tag.getList("Spans", Tag.TAG_COMPOUND)) {
 			CompoundTag c = (CompoundTag) t;
-			spans.add(new Span(BlockPos.of(c.getLong("To")), Direction.from3DDataValue(c.getInt("Facing")), c.getBoolean("Held"), c.getBoolean("Paid")));
+			BlockPos other = c.contains("Off") ? worldPosition.offset(BlockPos.of(c.getLong("Off"))) : BlockPos.of(c.getLong("To"));
+			spans.add(new Span(other, Direction.from3DDataValue(c.getInt("Facing")), c.getBoolean("Held"), c.getBoolean("Paid")));
 		}
 	}
 

@@ -281,18 +281,8 @@ public class ComedyMonkeysCreateAddons {
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event) {
-		// a hanging lamp moves with the ceiling it hangs from, its cable and all, and goes back after it (Create contraptions)
-		com.simibubi.create.api.contraption.BlockMovementChecks.registerAttachedCheck((state, world, pos, dir) -> {
-			if (state.getBlock() instanceof com.comedymonkey.createaddons.content.light.HangingCableBlock)
-				return com.simibubi.create.api.contraption.BlockMovementChecks.CheckResult.of(dir.getAxis() == net.minecraft.core.Direction.Axis.Y);
-			if (state.getBlock() instanceof com.comedymonkey.createaddons.content.light.HangingLampBlock && dir == net.minecraft.core.Direction.UP)
-				return com.simibubi.create.api.contraption.BlockMovementChecks.CheckResult.SUCCESS;
-			return com.simibubi.create.api.contraption.BlockMovementChecks.CheckResult.PASS;
-		});
-		com.simibubi.create.api.contraption.BlockMovementChecks.registerBrittleCheck(state ->
-			state.getBlock() instanceof com.comedymonkey.createaddons.content.light.HangingCableBlock || state.getBlock() instanceof com.comedymonkey.createaddons.content.light.HangingLampBlock
-				? com.simibubi.create.api.contraption.BlockMovementChecks.CheckResult.SUCCESS
-				: com.simibubi.create.api.contraption.BlockMovementChecks.CheckResult.PASS);
+		// the Electric Lights move with the blocks they're fixed to (Create contraptions)
+		com.comedymonkey.createaddons.content.light.LightMovement.register();
 		event.enqueueWork(() -> {
 			// Create-style "Hold [Shift] for Summary" tooltips, read from the lang file
 			registerCreateTooltip(ModBlocks.WELLSPRING.asItem());

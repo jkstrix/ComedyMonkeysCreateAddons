@@ -973,6 +973,56 @@ public final class LightGameTests {
 		});
 	}
 
+	// ---------- moved by contraptions ----------
+
+	/** A wall light, a strip and a Festoon hook go with the block they're fixed to, and are put back after it. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void lightsMoveWithTheirBlock(GameTestHelper helper) {
+		BlockPos wall = new BlockPos(3, 2, 3), lamp = wall.south(), strip = wall.above(), hook = wall.east();
+		helper.setBlock(wall, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.BULKHEAD).get().defaultBlockState().setValue(LightBlock.FACING, Direction.SOUTH));
+		helper.setBlock(strip, ModBlocks.LIGHT_STRIP.get().defaultBlockState()
+			.setValue(com.comedymonkey.createaddons.content.light.LightStripBlock.FACES.get(Direction.DOWN), true));
+		helper.setBlock(hook, ModBlocks.FESTOON_HOOK.get().defaultBlockState().setValue(com.comedymonkey.createaddons.content.light.FestoonHookBlock.FACING, Direction.EAST));
+		// (at once: a hook with no string comes down on its first tick)
+		{
+			var level = helper.getLevel();
+			Object[][] cases = {{lamp, Direction.NORTH}, {strip, Direction.DOWN}, {hook, Direction.WEST}};
+			for (Object[] c : cases) {
+				BlockPos p = helper.absolutePos((BlockPos) c[0]);
+				BlockState state = level.getBlockState(p);
+				if (!com.simibubi.create.api.contraption.BlockMovementChecks.isBlockAttachedTowards(state, level, p, (Direction) c[1]))
+					helper.fail(state.getBlock() + " isn't fixed to the block " + c[1] + " of it");
+				if (!com.simibubi.create.api.contraption.BlockMovementChecks.isBrittle(state))
+					helper.fail(state.getBlock() + " isn't put back after the block it's fixed to");
+			}
+			helper.succeed();
+		}
+	}
+
+	/** A Festoon's two hooks carried off together (saved, and put down five blocks along) keep their string. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void festoonKeepsItsStringWhenMoved(GameTestHelper helper) {
+		BlockPos[] hooks = festoon(helper, false);
+		helper.runAtTickTime(2, () -> {
+			var level = helper.getLevel();
+			var registries = level.registryAccess();
+			for (BlockPos hook : hooks) {
+				BlockPos from = helper.absolutePos(hook), to = from.south(5);
+				net.minecraft.nbt.CompoundTag data = level.getBlockEntity(from).saveCustomOnly(registries);
+				BlockState state = level.getBlockState(from);
+				level.setBlock(to.relative(state.getValue(com.comedymonkey.createaddons.content.light.FestoonHookBlock.FACING).getOpposite()),
+					net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 3);
+				level.setBlock(to, state, 3);
+				level.getBlockEntity(to).loadCustomOnly(data, registries);
+			}
+			var moved = (com.comedymonkey.createaddons.content.light.FestoonBlockEntity) level.getBlockEntity(helper.absolutePos(hooks[0]).south(5));
+			if (!moved.partners().contains(helper.absolutePos(hooks[1]).south(5)))
+				helper.fail("the moved hook's string doesn't reach its moved far hook: " + moved.partners());
+			helper.succeed();
+		});
+	}
+
 	/** Starved (power stops coming, its circuit still has a source), it stays lit for its store, flickers, then goes dark. */
 	@GameTest(template = COURSE, timeoutTicks = 140)
 	public static void starvedLightFlickersOut(GameTestHelper helper) {
