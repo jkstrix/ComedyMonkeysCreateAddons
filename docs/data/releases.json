@@ -4,7 +4,7 @@
     "from": "2.0.2",
     "date": "2026-10-27",
     "title": "Pipes, wires, batteries and bigger farms",
-    "summary": "Everything since 2.0.2: the mod's own pipes and wires, batteries up to grid scale, Monster Cages and Fish Tanks, a second robot, and a big performance pass, on screen and on the server.",
+    "summary": "Everything since 2.0.2: the mod's own pipes and wires, batteries up to grid scale, Monster Cages and Fish Tanks, a second robot, something asleep in a ruin, and a big performance pass, on screen and on the server.",
     "highlights": [
       "fluid-lines",
       "power-lines",
@@ -12,7 +12,10 @@
       "monster-cage",
       "netherite-monster-cage",
       "fish-tank",
-      "helper-bot"
+      "helper-bot",
+      "ruin-sleeper",
+      "clockwork-ruins",
+      "spring-engine"
     ],
     "sections": [
       {
@@ -76,6 +79,14 @@
         "icon": "cog",
         "body": [
           "[[helper-bot]], the [[trade-bot|Trade Bot]]'s cousin on a swivel post, drives your Create trains from behind the Train Controls and keeps shop beside a Stock Ticker, by exactly the Blaze Burner's rules. He's cheap, comes in 16 dyes, and has an animation for everything a train does."
+        ]
+      },
+      {
+        "title": "Something in the ruins",
+        "icon": "skull",
+        "body": [
+          "Rings of broken walls have appeared, in the Overworld and on the End's outer islands. At the middle of each, [[ruin-sleeper]] kneels. It is not a statue.",
+          "A [[winding-key]] can wake one wherever you like. What it leaves behind, the [[mainspring]], goes into the [[spring-engine]]: the only block that stores rotation."
         ]
       },
       {

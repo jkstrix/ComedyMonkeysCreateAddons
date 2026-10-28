@@ -62,7 +62,7 @@
       "accent": "& machinery",
       "text": "Stone from nothing, herds in a single block, lava turned into grid power, and a clockwork shopkeeper who sells your goods to villagers. Every machine here is taught from the first block to full automation."
     },
-    "latest": ["helper-bot", "fish-tank", "monster-cage", "netherite-monster-cage", "battery", "fluid-lines", "power-lines"],
+    "latest": ["ruin-sleeper", "clockwork-ruins", "spring-engine", "helper-bot", "fish-tank", "monster-cage", "netherite-monster-cage", "battery", "fluid-lines", "power-lines"],
     "featuredMachines": ["pressure-crucible", "geothermal-turbine", "magma-engine", "auto-harvester", "animal-pen", "cobblestone-generator", "electric-motor", "cuckoo-clock"],
     "featuredBlocks": ["upgraded-chest", "fluid-lines", "power-lines", "flight-instruments"],
     "featuredMobs": ["trade-bot", "helper-bot", "contained-wither", "armed-drowned", "blue-axolotl"],
@@ -75,6 +75,7 @@
       ]
     },
     "notes": [
+      { "date": "2026-10-28", "title": "Something in the ruins", "body": "Rings of broken walls, in the Overworld and on the End's outer islands. Something kneels at the middle of each. It is not a statue." },
       { "date": "2026-10-27", "title": "Fish Tanks", "body": "Fish, squid and axolotls now breed underwater in one block on **Fish Food**. Cages and tanks got their Ponder scenes, Display Links, Dispensers and advancements." },
       { "date": "2026-10-27", "title": "Monster Cages", "body": "Five cages, from a zombie horde to three Withers in a containment field, with Iron Jars, **Monster Chow** and the **Monstrous** enchantment." },
       { "date": "2026-10-26", "title": "Batteries", "body": "A Battery stores FE for the Power Lines. Fill a 3×3 column with them and they become an Industrial Battery, up to nine blocks tall." },
