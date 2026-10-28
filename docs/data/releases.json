@@ -3,11 +3,13 @@
     "version": "2.5.0",
     "from": "2.0.2",
     "date": "2026-10-27",
-    "title": "Pipes, wires, batteries and bigger farms",
-    "summary": "Everything since 2.0.2: the mod's own pipes and wires, batteries up to grid scale, Monster Cages and Fish Tanks, a second robot, something asleep in a ruin, and a big performance pass, on screen and on the server.",
+    "title": "Pipes, wires, lights, batteries and bigger farms",
+    "summary": "Everything since 2.0.2: the mod's own pipes and wires, electric lights for every place you build, batteries up to grid scale, Monster Cages and Fish Tanks, a second robot, something asleep in a ruin, and a big performance pass, on screen and on the server.",
     "highlights": [
       "fluid-lines",
       "power-lines",
+      "electric-lights",
+      "light-assembly",
       "battery",
       "monster-cage",
       "netherite-monster-cage",
@@ -32,6 +34,25 @@
               "**Hide them** inside any full block. Engineer's Goggles show the hidden lines.",
               "**Power networks keep a record** when chunks unload: far-off generators keep running on paper, and no extra chunk is ever loaded.",
               "Display Link sources, JEI pages, four Ponder scenes and advancements."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Electric Lights",
+        "icon": "lamp",
+        "body": [
+          "Twenty-three Create-style lights, all on one page: [[electric-lights]]. Each runs on a trickle of FE from a [[power-lines|Power Line]] touching it, even one hidden behind the wall it hangs on, so one Lava Generator runs a few hundred.",
+          {
+            "list": [
+              "**Street:** Cast Iron and Steel Lamp Posts stack into poles of any height, with a Lantern, Cobra, Globe or Yard Light Head on top and up to four more on arms. Feed the foot and the whole pole lights; spans tie on as on a [[line-post|Line Post]].",
+              "**Wall, ceiling and ground:** the Bulkhead Light, Wall Sconce and Gooseneck Lamp; the High-Bay Lamp (it warms up like sodium), Cage Lamp and Flush Ceiling Light; the Bollard Light and the walkable Floor Light.",
+              "**Hanging:** the Pendant Lamp and the brass Chandelier. Click one with a Power Line to lower it a block, up to 16, on cable that carries its power.",
+              "**Runs:** the Light Strip on any face and the Edge Light along a block's edges join into runs; Festoon Lights string bulbs between walls and posts, up to 16 blocks. A line touching any piece lights the whole run, and a run powers nothing else.",
+              "**Specials:** the Floodlight lights a spot up to 32 blocks away (wrench it, then wrench the block to light), the Warning Beacon turns while it's lit, and the Indicator Lamp marks live circuits on a control board. The Light Switch clips onto a line like the [[breaker]] and turns off everything beyond it.",
+              "**Dye in place:** right-click a light with any of the 16 dyes to colour its glow; the dye isn't used up. A run takes the colour all along (sneak for one block), and a water bucket washes it plain. With Colorful Lighting installed (it works with Sodium and Iris), the light it casts takes the colour too.",
+              "**Brightness:** the wrench steps a light through Full, Bright, Dim and Glow, and it draws less as it dims. Short of power, a light flickers for a second, then goes out.",
+              "**Cheap to make:** a [[light-assembly]] (glass, a copper sheet and redstone make two) becomes most lights in a stonecutter, eight strips, edge lights or indicators, or four Festoon Lights. The Floodlight, Warning Beacon, Chandelier and High-Bay Lamp are crafted with a part."
             ]
           }
         ]
