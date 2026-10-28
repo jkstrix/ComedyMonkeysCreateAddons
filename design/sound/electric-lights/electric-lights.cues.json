@@ -1,0 +1,616 @@
+{
+  "namespace": "lights",
+  "events": {
+    "switch_on": {
+      "group": "Switching",
+      "subtitle": "Light Switch clicks on",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.45,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 0.004,
+          "gain": 0.22,
+          "f": 3400,
+          "dur": 0.04
+        },
+        {
+          "type": "thud",
+          "at": 0.01,
+          "gain": 0.14,
+          "f": 160,
+          "dur": 0.06
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.32,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.08
+        },
+        "post": {
+          "lowpass": 9000,
+          "highpass": 120
+        },
+        "layers": [
+          {
+            "pick": [
+              "lt_sw_a_on",
+              "lt_sw_b_on"
+            ],
+            "gain": 1,
+            "pitch": 1.04,
+            "fadeOut": 0.06
+          }
+        ]
+      }
+    },
+    "switch_off": {
+      "group": "Switching",
+      "subtitle": "Light Switch clicks off",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.4,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 0.004,
+          "gain": 0.18,
+          "f": 2500,
+          "dur": 0.04
+        },
+        {
+          "type": "thud",
+          "at": 0.01,
+          "gain": 0.14,
+          "f": 130,
+          "dur": 0.06
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.3,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.08
+        },
+        "post": {
+          "lowpass": 8000,
+          "highpass": 120
+        },
+        "layers": [
+          {
+            "pick": [
+              "lt_sw_a_off",
+              "lt_sw_b_off"
+            ],
+            "gain": 1,
+            "pitch": 0.95,
+            "fadeOut": 0.06
+          }
+        ]
+      }
+    },
+    "flicker": {
+      "group": "Power",
+      "subtitle": "Light flickers",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.07,
+          "f": 100,
+          "dur": 1
+        },
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.035,
+          "f": 2500,
+          "dur": 0.9
+        },
+        {
+          "type": "tick",
+          "at": 0,
+          "gain": 0.12,
+          "f": 2200,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 0.09,
+          "gain": 0.09,
+          "f": 2000,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 0.2,
+          "gain": 0.11,
+          "f": 2300,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 0.27,
+          "gain": 0.07,
+          "f": 1900,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 0.45,
+          "gain": 0.09,
+          "f": 2100,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 0.62,
+          "gain": 0.06,
+          "f": 2000,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 0.85,
+          "gain": 0.05,
+          "f": 1800,
+          "dur": 0.03
+        }
+      ],
+      "real": {
+        "variants": 3,
+        "level": 0.2,
+        "vary": {
+          "pitch": 0.05,
+          "gain": 0.1,
+          "at": 0.01
+        },
+        "post": {
+          "lowpass": 7000
+        },
+        "layers": [
+          {
+            "src": "lt_transformer",
+            "trim": [
+              0,
+              1
+            ],
+            "gain": 0.35,
+            "lowpass": 2500,
+            "tremolo": {
+              "hz": 11,
+              "depth": 0.85
+            },
+            "fadeIn": 0.02,
+            "fadeOut": 0.45
+          },
+          {
+            "pick": [
+              "lt_bulb_a",
+              "lt_bulb_b1",
+              "lt_bulb_b2"
+            ],
+            "at": 0,
+            "gain": 0.55,
+            "lowpass": 6000,
+            "fadeOut": 0.08
+          },
+          {
+            "pick": [
+              "lt_bulb_a",
+              "lt_bulb_b1",
+              "lt_bulb_b2"
+            ],
+            "at": 0.2,
+            "gain": 0.4,
+            "lowpass": 6000,
+            "pitch": 0.94,
+            "fadeOut": 0.08
+          },
+          {
+            "pick": [
+              "lt_bulb_a",
+              "lt_bulb_b1",
+              "lt_bulb_b2"
+            ],
+            "at": 0.45,
+            "gain": 0.28,
+            "lowpass": 5500,
+            "pitch": 1.05,
+            "fadeOut": 0.08
+          },
+          {
+            "pick": [
+              "lt_bulb_a",
+              "lt_bulb_b1",
+              "lt_bulb_b2"
+            ],
+            "at": 0.85,
+            "gain": 0.16,
+            "lowpass": 5000,
+            "pitch": 0.9,
+            "fadeOut": 0.08
+          }
+        ]
+      }
+    },
+    "warm_up": {
+      "group": "Power",
+      "subtitle": "Lamp warms up",
+      "layers": [
+        {
+          "type": "swell",
+          "at": 0,
+          "gain": 0.04,
+          "f": 60,
+          "f2": 100,
+          "dur": 4
+        },
+        {
+          "type": "tick",
+          "at": 0.15,
+          "gain": 0.09,
+          "f": 1800,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 0.4,
+          "gain": 0.08,
+          "f": 1750,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 0.75,
+          "gain": 0.07,
+          "f": 1800,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 1.2,
+          "gain": 0.06,
+          "f": 1700,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 1.8,
+          "gain": 0.05,
+          "f": 1750,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 2.5,
+          "gain": 0.04,
+          "f": 1700,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 3.3,
+          "gain": 0.03,
+          "f": 1650,
+          "dur": 0.03
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.12,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 6000
+        },
+        "layers": [
+          {
+            "src": "lt_transformer",
+            "trim": [
+              1,
+              5.2
+            ],
+            "gain": 0.12,
+            "lowpass": 350,
+            "fadeIn": 2.8,
+            "fadeOut": 1
+          },
+          {
+            "src": "tick_004",
+            "at": 0.15,
+            "gain": 0.6,
+            "pitch": 0.72,
+            "lowpass": 5000
+          },
+          {
+            "src": "tick_004",
+            "at": 0.4,
+            "gain": 0.55,
+            "pitch": 0.705,
+            "lowpass": 5000
+          },
+          {
+            "src": "tick_004",
+            "at": 0.75,
+            "gain": 0.48,
+            "pitch": 0.69,
+            "lowpass": 5000
+          },
+          {
+            "src": "tick_004",
+            "at": 1.2,
+            "gain": 0.4,
+            "pitch": 0.6749999999999999,
+            "lowpass": 5000
+          },
+          {
+            "src": "tick_004",
+            "at": 1.8,
+            "gain": 0.32,
+            "pitch": 0.6599999999999999,
+            "lowpass": 5000
+          },
+          {
+            "src": "tick_004",
+            "at": 2.5,
+            "gain": 0.25,
+            "pitch": 0.645,
+            "lowpass": 5000
+          },
+          {
+            "src": "tick_004",
+            "at": 3.3,
+            "gain": 0.18,
+            "pitch": 0.63,
+            "lowpass": 5000
+          }
+        ]
+      }
+    },
+    "beacon_whirr": {
+      "group": "Moving parts",
+      "subtitle": "Warning Beacon turns",
+      "layers": [
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.07,
+          "f": 190,
+          "f2": 190,
+          "dur": 2
+        },
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.03,
+          "f": 95,
+          "dur": 2
+        },
+        {
+          "type": "tick",
+          "at": 0,
+          "gain": 0.06,
+          "f": 1500,
+          "dur": 0.03
+        },
+        {
+          "type": "tick",
+          "at": 1,
+          "gain": 0.06,
+          "f": 1500,
+          "dur": 0.03
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.08,
+        "post": {
+          "lowpass": 2200
+        },
+        "layers": [
+          {
+            "src": "lt_antenna_run",
+            "trim": [
+              0,
+              1.5
+            ],
+            "gain": 0.7,
+            "pitch": 0.75,
+            "lowpass": 1800,
+            "fadeIn": 0.03,
+            "fadeOut": 0.03
+          },
+          {
+            "src": "tick_004",
+            "at": 0,
+            "gain": 0.3,
+            "pitch": 0.6,
+            "lowpass": 3000
+          },
+          {
+            "src": "tick_004",
+            "at": 1,
+            "gain": 0.3,
+            "pitch": 0.6,
+            "lowpass": 3000
+          }
+        ]
+      }
+    },
+    "floodlight_aim": {
+      "group": "Moving parts",
+      "subtitle": "Floodlight turns",
+      "layers": [
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.11,
+          "f": 230,
+          "f2": 170,
+          "dur": 0.5
+        },
+        {
+          "type": "creak",
+          "at": 0.02,
+          "gain": 0.05,
+          "f": 320,
+          "dur": 0.4
+        },
+        {
+          "type": "tick",
+          "at": 0.5,
+          "gain": 0.12,
+          "f": 2400,
+          "dur": 0.03
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.2,
+        "vary": {
+          "pitch": 0.05,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 6000,
+          "highpass": 90
+        },
+        "layers": [
+          {
+            "src": "lt_antenna_start",
+            "trim": [
+              0,
+              0.55
+            ],
+            "gain": 0.8,
+            "pitch": 1.15,
+            "lowpass": 4000,
+            "fadeOut": 0.15
+          },
+          {
+            "src": "lt_antenna_stop",
+            "at": 0.46,
+            "trim": [
+              0,
+              0.3
+            ],
+            "gain": 0.5,
+            "pitch": 1.2,
+            "fadeOut": 0.1
+          }
+        ]
+      }
+    },
+    "brightness_step": {
+      "group": "Hand",
+      "subtitle": "Light brightness changes",
+      "layers": [
+        {
+          "type": "tick",
+          "at": 0,
+          "gain": 0.25,
+          "f": 2600,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.01,
+          "gain": 0.04,
+          "f": 2900,
+          "dur": 0.12
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.22,
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "switch24",
+            "trim": [
+              0.05,
+              0.22
+            ],
+            "gain": 0.8,
+            "fadeOut": 0.05
+          },
+          {
+            "src": "tick_002",
+            "at": 0.004,
+            "gain": 0.25,
+            "pitch": 1.2
+          }
+        ]
+      }
+    }
+  },
+  "clips": {
+    "switch": [
+      [
+        0.3,
+        "switch_on"
+      ],
+      [
+        1.4,
+        "switch_off"
+      ]
+    ],
+    "flicker_out": [
+      [
+        0,
+        "flicker"
+      ]
+    ],
+    "warm_up": [
+      [
+        0,
+        "warm_up"
+      ]
+    ],
+    "beacon": [
+      [
+        0,
+        "beacon_whirr"
+      ]
+    ],
+    "floodlight_aim": [
+      [
+        0.1,
+        "floodlight_aim"
+      ]
+    ],
+    "brightness": [
+      [
+        0.2,
+        "brightness_step"
+      ],
+      [
+        0.7,
+        "brightness_step"
+      ],
+      [
+        1.2,
+        "brightness_step"
+      ],
+      [
+        1.7,
+        "brightness_step"
+      ]
+    ]
+  }
+}

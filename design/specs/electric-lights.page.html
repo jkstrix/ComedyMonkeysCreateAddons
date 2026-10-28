@@ -1,0 +1,438 @@
+<title>Electric Lights</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the house quick-read column (material band, short blocks), with a live night street as the centrepiece */
+:root {
+  --bg: #e6e6e1; --surface: #f2f2ee; --fg: #22231f; --muted: #5f6058; --line: #c9c8c0;
+  --accent: #8a6626; --iron: #3b3d40; --steel: #6d7276; --brass: #8f7638; --copper: #b26247;
+  --glow-warm: #e0a95e; --ok: #4c7a46; --warn: #a3712a;
+  --night: #1b1d22; --night-2: #23262c; --wall: #34363b; --wall-line: #2b2d31; --pavement: #2a2b2e; --pool: #f2ede0;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --iron: #4a4d51; --steel: #8a8f93; --brass: #b0944e; --copper: #c47a5e;
+  --glow-warm: #d9a35c; --ok: #84b07c; --warn: #d4a35a;
+  --night: #121317; --night-2: #191b20; --wall: #2c2e33; --wall-line: #232529; --pavement: #202124; --pool: #e9e3d4; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --iron: #4a4d51; --steel: #8a8f93; --brass: #b0944e; --copper: #c47a5e;
+  --glow-warm: #d9a35c; --ok: #84b07c; --warn: #d4a35a;
+  --night: #121317; --night-2: #191b20; --wall: #2c2e33; --wall-line: #232529; --pavement: #202124; --pool: #e9e3d4; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.15rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+
+header { display: grid; gap: 14px }
+.band { height: 10px; border-radius: 2px; background: linear-gradient(90deg, var(--iron) 0 70%, var(--bg) 70% 72%, var(--glow-warm) 72% 100%) }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { padding: 8px 0 8px 14px; border-left: 3px solid var(--glow-warm); font-weight: 500 }
+
+/* Night street */
+.street { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; display: grid }
+.controls { display: grid; gap: 14px; padding: 14px 16px; border-bottom: 1px solid var(--line) }
+.row { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center }
+.row > .eyebrow { min-width: 92px }
+.toggle, .seg button, .cut { font: 500 .8rem/1 var(--mono); padding: 8px 12px; border-radius: 3px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer }
+.toggle[aria-pressed="true"] { border-color: var(--ok); color: var(--ok) }
+.toggle[aria-pressed="false"] { color: var(--muted) }
+.cut[aria-pressed="true"] { border-color: var(--warn); color: var(--warn) }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.seg button { border: 0; border-radius: 0; border-right: 1px solid var(--line) }
+.seg button:last-child { border-right: 0 }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg) }
+.swatches { display: flex; flex-wrap: wrap; gap: 6px }
+.sw { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--line); cursor: pointer; padding: 0 }
+.sw[aria-pressed="true"] { border-color: var(--fg); box-shadow: 0 0 0 2px var(--bg) inset }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.scene { overflow-x: auto; background: var(--night) }
+.scene svg { display: block; width: 100%; min-width: 560px; height: auto }
+.readout { display: flex; flex-wrap: wrap; gap: 6px 22px; padding: 10px 16px; border-top: 1px solid var(--line); font: 500 .85rem/1.3 var(--mono); font-variant-numeric: tabular-nums }
+.readout span { color: var(--muted) }
+.caption { padding: 0 16px 14px; color: var(--muted); font-size: .88rem }
+.lbl { font: 500 10.5px var(--mono); fill: #9a9890 }
+
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: step }
+.loop li { counter-increment: step; display: grid; gap: 6px; align-content: start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.loop li::before { content: counter(step); font: 600 1.4rem/1 var(--display); color: var(--accent) }
+
+.cat { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px }
+.cat div { padding: 14px 16px; border-top: 3px solid var(--iron); background: var(--surface); display: grid; gap: 6px; align-content: start }
+.cat p { color: var(--muted); font-size: .9rem }
+.cat b { font-weight: 600 }
+.cat .made { font: 500 .75rem/1.3 var(--mono); color: var(--accent) }
+
+.numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px }
+.num { padding: 12px 14px; border-top: 3px solid var(--accent); background: var(--surface); display: grid; gap: 2px }
+.num b { font: 600 1.5rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.num span { color: var(--muted); font-size: .85rem }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.pairs ul { margin: 0; padding: 14px 16px 14px 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 6px }
+.pairs h3 { margin-bottom: 4px }
+.does h3 { color: var(--ok) }
+.doesnt h3 { color: var(--warn) }
+
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 24px }
+.qa div { display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.qa b { font-weight: 600 }
+.qa span { color: var(--muted) }
+
+.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.open > div { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 8px; align-content: start }
+.open ul { margin: 0; padding-left: 18px; display: grid; gap: 4px }
+.open .ok h3 { color: var(--warn) }
+
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center }
+.score .track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden }
+.score .fill { height: 100%; background: var(--ok) }
+.score .why { grid-column: 2 / -1; color: var(--muted); font-size: .85rem; margin-top: -6px }
+.score b { font-variant-numeric: tabular-nums; text-align: right; font: 500 .85rem var(--mono) }
+.score.overall span:first-child { font-weight: 600 }
+@media (max-width: 520px) { .score { grid-template-columns: 1fr 44px } .score .track { grid-column: 1 / -1; order: 3 } .score .why { grid-column: 1 / -1; margin-top: 0 } }
+
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px }
+code { font: .85em var(--mono) }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="band" aria-hidden="true"></div>
+    <p class="eyebrow">ComedyMonkey's Create Addons · Power Lines</p>
+    <h1>Electric Lights</h1>
+    <p class="pitch">A light for every place: street lamps on stacking posts, wall, ceiling and hanging lamps, strips and edges, festoons, a Floodlight and more. Cheap to make, fed by your Power Lines, recoloured with a dye you keep.</p>
+    <div class="chips">
+      <span class="chip ready">Ready for development · 85%</span>
+      <span class="chip">23 lights</span>
+      <span class="chip">Early game</span>
+      <span class="chip">FE via Power Lines</span>
+    </div>
+  </header>
+
+  <section aria-labelledby="h-idiot">
+    <h2 id="h-idiot">In ten lines</h2>
+    <ul class="idiot">
+      <li>Lights run on FE from Power Lines.</li>
+      <li>A line must touch the light.</li>
+      <li>Lines hidden in walls still count.</li>
+      <li>Strips and edges pass power along themselves.</li>
+      <li>Craft an assembly, stonecut your light.</li>
+      <li>Right-click a dye: glow changes, dye kept.</li>
+      <li>Breaking drops it plain again.</li>
+      <li>Wrench steps the brightness.</li>
+      <li>Light Switch or Breaker switches circuits.</li>
+      <li>Street lamps stack like power poles.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="h-try">
+    <h2 id="h-try">Try it</h2>
+    <p class="sub">One street, two circuits. The dye colours the lamps' glow; the light on the ground stays white, as it does in Minecraft.</p>
+    <div class="street">
+      <div class="controls">
+        <div class="row">
+          <span class="eyebrow">Switch</span>
+          <button class="toggle" id="t-street" aria-pressed="true">Street Breaker: on</button>
+          <button class="toggle" id="t-wall" aria-pressed="true">Light Switch: on</button>
+          <button class="cut" id="t-cut" aria-pressed="false">Run the generator dry</button>
+        </div>
+        <div class="row">
+          <span class="eyebrow">Wrench</span>
+          <div class="seg" role="group" aria-label="Brightness">
+            <button id="b-100" aria-pressed="true" data-f="1">Full</button>
+            <button id="b-80" aria-pressed="false" data-f="0.8">Bright</button>
+            <button id="b-50" aria-pressed="false" data-f="0.5">Dim</button>
+            <button id="b-25" aria-pressed="false" data-f="0.25">Glow</button>
+          </div>
+        </div>
+        <div class="row">
+          <span class="eyebrow">Dye</span>
+          <div class="swatches" id="swatches" role="group" aria-label="Dye colour"></div>
+        </div>
+      </div>
+      <div class="scene">
+        <svg id="scene" viewBox="0 0 760 300" role="img" aria-label="A night street: a cast iron lamp post with a Lantern Head, a steel lamp post with a Cobra Head, festoon lights strung to a building, and on the building a Bulkhead Light, a Light Switch, a Light Strip and an Edge Light along the roof.">
+          <defs>
+            <radialGradient id="g-glow"><stop offset="0" style="stop-color: var(--lamp)" stop-opacity=".95"/><stop offset=".35" style="stop-color: var(--lamp)" stop-opacity=".35"/><stop offset="1" style="stop-color: var(--lamp)" stop-opacity="0"/></radialGradient>
+            <radialGradient id="g-pool"><stop offset="0" style="stop-color: var(--pool)" stop-opacity=".32"/><stop offset="1" style="stop-color: var(--pool)" stop-opacity="0"/></radialGradient>
+            <linearGradient id="g-strip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color: var(--lamp)" stop-opacity=".55"/><stop offset="1" style="stop-color: var(--lamp)" stop-opacity="0"/></linearGradient>
+          </defs>
+          <rect width="760" height="300" style="fill: var(--night)"/>
+          <rect y="250" width="760" height="50" style="fill: var(--pavement)"/>
+          <!-- building -->
+          <rect x="480" y="44" width="280" height="206" style="fill: var(--wall)"/>
+          <path d="M480 100H760M480 156H760M480 212H760" style="stroke: var(--wall-line)" stroke-width="2"/>
+          <rect x="640" y="160" width="60" height="90" style="fill: var(--night-2)"/>
+          <!-- buried feed: generator to Breaker to posts, and to the wall -->
+          <path d="M20 268H700" style="stroke: var(--copper)" stroke-width="2" stroke-dasharray="6 5" opacity=".7"/>
+          <path d="M120 268V250M330 268V250M500 268V250" style="stroke: var(--copper)" stroke-width="2" opacity=".7"/>
+          <text class="lbl" x="22" y="290">buried Power Line</text>
+          <rect x="34" y="226" width="22" height="24" rx="2" style="fill: var(--steel)"/>
+          <rect id="breaker-lever" x="43" y="230" width="4" height="10" style="fill: var(--brass)"/>
+          <text class="lbl" x="22" y="218">Breaker</text>
+          <!-- pools of world light (always white) -->
+          <g class="pools">
+            <ellipse class="p-street" cx="120" cy="252" rx="90" ry="14" fill="url(#g-pool)"/>
+            <ellipse class="p-street" cx="388" cy="252" rx="90" ry="14" fill="url(#g-pool)"/>
+            <ellipse class="p-wall" cx="560" cy="252" rx="70" ry="10" fill="url(#g-pool)"/>
+          </g>
+          <!-- cast iron post, Lantern Head -->
+          <path d="M108 250h24l-4-14h-16z" style="fill: var(--iron)"/>
+          <rect x="117" y="92" width="6" height="146" style="fill: var(--iron)"/>
+          <path d="M110 66h20l-3 26h-14z" style="fill: var(--iron)"/>
+          <rect class="lamp street" x="113.5" y="70" width="13" height="18" style="fill: var(--lamp)"/>
+          <path d="M106 66h28l-14-10z" style="fill: var(--iron)"/>
+          <circle class="glow street" cx="120" cy="79" r="46" fill="url(#g-glow)"/>
+          <text class="lbl" x="88" y="46">Lantern Head</text>
+          <!-- steel post, Cobra Head -->
+          <rect x="326" y="96" width="8" height="154" style="fill: var(--steel)"/>
+          <path d="M330 100 C330 78 352 72 384 74" style="stroke: var(--steel)" fill="none" stroke-width="5"/>
+          <path d="M374 70h30q6 0 4 6l-2 4h-34z" style="fill: var(--steel)"/>
+          <rect class="lamp street" x="376" y="78" width="28" height="4" rx="2" style="fill: var(--lamp)"/>
+          <circle class="glow street" cx="390" cy="84" r="42" fill="url(#g-glow)"/>
+          <text class="lbl" x="352" y="56">Cobra Head</text>
+          <!-- festoon: steel post to building -->
+          <path d="M334 112 Q407 150 480 104" style="stroke: #55565a" fill="none" stroke-width="1.5"/>
+          <g id="festoon"></g>
+          <text class="lbl" x="372" y="166">Festoon Lights</text>
+          <!-- wall lights -->
+          <rect x="548" y="168" width="24" height="18" rx="9" style="fill: var(--iron)"/>
+          <rect class="lamp wall" x="552" y="171" width="16" height="12" rx="6" style="fill: var(--lamp)"/>
+          <path d="M556 168v18M564 168v18M548 177h24" style="stroke: var(--iron)" stroke-width="1.5"/>
+          <circle class="glow wall" cx="560" cy="177" r="34" fill="url(#g-glow)"/>
+          <text class="lbl" x="528" y="152">Bulkhead</text>
+          <rect x="506" y="182" width="12" height="18" rx="1.5" style="fill: var(--steel)"/>
+          <rect id="switch-toggle" x="510" y="186" width="4" height="6" style="fill: var(--fg)"/>
+          <text class="lbl" x="492" y="216">Light Switch</text>
+          <rect x="600" y="120" width="140" height="3" rx="1.5" style="fill: var(--iron)"/>
+          <rect class="lamp wall" x="602" y="120.5" width="136" height="2" rx="1" style="fill: var(--lamp)"/>
+          <rect class="glow wall" x="600" y="123" width="140" height="22" fill="url(#g-strip)"/>
+          <text class="lbl" x="628" y="114">Light Strip</text>
+          <rect class="lamp wall" x="480" y="42" width="280" height="3" style="fill: var(--lamp)"/>
+          <rect class="glow wall" x="480" y="45" width="280" height="18" fill="url(#g-strip)"/>
+          <text class="lbl" x="660" y="34">Edge Light</text>
+        </svg>
+      </div>
+      <div class="readout" aria-live="polite">
+        <div><span>Draw </span><b id="r-draw">0</b> FE/t</div>
+        <div><span>Glow </span><b id="r-dye">plain (warm)</b></div>
+        <div><span>World light </span><b>white</b></div>
+      </div>
+      <p class="caption">Draw uses the spec's figures: street heads 8 FE/t, festoon 1 per 2 blocks, bulkhead 2, strip and edge 1 per block, times the brightness step.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-loop">
+    <h2 id="h-loop">How you use it</h2>
+    <ol class="loop">
+      <li><b>Craft</b> Light Assemblies: glass, copper sheet, redstone, two at a time.</li>
+      <li><b>Stonecut</b> the light the place needs. Big ones are crafted.</li>
+      <li><b>Wire</b> it: a Power Line touching it, hidden in the wall if you like.</li>
+      <li><b>Dress</b> it: dye the glow, step the brightness with the wrench.</li>
+      <li><b>Switch</b> it: a Light Switch by hand, a Breaker by redstone.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="h-cat">
+    <h2 id="h-cat">The lights</h2>
+    <div class="cat">
+      <div><h3>Street</h3><p><b>Cast Iron</b> or <b>Steel Lamp Posts</b>, stacked to any height, with <b>Lantern</b>, <b>Cobra</b>, <b>Globe</b> or <b>Yard Light</b> heads on top and up to 4 arms.</p><span class="made">Posts: own recipes · heads: stonecutter</span></div>
+      <div><h3>Ground</h3><p><b>Bollard Light</b> for paths. <b>Floor Light</b>, flush and walkable, doubles as a pool light.</p><span class="made">Stonecutter ×1</span></div>
+      <div><h3>Wall</h3><p><b>Bulkhead</b> for tunnels and factories, <b>Wall Sconce</b> for homes, <b>Gooseneck Lamp</b> over doors and signs.</p><span class="made">Stonecutter ×1</span></div>
+      <div><h3>Ceiling</h3><p><b>High-Bay Lamp</b> (warms up like sodium), <b>Cage Lamp</b>, <b>Flush Ceiling Light</b>.</p><span class="made">High-Bay crafted · others stonecutter ×1</span></div>
+      <div><h3>Hanging</h3><p><b>Pendant Lamp</b> and brass <b>Chandelier</b>. Lower either with a Power Line, a block at a time, up to 16.</p><span class="made">Pendant stonecutter · Chandelier crafted</span></div>
+      <div><h3>Runs</h3><p><b>Light Strip</b> on any face, <b>Edge Light</b> along block edges, <b>Festoon Lights</b> between posts and walls. One feed lights the run.</p><span class="made">Stonecutter ×8 · ×8 · ×4</span></div>
+      <div><h3>Special</h3><p><b>Floodlight</b> lights a spot 32 blocks away. <b>Warning Beacon</b> turns while lit. <b>Indicator Lamp</b> for control boards.</p><span class="made">Floodlight, Beacon crafted · Indicator ×8</span></div>
+      <div><h3>Control</h3><p><b>Light Switch</b>: a wall plate the cable runs through. Flip it and the circuit beyond goes dark.</p><span class="made">Lever + copper sheet → 2</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-num">
+    <h2 id="h-num">Key numbers</h2>
+    <div class="numbers">
+      <div class="num"><b>1–32</b><span>FE/t per light, at full</span></div>
+      <div class="num"><b>~300</b><span>lights on one Lava Generator</span></div>
+      <div class="num"><b>4</b><span>brightness steps</span></div>
+      <div class="num"><b>32</b><span>blocks a Floodlight reaches</span></div>
+      <div class="num"><b>16</b><span>blocks a Pendant drops or a Festoon spans</span></div>
+      <div class="num"><b>2 s</b><span>of power held before it flickers out</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-rules">
+    <h2 id="h-rules">Rules</h2>
+    <div class="pairs">
+      <div class="does"><h3>Does</h3><ul>
+        <li>Light from any Power Line touching it, even one encased behind it.</li>
+        <li>Keep the dye: it's never used up.</li>
+        <li>Colour a whole strip run at once (sneak for one block).</li>
+        <li>Wash plain with a water bucket, which stays full.</li>
+        <li>Flicker for a second when power runs out, then go dark.</li>
+        <li>Swap style in the stonecutter, within its size group.</li>
+      </ul></div>
+      <div class="doesnt"><h3>Doesn't</h3><ul>
+        <li>Take redstone itself: switch the circuit instead.</li>
+        <li>Colour the world's light: only the glow.</li>
+        <li>Pass power on, except along its own strip, edge or festoon.</li>
+        <li>Fill the recipe book with colours.</li>
+        <li>Drop its dye: broken lights come back plain.</li>
+        <li>Hurt anyone, start fires or mind the rain.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-qa">
+    <h2 id="h-qa">What if…?</h2>
+    <div class="qa">
+      <div><b>The generator runs dry?</b><span>Lights flicker for a second, then go dark.</span></div>
+      <div><b>The line is hidden in the wall?</b><span>The light on it still gets power.</span></div>
+      <div><b>A block is put in a Floodlight's beam?</b><span>The spot lands on that block until it's cleared.</span></div>
+      <div><b>Lights ride a moving contraption?</b><span>They keep their glow but light nothing and draw nothing.</span></div>
+      <div><b>A Pendant 10 blocks down is broken?</b><span>The lamp and its cable drop back.</span></div>
+      <div><b>A dyed light is picked up with Carry On?</b><span>It keeps its colour.</span></div>
+      <div><b>A Breaker switches on a whole street?</b><span>Lamps come on over a second, like a ripple.</span></div>
+      <div><b>The chunk unloads?</b><span>Lights there draw nothing and relight on load.</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-open">
+    <h2 id="h-open">Details and later</h2>
+    <div class="open">
+      <div><h3>Approved small details</h3><ul>
+        <li>Crafted lights' parts: Floodlight + 2 iron sheets, Chandelier + brass sheet, Warning Beacon + cogwheel, High-Bay + iron sheet.</li>
+        <li>Hardness: lights 1, Floor Light 3, Lamp Posts 2.</li>
+        <li>Anyone who can use the block can dye, wash, switch or dim it.</li>
+      </ul></div>
+      <div><h3>Parked for later</h3><ul>
+        <li>Searchlight, swept by a Create shaft.</li>
+        <li>Real coloured world light through a lighting mod.</li>
+        <li>Two-way stairwell switching.</li>
+        <li>Motion-sensor light.</li>
+        <li>Lamp heads on Line Post branches.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-score">
+    <h2 id="h-score">Readiness</h2>
+    <div class="scores">
+      <div class="score"><span>Gameplay</span><div class="track"><div class="fill" style="width:100%"></div></div><b>100%</b><p class="why">Every decision and default is approved.</p></div>
+      <div class="score"><span>World integration</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><p class="why">Glow with shaders and the Floodlight cone in fog need a look in game.</p></div>
+      <div class="score"><span>Balance</span><div class="track"><div class="fill" style="width:85%"></div></div><b>85%</b><p class="why">Draw figures need a play test against a real town.</p></div>
+      <div class="score"><span>Progression</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><p class="why">The Chandelier's brass makes it the only mid-game light.</p></div>
+      <div class="score"><span>Automation</span><div class="track"><div class="fill" style="width:85%"></div></div><b>85%</b><p class="why">Mechanical Saw making lights and Deployers dyeing need game tests.</p></div>
+      <div class="score"><span>Edge cases</span><div class="track"><div class="fill" style="width:85%"></div></div><b>85%</b><p class="why">Remote light spots on ships and in flowing water need a game test.</p></div>
+      <div class="score overall"><span>Overall</span><div class="track"><div class="fill" style="width:85%"></div></div><b>85%</b><p class="why">The lowest area sets the overall score.</p></div>
+    </div>
+  </section>
+
+  <footer>Full spec: <code>design/specs/electric-lights.md</code> · builds on <code>design/specs/fluid-and-power-lines.md</code></footer>
+</div>
+
+<script>
+(() => {
+  // Glow colours: the dyes, muted to the house palette and lifted for a lit lens (never near-white).
+  const DYES = [
+    ["plain (warm)", null], ["white", "#d6d3c8"], ["orange", "#d38a4c"], ["magenta", "#b979ad"], ["light blue", "#7fa9bf"],
+    ["yellow", "#d2b964"], ["lime", "#9cba66"], ["pink", "#cf97a5"], ["gray", "#8c8f91"], ["light gray", "#b0afa8"],
+    ["cyan", "#5fa6a6"], ["purple", "#9270b4"], ["blue", "#6e7cbd"], ["brown", "#a7845f"], ["green", "#86a058"],
+    ["red", "#c0665a"], ["black", "#5c5c62"]
+  ];
+  const svg = document.getElementById("scene");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const state = { street: true, wall: true, cut: false, f: 1, dye: 0, flicker: null };
+
+  // Festoon bulbs along the sagging string, one every 2 blocks of a 16-block span.
+  const fest = document.getElementById("festoon");
+  for (let i = 1; i < 9; i++) {
+    const t = i / 9, x = (1 - t) ** 2 * 334 + 2 * (1 - t) * t * 407 + t * t * 480, y = (1 - t) ** 2 * 112 + 2 * (1 - t) * t * 150 + t * t * 104;
+    fest.insertAdjacentHTML("beforeend",
+      `<circle class="glow street" cx="${x.toFixed(1)}" cy="${(y + 4).toFixed(1)}" r="10" fill="url(#g-glow)"/>` +
+      `<circle class="lamp street" cx="${x.toFixed(1)}" cy="${(y + 4).toFixed(1)}" r="2.6" style="fill: var(--lamp)"/>`);
+  }
+
+  const sw = document.getElementById("swatches");
+  DYES.forEach(([name, c], i) => {
+    const b = document.createElement("button");
+    b.className = "sw"; b.id = "dye-" + i; b.title = name; b.setAttribute("aria-label", name);
+    b.style.background = c || "var(--glow-warm)";
+    b.setAttribute("aria-pressed", i === 0);
+    b.onclick = () => { state.dye = i; render(); };
+    sw.append(b);
+  });
+
+  const lit = circuit => state[circuit] && !state.cut;
+
+  function render(flickerOn) {
+    svg.style.setProperty("--lamp", DYES[state.dye][1] || "var(--glow-warm)");
+    for (const circuit of ["street", "wall"]) {
+      const on = flickerOn !== undefined ? flickerOn && state[circuit] : lit(circuit);
+      svg.querySelectorAll(".glow." + circuit).forEach(e => e.style.opacity = on ? state.f : 0);
+      svg.querySelectorAll(".lamp." + circuit).forEach(e => e.style.opacity = on ? .35 + .65 * state.f : .12);
+      svg.querySelectorAll(".p-" + circuit).forEach(e => e.style.opacity = on ? state.f : 0);
+    }
+    // Street: two heads at 8 + 16 blocks of festoon at 1 per 2. Wall: bulkhead 2 + 10-block strip + 14-block edge.
+    const draw = ((lit("street") ? 16 + 8 : 0) + (lit("wall") ? 2 + 10 + 14 : 0)) * state.f;
+    document.getElementById("r-draw").textContent = Math.round(draw * 10) / 10;
+    document.getElementById("r-dye").textContent = DYES[state.dye][0];
+    sw.querySelectorAll(".sw").forEach((b, i) => b.setAttribute("aria-pressed", i === state.dye));
+    document.getElementById("breaker-lever").setAttribute("y", state.street ? 230 : 236);
+    document.getElementById("switch-toggle").setAttribute("y", state.wall ? 186 : 192);
+  }
+
+  function flicker(then) {
+    clearInterval(state.flicker);
+    if (reduce) { then(); return; }
+    let n = 0;
+    state.flicker = setInterval(() => {
+      render(Math.random() > .45);
+      if (++n > 9) { clearInterval(state.flicker); then(); }
+    }, 90);
+  }
+
+  const toggle = (id, key, label) => {
+    const b = document.getElementById(id);
+    b.onclick = () => { state[key] = !state[key]; b.setAttribute("aria-pressed", state[key]); b.textContent = label + (state[key] ? "on" : "off"); render(); };
+  };
+  toggle("t-street", "street", "Street Breaker: ");
+  toggle("t-wall", "wall", "Light Switch: ");
+
+  const cut = document.getElementById("t-cut");
+  cut.onclick = () => {
+    const goingDry = !state.cut;
+    cut.setAttribute("aria-pressed", goingDry);
+    cut.textContent = goingDry ? "Refuel the generator" : "Run the generator dry";
+    if (goingDry) flicker(() => { state.cut = true; render(); });
+    else { state.cut = false; flicker(() => render()); }
+  };
+
+  document.querySelectorAll(".seg button").forEach(b => b.onclick = () => {
+    state.f = +b.dataset.f;
+    document.querySelectorAll(".seg button").forEach(o => o.setAttribute("aria-pressed", o === b));
+    render();
+  });
+
+  render();
+})();
+</script>

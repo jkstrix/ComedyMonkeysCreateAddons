@@ -225,3 +225,17 @@ Stage 2 real sounds for the Clockwork Juggernaut and his props (design/sound/clo
 | 3360.ogg | 1-pendulum-chime | https://bigsoundbank.com/1-pendulum-chime-s3360.html | jug_chime (2.9-5.5 s) |
 | 3589.ogg | anvil-1 | https://bigsoundbank.com/anvil-1-s3589.html | jug_anvil_1..3 (from 0.1, 1.32, 2.39 s, 0.75 s each) |
 | 3590.ogg | anvil-2 | https://bigsoundbank.com/anvil-2-s3590.html | searched, not used (file not kept) |
+
+## Electric Lights (2026-10-28)
+
+New BigSoundBank downloads (CC0), in `bigsoundbank/`; cuts `cuts/lt_*.wav`. Per-event use in `design/sound/electric-lights/SOURCES.md`.
+
+| File | Title | URL | Cuts used |
+|---|---|---|---|
+| 0052.ogg | electric-switch-2 | https://bigsoundbank.com/detail-0052-electric-switch-2.html | lt_sw_a_on (0.20-0.45 s), lt_sw_a_off (1.25-1.50), lt_sw_b_on (2.26-2.50), lt_sw_b_off (3.16-3.40) |
+| 0540.ogg | old-switch | https://bigsoundbank.com/old-switch-s0540.html | (auditioned as a third switch take, 0.18-0.45 and 1.68-1.95 s; not kept) |
+| 1263.ogg | car-antenna-exit | https://bigsoundbank.com/car-antenna-exit-s1263.html | lt_antenna_start (0.12-0.80), lt_antenna_run (2.0-4.2), lt_antenna_stop (7.10-7.60) |
+| 0036.ogg | switch-desk-lamp | https://bigsoundbank.com/detail-0036-switch-desk-lamp.html | (not used) |
+| 0078.ogg | electric-fan-1 | https://bigsoundbank.com/sound-0078-electric-fan-1.html | (not used) |
+
+Also cut from files already here: 2143 and 2144 (lt_bulb_a, lt_bulb_b1 0-0.30, lt_bulb_b2 0.30-0.65), 2118 (lt_transformer 1.0-8.0).

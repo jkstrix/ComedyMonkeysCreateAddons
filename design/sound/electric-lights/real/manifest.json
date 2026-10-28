@@ -1,0 +1,60 @@
+{
+ "switch_on": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/lt_sw_a_on.wav",
+   "bigsoundbank/cuts/lt_sw_b_on.wav"
+  ],
+  "synth": []
+ },
+ "switch_off": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/lt_sw_a_off.wav",
+   "bigsoundbank/cuts/lt_sw_b_off.wav"
+  ],
+  "synth": []
+ },
+ "flicker": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/lt_transformer.wav",
+   "bigsoundbank/cuts/lt_bulb_a.wav",
+   "bigsoundbank/cuts/lt_bulb_b1.wav",
+   "bigsoundbank/cuts/lt_bulb_b2.wav"
+  ],
+  "synth": []
+ },
+ "warm_up": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/lt_transformer.wav",
+   "kenney-interface-sounds/Audio/tick_004.ogg"
+  ],
+  "synth": []
+ },
+ "beacon_whirr": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/lt_antenna_run.wav",
+   "kenney-interface-sounds/Audio/tick_004.ogg"
+  ],
+  "synth": []
+ },
+ "floodlight_aim": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/lt_antenna_start.wav",
+   "bigsoundbank/cuts/lt_antenna_stop.wav"
+  ],
+  "synth": []
+ },
+ "brightness_step": {
+  "variants": 1,
+  "sources": [
+   "kenney-ui-audio/Audio/switch24.ogg",
+   "kenney-interface-sounds/Audio/tick_002.ogg"
+  ],
+  "synth": []
+ }
+}
