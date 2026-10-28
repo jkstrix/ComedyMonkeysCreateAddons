@@ -33,6 +33,7 @@ public final class ElectricSounds {
 	private static final Map<LavaGeneratorBlockEntity, Generator> GENERATORS = new WeakHashMap<>();
 	private static final Map<ElectricMotorBlockEntity, Motor> MOTORS = new WeakHashMap<>();
 	private static final Map<BatteryBlockEntity, Battery> BATTERIES = new WeakHashMap<>();
+	private static final Map<com.comedymonkey.createaddons.content.light.LightBlockEntity, MachineLoop> BEACONS = new WeakHashMap<>();
 
 	private ElectricSounds() {}
 
@@ -41,6 +42,25 @@ public final class ElectricSounds {
 		GENERATORS.clear();
 		MOTORS.clear();
 		BATTERIES.clear();
+		BEACONS.clear();
+	}
+
+	/** The Warning Beacon's soft whirr while its rotor turns (asked each frame it's drawn: lights don't tick). */
+	public static void tickBeacon(com.comedymonkey.createaddons.content.light.LightBlockEntity be) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.level == null || be.getLevel() != mc.level)
+			return;
+		boolean turning = be.phase() != com.comedymonkey.createaddons.content.light.LightBlockEntity.Phase.DARK;
+		if (!turning || !MachineLoop.ended(BEACONS.get(be)))
+			return;
+		SoundEvent whirr = ModSounds.light("beacon_whirr");
+		BlockPos pos = be.getBlockPos();
+		if (!Loop.canStart(whirr, pos))
+			return;
+		Loop loop = new Loop(whirr, pos, be::isRemoved,
+			() -> be.phase() != com.comedymonkey.createaddons.content.light.LightBlockEntity.Phase.DARK ? 1 : 0, () -> 1);
+		BEACONS.put(be, loop);
+		mc.getSoundManager().play(loop);
 	}
 
 	private static final class Generator {

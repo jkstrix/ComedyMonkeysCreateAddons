@@ -1,0 +1,289 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/light/steel",
+    "brass": "comedymonkeysaddons:block/light/brass",
+    "steel": "comedymonkeysaddons:block/light/steel",
+    "reflector": "comedymonkeysaddons:block/light/reflector"
+  },
+  "elements": [
+    {
+      "name": "wb_cog_a",
+      "from": [
+        6.75,
+        7.375,
+        2.25
+      ],
+      "to": [
+        9.25,
+        8.625,
+        2.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.75,
+            7.375,
+            9.25,
+            8.625
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            13.25,
+            7.375,
+            13.75,
+            8.625
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            6.75,
+            7.375,
+            9.25,
+            8.625
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            2.25,
+            7.375,
+            2.75,
+            8.625
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            6.75,
+            2.25,
+            9.25,
+            2.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            6.75,
+            13.25,
+            9.25,
+            13.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wb_cog_b",
+      "from": [
+        7.375,
+        6.75,
+        2.25
+      ],
+      "to": [
+        8.625,
+        9.25,
+        2.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.375,
+            6.75,
+            8.625,
+            9.25
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            13.25,
+            6.75,
+            13.75,
+            9.25
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            7.375,
+            6.75,
+            8.625,
+            9.25
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            2.25,
+            6.75,
+            2.75,
+            9.25
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            7.375,
+            2.25,
+            8.625,
+            2.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            7.375,
+            13.25,
+            8.625,
+            13.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wb_spindle",
+      "from": [
+        7.75,
+        7.75,
+        2.75
+      ],
+      "to": [
+        8.25,
+        8.25,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.75,
+            7.75,
+            8.25,
+            8.25
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            7.75,
+            13.25,
+            8.25
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            7.75,
+            7.75,
+            8.25,
+            8.25
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            2.75,
+            7.75,
+            5.5,
+            8.25
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            7.75,
+            2.75,
+            8.25,
+            5.5
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            7.75,
+            10.5,
+            8.25,
+            13.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "wb_mirror",
+      "from": [
+        8.5,
+        6.75,
+        2.9
+      ],
+      "to": [
+        8.75,
+        9.25,
+        4.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.25,
+            6.75,
+            7.5,
+            9.25
+          ],
+          "texture": "#reflector"
+        },
+        "east": {
+          "uv": [
+            11.8,
+            6.75,
+            13.1,
+            9.25
+          ],
+          "texture": "#reflector"
+        },
+        "south": {
+          "uv": [
+            8.5,
+            6.75,
+            8.75,
+            9.25
+          ],
+          "texture": "#reflector"
+        },
+        "west": {
+          "uv": [
+            2.9,
+            6.75,
+            4.2,
+            9.25
+          ],
+          "texture": "#reflector"
+        },
+        "up": {
+          "uv": [
+            8.5,
+            2.9,
+            8.75,
+            4.2
+          ],
+          "texture": "#reflector"
+        },
+        "down": {
+          "uv": [
+            8.5,
+            11.8,
+            8.75,
+            13.1
+          ],
+          "texture": "#reflector"
+        }
+      }
+    }
+  ]
+}

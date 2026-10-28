@@ -431,6 +431,26 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 		tag.putLong("WarmAt", warmAt);
 	}
 
+	/** The Warning Beacon's rotor: a turn a second (D16, brief). */
+	private static final float SPIN_PER_TICK = 18;
+	/** On the client: where the Warning Beacon's rotor stopped, when it started turning again (-1: still), and where it was last drawn. */
+	private float spinRest, spinShown;
+	private long spinFrom = -1;
+
+	/** On the client: the Warning Beacon's rotor angle this frame (degrees), turning while it's lit, else still where it stopped. */
+	public float spin(long time, float pt, boolean turning) {
+		if (turning) {
+			if (spinFrom < 0)
+				spinFrom = time;
+			// (a whole turn is 20 ticks: kept small so a float stays exact)
+			spinShown = spinRest + ((time - spinFrom) % 20 + pt) * SPIN_PER_TICK;
+		} else if (spinFrom >= 0) {
+			spinRest = spinShown % 360;
+			spinFrom = -1;
+		}
+		return spinShown;
+	}
+
 	/** On the client: the dye it was last seen with, so a re-dyed lit light has its coloured light worked out again. */
 	@Nullable
 	private DyeColor dyeShown;

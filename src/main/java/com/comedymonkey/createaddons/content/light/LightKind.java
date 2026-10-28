@@ -29,7 +29,9 @@ public enum LightKind {
 	/** Hung under a ceiling, lowered on cable (HangingLampBlock). */
 	PENDANT("pendant_lamp", Mount.CEILING, 15, () -> CMConfig.SERVER.lightCeilingFePerTick(), false, box(4.5, 4.5, 4.5, 11.5, 16, 11.5)),
 	/** Hung like the Pendant; brass, several arms, twice its draw (P2). */
-	CHANDELIER("chandelier", Mount.CEILING, 15, () -> CMConfig.SERVER.lightCeilingFePerTick() * 2, false, box(1, 3.5, 1, 15, 16, 15));
+	CHANDELIER("chandelier", Mount.CEILING, 15, () -> CMConfig.SERVER.lightCeilingFePerTick() * 2, false, box(1, 3.5, 1, 15, 16, 15)),
+	/** On any face; its rotor turns while it's lit (LightRenderer). Built on the north wall facing south, as the Indicator. */
+	WARNING_BEACON("warning_beacon", Mount.ANY, 10, () -> CMConfig.SERVER.lightBeaconFePerTick(), false, box(4.5, 4.5, 0, 11.5, 11.5, 8));
 
 	/** Where a light is fixed, and so which ways it can face. */
 	public enum Mount {

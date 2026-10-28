@@ -92,6 +92,9 @@ public class StripModel extends BakedModelWrapper<BakedModel> {
 			int light = state.getValue(LightBlock.LIGHT);
 			return LightRenderer.runGlow(state.getValue(LightBlock.COLOR).dye(), Math.max(0, light - 1));
 		}, ModBlocks.LIGHT_STRIP.get(), ModBlocks.EDGE_LIGHT.get());
+		// the Warning Beacon's dome
+		event.register((state, level, pos, tint) -> tint == 0 && state.hasProperty(LightBlock.LIGHT) ? LightRenderer.dome(state) : -1,
+			ModBlocks.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.WARNING_BEACON).get());
 	}
 
 	@Override

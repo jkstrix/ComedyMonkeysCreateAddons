@@ -122,6 +122,7 @@ public final class CMConfig {
 		public final ModConfigSpec.DoubleValue lightSmallFePerTick;
 		public final ModConfigSpec.DoubleValue lightCeilingFePerTick;
 		public final ModConfigSpec.DoubleValue lightLargeFePerTick;
+		public final ModConfigSpec.DoubleValue lightBeaconFePerTick;
 		public final ModConfigSpec.DoubleValue lightRunFePerTick;
 		public final ModConfigSpec.IntValue lightBufferSeconds;
 
@@ -546,6 +547,10 @@ public final class CMConfig {
 				.comment("The Cage Lamp and the Flush Ceiling Light.")
 				.translation("comedymonkeysaddons.configuration.lightCeilingFePerTick")
 				.defineInRange("ceilingFePerTick", 3.0, 0.05, 10000.0);
+			lightBeaconFePerTick = builder
+				.comment("The Warning Beacon (its little motor too).")
+				.translation("comedymonkeysaddons.configuration.lightBeaconFePerTick")
+				.defineInRange("beaconFePerTick", 4.0, 0.05, 10000.0);
 			lightLargeFePerTick = builder
 				.comment("The High-Bay Lamp and each street lamp head.")
 				.translation("comedymonkeysaddons.configuration.lightLargeFePerTick")
@@ -933,6 +938,10 @@ public final class CMConfig {
 
 		public double lightCeilingFePerTick() {
 			return get(lightCeilingFePerTick);
+		}
+
+		public double lightBeaconFePerTick() {
+			return get(lightBeaconFePerTick);
 		}
 
 		public double lightLargeFePerTick() {

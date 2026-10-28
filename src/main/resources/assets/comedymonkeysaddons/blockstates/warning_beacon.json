@@ -1,0 +1,57 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/warning_beacon"
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/warning_beacon",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/warning_beacon",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/warning_beacon",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/warning_beacon",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/light/warning_beacon",
+        "x": 270
+      }
+    }
+  ]
+}

@@ -47,7 +47,7 @@ const ROTATIONS = {
   leaning: { north: {}, east: { y: 90 }, south: { y: 180 }, west: { y: 270 }, up: {}, down: {} },
 };
 
-function blockModel(cubes, particle, { glow = false, gui = false } = {}) {
+function blockModel(cubes, particle, { glow = false, gui = false, renderType = 'minecraft:cutout' } = {}) {
   const vars = new Map();
   const v = (r) => { if (!vars.has(r)) vars.set(r, r.replace(/^.*[/:]/, '').replace(/[^a-z0-9_]/g, '_')); return '#' + vars.get(r); };
   const elements = cubes.filter((c) => DIRS.some((d) => (d in c.faces ? c.faces[d] : c.faces.all))).map((c) => {
@@ -62,6 +62,8 @@ function blockModel(cubes, particle, { glow = false, gui = false } = {}) {
       // the glow is tinted by the renderer: a tinted face takes its colour when drawn without Flywheel (Flywheel's
       // instances multiply every face anyway)
       if (glow === 'tint' && c.shade === false) faces[dir].tintindex = 0;
+      // tinted by the block's colour handler (the Warning Beacon's dome)
+      if (c.tint) faces[dir].tintindex = 0;
     }
     const el = { name: c.name, from: c.from.map(r3), to: c.to.map(r3) };
     if (c.rot) {
@@ -78,7 +80,7 @@ function blockModel(cubes, particle, { glow = false, gui = false } = {}) {
   used.add(particle);
   const textures = { particle: ref(particle) };
   for (const [r, name] of vars) textures[name] = r;
-  const model = { parent: 'block/block', render_type: 'minecraft:cutout', ambientocclusion: false, textures, elements };
+  const model = { parent: 'block/block', render_type: renderType, ambientocclusion: false, textures, elements };
   if (gui) model.display = { gui: fitGui(elements) };
   return model;
 }
@@ -216,6 +218,26 @@ writeJson('blockstates/hanging_cable.json', { variants: {
   'rose=steel': { model: `${NS}:block/light/hanging_cable_rose_steel` },
   'rose=brass': { model: `${NS}:block/light/hanging_cable_rose_brass` } } });
 
+// ---------- the Warning Beacon: on any face, built on the floor and turned to the north wall facing south (as the
+// Indicator is). Its dome is pale glass the block's colour handler tints (amber, or its dye; darker while dark); its rotor
+// (cog, spindle, reflector, bulb and the flare the reflector throws on the dome) is turned by the renderer
+G.T.paint('dome_glass', (x, y) => ((x + y) % 6 === 0 ? '#f2ece4b8' : '#e4dcd09c'));
+const BEACON = 'warning_beacon';
+{
+  const wb = G.beacon();
+  const dome = (tex, tint) => (c) => (c.name.startsWith('wb_dome')
+    ? { ...c, faces: Object.fromEntries(Object.entries(c.faces).map(([k, v]) => [k, v && tex])), tint } : c);
+  const rotorBody = wb.rotor.filter((c) => !G.isGlow(c)), rotorGlow = wb.rotor.filter(G.isGlow);
+  writeJson(`models/block/light/${BEACON}.json`, blockModel(G.toWall(wb.base.map(dome('dome_glass', true))), 'steel', { renderType: 'minecraft:translucent' }));
+  writeJson(`models/block/light/${BEACON}_rotor.json`, blockModel(G.toWall(rotorBody), 'steel'));
+  // dark: the bulb's glass only (no flare)
+  writeJson(`models/block/light/${BEACON}_glass.json`, blockModel(G.toWall(lens(rotorGlow.filter((c) => c.name !== 'wb_flare'), 'glass_off')), 'steel'));
+  writeJson(`models/block/light/${BEACON}_glow.json`, blockModel(G.toWall(lens(rotorGlow, 'glow_white')), 'glow_white', { glow: 'tint' }));
+  writeJson(`models/item/${BEACON}.json`, blockModel([...wb.base, ...wb.rotor], 'steel', { glow: true, gui: true, renderType: 'minecraft:translucent' }));
+  const multipart = Object.entries(ROTATIONS.any).map(([facing, rot]) => ({ when: { facing }, apply: { model: `${NS}:block/light/${BEACON}`, ...rot } }));
+  writeJson(`blockstates/${BEACON}.json`, { multipart });
+}
+
 // ---------- the colour each light casts, for Colorful Lighting (it reads emitters by block state) ----------
 // As LightColours.castHex (checked by LightColoursTest): the lens colour at full; a dyed one strengthened so it reads over
 // vanilla's white light, black as a deep ultraviolet, green from a cooler green than its olive lens, undyed the warm lens as it is. Dark lights emit nothing anyway.
@@ -236,7 +258,7 @@ function castHex(dye) {
   return '#' + rgb.map((v) => Math.floor(f(v * 255) + 0.5).toString(16).toUpperCase().padStart(2, '0')).join('');
 }
 const emitters = {};
-for (const id of [...Object.keys(KINDS), ...Object.keys(HANGING), 'light_strip', 'edge_light']) {
+for (const id of [...Object.keys(KINDS), ...Object.keys(HANGING), BEACON, 'light_strip', 'edge_light']) {
   emitters[`${NS}:${id}`] = castHex(null);
   for (const dye of DYES) emitters[`${NS}:${id}[color=${dye}]`] = castHex(dye);
 }
@@ -274,7 +296,7 @@ const writeData = (rel, obj) => {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, JSON.stringify(obj, null, 2) + '\n');
 };
-const ids = [...Object.keys(KINDS), ...Object.keys(HANGING)];
+const ids = [...Object.keys(KINDS), ...Object.keys(HANGING), BEACON];
 for (const id of ids)
   writeData(`${NS}/loot_table/blocks/${id}.json`, { type: 'minecraft:block', pools: [{ rolls: 1,
     entries: [{ type: 'minecraft:item', name: `${NS}:${id}` }], conditions: [{ condition: 'minecraft:survives_explosion' }] }] });
@@ -320,7 +342,7 @@ const GROUPS = {
   small: ['indicator_lamp', 'light_strip', 'edge_light'],
 };
 const YIELD = { full: 1, small: 8 };
-const CRAFTED = { high_bay_lamp: [{ tag: 'c:plates/iron' }], chandelier: [{ tag: 'c:plates/brass' }] };
+const CRAFTED = { high_bay_lamp: [{ tag: 'c:plates/iron' }], chandelier: [{ tag: 'c:plates/brass' }], warning_beacon: [{ item: 'create:cogwheel' }] };
 fs.rmSync(path.join(DATA, NS, 'recipe/light'), { recursive: true, force: true });
 writeData(`${NS}/recipe/light_assembly.json`, { type: 'minecraft:crafting_shapeless', category: 'misc',
   ingredients: [{ item: 'minecraft:glass' }, { tag: 'c:plates/copper' }, { item: 'minecraft:redstone' }],

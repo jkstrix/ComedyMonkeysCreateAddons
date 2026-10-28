@@ -40,6 +40,9 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 		}
 	}
 
+	/** The Warning Beacon's rotor (cog, spindle, reflector), turned about its dome's axis. */
+	private static final ModelResourceLocation BEACON_ROTOR = model("warning_beacon_rotor");
+
 	/** How much darker each brightness step's lens is (Full, Bright, Dim, Glow). */
 	private static final float[] STEP_SHADE = {1f, 0.7f, 0.45f, 0.25f};
 	/** Ticks a flicker frame lasts (the design's 90 ms). */
@@ -68,6 +71,7 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 	public static void registerModels(ModelEvent.RegisterAdditional event) {
 		GLOW.values().forEach(event::register);
 		GLASS.values().forEach(event::register);
+		event.register(BEACON_ROTOR);
 		for (LightKind k : LightKind.values())
 			if (onArms(k))
 				for (var f : new com.comedymonkey.createaddons.content.light.ArmFinish[] {com.comedymonkey.createaddons.content.light.ArmFinish.IRON,
@@ -94,9 +98,12 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 		return new net.minecraft.world.phys.AABB(be.getBlockPos()).inflate(1);
 	}
 
-	/** Lit (or flickering) lights have a part to draw: their lens; dark ones show the glass in their block model. */
+	/**
+	 * Lit (or flickering) lights have a part to draw: their lens; dark ones show the glass in their block model. The Warning
+	 * Beacon always has its rotor.
+	 */
 	public static boolean active(LightBlockEntity be) {
-		return be.phase() != LightBlockEntity.Phase.DARK;
+		return be.phase() != LightBlockEntity.Phase.DARK || be.kind() == LightKind.WARNING_BEACON;
 	}
 
 	public static void parts(LightBlockEntity be, float pt, PoseStack ms, PartSink sink, int light) {
@@ -105,7 +112,7 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 		LightKind kind = be.kind();
 		BlockState state = be.getBlockState();
 		long time = be.getLevel().getGameTime();
-		boolean lit = lit(be, time, pt);
+		boolean lit = be.phase() != LightBlockEntity.Phase.DARK && lit(be, time, pt);
 		ms.pushPose();
 		Direction facing = state.hasProperty(LightBlock.FACING) ? state.getValue(LightBlock.FACING) : Direction.UP;
 		var arm = state.hasProperty(com.comedymonkey.createaddons.content.light.LampHeadBlock.ARM)
@@ -119,12 +126,30 @@ public class LightRenderer extends SafeBlockEntityRenderer<LightBlockEntity> {
 				sink.part(armLens(kind, arm, false), ms, light);
 		} else {
 			turn(ms, kind, facing);
+			if (kind == LightKind.WARNING_BEACON) {
+				ElectricSounds.tickBeacon(be);
+				// the rotor turns about the dome's axis (z, through the dome's middle, as it's built on the north wall)
+				ms.translate(0.5, 0.5, 0);
+				ms.mulPose(Axis.ZP.rotationDegrees(be.spin(time, pt, be.phase() != LightBlockEntity.Phase.DARK)));
+				ms.translate(-0.5, -0.5, 0);
+				sink.part(BEACON_ROTOR, ms, light);
+			}
 			if (lit)
 				sink.part(GLOW.get(kind), ms, LightTexture.FULL_BRIGHT, RenderType.cutout(), tint(be, time, pt));
 			else
 				sink.part(GLASS.get(kind), ms, light);
 		}
 		ms.popPose();
+	}
+
+	/**
+	 * The Warning Beacon's dome glass, as the block's colour handler tints it: its dye's lens colour (or the warm amber),
+	 * darker while it's dark (the brief's unlit amber).
+	 */
+	public static int dome(BlockState state) {
+		int c = LightColours.lens(state.getValue(LightBlock.COLOR).dye());
+		float s = state.getValue(LightBlock.LIGHT) > 0 ? 1f : 0.72f;
+		return rgb((c >> 16 & 255) * s, (c >> 8 & 255) * s, (c & 255) * s);
 	}
 
 	/** Lit this frame: steady, or in a flicker frame that's on (more of them on as it comes back, fewer as it goes). */

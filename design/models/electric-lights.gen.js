@@ -577,7 +577,9 @@ function beacon() {
       box('wb_guard_tx1', [5, 7.5, 7.5], [7.5, 8, 8.5], 'iron'), box('wb_guard_tx2', [8.5, 7.5, 7.5], [11, 8, 8.5], 'iron'),
       box('wb_guard_tz1', [7.5, 7.5, 5], [8.5, 8, 11], 'iron')],
     rotor: [...disc('wb_cog', 8, 8, 2.25, 2.75, 2.5, 'brass'), box('wb_spindle', [7.75, 2.75, 7.75], [8.25, 5.5, 8.25], 'steel'),
-      box('wb_mirror', [8.5, 2.9, 6.75], [8.75, 4.2, 9.25], 'reflector'), glowBox('wb_bulb', [7.1, 3.1, 7.1], [8.4, 4.2, 8.4])],
+      box('wb_mirror', [8.5, 2.9, 6.75], [8.75, 4.2, 9.25], 'reflector'), glowBox('wb_bulb', [7.1, 3.1, 7.1], [8.4, 4.2, 8.4]),
+      // the reflector's beam where it meets the dome, inside the glass: it sweeps round with the rotor (lit only)
+      glowBox('wb_flare', [5.85, 2.5, 6.75], [6.1, 4.3, 9.25], 'glow', ['east'])],
   };
 }
 function indicator() {

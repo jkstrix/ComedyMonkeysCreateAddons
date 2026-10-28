@@ -215,6 +215,24 @@ public final class LightGameTests {
 		});
 	}
 
+	/** A Warning Beacon on the side of a wall lights (and so turns) from a wire behind the wall. */
+	@GameTest(template = COURSE, timeoutTicks = 140)
+	public static void warningBeaconLightsOnAWall(GameTestHelper helper) {
+		BlockPos gen = new BlockPos(1, 1, 1), wire = gen.east(), wall = wire.south(), lamp = wall.south();
+		LineGameTests.generator(helper, gen);
+		helper.setBlock(wall, net.minecraft.world.level.block.Blocks.STONE);
+		helper.setBlock(lamp, ModBlocks.LIGHTS.get(LightKind.WARNING_BEACON).get().defaultBlockState().setValue(LightBlock.FACING, Direction.SOUTH));
+		LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), wire, Direction.SOUTH);
+		helper.runAtTickTime(2, () -> LineGameTests.relink(helper, wire));
+		helper.runAtTickTime(120, () -> {
+			if (be(helper, lamp).phase() != LightBlockEntity.Phase.LIT)
+				helper.fail("the Warning Beacon didn't light from the wire behind its wall");
+			if (level(helper, lamp) != LightKind.WARNING_BEACON.level())
+				helper.fail("lit at light level " + level(helper, lamp) + ", not " + LightKind.WARNING_BEACON.level());
+			helper.succeed();
+		});
+	}
+
 	/** A Light Strip on top of a block lights from a wire on the block's underside (above the ceiling below). */
 	@GameTest(template = COURSE, timeoutTicks = 140)
 	public static void stripFedThroughItsFloor(GameTestHelper helper) {
