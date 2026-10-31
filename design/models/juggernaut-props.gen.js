@@ -11,6 +11,10 @@ const OUT = process.argv.slice(2).find((a) => !a.startsWith('--')) || path.resol
 // ---------- the Juggernaut's palette ----------
 const IRON = ['#343a42', '#3d444d', '#454d56'], IRON_HI = '#56606b', CHAR = ['#1c1e21', '#232629', '#2a2d31'];
 const BRONZE = ['#5c4a2e', '#6e5a36', '#7d6a44'], BRONZE_DARK = '#463822', PATINA = ['#4f6b5e', '#5b7a6c'];
+// bronze that reads as metal, as on the Juggernaut: a smooth body, a lit top edge, a dark bottom edge where the patina
+// gathers in small clusters (texture review, 2026-10-29); the key's bars are rubbed smooth where they're gripped
+const BODY = ['#6a5634', '#6e5a36', '#76623d'], BRONZE_HI = '#8c774a', WORN = ['#7d6a44', '#7a6742'];
+const bronze = (x, y, s) => (y === 0 ? BRONZE_HI : y === 15 ? (hash(x >> 1, y, s) < 0.25 ? pick(PATINA, x, y, s + 1) : BRONZE_DARK) : pick(BODY, x, y, s + 2));
 const GOLD = ['#a8873e', '#93763a'], STONE = ['#4e504d', '#5a5c58', '#55574f'], CRACK = '#141516';
 const FROST = ['#6f7c86', '#7a8791'], RUNE = ['#4f8fae', '#4a87a4'], RUNE_HI = '#7ab8d0', RUNE_DIM = '#26343c';
 const pick = (arr, x, y, s) => arr[Math.floor(hash(x, y, s) * arr.length * 0.999)];
@@ -31,19 +35,20 @@ const T = textureSet(); T.file = 'jug_';
 const iron = (x, y, s = 1) => (y === 0 && hash(x, y, s) < 0.5 ? IRON_HI : y === 15 && hash(x, y, s + 1) < 0.4 ? '#3e3530' : pick(IRON, x, y, s));
 T.paint('iron', (x, y) => iron(x, y, 3));
 T.paint('char', (x, y) => pick(CHAR, x, y, 4));
-T.paint('bronze', (x, y) => (hash(x, y, 5) < 0.12 ? pick(PATINA, x, y, 6) : pick(BRONZE, x, y, 7)));
-T.paint('bronze_teeth', (x, y) => ((x + y) % 3 === 0 ? BRONZE_DARK : hash(x, y, 8) < 0.1 ? pick(PATINA, x, y, 9) : pick(BRONZE, x, y, 10)));
+T.paint('bronze', (x, y) => bronze(x, y, 5));
+// soft grooves, not dark stripes: the texture also wraps the drum's broad bands
+T.paint('bronze_teeth', (x, y) => (x % 4 === 0 && y > 0 && y < 15 ? BRONZE[0] : bronze(x, y, 8)));
 T.paint('bronze_dark', (x, y) => (hash(x, y, 11) < 0.5 ? BRONZE_DARK : BRONZE[0]));
 // the key's bars: bronze with a gold inlay line down the middle
-T.paint('key_bar', (x, y) => (y === 7 || y === 8 ? (x % 3 === 1 ? GOLD[1] : GOLD[0]) : y === 15 ? BRONZE_DARK : hash(x, y, 12) < 0.1 ? pick(PATINA, x, y, 13) : pick(BRONZE, x, y, 14)));
+T.paint('key_bar', (x, y) => (y === 7 || y === 8 ? (x % 3 === 1 ? GOLD[1] : GOLD[0]) : y === 0 ? BRONZE_HI : y === 15 ? BRONZE_DARK : pick(WORN, x, y, 14)));
 // the hub's front: bronze round a dark square socket for the shaft
-T.paint('key_hub', (x, y) => (x >= 4 && x <= 11 && y >= 4 && y <= 11 ? (x === 4 || y === 4 ? '#14161a' : '#1c1e21') : edge(x, y) === 0 ? BRONZE_DARK : pick(BRONZE, x, y, 15)));
-// the socket plate: a bronze rim, a knotwork border, a ring of runes (dark until wound), a dark socket in the middle
-const knot = (x, y) => ((x + y) % 4 === 0) !== ((x - y + 64) % 4 === 0);
+T.paint('key_hub', (x, y) => (x >= 4 && x <= 11 && y >= 4 && y <= 11 ? (x === 4 || y === 4 ? '#14161a' : '#1c1e21') : edge(x, y) === 0 ? BRONZE_DARK : pick(BODY, x, y, 15)));
+// the socket plate: a bronze rim, a carved cord border, a ring of runes (dark until wound), a dark socket in the middle
 const ringRune = (x, y) => { const r = Math.hypot(x - 7.5, y - 7.5); if (r < 4.6 || r > 6.4) return false; const a = Math.round(((Math.atan2(y - 7.5, x - 7.5) + Math.PI) / (2 * Math.PI)) * 24); return a % 3 !== 2 && hash(a, Math.round(r), 61) < 0.75; };
 T.paint('plate_front', (x, y) => {
-  if (edge(x, y) === 0) return pick(BRONZE, x, y, 16);
-  if (edge(x, y) === 1) return knot(x, y) ? BRONZE_DARK : pick(IRON, x, y, 17);
+  if (edge(x, y) === 0) return y === 0 || x === 0 ? BRONZE_HI : pick(BODY, x, y, 16);
+  // a carved cord inside the rim (2 px strands, not a dotted lattice)
+  if (edge(x, y) === 1) { const along = y === 1 || y === 14 ? x : y; return (along >> 1) % 2 === 0 ? BRONZE_DARK : pick(IRON, x, y, 17); }
   if (ringRune(x, y)) return RUNE_DIM;
   if (Math.hypot(x - 7.5, y - 7.5) < 3.4) return '#1c1e21';
   return iron(x, y, 18);
@@ -67,14 +72,14 @@ T.paint('drum_top', (x, y) => (x % 4 === 0 ? CHAR[2] : (x >= 6 && x <= 9) ? (run
 for (let k = 1; k <= 4; k++) T.paint('runes_band_' + k, (x, y) => (x >= 6 && x <= 9 && y < k * 4 && runeAt(y, x - 6, 0, 0, 3) ? (y === k * 4 - 1 ? RUNE_HI : RUNE[(x + y) % 2]) : null));
 // the end plate: an iron ring with a round window (clear), a bronze rim, and the shaft hole in the middle
 const winR = (x, y) => Math.hypot(x - 7.5, y - 7.5);
-T.paint('end_plate', (x, y) => { const r = winR(x, y); if (r < 2.6) return '#14161a'; if (r < 6.1) return null; if (r > 7.2) return pick(BRONZE, x, y, 29); return iron(x, y, 30); });
+T.paint('end_plate', (x, y) => { const r = winR(x, y); if (r < 2.6) return '#14161a'; if (r < 6.1) return null; if (r > 7.2) return pick(BODY, x, y, 29); return iron(x, y, 30); });
 T.paint('glass', (x, y) => { const r = winR(x, y); if (r < 2.6 || r > 6.4) return null; return (x === 5 && y === 4) || (x === 4 && y === 5) ? '#83939a99' : null; });
 // the coil seen through the window: wound, the spring packs tight round the arbor; run down, it lies out against the
 // barrel wall (frames 0 empty .. 3 full): the more wound, the more steel shows round the shaft; the dark barrel behind
 const coil = (k) => (x, y) => {
   const r = winR(x, y);
   if (r < 1.6) return null;
-  if (r < 2.7) return pick(BRONZE, x, y, 31);
+  if (r < 2.7) return pick(BODY, x, y, 31);
   if (r > 6.3) return null;
   if ((x === 5 && y === 4) || (x === 4 && y === 5)) return '#83939a'; // a glint on the glass
   const rIn = [5.3, 4.4, 3.5, 2.7][k], rOut = [6.3, 6.0, 5.6, 5.0][k];
@@ -84,7 +89,7 @@ const coil = (k) => (x, y) => {
 const COILS = [0, 1, 2, 3];
 COILS.forEach((k) => T.paint('coil_' + k, coil(k)));
 // a ratchet or escapement wheel face: a toothed bronze disc with a dark hub
-T.paint('wheel', (x, y) => { const r = winR(x, y); if (r < 1.6) return '#14161a'; const a = Math.atan2(y - 7.5, x - 7.5); const tooth = Math.floor(((a + Math.PI) / (2 * Math.PI)) * 12) % 2; return r > 6.5 ? (tooth ? BRONZE_DARK : pick(BRONZE, x, y, 32)) : pick(BRONZE, x, y, 33); });
+T.paint('wheel', (x, y) => { const r = winR(x, y); if (r < 1.6) return '#14161a'; const a = Math.atan2(y - 7.5, x - 7.5); const tooth = Math.floor(((a + Math.PI) / (2 * Math.PI)) * 12) % 2; return r > 6.5 ? (tooth ? BRONZE_DARK : pick(BODY, x, y, 32)) : pick(BODY, x, y, 33); });
 T.paint('leather', (x, y) => (y === 0 || y === 15 ? CHAR[0] : hash(x, y, 34) < 0.4 ? '#46321f' : '#3b2a1f'));
 // brass blocks for the effigy stand-in
 T.paint('brass_block', (x, y) => (edge(x, y) === 0 ? '#6e5a2b' : edge(x, y) === 1 ? '#c9a75a' : hash(x, y, 35) < 0.2 ? '#9c8240' : '#b08f45'));

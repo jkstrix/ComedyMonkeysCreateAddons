@@ -25,6 +25,11 @@ const P = {
   plateHi: ['#626c77'],
   brass: ['#5c4a2e', '#6e5a36', '#7d6a44'], // tarnished bronze
   brassDark: ['#463822'],
+  // bronze that reads as metal: a smooth body between a lit edge and a dark one (texture review, 2026-10-29)
+  bronze: ['#6a5634', '#6e5a36', '#76623d'],
+  bronzeHi: ['#8c774a'],
+  bronzeWorn: ['#7d6a44', '#7a6742'], // where hands grip and turn the key: rubbed smooth, no patina
+  plateDark: ['#4a525c', '#4c545e'], // the pectorals' field, so the runes sit in the iron
   patina: ['#4f6b5e', '#5b7a6c'],
   gold: ['#a8873e', '#93763a'], // ancient gold, inlays only
   stone: ['#4e504d', '#5a5c58', '#55574f'],
@@ -82,23 +87,51 @@ const runeAt = (i, j, i0, j0, seed, lit = 'rune') => {
 const G = (name, origin, kids, o = {}) => ({ kind: 'g', name, origin, kids, rot: o.rot || [0, 0, 0], hidden: !!o.hidden });
 const C = (name, from, to, mat, o = {}) => ({ kind: 'c', name, from, to, mat, ...o });
 const sides = (f) => f !== 'up' && f !== 'down';
-// frost settles on top faces and the top edge of the sides
-const frosty = (f, j, x, y, k = 0.45, i = -1, w = 99, h = 99) => (f === 'up' && (i < 2 || j < 2 || i > w - 3 || j > h - 3) && hash(x >> 1, y >> 1, 31) < k ? mot('frost', x, y) : sides(f) && j === 0 && hash(x >> 1, y, 33) < k * 0.3 ? mot('frost', x, y) : null);
-// old iron: frost on top, rust along the bottom
-const aged = (f, i, j, w, h, x, y) => frosty(f, j, x, y, 0.45, i, w, h) || (!sides(f) ? null : j === 0 && hash(x, y, 2) < 0.5 ? mot('ironHi', x, y) : j >= h - 1 && hash(x >> 1, y, 3) < 0.45 ? mot('rust', x, y) : null);
-// knotwork: an interlaced diamond lattice, engraved (darker) into a border band
-const knot = (i, j) => ((i + j) % 4 === 0) !== ((i - j + 400) % 4 === 0);
-// armour plates: an engraved knotwork border, bronze rivets at the corners, the odd dent, frost on top
-const plated = (f, i, j, w, h, x, y) => {
+// frost settles along the outer rim of top faces, in short runs (scattered specks shimmer at a distance)
+const frosty = (f, j, x, y, k = 0.45, i = -1, w = 99, h = 99) => {
+  if (f !== 'up') return null;
+  const row = j === 0 || j === h - 1, col = i === 0 || i === w - 1;
+  if (row && hash(x >> 2, y, 31) < k * 0.9) return mot('frost', x, y);
+  if (col && !row && hash(x, y >> 2, 32) < k * 0.9) return mot('frost', x, y);
+  return null;
+};
+// old iron: frost on top, a worn highlight along the top edge, rust where water runs off the bottom
+const aged = (f, i, j, w, h, x, y) => frosty(f, j, x, y, 0.45, i, w, h) || (!sides(f) ? null : j === 0 && hash(x >> 1, y, 2) < 0.75 ? mot('ironHi', x, y) : j >= h - 1 && hash(x >> 1, y, 3) < 0.45 ? mot('rust', x, y) : null);
+// knotwork: a twisted rope two pixels wide, carved along a border (t runs along it, s across it)
+const rope = (t, s) => { const m = (t - s + 400) % 4; return m <= 1 ? 'dark' : m === 2 ? 'lit' : null; };
+// a dent where a blow landed: a dark pit with the light catching the lip below it. n dents on the face, placed by seed
+const dentAt = (i, j, w, h, seed, n = 2) => {
+  for (let k = 0; k < n; k++) {
+    const di = 2 + Math.floor(hash(seed, k, 71) * Math.max(1, w - 5)), dj = 2 + Math.floor(hash(seed, k, 73) * Math.max(1, h - 5));
+    if (i === di && j === dj) return 'pit';
+    if (i === di && j === dj + 1) return 'lip';
+  }
+  return null;
+};
+// armour plates: a carved rope border on big plates, bronze rivets at the corners, frost on top;
+// dented (seed) only on the faces that take blows
+const platedWith = (seed) => (f, i, j, w, h, x, y) => {
   const fr = frosty(f, j, x, y, 0.45, i, w, h); if (fr) return fr;
   if (!sides(f)) return null;
   if (i === 0 || j === 0 || i === w - 1 || j === h - 1) return mot('plateHi', x, y);
   if ((i === 1 || i === w - 2) && (j === 1 || j === h - 2)) return P.brass[2];
-  const border = i <= 3 || j <= 3 || i >= w - 4 || j >= h - 4;
-  if (border && w > 13 && h > 9 && knot(i, j)) return P.char[2];
-  if (hash(x, y, 7) < 0.03) return P.char[1];
+  if (w > 13 && h > 9) {
+    const d = Math.min(i, j, w - 1 - i, h - 1 - j);
+    if (d === 2 || d === 3) {
+      const along = i === d || i === w - 1 - d ? j : i;
+      const r = rope(along, d - 2);
+      if (r === 'dark') return P.char[2];
+      if (r === 'lit') return P.plateHi[0];
+    }
+  }
+  if (seed !== undefined && f === 'north') {
+    const dent = dentAt(i, j, w, h, seed);
+    if (dent === 'pit') return P.char[2];
+    if (dent === 'lip') return P.plateHi[0];
+  }
   return null;
 };
+const plated = platedWith();
 // cracked stone: a wandering crack with blue rune-light in it and iron staples across it
 const crackAt = (i, j, w, h, seed) => {
   const x0 = Math.floor(hash(seed, 1, 5) * (w - 6)) + 3, s = (hash(seed, 2, 5) - 0.5) * 0.9, ph = hash(seed, 3, 5) * 6;
@@ -109,7 +142,9 @@ const crackAt = (i, j, w, h, seed) => {
   if (j % 5 === 2 && Math.abs(i - cx) <= 2) return 'staple';
   return null;
 };
-const stony = (seed = 0, cracks = true) => (f, i, j, w, h, x, y) => {
+// o.specks: pale grains on the sides (off for the feet, so they don't outshine him); o.chips: chips knocked out of the
+// front face where it strikes
+const stony = (seed = 0, cracks = true, o = {}) => (f, i, j, w, h, x, y) => {
   const fr = frosty(f, j, x, y, 0.35, i, w, h); if (fr) return fr;
   if (cracks && sides(f) && w >= 8 && h >= 8) {
     const c = crackAt(i, j, w, h, seed + f.length * 7);
@@ -117,10 +152,24 @@ const stony = (seed = 0, cracks = true) => (f, i, j, w, h, x, y) => {
     if (c === 'edge') return P.crack[0];
     if (c === 'staple') return mot('iron', x, y);
   }
-  if (sides(f) && hash(x, y, 41) < 0.05) return P.stoneHi[0];
+  if (o.chips && f === 'north') {
+    const d = dentAt(i, j, w, h, seed + 5, 3);
+    if (d === 'pit') return P.crack[0];
+    if (d === 'lip') return P.stoneHi[0];
+  }
+  if (o.specks !== false && sides(f) && hash(x, y, 41) < 0.05) return P.stoneHi[0];
   return null;
 };
-const bandTeeth = (f, i, j, w, h, x, y) => frosty(f, j, x, y, 0.25, i, w, h) || (sides(f) && (i + j) % 3 === 0 ? mot('brassDark', x, y) : hash(x, y, 9) < 0.12 ? mot('patina', x, y) : null);
+// tarnished bronze as metal: a smooth body, a lit top edge, a dark bottom edge where the patina gathers (water runs
+// down and sits there), in small clusters rather than a sprinkle
+const bronze = (f, i, j, w, h, x, y) => {
+  if (!sides(f)) return mot('bronze', x, y);
+  if (h >= 3 && j === h - 1) return hash(x >> 1, y, 23) < 0.22 ? mot('patina', x, y) : P.brassDark[0];
+  if (h >= 2 && j === 0) return P.bronzeHi[0];
+  return mot('bronze', x, y);
+};
+// bronze bands and cog rims: the bronze, with tooth notches down the sides
+const bandTeeth = (f, i, j, w, h, x, y) => frosty(f, j, x, y, 0.25, i, w, h) || (sides(f) && i % 3 === 0 && j > 0 && j < h - 1 ? P.brassDark[0] : bronze(f, i, j, w, h, x, y));
 const leatherStrap = (f, i, j, w, h, x, y) => (sides(f) && (j === 0 || j === h - 1) ? P.char[0] : null);
 
 // A stepped disc (a cylinder made of slabs that don't overlap). axis: the cylinder's axis ('x', 'y' or 'z').
@@ -175,7 +224,7 @@ function leg(side) {
   const s = side > 0 ? 'right' : 'left';
   const X = (a, b) => (side > 0 ? [a, b] : [-b, -a]);
   const cx = LEG_X * side;
-  const toePaint = (k) => (f, i, j, w, h, x, y) => (f === 'north' && j <= 1 ? mot('iron', x, y) : stony(k + 50 * side, false)(f, i, j, w, h, x, y));
+  const toePaint = (k) => (f, i, j, w, h, x, y) => (f === 'north' && j <= 1 ? mot('iron', x, y) : stony(k + 50 * side, false, { specks: false })(f, i, j, w, h, x, y));
   const stance = side > 0 ? [8, 0, 3] : [5, 0, -3];
   return G(`leg_${s}`, [cx, 28, 0], [
     ...cog(`hip_cog_${s}`, [cx, 28, 0], 6, X(22, 24)[0], X(22, 24)[1], 'x'),
@@ -190,16 +239,16 @@ function leg(side) {
       C(`ankle_ring_${s}`, [X(2.5, 23.5)[0], 6.5, -9.5], [X(2.5, 23.5)[1], 8, 9.5], 'brass', { paint: bandTeeth }),
       C(`shin_wrap_${s}`, [X(2.5, 23.5)[0], 9, -9.5], [X(2.5, 23.5)[1], 10.5, 9.5], 'leather', { paint: leatherStrap }),
       G(`shin_guard_${s}`, [cx, 10, -10], [
-        C(`shin_guard_${s}_plate`, [X(5, 21)[0], 8.5, -11], [X(5, 21)[1], 14.5, -9.5], 'plate', { paint: plated }),
-        C(`knee_cap_${s}`, [X(7, 19)[0], 13, -12.5], [X(7, 19)[1], 19.5, -10], 'plate', { paint: plated }),
+        C(`shin_guard_${s}_plate`, [X(5, 21)[0], 8.5, -11], [X(5, 21)[1], 14.5, -9.5], 'plate', { paint: platedWith(5 + side) }),
+        C(`knee_cap_${s}`, [X(7, 19)[0], 13, -12.5], [X(7, 19)[1], 19.5, -10], 'plate', { paint: platedWith(9 + side) }),
       ]),
       G(`foot_${s}`, [cx, 4, 0], [
         ...disc(`ankle_ball_${s}`, [cx, 4, 0], 3, X(6, 20)[0], X(6, 20)[1], 'x', 'iron', { paint: aged }),
-        ...disc(`foot_${s}`, [cx, 0, -3], 12, 0, 3, 'y', 'stone', { paint: stony(23 + side, false) }),
+        ...disc(`foot_${s}`, [cx, 0, -3], 12, 0, 3, 'y', 'stone', { paint: stony(23 + side, false, { specks: false }) }),
         C(`toe_${s}_0`, [cx - 10.75, 0, -17], [cx - 6.75, 4, -12.5], 'stone', { paint: toePaint(0) }),
         C(`toe_${s}_1`, [cx - 3, 0, -18.5], [cx + 3, 4.5, -15], 'stone', { paint: toePaint(1) }),
         C(`toe_${s}_2`, [cx + 6.75, 0, -17], [cx + 10.75, 4, -12.5], 'stone', { paint: toePaint(2) }),
-        C(`heel_${s}`, [cx - 5, 0, 9], [cx + 5, 6, 13], 'stone', { paint: stony(29 + side, false) }),
+        C(`heel_${s}`, [cx - 5, 0, 9], [cx + 5, 6, 13], 'stone', { paint: stony(29 + side, false, { specks: false }) }),
       ], { rot: [stance[0] * 0.6, 0, -stance[2]] }),
     ], { rot: [-stance[0] * 1.6, 0, 0] }),
   ], { rot: stance });
@@ -214,8 +263,15 @@ function shield(name, r, y0, y1, mat, seed) {
     const fr = frosty(f, j, x, y, 0.4, i, w, h); if (fr) return fr;
     if (f !== 'up') return null;
     const rr = Math.hypot(du, dv);
-    if (rr > r - 1.6) return hash(x, y, 51) < 0.25 ? mot('patina', x, y) : mot('brass', x, y);
-    if (rr > r - 3.2 && rr < r - 2.2 && knot(Math.round(du + 40), Math.round(dv + 40))) return P.brassDark[0];
+    // the bronze rim: a lit outer edge, patina in the odd cluster where rain sits against the boards
+    if (rr > r - 0.8) return P.bronzeHi[0];
+    if (rr > r - 1.6) return hash(x >> 1, y >> 1, 51) < 0.12 ? mot('patina', x, y) : mot('bronze', x, y);
+    // a carved rope ring inside the rim
+    if (rr > r - 3.2 && rr < r - 2.2) { const t = Math.round((Math.atan2(dv, du) + Math.PI) * r); if (t % 3 === 0) return P.brassDark[0]; }
+    // dents where blows landed, on the boards
+    const dent = dentAt(Math.round(du + r), Math.round(dv + r), 2 * r, 2 * r, seed + 3, 3);
+    if (dent === 'pit' && rr < r - 4) return P.char[0];
+    if (dent === 'lip' && rr < r - 4) return P.ironHi[0];
     if (Math.round(du + 40) % 3 === 0) return P.char[0];
     const c = crackAt(Math.round(du + r), Math.round(dv + r), 2 * r, 2 * r, seed);
     if (c === 'staple') return mot('iron', x, y);
@@ -274,7 +330,7 @@ function arm(side) {
         ]),
       ])
     : G('fist_left', [fx, 26, 0], [
-        C('fist_core', [fx - 10, 9, -10], [fx + 10, 26, 10], 'stone', { paint: stony(77) }),
+        C('fist_core', [fx - 10, 9, -10], [fx + 10, 26, 10], 'stone', { paint: stony(77, true, { chips: true }) }),
         C('fist_band', [fx - 10.5, 18, -10.5], [fx + 10.5, 20.5, 10.5], 'iron', { paint: (f, i, j, w, h, x, y) => (sides(f) && i % 5 === 2 ? P.brass[1] : aged(f, i, j, w, h, x, y)) }),
         ...[-6.5, -2, 2.5, 7].map((dx, k) => C(`knuckle_${k}`, [fx + dx - 1.5, 21, -11.5], [fx + dx + 1.5, 24, -10], 'iron', { paint: (f, i, j, w, h, x, y) => (f === 'north' ? mot('ironHi', x, y) : null) })),
         C('fist_thumb', [fx + 10, 12, -8], [fx + 13, 21, -1], 'stone', { paint: stony(79, false) }),
@@ -321,7 +377,7 @@ const maskPaint = (f, i, j, w, h, x, y) => {
   if (j >= 5 && j <= 6 && i >= 1 && i <= w - 2) return 'clear'; // the slit (the glow sits just behind it)
   if (j === 4 || j === 7) return P.char[0];
   if (j >= 8 && (i === 3 || i === w - 4)) return P.char[1]; // cheekbone grooves
-  if (j <= 3 && knot(i, j)) return P.char[2];
+  if (j === 1 || j === 2) { const r = rope(i, j - 1); if (r === 'dark') return P.char[2]; if (r === 'lit') return P.stoneHi[0]; }
   return hash(x, y, 43) < 0.08 ? P.stoneHi[0] : null;
 };
 const beardBar = (f, i, j, w, h, x, y) => (sides(f) && j % 6 === 3 ? P.char[0] : sides(f) && i === 0 ? mot('ironHi', x, y) : null);
@@ -339,7 +395,13 @@ const head = G('neck', [0, 74, -8], [
     C('nose_guard', [-1.5, 77, FACE - 3.5], [1.5, 83, FACE - 2], 'iron', { paint: (f, i, j, w, h, x, y) => (f === 'north' && j === 0 ? mot('ironHi', x, y) : f === 'north' && j === 1 ? P.gold[0] : null) }),
     G('brow_left', [-4.5, 84.5, FACE - 2], [C('brow_left_plate', [-10, 84, FACE - 5], [-0.75, 87.5, FACE - 2], 'iron', { paint: aged })], { rot: [0, 0, -10] }),
     G('brow_right', [4.5, 84.5, FACE - 2], [C('brow_right_plate', [0.75, 84, FACE - 5.25], [10, 87.5, FACE - 2], 'iron', { paint: aged })], { rot: [0, 0, 10] }),
-    C('rune_band', [-10, 88, FACE - 2.5], [10, 90, FACE], 'char', { paint: (f, i, j) => (f === 'north' ? runeAt(i, j - 0, 1, -2, 3) || (j === 0 ? P.brass[1] : null) : null) }),
+    // a worn inscription: some glyphs still lit, some burnt down to a dim groove, one worn away
+    C('rune_band', [-10, 88, FACE - 2.5], [10, 90, FACE], 'char', { paint: (f, i, j) => {
+      if (f !== 'north') return null;
+      const g = runeAt(i, j - 0, 1, -2, 3), k = Math.floor((i - 1) / 4);
+      if (g && k !== 2) return k % 2 === 1 ? P.runeDim[0] : g;
+      return j === 0 ? P.brass[1] : null;
+    } }),
     ...[-1, 1].map((sd) => C(`cheek_${sd > 0 ? 'right' : 'left'}`, [sd > 0 ? 10 : -11.5, 75, FACE - 1], [sd > 0 ? 11.5 : -10, 87, -10], 'plate', { paint: plated })),
     G('helm', [0, 90, -12], [
       C('helm_cap', [-10.5, 90, FACE - 0.5], [10.5, 93, -6.5], 'iron', { paint: aged }),
@@ -362,9 +424,26 @@ const head = G('neck', [0, 74, -8], [
 
 // ---------- back drum, key and steam pipes ----------
 const KEY_Y = 76, LOOP = 26, LOOP_H = 11, BAR = 4;
-// the key: tarnished bronze, the hero; a gold inlay runs along its loops
-const keyBronze = (f, i, j, w, h, x, y) => (sides(f) && j === h - 1 ? mot('brassDark', x, y) : hash(x, y, 17) < 0.1 ? mot('patina', x, y) : null);
-const inlay = (f, i, j, w, h, x, y) => (f === 'south' && j === 1 && i > 1 && i < w - 2 && i % 2 === 0 ? P.gold[(i / 2) % 2] : keyBronze(f, i, j, w, h, x, y));
+// the key: tarnished bronze, the hero, with the widest bronze range on him: lit top and left edges, dark bottom and
+// right edges, patina only in the odd cluster on the bottom edge; a gold inlay runs along its loops
+const keyBronze = (f, i, j, w, h, x, y, body = 'bronze') => {
+  if (!sides(f)) return mot(body, x, y);
+  if (j === h - 1) return body === 'bronze' && hash(x >> 1, y, 17) < 0.2 ? mot('patina', x, y) : P.brassDark[0];
+  if (j === 0 || i === 0) return P.bronzeHi[0];
+  if (i === w - 1) return P.brassDark[0];
+  return mot(body, x, y);
+};
+// the outer bars are where the key is gripped and turned: rubbed smooth and lighter, no patina
+const keyGrip = (f, i, j, w, h, x, y) => keyBronze(f, i, j, w, h, x, y, 'bronzeWorn');
+const inlay = (f, i, j, w, h, x, y) => (f === 'south' && j === 2 && i > 1 && i < w - 2 ? P.gold[(i >> 1) % 2] : keyBronze(f, i, j, w, h, x, y));
+// the hub: one gold rune (tiwaz, the warrior's) cut into a dark field, where the chequer was
+const hubPaint = (f, i, j, w, h, x, y) => {
+  if (f === 'south' && i >= 1 && i <= 5 && j >= 2 && j <= 8) {
+    const gi = i - 2, gj = j - 3;
+    return gi >= 0 && gi < 3 && gj >= 0 && gj < 5 && RUNE_LIST[0][gj][gi] === '#' ? P.gold[0] : P.brassDark[0];
+  }
+  return keyBronze(f, i, j, w, h, x, y);
+};
 function keyLoop(side) {
   const s = side > 0 ? 'r' : 'l';
   const X = (a, b) => (side > 0 ? [a, b] : [-b, -a]);
@@ -372,11 +451,19 @@ function keyLoop(side) {
   return [
     C(`key_loop_${s}_top`, [X(4, LOOP)[0], y(LOOP_H - BAR), 34], [X(4, LOOP)[1], y(LOOP_H), 38], 'brass', { paint: inlay }),
     C(`key_loop_${s}_bottom`, [X(4, LOOP)[0], y(-LOOP_H), 34], [X(4, LOOP)[1], y(-LOOP_H + BAR), 38], 'brass', { paint: inlay }),
-    C(`key_loop_${s}_outer`, [X(LOOP - BAR, LOOP)[0], y(-LOOP_H + BAR), 34], [X(LOOP - BAR, LOOP)[1], y(LOOP_H - BAR), 38], 'brass', { paint: keyBronze }),
+    C(`key_loop_${s}_outer`, [X(LOOP - BAR, LOOP)[0], y(-LOOP_H + BAR), 34], [X(LOOP - BAR, LOOP)[1], y(LOOP_H - BAR), 38], 'brass', { paint: keyGrip }),
   ];
 }
+// the drum's back: a carved ring inscription, dim all round, a lit glyph of three staves at each quarter turn
 const drumBack = (f, i, j, w, h, x, y, du, dv) => {
-  if (f === 'south') { const r = Math.hypot(du, dv); if (r > 9 && r < 11.5) { const a = Math.round((Math.atan2(dv, du) + Math.PI) * 9); if (a % 4 !== 3 && hash(a, Math.round(r), 61) < 0.45) return P.rune[0]; } }
+  if (f === 'south') {
+    const r = Math.hypot(du, dv);
+    if (r > 9 && r < 11.5) {
+      const a = Math.atan2(dv, du) + Math.PI, q = Math.round(a / (Math.PI / 2)) * (Math.PI / 2);
+      const s = Math.round((a - q) * r);
+      return Math.abs(s) <= 2 && s % 2 === 0 ? P.rune[0] : P.runeDim[0];
+    }
+  }
   return aged(f, i, j, w, h, x, y);
 };
 const backDrum = G('back_drum', [0, KEY_Y, 15], [
@@ -399,8 +486,9 @@ const backDrum = G('back_drum', [0, KEY_Y, 15], [
     C('arc_c', [-2, KEY_Y + 14, 38.5], [9, KEY_Y + 15, 39.5], 'runeHi', { rotation: [0, 0, 10], origin: [3, KEY_Y + 14.5, 39] }),
   ], { hidden: true }),
   G('key', [0, KEY_Y, 25], [
-    C('key_stem', [-4, KEY_Y - 4, 28], [4, KEY_Y + 4, 33], 'brass', { paint: (f, i, j, w, h, x, y) => (sides(f) && i % 3 === 0 ? mot('brassDark', x, y) : null) }),
-    C('key_hub', [-4, KEY_Y - 6, 33], [4, KEY_Y + 6, 38], 'brass', { paint: (f, i, j, w, h, x, y) => (f === 'south' && i >= 2 && i <= 5 && j >= 3 && j <= 8 ? ((i + j) % 2 ? P.gold[0] : P.brassDark[0]) : null) }),
+    // the stem is knurled where the collar's ratchet works it: rubbed bright between the grooves
+    C('key_stem', [-4, KEY_Y - 4, 28], [4, KEY_Y + 4, 33], 'brass', { paint: (f, i, j, w, h, x, y) => (sides(f) && i % 3 === 0 ? P.brassDark[0] : keyGrip(f, i, j, w, h, x, y)) }),
+    C('key_hub', [-4, KEY_Y - 6, 33], [4, KEY_Y + 6, 38], 'brass', { paint: hubPaint }),
     ...keyLoop(1),
     ...keyLoop(-1),
   ], { rot: [0, 0, 90] }),
@@ -427,7 +515,7 @@ const sealPaint = (f, i, j, w, h, x, y, du, dv) => {
   if (r > 4) return Math.round((Math.atan2(dv, du) + Math.PI) * 4) % 2 === 0 ? P.gold[0] : P.gold[1];
   const hx = Math.round(du + 3), hy = Math.round(3 - dv);
   if (hx >= 0 && hx < 7 && hy >= 0 && hy < 7 && HAMMER[hy][hx] === '#') return P.brassDark[0];
-  return hash(x, y, 47) < 0.15 ? mot('patina', x, y) : null;
+  return mot('bronze', x, y);
 };
 // the chest under the pectoral plates: cracked, rune-light showing through (seen once the plates are gone)
 const chestPaint = (f, i, j, w, h, x, y) => {
@@ -440,9 +528,17 @@ const GZ = -16; // the upper chest's front face
 const pectoral = (side) => {
   const s = side > 0 ? 'r' : 'l';
   const X = (a, b) => (side > 0 ? [a, b] : [-b, -a]);
-  const pp = (f, i, j, w, h, x, y) => (f === 'north' && j >= 4 && j <= 8 ? runeAt(i, j, 4, 4, 2 + side) : null) || plated(f, i, j, w, h, x, y);
+  // the runes are carved: a dark groove round each glyph, in the plate's darker field
+  const glyph = (i, j) => (j >= 4 && j <= 8 ? runeAt(i, j, 4, 4, 2 + side) : null);
+  const pp = (f, i, j, w, h, x, y) => {
+    if (f === 'north') {
+      const g = glyph(i, j); if (g) return g;
+      if (i > 0 && i < w - 1 && j > 0 && j < h - 1) for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) if (glyph(i + a, j + b)) return P.char[0];
+    }
+    return plated(f, i, j, w, h, x, y);
+  };
   // the plate swings forward about its outer edge, so its inner edge stands proud: a prow under the beard
-  return C(`pectoral_${s}`, [X(16, 26)[0], 61, GZ - 2.5], [X(16, 26)[1], 72, GZ], 'plate', { paint: pp, rotation: [0, -5 * side, 0], origin: [26 * side, 68, GZ] });
+  return C(`pectoral_${s}`, [X(16, 26)[0], 61, GZ - 2.5], [X(16, 26)[1], 72, GZ], 'plateDark', { paint: pp, rotation: [0, -5 * side, 0], origin: [26 * side, 68, GZ] });
 };
 const torso = G('torso', [0, 40, 0], [
   ...disc('waist_core', [0, 40, 0], 6, -12, 12, 'x', 'char', { paint: (f, i, j, w, h, x, y) => (sides(f) && i % 3 === 0 ? P.brassDark[0] : null) }),
@@ -468,7 +564,7 @@ const torso = G('torso', [0, 40, 0], [
 ]);
 
 // ---------- the Juggernaut ----------
-const hipsPaint = (f, i, j, w, h, x, y) => (sides(f) && j <= 1 ? mot('brass', x, y) : aged(f, i, j, w, h, x, y));
+const hipsPaint = (f, i, j, w, h, x, y) => (sides(f) && j === 0 ? P.bronzeHi[0] : sides(f) && j === 1 ? mot('bronze', x, y) : aged(f, i, j, w, h, x, y));
 const jug = G('juggernaut', [0, 0, 0], [
   G('hips', [0, 34, 0], [
     C('girdle', [-19, 35, -12], [19, 40, 12], 'iron', { paint: hipsPaint }),
