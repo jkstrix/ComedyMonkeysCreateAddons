@@ -48,7 +48,7 @@ class PlanningTest {
 			store(),
 			store(new ItemStack(Items.EMERALD, 3), namedWheat.copyWithCount(2)));
 		InputSnapshot snapshot = InputSnapshot.of(stores);
-		ItemCost onlyNamed = new ItemCost(Items.WHEAT.builtInRegistryHolder(), 1,
+		ItemCost onlyNamed = new ItemCost(net.minecraft.core.registries.BuiltInRegistries.ITEM.wrapAsHolder(Items.WHEAT), 1,
 			DataComponentPredicate.builder().expect(DataComponents.CUSTOM_NAME, Component.literal("Best wheat")).build());
 		for (ItemCost goods : List.of(new ItemCost(Items.WHEAT, 20), new ItemCost(Items.STICK, 32), new ItemCost(Items.PAPER, 24),
 			new ItemCost(Items.COAL, 15), new ItemCost(Items.EMERALD, 1), onlyNamed)) {

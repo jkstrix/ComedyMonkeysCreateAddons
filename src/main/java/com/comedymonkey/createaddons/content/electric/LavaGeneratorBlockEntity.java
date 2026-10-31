@@ -36,7 +36,7 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
  * of its side terminals into whatever takes it (an Electric Motor, a Power Line, a battery). While its chunk isn't
  * running, its line runs it on paper from its record ({@link PowerGrid}).
  */
-public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, PowerGrid.Generator, com.comedymonkey.createaddons.content.line.NetworkReading.Shown {
+public final class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, PowerGrid.Generator, com.comedymonkey.createaddons.content.line.NetworkReading.Shown {
 	private static final int TANK = 8000;
 	private static final int BUFFER = 100_000;
 	/** Ticks the window keeps showing lava once the tank runs dry, so a trickle of lava doesn't flicker it. */
@@ -130,6 +130,7 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 
 	/** Like vanilla's chest: a wrench turning it moves the sides its pipes and cables connect on, so they look again. */
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void setBlockState(BlockState state) {
 		BlockState old = getBlockState();
 		super.setBlockState(state);
@@ -166,14 +167,19 @@ public class LavaGeneratorBlockEntity extends SmartBlockEntity implements IHaveG
 	// ---------- its record, for running on paper while its chunk isn't running ----------
 
 	@Override
-	public PowerGrid.Paper newPaper() {
-		return new PowerGrid.Paper("lava_generator", 1);
+	public String paperKind() {
+		return "lava_generator";
+	}
+
+	@Override
+	public int paperFuels() {
+		return 1;
 	}
 
 	@Override
 	public void record(PowerGrid.Paper p, boolean refresh) {
 		p.set(CMConfig.SERVER.generatorFePerTick(), energy.getEnergyStored(), BUFFER);
-		p.fuel(0).set(tank.getFluidAmount(), TANK, CMConfig.SERVER.generatorLavaPerSecond() / 20.0);
+		p.fuel(0).set(tank.getFluidAmount(), TANK, CMConfig.SERVER.generatorLavaPerSecond() / 20.0, Fluids.LAVA);
 		if (refresh) {
 			feeds.into(p.fuel(0), 0, level);
 			p.row(row());

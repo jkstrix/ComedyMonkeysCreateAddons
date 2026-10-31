@@ -62,7 +62,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.tags.ItemTags;
@@ -89,8 +88,9 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * it, breeding as the Animal Pens do: every interval each adult eats one Fish Food, uses 250 mB of water and has one
  * young (F5, F11). The interval is 5 minutes at 64 RPM and scales with speed and Fruitful. Fish and squid have no young
  * in vanilla, so theirs arrive grown; axolotl young grow up. Young copy their parent; an axolotl birth is blue one time
- * in 1,200, as in vanilla (F13). A sword culls half the adults for their drops; a water bucket scoops one, blue first
- * (F6). A tank of glow squid gives light (F15).
+ * in 1,200, as in vanilla, but a school of another colour holds one blue at most; every one of a blue axolotl's young
+ * is blue, as with two blue parents in vanilla (F13). A sword culls half the adults for their drops; a water bucket
+ * scoops one, blue first (F6). A tank of glow squid gives light (F15).
  */
 public class FishTankBlockEntity extends KineticBlockEntity implements Clearable, MenuProvider {
 	public static final int SHOWN = 4;
@@ -107,6 +107,10 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	private int adults;
 	/** Blue axolotls among the adults. */
 	private int blue;
+	/** The captive is a blue axolotl, so the whole school is blue (F13). */
+	private boolean blueCaptive;
+	/** Game tests: every blue roll hits (never saved). */
+	private boolean forceBlueRolls;
 	private final List<int[]> young = new ArrayList<>();
 	private float progress;
 	/** The captive's bottle made no creature (its mod gone, a tag changed): not tried again until it changes. */
@@ -254,8 +258,43 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 		return getCount() - adults;
 	}
 
+	/** Blue axolotls among the adults. */
 	public int getBlue() {
 		return blue;
+	}
+
+	/** Blue axolotls in the tank, grown or young. */
+	public int getBlueHeld() {
+		int held = blue;
+		for (int[] litter : young)
+			held += litter[2];
+		return held;
+	}
+
+	/** Game tests: every blue roll hits. */
+	public void forceBlueRolls(boolean force) {
+		forceBlueRolls = force;
+	}
+
+	private boolean rollsBlue() {
+		return forceBlueRolls || level.random.nextInt(BLUE_ODDS) == 0;
+	}
+
+	/** How many of the {@code size} creatures in the window are young: the last ones, in proportion to the school. */
+	private int shownYoung(int size) {
+		return getYoung() == 0 ? 0 : adults == 0 ? size
+			: Mth.clamp(Math.round(size * getYoung() / (float) getCount()), 1, Math.max(1, size - 1));
+	}
+
+	/**
+	 * Whether the window's {@code index}th of {@code size} creatures is shown blue: the blue adults first among the
+	 * grown, the blue young first among the young, so a blue one born to a common-coloured school shows at once.
+	 */
+	public boolean shownBlue(int index, int size) {
+		int babies = shownYoung(size), grown = size - babies;
+		if (index < grown)
+			return index < blue;
+		return index - grown < getBlueHeld() - blue;
 	}
 
 	public ItemStack getCaptive() {
@@ -266,6 +305,14 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	private void holdCaptive(ItemStack bottle) {
 		captive = bottle;
 		creatureType = BottledAnimalItem.typeOf(bottle);
+		blueCaptive = isBlueAxolotl(bottle);
+	}
+
+	/** Whether a bottle holds a blue axolotl. */
+	private static boolean isBlueAxolotl(ItemStack bottle) {
+		var data = bottle.get(DataComponents.ENTITY_DATA);
+		return data != null && BottledAnimalItem.typeOf(bottle) == EntityType.AXOLOTL
+			&& data.copyTag().getInt("Variant") == Axolotl.Variant.BLUE.getId();
 	}
 
 	@Nullable
@@ -317,10 +364,10 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	public void setPonderSchool(ItemStack bottle, int grown, int babies, int blueOnes) {
 		setCaptive(bottle.copyWithCount(1));
 		adults = grown;
-		blue = Math.min(blueOnes, grown);
+		blue = blueCaptive ? grown : Math.min(blueOnes, grown);
 		young.clear();
 		if (babies > 0)
-			young.add(new int[] {babies, growTime(), 0});
+			young.add(new int[] {babies, growTime(), blueCaptive ? babies : 0});
 		setChanged();
 		sendData();
 	}
@@ -339,7 +386,7 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 		young.clear();
 		if (!bottle.isEmpty() && bottle.get(DataComponents.ENTITY_DATA) != null) {
 			CompoundTag tag = bottle.get(DataComponents.ENTITY_DATA).copyTag();
-			int isBlue = creatureType == EntityType.AXOLOTL && tag.getInt("Variant") == Axolotl.Variant.BLUE.getId() ? 1 : 0;
+			int isBlue = blueCaptive ? 1 : 0;
 			if (tag.getInt("Age") < 0) {
 				adults = 0;
 				young.add(new int[] {1, Math.min(-tag.getInt("Age"), growTime()), isBlue});
@@ -487,8 +534,8 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 			return drops;
 		LootTable table = server.getServer().reloadableRegistries().getLootTable(creature.getLootTable());
 		DamageSource source = killer != null ? server.damageSources().playerAttack(killer) : server.damageSources().generic();
-		boolean burning = !weapon.isEmpty() && EnchantmentHelper.getItemEnchantmentLevel(
-			server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FIRE_ASPECT), weapon) > 0;
+		boolean burning = !weapon.isEmpty() && weapon.getEnchantmentLevel(
+			server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FIRE_ASPECT)) > 0;
 		if (burning)
 			creature.igniteForSeconds(4);
 		for (int i = 0; i < killed; i++) {
@@ -612,13 +659,21 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 		eat(born);
 		water.drain(born * perBirth, IFluidHandler.FluidAction.EXECUTE);
 		if (isAxolotl()) {
-			int blueBorn = 0;
-			for (int i = 0; i < born; i++)
-				if (level.random.nextInt(BLUE_ODDS) == 0)
-					blueBorn++;
-			young.add(new int[] {born, growTime(), blueBorn});
-			if (blueBorn > 0)
-				ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.TANK_BLUE_AXOLOTL, ItemStack.EMPTY, blueBorn);
+			int rolledBlue = 0;
+			if (blueCaptive) {
+				// its young are all blue anyway: the roll is only the advancement's
+				for (int i = 0; i < born; i++)
+					if (rollsBlue())
+						rolledBlue++;
+			} else if (getBlueHeld() == 0) {
+				// a common-coloured school holds one blue at most: none is born while it has one (F13)
+				for (int i = 0; i < born && rolledBlue == 0; i++)
+					if (rollsBlue())
+						rolledBlue = 1;
+			}
+			young.add(new int[] {born, growTime(), blueCaptive ? born : rolledBlue});
+			if (rolledBlue > 0)
+				ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.TANK_BLUE_AXOLOTL, ItemStack.EMPTY, rolledBlue);
 		} else {
 			adults += born;
 		}
@@ -687,20 +742,19 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 				createFailed = true;
 				break;
 			}
-			// the school's own colour: a caught blue axolotl's young are a common colour
+			// the school's own colour, the captive's: a blue axolotl's young are blue too
 			if (made instanceof Axolotl axolotl && ownVariant == null)
-				ownVariant = axolotl.getVariant() == Axolotl.Variant.BLUE ? Axolotl.Variant.LUCY : axolotl.getVariant();
+				ownVariant = axolotl.getVariant();
 			shown.add(new TankCreature(made, level.random));
 		}
 		// young and blue ones by their place in the school, every tick, so a litter shows grown once it's grown (as the pens)
-		int babies = getYoung() == 0 ? 0 : adults == 0 ? shown.size()
-			: Mth.clamp(Math.round(shown.size() * getYoung() / (float) getCount()), 1, Math.max(1, shown.size() - 1));
+		int babies = shownYoung(shown.size());
 		for (int i = 0; i < shown.size(); i++) {
 			Entity entity = shown.get(i).entity();
 			if (entity instanceof AgeableMob mob)
 				mob.setBaby(i >= shown.size() - babies);
 			if (entity instanceof Axolotl axolotl && ownVariant != null)
-				axolotl.setVariant(i < blue ? Axolotl.Variant.BLUE : ownVariant);
+				axolotl.setVariant(shownBlue(i, shown.size()) ? Axolotl.Variant.BLUE : ownVariant);
 		}
 		float surface = waterLevel();
 		for (TankCreature creature : shown)
@@ -791,8 +845,9 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 		} else {
 			lang().add(getSchool().copy()).style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
 			lang().add(getStatus().copy()).style(isBreeding() ? ChatFormatting.AQUA : ChatFormatting.RED).forGoggles(tooltip, 1);
-			if (blue > 0)
-				lang().add(tr("blue", blue)).style(ChatFormatting.BLUE).forGoggles(tooltip, 1);
+			int blueHeld = getBlueHeld();
+			if (blueHeld > 0)
+				lang().add(tr("blue", blueHeld)).style(ChatFormatting.BLUE).forGoggles(tooltip, 1);
 			int fruitful = getFruitfulLevel();
 			if (fruitful > 0)
 				lang().add(Component.translatable(ComedyMonkeysCreateAddons.MOD_ID + ".gui.animal_pen.fruitful",
@@ -950,6 +1005,7 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void removeComponentsFromTag(CompoundTag tag) {
 		super.removeComponentsFromTag(tag);
 		tag.remove("Enchantments");
@@ -1016,6 +1072,12 @@ public class FishTankBlockEntity extends KineticBlockEntity implements Clearable
 		young.clear();
 		for (Tag entry : tag.getList("Young", Tag.TAG_COMPOUND))
 			young.add(new int[] {((CompoundTag) entry).getInt("Count"), ((CompoundTag) entry).getInt("Ticks"), ((CompoundTag) entry).getInt("Blue")});
+		if (blueCaptive) {
+			// a blue captive's school is all blue: older saves counted its young as a common colour
+			blue = adults;
+			for (int[] litter : young)
+				litter[2] = litter[0];
+		}
 		if (!ItemStack.isSameItemSameComponents(was, captive) || clientPacket && (blue != wasBlue || getCount() < wasCount)) {
 			sample = null;
 			createFailed = false;

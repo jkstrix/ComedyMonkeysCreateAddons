@@ -36,7 +36,19 @@ final class TubeNetwork {
 	/** Nearest the Receiver first, so a load moving on always finds the tube ahead already moved this tick. */
 	final List<BlockPos> tubes = new ArrayList<>();
 	final Map<BlockPos, Direction> home = new HashMap<>();
+	/**
+	 * For each tube (by its place in {@link #tubes}), the tubes whose way home goes through it, and the side of it each is
+	 * on, in {@link Direction#values} order: where an empty tube takes its next load from.
+	 */
+	final List<Behind[]> behind = new ArrayList<>();
 	final List<Entry> inlets = new ArrayList<>();
+	/** The Receiver's: each tube's block entity as last found, so it isn't looked up every tick (dropped once removed). */
+	ClockworkTubeBlockEntity[] found = {};
+
+	/** A tube behind another: its place in {@link #tubes}, and the side of the tube ahead it's on. */
+	record Behind(int tube, Direction side) {}
+
+	private static final Behind[] NONE = {};
 	/** More tubes than it may serve: the farthest are left out. */
 	boolean tooLong;
 	/**
@@ -73,9 +85,12 @@ final class TubeNetwork {
 		net.tubes.add(net.first);
 		ArrayDeque<BlockPos> queue = new ArrayDeque<>();
 		queue.add(net.first);
+		List<Behind> here = new ArrayList<>();
+		// the queue gives the tubes back in the order they were added, so net.behind.get(k) is tubes.get(k)'s
 		while (!queue.isEmpty()) {
 			BlockPos p = queue.poll();
 			BlockState ps = level.getBlockState(p);
+			here.clear();
 			for (Direction side : Direction.values()) {
 				if (!open(ps, side))
 					continue;
@@ -91,6 +106,7 @@ final class TubeNetwork {
 						continue;
 					}
 					net.home.put(n.immutable(), side.getOpposite());
+					here.add(new Behind(net.tubes.size(), side));
 					net.tubes.add(n.immutable());
 					queue.add(n.immutable());
 				} else if (ns.getBlock() instanceof ClockworkInletBlock && ns.getValue(ClockworkInletBlock.FACING) == side) {
@@ -100,7 +116,9 @@ final class TubeNetwork {
 					net.shared = true;
 				}
 			}
+			net.behind.add(here.isEmpty() ? NONE : here.toArray(NONE));
 		}
+		net.found = new ClockworkTubeBlockEntity[net.tubes.size()];
 		return net;
 	}
 }

@@ -40,7 +40,7 @@ public final class JuggernautArrival {
 					if (Math.max(Math.abs(dx), Math.abs(dz)) != r)
 						continue;
 					int x = base.getX() + dx, z = base.getZ() + dz;
-					if (!level.hasChunkAt(new BlockPos(x, base.getY(), z)))
+					if (!com.comedymonkey.createaddons.content.Loaded.at(level, new BlockPos(x, base.getY(), z)))
 						continue; // never loads a chunk to look
 					int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
 					BlockPos at = new BlockPos(x, y, z);

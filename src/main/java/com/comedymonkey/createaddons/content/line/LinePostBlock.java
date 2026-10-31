@@ -69,6 +69,7 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 			BRANCHES.put(d, BooleanProperty.create(d.getSerializedName()));
 	}
 
+	@SuppressWarnings("this-escape") // vanilla's registerDefaultState pattern: its subclasses override nothing it calls
 	public LinePostBlock(Properties properties) {
 		super(properties);
 		BlockState state = stateDefinition.any().setValue(FACING, Direction.UP).setValue(ROLE, PostRole.SINGLE).setValue(WATERLOGGED, false);
@@ -172,7 +173,7 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 		Direction facing = state.getValue(FACING);
 		BlockPos p = pos;
 		for (int i = 0; i < 256; i++) {
-			if (!level.hasChunkAt(p))
+			if (!com.comedymonkey.createaddons.content.Loaded.at(level, p))
 				return null;
 			BlockState s = level.getBlockState(p);
 			if (s.getBlock() != state.getBlock() || s.getValue(FACING) != facing)
@@ -193,7 +194,7 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 		Direction facing = state.getValue(FACING);
 		BlockPos p = pos;
 		for (int i = 0; i < 256; i++) {
-			if (!level.hasChunkAt(p))
+			if (!com.comedymonkey.createaddons.content.Loaded.at(level, p))
 				return null;
 			BlockState s = level.getBlockState(p);
 			if (s.getBlock() != state.getBlock() || s.getValue(FACING) != facing)

@@ -53,8 +53,11 @@ final class RealPlants {
 	/** The little tree: two logs, a cross of leaves and one on top, in blocks from the trunk's base. */
 	private static final int[][] TREE_LOGS = {{0, 0, 0}, {0, 1, 0}};
 	private static final int[][] TREE_LEAVES = {{0, 2, 0}, {1, 2, 0}, {-1, 2, 0}, {0, 2, 1}, {0, 2, -1}, {0, 3, 0}};
-	/** What's worked out once per plant, rather than every frame. Only used on the render thread. */
-	private static final Map<Block, Plant> PLANTS = new IdentityHashMap<>();
+	/**
+	 * What's worked out once per plant, rather than every frame. Concurrent: {@link #canRender} is also asked from
+	 * Flywheel's worker threads (blocks are equal only to themselves, so this is by identity too).
+	 */
+	private static final Map<Block, Plant> PLANTS = new java.util.concurrent.ConcurrentHashMap<>();
 	/** Whether each two-block crop's top half is really there ({@link #hasRealTop}), which depends on the models. */
 	private static final Map<BlockState, Boolean> REAL_TOPS = new IdentityHashMap<>();
 
@@ -91,9 +94,20 @@ final class RealPlants {
 		return PLANTS.computeIfAbsent(block, Plant::of);
 	}
 
-	/** Draws the plant; false if it can't be drawn as blocks, so the generic model is used instead. */
-	static boolean render(ItemStack plant, PlantKind kind, float growth, PoseStack ms, MultiBufferSource buffer, int light,
-						  int overlay) {
+	/**
+	 * Whether {@link #render} draws this plant at this growth (if not, the generic model is drawn instead). Draws
+	 * nothing and reads no models, so it's safe from any thread.
+	 */
+	static boolean canRender(ItemStack plant, PlantKind kind, float growth) {
+		return render(plant, kind, growth, null, null, 0, 0);
+	}
+
+	/**
+	 * Draws the plant; false if it can't be drawn as blocks (then nothing is drawn), so the generic model is used
+	 * instead. With no {@code buffer} it only answers whether it would draw it.
+	 */
+	static boolean render(ItemStack plant, PlantKind kind, float growth, @Nullable PoseStack ms, @Nullable MultiBufferSource buffer,
+						  int light, int overlay) {
 		if (!(plant.getItem() instanceof BlockItem item))
 			return false;
 		Block block = item.getBlock();
@@ -127,7 +141,7 @@ final class RealPlants {
 			block(state.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER), 0, 0, 0, TALL_SCALE * size,
 				ms, buffer, light, overlay);
 			BlockState upper = state.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER);
-			if (drawable(upper) && hasRealTop(upper))
+			if (buffer != null && drawable(upper) && hasRealTop(upper))
 				block(upper, 0, 1, 0, TALL_SCALE * size, ms, buffer, light, overlay);
 			return true;
 		}
@@ -222,9 +236,14 @@ final class RealPlants {
 		return true;
 	}
 
-	/** One block at {@code scale}, centred on the planter, {@code (x, y, z)} blocks from the middle of the soil. */
-	private static void block(BlockState state, int x, int y, int z, float scale, PoseStack ms, MultiBufferSource buffer,
+	/**
+	 * One block at {@code scale}, centred on the planter, {@code (x, y, z)} blocks from the middle of the soil (with no
+	 * {@code buffer}, nothing: {@link #canRender} only asks).
+	 */
+	private static void block(BlockState state, int x, int y, int z, float scale, @Nullable PoseStack ms, @Nullable MultiBufferSource buffer,
 							  int light, int overlay) {
+		if (buffer == null || ms == null)
+			return;
 		ms.pushPose();
 		ms.translate(0.5 + (x - 0.5) * scale, SOIL_Y / 16 + y * scale, 0.5 + (z - 0.5) * scale);
 		ms.scale(scale, scale, scale);

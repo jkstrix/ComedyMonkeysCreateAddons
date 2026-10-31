@@ -50,7 +50,7 @@ public final class LightMounts {
 			return out;
 		for (Direction d : Direction.values()) {
 			BlockPos p = support.relative(d);
-			if (p.equals(except) || !level.hasChunkAt(p))
+			if (p.equals(except) || !com.comedymonkey.createaddons.content.Loaded.at(level, p))
 				continue;
 			BlockState there = level.getBlockState(p);
 			// a hanging lamp's cable: the lamp at its foot is fixed to this block

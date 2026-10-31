@@ -127,6 +127,7 @@ class GeothermalPartBlockTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation") // exercises the block's own rotate and mirror
 	void controllerRotatesAndMirrors() {
 		BlockState north = ModBlocks.GEOTHERMAL_CONTROLLER.get().defaultBlockState();
 		assertEquals(Direction.EAST, north.rotate(Rotation.CLOCKWISE_90).getValue(GeothermalControllerBlock.FACING));

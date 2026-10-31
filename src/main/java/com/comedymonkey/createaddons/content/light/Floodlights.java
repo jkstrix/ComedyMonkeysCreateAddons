@@ -140,8 +140,7 @@ public final class Floodlights {
 
 	/** Every chunk between a and b is loaded (corners in order: the game's own check assumes it). */
 	private static boolean loadedBetween(Level level, BlockPos a, BlockPos b) {
-		return level.hasChunksAt(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()),
-			Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
+		return com.comedymonkey.createaddons.content.Loaded.between(level, a, b);
 	}
 
 	/** A world closed: nobody's aiming any more. */

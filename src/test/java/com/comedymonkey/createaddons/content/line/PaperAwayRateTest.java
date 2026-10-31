@@ -26,26 +26,26 @@ class PaperAwayRateTest {
 
 	@Test
 	void runningMakesTheFullRate() {
-		assertEquals(768, record(768, Map.of()).making(null, false), 1e-9);
+		assertEquals(768, record(768, Map.of()).making(null, null, false), 1e-9);
 	}
 
 	@Test
 	void awayMakesTheFreeSourcesShare() {
-		assertEquals(0, record(768, Map.of()).making(null, true), 1e-9);
-		assertEquals(384, record(768, Map.of(WHEEL, 0.25, MILL, 0.25)).making(null, true), 1e-9);
+		assertEquals(0, record(768, Map.of()).making(null, null, true), 1e-9);
+		assertEquals(384, record(768, Map.of(WHEEL, 0.25, MILL, 0.25)).making(null, null, true), 1e-9);
 	}
 
 	/** Without free sources (every other generator) it's the same running or away. */
 	@Test
 	void noFreeSourcesIsTheFullRate() {
-		assertEquals(1024, record(1024, null).making(null, true), 1e-9);
-		assertEquals(1024, record(1024, null).making(null, false), 1e-9);
+		assertEquals(1024, record(1024, null).making(null, null, true), 1e-9);
+		assertEquals(1024, record(1024, null).making(null, null, false), 1e-9);
 	}
 
 	/** Never more away than running, whatever the shares add up to. */
 	@Test
 	void awayIsCappedByTheRate() {
-		assertEquals(100, record(100, Map.of(WHEEL, 0.8, MILL, 0.8)).making(null, true), 1e-9);
+		assertEquals(100, record(100, Map.of(WHEEL, 0.8, MILL, 0.8)).making(null, null, true), 1e-9);
 	}
 
 	/** Worked forward while away, its store fills at the away rate. */
@@ -53,7 +53,7 @@ class PaperAwayRateTest {
 	void storeFillsAtTheAwayRate() {
 		PowerGrid.Paper p = record(768, Map.of(WHEEL, 0.5));
 		p.at = 0;
-		p.advance(100, null);
+		p.advance(100, null, null);
 		assertEquals(38_400, p.store, 1e-6);
 	}
 }

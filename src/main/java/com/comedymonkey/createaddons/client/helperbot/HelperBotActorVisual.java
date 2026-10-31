@@ -20,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
  * from the animator {@code HelperBotMovement} ticks. Lit as Create lights its own actors: the contraption's own block
  * light here, and the world's light where he is from Flywheel's embedding.
  */
-public class HelperBotActorVisual extends ActorVisual {
+public final class HelperBotActorVisual extends ActorVisual {
 	private final HelperBotRig rig = HelperBotRig.skeleton();
 	private final ClipPlayback playback = new ClipPlayback();
 	private final HelperBotInstances instances;

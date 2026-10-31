@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.phys.Vec3;
 
 /**
  * A machine's model parts as Flywheel instances: every frame its renderer's part method poses them, exactly as it
@@ -35,7 +34,7 @@ import net.minecraft.world.phys.Vec3;
  * Only {@link #beginFrame} (and the constructor) touches the instances: Flywheel runs light updates on its worker
  * threads alongside the frame, so {@link #updateLight} just notes the new light for the next frame.
  */
-public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisual<T> implements SimpleDynamicVisual, LightUpdatedVisual {
+public final class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisual<T> implements SimpleDynamicVisual, LightUpdatedVisual {
 	/** A renderer's part method: poses its parts about {@code ms} (at the block's corner) into {@code sink}. */
 	@FunctionalInterface
 	public interface Parts<T> {
@@ -108,7 +107,7 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 			return;
 		}
 		if (!embedded) {
-			if (context.camera().getPosition().distanceToSqr(Vec3.atCenterOf(pos)) > viewDistanceSqr) {
+			if (pos.distToCenterSqr(context.camera().getPosition()) > viewDistanceSqr) {
 				hideAll();
 				return;
 			}

@@ -35,7 +35,7 @@ import net.minecraft.world.phys.Vec3;
  * {@link LinePostRenderer}'s. Nothing moves, so nothing is done a frame: they're laid out when the visual is made, again
  * when its spans change or a far post comes into view, and lit again only when the light where they hang changes.
  */
-public class LinePostVisual extends AbstractBlockEntityVisual<LinePostBlockEntity> {
+public final class LinePostVisual extends AbstractBlockEntityVisual<LinePostBlockEntity> {
 	public static final ModelResourceLocation SEGMENT = ModelResourceLocation.standalone(ComedyMonkeysCreateAddons.asResource("block/line_fitting/span_segment"));
 	private static final int SEGMENTS = 16;
 

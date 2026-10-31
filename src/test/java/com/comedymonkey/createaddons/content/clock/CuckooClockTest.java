@@ -39,6 +39,7 @@ class CuckooClockTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation") // exercises the block's own rotate and mirror
 	void takesAShaftOnlyInTheBack() {
 		CuckooClockBlock block = ModBlocks.CUCKOO_CLOCK.get();
 		for (Direction facing : Direction.Plane.HORIZONTAL) {

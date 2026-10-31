@@ -30,7 +30,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
  * quarter of its buffer if that's less (a few seconds at high stress). Each start and stop jolts the whole kinetic
  * network, so a weak supply makes it pause now and then rather than stutter.
  */
-public class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity implements com.comedymonkey.createaddons.content.line.NetworkReading.Shown {
+public final class ElectricMotorBlockEntity extends GeneratingKineticBlockEntity implements com.comedymonkey.createaddons.content.line.NetworkReading.Shown {
 	/** Ticks of running it waits to have stored before it starts again after running short. */
 	private static final int RESTART_TICKS = 600;
 	public static final int MIN_SPEED = 1;

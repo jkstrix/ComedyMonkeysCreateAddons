@@ -120,9 +120,14 @@ public final class FluidLines {
 		intakes.add(pos.immutable());
 	}
 
+	/** The Intakes as this tick goes through them (kept, so a tick allocates nothing for it). */
+	private final List<BlockPos> ticking = new ArrayList<>();
+
 	private void tick() {
 		long now = level.getGameTime();
-		for (BlockPos pos : new ArrayList<>(intakes)) {
+		ticking.clear();
+		ticking.addAll(intakes);
+		for (BlockPos pos : ticking) {
 			if (!level.isLoaded(pos))
 				continue;
 			if (!(level.getBlockEntity(pos) instanceof FluidLineBlockEntity be) || be.intakeSide() == null) {
@@ -130,8 +135,9 @@ public final class FluidLines {
 				continue;
 			}
 			Network n = byPos.get(pos);
-			// a chunk it runs through went, or one at its edge came back: worked out again
-			if (n != null && !n.chunksAsBuilt(level)) {
+			// a chunk it runs through went, or one at its edge came back: worked out again (looked at once a tick,
+			// however many Intakes it has)
+			if (n != null && n.chunksCheckedAt != now && !n.chunksAsBuilt(level, now)) {
 				forget(pos);
 				n = null;
 			}
@@ -283,13 +289,23 @@ public final class FluidLines {
 		final Map<BlockPos, Long> offeredAt = new HashMap<>();
 		long fillingUntil = Long.MIN_VALUE / 2;
 		int turn;
+		/** The tick its chunks were last looked at. */
+		long chunksCheckedAt = Long.MIN_VALUE;
+		/**
+		 * The sight slots only change at known ticks (a piece filling or emptying, the fluid in one stopping): the first
+		 * of those still to come, and whether something changed since they were worked out (fluid started moving
+		 * somewhere still, the fill was worked out again). Until then the slots aren't gone through.
+		 */
+		long nextShow = Long.MIN_VALUE;
+		boolean showDirty = true;
 
 		Network(LineTier tier) {
 			this.tier = tier;
 		}
 
-		/** Every chunk it runs through is still there, and none at its edge has come back. */
-		boolean chunksAsBuilt(ServerLevel level) {
+		/** Every chunk it runs through is still there, and none at its edge has come back (looked at in the tick now). */
+		boolean chunksAsBuilt(ServerLevel level, long now) {
+			chunksCheckedAt = now;
 			for (long c : chunks)
 				if (!level.hasChunk(net.minecraft.world.level.ChunkPos.getX(c), net.minecraft.world.level.ChunkPos.getZ(c)))
 					return false;
@@ -466,8 +482,12 @@ public final class FluidLines {
 				given[i] += more;
 				left -= more;
 			}
-			if (left > 0)
-				left -= source.fill(drawn.copyWithAmount(left), FluidAction.EXECUTE);
+			int back = left > 0 ? source.fill(drawn.copyWithAmount(left), FluidAction.EXECUTE) : 0;
+			left -= back;
+			// a Wellspring's record (for generators on paper) goes down with what really left it
+			ServerLevel from = in.tank().level();
+			if (drawn.getAmount() > back && from.getBlockEntity(in.target()) instanceof com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity)
+				PowerGrid.of(from).springDrained(in.target(), drawn.getAmount() - back);
 			Sharing.spend(claims, given, capLeft);
 			for (int i = 0; i < given.length; i++) {
 				// (both ends are loaded: it just drew from one and filled the other)
@@ -481,8 +501,12 @@ public final class FluidLines {
 				for (BlockPos m : open.get(i).meters)
 					metered.merge(m, given[i], Integer::sum);
 				if (given[i] > 0 && now % 5 == 0)
-					for (BlockPos p : open.get(i).path)
-						wetAt.put(p, now);
+					for (BlockPos p : open.get(i).path) {
+						Long was = wetAt.put(p, now);
+						// starting to move where it stood still: its slot changes now (one moving already just goes on)
+						if (was == null || now - was > SHOW_FOR)
+							showDirty = true;
+					}
 			}
 			return drawn.getAmount() - left;
 		}
@@ -509,10 +533,18 @@ public final class FluidLines {
 				holding = held;
 				drain(before, now);
 				rise(before, now);
+				showDirty = true;
 			}
 			if (filled.isEmpty() && applied.isEmpty() && draining.isEmpty())
 				return;
+			// nothing can have changed since the slots were last gone through, until the next tick one changes at
+			if (!showDirty && now < nextShow)
+				return;
+			showDirty = false;
+			long next = Long.MAX_VALUE;
 			int per = tier.drainTicksPerBlock();
+			if (now <= fillingUntil)
+				next = fillingUntil + 1;
 			for (BlockPos pos : members) {
 				FluidStack fluid = filled.getOrDefault(pos, FluidStack.EMPTY);
 				int mode = FluidLineBlockEntity.FULL;
@@ -520,14 +552,20 @@ public final class FluidLines {
 				if (!fluid.isEmpty()) {
 					long at = filledAt.getOrDefault(pos, Long.MIN_VALUE / 2);
 					// not there yet: the fluid is still working its way along; then it creeps through this block
-					if (now < at)
+					if (now < at) {
 						fluid = FluidStack.EMPTY;
-					else if (now < at + per) {
+						next = Math.min(next, at);
+					} else if (now < at + per) {
 						mode = FluidLineBlockEntity.FILLING;
 						since = at;
+						next = Math.min(next, at + per);
 					}
 				}
-				boolean moving = !fluid.isEmpty() && (now - wetAt.getOrDefault(pos, Long.MIN_VALUE / 2) <= SHOW_FOR || now <= fillingUntil);
+				long wet = wetAt.getOrDefault(pos, Long.MIN_VALUE / 2);
+				boolean moving = !fluid.isEmpty() && (now - wet <= SHOW_FOR || now <= fillingUntil);
+				// moving as it ran lately: it stands still again once that's past
+				if (now - wet <= SHOW_FOR)
+					next = Math.min(next, wet + SHOW_FOR + 1);
 				// the last of the fluid running out of a piece that's lost its supply, on its way to the ends
 				if (fluid.isEmpty() && draining.containsKey(pos)) {
 					long end = drainedAt.get(pos);
@@ -538,22 +576,27 @@ public final class FluidLines {
 						if (now >= end - per) {
 							mode = FluidLineBlockEntity.DRAINING;
 							since = end - per;
+							next = Math.min(next, end);
+						} else {
+							next = Math.min(next, end - per);
 						}
 					} else {
 						draining.remove(pos);
 						drainedAt.remove(pos);
 					}
 				}
-				Shown want = fluid.isEmpty() ? null : new Shown(FluidStack.hashFluidAndComponents(fluid), moving, mode, since);
-				if (java.util.Objects.equals(want, applied.get(pos)))
+				Shown was = applied.get(pos);
+				if (fluid.isEmpty() ? was == null
+					: was != null && was.fluid() == FluidStack.hashFluidAndComponents(fluid) && was.moving() == moving && was.mode() == mode && was.since() == since)
 					continue;
-				if (want == null)
+				if (fluid.isEmpty())
 					applied.remove(pos);
 				else
-					applied.put(pos, want);
+					applied.put(pos, new Shown(FluidStack.hashFluidAndComponents(fluid), moving, mode, since));
 				if (level.isLoaded(pos) && level.getBlockEntity(pos) instanceof FluidLineBlockEntity be)
 					be.setFlow(fluid, downstream.getOrDefault(pos, 0), moving, mode, since);
 			}
+			nextShow = next;
 		}
 
 		/**

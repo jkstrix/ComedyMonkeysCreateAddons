@@ -9,6 +9,7 @@ import com.comedymonkey.createaddons.content.tube.ClockworkReceiverBlock;
 import com.comedymonkey.createaddons.content.tube.ClockworkTubeBlock;
 import com.comedymonkey.createaddons.content.tube.ClockworkTubeBlockEntity;
 import com.comedymonkey.createaddons.content.tube.TubeJoint;
+import com.comedymonkey.createaddons.content.tube.TubeJoints;
 import com.comedymonkey.createaddons.content.tube.TubeLoad;
 import com.comedymonkey.createaddons.registry.ModBlocks;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
@@ -279,6 +280,32 @@ public final class TubeGameTests {
 		});
 	}
 
+	/**
+	 * Backed up behind a full chest that then empties: every item taken arrives, once (the Receiver tries a full output
+	 * only every few ticks, and remembers its tubes between ticks; neither may lose or copy a load).
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 400)
+	public static void aBackedUpNetworkLosesNothing(GameTestHelper helper) {
+		network(helper, false);
+		ItemStack[] full = new ItemStack[27];
+		for (int i = 0; i < full.length; i++)
+			full[i] = new ItemStack(Items.DIRT, 64);
+		Container out = chest(helper, OUT, full), source = chest(helper, SOURCE, new ItemStack(Items.COBBLESTONE, 20));
+		drive(helper, 256);
+		helper.runAtTickTime(150, () -> {
+			helper.assertTrue(count(out, Items.COBBLESTONE) == 0, "the full chest took nothing");
+			out.clearContent();
+		});
+		helper.succeedWhen(() -> {
+			helper.assertTrue(count(out, Items.COBBLESTONE) == 20, "expected all 20 cobblestone in the chest, got " + count(out, Items.COBBLESTONE));
+			helper.assertTrue(count(source, Items.COBBLESTONE) == 0, "the source should be empty");
+			for (BlockPos t : TUBES)
+				helper.assertTrue(tube(helper, t).getLoad() == null, "a load is still in the tube at " + t);
+			AABB around = new AABB(helper.absolutePos(RECEIVER)).inflate(4);
+			helper.assertTrue(lying(helper, Items.COBBLESTONE, around) == 0, "cobblestone was dropped");
+		});
+	}
+
 	/** The Receiver's chest is full: loads queue back, one a tube, and the Inlet stops taking (D11, D26). */
 	@GameTest(template = COURSE, timeoutTicks = 200)
 	public static void aFullChestBacksTheTubesUp(GameTestHelper helper) {
@@ -420,5 +447,51 @@ public final class TubeGameTests {
 		} finally {
 			CMConfig.SERVER.clockworkTubeMaxLength.set(max);
 		}
+	}
+
+	/**
+	 * A capped tube looks at its cap again only for changes near enough to matter: with its reason gone quietly (the most
+	 * tubes raised), a change far away leaves it capped, and one close by opens it. (Its own batch: the config is shared,
+	 * and other tests' changes nearby would open it early.)
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 120, batch = "clockwork_tube_far_change")
+	public static void onlyANearbyChangeReopensACap(GameTestHelper helper) {
+		int max = CMConfig.Server.get(CMConfig.SERVER.clockworkTubeMaxLength);
+		// whatever happens, the most tubes is put back
+		java.util.function.Consumer<Runnable> step = check -> {
+			try {
+				check.run();
+			} catch (RuntimeException e) {
+				CMConfig.SERVER.clockworkTubeMaxLength.set(max);
+				throw e;
+			}
+		};
+		step.accept(() -> {
+			CMConfig.SERVER.clockworkTubeMaxLength.set(2);
+			receiver(helper, RECEIVER, Direction.UP);
+			for (BlockPos t : TUBES)
+				tubes(helper, t);
+		});
+		Runnable capped = () -> {
+			helper.assertTrue(joint(helper, TUBES[1], Direction.EAST) == TubeJoint.CAPPED, "the third tube's joint should be capped");
+			helper.assertTrue(joint(helper, TUBES[2], Direction.WEST) == TubeJoint.CAPPED, "both sides of it should be capped");
+		};
+		// (every tube has looked at its joints once by now)
+		helper.runAtTickTime(25, () -> step.accept(() -> {
+			capped.run();
+			CMConfig.SERVER.clockworkTubeMaxLength.set(10);
+			TubeJoints.changed(helper.getLevel(), helper.absolutePos(TUBES[2]).east(1000));
+		}));
+		// two looks each later
+		helper.runAtTickTime(65, () -> step.accept(() -> {
+			capped.run();
+			TubeJoints.changed(helper.getLevel(), helper.absolutePos(TUBES[2]).above(3));
+		}));
+		helper.runAtTickTime(105, () -> step.accept(() -> {
+			helper.assertTrue(joint(helper, TUBES[1], Direction.EAST) == TubeJoint.OPEN && joint(helper, TUBES[2], Direction.WEST) == TubeJoint.OPEN,
+				"a change beside it should have opened the cap");
+			CMConfig.SERVER.clockworkTubeMaxLength.set(max);
+			helper.succeed();
+		}));
 	}
 }

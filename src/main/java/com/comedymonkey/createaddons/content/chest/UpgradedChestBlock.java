@@ -50,7 +50,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * upgrade on a vanilla chest, and turned back into one when its upgrade is removed. A chest (single or double) holds
  * one upgrade; breaking it drops a chest, and the upgrade if no other half remains to keep it. The body is a block model; the lid is drawn by {@code UpgradedChestRenderer} so it can open.
  */
-public class UpgradedChestBlock extends BaseEntityBlock implements IWrenchable, TieredStorageBlock {
+public final class UpgradedChestBlock extends BaseEntityBlock implements IWrenchable, TieredStorageBlock {
 	public static final MapCodec<UpgradedChestBlock> CODEC = simpleCodec(UpgradedChestBlock::new);
 	// Same property objects as vanilla chests, so ChestBlock.getConnectedDirection works on both
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -213,6 +213,7 @@ public class UpgradedChestBlock extends BaseEntityBlock implements IWrenchable, 
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		BlockState rotated = state.rotate(mirror.getRotation(state.getValue(FACING)));
 		return mirror == Mirror.NONE ? rotated : rotated.setValue(TYPE, rotated.getValue(TYPE).getOpposite());
@@ -271,6 +272,7 @@ public class UpgradedChestBlock extends BaseEntityBlock implements IWrenchable, 
 
 	/** Pick-block gives the chest's own item, with its tier (never the contents: stacks over 99 can't go on an item). */
 	@Override
+	@SuppressWarnings("deprecation") // NeoForge's pick-block asks this one, and Create's Display Link screen calls it directly
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
 		return UpgradedChestItem.of(state.getValue(TIER));
 	}

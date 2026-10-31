@@ -41,7 +41,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * it can on all six sides (see {@link TubeJoints}); a wrench on one of its arms shuts that joint, or opens it again, so
  * networks can run side by side (design/specs/clockwork-tubes.md D5, D14, D20, D29). Broken, the load inside drops.
  */
-public class ClockworkTubeBlock extends Block implements IBE<ClockworkTubeBlockEntity>, IWrenchable, SimpleWaterloggedBlock {
+public final class ClockworkTubeBlock extends Block implements IBE<ClockworkTubeBlockEntity>, IWrenchable, SimpleWaterloggedBlock {
 	public static final Map<Direction, EnumProperty<TubeJoint>> JOINTS = new EnumMap<>(Direction.class);
 	static {
 		for (Direction side : Direction.values())

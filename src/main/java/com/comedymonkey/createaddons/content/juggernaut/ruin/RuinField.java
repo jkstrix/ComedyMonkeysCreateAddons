@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.comedymonkey.createaddons.content.juggernaut.ClockworkJuggernaut;
 import com.comedymonkey.createaddons.registry.ModStructures;
 
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -13,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -49,6 +53,10 @@ public class RuinField extends StructurePiece {
 	private final boolean end;
 	/** Worked out once, before any chunk is placed: several worldgen threads place the same piece at once. */
 	private final List<Column> columns;
+	/** How tall its column stands on each spot it built one (x, z packed as a ChunkPos long; the tallest where two meet),
+	 * and where it hung vines, for {@link #built}. */
+	private final Long2IntOpenHashMap heights = new Long2IntOpenHashMap();
+	private final LongOpenHashSet vines = new LongOpenHashSet();
 
 	/** A column of ruin: blocks of {@code kind} from {@code bottom} to below {@code top}, counted from the ground up. */
 	private record Column(int x, int z, int bottom, int top, Kind kind, Direction vine) {}
@@ -63,6 +71,7 @@ public class RuinField extends StructurePiece {
 		this.seed = seed;
 		this.end = end;
 		this.columns = layOut();
+		footprint();
 	}
 
 	public RuinField(CompoundTag tag) {
@@ -72,6 +81,71 @@ public class RuinField extends StructurePiece {
 		this.seed = tag.getLong("Seed");
 		this.end = tag.getBoolean("End");
 		this.columns = layOut();
+		footprint();
+	}
+
+	private void footprint() {
+		for (Column c : columns) {
+			int x = centre.getX() + c.x, z = centre.getZ() + c.z;
+			if (inHall(x, z) || distance(x, z) > 1)
+				continue;
+			long key = ChunkPos.asLong(x, z);
+			heights.put(key, Math.max(heights.get(key), c.top));
+			// vines are only hung within the wall's own chunk
+			int vx = c.vine == null ? x : x + c.vine.getStepX(), vz = c.vine == null ? z : z + c.vine.getStepZ();
+			if (c.vine != null && vx >> 4 == x >> 4 && vz >> 4 == z >> 4)
+				vines.add(ChunkPos.asLong(vx, vz));
+		}
+	}
+
+	/** How tall the field's column at (x, z) stands, from its ground up; 0 where it built none. */
+	public int height(int x, int z) {
+		return heights.get(ChunkPos.asLong(x, z));
+	}
+
+	/** Did the field lay old paving at (x, z), in place of the ground's top block? */
+	public boolean paved(int x, int z) {
+		double t = distance(x, z);
+		return t <= 1 && !inHall(x, z) && chance(x, z, 1) < 0.5 * (1 - t) * (1 - t);
+	}
+
+	private boolean mossAt(int x, int z) {
+		double t = distance(x, z);
+		return !end && t <= 1 && !inHall(x, z) && !paved(x, z) && chance(x, z, 2) < 0.06 * (1 - t);
+	}
+
+	/**
+	 * Could this ruin's field have put the block at {@code pos} there (D62: he crumbles its own blocks, never a player's)?
+	 * A vine where it hung vines, a moss carpet where it laid one, or a block of a column where it built one, no higher
+	 * than that column stands over the ground it stands on: the block must be part of an unbroken run of the ruin's
+	 * blocks reaching down to solid ground (or to the old paving the field laid there). A player's block on top of a
+	 * wall, floating over one or standing apart is not. Height is left to the land: walls follow it, however far it rises
+	 * or falls from the hall.
+	 */
+	public boolean built(BlockGetter level, BlockPos pos) {
+		int x = pos.getX(), z = pos.getZ();
+		if (x < boundingBox.minX() || x > boundingBox.maxX() || z < boundingBox.minZ() || z > boundingBox.maxZ())
+			return false;
+		BlockState state = level.getBlockState(pos);
+		long key = ChunkPos.asLong(x, z);
+		if (state.is(Blocks.VINE))
+			return vines.contains(key);
+		if (state.is(Blocks.MOSS_CARPET) && mossAt(x, z))
+			return true;
+		int top = heights.get(key);
+		if (top <= 0)
+			return false;
+		// down the run of ruin blocks it's part of (at most the column and its paving)
+		BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+		int low = pos.getY(), limit = pos.getY() - top - 1;
+		while (low > limit && level.getBlockState(p.set(x, low - 1, z)).is(ClockworkJuggernaut.RUIN_BLOCKS))
+			low--;
+		// on bare ground, the column starts at the run's lowest block...
+		if (pos.getY() - low < top && ground(level, p.set(x, low - 1, z)))
+			return true;
+		// ...on the old paving (of the ruin's own brick), one higher
+		return paved(x, z) && level.getBlockState(p.set(x, low, z)).is(paving(x, z).getBlock()) && pos.getY() > low
+			&& pos.getY() - (low + 1) < top;
 	}
 
 	@Override
@@ -248,8 +322,14 @@ public class RuinField extends StructurePiece {
 	private boolean groundOk(WorldGenLevel level, BlockPos.MutableBlockPos p, int x, int g, int z) {
 		if (g <= level.getMinBuildHeight() + 1)
 			return false;
-		BlockState below = level.getBlockState(p.set(x, g - 1, z));
-		return below.getFluidState().isEmpty() && below.isSolid() && !below.is(BlockTags.LEAVES) && !below.is(BlockTags.LOGS);
+		return ground(level, p.set(x, g - 1, z));
+	}
+
+	/** A block the ruin can stand on: dry, its top face whole (stone, dirt, sand), and not a tree's leaves or logs. */
+	public static boolean ground(BlockGetter level, BlockPos pos) {
+		BlockState below = level.getBlockState(pos);
+		return below.getFluidState().isEmpty() && below.isFaceSturdy(level, pos, Direction.UP) && !below.is(BlockTags.LEAVES)
+			&& !below.is(BlockTags.LOGS);
 	}
 
 	/** 0 at the hall, 1 at the ruin's edge. */

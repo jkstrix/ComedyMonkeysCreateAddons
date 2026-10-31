@@ -31,7 +31,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
  * show nothing of their own (the tower's tile for each block is drawn instead) and connect only through the tower's
  * insulators.
  */
-public class BatteryBlock extends Block implements IBE<BatteryBlockEntity>, IWrenchable {
+public final class BatteryBlock extends Block implements IBE<BatteryBlockEntity>, IWrenchable {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty FORMED = BooleanProperty.create("formed");
 	/** Joined to a Battery on that side: a bus bar instead of a terminal (left and right as you face its front). */
@@ -107,11 +107,18 @@ public class BatteryBlock extends Block implements IBE<BatteryBlockEntity>, IWre
 		BatteryTowers.placed(level, pos);
 	}
 
-	/** Broken, blown up or carried off: it keeps its share, and a tower it was part of comes apart or re-forms. */
+	/**
+	 * Broken, blown up or carried off: it keeps its share, and a tower it was part of comes apart or re-forms. A
+	 * contraption or Carry On takes the block entity first (its tower came apart then): only now is it known which
+	 * (a contraption's is moved), and what's left re-forms after Carry On.
+	 */
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-		if (!state.is(newState.getBlock()) && level instanceof ServerLevel server && level.getBlockEntity(pos) instanceof BatteryBlockEntity be) {
-			BatteryTowers.removed(server, pos, state, be, movedByPiston);
+		if (!state.is(newState.getBlock()) && level instanceof ServerLevel server) {
+			if (level.getBlockEntity(pos) instanceof BatteryBlockEntity be)
+				BatteryTowers.removed(server, pos, state, be, movedByPiston);
+			else
+				BatteryTowers.blockGone(server, pos, movedByPiston);
 			com.comedymonkey.createaddons.content.line.PowerLines.of(server).changed(pos);
 		}
 		super.onRemove(state, level, pos, newState, movedByPiston);
@@ -168,6 +175,7 @@ public class BatteryBlock extends Block implements IBE<BatteryBlockEntity>, IWre
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

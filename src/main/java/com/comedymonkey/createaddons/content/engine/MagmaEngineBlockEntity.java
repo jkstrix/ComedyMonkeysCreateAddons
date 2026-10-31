@@ -61,6 +61,7 @@ public class MagmaEngineBlockEntity extends GeneratingKineticBlockEntity {
 
 	/** Like vanilla's chest: a wrench turning it moves the sides its pipes and cables connect on, so they look again. */
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void setBlockState(BlockState state) {
 		BlockState old = getBlockState();
 		super.setBlockState(state);

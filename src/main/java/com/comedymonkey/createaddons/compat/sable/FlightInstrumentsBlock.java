@@ -30,7 +30,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * A cockpit panel of four dials (altimeter, airspeed, attitude, heading) facing whoever placed it. The ship's
  * forward is taken as the way the pilot faces the panel.
  */
-public class FlightInstrumentsBlock extends BaseEntityBlock implements IWrenchable {
+public final class FlightInstrumentsBlock extends BaseEntityBlock implements IWrenchable {
 	public static final MapCodec<FlightInstrumentsBlock> CODEC = simpleCodec(FlightInstrumentsBlock::new);
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	/** The console's outline per facing: the lip, then the body stepping back under the leaning panel. */
@@ -83,6 +83,7 @@ public class FlightInstrumentsBlock extends BaseEntityBlock implements IWrenchab
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

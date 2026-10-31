@@ -51,7 +51,7 @@ public class EdgeLightBlockEntity extends RunLightBlockEntity implements com.sim
 		if (next == edges || level == null)
 			return;
 		edges = next;
-		RunLightBlockEntity.runsChanged();
+		RunLightBlockEntity.runsChanged(level);
 		if (!level.isClientSide) {
 			setChanged();
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
@@ -96,14 +96,16 @@ public class EdgeLightBlockEntity extends RunLightBlockEntity implements com.sim
 		return tag;
 	}
 
-	/** On the client: new edges are drawn (the model reads them), and the blocks round about join to them afresh. */
+	/**
+	 * On the client: new edges are drawn (the model reads them), and the blocks round about join to them afresh. (Runs
+	 * are the server's: the client keeps no count of their changes.)
+	 */
 	@Override
 	public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
 		super.handleUpdateTag(tag, registries);
 		int next = tag.getInt("Edges");
 		if (next != edges) {
 			edges = next;
-			RunLightBlockEntity.runsChanged();
 			requestModelDataUpdate();
 			if (level != null)
 				level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);

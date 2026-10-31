@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModEntities;
@@ -26,10 +27,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.event.EventHooks;
 
 /**
  * The ritual (D16-D19, D52, D54): a Winding Key fitted to the back of the centre of a T of four Brass Blocks, turned at a
@@ -193,7 +196,8 @@ public class WindingKeyBlockEntity extends KineticBlockEntity {
 		ClockworkJuggernaut j = ModEntities.CLOCKWORK_JUGGERNAUT.get().create(server);
 		if (j != null) {
 			j.moveTo(spot.pos().x, spot.pos().y, spot.pos().z, front.toYRot(), 0);
-			j.finalizeSpawn(server, server.getCurrentDifficultyAt(BlockPos.containing(spot.pos())), MobSpawnType.TRIGGERED, null);
+			// through NeoForge's hook, so spawn-control mods hear of him (one that cancels the spawn keeps him out of the level)
+			EventHooks.finalizeMobSpawn(j, server, server.getCurrentDifficultyAt(BlockPos.containing(spot.pos())), MobSpawnType.TRIGGERED, null);
 			if (spot.surface()) {
 				// summoned underground (D52): the effigy collapses into steam and he kneels on the surface above
 				j.makeDormant();
@@ -206,6 +210,10 @@ public class WindingKeyBlockEntity extends KineticBlockEntity {
 			} else
 				sound("ritual_unfold", 1);
 			server.addFreshEntity(j);
+			// D41: "Wound Up", for everyone who saw him wake
+			if (j.isAddedToLevel())
+				ModAdvancements.awardNearby(server, worldPosition, ModAdvancements.JUGGERNAUT_SUMMONED, ItemStack.EMPTY, 0,
+					ModAdvancements.SUMMON_NEARBY);
 		}
 		level.destroyBlock(worldPosition, false);
 	}

@@ -15,6 +15,7 @@ import com.simibubi.create.content.logistics.stockTicker.StockTickerInteractionH
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -48,7 +49,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * block, and ducks into one block under anything solid (D17, D22). He turns to face Train Controls that face him (D21).
  * His look and animation are all client side (the renderer, and {@link HelperBotMovement} on contraptions).
  */
-public class HelperBotBlock extends HorizontalDirectionalBlock implements EntityBlock, IWrenchable {
+public final class HelperBotBlock extends HorizontalDirectionalBlock implements EntityBlock, IWrenchable {
 	public static final MapCodec<HelperBotBlock> CODEC = simpleCodec(HelperBotBlock::new);
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	/** Something solid above: his body slides down his post and he ducks. */
@@ -130,12 +131,17 @@ public class HelperBotBlock extends HorizontalDirectionalBlock implements Entity
 		return be != null && be.triggerEvent(id, param);
 	}
 
-	/** Picking him keeps his colour. */
+	/** Picking him keeps his colour and his name, as breaking him does. */
 	@Override
+	@SuppressWarnings("deprecation") // NeoForge's pick-block asks this one, and Create's Display Link screen calls it directly
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
 		ItemStack stack = super.getCloneItemStack(level, pos, state);
-		if (level.getBlockEntity(pos) instanceof HelperBotBlockEntity be && be.dye() != null)
-			stack.set(ModDataComponents.HELPER_BOT_DYE.get(), be.dye());
+		if (level.getBlockEntity(pos) instanceof HelperBotBlockEntity be) {
+			if (be.dye() != null)
+				stack.set(ModDataComponents.HELPER_BOT_DYE.get(), be.dye());
+			if (be.name() != null)
+				stack.set(DataComponents.CUSTOM_NAME, be.name());
+		}
 		return stack;
 	}
 
@@ -161,6 +167,7 @@ public class HelperBotBlock extends HorizontalDirectionalBlock implements Entity
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

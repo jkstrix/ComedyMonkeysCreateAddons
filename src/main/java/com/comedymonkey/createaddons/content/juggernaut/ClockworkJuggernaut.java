@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.config.CMConfig;
+import com.comedymonkey.createaddons.content.juggernaut.ruin.JuggernautRuinStructure;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipClock;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
@@ -63,6 +64,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import org.joml.Vector3f;
 
@@ -75,7 +77,7 @@ import org.joml.Vector3f;
  * <p>
  * The server picks the clip and when it started; clients pose him from it and play its sound cues, as for Trade Bot.
  */
-public class ClockworkJuggernaut extends Monster {
+public final class ClockworkJuggernaut extends Monster {
 	public static final String CLIPS = "/assets/comedymonkeysaddons/clockwork_juggernaut/clips.json";
 
 	/** Where he is in his fight (synced, so clients can show it). */
@@ -158,6 +160,8 @@ public class ClockworkJuggernaut extends Monster {
 	static final int CIRCLE_TICKS = 30;
 	/** Degrees a tick he turns to face his target before a move. */
 	static final float TURN = 9;
+	/** Ticks between looks for where a coiling leap will land (it's redrawn every 2 ticks; the take-off looks afresh). */
+	static final int COIL_AIM_TICKS = 4;
 
 	private final ServerBossEvent bossBar = new ServerBossEvent(Component.translatable("entity.comedymonkeysaddons.clockwork_juggernaut"),
 		BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.NOTCHED_10);
@@ -188,6 +192,24 @@ public class ClockworkJuggernaut extends Monster {
 	private int lastKill = -KILL_MEMORY, wipePending, trackedId = -1;
 	/** Players he's killed this fight (D58): respawned, they don't keep him awake until they hit him again. */
 	private final Set<UUID> fallen = new HashSet<>();
+	/** What else has hurt him this fight (pets, golems, mobs): his blows and cog may hit them; bystanders never (D27). Not saved. */
+	private final Set<UUID> attackers = new HashSet<>();
+	/** The blow that killed him (not saved), and whether a player (or their pet) struck it and who: saved, so a reload in
+	 * his death clip still drops the Mainspring (the loot table wants a player's kill). */
+	@Nullable
+	private DamageSource killingBlow;
+	private boolean playerKill;
+	@Nullable
+	private UUID killer;
+	/** His loot and XP have dropped (saved): never twice for one Juggernaut. */
+	private boolean paidOut;
+	/** Where he stood still last step: an outside shove (a Create contraption moves him by setting his position) is undone
+	 * the next, as nothing may push him (D20, D56). Not saved. */
+	@Nullable
+	private Vec3 anchoredAt;
+	/** Game tests: a hall placed by hand has no structure in the world, so this box stands in for the ruin's pieces. */
+	@Nullable
+	private net.minecraft.world.level.levelgen.structure.BoundingBox testRuin;
 	/** His target's ground speed, blocks a tick, smoothed: where they're running, for the leap. */
 	private Vec3 targetVelocity = Vec3.ZERO;
 	@Nullable
@@ -206,6 +228,10 @@ public class ClockworkJuggernaut extends Monster {
 	private LivingEntity grabbed;
 	private Vec3 leapFrom = Vec3.ZERO, leapTo = Vec3.ZERO;
 	private boolean leaping;
+	/** Where the coiling leap aims, looked up every few ticks (it's ten body-sized collision checks), and ticks till the next. */
+	@Nullable
+	private Vec3 coilAim;
+	private int coilAimTicks;
 	private final Set<UUID> hitThisMove = new HashSet<>();
 
 	public ClockworkJuggernaut(EntityType<? extends ClockworkJuggernaut> type, Level level) {
@@ -391,6 +417,50 @@ public class ClockworkJuggernaut extends Monster {
 
 	@Override
 	protected void customServerAiStep() {
+		holdGround();
+		serverStep();
+		// standing (not walking, charging, spinning after them or in the air): from here, anything that moves him is a shove
+		anchoredAt = !leaping && !charging && zza == 0 && getDeltaMovement().horizontalDistanceSqr() < 1e-6 && !isPassenger()
+			? position() : null;
+	}
+
+	/**
+	 * D20, D56: nothing pushes him. Create's contraptions shove whatever they run into by setting its position (asking
+	 * neither isPushable nor knockback resistance), or by throwing it (a train running it over, a slime-faced
+	 * contraption's bounce), so a move he didn't make while he stood still is put back and any sideways speed he didn't
+	 * give himself taken away, keeping his height and fall so he still falls. His own moves set their speed later in
+	 * the step, so they're untouched.
+	 */
+	private void holdGround() {
+		if (anchoredAt == null || leaping)
+			return;
+		double dx = getX() - anchoredAt.x, dz = getZ() - anchoredAt.z;
+		boolean shoved = dx * dx + dz * dz > 1e-6;
+		if (shoved)
+			setPos(anchoredAt.x, getY(), anchoredAt.z);
+		if (getDeltaMovement().horizontalDistanceSqr() > 1e-8) {
+			setDeltaMovement(0, getDeltaMovement().y, 0);
+			shoved = true;
+		}
+		if (shoved)
+			hurtMarked = true;
+	}
+
+	@Override
+	public void teleportTo(double x, double y, double z) {
+		super.teleportTo(x, y, z);
+		anchoredAt = null; // a command (or a mod) sending him somewhere isn't a shove
+	}
+
+	@Override
+	public boolean teleportTo(ServerLevel level, double x, double y, double z, Set<net.minecraft.world.entity.RelativeMovement> relative,
+							  float yaw, float pitch) {
+		boolean moved = super.teleportTo(level, x, y, z, relative, yaw, pitch);
+		anchoredAt = null;
+		return moved;
+	}
+
+	private void serverStep() {
 		super.customServerAiStep();
 		phaseTicks++;
 		updateBossBar();
@@ -478,6 +548,7 @@ public class ClockworkJuggernaut extends Monster {
 		graceTicks = 0;
 		wipePending = 0;
 		fallen.clear(); // the fight's over
+		attackers.clear();
 		playClip("dormant");
 	}
 
@@ -692,6 +763,8 @@ public class ClockworkJuggernaut extends Monster {
 		charging = false;
 		leaping = false;
 		grabbed = null;
+		coilAim = null;
+		coilAimTicks = 0; // a leap's coil aims at once
 		playClip(next.clip);
 	}
 
@@ -840,7 +913,13 @@ public class ClockworkJuggernaut extends Monster {
 	private void tickLeap(@Nullable LivingEntity target, float t) {
 		// he aims where they're running to, and marks it (frost-blue ring on the ground) so it can be dodged
 		if (t < 1.5f && (target != null || bursting || hopping)) {
-			Vec3 aim = bursting || hopping ? burstTo : leapLanding(target, (1.5f - t) / clipSpeed() + LEAP_FLIGHT);
+			// where they're running to, looked up every few ticks (a landing check is ten checks of his whole box); the
+			// take-off below looks afresh
+			if (!bursting && !hopping && --coilAimTicks <= 0) {
+				coilAim = leapLanding(target, (1.5f - t) / clipSpeed() + LEAP_FLIGHT);
+				coilAimTicks = COIL_AIM_TICKS;
+			}
+			Vec3 aim = bursting || hopping ? burstTo : coilAim;
 			turnToward(aim != null ? aim : target.position(), 6);
 			if (aim != null && t > 0.3f && tickCount % 2 == 0)
 				markLanding(aim);
@@ -1110,8 +1189,9 @@ public class ClockworkJuggernaut extends Monster {
 	public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> RUIN_BLOCKS = net.minecraft.tags.TagKey.create(
 		net.minecraft.core.registries.Registries.BLOCK, com.comedymonkey.createaddons.ComedyMonkeysCreateAddons.asResource("juggernaut_ruin_blocks"));
 
-	/** Within his own ruin: the hall he was found in and the field of broken walls round it (placed by world generation or
-	 * a command alike). */
+	/** Within reach of his own ruin: the hall he was found in and the field of broken walls round it. What of it crumbles
+	 * is asked of the structure itself ({@link #crumbles}), so a ruin {@code /place} put down (which keeps no record of the
+	 * structure) stands firm. */
 	private boolean inRuin() {
 		return home != null && home.closerToCenterThan(position(), RUIN_REACH);
 	}
@@ -1119,9 +1199,20 @@ public class ClockworkJuggernaut extends Monster {
 	/** How far from his hall his ruin reaches (its field's radius, and a little). */
 	static final double RUIN_REACH = 45;
 
-	/** A block of the ruin he's in, which crumbles as he walks into it or stomps by it (D62). */
+	/**
+	 * A block of the ruin he's in, which crumbles as he walks into it or stomps by it (D62): its brick, and part of the
+	 * ruin itself, not a player's wall of the same brick beside it.
+	 */
 	boolean crumbles(BlockPos p) {
-		return home != null && home.closerToCenterThan(Vec3.atCenterOf(p), RUIN_REACH) && level().getBlockState(p).is(RUIN_BLOCKS);
+		return home != null && home.closerToCenterThan(Vec3.atCenterOf(p), RUIN_REACH) && level().getBlockState(p).is(RUIN_BLOCKS)
+			&& partOfRuin(p);
+	}
+
+	/** Built by a Juggernaut Ruin: in its hall, or where its field put a wall, pillar or heap. */
+	private boolean partOfRuin(BlockPos p) {
+		if (testRuin != null)
+			return testRuin.isInside(p);
+		return level() instanceof ServerLevel server && JuggernautRuinStructure.built(server, p);
 	}
 
 	/** Walking or charging, he goes through the ruin's walls: whatever of it is just ahead of him, above his feet. */
@@ -1328,10 +1419,33 @@ public class ClockworkJuggernaut extends Monster {
 	private void tickDying() {
 		stopWalking();
 		if (clipElapsed() >= 3.9f) {
-			DamageSource source = getLastDamageSource() != null ? getLastDamageSource() : damageSources().generic();
+			DamageSource source = killingBlow;
+			// a player's kill, and the vanilla memory of it gone (it isn't saved, and lasts 5 s): back to them, so the loot
+			// table's killed_by_player passes. A reload lost the blow too: theirs again, if they're about
+			if (playerKill && (lastHurtByPlayer == null || lastHurtByPlayerTime <= 0)) {
+				Player by = killer != null ? level().getPlayerByUUID(killer) : null;
+				if (by != null && source == null)
+					source = damageSources().playerAttack(by);
+				// gone (logged off): a stand-in no one gets the credit of, so the Mainspring still drops (D30)
+				setLastHurtByPlayer(by != null ? by : FakePlayerFactory.getMinecraft((ServerLevel) level()));
+				lastHurtByPlayerTime = 100;
+			}
 			setHealth(0);
-			die(source);
+			die(source != null ? source : damageSources().generic());
+			// paid: a save before he's gone (the next tick) must not hand the kill out again
+			playerKill = false;
+			killer = null;
+			killingBlow = null;
 		}
+	}
+
+	/** His Mainspring, loot and XP come out once, whatever saves and reloads land around his death. */
+	@Override
+	protected void dropAllDeathLoot(ServerLevel level, DamageSource source) {
+		if (paidOut)
+			return;
+		paidOut = true;
+		super.dropAllDeathLoot(level, source);
 	}
 
 	@Override
@@ -1446,13 +1560,19 @@ public class ClockworkJuggernaut extends Monster {
 
 	// ---- hitting
 
-	/**
-	 * Living things in a box he can hurt: players not in creative or spectator, their pets (which can hurt him), and
-	 * whatever he's targeting.
-	 */
+	/** Living things in a box he can hurt ({@link #fairGame}). */
 	private List<LivingEntity> victims(AABB box) {
-		return level().getEntitiesOfClass(LivingEntity.class, box, e -> e != this && e.isAlive() && !(e instanceof ClockworkJuggernaut)
-			&& (e instanceof Player p ? fightable(p) : e == getTarget() || e instanceof OwnableEntity pet && pet.getOwner() instanceof Player));
+		return level().getEntitiesOfClass(LivingEntity.class, box, this::fairGame);
+	}
+
+	/**
+	 * D27: what his blows and his cog may hurt: players not in creative or spectator, whatever he's targeting, and
+	 * whatever has hurt him this fight (a pet, a golem). Villagers, golems, livestock and pets that never touched him are
+	 * left be, however close.
+	 */
+	public boolean fairGame(LivingEntity e) {
+		return e != this && e.isAlive() && !(e instanceof ClockworkJuggernaut)
+			&& (e instanceof Player p ? fightable(p) : e == getTarget() || attackers.contains(e.getUUID()));
 	}
 
 	/** Victims within {@code radius} of his centre and {@code halfAngle} degrees of where he faces. */
@@ -1589,6 +1709,9 @@ public class ClockworkJuggernaut extends Monster {
 		// thorns would land in the middle of his own move; only blows count
 		if (level().isClientSide || isInvulnerableTo(source) || phase() == Phase.DYING || source.is(DamageTypes.THORNS))
 			return false;
+		// whatever (but a player) strikes him is fair game for his blows from now on (D27)
+		if (source.getEntity() instanceof LivingEntity attacker && !(attacker instanceof Player) && attacker != this)
+			attackers.add(attacker.getUUID());
 		if (!fromPlayer(source)) {
 			// a golem or a stray mob: no damage, but he'll deal with it if nobody else is about
 			if (source.getEntity() instanceof LivingEntity attacker && attacker != this && getTarget() == null && phase() == Phase.WOUND)
@@ -1630,9 +1753,10 @@ public class ClockworkJuggernaut extends Monster {
 		else if (hurt && !open && phase() == Phase.WOUND && move == null)
 			playClip("hit_wound");
 		if (getHealth() <= floor + 0.01f) {
-			if (stage() >= 3)
+			if (stage() >= 3) {
+				rememberKill(source);
 				beginDying();
-			else
+			} else
 				beginShedding();
 		} else if (hurt && stage() >= 3 && !overdrive && getHealth() <= getMaxHealth() * OVERDRIVE_SHARE)
 			beginOverdrive();
@@ -1655,6 +1779,14 @@ public class ClockworkJuggernaut extends Monster {
 		stopWalking();
 		setPhase(Phase.SHEDDING);
 		playClip("shed_plates_" + (stage() + 1), 1, 0);
+	}
+
+	/** The killing blow, and whether a player (or their pet) struck it and who, kept for the end of his death clip. */
+	private void rememberKill(DamageSource source) {
+		killingBlow = source;
+		Player by = source.getEntity() instanceof Player p ? p : lastHurtByPlayer;
+		playerKill = lastHurtByPlayerTime > 0 && by != null;
+		killer = playerKill ? by.getUUID() : null;
 	}
 
 	private void beginDying() {
@@ -1704,6 +1836,7 @@ public class ClockworkJuggernaut extends Monster {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public boolean canBeAffected(MobEffectInstance effect) {
 		return effect.getEffect() != MobEffects.POISON && effect.getEffect() != MobEffects.WITHER && super.canBeAffected(effect);
 	}
@@ -1801,6 +1934,7 @@ public class ClockworkJuggernaut extends Monster {
 	// ======================================================================== spawning and saving
 
 	@Override
+	@SuppressWarnings("deprecation") // overriding is the intended use; callers go through EventHooks.finalizeMobSpawn
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData data) {
 		SpawnGroupData out = super.finalizeSpawn(level, difficulty, reason, data);
 		// found in a ruin (D31): he stays kneeling until someone comes near (D32)
@@ -1842,6 +1976,13 @@ public class ClockworkJuggernaut extends Monster {
 			fallenTag.add(NbtUtils.createUUID(id));
 		tag.put("Fallen", fallenTag);
 		tag.putInt("Rest", graceTicks);
+		if (playerKill) {
+			tag.putBoolean("PlayerKill", true);
+			if (killer != null)
+				tag.putUUID("Killer", killer);
+		}
+		if (paidOut)
+			tag.putBoolean("PaidOut", true);
 	}
 
 	@Override
@@ -1868,6 +2009,11 @@ public class ClockworkJuggernaut extends Monster {
 		for (Tag id : tag.getList("Fallen", Tag.TAG_INT_ARRAY))
 			fallen.add(NbtUtils.loadUUID(id));
 		overdrive = tag.getBoolean("Overdrive") && phase != Phase.DORMANT && phase != Phase.STIRRING;
+		// saved in his death clip: a player's kill is still theirs when he finishes dying (the blow itself is gone)
+		playerKill = phase == Phase.DYING && tag.getBoolean("PlayerKill");
+		killer = playerKill && tag.hasUUID("Killer") ? tag.getUUID("Killer") : null;
+		killingBlow = null;
+		paidOut = tag.getBoolean("PaidOut");
 		if (hasCustomName())
 			bossBar.setName(getDisplayName());
 		// saved mid-leap: the arc's no-gravity was saved with him, but the leap wasn't
@@ -1885,7 +2031,13 @@ public class ClockworkJuggernaut extends Monster {
 				setPhase(Phase.REWIND);
 				playClip("rewind");
 			}
-			case DYING -> beginDying();
+			case DYING -> {
+				// saved after he died, before he was gone: he stays dead (and goes, next tick), never dies again
+				if (getHealth() > 0 && !paidOut)
+					beginDying();
+				else
+					setPhase(Phase.DYING);
+			}
 			default -> {
 				int wound = woundTicks;
 				startWound();
@@ -1933,6 +2085,26 @@ public class ClockworkJuggernaut extends Monster {
 	public void forceLeap(LivingEntity target) {
 		setTarget(target);
 		startMove(Move.LEAP, target);
+	}
+
+	/** Charges at {@code target} now (game tests). */
+	public void forceCharge(LivingEntity target) {
+		setTarget(target);
+		startMove(Move.CHARGE, target);
+	}
+
+	/** Found in a ruin, kneeling at {@code home}, without breaking out when he wakes (game tests). */
+	public void setRuinHome(BlockPos home) {
+		this.home = home;
+		inRuin = inRuin();
+	}
+
+	/**
+	 * Game tests: treat {@code box} as his ruin's pieces. A hall placed from its template by hand is no structure in the
+	 * world, so the real check ({@link JuggernautRuinStructure#built}) can't see it.
+	 */
+	public void testRuinPieces(@Nullable net.minecraft.world.level.levelgen.structure.BoundingBox box) {
+		testRuin = box;
 	}
 
 	/** How many moves he has started (game tests). */

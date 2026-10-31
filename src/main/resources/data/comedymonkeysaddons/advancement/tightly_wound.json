@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:run_down",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:spring_engine"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.tightly_wound"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.tightly_wound.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "spring_engine_full"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

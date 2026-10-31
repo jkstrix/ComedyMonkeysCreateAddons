@@ -134,6 +134,7 @@ public class LinePostBlockEntity extends BlockEntity implements SpanHolder {
 	 * Spans whose far end is gone (a post moved away on a ship, say, or a battery that came apart) come down. Only the
 	 * owning end drops their wire, so a span pays back once however its two ends find out.
 	 */
+	@Override
 	public void dropBrokenSpans() {
 		if (level == null || level.isClientSide)
 			return;

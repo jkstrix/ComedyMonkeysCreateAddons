@@ -30,7 +30,7 @@ import net.minecraft.world.phys.BlockHitResult;
  * the back, like the generators. Hoppers, funnels and pipes insert both ingredients and extract the result from any
  * side; by hand, right-click with an ingredient to load it and with an empty hand to take the results.
  */
-public class TwoInputMachineBlock extends KineticBlock implements IBE<TwoInputMachineBlockEntity> {
+public final class TwoInputMachineBlock extends KineticBlock implements IBE<TwoInputMachineBlockEntity> {
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 	private final Supplier<BlockEntityType<TwoInputMachineBlockEntity>> type;
@@ -67,6 +67,7 @@ public class TwoInputMachineBlock extends KineticBlock implements IBE<TwoInputMa
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

@@ -24,7 +24,7 @@ import net.neoforged.neoforge.items.SlotItemHandler;
  */
 /* Inventory Profiles Next's sorting would shuffle these machine slots. */
 @IPNIgnore
-public class MonsterCageMenu extends AbstractContainerMenu implements QuickTransferMenu {
+public final class MonsterCageMenu extends AbstractContainerMenu implements QuickTransferMenu {
 	public static final int JAR_X = 8, JAR_Y = 18;
 	public static final int OUTPUT_X = 62, OUTPUT_Y = 18;
 	public static final int CHOW_X = 8, CHOW_Y = 80;
@@ -123,6 +123,8 @@ public class MonsterCageMenu extends AbstractContainerMenu implements QuickTrans
 		Slot slot = slots.get(index);
 		if (!slot.hasItem())
 			return ItemStack.EMPTY;
+		if (index == JAR_SLOT)
+			return quickMoveJar();
 		ItemStack stack = slot.getItem();
 		ItemStack original = stack.copy();
 		if (index < firstPlayer) {
@@ -136,10 +138,25 @@ public class MonsterCageMenu extends AbstractContainerMenu implements QuickTrans
 		}
 		if (stack.isEmpty())
 			slot.setByPlayer(ItemStack.EMPTY);
-		else if (index == JAR_SLOT)
-			slot.setChanged();
 		else
 			slot.set(stack);
+		return original;
+	}
+
+	/**
+	 * The jar goes out through the cage's own extract, so the cage decides: it refuses while a Netherite cage is locked
+	 * down (D41), and taking it culls the horde. The jar the slot shows is only a copy, so it's moved only once the cage
+	 * has said yes, and the cage lets go of its jar only once the copy is in the player's inventory.
+	 */
+	private ItemStack quickMoveJar() {
+		var captive = be.getCaptiveSlot();
+		ItemStack jar = captive.extractItem(0, 1, true);
+		if (jar.isEmpty())
+			return ItemStack.EMPTY;
+		ItemStack original = jar.copy();
+		if (!moveItemStackTo(jar, firstPlayer, slots.size(), true))
+			return ItemStack.EMPTY;
+		captive.extractItem(0, 1, false);
 		return original;
 	}
 

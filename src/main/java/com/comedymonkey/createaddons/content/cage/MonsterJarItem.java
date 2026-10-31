@@ -85,13 +85,21 @@ public class MonsterJarItem extends Item {
 	}
 
 	/**
-	 * The monster in the jar as a new entity (not in any world), or empty. Only a monster a cage could take comes out:
-	 * a stack edited to hold anything else makes nothing.
+	 * Whether a filled jar is the kind that holds its monster. Catching only fills the right kind, so only an edited
+	 * stack fails this (an Iron Jar holding a Wither, which could then be let out anywhere, D21).
+	 */
+	public static boolean holdsItsMonster(ItemStack stack) {
+		EntityType<?> type = typeOf(stack);
+		return type != null && stack.getItem() instanceof MonsterJarItem jar && jar.holds(type);
+	}
+
+	/**
+	 * The monster in the jar as a new entity (not in any world), or empty. Only a monster a cage could take, in the
+	 * kind of jar that holds it, comes out: a stack edited to hold anything else makes nothing.
 	 */
 	public static Optional<Entity> create(ItemStack stack, Level level) {
 		CustomData data = stack.get(DataComponents.ENTITY_DATA);
-		EntityType<?> type = typeOf(stack);
-		if (data == null || type == null || CageRules.kindOf(type) == null)
+		if (data == null || !holdsItsMonster(stack))
 			return Optional.empty();
 		return EntityType.create(data.copyTag(), level).filter(CageRules::isCageable);
 	}

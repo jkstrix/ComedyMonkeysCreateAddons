@@ -56,7 +56,7 @@ class ContraptionBlockSyncPayloadTest {
 
 	private static ContraptionBlockSyncPayload roundTrip(ContraptionBlockSyncPayload payload) {
 		RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(),
-			RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY));
+			RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), net.neoforged.neoforge.network.connection.ConnectionType.NEOFORGE);
 		ContraptionBlockSyncPayload.STREAM_CODEC.encode(buf, payload);
 		ContraptionBlockSyncPayload decoded = ContraptionBlockSyncPayload.STREAM_CODEC.decode(buf);
 		assertEquals(0, buf.readableBytes(), "trailing bytes");

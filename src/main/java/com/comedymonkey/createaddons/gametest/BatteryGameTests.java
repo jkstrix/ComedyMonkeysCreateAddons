@@ -152,7 +152,7 @@ public final class BatteryGameTests {
 			BlockPos abs = helper.absolutePos(p);
 			net.minecraft.world.phys.BlockHitResult hit = new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(abs),
 				Direction.UP, abs, false);
-			((BatteryBlock) ModBlocks.BATTERY.get()).onSneakWrenched(helper.getBlockState(p),
+			ModBlocks.BATTERY.get().onSneakWrenched(helper.getBlockState(p),
 				new net.minecraft.world.item.context.UseOnContext(player, net.minecraft.world.InteractionHand.MAIN_HAND, hit));
 			if (!helper.getBlockState(p).isAir())
 				helper.fail("the Battery is still there");
@@ -227,6 +227,71 @@ public final class BatteryGameTests {
 				helper.fail("the generator's spare didn't charge the Battery");
 			if (LineGameTests.stored(helper, m) <= 0 || be(helper, b2).share() >= 400_000)
 				helper.fail("the Battery didn't run the motor on its line");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Moves energy the way Pipez's cables do: asks how much the receiver would take of what the giver offers (both
+	 * simulated), takes that from the giver for real, then puts what it took into the receiver for real. Returns what
+	 * left the giver and what the receiver gained, which an honest pair always agree on.
+	 */
+	static int[] cablePush(IEnergyStorage from, IEnergyStorage to, int max) {
+		int fromBefore = from.getEnergyStored(), toBefore = to.getEnergyStored();
+		int asked = to.receiveEnergy(from.extractEnergy(max, true), true);
+		int taken = from.extractEnergy(asked, false);
+		to.receiveEnergy(taken, false);
+		return new int[] {fromBefore - from.getEnergyStored(), to.getEnergyStored() - toBefore};
+	}
+
+	/**
+	 * Another mod's cable pushing into a Battery, or pulling from it, moves a tick's worth and loses nothing: what
+	 * leaves the source is what the Battery gains, every tick. Its simulate answers are for this tick; the Power Lines'
+	 * plan still gets a second's worth. The same for a store's record on paper.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 40)
+	public static void cablesNeverLoseEnergy(GameTestHelper helper) {
+		BlockPos b = new BlockPos(2, 1, 2);
+		battery(helper, b);
+		int rate = CMConfig.SERVER.batteryFePerTick(), cap = CMConfig.SERVER.batteryCapacity();
+		// a big generator's store, pushing far more than a Battery's rate a tick
+		net.neoforged.neoforge.energy.EnergyStorage source = new net.neoforged.neoforge.energy.EnergyStorage(4_000_000, 0, 1_000_000, 4_000_000);
+		net.neoforged.neoforge.energy.EnergyStorage sink = new net.neoforged.neoforge.energy.EnergyStorage(4_000_000, 1_000_000, 0, 0);
+		for (int t = 3; t < 8; t++)
+			helper.runAtTickTime(t, () -> {
+				IEnergyStorage battery = energy(helper, b, null);
+				int[] moved = cablePush(source, battery, 1_000_000);
+				if (moved[0] != moved[1])
+					helper.fail("pushing in, the source lost " + moved[0] + " FE and the Battery gained " + moved[1]);
+				if (moved[1] != rate)
+					helper.fail("pushed in " + moved[1] + " FE in a tick, not the Battery's " + rate);
+				// asked again in the same tick, it has no more room this tick
+				if (battery.receiveEnergy(1_000_000, true) != 0)
+					helper.fail("the Battery says it would take more in a tick it already took its rate in");
+			});
+		for (int t = 8; t < 13; t++)
+			helper.runAtTickTime(t, () -> {
+				int[] moved = cablePush(energy(helper, b, null), sink, 1_000_000);
+				if (moved[0] != moved[1] || moved[0] != rate)
+					helper.fail("pulling out, the Battery lost " + moved[0] + " FE and the cable's end gained " + moved[1] + " (rate " + rate + ")");
+			});
+		helper.runAtTickTime(14, () -> {
+			IEnergyStorage battery = energy(helper, b, null);
+			if (!(battery instanceof com.comedymonkey.createaddons.content.line.PowerGrid.Planned plan))
+				throw new net.minecraft.gametest.framework.GameTestAssertException("the Battery's energy isn't planned by the Power Lines");
+			if (plan.planReceive(Integer.MAX_VALUE) != Math.min(cap, 20 * rate) || plan.planExtract(Integer.MAX_VALUE) != 0)
+				helper.fail("the Power Lines' plan reads " + plan.planReceive(Integer.MAX_VALUE) + " in, " + plan.planExtract(Integer.MAX_VALUE)
+					+ " out, not a second's worth in and nothing out");
+			if (battery.receiveEnergy(Integer.MAX_VALUE, true) != rate)
+				helper.fail("asked, the Battery says it would take " + battery.receiveEnergy(Integer.MAX_VALUE, true) + " this tick, not " + rate);
+			// a store's record on paper answers the same way
+			IEnergyStorage paper = com.comedymonkey.createaddons.content.line.PowerGridTesting.paperStore(helper.getLevel(), 40L * rate, 100L * rate, rate);
+			int[] in = cablePush(source, paper, 1_000_000), out = cablePush(paper, sink, 1_000_000);
+			if (in[0] != in[1] || in[1] != rate || out[0] != out[1] || out[0] != rate)
+				helper.fail("a record on paper moved " + java.util.Arrays.toString(in) + " in and " + java.util.Arrays.toString(out) + " out, not "
+					+ rate + " each way with nothing lost");
+			if (!(paper instanceof com.comedymonkey.createaddons.content.line.PowerGrid.Planned p) || p.planExtract(Integer.MAX_VALUE) != 20 * rate)
+				helper.fail("a record on paper isn't planned a second at once");
 			helper.succeed();
 		});
 	}
@@ -585,6 +650,193 @@ public final class BatteryGameTests {
 				helper.fail("a Battery holds " + be(helper, one).share() + ", a full one " + be(helper, full).share());
 			if (energy(helper, master(c), Direction.UP).getEnergyStored() != strike)
 				helper.fail("the tower holds " + energy(helper, master(c), Direction.UP).getEnergyStored());
+			helper.succeed();
+		});
+	}
+
+	// ---------- moved, stale and picked up ----------
+
+	/** A Battery's block entity as saved now (what a chunk unloading, a contraption or Carry On keeps of it). */
+	static net.minecraft.nbt.CompoundTag saved(GameTestHelper helper, BlockPos pos) {
+		return be(helper, pos).saveWithoutMetadata(helper.getLevel().registryAccess());
+	}
+
+	/**
+	 * Back as it was saved, formed and remembering its tower, and checking it a tick later (as it does when its chunk
+	 * loads, or when a contraption or Carry On puts it down).
+	 */
+	static void restore(GameTestHelper helper, BlockPos pos, net.minecraft.nbt.CompoundTag tag) {
+		BlockPos abs = helper.absolutePos(pos);
+		// out of its bank first (the rest keep their shares): it comes back with the charge in the tag
+		be(helper, pos).setCharge(0);
+		be(helper, pos).loadWithComponents(tag, helper.getLevel().registryAccess());
+		helper.getLevel().setBlock(abs, helper.getBlockState(pos).setValue(BatteryBlock.FORMED, true), 2);
+		helper.getLevel().scheduleTick(abs, ModBlocks.BATTERY.get(), 1);
+	}
+
+	/**
+	 * A block whose chunk was unloaded while its tower broke (9 high, broken in layer 5: the lower four re-form on the same
+	 * master) comes back remembering the 9-high tower: only it goes plain, and the live 4-high tower keeps its cable.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 40)
+	public static void staleBlockLeavesALiveTower(GameTestHelper helper) {
+		BlockPos c = new BlockPos(1, 1, 2), post = new BlockPos(9, 1, 3), stale = c.offset(2, 8, 2);
+		batteries(helper, c, 3, 9, 3, 10_000);
+		post(helper, post);
+		net.minecraft.nbt.CompoundTag[] tag = new net.minecraft.nbt.CompoundTag[1];
+		helper.runAtTickTime(5, () -> {
+			if (be(helper, master(c)).height() != 9)
+				helper.fail("didn't form 9 high");
+			Span s = new Span(0, post.subtract(master(c)), 0, LineTier.COPPER, null, false, 3);
+			be(helper, master(c)).addSpan(s);
+			((LinePostBlockEntity) helper.getBlockEntity(post)).addSpan(s.reversed());
+			tag[0] = saved(helper, stale);
+			helper.setBlock(c.offset(1, 4, 1), Blocks.AIR);
+		});
+		helper.runAtTickTime(8, () -> {
+			if (be(helper, master(c)).height() != 4 || be(helper, master(c)).spans().size() != 1)
+				helper.fail("the lower four didn't re-form with their cable");
+			restore(helper, stale, tag[0]);
+		});
+		helper.runAtTickTime(11, () -> {
+			BatteryBlockEntity m = be(helper, master(c));
+			if (!m.isMaster() || m.height() != 4)
+				helper.fail("the live tower was taken apart by a block remembering the old one");
+			for (int y = 0; y < 4; y++)
+				for (int z = 0; z < 3; z++)
+					for (int x = 0; x < 3; x++)
+						if (!formed(helper, c.offset(x, y, z)))
+							helper.fail("not formed at " + c.offset(x, y, z));
+			LinePostBlockEntity p = (LinePostBlockEntity) helper.getBlockEntity(post);
+			if (m.spans().size() != 1 || p.spans().size() != 1 || !p.spans().get(0).equals(m.spans().get(0).reversed()))
+				helper.fail("the live tower's cable moved or came down (tower " + m.spans() + ", post " + p.spans() + ")");
+			if (helper.absolutePos(master(c)).equals(be(helper, stale).master()))
+				helper.fail("the stale block still remembers the old tower");
+			long left = total(helper, c, 3, 9, 3);
+			if (left != 80 * 10_000L)
+				helper.fail("left " + left + ", not 80 Batteries' worth");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * A block a contraption carried off a tower, put down somewhere else after the hole was filled and the tower formed
+	 * again on the same master: only it is plain, and the tower it came from stands.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 40)
+	public static void movedBlockLeavesTheTowerItCameFrom(GameTestHelper helper) {
+		BlockPos c = new BlockPos(2, 1, 2), taken = c.offset(2, 1, 2), away = new BlockPos(14, 1, 14);
+		batteries(helper, c, 3, 3, 3, 10_000);
+		net.minecraft.nbt.CompoundTag[] tag = new net.minecraft.nbt.CompoundTag[1];
+		helper.runAtTickTime(5, () -> {
+			tag[0] = saved(helper, taken);
+			BlockPos abs = helper.absolutePos(taken);
+			helper.getLevel().removeBlockEntity(abs);
+			helper.getLevel().setBlock(abs, Blocks.AIR.defaultBlockState(), 2 | 16 | 64);
+		});
+		// the hole filled: the tower forms again, on the same master
+		helper.runAtTickTime(7, () -> battery(helper, taken));
+		helper.runAtTickTime(10, () -> {
+			if (!be(helper, master(c)).isMaster() || be(helper, master(c)).height() != 3)
+				helper.fail("the tower didn't form again once the hole was filled");
+			// the contraption puts the carried block down
+			battery(helper, away);
+			restore(helper, away, tag[0]);
+		});
+		helper.runAtTickTime(13, () -> {
+			for (int y = 0; y < 3; y++)
+				for (int z = 0; z < 3; z++)
+					for (int x = 0; x < 3; x++)
+						if (!formed(helper, c.offset(x, y, z)))
+							helper.fail("the tower came apart at " + c.offset(x, y, z) + " when the carried block was put down");
+			if (formed(helper, away) || be(helper, away).master() != null)
+				helper.fail("the carried block is still formed, away from its tower");
+			if (total(helper, c, 3, 3, 3) != 26 * 10_000L || be(helper, away).share() != 10_000)
+				helper.fail("the tower holds " + total(helper, c, 3, 3, 3) + " and the carried block " + be(helper, away).share());
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Picked up with Carry On (its block entity first, then the block, not moved): like breaking it, the tower re-forms
+	 * one layer shorter, keeps its cable, and only the picked-up block's share leaves.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 40)
+	public static void carryOnTakesATowerBlock(GameTestHelper helper) {
+		BlockPos c = new BlockPos(1, 1, 2), post = new BlockPos(9, 1, 3), taken = c.offset(1, 3, 1);
+		batteries(helper, c, 3, 4, 3, 40_000);
+		post(helper, post);
+		helper.runAtTickTime(5, () -> {
+			if (be(helper, master(c)).height() != 4)
+				helper.fail("didn't form 4 high");
+			Span s = new Span(0, post.subtract(master(c)), 0, LineTier.COPPER, null, false, 3);
+			be(helper, master(c)).addSpan(s);
+			((LinePostBlockEntity) helper.getBlockEntity(post)).addSpan(s.reversed());
+			BlockPos abs = helper.absolutePos(taken);
+			helper.getLevel().removeBlockEntity(abs);
+			helper.getLevel().removeBlock(abs, false);
+		});
+		helper.runAtTickTime(8, () -> {
+			BatteryBlockEntity m = be(helper, master(c));
+			if (!m.isMaster() || m.height() != 3 || !formed(helper, c.offset(1, 2, 1)) || formed(helper, c.offset(0, 3, 0)))
+				helper.fail("didn't re-form 3 high with the top layer plain (master " + m.isMaster() + ", " + m.height() + " high, " + m.master() + ", middle formed " + formed(helper, c.offset(1, 2, 1)) + ", top corner formed " + formed(helper, c.offset(0, 3, 0)) + ")");
+			LinePostBlockEntity p = (LinePostBlockEntity) helper.getBlockEntity(post);
+			if (m.spans().size() != 1 || p.spans().size() != 1 || !p.spans().get(0).equals(m.spans().get(0).reversed()))
+				helper.fail("the cable came down (tower " + m.spans() + ", post " + p.spans() + ")");
+			long left = total(helper, c, 3, 4, 3);
+			if (left != 35 * 40_000L)
+				helper.fail("left " + left + ", not 35 Batteries' worth");
+			helper.succeed();
+		});
+	}
+
+	/** Placed from a Battery item on a block of stone, by a player. */
+	static void placeFrom(GameTestHelper helper, ItemStack stack, BlockPos pos) {
+		helper.setBlock(pos.below(), Blocks.STONE);
+		net.minecraft.world.entity.player.Player player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+		player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, stack);
+		BlockPos abs = helper.absolutePos(pos.below());
+		net.minecraft.world.phys.BlockHitResult hit = new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(abs).add(0, 0.5, 0),
+			Direction.UP, abs, false);
+		((net.minecraft.world.item.BlockItem) stack.getItem()).place(new net.minecraft.world.item.context.BlockPlaceContext(player,
+			net.minecraft.world.InteractionHand.MAIN_HAND, stack, hit));
+	}
+
+	/**
+	 * Placed, a Battery holds no more than one block can: a stack saying far more (made in creative) is cut to that, and
+	 * a block picked up off a full Industrial Battery, holding its whole share (more than a plain Battery's room), keeps it.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 30)
+	public static void placedChargeIsCapped(GameTestHelper helper) {
+		BlockPos c = new BlockPos(1, 1, 1), huge = new BlockPos(1, 1, 8), share = new BlockPos(5, 1, 8), below = new BlockPos(9, 1, 8);
+		int each = CMConfig.SERVER.industrialBatteryCapacity();
+		batteries(helper, c, 3, 3, 3, each);
+		helper.runAtTickTime(5, () -> {
+			if (!be(helper, master(c)).isMaster())
+				helper.fail("the tower didn't form");
+			ItemStack big = new ItemStack(ModBlocks.BATTERY.get().asItem());
+			big.set(ModDataComponents.BATTERY_CHARGE.get(), 2_000_000_000);
+			placeFrom(helper, big, huge);
+			ItemStack negative = new ItemStack(ModBlocks.BATTERY.get().asItem());
+			negative.set(ModDataComponents.BATTERY_CHARGE.get(), -5);
+			placeFrom(helper, negative, below);
+			// a block of the full tower, as it drops
+			List<ItemStack> drops = Block.getDrops(helper.getBlockState(c.offset(2, 2, 2)), helper.getLevel(), helper.absolutePos(c.offset(2, 2, 2)),
+				helper.getBlockEntity(c.offset(2, 2, 2)));
+			if (drops.size() != 1 || drops.get(0).getOrDefault(ModDataComponents.BATTERY_CHARGE.get(), 0) != each)
+				helper.fail("a block of the full tower dropped " + drops);
+			placeFrom(helper, drops.get(0), share);
+		});
+		helper.runAtTickTime(8, () -> {
+			int most = BatteryBlockEntity.mostCharge();
+			if (most != Math.max(CMConfig.SERVER.batteryCapacity(), each))
+				helper.fail("the most a block holds is " + most);
+			if (be(helper, huge).share() != most)
+				helper.fail("placed from a stack saying 2,000,000,000 FE it holds " + be(helper, huge).share() + ", not " + most);
+			if (be(helper, below).share() != 0)
+				helper.fail("placed from a stack saying -5 FE it holds " + be(helper, below).share());
+			if (be(helper, share).share() != each)
+				helper.fail("the tower block's share came back as " + be(helper, share).share() + ", not " + each);
 			helper.succeed();
 		});
 	}

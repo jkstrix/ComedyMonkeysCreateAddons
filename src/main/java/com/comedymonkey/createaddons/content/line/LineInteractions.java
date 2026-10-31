@@ -135,7 +135,7 @@ public final class LineInteractions {
 				return InteractionResult.PASS;
 			be.setEncasing(null);
 			be.give(player, new ItemStack(casing.getBlock()));
-			level.playSound(null, be.getBlockPos(), casing.getSoundType().getBreakSound(), SoundSource.BLOCKS, 1f, 1f);
+			level.playSound(null, be.getBlockPos(), casing.getSoundType(level, be.getBlockPos(), player).getBreakSound(), SoundSource.BLOCKS, 1f, 1f);
 			return InteractionResult.SUCCESS;
 		}
 		if (be.fitting() != Fitting.NONE)

@@ -372,7 +372,7 @@ public final class StorageGameTests {
 
 	/** What the server sends a client opening this block entity's screen. */
 	private static RegistryFriendlyByteBuf sent(GameTestHelper helper, net.minecraft.world.MenuProvider be, FakePlayer player) {
-		RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), helper.getLevel().registryAccess());
+		RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), helper.getLevel().registryAccess(), net.neoforged.neoforge.network.connection.ConnectionType.NEOFORGE);
 		AbstractContainerMenu menu = be.createMenu(1, player.getInventory(), player);
 		be.writeClientSideData(menu, buf);
 		return buf;

@@ -47,7 +47,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
  * of its shaft's power that comes from free sources (water wheels, windmills), so a far motor or engine can't run it for
  * nothing (design/specs/dynamo.md D11, D12).
  */
-public class ClockworkDynamoBlockEntity extends KineticBlockEntity implements PowerGrid.Generator, NetworkReading.Shown {
+public final class ClockworkDynamoBlockEntity extends KineticBlockEntity implements PowerGrid.Generator, NetworkReading.Shown {
 	/** Stress is set in steps of this, as on the motor. */
 	public static final int STRESS_STEP = ElectricMotorBlockEntity.STRESS_STEP;
 	/** Shaft power sources that cost nothing to run, so they keep a far dynamo going on paper. */
@@ -299,8 +299,8 @@ public class ClockworkDynamoBlockEntity extends KineticBlockEntity implements Po
 	// ---------- its record, for running on paper while its chunk isn't running ----------
 
 	@Override
-	public PowerGrid.Paper newPaper() {
-		return new PowerGrid.Paper("clockwork_dynamo", 0);
+	public String paperKind() {
+		return "clockwork_dynamo";
 	}
 
 	/**

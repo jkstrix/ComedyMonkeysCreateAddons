@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
  * at the pace a Mechanical Drill would mine it (see {@link CobbleGeneratorBlockEntity}). It only comes out through
  * item transport (hoppers, chutes, funnels, pipes, arms) from any side; it stops when its buffer is full.
  */
-public class CobbleGeneratorBlock extends KineticBlock implements IBE<CobbleGeneratorBlockEntity> {
+public final class CobbleGeneratorBlock extends KineticBlock implements IBE<CobbleGeneratorBlockEntity> {
 	/** The front, with the window. The shaft goes into the opposite face. */
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	/** Held off by a redstone signal (lights a wireless generator's antenna). */
@@ -92,6 +92,7 @@ public class CobbleGeneratorBlock extends KineticBlock implements IBE<CobbleGene
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

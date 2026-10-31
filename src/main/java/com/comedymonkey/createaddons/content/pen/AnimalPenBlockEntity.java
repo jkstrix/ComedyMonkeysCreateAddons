@@ -62,7 +62,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -470,8 +469,8 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 			return drops;
 		LootTable table = server.getServer().reloadableRegistries().getLootTable(animal.getLootTable());
 		DamageSource source = killer != null ? server.damageSources().playerAttack(killer) : server.damageSources().generic();
-		boolean burning = !weapon.isEmpty() && EnchantmentHelper.getItemEnchantmentLevel(
-			server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FIRE_ASPECT), weapon) > 0;
+		boolean burning = !weapon.isEmpty() && weapon.getEnchantmentLevel(
+			server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FIRE_ASPECT)) > 0;
 		if (burning)
 			animal.igniteForSeconds(4);
 		for (int i = 0; i < killed; i++) {
@@ -895,6 +894,7 @@ public class AnimalPenBlockEntity extends KineticBlockEntity implements Clearabl
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void removeComponentsFromTag(CompoundTag tag) {
 		super.removeComponentsFromTag(tag);
 		tag.remove("Enchantments");

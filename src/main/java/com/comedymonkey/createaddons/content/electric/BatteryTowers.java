@@ -12,6 +12,7 @@ import com.comedymonkey.createaddons.registry.ModSounds;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
@@ -126,9 +127,11 @@ public final class BatteryTowers {
 				// its tower stands as it was: nothing to do (a check after loading, or after something went missing)
 				if (intact(level, be))
 					return;
-				// what's left of its tower is plain again, and so is it
+				// what's left of its tower is plain again, and so is it. Moved here (a contraption, Carry On), what was
+				// left came apart when it went, and a tower standing there now may be a new one: only it goes plain
+				boolean moved = be.formedAt != null && !pos.equals(be.formedAt);
 				Tower t = towerOf(be);
-				if (t != null)
+				if (t != null && !moved)
 					unform(level, t, null);
 				if (be.master != null || level.getBlockState(pos).getValue(BatteryBlock.FORMED)) {
 					be.dissolveStore();
@@ -157,14 +160,26 @@ public final class BatteryTowers {
 		// (formed before blocks noted where: taken as not moved)
 		if (be.master == null || be.height < MIN || be.formedAt != null && !be.getBlockPos().equals(be.formedAt))
 			return false;
-		for (BlockPos p : blocks(be.master, be.height, be.towerFacing)) {
+		return stands(level, towerOf(be));
+	}
+
+	/** Every block of a tower that's loaded is formed in it, where it formed (it never loads a chunk to look). */
+	private static boolean stands(ServerLevel level, Tower t) {
+		for (BlockPos p : blocks(t.master(), t.height(), t.facing())) {
 			if (!level.isLoaded(p))
 				continue;
-			if (!(level.getBlockEntity(p) instanceof BatteryBlockEntity o) || !BatteryBlock.isFormed(o.getBlockState()) || !be.master.equals(o.master)
-				|| o.height != be.height || o.towerFacing != be.towerFacing || o.formedAt != null && !p.equals(o.formedAt))
+			if (!(level.getBlockEntity(p) instanceof BatteryBlockEntity o) || !BatteryBlock.isFormed(o.getBlockState()) || !in(o, t, p))
 				return false;
 		}
 		return true;
+	}
+
+	/**
+	 * A block at p is part of tower t: it remembers that very tower (master, height and front), and formed at p. A block
+	 * remembering another tower on the same master (one that stood there before, or that it was carried off from) isn't.
+	 */
+	private static boolean in(BatteryBlockEntity be, Tower t, BlockPos p) {
+		return t.equals(towerOf(be)) && (be.formedAt == null || p.equals(be.formedAt));
 	}
 
 	/** A layer of the footprint every block of which is a Battery, plain or in a tower on this same footprint. */
@@ -223,8 +238,9 @@ public final class BatteryTowers {
 		for (Tower t : old)
 			if (!plan.contains(t))
 				unform(level, t, null);
+		// (one a block remembers that doesn't stand as it was, a block of it plain or remembering another, forms again)
 		for (Tower t : plan)
-			if (!old.contains(t)) {
+			if (!old.contains(t) || !stands(level, t)) {
 				form(level, t);
 				formed = true;
 			}
@@ -293,11 +309,17 @@ public final class BatteryTowers {
 			to.giveSpans(moved);
 	}
 
-	/** Back to plain Batteries, each with its share ({@code without}: a block that's going, already given its share). */
-	private static void unform(ServerLevel level, Tower t, @Nullable BlockPos without) {
-		BlockPos master = t.master();
+	/**
+	 * Back to plain Batteries, each with its share ({@code going}: a block that's going, already given its share; its
+	 * block entity may be out of the world already, and nothing here looks for one at its place, which would make a new one).
+	 */
+	private static void unform(ServerLevel level, Tower t, @Nullable BatteryBlockEntity going) {
+		BlockPos master = t.master(), without = going == null ? null : going.getBlockPos();
 		List<BlockPos> blocks = blocks(master, t.height(), t.facing());
-		if (level.isLoaded(master) && level.getBlockEntity(master) instanceof BatteryBlockEntity m) {
+		net.minecraft.world.level.block.entity.BlockEntity atMaster = master.equals(without) ? going
+			: level.isLoaded(master) ? level.getBlockEntity(master) : null;
+		// (only this very tower's blocks: one on the same master remembering another tower is left as it is)
+		if (atMaster instanceof BatteryBlockEntity m && in(m, t, master)) {
 			List<com.comedymonkey.createaddons.content.line.Span> off = m.takeSpans();
 			if (!off.isEmpty())
 				LOOSE.computeIfAbsent(master, k -> new ArrayList<>()).addAll(off);
@@ -305,10 +327,10 @@ public final class BatteryTowers {
 		com.comedymonkey.createaddons.content.line.PowerLines.of(level).changed(master);
 		// (never loading a chunk: a block of it left unloaded checks its tower when it loads, and goes plain then)
 		for (BlockPos p : blocks)
-			if (level.isLoaded(p) && level.getBlockEntity(p) instanceof BatteryBlockEntity be && be.isFormed() && master.equals(be.master))
+			if (!p.equals(without) && level.isLoaded(p) && level.getBlockEntity(p) instanceof BatteryBlockEntity be && be.isFormed() && in(be, t, p))
 				be.dissolveStore();
 		for (BlockPos p : blocks) {
-			if (p.equals(without) || !level.isLoaded(p) || !(level.getBlockEntity(p) instanceof BatteryBlockEntity be) || !master.equals(be.master))
+			if (p.equals(without) || !level.isLoaded(p) || !(level.getBlockEntity(p) instanceof BatteryBlockEntity be) || !in(be, t, p))
 				continue;
 			BlockState s = level.getBlockState(p);
 			be.setTower(null, 0, s.getValue(BatteryBlock.FACING));
@@ -332,6 +354,20 @@ public final class BatteryTowers {
 	// ---------- breaking ----------
 
 	/**
+	 * A tower block whose block entity went before the block (a contraption, Carry On): its tower, already apart, and the
+	 * spans it let go, until the block goes too and says how (only a contraption's is moved).
+	 */
+	private record Pending(Tower tower, java.util.Map<BlockPos, List<com.comedymonkey.createaddons.content.line.Span>> loose) {}
+
+	private static final java.util.Map<GlobalPos, Pending> PENDING = new java.util.HashMap<>();
+
+	/** The server stopped: nothing half done is kept for the next world (a singleplayer game keeps what's static). */
+	public static void clear() {
+		PENDING.clear();
+		LOOSE.clear();
+	}
+
+	/**
 	 * A Battery is going (broken, blown up, carried off): it keeps its share; its tower comes apart and re-forms if it
 	 * can (only the switch-in is heard then). Carried off by a contraption, the rest is going too: nothing re-forms.
 	 */
@@ -341,20 +377,61 @@ public final class BatteryTowers {
 		if (t == null)
 			return;
 		try {
-			unform(level, t, pos);
+			unform(level, t, be);
 			be.setTower(null, 0, state.getValue(BatteryBlock.FACING));
-			if (moving)
-				return;
-			// the runs left below and above the broken layer, within this tower (one stacked on it stays as it is)
-			int y = pos.getY();
-			int[] below = run(level, t, y - 1, -1, pos), above = run(level, t, y + 1, 1, pos);
-			int[] keep = above[1] - above[0] > below[1] - below[0] ? above : below;
-			boolean reformed = keep[1] - keep[0] + 1 >= MIN && arrange(level, t.x0(), t.z0(), keep[0], keep[1], t.facing());
-			if (!reformed)
-				play(level, Sound.UNFORM, middle(t));
+			if (!moving)
+				reform(level, t, pos);
 		} finally {
 			finish(level);
 		}
+	}
+
+	/**
+	 * A Battery's block entity went before its block (a contraption or Carry On takes it that way): it keeps its share
+	 * and its tower comes apart now; whether what's left re-forms waits for the block to go ({@link #blockGone}), which
+	 * tells a contraption (the rest going too) from Carry On (one block picked up).
+	 */
+	static void entityRemoved(ServerLevel level, BlockPos pos, BlockState state, BatteryBlockEntity be) {
+		Tower t = state.getBlock() instanceof BatteryBlock && state.getValue(BatteryBlock.FORMED) ? towerOf(be) : null;
+		be.dissolveStore();
+		if (t == null)
+			return;
+		unform(level, t, be);
+		be.setTower(null, 0, state.getValue(BatteryBlock.FACING));
+		GlobalPos at = GlobalPos.of(level.dimension(), pos.immutable());
+		Pending before = PENDING.remove(at);
+		if (before != null)
+			before.loose().forEach((k, v) -> LOOSE.computeIfAbsent(k, x -> new ArrayList<>()).addAll(v));
+		PENDING.put(at, new Pending(t, new java.util.LinkedHashMap<>(LOOSE)));
+		LOOSE.clear();
+		// the block goes straight after; if it never does, nothing re-forms and the spans come down, as when carried off
+		net.minecraft.server.MinecraftServer server = level.getServer();
+		server.tell(new net.minecraft.server.TickTask(server.getTickCount(), () -> blockGone(level, at.pos(), true)));
+	}
+
+	/** A Battery's block went after its block entity: what's left of its tower re-forms if it can, unless it was moved. */
+	static void blockGone(ServerLevel level, BlockPos pos, boolean moving) {
+		Pending p = PENDING.remove(GlobalPos.of(level.dimension(), pos));
+		if (p == null)
+			return;
+		p.loose().forEach((k, v) -> LOOSE.computeIfAbsent(k, x -> new ArrayList<>()).addAll(v));
+		try {
+			if (!moving)
+				reform(level, p.tower(), pos);
+		} finally {
+			finish(level);
+		}
+	}
+
+	/** After a block of tower t at pos went: the tallest run of full layers left in it re-forms (the lower if two tie). */
+	private static void reform(ServerLevel level, Tower t, BlockPos pos) {
+		// the runs left below and above the broken layer, within this tower (one stacked on it stays as it is)
+		int y = pos.getY();
+		int[] below = run(level, t, y - 1, -1, pos), above = run(level, t, y + 1, 1, pos);
+		int[] keep = above[1] - above[0] > below[1] - below[0] ? above : below;
+		boolean reformed = keep[1] - keep[0] + 1 >= MIN && arrange(level, t.x0(), t.z0(), keep[0], keep[1], t.facing());
+		if (!reformed)
+			play(level, Sound.UNFORM, middle(t));
 	}
 
 	/** From layer y going one way, the full layers on the tower's footprint: {low, high} (empty if high < low). */

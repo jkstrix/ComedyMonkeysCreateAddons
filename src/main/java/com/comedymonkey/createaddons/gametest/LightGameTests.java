@@ -306,6 +306,54 @@ public final class LightGameTests {
 		});
 	}
 
+	/**
+	 * A run's pieces are kept from tick to tick while nothing changes, and a strip added or taken away is seen at once, in
+	 * the same tick; a piece taken away is never among them, even one removed without the run being told. (Its own batch:
+	 * the count of changes is the level's, and other tests' strips would move it.)
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20, batch = "light_run_cache")
+	public static void aRunSeesAPieceAddedOrTakenAwayAtOnce(GameTestHelper helper) {
+		BlockPos start = new BlockPos(1, 1, 2);
+		strips(helper, start, 4);
+		helper.runAtTickTime(2, () -> {
+			var first = strip(helper, start);
+			var run = first.run();
+			if (run.size() != 4)
+				helper.fail("the run of 4 strips has " + run.size() + " pieces");
+			strips(helper, start.east(4), 1);
+			var added = strip(helper, start.east(4));
+			run = first.run();
+			if (run.size() != 5 || !run.contains(added))
+				helper.fail("the strip added this tick isn't in the run: " + run.size() + " pieces");
+			helper.setBlock(start.east(4), net.minecraft.world.level.block.Blocks.AIR);
+			run = first.run();
+			if (run.size() != 4 || run.contains(added))
+				helper.fail("the strip taken away this tick is still in the run: " + run.size() + " pieces");
+			for (var piece : run)
+				if (piece.isRemoved())
+					helper.fail("a removed piece is in the run at " + piece.getBlockPos());
+		});
+		// (by now the strips added and taken away have settled)
+		Object[] kept = new Object[1];
+		helper.runAtTickTime(4, () -> kept[0] = strip(helper, start).run());
+		helper.runAtTickTime(5, () -> {
+			var first = strip(helper, start);
+			var run = first.run();
+			if (run != kept[0])
+				helper.fail("with nothing changed since last tick, the run's pieces were worked out again");
+			// a piece removed with no change counted: left out all the same
+			var gone = strip(helper, start.east(2));
+			gone.setRemoved();
+			var after = first.run();
+			if (after == run || after.contains(gone))
+				helper.fail("a piece removed without the run being told is still in it");
+			for (var piece : after)
+				if (piece.isRemoved())
+					helper.fail("a removed piece is in the run at " + piece.getBlockPos());
+			helper.succeed();
+		});
+	}
+
 	/** A run never passes power on (P7): a Bollard beside its far end, touching no line, stays dark. */
 	@GameTest(template = COURSE, timeoutTicks = 140)
 	public static void stripRunPowersNothingElse(GameTestHelper helper) {
@@ -418,7 +466,7 @@ public final class LightGameTests {
 			Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 			player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STICK));
 			BlockPos abs = helper.absolutePos(start.east(1));
-			((com.comedymonkey.createaddons.content.light.LightStripBlock) ModBlocks.LIGHT_STRIP.get()).onWrenched(helper.getBlockState(start.east(1)),
+			ModBlocks.LIGHT_STRIP.get().onWrenched(helper.getBlockState(start.east(1)),
 				new net.minecraft.world.item.context.UseOnContext(player, InteractionHand.MAIN_HAND,
 					new BlockHitResult(Vec3.atCenterOf(abs), Direction.UP, abs, false)));
 			for (int i = 0; i < 3; i++)
@@ -909,7 +957,7 @@ public final class LightGameTests {
 				.setValue(com.comedymonkey.createaddons.content.line.PowerLineBlock.FACES.get(Direction.DOWN), true));
 		}
 		var result = com.comedymonkey.createaddons.content.light.Festoons.hang(helper.getLevel(), helper.absolutePos(a), Direction.EAST,
-			helper.absolutePos(b), Direction.WEST, new ItemStack(ModItems.FESTOON_LIGHTS.get(), 8));
+			helper.absolutePos(b), Direction.WEST, new ItemStack(ModItems.FESTOON_LIGHTS.get(), 8), null);
 		if (result != com.comedymonkey.createaddons.content.light.Festoons.Result.HUNG)
 			helper.fail("the festoon didn't hang: " + result);
 		if (fed)
@@ -971,6 +1019,87 @@ public final class LightGameTests {
 				helper.fail("power came through the festoon to a light on its far wall");
 			helper.succeed();
 		});
+	}
+
+	/**
+	 * A player clicks a Festoon from {@code a} (on the wall west of it) to {@code b}, as in game: on the wall east of b,
+	 * or, {@code onHookB}, on the hook already at b itself.
+	 */
+	private static void hangByHand(GameTestHelper helper, Player player, ItemStack stack, BlockPos a, BlockPos b, boolean onHookB) {
+		player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+		for (Object[] end : new Object[][] {{a.west(), Direction.EAST}, {onHookB ? b : b.east(), Direction.WEST}}) {
+			BlockPos clicked = helper.absolutePos((BlockPos) end[0]);
+			Direction face = (Direction) end[1];
+			// through the stack, so NeoForge's own placement handling round an item use is in it too
+			stack.useOn(new net.minecraft.world.item.context.UseOnContext(player, InteractionHand.MAIN_HAND,
+				new BlockHitResult(Vec3.atCenterOf(clicked).add(Vec3.atLowerCornerOf(face.getNormal()).scale(0.5)), face, clicked, false)));
+		}
+	}
+
+	/**
+	 * Every hook a Festoon goes on is asked about as a block placement a claim can refuse (P31): a new one at either end,
+	 * and one already there (someone's hook, reached through the wall behind it). Refused, nothing is put up, no string
+	 * hangs (not even from a hook that was there) and no Festoon Lights are used. A hook the player clicked on itself
+	 * isn't asked about again (the click was), so the string hangs, and is paid for.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void aClaimCanRefuseEitherFestoonHook(GameTestHelper helper) {
+		BlockPos a = new BlockPos(2, 3, 3), b = a.east(5), c = b.above(2);
+		for (BlockPos wall : new BlockPos[] {a.west(), b.east(), b.below().east(), c.east()})
+			helper.setBlock(wall, net.minecraft.world.level.block.Blocks.STONE);
+		var level = helper.getLevel();
+		// a hook already up at b, holding a string to c
+		if (com.comedymonkey.createaddons.content.light.Festoons.hang(level, helper.absolutePos(c), Direction.WEST, helper.absolutePos(b), Direction.WEST, null, null)
+			!= com.comedymonkey.createaddons.content.light.Festoons.Result.HUNG)
+			helper.fail("the string from c to b didn't hang");
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		BlockPos[] refused = new BlockPos[1];
+		int[] asked = new int[1];
+		java.util.function.Consumer<net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent> claim = event -> {
+			if (event.getPos().equals(refused[0])) {
+				asked[0]++;
+				event.setCanceled(true);
+			}
+		};
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(claim);
+		try {
+			// the new hook at a refused; a new hook under b (clicked) refused; the hook already at b, reached through its wall, refused
+			for (BlockPos[] ends : new BlockPos[][] {{a, b}, {b.below(), b.below()}, {b, b}}) {
+				BlockPos end = ends[0], to = ends[1];
+				refused[0] = helper.absolutePos(end);
+				asked[0] = 0;
+				ItemStack stack = new ItemStack(ModItems.FESTOON_LIGHTS.get(), 8);
+				hangByHand(helper, player, stack, a, to, false);
+				if (asked[0] == 0)
+					helper.fail("no placement event for the hook at " + end);
+				if (helper.getBlockState(a).is(ModBlocks.FESTOON_HOOK.get()) || helper.getBlockState(b.below()).is(ModBlocks.FESTOON_HOOK.get()))
+					helper.fail("a hook stayed up when the one at " + end + " was refused");
+				if (stack.getCount() != 8)
+					helper.fail("a refused Festoon used " + (8 - stack.getCount()) + " Festoon Lights");
+				if (helper.getBlockEntity(b) instanceof com.comedymonkey.createaddons.content.light.FestoonBlockEntity hook
+					&& hook.partners().contains(helper.absolutePos(a)))
+					helper.fail("the hook that was there holds a string to the refused one");
+			}
+			if (!(helper.getBlockEntity(b) instanceof com.comedymonkey.createaddons.content.light.FestoonBlockEntity hook) || !hook.partners().contains(helper.absolutePos(c)))
+				helper.fail("the string from c to b should still be up");
+			// the hook at b clicked on itself: not asked about again, so it hangs (and the new hook at a is asked about, and allowed)
+			refused[0] = helper.absolutePos(b);
+			asked[0] = 0;
+			ItemStack stack = new ItemStack(ModItems.FESTOON_LIGHTS.get(), 8);
+			hangByHand(helper, player, stack, a, b, true);
+			if (asked[0] != 0)
+				helper.fail("the hook clicked on itself was asked about again");
+			if (!helper.getBlockState(a).is(ModBlocks.FESTOON_HOOK.get()) || !(helper.getBlockEntity(a) instanceof com.comedymonkey.createaddons.content.light.FestoonBlockEntity hook)
+				|| !hook.partners().contains(helper.absolutePos(b)))
+				helper.fail("clicked on the hook at b, the Festoon didn't hang from a to b");
+			int cost = com.comedymonkey.createaddons.content.light.Festoons.cost(com.comedymonkey.createaddons.content.light.Festoons.eye(helper.absolutePos(a), Direction.EAST)
+				.distanceTo(com.comedymonkey.createaddons.content.light.Festoons.eye(helper.absolutePos(b), Direction.WEST)));
+			if (stack.getCount() != 8 - cost)
+				helper.fail("the Festoon used " + (8 - stack.getCount()) + " Festoon Lights");
+		} finally {
+			net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(claim);
+		}
+		helper.succeed();
 	}
 
 	// ---------- moved by contraptions ----------

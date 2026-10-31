@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * onto his instances. The animator itself still ticks on the client tick (his choices and his sounds). His renderer
  * stays for when Flywheel can't draw, for Ponder, the shop screen and the item.
  */
-public class HelperBotVisual extends AbstractBlockEntityVisual<HelperBotBlockEntity> implements SimpleDynamicVisual {
+public final class HelperBotVisual extends AbstractBlockEntityVisual<HelperBotBlockEntity> implements SimpleDynamicVisual {
 	private final HelperBotRig rig = HelperBotRig.skeleton();
 	private final ClipPlayback playback = new ClipPlayback();
 	private final HelperBotInstances instances;

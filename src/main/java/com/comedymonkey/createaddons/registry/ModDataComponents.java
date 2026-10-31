@@ -36,9 +36,25 @@ public final class ModDataComponents {
 	public static final Supplier<DataComponentType<Long>> SPRING_WIND = DATA_COMPONENTS.registerComponentType("spring_wind",
 		builder -> builder.persistent(com.mojang.serialization.Codec.LONG).networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_LONG));
 
+	/**
+	 * The most FE a Battery item can say it holds, whatever the config: the highest either the Battery's or an Industrial
+	 * Battery block's capacity can be set to (a block of a tower carries its share, up to that).
+	 */
+	public static final int BATTERY_CHARGE_MAX = 25_000_000;
+
+	/** A Battery's charge, read back between none and {@link #BATTERY_CHARGE_MAX} (out of range, it's brought in, not refused). */
+	public static final com.mojang.serialization.Codec<Integer> BATTERY_CHARGE_CODEC =
+		com.mojang.serialization.Codec.INT.xmap(ModDataComponents::chargeInRange, v -> v);
+	public static final net.minecraft.network.codec.StreamCodec<io.netty.buffer.ByteBuf, Integer> BATTERY_CHARGE_STREAM_CODEC =
+		net.minecraft.network.codec.ByteBufCodecs.VAR_INT.map(ModDataComponents::chargeInRange, v -> v);
+
 	/** On a Battery: the FE it holds. */
 	public static final Supplier<DataComponentType<Integer>> BATTERY_CHARGE = DATA_COMPONENTS.registerComponentType("battery_charge",
-		builder -> builder.persistent(com.mojang.serialization.Codec.INT).networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
+		builder -> builder.persistent(BATTERY_CHARGE_CODEC).networkSynchronized(BATTERY_CHARGE_STREAM_CODEC));
+
+	private static int chargeInRange(int fe) {
+		return Math.max(0, Math.min(BATTERY_CHARGE_MAX, fe));
+	}
 
 	private ModDataComponents() {}
 }

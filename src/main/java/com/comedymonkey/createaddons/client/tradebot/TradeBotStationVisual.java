@@ -31,7 +31,7 @@ import net.minecraft.world.phys.Vec3;
  * frame by the same code as {@link TradeBotStationRenderer} (it follows Trade Bot's clip, so it can move any frame), then
  * copied onto the instance trees. There's one station per Trade Bot, so this costs little.
  */
-public class TradeBotStationVisual extends AbstractBlockEntityVisual<TradeBotStationBlockEntity> implements SimpleDynamicVisual {
+public final class TradeBotStationVisual extends AbstractBlockEntityVisual<TradeBotStationBlockEntity> implements SimpleDynamicVisual {
 	private static final Material MODEL = material(TradeBotRenderer.TEXTURE, false), GLOW = material(TradeBotRenderer.GLOW, true);
 
 	/** The station's bones, posed as the renderer poses them, and its instance trees, bone by bone. */

@@ -42,7 +42,7 @@ import net.minecraft.world.phys.BlockHitResult;
  * upgrade on a vanilla barrel and turned back into one when the upgrade is removed. Breaking it drops a barrel plus
  * the upgrade.
  */
-public class UpgradedBarrelBlock extends BaseEntityBlock implements IWrenchable, TieredStorageBlock {
+public final class UpgradedBarrelBlock extends BaseEntityBlock implements IWrenchable, TieredStorageBlock {
 	public static final MapCodec<UpgradedBarrelBlock> CODEC = simpleCodec(UpgradedBarrelBlock::new);
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final EnumProperty<ChestTier> TIER = UpgradedChestBlock.TIER;
@@ -89,6 +89,7 @@ public class UpgradedBarrelBlock extends BaseEntityBlock implements IWrenchable,
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
@@ -144,6 +145,7 @@ public class UpgradedBarrelBlock extends BaseEntityBlock implements IWrenchable,
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // NeoForge's pick-block asks this one, and Create's Display Link screen calls it directly
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
 		return UpgradedBarrelItem.of(state.getValue(TIER));
 	}

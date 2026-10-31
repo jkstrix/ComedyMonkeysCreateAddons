@@ -189,4 +189,101 @@ class UpgradedChestBlockEntityTest {
 		assertEquals(64, handler.extractItem(0, 1000, false).getCount());
 		assertEquals(448, gold.getItem(0).getCount());
 	}
+
+	/**
+	 * FLY-01: with Flywheel the open lid is a visual of its own, which Flywheel doesn't make again for a change of block
+	 * state, so opening or shutting must have the client make it again; other state changes (a new tier, turning) not.
+	 */
+	@Test
+	void onlyOpeningOrShuttingChangesTheLidShown() {
+		BlockState shut = state(ChestTier.GOLD), open = shut.setValue(UpgradedChestBlock.OPEN, true);
+		assertTrue(UpgradedChestBlockEntity.lidShownChanged(shut, open));
+		assertTrue(UpgradedChestBlockEntity.lidShownChanged(open, shut));
+		assertFalse(UpgradedChestBlockEntity.lidShownChanged(shut, shut));
+		assertFalse(UpgradedChestBlockEntity.lidShownChanged(open, open.setValue(UpgradedChestBlock.TIER, ChestTier.DIAMOND)));
+		assertFalse(UpgradedChestBlockEntity.lidShownChanged(shut, shut.setValue(UpgradedChestBlock.FACING,
+			net.minecraft.core.Direction.EAST)));
+	}
+
+	/**
+	 * A level with nothing in it but which side it's on: made without its constructor (which needs a running server or
+	 * client), enough for what a chest asks of its level when only its {@code open} state changes.
+	 */
+	private static net.minecraft.world.level.Level level(boolean clientSide) {
+		try {
+			Class<?> unsafeClass = Class.forName("sun.misc.Unsafe");
+			java.lang.reflect.Field theUnsafe = unsafeClass.getDeclaredField("theUnsafe");
+			theUnsafe.setAccessible(true);
+			Object unsafe = theUnsafe.get(null);
+			Object level = unsafeClass.getMethod("allocateInstance", Class.class).invoke(unsafe, net.minecraft.server.level.ServerLevel.class);
+			long side = (long) unsafeClass.getMethod("objectFieldOffset", java.lang.reflect.Field.class)
+				.invoke(unsafe, net.minecraft.world.level.Level.class.getDeclaredField("isClientSide"));
+			unsafeClass.getMethod("putBoolean", Object.class, long.class, boolean.class).invoke(unsafe, level, side, clientSide);
+			net.minecraft.world.level.Level made = (net.minecraft.world.level.Level) level;
+			assertEquals(clientSide, made.isClientSide());
+			return made;
+		} catch (ReflectiveOperationException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+	/** Opens or shuts a chest in a level on this side, counting the client hook's calls. */
+	private static int lidHookCalls(boolean clientSide, BlockState from, BlockState to) {
+		java.util.function.Consumer<UpgradedChestBlockEntity> was = UpgradedChestBlockEntity.clientLidShown;
+		int[] calls = {0};
+		UpgradedChestBlockEntity chest = ModBlockEntities.UPGRADED_CHEST.get().create(BlockPos.ZERO, from);
+		chest.setLevel(level(clientSide));
+		UpgradedChestBlockEntity.clientLidShown = be -> {
+			assertTrue(be == chest);
+			calls[0]++;
+		};
+		try {
+			chest.setBlockState(to);
+		} finally {
+			UpgradedChestBlockEntity.clientLidShown = was;
+		}
+		return calls[0];
+	}
+
+	/** In a client level, opening and shutting each call the client hook once; on the server, never. */
+	@Test
+	void lidHookOnTheClientOnly() {
+		BlockState shut = state(ChestTier.GOLD), open = shut.setValue(UpgradedChestBlock.OPEN, true);
+		assertEquals(1, lidHookCalls(true, shut, open));
+		assertEquals(1, lidHookCalls(true, open, shut));
+		assertEquals(0, lidHookCalls(false, shut, open));
+		assertEquals(0, lidHookCalls(false, open, shut));
+		// no change, nothing
+		assertEquals(0, lidHookCalls(true, open, open));
+	}
+
+	/**
+	 * A new tier or turning it doesn't call the client hook, on either side (asked of the check itself: those changes
+	 * also drop the chest's automation handlers through its level, which an empty level can't do), nor with no level.
+	 */
+	@Test
+	void lidHookNotForOtherChanges() {
+		BlockState shut = state(ChestTier.GOLD), open = shut.setValue(UpgradedChestBlock.OPEN, true);
+		for (boolean clientSide : new boolean[] {true, false}) {
+			net.minecraft.world.level.Level level = level(clientSide);
+			assertEquals(clientSide, UpgradedChestBlockEntity.tellsClient(level, shut, open));
+			assertEquals(clientSide, UpgradedChestBlockEntity.tellsClient(level, open, shut));
+			for (BlockState from : new BlockState[] {shut, open}) {
+				assertFalse(UpgradedChestBlockEntity.tellsClient(level, from, from.setValue(UpgradedChestBlock.TIER, ChestTier.DIAMOND)));
+				assertFalse(UpgradedChestBlockEntity.tellsClient(level, from, from.setValue(UpgradedChestBlock.FACING,
+					net.minecraft.core.Direction.EAST)));
+			}
+		}
+		assertFalse(UpgradedChestBlockEntity.tellsClient(null, shut, open));
+		// and through the chest itself: with no level it can't be on the client
+		java.util.function.Consumer<UpgradedChestBlockEntity> was = UpgradedChestBlockEntity.clientLidShown;
+		int[] calls = {0};
+		UpgradedChestBlockEntity.clientLidShown = be -> calls[0]++;
+		try {
+			chest(ChestTier.GOLD).setBlockState(open);
+		} finally {
+			UpgradedChestBlockEntity.clientLidShown = was;
+		}
+		assertEquals(0, calls[0]);
+	}
 }

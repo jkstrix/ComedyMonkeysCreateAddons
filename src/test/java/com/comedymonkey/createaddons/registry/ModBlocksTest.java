@@ -82,6 +82,6 @@ class ModBlocksTest {
 		assertFalse(ModBlocks.ANIMAL_PEN.get().isBrass());
 		assertTrue(ModBlocks.BRASS_ANIMAL_PEN.get().isBrass());
 		// The Brass pen is built like the Brass generator, but its window doesn't glow
-		assertEquals(0, ModBlocks.BRASS_ANIMAL_PEN.get().defaultBlockState().getLightEmission());
+		assertEquals(0, ModBlocks.BRASS_ANIMAL_PEN.get().defaultBlockState().getLightEmission(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, net.minecraft.core.BlockPos.ZERO));
 	}
 }

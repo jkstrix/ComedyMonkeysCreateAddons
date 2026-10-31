@@ -41,6 +41,7 @@ class AnimalPenBlockTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation") // exercises the block's own rotate and mirror
 	void rotatesAndMirrorsItsFront() {
 		BlockState north = ModBlocks.ANIMAL_PEN.get().defaultBlockState();
 		assertEquals(Direction.EAST, north.rotate(Rotation.CLOCKWISE_90).getValue(AnimalPenBlock.FACING));

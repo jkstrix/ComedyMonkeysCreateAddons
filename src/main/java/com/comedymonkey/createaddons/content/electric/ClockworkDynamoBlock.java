@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
  * speed, and makes three quarters of the FE a motor would draw for it (configurable). Power goes out only through its
  * base, opposite the shaft, whichever way it's placed. A wrench opens its settings.
  */
-public class ClockworkDynamoBlock extends DirectionalKineticBlock implements IBE<ClockworkDynamoBlockEntity> {
+public final class ClockworkDynamoBlock extends DirectionalKineticBlock implements IBE<ClockworkDynamoBlockEntity> {
 	/** Making power: the lamp lights cyan (and its aerial stands up, drawn by the renderer). */
 	public static final BooleanProperty WORKING = BooleanProperty.create("working");
 

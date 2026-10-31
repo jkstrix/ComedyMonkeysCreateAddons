@@ -22,7 +22,7 @@ public final class PowerGridTesting {
 	/** FE a tick the record of the generator at key says it makes while away (its free sources' share), or -1 without one. */
 	public static double makingAway(ServerLevel level, BlockPos key) {
 		PowerGrid.Paper p = PowerGrid.of(level).paper(key);
-		return p == null ? -1 : p.making(level, true);
+		return p == null ? -1 : p.making(level, PowerGrid.of(level), true);
 	}
 
 	/** The FE in the record of the generator at key, or -1 if it has none. */
@@ -53,6 +53,27 @@ public final class PowerGridTesting {
 	public static double storeRecord(ServerLevel level, BlockPos key) {
 		PowerGrid.StorePaper p = PowerGrid.of(level).storePaper(key);
 		return p == null ? -1 : p.energy();
+	}
+
+	/** The mB in the record of the Wellspring at pos (what generators on paper can still draw on), or -1 if it has none. */
+	public static double springRecord(ServerLevel level, BlockPos pos) {
+		PowerGrid.SpringPaper s = PowerGrid.of(level).springPaper(pos);
+		return s == null ? -1 : s.amount();
+	}
+
+	/** All generators on paper have drawn from the record of the Wellspring at pos (since it was made), or -1 without one. */
+	public static double springGiven(ServerLevel level, BlockPos pos) {
+		PowerGrid.SpringPaper s = PowerGrid.of(level).springPaper(pos);
+		return s == null ? -1 : s.given;
+	}
+
+	/** A shared store's record on its own (in no grid), as the network fills and draws it while the store is away. */
+	public static net.neoforged.neoforge.energy.IEnergyStorage paperStore(ServerLevel level, long energy, long cap, long perTick) {
+		PowerGrid.StorePaper p = new PowerGrid.StorePaper();
+		p.energy = energy;
+		p.cap = cap;
+		p.perTick = perTick;
+		return PowerGrid.of(level).paperStore(p, level);
 	}
 
 	/** The same once the grid has been saved and loaded back. */

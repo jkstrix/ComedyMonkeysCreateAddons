@@ -29,7 +29,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * time, or up to a stack for the brass one. It faces any way; its tube joins at its back. Redstone switches it off
  * (design/specs/clockwork-tubes.md D4, D19, D21, D22, D27, D28).
  */
-public class ClockworkInletBlock extends Block implements IBE<ClockworkInletBlockEntity>, IWrenchable {
+public final class ClockworkInletBlock extends Block implements IBE<ClockworkInletBlockEntity>, IWrenchable {
 	/** Where its mouth points. */
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -100,6 +100,7 @@ public class ClockworkInletBlock extends Block implements IBE<ClockworkInletBloc
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

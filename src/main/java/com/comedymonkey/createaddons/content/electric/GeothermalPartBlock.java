@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
  * controller, so it hides its own model. Casings keep a note of their controller, so pipes and energy pipes on any
  * casing reach it.
  */
-public class GeothermalPartBlock extends Block implements EntityBlock {
+public final class GeothermalPartBlock extends Block implements EntityBlock {
 	public static final BooleanProperty FORMED = BooleanProperty.create("formed");
 	private final boolean casing;
 

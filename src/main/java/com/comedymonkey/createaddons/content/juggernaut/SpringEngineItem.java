@@ -17,8 +17,9 @@ public class SpringEngineItem extends BlockItem {
 		super(block, properties);
 	}
 
-	private static float fill(ItemStack stack) {
-		return (float) ((double) stack.getOrDefault(ModDataComponents.SPRING_WIND.get(), 0L) / SpringEngineBlockEntity.capacity());
+	/** 0..1: never over full, even after the capacity was lowered in the config. */
+	static float fill(ItemStack stack) {
+		return Math.clamp((float) ((double) stack.getOrDefault(ModDataComponents.SPRING_WIND.get(), 0L) / SpringEngineBlockEntity.capacity()), 0f, 1f);
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class SpringEngineItem extends BlockItem {
 
 	@Override
 	public int getBarWidth(ItemStack stack) {
-		return Math.round(13 * Math.min(1, fill(stack)));
+		return Math.round(13 * fill(stack));
 	}
 
 	@Override

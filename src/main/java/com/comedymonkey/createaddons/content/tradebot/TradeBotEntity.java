@@ -64,7 +64,7 @@ import net.minecraft.world.phys.Vec3;
  * Blockbench preview uses. In {@link Clip.Root#PHYSICAL} clips (hops, stairs, docking) the server moves him along the
  * clip's root path from where the clip started, and clients draw him on that path.
  */
-public class TradeBotEntity extends PathfinderMob {
+public final class TradeBotEntity extends PathfinderMob {
 	private static final EntityDataAccessor<Integer> CLIP = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> CLIP_START = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.INT);
 	/** Where a physical clip started: a block, plus the offset within it (floats alone are too coarse far from spawn). */

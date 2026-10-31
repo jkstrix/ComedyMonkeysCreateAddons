@@ -53,7 +53,7 @@ public final class PowerLines {
 	/** Wire blocks that meet a machine, where the work starts, with the tick their network last updated. */
 	private final Map<BlockPos, Long> terminals = new LinkedHashMap<>();
 	/** The same, by the tick of the second each looks on, so a tick only goes through its twentieth. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"}) // a generic array has to be made raw
 	private final Set<BlockPos>[] phases = new Set[INTERVAL];
 	/** What machines used, kept across a rebuild of their network (so a full one stays full): store, given, when. */
 	private final Map<BlockPos, double[]> carriedUse = new HashMap<>();
@@ -172,7 +172,7 @@ public final class PowerLines {
 					n.tick(now, true);
 			}
 		}
-		Set<BlockPos> due = phases[(int) Math.floorMod(now, INTERVAL)];
+		Set<BlockPos> due = phases[Math.floorMod(now, INTERVAL)];
 		for (BlockPos pos : due == null ? List.<BlockPos>of() : new ArrayList<>(due)) {
 			// each machine's wire looks once a second, spread over the second (its machines are checked one by one)
 			if (!level.isLoaded(pos))
@@ -341,7 +341,19 @@ public final class PowerLines {
 			read(pos, touched, false, read);
 		for (Node n : touched)
 			forget(n);
+		// posts and Industrial Batteries whose spans ran to a head that went without taking them down: they find out now,
+		// not when they next load
+		if (!orphaned.isEmpty()) {
+			List<BlockPos> ends = new ArrayList<>(orphaned);
+			orphaned.clear();
+			for (BlockPos q : ends)
+				if (level.isLoaded(q) && level.getBlockEntity(q) instanceof SpanHolder h)
+					h.dropBrokenSpans();
+		}
 	}
+
+	/** Span ends that held spans to a pole head now gone (see {@link #read}), tidied once this tick's reading is done. */
+	private final Set<BlockPos> orphaned = new LinkedHashSet<>();
 
 	/** Reads what's at p into the grid (when {@code force}, or the grid hasn't got it), noting the pieces touched. */
 	private void read(BlockPos p, Set<Node> touched, boolean force, Set<BlockPos> read) {
@@ -357,8 +369,15 @@ public final class PowerLines {
 		}
 		BlockPos head = state.getBlock() instanceof LinePostBlock ? LinePostBlock.head(level, p) : towerAt(p);
 		Node pole = new Node(p, Node.POLE);
-		if (!p.equals(head) && grid.piece(pole) != null)
+		if (!p.equals(head) && grid.piece(pole) != null) {
+			// a head gone with nothing left to hold its spans (a contraption takes a block's entity before the block, so
+			// the post never took them down): the posts they ran to drop them (the owner end pays back, as on loading)
+			if (!(level.getBlockEntity(p) instanceof SpanHolder))
+				for (PowerGrid.Link l : grid.piece(pole).links)
+					if (l.to().isPole())
+						orphaned.add(l.to().pos());
 			set(pole, null, touched);
+		}
 		if (head != null) {
 			Node h = new Node(head, Node.POLE);
 			if (force || grid.piece(h) == null || grid.piece(h).stale) {
@@ -1078,7 +1097,7 @@ public final class PowerLines {
 				if (out)
 					canGive[c] = true;
 				if (out) {
-					int offer = e.extractEnergy(rate, true);
+					int offer = PowerGrid.planExtract(e, rate);
 					if (offer > 0) {
 						sources.add(new Source(c, d.energy()::getCapability, null, offer, in, null));
 						(in ? stored : gen)[c] += offer;
@@ -1089,7 +1108,7 @@ public final class PowerLines {
 				}
 				if (in) {
 					// a second's worth: room to fill, and (for a machine) what it used in the last second
-					int roomNow = e.receiveEnergy(rate, true);
+					int roomNow = PowerGrid.planReceive(e, rate);
 					double used = 0;
 					double[] last = use.get(t);
 					if (last == null)
@@ -1120,7 +1139,7 @@ public final class PowerLines {
 				if (e == null)
 					continue;
 				int all = rate(tiers, s.circuits);
-				int offer = e.canExtract() ? e.extractEnergy(all, true) : 0, roomNow = e.canReceive() ? e.receiveEnergy(all, true) : 0;
+				int offer = e.canExtract() ? PowerGrid.planExtract(e, all) : 0, roomNow = e.canReceive() ? PowerGrid.planReceive(e, all) : 0;
 				double[] byNeed = parts(s.circuits, want), byGen = parts(s.circuits, haveGen);
 				for (int i = 0; i < s.circuits.size(); i++) {
 					int c = s.circuits.get(i), cap = tiers[c].powerPerTick() * INTERVAL;
@@ -1161,9 +1180,9 @@ public final class PowerLines {
 					BlockCapabilityCache<IEnergyStorage, Direction> cache = generatorCaches.computeIfAbsent(key,
 						k -> BlockCapabilityCache.create(Capabilities.EnergyStorage.BLOCK, level, k, null));
 					IEnergyStorage e = cache.getCapability();
-					int offer = e == null || !e.canExtract() ? 0 : e.extractEnergy(rate, true);
+					int offer = e == null || !e.canExtract() ? 0 : PowerGrid.planExtract(e, rate);
 					PowerGrid.Paper rec = grid.paper(key);
-					makes += rec != null ? rec.making(level, false) : offer / (double) INTERVAL;
+					makes += rec != null ? rec.making(level, grid, false) : offer / (double) INTERVAL;
 					share(sources, gen, tiers, cs, part, offer, cache::getCapability, null, key);
 					continue;
 				}
@@ -1183,7 +1202,7 @@ public final class PowerLines {
 							if (!kc.contains(c))
 								kc.add(c);
 					}
-					makes += p.making(level, true);
+					makes += p.making(level, grid, true);
 					share(sources, gen, tiers, kc, kc == cs ? part : parts(kc, weight), grid.draw(p, kc == cs ? rate : rate(tiers, kc), now, true, level),
 						null, p, k.immutable());
 				}

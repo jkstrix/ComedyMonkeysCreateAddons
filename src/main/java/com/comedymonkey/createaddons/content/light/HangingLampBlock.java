@@ -39,7 +39,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
  * the ceiling with its rose. It's fed through the ceiling it hangs from, as any light fixed to a block is (LightMounts),
  * by a wire meeting its rose flat on that ceiling, or by the line encased in it.
  */
-public class HangingLampBlock extends LightBlock {
+public final class HangingLampBlock extends LightBlock {
 	public static final BooleanProperty HUNG = BooleanProperty.create("hung");
 	/** The most blocks of cable a lamp is lowered on. */
 	public static final int MAX_DROP = 16;
@@ -70,7 +70,7 @@ public class HangingLampBlock extends LightBlock {
 			return null;
 		for (int i = 0; i <= MAX_DROP; i++) {
 			// (never loads a chunk to look)
-			if (level instanceof LevelReader reader && !reader.hasChunkAt(p))
+			if (level instanceof LevelReader reader && !com.comedymonkey.createaddons.content.Loaded.at(reader, p))
 				return null;
 			if (!(level.getBlockState(p).getBlock() instanceof HangingCableBlock))
 				return p;

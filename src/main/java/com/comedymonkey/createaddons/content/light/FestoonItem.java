@@ -59,7 +59,8 @@ public class FestoonItem extends Item {
 		if (level.isClientSide)
 			return InteractionResult.SUCCESS;
 		boolean free = player != null && player.getAbilities().instabuild;
-		var result = Festoons.hang(level, a, Direction.from3DDataValue(from.getInt("FestoonFacing")), cell, facing, free ? null : stack);
+		var result = Festoons.hang(level, a, Direction.from3DDataValue(from.getInt("FestoonFacing")), cell, facing, free ? null : stack, player,
+			state.getBlock() instanceof FestoonHookBlock);
 		tell(player, level, Component.translatable(KEY + result.name().toLowerCase(java.util.Locale.ROOT), (int) Festoons.reach(),
 			Festoons.cost(Festoons.eye(a, Direction.from3DDataValue(from.getInt("FestoonFacing"))).distanceTo(Festoons.eye(cell, facing)))));
 		return InteractionResult.SUCCESS;

@@ -36,7 +36,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * a shaft at its set speed and gives up to 16,384 SU, drained by what's actually used. {@code facing} is the way the
  * output shaft points; the winding end is the block behind it.
  */
-public class SpringEngineBlock extends HorizontalKineticBlock implements IBE<SpringEngineBlockEntity> {
+public final class SpringEngineBlock extends HorizontalKineticBlock implements IBE<SpringEngineBlockEntity> {
 	public static final EnumProperty<Part> PART = EnumProperty.create("part", Part.class);
 	private static final VoxelShape SHAPE = Block.box(0.5, 0, 0, 15.5, 16, 16);
 

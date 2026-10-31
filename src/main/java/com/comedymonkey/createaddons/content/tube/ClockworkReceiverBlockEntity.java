@@ -61,6 +61,13 @@ public class ClockworkReceiverBlockEntity extends KineticBlockEntity {
 	private boolean tooLong;
 	/** Client (Ponder): how far through the throat to show its load, or below 0 to work it out from the time. */
 	public float throatShown = -1;
+	/** Ticks between tries at an output that took nothing. */
+	private static final int RETRY = 4;
+	/** Server: when it may next try an output that took nothing. */
+	private long retryAt;
+	/** Server: whether the chunk {@link #tubeAt} last asked about was running, and when it asked. */
+	private long runningChunk, runningAt = Long.MIN_VALUE;
+	private boolean chunkRunning;
 
 	public ClockworkReceiverBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.CLOCKWORK_RECEIVER.get(), pos, state);
@@ -174,12 +181,17 @@ public class ClockworkReceiverBlockEntity extends KineticBlockEntity {
 	private boolean pass(long now) {
 		if (throat.isEmpty() || now - throatSince < passTicks())
 			return false;
+		// its output took nothing last time: it tries again every few ticks, as a funnel does, not every tick
+		if (now < retryAt)
+			return true;
 		ItemStack rest = deliver(throat);
 		boolean changed = rest.getCount() != throat.getCount();
 		throat = rest;
 		if (changed) {
 			setChanged();
 			sendData();
+		} else {
+			retryAt = now + RETRY;
 		}
 		return !throat.isEmpty();
 	}
@@ -201,9 +213,11 @@ public class ClockworkReceiverBlockEntity extends KineticBlockEntity {
 	 */
 	private boolean move(long now, float speed) {
 		boolean full = false;
-		for (BlockPos tube : network.tubes) {
-			if (!ClockworkTubeBlock.running(level, tube) || !(level.getBlockEntity(tube) instanceof ClockworkTubeBlockEntity be))
+		for (int i = 0; i < network.tubes.size(); i++) {
+			ClockworkTubeBlockEntity be = tubeAt(i, now);
+			if (be == null)
 				continue;
+			BlockPos tube = network.tubes.get(i);
 			Direction home = network.home.get(tube);
 			TubeLoad load = be.getLoad();
 			if (load != null) {
@@ -236,16 +250,15 @@ public class ClockworkReceiverBlockEntity extends KineticBlockEntity {
 			ClockworkTubeBlockEntity from = null;
 			Direction fromSide = null;
 			double earliest = Double.MAX_VALUE;
-			for (Direction side : Direction.values()) {
-				BlockPos behind = tube.relative(side);
-				if (network.home.get(behind) != side.getOpposite() || !ClockworkTubeBlock.running(level, behind)
-					|| !(level.getBlockEntity(behind) instanceof ClockworkTubeBlockEntity b) || b.getLoad() == null || at(b.getLoad(), now) < 1)
+			for (TubeNetwork.Behind behind : network.behind.get(i)) {
+				ClockworkTubeBlockEntity b = tubeAt(behind.tube(), now);
+				if (b == null || b.getLoad() == null || at(b.getLoad(), now) < 1)
 					continue;
 				double when = arrived(b.getLoad());
 				if (when < earliest) {
 					earliest = when;
 					from = b;
-					fromSide = side;
+					fromSide = behind.side();
 				}
 			}
 			if (from != null) {
@@ -257,6 +270,30 @@ public class ClockworkReceiverBlockEntity extends KineticBlockEntity {
 		return full;
 	}
 
+	/**
+	 * The network's i-th tube, or null if its chunk isn't running or it isn't there. Its block entity is remembered while
+	 * it lasts (a tube broken, moved or unloaded is removed, and found again or not next time), and whether a chunk is
+	 * running is asked once a tick for each run of tubes in it.
+	 */
+	@org.jetbrains.annotations.Nullable
+	private ClockworkTubeBlockEntity tubeAt(int i, long now) {
+		BlockPos pos = network.tubes.get(i);
+		long chunk = net.minecraft.world.level.ChunkPos.asLong(pos.getX() >> 4, pos.getZ() >> 4);
+		if (chunk != runningChunk || now != runningAt) {
+			runningChunk = chunk;
+			runningAt = now;
+			chunkRunning = ClockworkTubeBlock.running(level, pos);
+		}
+		if (!chunkRunning)
+			return null;
+		ClockworkTubeBlockEntity be = network.found[i];
+		if (be == null || be.isRemoved()) {
+			be = level.getBlockEntity(pos) instanceof ClockworkTubeBlockEntity t ? t : null;
+			network.found[i] = be;
+		}
+		return be;
+	}
+
 	private static void anchor(TubeLoad load, float progress, long now, float speed) {
 		load.progress = progress;
 		load.since = now;
@@ -265,13 +302,14 @@ public class ClockworkReceiverBlockEntity extends KineticBlockEntity {
 
 	/** Stopped: every load in its tubes stands still where it is. */
 	private void freeze(long now) {
-		for (BlockPos tube : network.tubes)
-			if (ClockworkTubeBlock.running(level, tube) && level.getBlockEntity(tube) instanceof ClockworkTubeBlockEntity be && be.getLoad() != null
-				&& be.getLoad().speed != 0) {
+		for (int i = 0; i < network.tubes.size(); i++) {
+			ClockworkTubeBlockEntity be = tubeAt(i, now);
+			if (be != null && be.getLoad() != null && be.getLoad().speed != 0) {
 				TubeLoad load = be.getLoad();
 				anchor(load, load.progressAt(now), now, 0);
 				be.loadChanged();
 			}
+		}
 	}
 
 	/** The Inlets take loads in turn, as many as its speed allows. */
@@ -359,9 +397,12 @@ public class ClockworkReceiverBlockEntity extends KineticBlockEntity {
 		for (int n : perSecond)
 			perMinute += n;
 		int transit = throat.getCount();
-		for (BlockPos tube : network.tubes)
-			if (ClockworkTubeBlock.running(level, tube) && level.getBlockEntity(tube) instanceof ClockworkTubeBlockEntity be && be.getLoad() != null)
+		long now = level.getGameTime();
+		for (int i = 0; i < network.tubes.size(); i++) {
+			ClockworkTubeBlockEntity be = tubeAt(i, now);
+			if (be != null && be.getLoad() != null)
 				transit += be.getLoad().stack.getCount();
+		}
 		if (force || perMinute != itemsPerMinute || transit != inTransit || network.inlets.size() != inletCount || network.tubes.size() != tubeCount
 			|| network.tooLong != tooLong) {
 			itemsPerMinute = perMinute;

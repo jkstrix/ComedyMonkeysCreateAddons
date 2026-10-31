@@ -36,7 +36,7 @@ import net.neoforged.neoforge.fluids.FluidUtil;
  * front ({@code facing}), which can point any way; pipes fill it on every other side, and a bucket works on any face.
  * Its look and effects are modelled with the shaft to the north; {@link #modelToWorld} turns them to the facing.
  */
-public class MagmaEngineBlock extends KineticBlock implements IBE<MagmaEngineBlockEntity> {
+public final class MagmaEngineBlock extends KineticBlock implements IBE<MagmaEngineBlockEntity> {
 	/** The side the output shaft comes out of. */
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	/** Burning (the firebox and exhausts glow, the pistons pump). */
@@ -127,6 +127,7 @@ public class MagmaEngineBlock extends KineticBlock implements IBE<MagmaEngineBlo
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

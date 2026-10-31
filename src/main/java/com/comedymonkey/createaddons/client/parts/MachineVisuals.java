@@ -61,15 +61,15 @@ public final class MachineVisuals {
 		visual(ModBlockEntities.FISH_TANK, com.comedymonkey.createaddons.client.FishTankRenderer::parts, false);
 		visual(ModBlockEntities.CUCKOO_CLOCK, CuckooClockRenderer::parts, false);
 		// the lines' fittings; a Fluid Line's fluid stays with its renderer, a Power Line has nothing else
-		// (most pieces carry no fitting: their visuals do nothing a frame)
-		// (most pieces carry no fitting: theirs is an idle visual, made again when a fitting goes on)
-		visualWhen(ModBlockEntities.FLUID_LINE, FluidLineRenderer::parts, false, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
+		// (most pieces carry no fitting, and an Intake has no parts: theirs is an idle visual, made again when a fitting changes)
+		visualWhen(ModBlockEntities.FLUID_LINE, FluidLineRenderer::parts, false, MachineVisuals::fluidLineHasParts);
 		visualWhen(ModBlockEntities.POWER_LINE, PowerLineRenderer::parts, true, be -> be.fitting() != Fitting.NONE && be.encasing() == null);
 		// an Electric Light's lens, only while it's lit (dark, its glass is in the block model)
 		// (the Floodlight's renderer still runs, for its cone)
 		visualWhen(ModBlockEntities.LIGHT, com.comedymonkey.createaddons.client.LightRenderer::parts,
 			be -> be.kind() != com.comedymonkey.createaddons.content.light.LightKind.FLOODLIGHT, com.comedymonkey.createaddons.client.LightRenderer::active);
-		// an Upgraded Chest's lid, only while it's open (closed, it's part of the block model)
+		// an Upgraded Chest's lid, only while it's open (closed, it's part of the block model; the chest's visual is
+		// made again when it opens or shuts, UpgradedChestBlockEntity.clientLidShown)
 		visualWhen(ModBlockEntities.UPGRADED_CHEST, com.comedymonkey.createaddons.client.UpgradedChestRenderer::parts, true,
 			com.comedymonkey.createaddons.client.UpgradedChestRenderer::open);
 		// Trade Bot's winding station
@@ -82,6 +82,11 @@ public final class MachineVisuals {
 			.factory(com.comedymonkey.createaddons.client.helperbot.HelperBotVisual::new)
 			.skipVanillaRender(be -> true)
 			.apply();
+		// Festoon strings: laid out once, as instances (only the bulbs change, as they light and flicker)
+		SimpleBlockEntityVisualizer.builder(ModBlockEntities.FESTOON.get())
+			.factory(com.comedymonkey.createaddons.client.FestoonVisual::new)
+			.skipVanillaRender(be -> true)
+			.apply();
 		// the spans between Line Posts: laid out once, as instances
 		SimpleBlockEntityVisualizer.builder(ModBlockEntities.LINE_POST.get())
 			.factory(com.comedymonkey.createaddons.client.line.LinePostVisual::new)
@@ -92,9 +97,16 @@ public final class MachineVisuals {
 			AeronauticsRenderers.registerVisuals();
 	}
 
+	/** A Fluid Line with parts for its visual: a fitting other than an Intake (whose fluid its renderer draws), not encased. */
+	public static boolean fluidLineHasParts(com.comedymonkey.createaddons.content.line.FluidLineBlockEntity be) {
+		return be.fitting() != Fitting.NONE && be.fitting() != Fitting.INTAKE && be.encasing() == null;
+	}
+
 	/**
 	 * A visual that's only needed some of the time: its parts while {@code active} (a line's fitting, a chest's open
-	 * lid), else an idle visual that does nothing a frame. The client makes it again when that changes.
+	 * lid), else an idle visual that does nothing a frame. Which one is chosen only when the visual is made: Flywheel's
+	 * own update on a block state change doesn't make it again, so the block entity must have it made again
+	 * ({@code ComedyMonkeysCreateAddonsClient.revisualize}) whenever {@code active} changes.
 	 */
 	public static <T extends BlockEntity> void visualWhen(Supplier<BlockEntityType<T>> type, PartsVisual.Parts<T> parts, boolean partsOnly,
 															java.util.function.Predicate<T> active) {

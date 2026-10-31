@@ -75,6 +75,33 @@ public final class TubeJoints {
 		}
 	}
 
+	/**
+	 * Whether any change after {@code since} was within {@code range} blocks (Manhattan) of {@code pos}, or there have been
+	 * too many since to remember. Allocates nothing.
+	 */
+	public static boolean changedNear(LevelAccessor level, int since, BlockPos pos, int range) {
+		synchronized (CHANGES) {
+			Changes c = CHANGES.get(level);
+			int now = c == null ? 0 : c.version, n = now - since;
+			if (n < 0 || n > REMEMBERED)
+				return true;
+			for (int i = 0; i < n; i++) {
+				long at = c.at[Math.floorMod(since + 1 + i, REMEMBERED)];
+				if (Math.abs(BlockPos.getX(at) - pos.getX()) + Math.abs(BlockPos.getY(at) - pos.getY()) + Math.abs(BlockPos.getZ(at) - pos.getZ()) <= range)
+					return true;
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * How far a change can be from a tube and still alter whether one of its joints is refused: {@link #refusal}'s walks
+	 * reach at most the most tubes along from it (and look one block beyond), so nothing further away counts.
+	 */
+	public static int refusalRange() {
+		return CMConfig.SERVER.clockworkTubeMaxLength() + 4;
+	}
+
 	static boolean loaded(LevelAccessor level, BlockPos pos) {
 		return !(level instanceof Level l) || l.isLoaded(pos);
 	}

@@ -110,6 +110,13 @@ public class ComedyMonkeysCreateAddonsClient {
 		com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity.clientTicker = ElectricSounds::tickDynamo;
 		// Electric Lights: flicker and warm-up sounds (capped nearby), and a lit light's visual made when it comes on
 		com.comedymonkey.createaddons.content.light.LightBlockEntity.clientCue = LightSounds::cue;
+		// Festoon strings: a hook's visual lays them out again when they change
+		com.comedymonkey.createaddons.content.light.FestoonBlockEntity.clientSpansChanged = be -> {
+			if (be.getLevel() != null && dev.engine_room.flywheel.api.visualization.VisualizationManager.supportsVisualization(be.getLevel()))
+				dev.engine_room.flywheel.lib.visualization.VisualizationHelper.queueUpdate(be);
+		};
+		// an Upgraded Chest opened or shut: its visual is made again (an open one has the lid, a shut one nothing)
+		com.comedymonkey.createaddons.content.chest.UpgradedChestBlockEntity.clientLidShown = ComedyMonkeysCreateAddonsClient::revisualize;
 		// The Industrial Battery's hum runs from its master's client tick
 		com.comedymonkey.createaddons.content.electric.BatteryBlockEntity.clientTicker = ElectricSounds::tickBattery;
 		// The Magma Engines' sounds and exhaust puffs run from their client ticks
@@ -161,6 +168,8 @@ public class ComedyMonkeysCreateAddonsClient {
 	private static void forgetModelReads(ModelEvent.BakingCompleted event) {
 		RealPlants.forget();
 		com.comedymonkey.createaddons.client.parts.PartModels.forget();
+		FestoonRenderer.forget();
+		FestoonVisual.forget();
 		com.comedymonkey.createaddons.client.line.PowerLineModel.forget();
 		com.comedymonkey.createaddons.client.line.StripModel.forget();
 		com.comedymonkey.createaddons.client.line.EdgeModel.forget();

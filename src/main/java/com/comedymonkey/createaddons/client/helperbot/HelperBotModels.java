@@ -41,13 +41,19 @@ public final class HelperBotModels {
 		for (DyeColor dye : DyeColor.values())
 			DYED.put(dye, ComedyMonkeysCreateAddons.asResource("textures/entity/helper_bot/" + dye.getName() + ".png"));
 	}
+	/** Looked up once: {@code RenderType.entityCutoutNoCull} memoizes, but still builds a key on every call. */
+	private static final RenderType PLAIN_TYPE = RenderType.entityCutoutNoCull(PLAIN);
+	private static final Map<DyeColor, RenderType> DYED_TYPES = new EnumMap<>(DyeColor.class);
 	/** His render types, one per texture: each has a buffer of its own, so drawing him never ends anyone's batch. */
 	static final List<RenderType> RENDER_TYPES;
 	static {
 		List<RenderType> types = new ArrayList<>();
-		types.add(renderType(null));
-		for (DyeColor dye : DyeColor.values())
-			types.add(renderType(dye));
+		types.add(PLAIN_TYPE);
+		for (DyeColor dye : DyeColor.values()) {
+			RenderType type = RenderType.entityCutoutNoCull(DYED.get(dye));
+			DYED_TYPES.put(dye, type);
+			types.add(type);
+		}
 		RENDER_TYPES = List.copyOf(types);
 	}
 
@@ -90,7 +96,7 @@ public final class HelperBotModels {
 	}
 
 	static RenderType renderType(@Nullable DyeColor dye) {
-		return RenderType.entityCutoutNoCull(texture(dye));
+		return dye == null ? PLAIN_TYPE : DYED_TYPES.get(dye);
 	}
 
 	/** After a resource reload: bake again next time (the entity models are baked again). */

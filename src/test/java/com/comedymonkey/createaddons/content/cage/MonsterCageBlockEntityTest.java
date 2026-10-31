@@ -323,7 +323,7 @@ class MonsterCageBlockEntityTest {
 		assertEquals(1, sent.getCount());
 		for (int fe : new int[] {200_000, 65_536, 100_000_000}) {
 			AdvancedContainerSetDataPayload payload = new AdvancedContainerSetDataPayload((byte) 1, (short) 0, fe);
-			RegistryFriendlyByteBuf buffer = new RegistryFriendlyByteBuf(Unpooled.buffer(), RegistryAccess.EMPTY);
+			RegistryFriendlyByteBuf buffer = new RegistryFriendlyByteBuf(Unpooled.buffer(), RegistryAccess.EMPTY, net.neoforged.neoforge.network.connection.ConnectionType.NEOFORGE);
 			AdvancedContainerSetDataPayload.STREAM_CODEC.encode(buffer, payload);
 			SimpleContainerData received = new SimpleContainerData(1);
 			received.set(0, AdvancedContainerSetDataPayload.STREAM_CODEC.decode(buffer).value());

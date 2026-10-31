@@ -41,6 +41,7 @@ class AutoHarvesterBlockTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation") // exercises the block's own rotate and mirror
 	void rotatesAndMirrorsKeepingThePlant() {
 		BlockState state = facing(Direction.NORTH).setValue(AutoHarvesterBlock.PLANT, PlantKind.TREE);
 		BlockState rotated = state.rotate(Rotation.CLOCKWISE_90);

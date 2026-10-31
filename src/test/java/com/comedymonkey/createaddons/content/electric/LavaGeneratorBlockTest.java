@@ -32,9 +32,9 @@ class LavaGeneratorBlockTest {
 		BlockState empty = ModBlocks.LAVA_GENERATOR.get().defaultBlockState();
 		BlockState full = empty.setValue(LavaGeneratorBlock.FUELLED, true);
 		BlockState burning = full.setValue(LavaGeneratorBlock.LIT, true);
-		assertEquals(0, empty.getLightEmission());
-		assertTrue(full.getLightEmission() > 0);
-		assertTrue(burning.getLightEmission() > full.getLightEmission());
+		assertEquals(0, empty.getLightEmission(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, net.minecraft.core.BlockPos.ZERO));
+		assertTrue(full.getLightEmission(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, net.minecraft.core.BlockPos.ZERO) > 0);
+		assertTrue(burning.getLightEmission(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, net.minecraft.core.BlockPos.ZERO) > full.getLightEmission(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, net.minecraft.core.BlockPos.ZERO));
 	}
 
 	@Test
@@ -70,6 +70,7 @@ class LavaGeneratorBlockTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation") // exercises the block's own rotate and mirror
 	void rotatesAndMirrorsItsFacing() {
 		assertEquals(Direction.EAST, facing(Direction.NORTH).rotate(Rotation.CLOCKWISE_90).getValue(LavaGeneratorBlock.FACING));
 		assertEquals(Direction.SOUTH, facing(Direction.NORTH).rotate(Rotation.CLOCKWISE_180).getValue(LavaGeneratorBlock.FACING));

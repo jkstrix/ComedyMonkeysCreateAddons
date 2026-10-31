@@ -37,7 +37,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * it. While it turns, villagers nearby restock at 8:00 and 12:00, and it chimes and calls the hour (see
  * {@link CuckooClockBlockEntity}).
  */
-public class CuckooClockBlock extends KineticBlock implements IBE<CuckooClockBlockEntity> {
+public final class CuckooClockBlock extends KineticBlock implements IBE<CuckooClockBlockEntity> {
 	/** The front, with the dial. The shaft goes into the opposite face, usually through the wall it hangs on. */
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -128,6 +128,7 @@ public class CuckooClockBlock extends KineticBlock implements IBE<CuckooClockBlo
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

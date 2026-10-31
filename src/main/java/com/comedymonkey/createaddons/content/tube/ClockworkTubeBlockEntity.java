@@ -112,8 +112,9 @@ public class ClockworkTubeBlockEntity extends SmartBlockEntity implements IHaveG
 	}
 
 	/**
-	 * About once a second, if anything changed since: a joint capped for a reason that may have gone (a Receiver broken,
-	 * the network shortened), or capped with no reason known yet (just placed), is worked out again.
+	 * About once a second, if anything changed near enough since to matter (TubeJoints.refusalRange): a joint capped for a
+	 * reason that may have gone (a Receiver broken, the network shortened), or capped with no reason known yet (just
+	 * placed or loaded), is worked out again. Changes further away can't open it, so they don't make it walk its network.
 	 */
 	@Override
 	public void tick() {
@@ -123,13 +124,15 @@ public class ClockworkTubeBlockEntity extends SmartBlockEntity implements IHaveG
 		int version = TubeJoints.version(level);
 		if (version == checked)
 			return;
+		int since = checked;
 		checked = version;
 		BlockState state = getBlockState();
 		boolean recheck = false;
 		for (Direction side : Direction.values())
 			if (state.getValue(ClockworkTubeBlock.JOINTS.get(side)) == TubeJoint.CAPPED && refusals.get(side) != TubeJoints.Refusal.SHUT)
 				recheck = true;
-		if (!recheck)
+		// (never looked at yet: worked out whatever changed)
+		if (!recheck || (since >= 0 && !TubeJoints.changedNear(level, since, worldPosition, TubeJoints.refusalRange())))
 			return;
 		BlockState next = ClockworkTubeBlock.rejoin(state, level, worldPosition);
 		if (next != state)

@@ -111,7 +111,7 @@ public class FestoonBlockEntity extends RunLightBlockEntity {
 					new net.minecraft.world.item.ItemStack(com.comedymonkey.createaddons.registry.ModItems.FESTOON_LIGHTS.get(), Festoons.cost(length(s))));
 		}
 		if (changed) {
-			RunLightBlockEntity.runsChanged();
+			RunLightBlockEntity.runsChanged(level);
 			changed();
 		}
 		return !spans.isEmpty();
@@ -163,13 +163,19 @@ public class FestoonBlockEntity extends RunLightBlockEntity {
 		tag.put("Spans", list);
 	}
 
+	/** Client hook: the strings it holds changed (with Flywheel, its visual lays them out again). */
+	public static java.util.function.Consumer<FestoonBlockEntity> clientSpansChanged = be -> {};
+
 	private void readSpans(CompoundTag tag) {
+		List<Span> before = level != null && level.isClientSide ? List.copyOf(spans) : null;
 		spans.clear();
 		for (Tag t : tag.getList("Spans", Tag.TAG_COMPOUND)) {
 			CompoundTag c = (CompoundTag) t;
 			BlockPos other = c.contains("Off") ? worldPosition.offset(BlockPos.of(c.getLong("Off"))) : BlockPos.of(c.getLong("To"));
 			spans.add(new Span(other, Direction.from3DDataValue(c.getInt("Facing")), c.getBoolean("Held"), c.getBoolean("Paid")));
 		}
+		if (before != null && !before.equals(spans))
+			clientSpansChanged.accept(this);
 	}
 
 	@Override

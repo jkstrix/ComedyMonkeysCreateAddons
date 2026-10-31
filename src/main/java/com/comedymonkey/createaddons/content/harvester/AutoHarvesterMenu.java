@@ -21,7 +21,7 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 /** Wrench screen: the planter slot, the nine harvest slots (take only) and the player's inventory. */
 /* Inventory Profiles Next's sorting would shuffle these machine slots (and can't handle the pen's big food stack). */
 @IPNIgnore
-public class AutoHarvesterMenu extends AbstractContainerMenu implements QuickTransferMenu {
+public final class AutoHarvesterMenu extends AbstractContainerMenu implements QuickTransferMenu {
 	public static final int PLANTER_X = 26, PLANTER_Y = 36;
 	public static final int OUTPUT_X = 80, OUTPUT_Y = 18;
 	/** The machine panel (the player's inventory panel sits under it). */

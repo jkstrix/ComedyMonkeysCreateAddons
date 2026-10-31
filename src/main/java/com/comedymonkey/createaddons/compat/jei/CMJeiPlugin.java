@@ -31,7 +31,7 @@ public class CMJeiPlugin implements IModPlugin {
 			}
 
 			@Override
-			@SuppressWarnings("removal")
+			@SuppressWarnings({"removal", "deprecation"}) // kept for JEI before 19.9, which still asks for it
 			public String getLegacyStringSubtypeInfo(net.minecraft.world.item.ItemStack stack, mezz.jei.api.ingredients.subtypes.UidContext context) {
 				Object dye = getSubtypeData(stack, context);
 				return dye == null ? "" : dye.toString();

@@ -22,7 +22,7 @@ public final class StripLinks {
 	/** A strip lies on face f of the block at pos. */
 	public static boolean has(BlockGetter level, BlockPos pos, Direction face) {
 		// (a chunk that isn't loaded is never loaded to look: no strip there yet)
-		if (level instanceof net.minecraft.world.level.LevelReader reader && !reader.hasChunkAt(pos))
+		if (level instanceof net.minecraft.world.level.LevelReader reader && !com.comedymonkey.createaddons.content.Loaded.at(reader, pos))
 			return false;
 		BlockState state = level.getBlockState(pos);
 		return LightStripBlock.hasFace(state, face);

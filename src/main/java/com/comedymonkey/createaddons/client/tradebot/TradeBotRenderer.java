@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
  * Draws Trade Bot. In physical clips he's drawn on the clip's own path from where it started, worked out here from
  * the clip time, rather than where network smoothing has got to, so his body and his travel can't drift apart.
  */
-public class TradeBotRenderer extends MobRenderer<TradeBotEntity, TradeBotModel> {
+public final class TradeBotRenderer extends MobRenderer<TradeBotEntity, TradeBotModel> {
 	public static final ResourceLocation TEXTURE = ComedyMonkeysCreateAddons.asResource("textures/entity/trade_bot.png");
 	public static final ResourceLocation GLOW = ComedyMonkeysCreateAddons.asResource("textures/entity/trade_bot_glow.png");
 

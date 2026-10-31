@@ -32,7 +32,7 @@ import net.minecraft.world.phys.BlockHitResult;
  * underwater, for fish, squid and axolotls. Glass on three sides; the shaft goes into the back, water and items on
  * every other face. A tank of glow squid gives light (F15). See {@link FishTankBlockEntity}.
  */
-public class FishTankBlock extends KineticBlock implements IBE<FishTankBlockEntity> {
+public final class FishTankBlock extends KineticBlock implements IBE<FishTankBlockEntity> {
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	/** Holding glow squid: light level 6. */
 	public static final BooleanProperty GLOWING = BooleanProperty.create("glowing");
@@ -75,6 +75,7 @@ public class FishTankBlock extends KineticBlock implements IBE<FishTankBlockEnti
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

@@ -151,6 +151,7 @@ public class ComedyMonkeysCreateAddons {
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.FluidLines::onChunkUnload);
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.line.PowerLines.clear());
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.line.FluidLines.clear());
+		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.electric.BatteryTowers.clear());
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> ChestUpgrades.clearJustPlaced());
 		if (ModList.get().isLoaded(PipezBlazeBurnerCompat.PIPEZ_ID)) {
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onRightClickBlock);

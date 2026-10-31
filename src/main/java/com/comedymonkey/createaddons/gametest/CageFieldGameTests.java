@@ -104,7 +104,7 @@ public final class CageFieldGameTests {
 	private static MonsterCageBlockEntity cage(GameTestHelper helper, Supply supply, Watch watch) {
 		helper.setBlock(CAGE, ModBlocks.NETHERITE_MONSTER_CAGE.get().defaultBlockState().setValue(MonsterCageBlock.FACING, Direction.NORTH));
 		MonsterCageBlockEntity cage = helper.getBlockEntity(CAGE);
-		ItemStack wither = ((MonsterJarItem) ModItems.NETHERITE_JAR.get()).fill(EntityType.WITHER.create(helper.getLevel()));
+		ItemStack wither = ModItems.NETHERITE_JAR.get().fill(EntityType.WITHER.create(helper.getLevel()));
 		if (!cage.getCaptiveSlot().insertItem(0, wither, false).isEmpty())
 			helper.fail("the Netherite cage didn't take the Wither");
 		helper.onEachTick(() -> {
