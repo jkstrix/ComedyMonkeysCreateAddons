@@ -8,7 +8,7 @@ Totals: 4 high, 10 medium, 33 low (47 findings). Compiler warnings: 172 in total
 
 ## Status after the fixes (2026-10-31)
 
-All findings were worked on the same day; the changes are uncommitted in the working tree. Every fix has a test where its behaviour could be tested. Four fresh reviewers then attacked the fixes; their nine findings were fixed too. Final run: javac -Xlint:all reports no warnings (it is now on in build.gradle), 990 unit tests and 303 game tests pass.
+All findings were worked on the same day. Every fix has a test where its behaviour could be tested. Four fresh reviewers then attacked the fixes; their nine findings were fixed too. Final run: javac -Xlint:all reports no warnings (it is now on in build.gradle), 999 unit tests and 303 game tests pass. The fixes were committed as f3ea3da; OBS-01 and the vanilla chest visual came after.
 
 | ID | Status | What changed |
 |---|---|---|
@@ -48,7 +48,7 @@ All findings were worked on the same day; the changes are uncommitted in the wor
 | LINE-04 | fixed | Dynamo paper rates use an index of who last saw each source and a per-tick cache; no SavedData lookups per call. |
 | LINE-05 | fixed | A post or battery tower left behind drops a span whose partner was carried off, at once; only the owner end refunds the wire. |
 | LINE-06 | fixed | A turbine casing stops pointing at a controller that was carried off, unless the controller's chunk is unloaded (on paper). |
-| OBS-01 | open | Likely Veil's coloured light lighting Flywheel-drawn pixels with the albedo of what is behind them; waiting for the maintainer's screenshots before choosing a fix. |
+| OBS-01 | fixed | Cause: Veil's coloured light lights each pixel from its albedo and normal buffers, but Flywheel's shader never wrote them and Flywheel drew with only the plain screen bound, so what was behind an instanced part showed through it. Fix, only where the coloured light runs through Veil: Flywheel's common fragment shader is given Veil's albedo (location 1) and view-space normal (location 2) outputs as it loads (VeilFlywheelOutputs, FlywheelSourceFileMixin), and Veil's buffers are bound around Flywheel's draw (LightGlow, LevelRendererVeilFlywheelMixin). If Flywheel's shader ever changes, the patch skips itself and logs a warning. Checked in the maintainer's own scene: the ghost of the grass and chest behind the Helper Bot is gone and the frame matches the Flywheel-off picture. Vanilla chests now also draw through Flywheel (VanillaChestVisual), at the maintainer's request. |
 | WARN-01 | fixed | The boss is spawned through EventHooks.finalizeMobSpawn. |
 | WARN-02 | fixed | stack.getEnchantmentLevel everywhere. |
 | WARN-03 | fixed (suppressed) | The six pick-block overrides keep the 3-argument method with a stated suppression: Create's Display Link screen still calls it directly, so moving to NeoForge's 5-argument hook broke its icons (caught in review). |

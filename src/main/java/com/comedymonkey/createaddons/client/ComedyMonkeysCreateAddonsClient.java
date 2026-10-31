@@ -138,8 +138,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseReleased);
 		// Electric Lights cast light in their glow's colour where Veil can draw it (it comes with Sable): not with Iris (its
 		// light pass fails there, shader pack or not), nor with Colorful Lighting (which colours their light itself)
-		if (net.neoforged.fml.ModList.get().isLoaded("veil") && !net.neoforged.fml.ModList.get().isLoaded("iris")
-			&& !net.neoforged.fml.ModList.get().isLoaded("colorful_lighting"))
+		if (com.comedymonkey.createaddons.compat.veil.VeilFlywheelOutputs.colouredLight())
 			com.comedymonkey.createaddons.compat.veil.LightGlow.install(modBus);
 		// Pipez Covers: covered pipes are drawn as their cover, tinted like its block
 		if (net.neoforged.fml.ModList.get().isLoaded("pipez")) {

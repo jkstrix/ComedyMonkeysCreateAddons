@@ -98,6 +98,34 @@ public final class LightGlow {
 			GLOWS.values().forEach(g -> g.step = -1);
 		});
 		modBus.addListener(LightGlow::addPack);
+		// Flywheel's instances write Veil's albedo and normal (VeilFlywheelOutputs): Veil's buffers bound while it draws
+		NeoForge.EVENT_BUS.addListener(LightGlow::bindForFlywheel);
+		VeilFlywheelOutputs.unbind = LightGlow::unbindAfterFlywheel;
+	}
+
+	/**
+	 * Flywheel draws its instances straight after the entities (where NeoForge's AFTER_ENTITIES stage ends), into the
+	 * screen as it finds it. Veil binds its albedo and normal buffers only inside vanilla's render types, so they're
+	 * bound here, as those render types bind them, while both are on: then albedo and normal are at the places
+	 * VeilFlywheelOutputs writes them (1 and 2). They're unbound once Flywheel has drawn.
+	 */
+	private static void bindForFlywheel(net.neoforged.neoforge.client.event.RenderLevelStageEvent event) {
+		if (event.getStage() != net.neoforged.neoforge.client.event.RenderLevelStageEvent.Stage.AFTER_ENTITIES
+			|| foundry.veil.Veil.platform().hasErrors() || foundry.veil.api.client.render.VeilLevelPerspectiveRenderer.isRenderingPerspective())
+			return;
+		var buffers = VeilRenderSystem.renderer().getDynamicBufferManger();
+		int both = foundry.veil.api.client.render.dynamicbuffer.DynamicBufferType.ALBEDO.getMask()
+			| foundry.veil.api.client.render.dynamicbuffer.DynamicBufferType.NORMAL.getMask();
+		if (!buffers.isEnabled() || (buffers.getActiveBuffers() & both) != both)
+			return;
+		var wrapper = foundry.veil.impl.client.render.dynamicbuffer.DynamicBufferManager.MAIN_WRAPPER;
+		foundry.veil.api.client.render.framebuffer.FramebufferStack.push(wrapper);
+		buffers.setupRenderState(wrapper, Minecraft.getInstance().getMainRenderTarget(), true);
+		VeilFlywheelOutputs.boundForFlywheel = true;
+	}
+
+	private static void unbindAfterFlywheel() {
+		foundry.veil.api.client.render.framebuffer.FramebufferStack.pop(foundry.veil.impl.client.render.dynamicbuffer.DynamicBufferManager.MAIN_WRAPPER);
 	}
 
 	private static void addPack(AddPackFindersEvent event) {

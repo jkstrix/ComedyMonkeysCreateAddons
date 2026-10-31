@@ -64,4 +64,6 @@ The repro attempt in the dev client (flat world, `/lights testsetup` street at m
 
 ## Status (2026-10-31)
 
-**open.** Likely Veil's coloured light lighting Flywheel-drawn pixels with the albedo of what is behind them; waiting for the maintainer's screenshots before choosing a fix.
+**fixed.** Cause: Veil's coloured light lights each pixel from its albedo and normal buffers, but Flywheel's shader never wrote them and Flywheel drew with only the plain screen bound, so what was behind an instanced part showed through it. Fix, only where the coloured light runs through Veil: Flywheel's common fragment shader is given Veil's albedo (location 1) and view-space normal (location 2) outputs as it loads (VeilFlywheelOutputs, FlywheelSourceFileMixin), and Veil's buffers are bound around Flywheel's draw (LightGlow, LevelRendererVeilFlywheelMixin). If Flywheel's shader ever changes, the patch skips itself and logs a warning. Checked in the maintainer's own scene: the ghost of the grass and chest behind the Helper Bot is gone and the frame matches the Flywheel-off picture. Vanilla chests now also draw through Flywheel (VanillaChestVisual), at the maintainer's request.
+
+Tests: VeilFlywheelOutputsTest (against Flywheel 1.0.6's real shader text), VanillaChestVisualTest; in-game A/B screenshots.

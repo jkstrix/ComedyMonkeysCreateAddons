@@ -92,6 +92,8 @@ public final class MachineVisuals {
 			.factory(com.comedymonkey.createaddons.client.line.LinePostVisual::new)
 			.skipVanillaRender(be -> true)
 			.apply();
+		// vanilla's chests (plain, trapped, ender), drawn as vanilla draws them
+		VanillaChestVisual.register();
 		// the Compact Gyroscope and Torque Rotor only exist with Sable
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerVisuals();

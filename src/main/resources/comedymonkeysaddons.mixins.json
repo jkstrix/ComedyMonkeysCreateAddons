@@ -18,7 +18,9 @@
     "PipeRendererMixin",
     "VillagerModelMixin",
     "StockKeeperRequestScreenMixin",
-    "VeilRenderSystemMixin"
+    "VeilRenderSystemMixin",
+    "FlywheelSourceFileMixin",
+    "LevelRendererVeilFlywheelMixin"
   ],
   "injectors": {
     "defaultRequire": 0
