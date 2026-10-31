@@ -45,6 +45,7 @@
     { "id": "incinerator", "setup": [ "setblock ~ ~ ~ comedymonkeysaddons:incinerator[facing=south,lit=true]{Heat:10}" ] },
     { "id": "lava-generator", "setup": [ "setblock ~ ~ ~ comedymonkeysaddons:lava_generator[facing=south,fuelled=true,lit=true]{Tank:{Fluid:{id:\"minecraft:lava\",amount:4000}},Running:1b}" ] },
     { "id": "electric-motor", "setup": [ "setblock ~ ~ ~ comedymonkeysaddons:electric_motor[facing=south,powered=true]{Energy:1000000,Running:1b}" ] },
+    { "id": "clockwork-dynamo", "wait": 60, "setup": [ "setblock ~ ~ ~ comedymonkeysaddons:clockwork_dynamo[facing=south]{StressSetting:16384}", "setblock ~ ~ ~1 create:creative_motor[facing=north]{ScrollValue:64}" ] },
     { "id": "battery", "setup": [ "setblock ~ ~ ~ comedymonkeysaddons:battery[facing=south]{Charge:7000000}" ] },
     { "id": "battery--industrial", "region": [ [ -1, 0, -2 ], [ 1, 3, 0 ] ], "wait": 80, "setup": [ "fill ~-1 ~ ~-2 ~1 ~3 ~ comedymonkeysaddons:battery[facing=south]" ] },
     { "id": "geothermal-turbine", "region": [ [ -1, 0, -2 ], [ 1, 2, 0 ] ], "wait": 80, "setup": [ "fill ~-1 ~ ~-2 ~1 ~2 ~ comedymonkeysaddons:geothermal_casing", "setblock ~ ~1 ~-1 comedymonkeysaddons:geothermal_core", "setblock ~ ~1 ~ comedymonkeysaddons:geothermal_controller[facing=south]" ] },

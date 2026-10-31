@@ -39,6 +39,8 @@ public final class ModSounds {
 	/** The Lava Generator's and the Electric Motor's sounds, which {@code design/sound/export-block.js} writes. */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> GENERATOR = registerPrefixed("lava_generator.");
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> MOTOR = registerPrefixed("electric_motor.");
+	/** The Clockwork Dynamo's sounds (design/sound/clockwork-dynamo), written by {@code design/sound/export-block.js} too. */
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> DYNAMO = registerPrefixed("clockwork_dynamo.");
 	/** The Industrial Battery's sounds (the plain Battery is silent in use). */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> BATTERY = registerPrefixed("industrial_battery.");
 	/** Both Magma Engines' sounds (the Supercharged one plays them a little higher, and adds the blower). */
@@ -84,6 +86,11 @@ public final class ModSounds {
 	/** One of the Electric Motor's sounds; throws for an unknown id. */
 	public static SoundEvent motor(String id) {
 		return get(MOTOR, id, "Electric Motor");
+	}
+
+	/** One of the Clockwork Dynamo's sounds; throws for an unknown id. */
+	public static SoundEvent dynamo(String id) {
+		return get(DYNAMO, id, "Clockwork Dynamo");
 	}
 
 	/** One of the Industrial Battery's sounds; throws for an unknown id. */

@@ -1,0 +1,80 @@
+{
+ "hum": {
+  "variants": 1,
+  "sources": [
+   "bigsoundbank/cuts/loop_transformer.wav",
+   "bigsoundbank/cuts/lt_antenna_run.wav"
+  ],
+  "synth": [
+   "hum"
+  ]
+ },
+ "start": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/1498.ogg",
+   "kenney-interface-sounds/Audio/tick_004.ogg",
+   "bigsoundbank/cuts/loop_transformer.wav"
+  ],
+  "synth": []
+ },
+ "stop": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/loop_transformer.wav",
+   "bigsoundbank/cuts/lt_antenna_stop.wav",
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "kenney-rpg-audio/Audio/metalClick.ogg"
+  ],
+  "synth": []
+ },
+ "aerial_up": {
+  "variants": 2,
+  "sources": [
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": [
+   "boing"
+  ]
+ },
+ "aerial_boing": {
+  "variants": 3,
+  "sources": [
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": [
+   "boing"
+  ]
+ },
+ "aerial_fold": {
+  "variants": 2,
+  "sources": [
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": [
+   "boing"
+  ]
+ },
+ "adjust": {
+  "variants": 2,
+  "sources": [
+   "kenney-ui-audio/Audio/switch12.ogg",
+   "kenney-ui-audio/Audio/switch13.ogg"
+  ],
+  "synth": [
+   "ratchet"
+  ]
+ }
+}

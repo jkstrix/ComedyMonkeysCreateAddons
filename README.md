@@ -15,7 +15,7 @@ A NeoForge add-on for **Create** (Minecraft 1.21.1). Mod id: `comedymonkeysaddon
 - **Magma Engine** and **Supercharged Magma Engine**: lava-burning engines with four and eight Portable Engines' worth of power.
 - **String Tangler** (cobwebs from string and slime) and **Stone Infuser** (Create's ore-bearing stones from cobblestone and metal nuggets).
 - **Incinerator**: destroys any item or fluid, and heats a boiler while it burns.
-- **Electricity**: the **Lava Generator** and the 3x3x3 **Geothermal Turbine** burn lava for Forge Energy, and the **Electric Motor** turns it back into rotation.
+- **Electricity**: the **Lava Generator** and the 3x3x3 **Geothermal Turbine** burn lava for Forge Energy, the **Clockwork Dynamo** makes it from any shaft, and the **Electric Motor** turns it back into rotation.
 - **Compact Gyroscope**, **Torque Rotor** and **Flight Instruments** for Create Aeronautics ships: stay level, turn without strafing, and read altitude, airspeed, attitude and heading.
 - **Aviator's Goggles in the Curios head slot** (with Create Aeronautics).
 - **Pipez**: pipes can feed Blaze Burners and Portable Engines, and **Pipez Covers** hide pipework inside walls and floors.
@@ -294,20 +294,22 @@ Only present when Sable (Create Aeronautics) is installed.
 - **Flight Instruments**: a sloping riveted steel console with walnut trim and a glare hood, and four live brass-ringed dials: an altimeter (long hand per 100 m, short per 1000 m), airspeed (0 to 60 m/s), an artificial horizon that tilts with roll and drops with pitch, and heading. Place it facing you; the way you face it counts as the ship's forward. Goggles show every reading, and Display Links can put **altitude, airspeed, climb rate, heading or pitch and roll** on Display Boards and Nixie Tubes (refreshed every second). Recipe: iron sheets, a compass, 2 clocks, a Precision Mechanism and an electron tube.
 - **Torque Rotor**: a three-bladed airship tail rotor (laminated walnut blades with brass leading edges on a riveted steel nacelle) that turns the ship instead of pushing it. Its blades push the way they face (or pull, with the shaft reversed) exactly as hard as an Andesite Propeller at the same speed, and the ship turns about its centre of mass just as it would from a propeller in that spot, but without being pushed, so there's no sideways drift. Put it on the tail like a tail rotor, facing sideways, to yaw: the further from the middle, the harder it turns. It mounts on the face you click, with the shaft going into its base, and blows wind like a propeller. Recipe: iron sheets, Andesite Casing, 2 shafts and a Precision Mechanism.
 
-## Electricity: Lava Generator, Geothermal Turbine and Electric Motor
+## Electricity: Lava Generator, Geothermal Turbine, Electric Motor and Clockwork Dynamo
 
-Burn lava for Forge Energy (FE), and turn FE back into rotation. All the numbers are configurable.
+Burn lava or turn a shaft for Forge Energy (FE), and turn FE back into rotation. All the numbers are configurable.
 
 | | Takes | Gives |
 |---|---|---|
 | **Lava Generator** | 20 mB/s lava, in at the middle of the back | **1,024 FE/t**, out of the terminals in the middle of each side |
 | **Geothermal Turbine** (3x3x3) | 90 mB/s lava and 250 mB/s water, through the ports under its base | **46,080 FE/t**, through the ports under its base, into anything under it |
 | **Electric Motor** | 1 FE/t for every 16 SU it's set to give, in through its base (the flange opposite the shaft) | Up to **294,912 SU** (a full superheated boiler) |
+| **Clockwork Dynamo** | The stress it's set to take, 256 to 294,912 SU, from the shaft at its front | **1 FE/t for every 21⅓ SU** (75% of what a motor draws), out of its base |
 
 - **Lava Generator**: a small lava-fired turbine; its wheel spins behind the brass-ringed window, faster the more power is taken, and the lava glows behind the glass in front while it burns. It pushes its power into whatever is on its sides (an Electric Motor, or a Pipez energy pipe). One generator runs a motor at 16,384 SU.
 - **Geothermal Turbine**: build a 3x3x3 of Geothermal Casings with a Turbine Core in the very middle and the Controller in the middle of the front, facing you. It forms into one big machine within a second. Lava heats water to steam that turns the turbine: ten times as efficient with lava as the Lava Generator, so two fully upgraded Lava Wellsprings and a water supply run it, and it powers two and a half motors flat out. Its gauges show the lava and water, and while it runs it steams and its vents flicker with flame.
 - **Electric Motor**: a flange-mounted motor that takes power through its base, opposite the shaft, in any facing; its lamp is cyan while it runs and red when it's short of power. Right-click it with a wrench for its settings. Speed snaps to Create's standard speeds (1 to 256 RPM); stress snaps to what the generators make (a quarter or half of a Lava Generator, whole generators, up to one Geothermal Turbine), and the screen shows the power it will draw. It stops when it runs short of power and restarts once it has a reserve stored (30 seconds' worth, or a few seconds' at high stress), so a weak supply makes it pause now and then rather than stutter the whole network.
-- Recipes: Lava Generator: brass sheets, an electron tube, 2 Fluid Tanks, a Propeller, Industrial Iron and a Blaze Burner. Electric Motor: brass sheets, an electron tube, copper, a Precision Mechanism, Industrial Iron and Brass Casing. Geothermal Casing (4): iron sheets, Industrial Iron and Copper Casing. Controller: brass sheets, electron tubes, Precision Mechanisms and a casing. Turbine Core: 4 Precision Mechanisms, 4 Propellers and a Flywheel.
+- **Clockwork Dynamo**: the Electric Motor run backwards, built from the bots' own parts. It takes the stress it's set to (with a wrench) off the shaft at its front, at any speed, and makes 1 FE a tick for every 21⅓ SU out of its base: one water wheel makes 12 FE/t, a full boiler 13,824. Since it makes three quarters of what a motor draws, a motor and a dynamo can never run each other. With nowhere to put its power it keeps taking its stress and the rest is lost; a Clutch or Gearshift on its shaft switches it off. Far from any player it keeps feeding its Power Lines on paper, but only from water wheels and windmills (the `comedymonkeysaddons:free_kinetic_sources` block tag): what motors and engines give counts for nothing while it's away. Its lamp lights cyan and its copper aerial springs up while it makes power.
+- Recipes: Lava Generator: brass sheets, an electron tube, 2 Fluid Tanks, a Propeller, Industrial Iron and a Blaze Burner. Electric Motor: brass sheets, an electron tube, copper, a Precision Mechanism, Industrial Iron and Brass Casing. Clockwork Dynamo: brass sheets, an electron tube, copper, a Precision Mechanism, Andesite Casings and a shaft. Geothermal Casing (4): iron sheets, Industrial Iron and Copper Casing. Controller: brass sheets, electron tubes, Precision Mechanisms and a casing. Turbine Core: 4 Precision Mechanisms, 4 Propellers and a Flywheel.
 
 ## Pipez Covers (with Pipez)
 
@@ -333,9 +335,9 @@ Copycat-style covers for Pipez pipes, to hide pipework inside walls and floors. 
 - **Curios + Aviator's Goggles**: wear them in the head slot (over a helmet if you like); they still count as goggles for Create's overlays.
 - **Modded crops** (Supplementaries, Farmer's Delight and others): any crop built on vanilla's crop or bush blocks grows in the Auto Harvester with its own drops, growth stages and model. Two-block crops like flax show both halves once they're tall enough.
 
-Ponder scenes (hold **W**) cover the Wellspring, the chest and barrel upgrades, the Pressure Crucible, the generators (Basalt, Blackstone and Tuff get their own scenes too), both Magma Engines, the Incinerator, the String Tangler, the Stone Infuser, the Lava Generator, the Electric Motor, the Geothermal Turbine, the Auto Harvester, the Animal Pens, the Monster Cages (dry, Flooded and Containment) and the Fish Tanks, and with Sable the Compact Gyroscope, Torque Rotor and Flight Instruments.
+Ponder scenes (hold **W**) cover the Wellspring, the chest and barrel upgrades, the Pressure Crucible, the generators (Basalt, Blackstone and Tuff get their own scenes too), both Magma Engines, the Incinerator, the String Tangler, the Stone Infuser, the Lava Generator, the Electric Motor, the Clockwork Dynamo, the Geothermal Turbine, the Auto Harvester, the Animal Pens, the Monster Cages (dry, Flooded and Containment) and the Fish Tanks, and with Sable the Compact Gyroscope, Torque Rotor and Flight Instruments.
 
-An advancement tab follows the mod from the first Upgrade Template to a maxed-out Wellspring, a Netherite chest, a full-power Electric Motor, the Auto Harvester, a Brass Animal Pen of 512, a caged monster, a caged Wither and a blue axolotl born in a Fish Tank.
+An advancement tab follows the mod from the first Upgrade Template to a maxed-out Wellspring, a Netherite chest, a full-power Electric Motor, an Electric Motor run off a Clockwork Dynamo, the Auto Harvester, a Brass Animal Pen of 512, a caged monster, a caged Wither and a blue axolotl born in a Fish Tank.
 
 ## Configuration
 
@@ -353,7 +355,7 @@ Mods → Create → Config → *Access configs of other mods* → ComedyMonkey's
 - **Cuckoo Clock**: stress (SU, at any speed) and how far it reaches villagers (blocks).
 - **Trade Bot**: his range from the station, bots per player, the station's charge rate and buffer, a full charge, FE per block and per trade, and how near a monster has to be to scare him.
 - **Magma Engine** and **Supercharged Magma Engine**: each has its own speed, stress capacity per RPM and lava burned per second.
-- **Electricity**: the Electric Motor's maximum stress and FE drawn per SU; the Lava Generator's and Geothermal Turbine's FE per tick and lava (and the turbine's water) per second.
+- **Electricity**: the Electric Motor's maximum stress and FE drawn per SU (the Clockwork Dynamo shares them); the Clockwork Dynamo's efficiency; the Lava Generator's and Geothermal Turbine's FE per tick and lava (and the turbine's water) per second.
 - **Create Aeronautics**: Compact Gyroscope strength, damping, lean correction, full-strength speed and stress; Torque Rotor thrust per RPM and stress.
 - **Mod Compatibility**: Pipez Blaze Burner feeding, whether only Pipez (not hoppers or funnels) may feed them, and Portable Engine fluid fuel.
 - **Aviator's Goggles** (client): show goggles in the Curios slot and over helmets.

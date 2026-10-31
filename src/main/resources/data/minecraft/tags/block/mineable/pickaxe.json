@@ -34,6 +34,7 @@
       "required": false
     },
     "comedymonkeysaddons:electric_motor",
+    "comedymonkeysaddons:clockwork_dynamo",
     "comedymonkeysaddons:lava_generator",
     "comedymonkeysaddons:battery",
     "comedymonkeysaddons:geothermal_casing",

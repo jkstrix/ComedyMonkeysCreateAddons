@@ -522,6 +522,65 @@
   ]
  },
  {
+  "id": "comedymonkeysaddons:clockwork_dynamo",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:electron_tube",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:copper_ingot",
+     "tag": "c:ingots/copper",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "minecraft:copper_ingot",
+     "tag": "c:ingots/copper",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:shaft",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:clockwork_dynamo",
+    "count": 1
+   }
+  ]
+ },
+ {
   "id": "comedymonkeysaddons:compact_gyroscope",
   "type": "crafting_shapeless",
   "machine": "minecraft",

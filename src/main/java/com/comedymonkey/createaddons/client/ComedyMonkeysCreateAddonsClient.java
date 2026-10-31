@@ -107,6 +107,7 @@ public class ComedyMonkeysCreateAddonsClient {
 					dev.engine_room.flywheel.lib.visualization.VisualizationHelper.queueUpdate(post);
 		};
 		com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity.clientTicker = ElectricSounds::tickMotor;
+		com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity.clientTicker = ElectricSounds::tickDynamo;
 		// Electric Lights: flicker and warm-up sounds (capped nearby), and a lit light's visual made when it comes on
 		com.comedymonkey.createaddons.content.light.LightBlockEntity.clientCue = LightSounds::cue;
 		// The Industrial Battery's hum runs from its master's client tick
@@ -212,6 +213,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.FISH_TANK.get(), FishTankRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.MAGMA_ENGINE.get(), MagmaEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ELECTRIC_MOTOR.get(), ElectricRenderers.Motor::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.CLOCKWORK_DYNAMO.get(), ElectricRenderers.Dynamo::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.WINDING_KEY.get(), com.comedymonkey.createaddons.client.juggernaut.WindingKeyRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.SPRING_ENGINE.get(), com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);

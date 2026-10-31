@@ -34,6 +34,8 @@ public final class ModAdvancements {
 	/** Value: the tower's height. */
 	public static final String INDUSTRIAL_BATTERY_FORMED = "industrial_battery_formed";
 	public static final String MOTOR_FULL_POWER = "motor_full_power";
+	/** An Electric Motor running off a Clockwork Dynamo's power. */
+	public static final String DYNAMO_MOTOR = "dynamo_motor";
 	public static final String HARVESTER_HARVEST = "harvester_harvest";
 	public static final String PEN_CULL = "pen_cull";
 	public static final String PEN_FULL = "pen_full";

@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:clockwork_dynamo",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:electric_motor"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.dynamo_motor"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.dynamo_motor.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "dynamo_motor"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

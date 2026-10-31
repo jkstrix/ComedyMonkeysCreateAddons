@@ -2,16 +2,16 @@
   {
     "id": "electricity",
     "name": "Electricity",
-    "summary": "Burn lava for Forge Energy, carry it on Power Lines, store it in Batteries and turn it back into rotation with Electric Motors.",
+    "summary": "Burn lava or turn a shaft for Forge Energy, carry it on Power Lines, store it in Batteries and turn it back into rotation with Electric Motors.",
     "image": "renders/geothermal-turbine.png",
     "tags": [
       "power"
     ],
     "stage": "advanced",
     "teach": {
-      "what": "A complete FE grid inside the mod: the [[lava-generator]] and [[geothermal-turbine]] make Forge Energy, [[power-lines|Power Lines]] carry it, [[battery|Batteries]] store it, and the [[electric-motor]] turns it into Create rotation of up to 294,912 SU.",
+      "what": "A complete FE grid inside the mod: the [[lava-generator]] and [[geothermal-turbine]] burn lava for Forge Energy, the [[clockwork-dynamo]] makes it from any shaft, [[power-lines|Power Lines]] carry it, [[battery|Batteries]] store it, and the [[electric-motor]] turns it into Create rotation of up to 294,912 SU.",
       "why": "Rotation is hard to move long distances and hard to make in huge amounts. FE travels any distance on a thin cable, and one motor can match a full superheated steam boiler. It also powers [[trade-bot|Trade Bot]] and the [[netherite-monster-cage]].",
-      "when": "Once you have brass, Industrial Iron and a lava supply (a [[lava-upgrade|Lava Wellspring]]). The turbine and Industrial Battery come later, as grid projects.",
+      "when": "Once you have brass and a lava supply (a [[lava-upgrade|Lava Wellspring]]), or brass and any spare rotation for a [[clockwork-dynamo]]. The turbine and Industrial Battery come later, as grid projects.",
       "interacts": "Fuel comes from the [[fluid-wellspring]] on [[fluid-lines|Fluid Lines]]. Pipez energy pipes and other mods' FE blocks connect too: anything that gives or takes FE through a face works.",
       "mistakes": [
         "Leaving generators with nothing to power. They always run flat out while fuelled; what isn't used fills stores and the rest is lost.",
@@ -25,7 +25,7 @@
         "id": "making-fe",
         "title": "Making FE",
         "body": [
-          "Two generators burn lava. Both run **flat out** whenever they have fuel: there's no throttle on the Lava Generator, and the Geothermal Turbine runs at whatever power level you set on it with a Wrench, in 10% steps.",
+          "Two generators burn lava, and the [[clockwork-dynamo]] turns any shaft into power. Both run **flat out** whenever they have fuel: there's no throttle on the Lava Generator, and the Geothermal Turbine runs at whatever power level you set on it with a Wrench, in 10% steps.",
           {
             "table": {
               "head": [
@@ -46,6 +46,12 @@
                   "90 mB/s lava and 250 mB/s water, through the ports under its base",
                   "46,080 FE a tick, through the ports under its base",
                   "10,240"
+                ],
+                [
+                  "[[clockwork-dynamo]]",
+                  "The stress you set, 256 to 294,912 SU, from the shaft at its front",
+                  "1 FE a tick per 21⅓ SU, out of its base",
+                  "None of its own (768 through a Magma Engine): 75% of what a motor draws for the same stress"
                 ]
               ]
             }

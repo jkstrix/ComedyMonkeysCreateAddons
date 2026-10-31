@@ -98,6 +98,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(TradeBotGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.StorageGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.MachineGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.DynamoGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LightGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.BatteryGameTests::register);
@@ -225,6 +226,10 @@ public class ComedyMonkeysCreateAddons {
 		// gives FE at the sides; the turbine takes lava and water and gives FE through its controller or any of its casings
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.ELECTRIC_MOTOR.get(),
 			(be, side) -> side == null || ElectricMotorBlock.isInput(be.getBlockState(), side) ? be.getEnergy() : null);
+		// the Clockwork Dynamo gives FE through its base only, like the motor takes it
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.CLOCKWORK_DYNAMO.get(),
+			(be, side) -> side == null || com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock.isOutput(be.getBlockState(), side)
+				? be.getEnergyOut() : null);
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),
 			(be, side) -> side == null || side == LavaGeneratorBlock.inlet(be.getBlockState()) ? be.getFluidsOut() : null);
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),
@@ -267,6 +272,8 @@ public class ComedyMonkeysCreateAddons {
 			QuickTransferPayload::handle);
 		// The Electric Motor's settings screen
 		event.registrar("1").playToServer(MotorSettingsPayload.TYPE, MotorSettingsPayload.STREAM_CODEC, MotorSettingsPayload::handle);
+		event.registrar("1").playToServer(com.comedymonkey.createaddons.network.DynamoSettingsPayload.TYPE,
+			com.comedymonkey.createaddons.network.DynamoSettingsPayload.STREAM_CODEC, com.comedymonkey.createaddons.network.DynamoSettingsPayload::handle);
 		event.registrar("1").playToServer(TurbineSettingsPayload.TYPE, TurbineSettingsPayload.STREAM_CODEC, TurbineSettingsPayload::handle);
 		event.registrar("1").playToServer(SplitterSettingsPayload.TYPE, SplitterSettingsPayload.STREAM_CODEC, SplitterSettingsPayload::handle);
 		event.registrar("1").playToClient(SplitterInfoPayload.TYPE, SplitterInfoPayload.STREAM_CODEC, SplitterInfoPayload::handle);
@@ -362,6 +369,7 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.MAGMA_ENGINE.get());
 			registerCreateTooltip(ModItems.SUPERCHARGED_MAGMA_ENGINE.get());
 			registerCreateTooltip(ModItems.ELECTRIC_MOTOR.get());
+			registerCreateTooltip(ModItems.CLOCKWORK_DYNAMO.get());
 			registerCreateTooltip(ModItems.LAVA_GENERATOR.get());
 			registerCreateTooltip(ModItems.BATTERY.get());
 			registerCreateTooltip(ModItems.GEOTHERMAL_CONTROLLER.get());

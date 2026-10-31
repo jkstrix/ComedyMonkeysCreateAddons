@@ -19,6 +19,12 @@ public final class PowerGridTesting {
 			PowerGrid.AWAY.remove(key);
 	}
 
+	/** FE a tick the record of the generator at key says it makes while away (its free sources' share), or -1 without one. */
+	public static double makingAway(ServerLevel level, BlockPos key) {
+		PowerGrid.Paper p = PowerGrid.of(level).paper(key);
+		return p == null ? -1 : p.making(level, true);
+	}
+
 	/** The FE in the record of the generator at key, or -1 if it has none. */
 	public static double store(ServerLevel level, BlockPos key) {
 		PowerGrid.Paper p = PowerGrid.of(level).paper(key);

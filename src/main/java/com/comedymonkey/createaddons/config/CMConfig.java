@@ -103,6 +103,7 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue superchargedMagmaEngineLavaPerSecond;
 		public final ModConfigSpec.IntValue motorMaxStress;
 		public final ModConfigSpec.DoubleValue motorFePerStress;
+		public final ModConfigSpec.DoubleValue dynamoEfficiency;
 		public final ModConfigSpec.IntValue generatorFePerTick;
 		public final ModConfigSpec.IntValue generatorLavaPerSecond;
 		public final ModConfigSpec.IntValue turbineFePerTick;
@@ -469,6 +470,12 @@ public final class CMConfig {
 				.comment("FE an Electric Motor draws per tick for each SU it's set to give.")
 				.translation("comedymonkeysaddons.configuration.motorFePerStress")
 				.defineInRange("motorFePerStress", 0.0625, 0.0, 64.0);
+			dynamoEfficiency = builder
+				.comment("How much of what a Clockwork Dynamo takes comes out as power: it makes the FE an Electric Motor would",
+					"draw for the same stress, times this. Below 1 a motor and a dynamo can't run each other; at 1 the loop breaks",
+					"even, and burning lava through a Magma Engine and a dynamo ties the Lava Generator.")
+				.translation("comedymonkeysaddons.configuration.dynamoEfficiency")
+				.defineInRange("dynamoEfficiency", 0.75, 0.0, 1.0);
 			generatorFePerTick = builder
 				.comment("FE a Lava Generator makes per tick while it burns.")
 				.translation("comedymonkeysaddons.configuration.generatorFePerTick")
@@ -886,6 +893,10 @@ public final class CMConfig {
 
 		public double motorFePerStress() {
 			return get(motorFePerStress);
+		}
+
+		public double dynamoEfficiency() {
+			return get(dynamoEfficiency);
 		}
 
 		public int generatorFePerTick() {

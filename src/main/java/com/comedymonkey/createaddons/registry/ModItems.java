@@ -127,6 +127,7 @@ public final class ModItems {
 	public static final DeferredItem<BlockItem> SUPERCHARGED_MAGMA_ENGINE =
 		ITEMS.registerSimpleBlockItem(ModBlocks.SUPERCHARGED_MAGMA_ENGINE);
 	public static final DeferredItem<BlockItem> ELECTRIC_MOTOR = ITEMS.registerSimpleBlockItem(ModBlocks.ELECTRIC_MOTOR);
+	public static final DeferredItem<BlockItem> CLOCKWORK_DYNAMO = ITEMS.registerSimpleBlockItem(ModBlocks.CLOCKWORK_DYNAMO);
 	public static final DeferredItem<BlockItem> LAVA_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.LAVA_GENERATOR);
 	public static final DeferredItem<com.comedymonkey.createaddons.content.juggernaut.SpringEngineItem> SPRING_ENGINE = ITEMS.register("spring_engine",
 		() -> new com.comedymonkey.createaddons.content.juggernaut.SpringEngineItem(ModBlocks.SPRING_ENGINE.get(), new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE)));

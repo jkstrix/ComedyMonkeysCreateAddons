@@ -229,6 +229,14 @@ public final class PowerGrid extends SavedData {
 	public static final class Paper {
 		final String kind;
 		int rate;
+		/**
+		 * A Clockwork Dynamo's free sources (water wheels, windmills): the share of its output each one gives, by where it
+		 * is; null for every other generator. While it runs it makes its full {@link #rate}; while it's away a source counts
+		 * only if it isn't running itself (it's away too, so nothing else uses it: the Wellspring rule) and this is the
+		 * record that saw it last (a source re-routed to another dynamo counts once).
+		 */
+		@Nullable
+		Map<BlockPos, Double> freeShares;
 		long storeCap;
 		double store, seenStore;
 		final Fuel[] fuels;
@@ -250,6 +258,25 @@ public final class PowerGrid extends SavedData {
 			this.storeCap = storeCap;
 		}
 
+		/** Only the free sources' shares count while it's away (see {@link #freeShares}); a map nothing else changes. */
+		public void away(Map<BlockPos, Double> shares) {
+			this.freeShares = shares;
+		}
+
+		/**
+		 * FE a tick flat out while away: its full rate, or (with free sources) its rate times the share of the sources that
+		 * count now, never more than all of it. Without a level (tests) every source counts.
+		 */
+		int paperRate(@Nullable ServerLevel level) {
+			if (freeShares == null)
+				return rate;
+			double share = 0;
+			for (Map.Entry<BlockPos, Double> e : freeShares.entrySet())
+				if (level == null || !running(level, e.getKey()) && of(level).lastToSee(e.getKey()) == this)
+					share += e.getValue();
+			return (int) Math.floor(rate * Math.min(1, share));
+		}
+
 		public Fuel fuel(int i) {
 			return fuels[i];
 		}
@@ -267,15 +294,19 @@ public final class PowerGrid extends SavedData {
 			return in;
 		}
 
-		/** FE a tick it's making now: flat out, or (with a fuel run dry) what that fuel's income keeps going; none if it can't run. */
-		double making(ServerLevel level) {
-			if (rate <= 0)
+		/**
+		 * FE a tick it's making now: flat out, or (with a fuel run dry) what that fuel's income keeps going; none if it
+		 * can't run. Flat out is its away rate while it's {@code away}, its full rate while it runs.
+		 */
+		double making(ServerLevel level, boolean away) {
+			int flatOut = away ? paperRate(level) : rate;
+			if (flatOut <= 0)
 				return 0;
 			double run = 1;
 			for (Fuel f : fuels)
 				if (f.amount <= 1e-9)
 					run = Math.min(run, f.use <= 0 ? 1 : Math.min(1, income(f, level) / f.use));
-			return rate * run;
+			return flatOut * run;
 		}
 
 		/**
@@ -290,9 +321,11 @@ public final class PowerGrid extends SavedData {
 			double[] in = new double[fuels.length];
 			for (int i = 0; i < fuels.length; i++)
 				in[i] = income(fuels[i], level);
+			// it's away (or catching up on the time it was): its away rate
+			int flatOut = paperRate(level);
 			for (int step = 0; step < 8 && left > 1e-9; step++) {
 				// how much of full output it makes as its fuels stand: all, or (with one run dry) what that one is brought
-				double run = rate <= 0 ? 0 : 1;
+				double run = flatOut <= 0 ? 0 : 1;
 				for (int i = 0; i < fuels.length; i++)
 					if (fuels[i].amount <= 1e-9)
 						run = Math.min(run, fuels[i].use <= 0 ? 1 : Math.min(1, in[i] / fuels[i].use));
@@ -304,7 +337,7 @@ public final class PowerGrid extends SavedData {
 				}
 				for (int i = 0; i < fuels.length; i++)
 					fuels[i].amount = Math.max(0, Math.min(fuels[i].cap, fuels[i].amount + (in[i] - fuels[i].use * run) * until));
-				store = Math.min(storeCap, store + rate * run * until);
+				store = Math.min(storeCap, store + flatOut * run * until);
 				left -= until;
 			}
 		}
@@ -403,6 +436,12 @@ public final class PowerGrid extends SavedData {
 				ListTag fl = c.getList("Fuels", Tag.TAG_COMPOUND);
 				Paper p = new Paper(c.getString("Kind"), fl.size());
 				p.set(c.getInt("Rate"), c.getDouble("Store"), c.getLong("StoreCap"));
+				if (c.contains("FreeShares")) {
+					Map<BlockPos, Double> shares = new LinkedHashMap<>();
+					for (Tag s : c.getList("FreeShares", Tag.TAG_COMPOUND))
+						shares.put(BlockPos.of(((CompoundTag) s).getLong("Pos")), ((CompoundTag) s).getDouble("Share"));
+					p.freeShares = Map.copyOf(shares);
+				}
 				p.seenStore = c.getDouble("SeenStore");
 				p.at = c.getLong("At");
 				p.seenAt = c.getLong("SeenAt");
@@ -448,6 +487,16 @@ public final class PowerGrid extends SavedData {
 				c.putLong("Pos", e.getKey().asLong());
 				c.putString("Kind", p.kind);
 				c.putInt("Rate", p.rate);
+				if (p.freeShares != null) {
+					ListTag shares = new ListTag();
+					for (Map.Entry<BlockPos, Double> s : p.freeShares.entrySet()) {
+						CompoundTag sc = new CompoundTag();
+						sc.putLong("Pos", s.getKey().asLong());
+						sc.putDouble("Share", s.getValue());
+						shares.add(sc);
+					}
+					c.put("FreeShares", shares);
+				}
 				c.putDouble("Store", p.store);
 				c.putDouble("SeenStore", p.seenStore);
 				c.putLong("StoreCap", p.storeCap);
@@ -655,11 +704,36 @@ public final class PowerGrid extends SavedData {
 				if (f.income.keySet().removeIf(src -> level.isLoaded(src)
 					&& !(level.getBlockEntity(src) instanceof com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity)))
 					records.setDirty();
+			// ...and a dynamo's free source that's loaded and no free source now (broken, replaced)
+			if (p.freeShares != null && p.freeShares.keySet().stream().anyMatch(src -> !stillFree(level, src))) {
+				Map<BlockPos, Double> kept = new LinkedHashMap<>();
+				p.freeShares.forEach((src, share) -> {
+					if (stillFree(level, src))
+						kept.put(src, share);
+				});
+				p.freeShares = Map.copyOf(kept);
+				records.setDirty();
+			}
 			if (now - p.at >= 20) {
 				p.advance(now, level);
 				records.setDirty();
 			}
 		}
+	}
+
+	/** A free source counts while it's unloaded (nothing can change it) or still a free source's block. Never loads a chunk. */
+	private static boolean stillFree(ServerLevel level, BlockPos src) {
+		return !level.isLoaded(src) || level.getBlockState(src).is(com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity.FREE_SOURCES);
+	}
+
+	/** Of the records that count a free source, the one whose generator saw it last (it's in no record: null). */
+	@Nullable
+	Paper lastToSee(BlockPos source) {
+		Paper last = null;
+		for (Paper p : generators.values())
+			if (p.freeShares != null && p.freeShares.containsKey(source) && (last == null || p.seenAt > last.seenAt))
+				last = p;
+		return last;
 	}
 
 	/** A generator has run this tick: its record as it now stands (only if a line meets it). */
@@ -674,11 +748,17 @@ public final class PowerGrid extends SavedData {
 		}
 		Paper p = generators.get(key);
 		long now = level.getGameTime();
+		// a record of some other kind of generator that stood here (replaced within the tick): not this one's
+		Paper fresh = g.newPaper();
+		if (fresh == null)
+			return;
+		if (p != null && (!fresh.kind.equals(p.kind) || fresh.fuels.length != p.fuels.length)) {
+			generators.remove(key);
+			p = null;
+		}
 		boolean refresh = p == null || Math.floorMod(key.hashCode() + now, 20) == 0;
 		if (p == null) {
-			p = g.newPaper();
-			if (p == null)
-				return;
+			p = fresh;
 			generators.put(key.immutable(), p);
 		}
 		g.record(p, refresh);

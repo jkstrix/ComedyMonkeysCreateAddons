@@ -112,7 +112,7 @@
         "Drive an [[electric-motor]] from a [[lava-generator]]",
         "Store FE in a [[battery]]"
       ],
-      "entries": ["fluid-wellspring", "pressure-crucible", "magma-engine", "lava-generator", "power-lines", "electric-motor", "battery", "cuckoo-clock"]
+      "entries": ["fluid-wellspring", "pressure-crucible", "magma-engine", "lava-generator", "power-lines", "electric-motor", "clockwork-dynamo", "battery", "cuckoo-clock"]
     },
     {
       "id": "advanced", "title": "Advanced", "era": "heat and power",

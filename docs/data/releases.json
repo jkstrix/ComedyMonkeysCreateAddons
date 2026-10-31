@@ -4,13 +4,14 @@
     "from": "2.0.2",
     "date": "2026-10-27",
     "title": "Pipes, wires, lights, batteries and bigger farms",
-    "summary": "Everything since 2.0.2: the mod's own pipes and wires, electric lights for every place you build, batteries up to grid scale, Monster Cages and Fish Tanks, a second robot, something asleep in a ruin, and a big performance pass, on screen and on the server.",
+    "summary": "Everything since 2.0.2: the mod's own pipes and wires, electric lights for every place you build, batteries up to grid scale, a dynamo that turns any shaft into power, Monster Cages and Fish Tanks, a second robot, something asleep in a ruin, and a big performance pass, on screen and on the server.",
     "highlights": [
       "fluid-lines",
       "power-lines",
       "electric-lights",
       "light-assembly",
       "battery",
+      "clockwork-dynamo",
       "monster-cage",
       "netherite-monster-cage",
       "fish-tank",
@@ -66,6 +67,22 @@
               "The **[[battery]]** stores 10,000,000 FE, in or out at 2,048 FE a tick. Batteries that touch share one store, and a broken Battery keeps its charge as an item.",
               "Fill a 3×3 footprint with Batteries 3 to 9 blocks high and they form an **Industrial Battery**: 20,000,000 FE a block, hung off the pole network through four insulators on its top corners. Place a Battery on top and it fills the whole layer, like a Create vault.",
               "A Lightning Rod on top of either adds 250,000 FE a strike."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Clockwork Dynamo",
+        "icon": "bolt",
+        "body": [
+          "The **[[clockwork-dynamo]]** is the [[electric-motor]] run backwards: rotation in, Forge Energy out, built from the bots' own parts.",
+          {
+            "list": [
+              "**Any Create power becomes electricity:** water wheels, windmills, steam boilers, Magma Engines. Set the stress it takes with a Wrench, from 256 SU (one water wheel) to 294,912.",
+              "**It loses a quarter on the way:** 1 FE a tick for every 21⅓ SU, three quarters of what a motor draws, so a motor and a dynamo can never run each other.",
+              "**Far away, it runs on paper** from water wheels and windmills only: motors and engines count for nothing while it's away.",
+              "**A little whimsy:** its copper aerial springs up when it starts and wobbles when you change its setting.",
+              "A Display Link source, a Ponder scene and two advancements."
             ]
           }
         ]

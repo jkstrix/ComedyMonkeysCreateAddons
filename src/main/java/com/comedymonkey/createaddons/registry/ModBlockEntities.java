@@ -157,6 +157,11 @@ public final class ModBlockEntities {
 			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlockEntity::new, ModBlocks.SPRING_ENGINE.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity>> CLOCKWORK_DYNAMO =
+		BLOCK_ENTITY_TYPES.register("clockwork_dynamo",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity::new, ModBlocks.CLOCKWORK_DYNAMO.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LavaGeneratorBlockEntity>> LAVA_GENERATOR =
 		BLOCK_ENTITY_TYPES.register("lava_generator",
 			() -> BlockEntityType.Builder.of(LavaGeneratorBlockEntity::new, ModBlocks.LAVA_GENERATOR.get()).build(null));

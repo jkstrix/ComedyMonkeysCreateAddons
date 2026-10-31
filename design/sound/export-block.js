@@ -1,5 +1,5 @@
 // Copies a block's approved real sounds into the mod and writes their sounds.json entries and subtitles.
-// Usage: node design/sound/export-block.js <lava-generator|electric-motor|magma-engine|pressure-crucible|battery|electric-lights>   (run that folder's make-loops.js first)
+// Usage: node design/sound/export-block.js <lava-generator|electric-motor|clockwork-dynamo|magma-engine|pressure-crucible|battery|electric-lights>   (run that folder's make-loops.js first)
 // Every cue-file event becomes comedymonkeysaddons:<namespace>.<id> with all its variants; loops use their seamless
 // _loop files; the running sounds carry only 8 blocks (they run all day); an event marked "vanilla" points at
 // Minecraft's own sound event instead of a file. Only <namespace>.* entries are touched in sounds.json and the lang file.
@@ -10,6 +10,8 @@ const MOD = 'comedymonkeysaddons';
 const BLOCKS = {
   'lava-generator': { loops: ['whir', 'burn'], quiet: ['whir', 'burn', 'cool_tick'] },
   'electric-motor': { loops: ['hum'], quiet: ['hum', 'spark'] },
+  // the Clockwork Dynamo's hum runs all day and is very quiet; the aerial's wobble is close by (the player's wrenching it)
+  'clockwork-dynamo': { loops: ['hum'], quiet: ['hum', 'aerial_boing'] },
   'magma-engine': { loops: ['firebox', 'blower'], quiet: ['chug', 'firebox', 'blower', 'cool_tick'] },
   // every press creaks and crunches, all day, so those carry only 8 blocks too
   'pressure-crucible': { loops: ['whirr', 'fire', 'fire_soul'], quiet: ['whirr', 'creak', 'crunch', 'fire', 'fire_soul'] },

@@ -306,6 +306,10 @@ public final class ModBlocks {
 	// ---- Electricity
 	public static final DeferredBlock<ElectricMotorBlock> ELECTRIC_MOTOR = BLOCKS.register("electric_motor",
 		() -> new ElectricMotorBlock(machine().lightLevel(state -> state.getValue(ElectricMotorBlock.POWERED) ? 6 : 0)));
+	/** The motor run backwards: rotation in, power out at 75% (design/specs/dynamo.md). */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock> CLOCKWORK_DYNAMO = BLOCKS.register("clockwork_dynamo",
+		() -> new com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock(machine()
+			.lightLevel(state -> state.getValue(com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock.WORKING) ? 6 : 0)));
 	/** The Clockwork Juggernaut's ritual key (D16-D18): fitted to a T of Brass Blocks and wound with a shaft. */
 	public static final DeferredBlock<com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlock> WINDING_KEY = BLOCKS.register("winding_key",
 		() -> new com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlock(machine()));

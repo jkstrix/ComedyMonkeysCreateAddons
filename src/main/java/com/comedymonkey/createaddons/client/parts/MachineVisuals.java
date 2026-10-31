@@ -35,6 +35,7 @@ public final class MachineVisuals {
 		visual(ModBlockEntities.COBBLE_GENERATOR, CobbleGeneratorRenderer::parts, false);
 		visual(ModBlockEntities.MAGMA_ENGINE, MagmaEngineRenderer::parts, true);
 		visual(ModBlockEntities.ELECTRIC_MOTOR, ElectricRenderers.Motor::parts, true);
+		visual(ModBlockEntities.CLOCKWORK_DYNAMO, ElectricRenderers.Dynamo::parts, true);
 		visual(ModBlockEntities.WINDING_KEY, com.comedymonkey.createaddons.client.juggernaut.WindingKeyRenderer::parts, true);
 		visual(ModBlockEntities.SPRING_ENGINE, com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer::parts, true);
 		visual(ModBlockEntities.LAVA_GENERATOR, ElectricRenderers.Generator::parts, true);

@@ -1163,7 +1163,7 @@ public final class PowerLines {
 					IEnergyStorage e = cache.getCapability();
 					int offer = e == null || !e.canExtract() ? 0 : e.extractEnergy(rate, true);
 					PowerGrid.Paper rec = grid.paper(key);
-					makes += rec != null ? rec.making(level) : offer / (double) INTERVAL;
+					makes += rec != null ? rec.making(level, false) : offer / (double) INTERVAL;
 					share(sources, gen, tiers, cs, part, offer, cache::getCapability, null, key);
 					continue;
 				}
@@ -1183,7 +1183,7 @@ public final class PowerLines {
 							if (!kc.contains(c))
 								kc.add(c);
 					}
-					makes += p.making(level);
+					makes += p.making(level, true);
 					share(sources, gen, tiers, kc, kc == cs ? part : parts(kc, weight), grid.draw(p, kc == cs ? rate : rate(tiers, kc), now, true, level),
 						null, p, k.immutable());
 				}
@@ -1457,6 +1457,11 @@ public final class PowerLines {
 			for (BlockPos w : wires)
 				if (level.isLoaded(w) && level.getBlockEntity(w) instanceof NetworkReading.Shown s)
 					s.networkReading(makes, using);
+			// a Clockwork Dynamo running an Electric Motor through the line earns its advancement (looked for every five
+			// seconds: it's a few block lookups per machine on the line)
+			if (makes > 0 && using > 0 && level.getGameTime() / 20 % 5 == 0)
+				com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity.noteNetwork(level,
+					() -> ends.stream().map(d -> d.end().target()).iterator());
 		}
 
 		/** Each segment's circuit: segments joined through the Breakers that are on. */

@@ -1,0 +1,535 @@
+{
+  "namespace": "clockwork_dynamo",
+  "events": {
+    "hum": {
+      "group": "Signature sounds",
+      "subtitle": "Clockwork Dynamo hums",
+      "layers": [
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.06,
+          "f": 110,
+          "dur": 2
+        },
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.012,
+          "f": 660,
+          "f2": 660,
+          "dur": 2
+        },
+        {
+          "type": "noise",
+          "at": 0,
+          "gain": 0.004,
+          "f": 1500,
+          "dur": 2
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "level": 0.0158,
+        "post": {
+          "lowpass": 2500,
+          "highpass": 45
+        },
+        "layers": [
+          {
+            "src": "loop_transformer",
+            "trim": [
+              0,
+              2
+            ],
+            "gain": 0.5,
+            "lowpass": 900
+          },
+          {
+            "type": "hum",
+            "f": 100,
+            "dur": 2,
+            "gain": 0.3
+          },
+          {
+            "src": "lt_antenna_run",
+            "trim": [
+              0,
+              1.2
+            ],
+            "gain": 0.28,
+            "pitch": 0.6,
+            "lowpass": 1200
+          }
+        ]
+      }
+    },
+    "start": {
+      "group": "Running",
+      "subtitle": "Clockwork Dynamo starts",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.595,
+          "dur": 0.03
+        },
+        {
+          "type": "servo",
+          "at": 0.02,
+          "gain": 0.34,
+          "f": 200,
+          "f2": 660,
+          "dur": 0.45
+        },
+        {
+          "type": "tick",
+          "at": 0.05,
+          "gain": 0.17,
+          "f": 2600,
+          "dur": 0.04
+        },
+        {
+          "type": "swell",
+          "at": 0.1,
+          "gain": 0.255,
+          "f": 90,
+          "f2": 110,
+          "dur": 0.4
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.208,
+        "vary": {
+          "pitch": 0.03
+        },
+        "post": {
+          "lowpass": 9000,
+          "highpass": 60
+        },
+        "layers": [
+          {
+            "src": "1498",
+            "trim": [
+              0,
+              0.8
+            ],
+            "gain": 0.85,
+            "pitch": 0.8,
+            "lowpass": 3500,
+            "fadeOut": 0.3
+          },
+          {
+            "src": "tick_004",
+            "at": 0.06,
+            "gain": 0.25,
+            "pitch": 0.9,
+            "lowpass": 5000
+          },
+          {
+            "src": "loop_transformer",
+            "at": 0.25,
+            "trim": [
+              0,
+              0.55
+            ],
+            "gain": 0.22,
+            "lowpass": 900,
+            "fadeIn": 0.3,
+            "fadeOut": 0.15
+          }
+        ]
+      }
+    },
+    "stop": {
+      "group": "Running",
+      "subtitle": "Clockwork Dynamo stops",
+      "layers": [
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.4,
+          "f": 660,
+          "f2": 150,
+          "dur": 0.5
+        },
+        {
+          "type": "hum",
+          "at": 0,
+          "gain": 0.24,
+          "f": 110,
+          "dur": 0.35
+        },
+        {
+          "type": "click",
+          "at": 0.42,
+          "gain": 0.44,
+          "dur": 0.03
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.19,
+        "vary": {
+          "pitch": 0.03
+        },
+        "post": {
+          "lowpass": 9000,
+          "highpass": 60
+        },
+        "layers": [
+          {
+            "src": "loop_transformer",
+            "trim": [
+              0,
+              0.3
+            ],
+            "gain": 0.22,
+            "lowpass": 900,
+            "fadeOut": 0.25
+          },
+          {
+            "src": "lt_antenna_stop",
+            "trim": [
+              0,
+              0.5
+            ],
+            "gain": 0.8,
+            "pitch": 0.7,
+            "lowpass": 3000,
+            "fadeOut": 0.15
+          },
+          {
+            "pick": [
+              "metalLatch",
+              "metalClick"
+            ],
+            "at": 0.42,
+            "gain": 0.55,
+            "pitch": 0.85,
+            "trim": [
+              0,
+              0.25
+            ],
+            "fadeOut": 0.05
+          }
+        ]
+      }
+    },
+    "aerial_up": {
+      "group": "Aerial",
+      "subtitle": "Dynamo's aerial springs up",
+      "layers": [
+        {
+          "type": "boing",
+          "at": 0,
+          "gain": 0.203,
+          "f": 560,
+          "dur": 0.4,
+          "wobble": 0.5
+        },
+        {
+          "type": "boing",
+          "at": 0.2,
+          "gain": 0.077,
+          "f": 760,
+          "dur": 0.2,
+          "wobble": 0.3
+        },
+        {
+          "type": "ping",
+          "at": 0.45,
+          "gain": 0.027,
+          "f": 2800,
+          "dur": 0.2
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.081,
+        "layers": [
+          {
+            "type": "boing",
+            "f": 560,
+            "dur": 0.45,
+            "wobble": 0.5,
+            "gain": 0.5
+          },
+          {
+            "type": "boing",
+            "at": 0.2,
+            "f": 760,
+            "dur": 0.22,
+            "wobble": 0.3,
+            "gain": 0.2
+          },
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0.45,
+            "gain": 0.08,
+            "pitch": 2.4,
+            "trim": [
+              0,
+              0.2
+            ],
+            "fadeOut": 0.08,
+            "highpass": 1500
+          }
+        ],
+        "post": {
+          "lowpass": 9000
+        }
+      }
+    },
+    "aerial_boing": {
+      "group": "Aerial",
+      "subtitle": "Dynamo's aerial wobbles",
+      "layers": [
+        {
+          "type": "boing",
+          "at": 0,
+          "gain": 0.203,
+          "f": 520,
+          "dur": 0.45,
+          "wobble": 0.5
+        },
+        {
+          "type": "boing",
+          "at": 0.28,
+          "gain": 0.081,
+          "f": 700,
+          "dur": 0.22,
+          "wobble": 0.3
+        },
+        {
+          "type": "ping",
+          "at": 0.5,
+          "gain": 0.032,
+          "f": 2800,
+          "dur": 0.2
+        }
+      ],
+      "real": {
+        "variants": 3,
+        "level": 0.082,
+        "layers": [
+          {
+            "type": "boing",
+            "f": 520,
+            "dur": 0.45,
+            "wobble": 0.5,
+            "gain": 0.5
+          },
+          {
+            "type": "boing",
+            "at": 0.28,
+            "f": 700,
+            "dur": 0.22,
+            "wobble": 0.3,
+            "gain": 0.2
+          },
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0.5,
+            "gain": 0.08,
+            "pitch": 2.3,
+            "trim": [
+              0,
+              0.2
+            ],
+            "fadeOut": 0.08,
+            "highpass": 1500
+          }
+        ],
+        "post": {
+          "lowpass": 9000
+        }
+      }
+    },
+    "aerial_fold": {
+      "group": "Aerial",
+      "subtitle": "Dynamo's aerial folds",
+      "layers": [
+        {
+          "type": "boing",
+          "at": 0,
+          "gain": 0.175,
+          "f": 300,
+          "f2": 220,
+          "dur": 0.45,
+          "wobble": 0.25
+        },
+        {
+          "type": "clink",
+          "at": 0.42,
+          "gain": 0.08,
+          "f": 1800,
+          "dur": 0.1
+        },
+        {
+          "type": "clink",
+          "at": 0.6,
+          "gain": 0.03,
+          "f": 1900,
+          "dur": 0.08
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.087,
+        "vary": {
+          "pitch": 0.05
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "type": "boing",
+            "f": 280,
+            "dur": 0.45,
+            "wobble": 0.25,
+            "gain": 0.5
+          },
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002"
+            ],
+            "at": 0.42,
+            "gain": 0.16,
+            "pitch": 1.6,
+            "trim": [
+              0,
+              0.2
+            ],
+            "fadeOut": 0.08,
+            "lowpass": 4000
+          },
+          {
+            "pick": [
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0.6,
+            "gain": 0.06,
+            "pitch": 1.7,
+            "trim": [
+              0,
+              0.15
+            ],
+            "fadeOut": 0.06,
+            "lowpass": 4000
+          }
+        ]
+      }
+    },
+    "adjust": {
+      "group": "Settings",
+      "subtitle": "Dynamo settings click",
+      "layers": [
+        {
+          "type": "ratchet",
+          "at": 0,
+          "gain": 0.25,
+          "rate": 30,
+          "dur": 0.15
+        },
+        {
+          "type": "click",
+          "at": 0.18,
+          "gain": 0.3,
+          "dur": 0.03
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "level": 0.4,
+        "vary": {
+          "pitch": 0.05
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "type": "ratchet",
+            "rate": 16,
+            "dur": 0.22,
+            "gain": 0.4
+          },
+          {
+            "pick": [
+              "switch12",
+              "switch13"
+            ],
+            "at": 0.24,
+            "gain": 0.6,
+            "pitch": 0.9
+          }
+        ]
+      }
+    }
+  },
+  "clips": {
+    "start": [
+      [
+        0.5,
+        "start"
+      ],
+      [
+        0.55,
+        "aerial_up"
+      ],
+      [
+        1,
+        "hum"
+      ]
+    ],
+    "working": [
+      [
+        0,
+        "hum"
+      ]
+    ],
+    "boing": [
+      [
+        0,
+        "hum"
+      ],
+      [
+        0.38,
+        "adjust"
+      ],
+      [
+        0.4,
+        "aerial_boing"
+      ]
+    ],
+    "stop": [
+      [
+        0.5,
+        "stop"
+      ],
+      [
+        0.6,
+        "aerial_fold"
+      ]
+    ],
+    "idle": []
+  }
+}

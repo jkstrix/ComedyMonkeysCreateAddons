@@ -3915,6 +3915,140 @@
     ]
   },
   {
+    "id": "clockwork-dynamo",
+    "name": "Clockwork Dynamo",
+    "registry": [
+      "comedymonkeysaddons:clockwork_dynamo"
+    ],
+    "summary": "The Electric Motor run backwards: a bot-built dynamo that turns Create rotation into Forge Energy, losing a quarter on the way.",
+    "tags": [
+      "power",
+      "fe",
+      "rotation"
+    ],
+    "stage": "mid",
+    "requires": [],
+    "teach": {
+      "what": "It takes the stress you set with a Wrench off the shaft at its front, at any speed, and makes 1 FE a tick for every 21⅓ SU: three quarters of what an [[electric-motor]] would draw for the same stress. Power goes out through its base, opposite the shaft.",
+      "why": "It makes every Create power source an electricity source: water wheels and windmills, steam boilers, Magma Engines. Free rotation becomes power you can carry anywhere on [[power-lines]] or keep in a [[battery]].",
+      "when": "Alongside the [[electric-motor]]: brass sheets, an electron tube, copper, a Precision Mechanism, Andesite Casings and a shaft.",
+      "interacts": "Power goes out to [[power-lines]], a [[battery]] or a machine against its base. Far from any player it keeps feeding its line on paper, but only from free sources: water wheels and windmills: what motors and engines give counts for nothing while it's away.",
+      "mistakes": [
+        "A motor and a dynamo can't run each other: the motor always needs a third more than the dynamo makes.",
+        "Setting it to take more stress than its shaft has overstresses the network, and it makes nothing.",
+        "For lava, a [[lava-generator]] or [[geothermal-turbine]] does better: a Magma Engine through a dynamo makes three quarters of what a Lava Generator does on the same lava."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Efficiency",
+        "value": "75",
+        "unit": "%"
+      },
+      {
+        "label": "Make",
+        "value": "1",
+        "unit": "FE/t per 21⅓ SU"
+      },
+      {
+        "label": "Max stress",
+        "value": "294,912",
+        "unit": "SU",
+        "gauge": 1
+      }
+    ],
+    "specs": [
+      [
+        "Stress taken",
+        "256 to 294,912 SU, at any speed (config)"
+      ],
+      [
+        "Makes",
+        "1 FE a tick per 21⅓ SU (75% of the motor's rate, config)"
+      ],
+      [
+        "One water wheel",
+        "256 SU, 12 FE a tick"
+      ],
+      [
+        "At full stress",
+        "13,824 FE a tick"
+      ],
+      [
+        "Store",
+        "552,960 FE (two seconds flat out)"
+      ],
+      [
+        "Power out",
+        "Its base, opposite the shaft"
+      ],
+      [
+        "Facing",
+        "Any"
+      ]
+    ],
+    "power": {
+      "kind": "fe",
+      "makes": "Up to 13,824 FE/t",
+      "draws": "The stress it's set to take, 256 to 294,912 SU"
+    },
+    "inputs": [
+      "Rotation through the shaft at its front."
+    ],
+    "outputs": [
+      "FE through its base, to a Power Line, battery or machine."
+    ],
+    "rules": [
+      "Right-click it with a Wrench to set the stress it takes; the screen shows the power it will make.",
+      "More power always takes more stress: the setting fixes both.",
+      "With nowhere to put its power it keeps taking its stress, and what doesn't fit its store is lost.",
+      "There's no redstone control: a Clutch or Gearshift on its shaft switches it off.",
+      "Its lamp lights cyan while it makes power, and the copper aerial on top springs up."
+    ],
+    "efficiency": [
+      "One water wheel (256 SU) makes 12 FE a tick: enough for a few lights.",
+      "A full 128-sail windmill (8,192 SU) makes 384 FE a tick, for nothing.",
+      "A full superheated boiler (294,912 SU) makes 13,824 FE a tick, under a third of a Geothermal Turbine."
+    ],
+    "flows": [
+      {
+        "title": "Free power on a cable",
+        "steps": [
+          {
+            "ref": "clockwork-dynamo",
+            "kind": "source",
+            "note": "turned by water wheels"
+          },
+          {
+            "ref": "power-lines",
+            "kind": "machine",
+            "via": "FE"
+          },
+          {
+            "ref": "electric-lights",
+            "kind": "result"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Put water wheels and windmills on a shaft of their own: far away, only their share keeps the dynamo going.",
+      "Its hum rises the more it's set to make."
+    ],
+    "facts": [
+      "Built from the bots' own parts: a Trade Bot's copper aerial, a riveted brass waist band and whisker-grille vents.",
+      "Through the window in its top you can watch the copper commutator turn under its carbon brushes.",
+      "Running an Electric Motor off one earns \"Round Trip\"."
+    ],
+    "related": [
+      "electric-motor",
+      "lava-generator",
+      "power-lines",
+      "battery",
+      "electricity"
+    ]
+  },
+  {
     "id": "battery",
     "name": "Battery",
     "registry": [
