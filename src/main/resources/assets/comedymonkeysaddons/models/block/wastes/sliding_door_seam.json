@@ -1,0 +1,186 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "seam_strip_lit": "comedymonkeysaddons:block/wastes/seam_strip_lit"
+  },
+  "elements": [
+    {
+      "name": "dseam_v0",
+      "from": [
+        16.75,
+        -16,
+        5.75
+      ],
+      "to": [
+        17.25,
+        -4,
+        5.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            14.75,
+            4,
+            15.25,
+            16
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "dseam_v12",
+      "from": [
+        14.75,
+        -4,
+        5.75
+      ],
+      "to": [
+        15.25,
+        8,
+        5.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0.75,
+            0,
+            1.25,
+            12
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "dseam_v24",
+      "from": [
+        16.75,
+        8,
+        5.75
+      ],
+      "to": [
+        17.25,
+        20,
+        5.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            14.75,
+            0,
+            15.25,
+            12
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "dseam_v36",
+      "from": [
+        14.75,
+        20,
+        5.75
+      ],
+      "to": [
+        15.25,
+        32,
+        5.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0.75,
+            0,
+            1.25,
+            12
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "dseam_h12",
+      "from": [
+        14.75,
+        -4.25,
+        5.75
+      ],
+      "to": [
+        17.25,
+        -3.75,
+        5.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            3.75,
+            2.5,
+            4.25
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "dseam_h24",
+      "from": [
+        14.75,
+        7.75,
+        5.75
+      ],
+      "to": [
+        17.25,
+        8.25,
+        5.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            7.75,
+            2.5,
+            8.25
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "dseam_h36",
+      "from": [
+        14.75,
+        19.75,
+        5.75
+      ],
+      "to": [
+        17.25,
+        20.25,
+        5.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            11.75,
+            2.5,
+            12.25
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    }
+  ]
+}

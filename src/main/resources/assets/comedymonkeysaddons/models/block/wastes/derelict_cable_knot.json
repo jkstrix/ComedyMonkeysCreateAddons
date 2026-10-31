@@ -1,0 +1,71 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/cable",
+    "va": "comedymonkeysaddons:block/wastes/va"
+  },
+  "elements": [
+    {
+      "name": "knot",
+      "from": [
+        6.75,
+        0,
+        6.5
+      ],
+      "to": [
+        9.25,
+        1.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.75,
+            14.5,
+            9.25,
+            16
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            14.5,
+            9.5,
+            16
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            6.75,
+            14.5,
+            9.25,
+            16
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            14.5,
+            9.5,
+            16
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            6.75,
+            6.5,
+            9.25,
+            9.5
+          ],
+          "texture": "#va"
+        }
+      }
+    }
+  ]
+}

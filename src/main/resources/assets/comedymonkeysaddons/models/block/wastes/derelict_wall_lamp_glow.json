@@ -1,0 +1,216 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/iron",
+    "lens_lit": "comedymonkeysaddons:block/wastes/lens_lit",
+    "lamp_lens_ring": "comedymonkeysaddons:block/wastes/lamp_lens_ring"
+  },
+  "elements": [
+    {
+      "name": "wl_glow_0",
+      "from": [
+        6,
+        6,
+        3
+      ],
+      "to": [
+        10,
+        6,
+        5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          12.75,
+          5.5
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "shade": false,
+      "faces": {
+        "down": {
+          "uv": [
+            6,
+            7,
+            10,
+            9
+          ],
+          "texture": "#lens_lit"
+        }
+      }
+    },
+    {
+      "name": "wl_glow_1",
+      "from": [
+        7,
+        6,
+        2
+      ],
+      "to": [
+        9,
+        6,
+        6
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          12.75,
+          5.5
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "shade": false,
+      "faces": {
+        "down": {
+          "uv": [
+            7,
+            6,
+            9,
+            10
+          ],
+          "texture": "#lens_lit"
+        }
+      }
+    },
+    {
+      "name": "wl_glow_ring_n",
+      "from": [
+        5,
+        6,
+        0.75
+      ],
+      "to": [
+        11,
+        6.5,
+        0.75
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          12.75,
+          5.5
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            9.5,
+            11,
+            10
+          ],
+          "texture": "#lamp_lens_ring"
+        }
+      }
+    },
+    {
+      "name": "wl_glow_ring_s",
+      "from": [
+        5,
+        6,
+        7.25
+      ],
+      "to": [
+        11,
+        6.5,
+        7.25
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          12.75,
+          5.5
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "shade": false,
+      "faces": {
+        "south": {
+          "uv": [
+            5,
+            9.5,
+            11,
+            10
+          ],
+          "texture": "#lamp_lens_ring"
+        }
+      }
+    },
+    {
+      "name": "wl_glow_ring_w",
+      "from": [
+        4.75,
+        6,
+        1
+      ],
+      "to": [
+        4.75,
+        6.5,
+        7
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          12.75,
+          5.5
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "shade": false,
+      "faces": {
+        "west": {
+          "uv": [
+            1,
+            9.5,
+            7,
+            10
+          ],
+          "texture": "#lamp_lens_ring"
+        }
+      }
+    },
+    {
+      "name": "wl_glow_ring_e",
+      "from": [
+        11.25,
+        6,
+        1
+      ],
+      "to": [
+        11.25,
+        6.5,
+        7
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          12.75,
+          5.5
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "shade": false,
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            9.5,
+            15,
+            10
+          ],
+          "texture": "#lamp_lens_ring"
+        }
+      }
+    }
+  ]
+}

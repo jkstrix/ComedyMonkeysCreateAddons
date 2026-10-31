@@ -69,7 +69,7 @@ A player should tell the sides apart from across a street, without text.
 | | **The uprising** | **The clockwork resistance** |
 |---|---|---|
 | Who | Automatons that found electricity and overthrew their makers | Loyal clockwork bots that flew their makers out and fought back |
-| Material | Void-alloy, starlight seams | The makers' own: andesite casing, mid brass, dark steel, walnut, **blued spring steel** |
+| Material | Void-alloy, starlight seams | The makers' own: andesite casing, mid brass, dark steel, walnut, **spring steel** (the mod's Mainspring steel) |
 | Engine | Electricity: a seam that lights | A **mainspring drum** on the back with a **winding key** in it (round, because it's their engine: house rule) |
 | Eyes | One lens, or a ring of lenses, in a void-alloy ring; starlight and an ember pupil when woken | **Two round glass eyes in brass rims**, warm dark glass with a dull catchlight: binocular like Trade Bot and Helper Bot. **They never light** |
 | Shape | Tall chamfered rectangles | Squarer, stockier, riveted, patched: Create-built, repaired in the field |
@@ -97,7 +97,7 @@ Rules that keep the layers readable:
 | Mid brass (makers) | Trims, plaques, gauges | `#7e6832` `#8f7638` `#a3873f`, no highlights |
 | Copper, aged (makers) | Pipes, tanks | Create's copper `#904931` `#9a5038` `#a75a40` on whole parts; **patina** `#4f6b5e` `#5b7a6c` creeping from edges and joints |
 | Dark walnut (makers) | Benches, crates, rail sleepers | `#4e3626` `#634532` `#6f4d36` |
-| Blued spring steel (resistance) | Mainsprings, screws, spilled coils | `#2c3446` `#36405a` `#45506a`: a real clockwork finish; small parts only, so it never competes with void-alloy's violet |
+| Spring steel (resistance) | Mainsprings, screws, spilled coils | the mod's Mainspring and Spring Engine steel: smooth strip `#6d7780`, edges `#4a525a`, a few `#8a949c` highlights; always shown as a coil of strip with real gaps, never a striped surface (texture review, 2026-10-28) |
 | Glass eye (resistance) | Their eyes | warm dark glass `#3a3430`, rim mid brass, one dull catchlight `#6b6e6a`. Never lit |
 | Rust (age and war) | Streaks under bolts and on steel | `#5a3523` `#6e4129` `#7f4d30`, as runs and edges, never whole faces |
 | Soot (war) | Scorch fans, crater rims | `#1a1714` `#26211c` `#30291f` |
@@ -147,7 +147,7 @@ Each has its own silhouette and one **set piece**, so players can tell where the
 
 ### The outskirts and the island edge
 - **Rings of damage** like the Juggernaut ruins, which the user loved ("grow bigger towards the middle"), reversed: from the districts outward, collapse grows. First come snapped towers and fallen lamp posts, then scrap heaps, welded barricades and fallen war-frames, then scattered stubs, and finally bare scorched ground at the island's edge.
-- **The siege lines** (the resistance's ring, in the outermost band): what's left of their field works, built from the makers' materials. Low walls of stacked andesite casing and walnut, a toppled **siege winch** (a big brass mainspring drum on a wheeled frame, its spring sprung out across the ground in a blued coil), resistance shells behind cover, all facing in toward the city. The winding key is scratched into the cover stones.
+- **The siege lines** (the resistance's ring, in the outermost band): what's left of their field works, built from the makers' materials. Low walls of stacked andesite casing and walnut, a toppled **siege winch** (a big brass mainspring drum on a wheeled frame, its spring sprung out across the ground in a loose coil), resistance shells behind cover, all facing in toward the city. The winding key is scratched into the cover stones.
 - **Struts and bridges** (P3): where a district reaches past the island, it stands on void-alloy trestles (tall, thin, cross-braced, with chamfered feet on the island's underside). Bridges between them are railed void-alloy decks; some have snapped, with half a bridge hanging down into the void on its cables.
 
 ## Secondary Forms
@@ -157,7 +157,7 @@ Each has its own silhouette and one **set piece**, so players can tell where the
 - **Barricades:** the uprising's welded scrap walls (bent iron bars, plates, cogs, a door torn off), set across streets at district edges, scorched on the outside face, with the winding key scratched into them from outside. The war came from outside: the resistance attacked inward.
 - **Fallen war-frames** (8–12 blocks long, built from blocks; the biggest "what happened here?" moment on the way in), from **both sides**, often **locked together** where they fell:
   - **Uprising war-frame:** tall and thin, void-alloy, a big dark lens (a cracked dark glass disc, the one place it catches light).
-  - **Resistance war-frame:** stocky, square, andesite casing and brass plates, riveted and patched, a split mainspring drum on its back with the spring burst out in a blued coil, a winding key the size of a door, and two big glass eyes in brass rims.
+  - **Resistance war-frame:** stocky, square, andesite casing and brass plates, riveted and patched, a split mainspring drum on its back with the spring burst out in a loose coil, a winding key the size of a door, and two big glass eyes in brass rims.
   - The best one per city: the two locked in a grapple in the outskirts, the resistance frame's hand on the uprising frame's lens.
 - **Scrap heaps:** low mounds of Clockwork Scrap blocks, iron bars, chain, and a toppled cog or two, with salvage blocks half-buried in them.
 

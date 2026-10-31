@@ -1,0 +1,83 @@
+newmtl brass
+Kd 1 1 1
+map_Kd #brass
+
+newmtl casing_aged
+Kd 1 1 1
+map_Kd #casing_aged
+
+newmtl casing_aged_top
+Kd 1 1 1
+map_Kd #casing_aged_top
+
+newmtl cp_core
+Kd 1 1 1
+map_Kd #cp_core
+
+newmtl cp_lead
+Kd 1 1 1
+map_Kd #cp_lead
+
+newmtl cp_socket
+Kd 1 1 1
+map_Kd #cp_socket
+
+newmtl glass_eye
+Kd 1 1 1
+map_Kd #glass_eye
+
+newmtl lens_dark
+Kd 1 1 1
+map_Kd #lens_dark
+
+newmtl lens_ring
+Kd 1 1 1
+map_Kd #lens_ring
+
+newmtl loot_gem
+Kd 1 1 1
+map_Kd #loot_gem
+
+newmtl loot_gold
+Kd 1 1 1
+map_Kd #loot_gold
+
+newmtl press_steel
+Kd 1 1 1
+map_Kd #press_steel
+
+newmtl res_casing
+Kd 1 1 1
+map_Kd #res_casing
+
+newmtl res_patch
+Kd 1 1 1
+map_Kd #res_patch
+
+newmtl seam_strip_dark
+Kd 1 1 1
+map_Kd #seam_strip_dark
+
+newmtl spring_top
+Kd 1 1 1
+map_Kd #spring_top
+
+newmtl va
+Kd 1 1 1
+map_Kd #va
+
+newmtl va_chipped
+Kd 1 1 1
+map_Kd #va_chipped
+
+newmtl va_field
+Kd 1 1 1
+map_Kd #va_field
+
+newmtl vault_inner
+Kd 1 1 1
+map_Kd #vault_inner
+
+newmtl vent_cavity
+Kd 1 1 1
+map_Kd #vent_cavity

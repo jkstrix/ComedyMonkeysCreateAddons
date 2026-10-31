@@ -174,8 +174,9 @@ public final class PowerLines {
 		}
 		Set<BlockPos> due = phases[(int) Math.floorMod(now, INTERVAL)];
 		for (BlockPos pos : due == null ? List.<BlockPos>of() : new ArrayList<>(due)) {
-			// each machine's wire looks once a second, spread over the second (its machines are checked one by one)
-			if (!level.isLoaded(pos))
+			// each machine's wire looks once a second, spread over the second (its machines are checked one by one); a
+			// wire a game test marks away is as if its chunk weren't running
+			if (!level.isLoaded(pos) || PowerGrid.away(level, pos))
 				continue;
 			if (!(level.getBlockEntity(pos) instanceof PowerLineBlockEntity be) || !be.hasTerminal()) {
 				terminals.remove(pos);
@@ -578,6 +579,77 @@ public final class PowerLines {
 		if (grid.allAway(r, level))
 			return true;
 		return r.whole() && !(PowerGrid.running(level, key) && level.getBlockEntity(key) instanceof PowerGrid.Store s && s.storeKey() != null);
+	}
+
+	/**
+	 * A machine that's away draws a second's worth on paper ({@code need} FE: a Clockwork Wastes Substation's upkeep, P24,
+	 * D48): from what a running network sent its record meanwhile or, when no network that meets it is running, straight
+	 * from the records of the generators and stores its lines reach (through Breakers and Light Switches only while
+	 * they're on). Nothing is loaded to do it. Returns {@code need} if it was all there (and spends it), else 0 (what came
+	 * stays in its record toward the next).
+	 */
+	public int drawAway(BlockPos device, int need) {
+		PowerGrid.ConsumerPaper p = grid.consumer(device);
+		if (p == null || need <= 0)
+			return 0;
+		if (p.energy < need && !runningNetworkMeets(device))
+			grid.bring(p, Math.min(p.cap - p.energy, pullOnPaper(device, need - p.energy)));
+		if (p.energy + 1e-6 < need)
+			return 0;
+		grid.spend(p, need);
+		return need;
+	}
+
+	/** A network that meets the block has worked out its second lately (so it delivers to the block's record itself). */
+	private boolean runningNetworkMeets(BlockPos device) {
+		long now = level.getGameTime();
+		for (Node n : grid.endsAt(device)) {
+			Network net = byNode.get(n);
+			if (net != null && net.lastTick >= 0 && now - net.lastTick <= INTERVAL + 2)
+				return true;
+		}
+		return false;
+	}
+
+	/** Up to {@code want} FE drawn from the records of the generators and stores on paper that the lines from a block reach. */
+	private double pullOnPaper(BlockPos device, double want) {
+		long now = level.getGameTime();
+		double got = 0;
+		Set<Node> start = grid.endsAt(device), seenNodes = new HashSet<>(start);
+		ArrayDeque<Node> queue = new ArrayDeque<>(start);
+		Set<BlockPos> done = new HashSet<>();
+		done.add(device);
+		while (!queue.isEmpty() && got < want) {
+			Node m = queue.poll();
+			Piece pc = grid.piece(m);
+			if (pc == null)
+				continue;
+			for (End e : pc.ends) {
+				BlockPos t = e.target();
+				if (!done.add(t))
+					continue;
+				BlockPos key = grid.keyAt(t);
+				if (key != null) {
+					for (BlockPos k : grid.row(key)) {
+						PowerGrid.Paper gp = grid.paper(k);
+						if (gp != null && !PowerGrid.running(level, k) && (k.equals(t) || done.add(k)) && got < want)
+							got += grid.draw(gp, (int) Math.ceil(want - got), now, false, level);
+					}
+					continue;
+				}
+				BlockPos sk = grid.storeKeyFor(t);
+				PowerGrid.StorePaper sp = sk == null ? null : grid.storePaper(sk);
+				if (sp != null && onPaper(sk, sp) && done.add(sk))
+					got += grid.drawStore(sp, (int) Math.ceil(want - got));
+			}
+			// a Breaker or Light Switch that's off cuts the line here
+			if (pc.fitting.cuts() && !pc.closed)
+				continue;
+			for (Node o : grid.neighbours(m))
+				if (seenNodes.add(o))
+					queue.add(o);
+		}
+		return got;
 	}
 
 	/** A shared store's key at block t, if it's one (loaded). */
@@ -1052,8 +1124,21 @@ public final class PowerLines {
 					continue;
 				}
 				if (!PowerGrid.running(level, t)) {
-					// a shared store all of which is away: on paper, from its record
-					paperStore(t, c, d, stores);
+					// a shared store all of which is away: on paper, from its record; or a machine that draws on paper while
+					// it's away (a Substation's upkeep): its record takes what it has room for
+					if (!paperStore(t, c, d, stores) && seen.add(t)) {
+						PowerGrid.ConsumerPaper p = grid.consumer(t);
+						int w = p == null ? 0 : (int) Math.min(rate, Math.max(0, Math.floor(p.cap - p.energy)));
+						if (w > 0) {
+							BlockPos k = t.immutable();
+							takers.add(new Taker(c, () -> {
+								PowerGrid.ConsumerPaper r = grid.consumer(k);
+								return r == null || PowerGrid.running(level, k) ? null : grid.consumerStore(r);
+							}, k, w, false, d.key()));
+							want[c] += w;
+							live = true;
+						}
+					}
 					continue;
 				}
 				// a store shared between blocks or circuits: once, below

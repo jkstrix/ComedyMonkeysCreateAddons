@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "type=bottom": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_slab_0",
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_slab_1"
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_slab_2"
+      }
+    ],
+    "type=top": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_slab_0_top",
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_slab_1_top"
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_slab_2_top"
+      }
+    ],
+    "type=double": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_bricks_0",
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_bricks_1"
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_bricks_2"
+      }
+    ]
+  }
+}

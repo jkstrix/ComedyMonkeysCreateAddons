@@ -1,0 +1,36 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "seam_strip_lit": "comedymonkeysaddons:block/wastes/seam_strip_lit"
+  },
+  "elements": [
+    {
+      "name": "groove_g",
+      "from": [
+        7.5,
+        0.5,
+        -13
+      ],
+      "to": [
+        8.5,
+        0.5,
+        3
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            16
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    }
+  ]
+}

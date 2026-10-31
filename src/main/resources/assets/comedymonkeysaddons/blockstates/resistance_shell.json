@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,pose=slumped": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_slumped"
+    },
+    "facing=east,pose=slumped": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_slumped",
+      "y": 90
+    },
+    "facing=south,pose=slumped": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_slumped",
+      "y": 180
+    },
+    "facing=west,pose=slumped": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_slumped",
+      "y": 270
+    },
+    "facing=north,pose=fallen": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_fallen"
+    },
+    "facing=east,pose=fallen": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_fallen",
+      "y": 90
+    },
+    "facing=south,pose=fallen": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_fallen",
+      "y": 180
+    },
+    "facing=west,pose=fallen": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_fallen",
+      "y": 270
+    },
+    "facing=north,pose=reaching": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_reaching"
+    },
+    "facing=east,pose=reaching": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_reaching",
+      "y": 90
+    },
+    "facing=south,pose=reaching": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_reaching",
+      "y": 180
+    },
+    "facing=west,pose=reaching": {
+      "model": "comedymonkeysaddons:block/wastes/resistance_shell_reaching",
+      "y": 270
+    }
+  }
+}

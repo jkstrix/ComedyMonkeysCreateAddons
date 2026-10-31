@@ -1,0 +1,1631 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/casing_aged",
+    "wheel_stone": "comedymonkeysaddons:block/wastes/wheel_stone",
+    "wheel_break": "comedymonkeysaddons:block/wastes/wheel_break",
+    "steel_aged": "comedymonkeysaddons:block/wastes/steel_aged"
+  },
+  "elements": [
+    {
+      "name": "half_up_0",
+      "from": [
+        1,
+        0,
+        2.5
+      ],
+      "to": [
+        15,
+        1,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            15,
+            15,
+            16
+          ],
+          "texture": "#wheel_stone"
+        },
+        "east": {
+          "uv": [
+            8.5,
+            15,
+            13.5,
+            16
+          ],
+          "texture": "#wheel_stone"
+        },
+        "south": {
+          "uv": [
+            1,
+            15,
+            15,
+            16
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            15,
+            7.5,
+            16
+          ],
+          "texture": "#wheel_stone"
+        },
+        "up": {
+          "uv": [
+            1,
+            2.5,
+            15,
+            7.5
+          ],
+          "texture": "#wheel_stone"
+        },
+        "down": {
+          "uv": [
+            1,
+            8.5,
+            15,
+            13.5
+          ],
+          "texture": "#wheel_break",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "half_up_1",
+      "from": [
+        1,
+        1,
+        2.5
+      ],
+      "to": [
+        15,
+        2,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            14,
+            15,
+            15
+          ],
+          "texture": "#wheel_stone"
+        },
+        "east": {
+          "uv": [
+            8.5,
+            14,
+            13.5,
+            15
+          ],
+          "texture": "#wheel_stone"
+        },
+        "south": {
+          "uv": [
+            1,
+            14,
+            15,
+            15
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            14,
+            7.5,
+            15
+          ],
+          "texture": "#wheel_stone"
+        },
+        "up": {
+          "uv": [
+            1,
+            2.5,
+            15,
+            7.5
+          ],
+          "texture": "#wheel_stone"
+        }
+      }
+    },
+    {
+      "name": "half_up_2",
+      "from": [
+        1.5,
+        2,
+        2.5
+      ],
+      "to": [
+        14.5,
+        3,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.5,
+            13,
+            14.5,
+            14
+          ],
+          "texture": "#wheel_stone"
+        },
+        "east": {
+          "uv": [
+            8.5,
+            13,
+            13.5,
+            14
+          ],
+          "texture": "#wheel_stone"
+        },
+        "south": {
+          "uv": [
+            1.5,
+            13,
+            14.5,
+            14
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            13,
+            7.5,
+            14
+          ],
+          "texture": "#wheel_stone"
+        },
+        "up": {
+          "uv": [
+            1.5,
+            2.5,
+            14.5,
+            7.5
+          ],
+          "texture": "#wheel_stone"
+        }
+      }
+    },
+    {
+      "name": "half_up_3",
+      "from": [
+        2,
+        3,
+        2.5
+      ],
+      "to": [
+        14,
+        4,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            12,
+            14,
+            13
+          ],
+          "texture": "#wheel_stone"
+        },
+        "east": {
+          "uv": [
+            8.5,
+            12,
+            13.5,
+            13
+          ],
+          "texture": "#wheel_stone"
+        },
+        "south": {
+          "uv": [
+            2,
+            12,
+            14,
+            13
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            12,
+            7.5,
+            13
+          ],
+          "texture": "#wheel_stone"
+        },
+        "up": {
+          "uv": [
+            2,
+            2.5,
+            14,
+            7.5
+          ],
+          "texture": "#wheel_stone"
+        }
+      }
+    },
+    {
+      "name": "half_up_4",
+      "from": [
+        2.5,
+        4,
+        2.5
+      ],
+      "to": [
+        13.5,
+        5,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            11,
+            13.5,
+            12
+          ],
+          "texture": "#wheel_stone"
+        },
+        "east": {
+          "uv": [
+            8.5,
+            11,
+            13.5,
+            12
+          ],
+          "texture": "#wheel_stone"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            11,
+            13.5,
+            12
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            11,
+            7.5,
+            12
+          ],
+          "texture": "#wheel_stone"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            2.5,
+            13.5,
+            7.5
+          ],
+          "texture": "#wheel_stone"
+        }
+      }
+    },
+    {
+      "name": "half_up_5",
+      "from": [
+        3.5,
+        5,
+        2.5
+      ],
+      "to": [
+        12.5,
+        6,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            10,
+            12.5,
+            11
+          ],
+          "texture": "#wheel_stone"
+        },
+        "east": {
+          "uv": [
+            8.5,
+            10,
+            13.5,
+            11
+          ],
+          "texture": "#wheel_stone"
+        },
+        "south": {
+          "uv": [
+            3.5,
+            10,
+            12.5,
+            11
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            10,
+            7.5,
+            11
+          ],
+          "texture": "#wheel_stone"
+        },
+        "up": {
+          "uv": [
+            3.5,
+            2.5,
+            12.5,
+            7.5
+          ],
+          "texture": "#wheel_stone"
+        }
+      }
+    },
+    {
+      "name": "half_up_6",
+      "from": [
+        5.5,
+        6,
+        2.5
+      ],
+      "to": [
+        10.5,
+        7,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            10
+          ],
+          "texture": "#wheel_stone"
+        },
+        "east": {
+          "uv": [
+            8.5,
+            9,
+            13.5,
+            10
+          ],
+          "texture": "#wheel_stone"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            10
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            9,
+            7.5,
+            10
+          ],
+          "texture": "#wheel_stone"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            2.5,
+            10.5,
+            7.5
+          ],
+          "texture": "#wheel_stone"
+        }
+      }
+    },
+    {
+      "name": "half_up_tooth_0",
+      "from": [
+        14.133,
+        1.318,
+        2
+      ],
+      "to": [
+        16.133,
+        3.318,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12.682,
+            2,
+            14.682
+          ],
+          "texture": "#steel_aged"
+        },
+        "east": {
+          "uv": [
+            8,
+            12.682,
+            14,
+            14.682
+          ],
+          "texture": "#steel_aged"
+        },
+        "south": {
+          "uv": [
+            14,
+            12.682,
+            16,
+            14.682
+          ],
+          "texture": "#steel_aged"
+        },
+        "west": {
+          "uv": [
+            2,
+            12.682,
+            8,
+            14.682
+          ],
+          "texture": "#steel_aged"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            16,
+            8
+          ],
+          "texture": "#steel_aged"
+        },
+        "down": {
+          "uv": [
+            14,
+            8,
+            16,
+            14
+          ],
+          "texture": "#steel_aged"
+        }
+      }
+    },
+    {
+      "name": "half_up_tooth_1",
+      "from": [
+        11.408,
+        5.068,
+        2
+      ],
+      "to": [
+        13.408,
+        7.068,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.592,
+            8.932,
+            4.592,
+            10.932
+          ],
+          "texture": "#steel_aged"
+        },
+        "east": {
+          "uv": [
+            8,
+            8.932,
+            14,
+            10.932
+          ],
+          "texture": "#steel_aged"
+        },
+        "south": {
+          "uv": [
+            11.408,
+            8.932,
+            13.408,
+            10.932
+          ],
+          "texture": "#steel_aged"
+        },
+        "west": {
+          "uv": [
+            2,
+            8.932,
+            8,
+            10.932
+          ],
+          "texture": "#steel_aged"
+        },
+        "up": {
+          "uv": [
+            11.408,
+            2,
+            13.408,
+            8
+          ],
+          "texture": "#steel_aged"
+        },
+        "down": {
+          "uv": [
+            11.408,
+            8,
+            13.408,
+            14
+          ],
+          "texture": "#steel_aged"
+        }
+      }
+    },
+    {
+      "name": "half_up_tooth_2",
+      "from": [
+        7,
+        6.5,
+        2
+      ],
+      "to": [
+        9,
+        8.5,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            7.5,
+            9,
+            9.5
+          ],
+          "texture": "#steel_aged"
+        },
+        "east": {
+          "uv": [
+            8,
+            7.5,
+            14,
+            9.5
+          ],
+          "texture": "#steel_aged"
+        },
+        "south": {
+          "uv": [
+            7,
+            7.5,
+            9,
+            9.5
+          ],
+          "texture": "#steel_aged"
+        },
+        "west": {
+          "uv": [
+            2,
+            7.5,
+            8,
+            9.5
+          ],
+          "texture": "#steel_aged"
+        },
+        "up": {
+          "uv": [
+            7,
+            2,
+            9,
+            8
+          ],
+          "texture": "#steel_aged"
+        },
+        "down": {
+          "uv": [
+            7,
+            8,
+            9,
+            14
+          ],
+          "texture": "#steel_aged"
+        }
+      }
+    },
+    {
+      "name": "half_up_tooth_3",
+      "from": [
+        2.592,
+        5.068,
+        2
+      ],
+      "to": [
+        4.592,
+        7.068,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.408,
+            8.932,
+            13.408,
+            10.932
+          ],
+          "texture": "#steel_aged"
+        },
+        "east": {
+          "uv": [
+            8,
+            8.932,
+            14,
+            10.932
+          ],
+          "texture": "#steel_aged"
+        },
+        "south": {
+          "uv": [
+            2.592,
+            8.932,
+            4.592,
+            10.932
+          ],
+          "texture": "#steel_aged"
+        },
+        "west": {
+          "uv": [
+            2,
+            8.932,
+            8,
+            10.932
+          ],
+          "texture": "#steel_aged"
+        },
+        "up": {
+          "uv": [
+            2.592,
+            2,
+            4.592,
+            8
+          ],
+          "texture": "#steel_aged"
+        },
+        "down": {
+          "uv": [
+            2.592,
+            8,
+            4.592,
+            14
+          ],
+          "texture": "#steel_aged"
+        }
+      }
+    },
+    {
+      "name": "half_up_tooth_4",
+      "from": [
+        -0.133,
+        1.318,
+        2
+      ],
+      "to": [
+        1.867,
+        3.318,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12.682,
+            2,
+            14.682
+          ],
+          "texture": "#steel_aged"
+        },
+        "east": {
+          "uv": [
+            8,
+            12.682,
+            14,
+            14.682
+          ],
+          "texture": "#steel_aged"
+        },
+        "south": {
+          "uv": [
+            14,
+            12.682,
+            16,
+            14.682
+          ],
+          "texture": "#steel_aged"
+        },
+        "west": {
+          "uv": [
+            2,
+            12.682,
+            8,
+            14.682
+          ],
+          "texture": "#steel_aged"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            16,
+            8
+          ],
+          "texture": "#steel_aged"
+        },
+        "down": {
+          "uv": [
+            14,
+            8,
+            16,
+            14
+          ],
+          "texture": "#steel_aged"
+        }
+      }
+    },
+    {
+      "name": "half_down_0",
+      "from": [
+        1,
+        0,
+        12
+      ],
+      "to": [
+        15,
+        5,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            5.5,
+            15,
+            10.5
+          ],
+          "texture": "#wheel_break",
+          "rotation": 180
+        },
+        "east": {
+          "uv": [
+            5.5,
+            15,
+            10.5,
+            16
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            1,
+            5.5,
+            15,
+            10.5
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            15,
+            10.5,
+            16
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            1,
+            15,
+            15,
+            16
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            1,
+            15,
+            15,
+            16
+          ],
+          "texture": "#wheel_stone",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "half_down_1",
+      "from": [
+        1,
+        0,
+        13
+      ],
+      "to": [
+        15,
+        5,
+        14
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5.5,
+            14,
+            10.5,
+            15
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            1,
+            5.5,
+            15,
+            10.5
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            14,
+            10.5,
+            15
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            1,
+            14,
+            15,
+            15
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            1,
+            14,
+            15,
+            15
+          ],
+          "texture": "#wheel_stone",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "half_down_2",
+      "from": [
+        1.5,
+        0,
+        14
+      ],
+      "to": [
+        14.5,
+        5,
+        15
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5.5,
+            13,
+            10.5,
+            14
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            1.5,
+            5.5,
+            14.5,
+            10.5
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            13,
+            10.5,
+            14
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            1.5,
+            13,
+            14.5,
+            14
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            1.5,
+            13,
+            14.5,
+            14
+          ],
+          "texture": "#wheel_stone",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "half_down_3",
+      "from": [
+        2,
+        0,
+        15
+      ],
+      "to": [
+        14,
+        5,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5.5,
+            12,
+            10.5,
+            13
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            2,
+            5.5,
+            14,
+            10.5
+          ],
+          "texture": "#wheel_stone",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            12,
+            10.5,
+            13
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            2,
+            12,
+            14,
+            13
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            2,
+            12,
+            14,
+            13
+          ],
+          "texture": "#wheel_stone",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "half_down_4",
+      "from": [
+        2.5,
+        0,
+        16
+      ],
+      "to": [
+        13.5,
+        5,
+        17
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5.5,
+            11,
+            10.5,
+            12
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            2.5,
+            5.5,
+            13.5,
+            10.5
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            11,
+            10.5,
+            12
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            2.5,
+            11,
+            13.5,
+            12
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            2.5,
+            11,
+            13.5,
+            12
+          ],
+          "texture": "#wheel_stone",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "half_down_5",
+      "from": [
+        3.5,
+        0,
+        17
+      ],
+      "to": [
+        12.5,
+        5,
+        18
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5.5,
+            10,
+            10.5,
+            11
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            3.5,
+            5.5,
+            12.5,
+            10.5
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            10,
+            10.5,
+            11
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            3.5,
+            10,
+            12.5,
+            11
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            3.5,
+            10,
+            12.5,
+            11
+          ],
+          "texture": "#wheel_stone",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "half_down_6",
+      "from": [
+        5.5,
+        0,
+        18
+      ],
+      "to": [
+        10.5,
+        5,
+        19
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            10
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#wheel_stone"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            10
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            10
+          ],
+          "texture": "#wheel_stone",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            10
+          ],
+          "texture": "#wheel_stone",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "half_down_tooth_0",
+      "from": [
+        14.133,
+        -0.5,
+        13.318
+      ],
+      "to": [
+        16.133,
+        5.5,
+        15.318
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            5,
+            16,
+            11
+          ],
+          "texture": "#steel_aged",
+          "rotation": 180
+        },
+        "east": {
+          "uv": [
+            5,
+            12.682,
+            11,
+            14.682
+          ],
+          "texture": "#steel_aged",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            14,
+            5,
+            16,
+            11
+          ],
+          "texture": "#steel_aged"
+        },
+        "west": {
+          "uv": [
+            5,
+            12.682,
+            11,
+            14.682
+          ],
+          "texture": "#steel_aged",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            12.682,
+            2,
+            14.682
+          ],
+          "texture": "#steel_aged",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            14,
+            12.682,
+            16,
+            14.682
+          ],
+          "texture": "#steel_aged"
+        }
+      }
+    },
+    {
+      "name": "half_down_tooth_1",
+      "from": [
+        11.408,
+        -0.5,
+        17.068
+      ],
+      "to": [
+        13.408,
+        5.5,
+        19.068
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.408,
+            5,
+            13.408,
+            11
+          ],
+          "texture": "#steel_aged",
+          "rotation": 180
+        },
+        "east": {
+          "uv": [
+            5,
+            8.932,
+            11,
+            10.932
+          ],
+          "texture": "#steel_aged",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            11.408,
+            5,
+            13.408,
+            11
+          ],
+          "texture": "#steel_aged"
+        },
+        "west": {
+          "uv": [
+            5,
+            8.932,
+            11,
+            10.932
+          ],
+          "texture": "#steel_aged",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            2.592,
+            8.932,
+            4.592,
+            10.932
+          ],
+          "texture": "#steel_aged",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            11.408,
+            8.932,
+            13.408,
+            10.932
+          ],
+          "texture": "#steel_aged"
+        }
+      }
+    },
+    {
+      "name": "half_down_tooth_2",
+      "from": [
+        7,
+        -0.5,
+        18.5
+      ],
+      "to": [
+        9,
+        5.5,
+        20.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            5,
+            9,
+            11
+          ],
+          "texture": "#steel_aged",
+          "rotation": 180
+        },
+        "east": {
+          "uv": [
+            5,
+            7.5,
+            11,
+            9.5
+          ],
+          "texture": "#steel_aged",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            7,
+            5,
+            9,
+            11
+          ],
+          "texture": "#steel_aged"
+        },
+        "west": {
+          "uv": [
+            5,
+            7.5,
+            11,
+            9.5
+          ],
+          "texture": "#steel_aged",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            7,
+            7.5,
+            9,
+            9.5
+          ],
+          "texture": "#steel_aged",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            7,
+            7.5,
+            9,
+            9.5
+          ],
+          "texture": "#steel_aged"
+        }
+      }
+    },
+    {
+      "name": "half_down_tooth_3",
+      "from": [
+        2.592,
+        -0.5,
+        17.068
+      ],
+      "to": [
+        4.592,
+        5.5,
+        19.068
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.592,
+            5,
+            4.592,
+            11
+          ],
+          "texture": "#steel_aged",
+          "rotation": 180
+        },
+        "east": {
+          "uv": [
+            5,
+            8.932,
+            11,
+            10.932
+          ],
+          "texture": "#steel_aged",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            2.592,
+            5,
+            4.592,
+            11
+          ],
+          "texture": "#steel_aged"
+        },
+        "west": {
+          "uv": [
+            5,
+            8.932,
+            11,
+            10.932
+          ],
+          "texture": "#steel_aged",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            11.408,
+            8.932,
+            13.408,
+            10.932
+          ],
+          "texture": "#steel_aged",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            2.592,
+            8.932,
+            4.592,
+            10.932
+          ],
+          "texture": "#steel_aged"
+        }
+      }
+    },
+    {
+      "name": "half_down_tooth_4",
+      "from": [
+        -0.133,
+        -0.5,
+        13.318
+      ],
+      "to": [
+        1.867,
+        5.5,
+        15.318
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            5,
+            16,
+            11
+          ],
+          "texture": "#steel_aged",
+          "rotation": 180
+        },
+        "east": {
+          "uv": [
+            5,
+            12.682,
+            11,
+            14.682
+          ],
+          "texture": "#steel_aged",
+          "rotation": 270
+        },
+        "south": {
+          "uv": [
+            14,
+            5,
+            16,
+            11
+          ],
+          "texture": "#steel_aged"
+        },
+        "west": {
+          "uv": [
+            5,
+            12.682,
+            11,
+            14.682
+          ],
+          "texture": "#steel_aged",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            12.682,
+            2,
+            14.682
+          ],
+          "texture": "#steel_aged",
+          "rotation": 180
+        },
+        "down": {
+          "uv": [
+            14,
+            12.682,
+            16,
+            14.682
+          ],
+          "texture": "#steel_aged"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0.563,
+        2.611,
+        0
+      ],
+      "scale": [
+        0.679,
+        0.679,
+        0.679
+      ]
+    }
+  }
+}

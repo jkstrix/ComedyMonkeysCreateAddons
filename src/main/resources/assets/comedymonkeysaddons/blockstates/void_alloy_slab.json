@@ -1,0 +1,144 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "type": "bottom"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_slab"
+      }
+    },
+    {
+      "when": {
+        "type": "top"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_slab_top"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ns": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_north_s"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ns": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_north_l"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ns": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_north_r"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ew": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_east_s"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ew": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_east_l"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ew": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_east_r"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ns": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_south_s"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ns": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_south_l"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ns": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_south_r"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ew": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_west_s"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ew": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_west_l"
+      }
+    },
+    {
+      "when": {
+        "type": "double",
+        "bond_ew": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_west_r"
+      }
+    },
+    {
+      "when": {
+        "type": "double"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_up_s"
+      }
+    },
+    {
+      "when": {
+        "type": "double"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_down_s"
+      }
+    }
+  ]
+}

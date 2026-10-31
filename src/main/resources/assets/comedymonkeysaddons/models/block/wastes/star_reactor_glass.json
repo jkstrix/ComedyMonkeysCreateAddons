@@ -1,0 +1,1836 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:translucent",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/reactor_brass",
+    "port_glass": "comedymonkeysaddons:block/wastes/port_glass",
+    "smoke_glass": "comedymonkeysaddons:block/wastes/smoke_glass"
+  },
+  "elements": [
+    {
+      "name": "port_11_north",
+      "from": [
+        6,
+        11,
+        1.5
+      ],
+      "to": [
+        10,
+        12,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            4,
+            10,
+            5
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_10_north",
+      "from": [
+        5,
+        10,
+        1.5
+      ],
+      "to": [
+        11,
+        11,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            5,
+            11,
+            6
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_9_north",
+      "from": [
+        4,
+        9,
+        1.5
+      ],
+      "to": [
+        12,
+        10,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            6,
+            12,
+            7
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_8_north",
+      "from": [
+        4,
+        8,
+        1.5
+      ],
+      "to": [
+        12,
+        9,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            7,
+            12,
+            8
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_7_north",
+      "from": [
+        4,
+        7,
+        1.5
+      ],
+      "to": [
+        12,
+        8,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            8,
+            12,
+            9
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_6_north",
+      "from": [
+        4,
+        6,
+        1.5
+      ],
+      "to": [
+        12,
+        7,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            9,
+            12,
+            10
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_5_north",
+      "from": [
+        5,
+        5,
+        1.5
+      ],
+      "to": [
+        11,
+        6,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            10,
+            11,
+            11
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_4_north",
+      "from": [
+        6,
+        4,
+        1.5
+      ],
+      "to": [
+        10,
+        5,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            11,
+            10,
+            12
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_11_east",
+      "from": [
+        14.5,
+        11,
+        6
+      ],
+      "to": [
+        14.5,
+        12,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            4,
+            10,
+            5
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_10_east",
+      "from": [
+        14.5,
+        10,
+        5
+      ],
+      "to": [
+        14.5,
+        11,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            5,
+            11,
+            6
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_9_east",
+      "from": [
+        14.5,
+        9,
+        4
+      ],
+      "to": [
+        14.5,
+        10,
+        12
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4,
+            6,
+            12,
+            7
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_8_east",
+      "from": [
+        14.5,
+        8,
+        4
+      ],
+      "to": [
+        14.5,
+        9,
+        12
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4,
+            7,
+            12,
+            8
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_7_east",
+      "from": [
+        14.5,
+        7,
+        4
+      ],
+      "to": [
+        14.5,
+        8,
+        12
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4,
+            8,
+            12,
+            9
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_6_east",
+      "from": [
+        14.5,
+        6,
+        4
+      ],
+      "to": [
+        14.5,
+        7,
+        12
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4,
+            9,
+            12,
+            10
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_5_east",
+      "from": [
+        14.5,
+        5,
+        5
+      ],
+      "to": [
+        14.5,
+        6,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            10,
+            11,
+            11
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_4_east",
+      "from": [
+        14.5,
+        4,
+        6
+      ],
+      "to": [
+        14.5,
+        5,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            11,
+            10,
+            12
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_11_west",
+      "from": [
+        1.5,
+        11,
+        6
+      ],
+      "to": [
+        1.5,
+        12,
+        10
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            6,
+            4,
+            10,
+            5
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_10_west",
+      "from": [
+        1.5,
+        10,
+        5
+      ],
+      "to": [
+        1.5,
+        11,
+        11
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            5,
+            5,
+            11,
+            6
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_9_west",
+      "from": [
+        1.5,
+        9,
+        4
+      ],
+      "to": [
+        1.5,
+        10,
+        12
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            4,
+            6,
+            12,
+            7
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_8_west",
+      "from": [
+        1.5,
+        8,
+        4
+      ],
+      "to": [
+        1.5,
+        9,
+        12
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            4,
+            7,
+            12,
+            8
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_7_west",
+      "from": [
+        1.5,
+        7,
+        4
+      ],
+      "to": [
+        1.5,
+        8,
+        12
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            4,
+            8,
+            12,
+            9
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_6_west",
+      "from": [
+        1.5,
+        6,
+        4
+      ],
+      "to": [
+        1.5,
+        7,
+        12
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            4,
+            9,
+            12,
+            10
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_5_west",
+      "from": [
+        1.5,
+        5,
+        5
+      ],
+      "to": [
+        1.5,
+        6,
+        11
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            5,
+            10,
+            11,
+            11
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "port_4_west",
+      "from": [
+        1.5,
+        4,
+        6
+      ],
+      "to": [
+        1.5,
+        5,
+        10
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            6,
+            11,
+            10,
+            12
+          ],
+          "texture": "#port_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-4_-3",
+      "from": [
+        6,
+        4,
+        5
+      ],
+      "to": [
+        10,
+        6,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            10,
+            10,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "east": {
+          "uv": [
+            10,
+            10,
+            11,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            5,
+            10,
+            6,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            6,
+            10,
+            10,
+            11
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-4_-2",
+      "from": [
+        5,
+        4,
+        6
+      ],
+      "to": [
+        11,
+        6,
+        7
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            10,
+            10,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            6,
+            10,
+            7,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            5,
+            9,
+            11,
+            10
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-4_-1",
+      "from": [
+        5,
+        4,
+        7
+      ],
+      "to": [
+        11,
+        6,
+        8
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            8,
+            10,
+            9,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            7,
+            10,
+            8,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            5,
+            8,
+            11,
+            9
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-4_0",
+      "from": [
+        5,
+        4,
+        8
+      ],
+      "to": [
+        11,
+        6,
+        9
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            10,
+            8,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            8,
+            10,
+            9,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            5,
+            7,
+            11,
+            8
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-4_1",
+      "from": [
+        5,
+        4,
+        9
+      ],
+      "to": [
+        11,
+        6,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            10,
+            7,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            9,
+            10,
+            10,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            5,
+            6,
+            11,
+            7
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-4_2",
+      "from": [
+        6,
+        4,
+        10
+      ],
+      "to": [
+        10,
+        6,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            10,
+            6,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "south": {
+          "uv": [
+            6,
+            10,
+            10,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            10,
+            10,
+            11,
+            12
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            6,
+            5,
+            10,
+            6
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-2_-4",
+      "from": [
+        5.5,
+        6,
+        4
+      ],
+      "to": [
+        10.5,
+        8,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            8,
+            10.5,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "east": {
+          "uv": [
+            11,
+            8,
+            12,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            4,
+            8,
+            5,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            11,
+            10.5,
+            12
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-2_-3",
+      "from": [
+        4.5,
+        6,
+        5
+      ],
+      "to": [
+        11.5,
+        8,
+        6
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            10,
+            8,
+            11,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            5,
+            8,
+            6,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            4.5,
+            10,
+            11.5,
+            11
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-2_-2",
+      "from": [
+        4,
+        6,
+        6
+      ],
+      "to": [
+        12,
+        8,
+        7
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            8,
+            10,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            6,
+            8,
+            7,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            4,
+            9,
+            12,
+            10
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-2_-1",
+      "from": [
+        4,
+        6,
+        7
+      ],
+      "to": [
+        12,
+        8,
+        8
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            8,
+            8,
+            9,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            7,
+            8,
+            8,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            4,
+            8,
+            12,
+            9
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-2_0",
+      "from": [
+        4,
+        6,
+        8
+      ],
+      "to": [
+        12,
+        8,
+        9
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            8,
+            8,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            8,
+            8,
+            9,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            4,
+            7,
+            12,
+            8
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-2_1",
+      "from": [
+        4,
+        6,
+        9
+      ],
+      "to": [
+        12,
+        8,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            8,
+            7,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            9,
+            8,
+            10,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            4,
+            6,
+            12,
+            7
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-2_2",
+      "from": [
+        4.5,
+        6,
+        10
+      ],
+      "to": [
+        11.5,
+        8,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            8,
+            6,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            10,
+            8,
+            11,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            4.5,
+            5,
+            11.5,
+            6
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_-2_3",
+      "from": [
+        5.5,
+        6,
+        11
+      ],
+      "to": [
+        10.5,
+        8,
+        12
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4,
+            8,
+            5,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            8,
+            10.5,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            11,
+            8,
+            12,
+            10
+          ],
+          "texture": "#smoke_glass"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            4,
+            10.5,
+            5
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_0_-4",
+      "from": [
+        5.5,
+        8,
+        4
+      ],
+      "to": [
+        10.5,
+        10,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            6,
+            10.5,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "east": {
+          "uv": [
+            11,
+            6,
+            12,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            4,
+            6,
+            5,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            4,
+            10.5,
+            5
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_0_-3",
+      "from": [
+        4.5,
+        8,
+        5
+      ],
+      "to": [
+        11.5,
+        10,
+        6
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            10,
+            6,
+            11,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            5,
+            6,
+            6,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            4.5,
+            5,
+            11.5,
+            6
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_0_-2",
+      "from": [
+        4,
+        8,
+        6
+      ],
+      "to": [
+        12,
+        10,
+        7
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            6,
+            10,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            6,
+            6,
+            7,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            4,
+            6,
+            12,
+            7
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_0_-1",
+      "from": [
+        4,
+        8,
+        7
+      ],
+      "to": [
+        12,
+        10,
+        8
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            8,
+            6,
+            9,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            7,
+            6,
+            8,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            4,
+            7,
+            12,
+            8
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_0_0",
+      "from": [
+        4,
+        8,
+        8
+      ],
+      "to": [
+        12,
+        10,
+        9
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            6,
+            8,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            8,
+            6,
+            9,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            4,
+            8,
+            12,
+            9
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_0_1",
+      "from": [
+        4,
+        8,
+        9
+      ],
+      "to": [
+        12,
+        10,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            6,
+            7,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            9,
+            6,
+            10,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            4,
+            9,
+            12,
+            10
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_0_2",
+      "from": [
+        4.5,
+        8,
+        10
+      ],
+      "to": [
+        11.5,
+        10,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            6,
+            6,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            10,
+            6,
+            11,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            4.5,
+            10,
+            11.5,
+            11
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_0_3",
+      "from": [
+        5.5,
+        8,
+        11
+      ],
+      "to": [
+        10.5,
+        10,
+        12
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4,
+            6,
+            5,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            6,
+            10.5,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            11,
+            6,
+            12,
+            8
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            11,
+            10.5,
+            12
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_2_-3",
+      "from": [
+        6,
+        10,
+        5
+      ],
+      "to": [
+        10,
+        12,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            4,
+            10,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "east": {
+          "uv": [
+            10,
+            4,
+            11,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            5,
+            4,
+            6,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            6,
+            5,
+            10,
+            6
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_2_-2",
+      "from": [
+        5,
+        10,
+        6
+      ],
+      "to": [
+        11,
+        12,
+        7
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            4,
+            10,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            6,
+            4,
+            7,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            5,
+            6,
+            11,
+            7
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_2_-1",
+      "from": [
+        5,
+        10,
+        7
+      ],
+      "to": [
+        11,
+        12,
+        8
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            8,
+            4,
+            9,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            7,
+            4,
+            8,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            5,
+            7,
+            11,
+            8
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_2_0",
+      "from": [
+        5,
+        10,
+        8
+      ],
+      "to": [
+        11,
+        12,
+        9
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            4,
+            8,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            8,
+            4,
+            9,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            5,
+            8,
+            11,
+            9
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_2_1",
+      "from": [
+        5,
+        10,
+        9
+      ],
+      "to": [
+        11,
+        12,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            4,
+            7,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            9,
+            4,
+            10,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            5,
+            9,
+            11,
+            10
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    },
+    {
+      "name": "rsphere_2_2",
+      "from": [
+        6,
+        10,
+        10
+      ],
+      "to": [
+        10,
+        12,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            4,
+            6,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "south": {
+          "uv": [
+            6,
+            4,
+            10,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "west": {
+          "uv": [
+            10,
+            4,
+            11,
+            6
+          ],
+          "texture": "#smoke_glass"
+        },
+        "up": {
+          "uv": [
+            6,
+            10,
+            10,
+            11
+          ],
+          "texture": "#smoke_glass"
+        }
+      }
+    }
+  ]
+}

@@ -12,6 +12,42 @@
     {
       "id": "comedymonkeysaddons:netherite_monster_cage",
       "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:substation",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:city_vault",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:sliding_door",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:conduit_pylon",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:derelict_star_reactor",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:lift",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:lift_call_plate",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:wall_vent",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:derelict_insulator",
+      "required": false
     }
   ]
 }

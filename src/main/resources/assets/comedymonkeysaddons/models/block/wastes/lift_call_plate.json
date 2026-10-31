@@ -1,0 +1,106 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "va": "comedymonkeysaddons:block/wastes/va",
+    "lift_sigil": "comedymonkeysaddons:block/wastes/lift_sigil"
+  },
+  "elements": [
+    {
+      "name": "call_mount",
+      "from": [
+        4,
+        10,
+        15
+      ],
+      "to": [
+        12,
+        18,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            0,
+            12,
+            8
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1,
+            8
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            4,
+            0,
+            12,
+            8
+          ],
+          "texture": "#va",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            15,
+            0,
+            16,
+            8
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            4,
+            15,
+            12,
+            16
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            4,
+            0,
+            12,
+            1
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "call_plate",
+      "from": [
+        5,
+        11,
+        14.75
+      ],
+      "to": [
+        11,
+        17,
+        14.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6,
+            6
+          ],
+          "texture": "#lift_sigil"
+        }
+      }
+    }
+  ]
+}

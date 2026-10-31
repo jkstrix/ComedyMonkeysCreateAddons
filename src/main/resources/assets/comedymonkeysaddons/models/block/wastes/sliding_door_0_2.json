@@ -1,0 +1,132 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field"
+  },
+  "elements": [
+    {
+      "name": "jamb_w",
+      "from": [
+        -2,
+        0,
+        4
+      ],
+      "to": [
+        0,
+        18,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            4,
+            0,
+            12,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            14,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            12,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            14,
+            4,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "jamb_t",
+      "from": [
+        0,
+        16,
+        4
+      ],
+      "to": [
+        16,
+        18,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            4,
+            14,
+            12,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            4,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            4,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/key_marked_stone"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/key_marked_stone",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/key_marked_stone",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/key_marked_stone",
+      "y": 270
+    }
+  }
+}

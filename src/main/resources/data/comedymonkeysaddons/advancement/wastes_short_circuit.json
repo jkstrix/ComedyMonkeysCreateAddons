@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:wastes_city_of_lights",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:conduit_pylon"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.wastes_short_circuit"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.wastes_short_circuit.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "wastes_short_circuit"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

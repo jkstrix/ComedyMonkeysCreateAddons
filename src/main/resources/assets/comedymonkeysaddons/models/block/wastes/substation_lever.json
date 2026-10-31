@@ -1,0 +1,220 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/steel",
+    "steel": "comedymonkeysaddons:block/wastes/steel",
+    "walnut": "comedymonkeysaddons:block/wastes/walnut",
+    "brass_aged": "comedymonkeysaddons:block/wastes/brass_aged"
+  },
+  "elements": [
+    {
+      "name": "blade",
+      "from": [
+        16.5,
+        11,
+        7.5
+      ],
+      "to": [
+        17.5,
+        20,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.5,
+            0,
+            15.5,
+            9
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            9
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            0,
+            1.5,
+            9
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            9
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            7.5,
+            1.5,
+            8.5
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            7.5,
+            1.5,
+            8.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "grip",
+      "from": [
+        16.25,
+        10,
+        7.25
+      ],
+      "to": [
+        17.75,
+        11,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.25,
+            5,
+            15.75,
+            6
+          ],
+          "texture": "#walnut"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            5,
+            8.75,
+            6
+          ],
+          "texture": "#walnut"
+        },
+        "south": {
+          "uv": [
+            0.25,
+            5,
+            1.75,
+            6
+          ],
+          "texture": "#walnut"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            5,
+            8.75,
+            6
+          ],
+          "texture": "#walnut"
+        },
+        "up": {
+          "uv": [
+            0.25,
+            7.25,
+            1.75,
+            8.75
+          ],
+          "texture": "#walnut"
+        },
+        "down": {
+          "uv": [
+            0.25,
+            7.25,
+            1.75,
+            8.75
+          ],
+          "texture": "#walnut"
+        }
+      }
+    },
+    {
+      "name": "pin",
+      "from": [
+        16.25,
+        19.5,
+        7.75
+      ],
+      "to": [
+        17.75,
+        20.5,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.25,
+            11.5,
+            15.75,
+            12.5
+          ],
+          "texture": "#brass_aged"
+        },
+        "east": {
+          "uv": [
+            7.75,
+            11.5,
+            8.25,
+            12.5
+          ],
+          "texture": "#brass_aged"
+        },
+        "south": {
+          "uv": [
+            0.25,
+            11.5,
+            1.75,
+            12.5
+          ],
+          "texture": "#brass_aged"
+        },
+        "west": {
+          "uv": [
+            7.75,
+            11.5,
+            8.25,
+            12.5
+          ],
+          "texture": "#brass_aged"
+        },
+        "up": {
+          "uv": [
+            0.25,
+            7.75,
+            1.75,
+            8.25
+          ],
+          "texture": "#brass_aged"
+        },
+        "down": {
+          "uv": [
+            0.25,
+            7.75,
+            1.75,
+            8.25
+          ],
+          "texture": "#brass_aged"
+        }
+      }
+    }
+  ]
+}

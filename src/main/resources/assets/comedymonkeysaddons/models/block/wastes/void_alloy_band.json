@@ -1,0 +1,226 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_band",
+    "va_band": "comedymonkeysaddons:block/wastes/va_band",
+    "va_step_hi": "comedymonkeysaddons:block/wastes/va_step_hi",
+    "va_step_lo": "comedymonkeysaddons:block/wastes/va_step_lo",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field"
+  },
+  "elements": [
+    {
+      "name": "band",
+      "from": [
+        0,
+        3,
+        0
+      ],
+      "to": [
+        16,
+        13,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            3,
+            16,
+            13
+          ],
+          "texture": "#va_band",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0,
+            3,
+            16,
+            13
+          ],
+          "texture": "#va_band",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            0,
+            3,
+            16,
+            13
+          ],
+          "texture": "#va_band",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            3,
+            16,
+            13
+          ],
+          "texture": "#va_band",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_step_hi"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "margin_lo",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        3,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            13,
+            15,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            1,
+            13,
+            15,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            1,
+            13,
+            15,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            1,
+            13,
+            15,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "margin_hi",
+      "from": [
+        1,
+        13,
+        1
+      ],
+      "to": [
+        15,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            0,
+            15,
+            3
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            1,
+            0,
+            15,
+            3
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            1,
+            0,
+            15,
+            3
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            1,
+            0,
+            15,
+            3
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#va_field",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#va_field"
+        }
+      }
+    }
+  ]
+}

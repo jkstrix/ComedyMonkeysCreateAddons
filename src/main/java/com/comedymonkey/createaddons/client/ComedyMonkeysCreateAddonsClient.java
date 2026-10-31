@@ -48,6 +48,12 @@ public class ComedyMonkeysCreateAddonsClient {
 		modBus.addListener(this::clientSetup);
 		modBus.addListener(this::registerScreens);
 		modBus.addListener(this::registerModels);
+		// the Clockwork Wastes' powered city blocks
+		modBus.addListener(com.comedymonkey.createaddons.client.wastes.WastesRenderers::registerModels);
+		modBus.addListener(com.comedymonkey.createaddons.client.wastes.WastesRenderers::registerRenderers);
+		// the city's lifts
+		modBus.addListener(com.comedymonkey.createaddons.client.wastes.LiftRenderers::registerModels);
+		modBus.addListener(com.comedymonkey.createaddons.client.wastes.LiftRenderers::registerRenderers);
 		modBus.addListener(this::registerClientExtensions);
 		// Fluid and Power Lines: tier and dye colours, encased lines drawn as their block, hidden lines through goggles
 		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::registerBlockColors);
@@ -90,6 +96,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		com.comedymonkey.createaddons.content.electric.LavaGeneratorBlockEntity.clientTicker = ElectricSounds::tickGenerator;
 		// Flywheel: a line's visual made again when its fitting changes; a post's spans laid out again (and its partners')
 		com.comedymonkey.createaddons.content.line.LineBlockEntity.clientRefitted = ComedyMonkeysCreateAddonsClient::revisualize;
+		// a lift call plate's lens comes on with its call and goes out when the deck arrives (D62)
+		com.comedymonkey.createaddons.content.wastes.LiftCallPlateBlockEntity.clientChanged = ComedyMonkeysCreateAddonsClient::revisualize;
 		com.comedymonkey.createaddons.content.line.LinePostBlockEntity.clientSpansChanged = be -> {
 			if (be.getLevel() == null || !dev.engine_room.flywheel.api.visualization.VisualizationManager.supportsVisualization(be.getLevel()))
 				return;
@@ -195,6 +203,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.register(ModMenus.ANIMAL_PEN.get(), AnimalPenScreen::new);
 		event.register(ModMenus.MONSTER_CAGE.get(), MonsterCageScreen::new);
 		event.register(ModMenus.FISH_TANK.get(), FishTankScreen::new);
+		event.register(com.comedymonkey.createaddons.registry.ModWastes.CITY_VAULT_MENU.get(), com.comedymonkey.createaddons.client.wastes.CityVaultScreen::new);
 	}
 
 	private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -227,6 +236,11 @@ public class ComedyMonkeysCreateAddonsClient {
 			AeronauticsRenderers.registerRenderers(event);
 		event.registerEntityRenderer(ModEntities.TRADE_BOT.get(), TradeBotRenderer::new);
 		event.registerEntityRenderer(ModEntities.CLOCKWORK_JUGGERNAUT.get(), com.comedymonkey.createaddons.client.juggernaut.JuggernautRenderer::new);
+		// the Clockwork Wastes bots and their bolt
+		event.registerEntityRenderer(com.comedymonkey.createaddons.registry.ModWastes.SCUTTLER.get(), com.comedymonkey.createaddons.client.wastes.bot.BotRenderer::scuttler);
+		event.registerEntityRenderer(com.comedymonkey.createaddons.registry.ModWastes.SENTRY.get(), com.comedymonkey.createaddons.client.wastes.bot.BotRenderer::sentry);
+		event.registerEntityRenderer(com.comedymonkey.createaddons.registry.ModWastes.CUSTODIAN.get(), com.comedymonkey.createaddons.client.wastes.bot.BotRenderer::custodian);
+		event.registerEntityRenderer(com.comedymonkey.createaddons.registry.ModWastes.STARLIGHT_BOLT.get(), com.comedymonkey.createaddons.client.wastes.bot.StarlightBoltRenderer::new);
 		event.registerEntityRenderer(ModEntities.THROWN_COG.get(), context -> new net.minecraft.client.renderer.entity.ThrownItemRenderer<>(context, 2.5f, false));
 		event.registerBlockEntityRenderer(ModBlockEntities.TRADE_BOT_STATION.get(), TradeBotStationRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.HELPER_BOT.get(), com.comedymonkey.createaddons.client.helperbot.HelperBotRenderer::new);
@@ -321,6 +335,9 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerLayerDefinition(TradeBotGeometry.BOT_LAYER, TradeBotGeometry::botLayer);
 		event.registerLayerDefinition(com.comedymonkey.createaddons.client.juggernaut.JuggernautModel.LAYER,
 			com.comedymonkey.createaddons.client.juggernaut.JuggernautModel::layer);
+		for (var rig : java.util.List.of(com.comedymonkey.createaddons.client.wastes.bot.BotModel.SCUTTLER, com.comedymonkey.createaddons.client.wastes.bot.BotModel.SENTRY,
+			com.comedymonkey.createaddons.client.wastes.bot.BotModel.CUSTODIAN))
+			event.registerLayerDefinition(rig.layer(), rig::layerDefinition);
 		event.registerLayerDefinition(com.comedymonkey.createaddons.client.helperbot.HelperBotModels.LAYER,
 			com.comedymonkey.createaddons.client.helperbot.HelperBotModels::layer);
 		event.registerLayerDefinition(TradeBotGeometry.STATION_LAYER, TradeBotGeometry::stationLayer);
@@ -334,6 +351,8 @@ public class ComedyMonkeysCreateAddonsClient {
 	private void clientSetup(FMLClientSetupEvent event) {
 		// The machines' moving parts, drawn by Flywheel when it can
 		event.enqueueWork(com.comedymonkey.createaddons.client.parts.MachineVisuals::register);
+		// a Derelict lamp that lights or goes dark gets its lens visual made again
+		com.comedymonkey.createaddons.content.wastes.DerelictLightBlockEntity.clientLit = ComedyMonkeysCreateAddonsClient::revisualize;
 		// Helper Bot's clips (a big file) are read now, in the background, rather than on the first frame he's seen
 		com.comedymonkey.createaddons.client.helperbot.HelperBotRig.preload();
 		// Upgraded chest item picks its tier's model (0 copper .. 0.3 diamond)

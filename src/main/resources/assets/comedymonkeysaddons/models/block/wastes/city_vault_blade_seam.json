@@ -1,0 +1,36 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "seam_strip_lit": "comedymonkeysaddons:block/wastes/seam_strip_lit"
+  },
+  "elements": [
+    {
+      "name": "blade_seam_5",
+      "from": [
+        7,
+        8,
+        1.75
+      ],
+      "to": [
+        14,
+        8.5,
+        1.75
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            7.5,
+            9,
+            8
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    }
+  ]
+}

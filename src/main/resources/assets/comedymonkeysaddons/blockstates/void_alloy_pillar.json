@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "comedymonkeysaddons:block/wastes/void_alloy_pillar"
+    },
+    "axis=z": {
+      "model": "comedymonkeysaddons:block/wastes/void_alloy_pillar",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "comedymonkeysaddons:block/wastes/void_alloy_pillar",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

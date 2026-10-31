@@ -1,0 +1,61 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/steel",
+    "seam_frame_lit": "comedymonkeysaddons:block/wastes/seam_frame_lit"
+  },
+  "elements": [
+    {
+      "name": "seam_l",
+      "from": [
+        5.5,
+        2.5,
+        0.5
+      ],
+      "to": [
+        6,
+        22.5,
+        0.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            0,
+            10.5,
+            16
+          ],
+          "texture": "#seam_frame_lit"
+        }
+      }
+    },
+    {
+      "name": "seam_r",
+      "from": [
+        10,
+        2.5,
+        0.5
+      ],
+      "to": [
+        10.5,
+        22.5,
+        0.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            0,
+            6,
+            16
+          ],
+          "texture": "#seam_frame_lit"
+        }
+      }
+    }
+  ]
+}

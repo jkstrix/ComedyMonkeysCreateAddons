@@ -1,0 +1,110 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "bond_ns": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_north_s"
+      }
+    },
+    {
+      "when": {
+        "bond_ns": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_north_l"
+      }
+    },
+    {
+      "when": {
+        "bond_ns": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_north_r"
+      }
+    },
+    {
+      "when": {
+        "bond_ew": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_east_s"
+      }
+    },
+    {
+      "when": {
+        "bond_ew": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_east_l"
+      }
+    },
+    {
+      "when": {
+        "bond_ew": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_east_r"
+      }
+    },
+    {
+      "when": {
+        "bond_ns": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_south_s"
+      }
+    },
+    {
+      "when": {
+        "bond_ns": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_south_l"
+      }
+    },
+    {
+      "when": {
+        "bond_ns": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_south_r"
+      }
+    },
+    {
+      "when": {
+        "bond_ew": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_west_s"
+      }
+    },
+    {
+      "when": {
+        "bond_ew": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_west_l"
+      }
+    },
+    {
+      "when": {
+        "bond_ew": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_west_r"
+      }
+    },
+    {
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_up_s"
+      }
+    },
+    {
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_down_s"
+      }
+    }
+  ]
+}

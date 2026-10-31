@@ -1,0 +1,36 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "vent_seam_dim": "comedymonkeysaddons:block/wastes/vent_seam_dim"
+  },
+  "elements": [
+    {
+      "name": "contact",
+      "from": [
+        6,
+        4,
+        14.5
+      ],
+      "to": [
+        10,
+        8,
+        14.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            8,
+            10,
+            12
+          ],
+          "texture": "#vent_seam_dim"
+        }
+      }
+    }
+  ]
+}

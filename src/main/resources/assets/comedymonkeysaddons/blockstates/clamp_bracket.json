@@ -1,0 +1,33 @@
+{
+  "variants": {
+    "facing=north,mount=wall": {
+      "model": "comedymonkeysaddons:block/wastes/clamp_bracket_wall"
+    },
+    "facing=north,mount=saddle": {
+      "model": "comedymonkeysaddons:block/wastes/clamp_bracket_saddle"
+    },
+    "facing=east,mount=wall": {
+      "model": "comedymonkeysaddons:block/wastes/clamp_bracket_wall",
+      "y": 90
+    },
+    "facing=east,mount=saddle": {
+      "model": "comedymonkeysaddons:block/wastes/clamp_bracket_saddle",
+      "y": 90
+    },
+    "facing=south,mount=wall": {
+      "model": "comedymonkeysaddons:block/wastes/clamp_bracket_wall",
+      "y": 180
+    },
+    "facing=south,mount=saddle": {
+      "model": "comedymonkeysaddons:block/wastes/clamp_bracket_saddle"
+    },
+    "facing=west,mount=wall": {
+      "model": "comedymonkeysaddons:block/wastes/clamp_bracket_wall",
+      "y": 270
+    },
+    "facing=west,mount=saddle": {
+      "model": "comedymonkeysaddons:block/wastes/clamp_bracket_saddle",
+      "y": 90
+    }
+  }
+}

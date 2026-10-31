@@ -1,0 +1,186 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "va": "comedymonkeysaddons:block/wastes/va"
+  },
+  "elements": [
+    {
+      "name": "head_w",
+      "from": [
+        -3,
+        0,
+        0
+      ],
+      "to": [
+        -1,
+        4,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            13,
+            12,
+            15,
+            16
+          ],
+          "texture": "#va",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            13,
+            0,
+            15,
+            16
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            13,
+            0,
+            15,
+            16
+          ],
+          "texture": "#va",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "head_s",
+      "from": [
+        -3,
+        0,
+        16
+      ],
+      "to": [
+        0,
+        3,
+        18
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            13,
+            3,
+            16
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            13,
+            13,
+            16,
+            16
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            0,
+            13,
+            2,
+            16
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            13,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            13,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "head_s",
+      "from": [
+        0,
+        0,
+        16
+      ],
+      "to": [
+        16,
+        3,
+        18
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            13,
+            16,
+            16
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            0,
+            13,
+            16,
+            16
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

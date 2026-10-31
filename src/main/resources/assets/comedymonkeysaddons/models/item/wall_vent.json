@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "neoforge:obj",
+  "model": "comedymonkeysaddons:models/block/wastes/wall_vent_item.obj",
+  "flip_v": false,
+  "emissive_ambient": false,
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field",
+    "vent_cavity": "comedymonkeysaddons:block/wastes/vent_cavity",
+    "va": "comedymonkeysaddons:block/wastes/va",
+    "seam_strip_dark": "comedymonkeysaddons:block/wastes/seam_strip_dark"
+  },
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.584,
+        0.584,
+        0.584
+      ]
+    }
+  }
+}

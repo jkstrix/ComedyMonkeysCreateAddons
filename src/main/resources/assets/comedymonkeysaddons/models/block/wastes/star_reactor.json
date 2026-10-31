@@ -1,0 +1,4315 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/reactor_brass",
+    "reactor_brass": "comedymonkeysaddons:block/wastes/reactor_brass",
+    "casing_top": "comedymonkeysaddons:block/wastes/casing_top",
+    "casing_panel": "comedymonkeysaddons:block/wastes/casing_panel",
+    "reactor_copper": "comedymonkeysaddons:block/wastes/reactor_copper",
+    "hatch": "comedymonkeysaddons:block/wastes/hatch",
+    "va": "comedymonkeysaddons:block/wastes/va"
+  },
+  "elements": [
+    {
+      "name": "post_0_0",
+      "from": [
+        0,
+        2,
+        0
+      ],
+      "to": [
+        2,
+        14,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            14,
+            2,
+            16
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "post_14_0",
+      "from": [
+        14,
+        2,
+        0
+      ],
+      "to": [
+        16,
+        14,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            0,
+            16,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            14,
+            16,
+            16
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "post_0_14",
+      "from": [
+        0,
+        2,
+        14
+      ],
+      "to": [
+        2,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            14,
+            2,
+            16
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "post_14_14",
+      "from": [
+        14,
+        2,
+        14
+      ],
+      "to": [
+        16,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            14,
+            16,
+            16
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            0,
+            16,
+            2
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "bottom",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "west"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "top",
+      "from": [
+        0,
+        14,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#reactor_brass",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#casing_top",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "panel_t_north",
+      "from": [
+        2,
+        12,
+        1
+      ],
+      "to": [
+        14,
+        14,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            14,
+            4
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            2,
+            15,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            2,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            1,
+            14,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            14,
+            14,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_b_north",
+      "from": [
+        2,
+        2,
+        1
+      ],
+      "to": [
+        14,
+        4,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            12,
+            14,
+            14
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            12,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            12,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            1,
+            14,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            14,
+            14,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w11_north",
+      "from": [
+        2,
+        11,
+        1
+      ],
+      "to": [
+        6,
+        12,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            4,
+            14,
+            5
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            4,
+            15,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            4,
+            2,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            1,
+            6,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            14,
+            6,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e11_north",
+      "from": [
+        10,
+        11,
+        1
+      ],
+      "to": [
+        14,
+        12,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            4,
+            6,
+            5
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            4,
+            15,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            4,
+            2,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            10,
+            1,
+            14,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            10,
+            14,
+            14,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w10_north",
+      "from": [
+        2,
+        10,
+        1
+      ],
+      "to": [
+        5,
+        11,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            5,
+            14,
+            6
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            5,
+            15,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            5,
+            2,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            1,
+            5,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            14,
+            5,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e10_north",
+      "from": [
+        11,
+        10,
+        1
+      ],
+      "to": [
+        14,
+        11,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            5,
+            5,
+            6
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            5,
+            15,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            5,
+            2,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            11,
+            1,
+            14,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            11,
+            14,
+            14,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w9_north",
+      "from": [
+        2,
+        9,
+        1
+      ],
+      "to": [
+        4,
+        10,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            6,
+            14,
+            7
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            6,
+            15,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            6,
+            2,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            1,
+            4,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            14,
+            4,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e9_north",
+      "from": [
+        12,
+        9,
+        1
+      ],
+      "to": [
+        14,
+        10,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            6,
+            4,
+            7
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            6,
+            15,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            6,
+            2,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            12,
+            1,
+            14,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            12,
+            14,
+            14,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w8_north",
+      "from": [
+        2,
+        8,
+        1
+      ],
+      "to": [
+        4,
+        9,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            7,
+            14,
+            8
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            7,
+            15,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            7,
+            2,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            1,
+            4,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            14,
+            4,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e8_north",
+      "from": [
+        12,
+        8,
+        1
+      ],
+      "to": [
+        14,
+        9,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            7,
+            4,
+            8
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            7,
+            15,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            7,
+            2,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            12,
+            1,
+            14,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            12,
+            14,
+            14,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w7_north",
+      "from": [
+        2,
+        7,
+        1
+      ],
+      "to": [
+        4,
+        8,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            8,
+            14,
+            9
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            8,
+            15,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            8,
+            2,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            1,
+            4,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            14,
+            4,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e7_north",
+      "from": [
+        12,
+        7,
+        1
+      ],
+      "to": [
+        14,
+        8,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            8,
+            4,
+            9
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            8,
+            15,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            8,
+            2,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            12,
+            1,
+            14,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            12,
+            14,
+            14,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w6_north",
+      "from": [
+        2,
+        6,
+        1
+      ],
+      "to": [
+        4,
+        7,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            9,
+            14,
+            10
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            9,
+            15,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            9,
+            2,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            1,
+            4,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            14,
+            4,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e6_north",
+      "from": [
+        12,
+        6,
+        1
+      ],
+      "to": [
+        14,
+        7,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            9,
+            4,
+            10
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            9,
+            15,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            9,
+            2,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            12,
+            1,
+            14,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            12,
+            14,
+            14,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w5_north",
+      "from": [
+        2,
+        5,
+        1
+      ],
+      "to": [
+        5,
+        6,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            10,
+            14,
+            11
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            10,
+            15,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            10,
+            2,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            1,
+            5,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            14,
+            5,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e5_north",
+      "from": [
+        11,
+        5,
+        1
+      ],
+      "to": [
+        14,
+        6,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            10,
+            5,
+            11
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            10,
+            15,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            10,
+            2,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            11,
+            1,
+            14,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            11,
+            14,
+            14,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w4_north",
+      "from": [
+        2,
+        4,
+        1
+      ],
+      "to": [
+        6,
+        5,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            11,
+            14,
+            12
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            11,
+            15,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            11,
+            2,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            1,
+            6,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            14,
+            6,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e4_north",
+      "from": [
+        10,
+        4,
+        1
+      ],
+      "to": [
+        14,
+        5,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            11,
+            6,
+            12
+          ],
+          "texture": "#casing_panel"
+        },
+        "east": {
+          "uv": [
+            14,
+            11,
+            15,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            11,
+            2,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            10,
+            1,
+            14,
+            2
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            10,
+            14,
+            14,
+            15
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_t_east",
+      "from": [
+        14,
+        12,
+        2
+      ],
+      "to": [
+        15,
+        14,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            2,
+            2,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            2,
+            2,
+            14,
+            4
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            2,
+            15,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            2,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_b_east",
+      "from": [
+        14,
+        2,
+        2
+      ],
+      "to": [
+        15,
+        4,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            12,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            2,
+            12,
+            14,
+            14
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            12,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            2,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w11_east",
+      "from": [
+        14,
+        11,
+        2
+      ],
+      "to": [
+        15,
+        12,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            4,
+            2,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            10,
+            4,
+            14,
+            5
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            4,
+            15,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            15,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            10,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e11_east",
+      "from": [
+        14,
+        11,
+        10
+      ],
+      "to": [
+        15,
+        12,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            4,
+            2,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            2,
+            4,
+            6,
+            5
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            4,
+            15,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            10,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            2,
+            15,
+            6
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w10_east",
+      "from": [
+        14,
+        10,
+        2
+      ],
+      "to": [
+        15,
+        11,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            5,
+            2,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            11,
+            5,
+            14,
+            6
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            5,
+            15,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            15,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            11,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e10_east",
+      "from": [
+        14,
+        10,
+        11
+      ],
+      "to": [
+        15,
+        11,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            5,
+            2,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            2,
+            5,
+            5,
+            6
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            5,
+            15,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            11,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            2,
+            15,
+            5
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w9_east",
+      "from": [
+        14,
+        9,
+        2
+      ],
+      "to": [
+        15,
+        10,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            6,
+            2,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            12,
+            6,
+            14,
+            7
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            6,
+            15,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            15,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            12,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e9_east",
+      "from": [
+        14,
+        9,
+        12
+      ],
+      "to": [
+        15,
+        10,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            6,
+            2,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            2,
+            6,
+            4,
+            7
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            6,
+            15,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            12,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            2,
+            15,
+            4
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w8_east",
+      "from": [
+        14,
+        8,
+        2
+      ],
+      "to": [
+        15,
+        9,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            7,
+            2,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            12,
+            7,
+            14,
+            8
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            7,
+            15,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            15,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            12,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e8_east",
+      "from": [
+        14,
+        8,
+        12
+      ],
+      "to": [
+        15,
+        9,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            7,
+            2,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            2,
+            7,
+            4,
+            8
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            7,
+            15,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            12,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            2,
+            15,
+            4
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w7_east",
+      "from": [
+        14,
+        7,
+        2
+      ],
+      "to": [
+        15,
+        8,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            8,
+            2,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            12,
+            8,
+            14,
+            9
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            8,
+            15,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            15,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            12,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e7_east",
+      "from": [
+        14,
+        7,
+        12
+      ],
+      "to": [
+        15,
+        8,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            8,
+            2,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            2,
+            8,
+            4,
+            9
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            8,
+            15,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            12,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            2,
+            15,
+            4
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w6_east",
+      "from": [
+        14,
+        6,
+        2
+      ],
+      "to": [
+        15,
+        7,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            9,
+            2,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            12,
+            9,
+            14,
+            10
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            9,
+            15,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            15,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            12,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e6_east",
+      "from": [
+        14,
+        6,
+        12
+      ],
+      "to": [
+        15,
+        7,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            9,
+            2,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            2,
+            9,
+            4,
+            10
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            9,
+            15,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            12,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            2,
+            15,
+            4
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w5_east",
+      "from": [
+        14,
+        5,
+        2
+      ],
+      "to": [
+        15,
+        6,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            10,
+            2,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            11,
+            10,
+            14,
+            11
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            10,
+            15,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            15,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            11,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e5_east",
+      "from": [
+        14,
+        5,
+        11
+      ],
+      "to": [
+        15,
+        6,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            10,
+            2,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            2,
+            10,
+            5,
+            11
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            10,
+            15,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            11,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            2,
+            15,
+            5
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w4_east",
+      "from": [
+        14,
+        4,
+        2
+      ],
+      "to": [
+        15,
+        5,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            11,
+            2,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            10,
+            11,
+            14,
+            12
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            11,
+            15,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            15,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            10,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e4_east",
+      "from": [
+        14,
+        4,
+        10
+      ],
+      "to": [
+        15,
+        5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            11,
+            2,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            2,
+            11,
+            6,
+            12
+          ],
+          "texture": "#casing_panel"
+        },
+        "south": {
+          "uv": [
+            14,
+            11,
+            15,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            14,
+            10,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            14,
+            2,
+            15,
+            6
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_t_west",
+      "from": [
+        1,
+        12,
+        2
+      ],
+      "to": [
+        2,
+        14,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            2,
+            15,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            2,
+            2,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            2,
+            2,
+            14,
+            4
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_b_west",
+      "from": [
+        1,
+        2,
+        2
+      ],
+      "to": [
+        2,
+        4,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            12,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            12,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            2,
+            12,
+            14,
+            14
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w11_west",
+      "from": [
+        1,
+        11,
+        10
+      ],
+      "to": [
+        2,
+        12,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            4,
+            15,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            4,
+            2,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            10,
+            4,
+            14,
+            5
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            10,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            2,
+            6
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e11_west",
+      "from": [
+        1,
+        11,
+        2
+      ],
+      "to": [
+        2,
+        12,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            4,
+            15,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            4,
+            2,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            2,
+            4,
+            6,
+            5
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            2,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            10,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w10_west",
+      "from": [
+        1,
+        10,
+        11
+      ],
+      "to": [
+        2,
+        11,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            5,
+            15,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            5,
+            2,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            11,
+            5,
+            14,
+            6
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            11,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            2,
+            5
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e10_west",
+      "from": [
+        1,
+        10,
+        2
+      ],
+      "to": [
+        2,
+        11,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            5,
+            15,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            5,
+            2,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            2,
+            5,
+            5,
+            6
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            2,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            11,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w9_west",
+      "from": [
+        1,
+        9,
+        12
+      ],
+      "to": [
+        2,
+        10,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            6,
+            15,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            6,
+            2,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            12,
+            6,
+            14,
+            7
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            12,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            2,
+            4
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e9_west",
+      "from": [
+        1,
+        9,
+        2
+      ],
+      "to": [
+        2,
+        10,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            6,
+            15,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            6,
+            2,
+            7
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            2,
+            6,
+            4,
+            7
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            2,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            12,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w8_west",
+      "from": [
+        1,
+        8,
+        12
+      ],
+      "to": [
+        2,
+        9,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            7,
+            15,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            7,
+            2,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            12,
+            7,
+            14,
+            8
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            12,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            2,
+            4
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e8_west",
+      "from": [
+        1,
+        8,
+        2
+      ],
+      "to": [
+        2,
+        9,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            7,
+            15,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            7,
+            2,
+            8
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            2,
+            7,
+            4,
+            8
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            2,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            12,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w7_west",
+      "from": [
+        1,
+        7,
+        12
+      ],
+      "to": [
+        2,
+        8,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            8,
+            15,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            8,
+            2,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            12,
+            8,
+            14,
+            9
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            12,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            2,
+            4
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e7_west",
+      "from": [
+        1,
+        7,
+        2
+      ],
+      "to": [
+        2,
+        8,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            8,
+            15,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            8,
+            2,
+            9
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            2,
+            8,
+            4,
+            9
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            2,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            12,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w6_west",
+      "from": [
+        1,
+        6,
+        12
+      ],
+      "to": [
+        2,
+        7,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            9,
+            15,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            9,
+            2,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            12,
+            9,
+            14,
+            10
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            12,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            2,
+            4
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e6_west",
+      "from": [
+        1,
+        6,
+        2
+      ],
+      "to": [
+        2,
+        7,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            9,
+            15,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            9,
+            2,
+            10
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            2,
+            9,
+            4,
+            10
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            2,
+            4
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            12,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w5_west",
+      "from": [
+        1,
+        5,
+        11
+      ],
+      "to": [
+        2,
+        6,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            10,
+            15,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            10,
+            2,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            11,
+            10,
+            14,
+            11
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            11,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            2,
+            5
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e5_west",
+      "from": [
+        1,
+        5,
+        2
+      ],
+      "to": [
+        2,
+        6,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            10,
+            15,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            10,
+            2,
+            11
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            2,
+            10,
+            5,
+            11
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            2,
+            5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            11,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_w4_west",
+      "from": [
+        1,
+        4,
+        10
+      ],
+      "to": [
+        2,
+        5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            11,
+            15,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            11,
+            2,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            10,
+            11,
+            14,
+            12
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            10,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            2,
+            6
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_e4_west",
+      "from": [
+        1,
+        4,
+        2
+      ],
+      "to": [
+        2,
+        5,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            11,
+            15,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            1,
+            11,
+            2,
+            12
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            2,
+            11,
+            6,
+            12
+          ],
+          "texture": "#casing_panel"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            2,
+            6
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            1,
+            10,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "panel_south",
+      "from": [
+        2,
+        2,
+        14
+      ],
+      "to": [
+        14,
+        14,
+        15
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1,
+            2,
+            2,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#casing_panel"
+        },
+        "west": {
+          "uv": [
+            14,
+            2,
+            15,
+            14
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            14,
+            14,
+            15
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            1,
+            14,
+            2
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "terminal",
+      "from": [
+        6,
+        6,
+        15
+      ],
+      "to": [
+        10,
+        10,
+        16.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            6,
+            1.5,
+            10
+          ],
+          "texture": "#reactor_copper"
+        },
+        "south": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#reactor_copper"
+        },
+        "west": {
+          "uv": [
+            14.5,
+            6,
+            16,
+            10
+          ],
+          "texture": "#reactor_copper"
+        },
+        "up": {
+          "uv": [
+            6,
+            14.5,
+            10,
+            16
+          ],
+          "texture": "#reactor_copper"
+        },
+        "down": {
+          "uv": [
+            6,
+            0,
+            10,
+            1.5
+          ],
+          "texture": "#reactor_copper"
+        }
+      }
+    },
+    {
+      "name": "hatch",
+      "from": [
+        6,
+        16,
+        6
+      ],
+      "to": [
+        10,
+        16.5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            15.5,
+            10,
+            16
+          ],
+          "texture": "#hatch"
+        },
+        "east": {
+          "uv": [
+            6,
+            15.5,
+            10,
+            16
+          ],
+          "texture": "#hatch"
+        },
+        "south": {
+          "uv": [
+            6,
+            15.5,
+            10,
+            16
+          ],
+          "texture": "#hatch"
+        },
+        "west": {
+          "uv": [
+            6,
+            15.5,
+            10,
+            16
+          ],
+          "texture": "#hatch"
+        },
+        "up": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#hatch"
+        }
+      }
+    },
+    {
+      "name": "hatch_grip",
+      "from": [
+        7,
+        16.5,
+        7.5
+      ],
+      "to": [
+        9,
+        17,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            15,
+            9,
+            15.5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            15,
+            8.5,
+            15.5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "south": {
+          "uv": [
+            7,
+            15,
+            9,
+            15.5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            15,
+            8.5,
+            15.5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "up": {
+          "uv": [
+            7,
+            7.5,
+            9,
+            8.5
+          ],
+          "texture": "#reactor_brass"
+        },
+        "down": {
+          "uv": [
+            7,
+            7.5,
+            9,
+            8.5
+          ],
+          "texture": "#reactor_brass"
+        }
+      }
+    },
+    {
+      "name": "cage_4_4",
+      "from": [
+        4,
+        3,
+        4
+      ],
+      "to": [
+        4.5,
+        13,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.5,
+            3,
+            12,
+            13
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            11.5,
+            3,
+            12,
+            13
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            4,
+            3,
+            4.5,
+            13
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            4,
+            3,
+            4.5,
+            13
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            4.5,
+            4.5
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            4,
+            11.5,
+            4.5,
+            12
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "cage_11.5_4",
+      "from": [
+        11.5,
+        3,
+        4
+      ],
+      "to": [
+        12,
+        13,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            3,
+            4.5,
+            13
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            11.5,
+            3,
+            12,
+            13
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            11.5,
+            3,
+            12,
+            13
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            4,
+            3,
+            4.5,
+            13
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            11.5,
+            4,
+            12,
+            4.5
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            11.5,
+            11.5,
+            12,
+            12
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "cage_4_11.5",
+      "from": [
+        4,
+        3,
+        11.5
+      ],
+      "to": [
+        4.5,
+        13,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.5,
+            3,
+            12,
+            13
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            4,
+            3,
+            4.5,
+            13
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            4,
+            3,
+            4.5,
+            13
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            11.5,
+            3,
+            12,
+            13
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            4,
+            11.5,
+            4.5,
+            12
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            4,
+            4,
+            4.5,
+            4.5
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "cage_11.5_11.5",
+      "from": [
+        11.5,
+        3,
+        11.5
+      ],
+      "to": [
+        12,
+        13,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            3,
+            4.5,
+            13
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            4,
+            3,
+            4.5,
+            13
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            11.5,
+            3,
+            12,
+            13
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            11.5,
+            3,
+            12,
+            13
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            11.5,
+            11.5,
+            12,
+            12
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            11.5,
+            4,
+            12,
+            4.5
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "cage_floor",
+      "from": [
+        4,
+        2,
+        4
+      ],
+      "to": [
+        12,
+        3,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            13,
+            12,
+            14
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            4,
+            13,
+            12,
+            14
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            4,
+            13,
+            12,
+            14
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            4,
+            13,
+            12,
+            14
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "cage_roof",
+      "from": [
+        4,
+        13,
+        4
+      ],
+      "to": [
+        12,
+        14,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            2,
+            12,
+            3
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            4,
+            2,
+            12,
+            3
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            4,
+            2,
+            12,
+            3
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            4,
+            2,
+            12,
+            3
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#va"
+        }
+      }
+    }
+  ]
+}

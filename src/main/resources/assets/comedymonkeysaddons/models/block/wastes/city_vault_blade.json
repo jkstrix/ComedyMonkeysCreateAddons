@@ -1,0 +1,96 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "va": "comedymonkeysaddons:block/wastes/va",
+    "seam_strip_dark": "comedymonkeysaddons:block/wastes/seam_strip_dark"
+  },
+  "elements": [
+    {
+      "name": "blade_5",
+      "from": [
+        7,
+        8,
+        2.25
+      ],
+      "to": [
+        14,
+        13,
+        2.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            3,
+            9,
+            8
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            13.25,
+            3,
+            13.75,
+            8
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            2.25,
+            3,
+            2.75,
+            8
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            7,
+            2.25,
+            14,
+            2.75
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            7,
+            13.25,
+            14,
+            13.75
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "blade_seam_d_5",
+      "from": [
+        7,
+        8,
+        2
+      ],
+      "to": [
+        14,
+        8.5,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            7.5,
+            9,
+            8
+          ],
+          "texture": "#seam_strip_dark"
+        }
+      }
+    }
+  ]
+}

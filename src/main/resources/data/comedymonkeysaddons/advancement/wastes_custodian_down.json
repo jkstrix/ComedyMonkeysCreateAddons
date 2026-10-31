@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:wastes_short_circuit",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:unknown_device"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.wastes_custodian_down"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.wastes_custodian_down.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "wastes_custodian_down"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

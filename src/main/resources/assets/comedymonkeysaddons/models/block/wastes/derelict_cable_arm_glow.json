@@ -1,0 +1,40 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/cable",
+    "seam_strip_lit": "comedymonkeysaddons:block/wastes/seam_strip_lit"
+  },
+  "elements": [
+    {
+      "name": "cable_g",
+      "from": [
+        8,
+        0,
+        7.75
+      ],
+      "to": [
+        16,
+        0.75,
+        8.25
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "up": {
+          "uv": [
+            8,
+            7.75,
+            16,
+            8.25
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    }
+  ]
+}

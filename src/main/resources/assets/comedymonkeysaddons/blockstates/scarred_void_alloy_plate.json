@@ -1,0 +1,288 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "east|south|west",
+        "bond_ns": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_north_s"
+      }
+    },
+    {
+      "when": {
+        "facing": "east|south|west",
+        "bond_ns": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_north_l"
+      }
+    },
+    {
+      "when": {
+        "facing": "east|south|west",
+        "bond_ns": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_north_r"
+      }
+    },
+    {
+      "when": {
+        "facing": "north|south|west",
+        "bond_ew": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_east_s"
+      }
+    },
+    {
+      "when": {
+        "facing": "north|south|west",
+        "bond_ew": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_east_l"
+      }
+    },
+    {
+      "when": {
+        "facing": "north|south|west",
+        "bond_ew": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_east_r"
+      }
+    },
+    {
+      "when": {
+        "facing": "north|east|west",
+        "bond_ns": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_south_s"
+      }
+    },
+    {
+      "when": {
+        "facing": "north|east|west",
+        "bond_ns": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_south_l"
+      }
+    },
+    {
+      "when": {
+        "facing": "north|east|west",
+        "bond_ns": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_south_r"
+      }
+    },
+    {
+      "when": {
+        "facing": "north|east|south",
+        "bond_ew": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_west_s"
+      }
+    },
+    {
+      "when": {
+        "facing": "north|east|south",
+        "bond_ew": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_west_l"
+      }
+    },
+    {
+      "when": {
+        "facing": "north|east|south",
+        "bond_ew": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_west_r"
+      }
+    },
+    {
+      "when": {
+        "facing": "north|east|south|west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_up_s"
+      }
+    },
+    {
+      "when": {
+        "facing": "north|east|south|west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_plate_down_s"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "scar": "chipped"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_chipped"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "scar": "chipped"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_chipped",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "scar": "chipped"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_chipped",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "scar": "chipped"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_chipped",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "scar": "cracked"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_cracked"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "scar": "cracked"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_cracked",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "scar": "cracked"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_cracked",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "scar": "cracked"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_cracked",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "scar": "heat"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_heat"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "scar": "heat"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_heat",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "scar": "heat"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_heat",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "scar": "heat"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_heat",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "scar": "cracked",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_glow"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "scar": "cracked",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_glow",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "scar": "cracked",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_glow",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "scar": "cracked",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/scarred_void_alloy_plate_glow",
+        "y": 270
+      }
+    }
+  ]
+}

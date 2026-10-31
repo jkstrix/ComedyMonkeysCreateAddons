@@ -19,6 +19,9 @@ public final class CMConfig {
 	public static final Server SERVER;
 	public static final ModConfigSpec CLIENT_SPEC;
 	public static final Client CLIENT;
+	/** Settings read once at startup, before any world: the End biomes are registered with TerraBlender then. */
+	public static final ModConfigSpec COMMON_SPEC;
+	public static final Common COMMON;
 
 	static {
 		Pair<Server, ModConfigSpec> server = new ModConfigSpec.Builder().configure(Server::new);
@@ -28,6 +31,10 @@ public final class CMConfig {
 		Pair<Client, ModConfigSpec> client = new ModConfigSpec.Builder().configure(Client::new);
 		CLIENT = client.getLeft();
 		CLIENT_SPEC = client.getRight();
+
+		Pair<Common, ModConfigSpec> common = new ModConfigSpec.Builder().configure(Common::new);
+		COMMON = common.getLeft();
+		COMMON_SPEC = common.getRight();
 	}
 
 	public static final int MAX_UPGRADE_SLOTS = 3;
@@ -163,6 +170,15 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue springEngineMaxWindStress;
 		public final ModConfigSpec.BooleanValue juggernautRuins;
 		public final ModConfigSpec.BooleanValue juggernautEndRuins;
+		public final ModConfigSpec.IntValue wastesWakeCharge;
+		public final ModConfigSpec.IntValue wastesUpkeep;
+		public final ModConfigSpec.IntValue starReactorOutput;
+		public final ModConfigSpec.IntValue starBurnHours;
+		public final ModConfigSpec.DoubleValue starUpgradeMultiplier;
+		public final ModConfigSpec.IntValue pylonHits;
+		public final ModConfigSpec.BooleanValue clockworkCities;
+		public final ModConfigSpec.DoubleValue cityIslandFit;
+		public final ModConfigSpec.BooleanValue cityHighlandsFallback;
 
 		public final ModConfigSpec.BooleanValue pipezFeedsBlazeBurners;
 		public final ModConfigSpec.BooleanValue blazeBurnerPipezOnly;
@@ -712,6 +728,33 @@ public final class CMConfig {
 				.translation("comedymonkeysaddons.configuration.juggernautEndRuins").define("juggernautEndRuins", true);
 			builder.pop();
 
+			builder.comment("Clockwork Wastes: the dead cities' power. A district wakes for good once its Substation has taken the wake charge;",
+					"after that its lamps (and Sentries) run only while it meets its upkeep.").push("clockworkWastes");
+			wastesWakeCharge = builder.comment("FE a district's Substation must take, in all, to wake it for good.")
+				.translation("comedymonkeysaddons.configuration.wastesWakeCharge").defineInRange("wakeCharge", 1_000_000, 1, 1_000_000_000);
+			wastesUpkeep = builder.comment("FE a tick a woken district's Substation draws to keep its lamps lit.")
+				.translation("comedymonkeysaddons.configuration.wastesUpkeep").defineInRange("upkeep", 500, 0, 1_000_000);
+			starReactorOutput = builder.comment("FE a tick a Star Reactor (and the heart's Derelict Star Reactor) makes while a Nether Star burns in it, flat out.")
+				.translation("comedymonkeysaddons.configuration.starReactorOutput").defineInRange("reactorOutput", 8192, 1, 1_000_000);
+			starBurnHours = builder.comment("Hours of running one Nether Star lasts in a reactor (real hours: 72,000 ticks each).")
+				.translation("comedymonkeysaddons.configuration.starBurnHours").defineInRange("burnHours", 8, 1, 1000);
+			starUpgradeMultiplier = builder.comment("How much longer each star burns in a Star Reactor with an Unknown Device fitted (1.5: 12 hours instead of 8).")
+				.translation("comedymonkeysaddons.configuration.starUpgradeMultiplier").defineInRange("upgradeMultiplier", 1.5, 1.0, 10.0);
+			pylonHits = builder.comment("Hits that break a Conduit Pylon's coil (one fin snaps per hit).")
+				.translation("comedymonkeysaddons.configuration.pylonHits").defineInRange("pylonHits", 6, 1, 64);
+			// D66: the city goes into world generation only once the user has walked round it (/wastes buildcity) and approved it
+			clockworkCities = builder.comment("Clockwork cities generate in the Clockwork Wastes (and, with the fallback below, in the vanilla highlands).",
+					"OFF until the city is approved (D66): build one beside you with /wastes buildcity to look round it.",
+					"Their spacing is in the data pack (worldgen/structure_set/clockwork_city.json: 24 chunks, separation 12, 6 chunks from End cities).")
+				.translation("comedymonkeysaddons.configuration.clockworkCities").define("cities", false);
+			cityIslandFit = builder.comment("The share of a city's 9 x 9-chunk footprint that must have End Stone at its heart's height (P46); short of it,",
+					"the spot gets only the outskirts. The rest of the city stands on struts and bridges over the void.")
+				.translation("comedymonkeysaddons.configuration.cityIslandFit").defineInRange("islandFit", 0.5, 0.0, 1.0);
+			cityHighlandsFallback = builder.comment("When another mod replaces the End's biomes (so the Clockwork Wastes can't appear), let cities place in the",
+					"vanilla End highlands instead, still 6 chunks from any End city (P53).")
+				.translation("comedymonkeysaddons.configuration.cityHighlandsFallback").define("highlandsFallback", false);
+			builder.pop();
+
 			builder.comment("Compatibility with other mods").push("modCompatibility");
 
 			pipezFeedsBlazeBurners = builder
@@ -1060,6 +1103,44 @@ public final class CMConfig {
 			return get(tradeBotHostileRadius);
 		}
 
+		public int wastesWakeCharge() {
+			return get(wastesWakeCharge);
+		}
+
+		public int wastesUpkeep() {
+			return get(wastesUpkeep);
+		}
+
+		public int starReactorOutput() {
+			return get(starReactorOutput);
+		}
+
+		/** Ticks one star burns in a plain reactor. */
+		public long starBurnTicks() {
+			return get(starBurnHours) * 72_000L;
+		}
+
+		public double starUpgradeMultiplier() {
+			return get(starUpgradeMultiplier);
+		}
+
+		public int pylonHits() {
+			return get(pylonHits);
+		}
+
+		/** Clockwork cities generate (D66: off until the user approves the city). */
+		public boolean clockworkCities() {
+			return get(clockworkCities);
+		}
+
+		public double cityIslandFit() {
+			return get(cityIslandFit);
+		}
+
+		public boolean cityHighlandsFallback() {
+			return get(cityHighlandsFallback);
+		}
+
 		public boolean pipezFeedsBlazeBurners() {
 			return get(pipezFeedsBlazeBurners);
 		}
@@ -1070,6 +1151,28 @@ public final class CMConfig {
 
 		public boolean pipezFeedsEngines() {
 			return get(pipezFeedsEngines);
+		}
+	}
+
+	/**
+	 * Startup settings (config/comedymonkeysaddons-common.toml). TerraBlender takes its End biome slots once, as the game
+	 * starts, before any server config exists, so the biome weights live here rather than with the server settings.
+	 */
+	public static class Common {
+		public final ModConfigSpec.IntValue clockworkWastesWeight;
+
+		Common(ModConfigSpec.Builder builder) {
+			builder.comment("Clockwork Wastes: the End biome of dead clockwork cities (the first of three End biomes).").push("clockworkWastes");
+			clockworkWastesWeight = builder.comment("Its weight in the outer End's highlands and midlands, where vanilla's own biome weighs 10, so 1",
+					"makes about 1 in 11 of that land Wastes. 0 leaves it out. Takes effect when the game restarts; only new",
+					"chunks change.")
+				.translation("comedymonkeysaddons.configuration.clockworkWastesWeight").defineInRange("biomeWeight", 1, 0, 100);
+			builder.pop();
+		}
+
+		/** The Clockwork Wastes' weight, or its default if the startup config somehow isn't loaded yet. */
+		public int clockworkWastesWeight() {
+			return COMMON_SPEC.isLoaded() ? clockworkWastesWeight.get() : clockworkWastesWeight.getDefault();
 		}
 	}
 

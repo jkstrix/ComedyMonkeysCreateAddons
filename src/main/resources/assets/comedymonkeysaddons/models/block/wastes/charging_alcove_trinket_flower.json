@@ -1,0 +1,367 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "cp_brass": "comedymonkeysaddons:block/wastes/cp_brass",
+    "cp_flower_card": "comedymonkeysaddons:block/wastes/cp_flower_card",
+    "walnut": "comedymonkeysaddons:block/wastes/walnut"
+  },
+  "elements": [
+    {
+      "name": "frame_t",
+      "from": [
+        9.5,
+        6,
+        10
+      ],
+      "to": [
+        12.5,
+        6.5,
+        10.75
+      ],
+      "rotation": {
+        "origin": [
+          11,
+          2,
+          10.75
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            9.5,
+            6.5,
+            10
+          ],
+          "texture": "#cp_brass"
+        },
+        "east": {
+          "uv": [
+            5.25,
+            9.5,
+            6,
+            10
+          ],
+          "texture": "#cp_brass"
+        },
+        "south": {
+          "uv": [
+            9.5,
+            9.5,
+            12.5,
+            10
+          ],
+          "texture": "#cp_brass"
+        },
+        "west": {
+          "uv": [
+            10,
+            9.5,
+            10.75,
+            10
+          ],
+          "texture": "#cp_brass"
+        },
+        "up": {
+          "uv": [
+            9.5,
+            10,
+            12.5,
+            10.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "down": {
+          "uv": [
+            9.5,
+            5.25,
+            12.5,
+            6
+          ],
+          "texture": "#cp_brass"
+        }
+      }
+    },
+    {
+      "name": "frame_b",
+      "from": [
+        9.5,
+        2,
+        10
+      ],
+      "to": [
+        12.5,
+        2.5,
+        10.75
+      ],
+      "rotation": {
+        "origin": [
+          11,
+          2,
+          10.75
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            13.5,
+            6.5,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "east": {
+          "uv": [
+            5.25,
+            13.5,
+            6,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "south": {
+          "uv": [
+            9.5,
+            13.5,
+            12.5,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "west": {
+          "uv": [
+            10,
+            13.5,
+            10.75,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "up": {
+          "uv": [
+            9.5,
+            10,
+            12.5,
+            10.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "down": {
+          "uv": [
+            9.5,
+            5.25,
+            12.5,
+            6
+          ],
+          "texture": "#cp_brass"
+        }
+      }
+    },
+    {
+      "name": "frame_w",
+      "from": [
+        9,
+        2,
+        10
+      ],
+      "to": [
+        9.5,
+        6.5,
+        10.75
+      ],
+      "rotation": {
+        "origin": [
+          11,
+          2,
+          10.75
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            9.5,
+            7,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "east": {
+          "uv": [
+            5.25,
+            9.5,
+            6,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "south": {
+          "uv": [
+            9,
+            9.5,
+            9.5,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "west": {
+          "uv": [
+            10,
+            9.5,
+            10.75,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "up": {
+          "uv": [
+            9,
+            10,
+            9.5,
+            10.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "down": {
+          "uv": [
+            9,
+            5.25,
+            9.5,
+            6
+          ],
+          "texture": "#cp_brass"
+        }
+      }
+    },
+    {
+      "name": "frame_e",
+      "from": [
+        12.5,
+        2,
+        10
+      ],
+      "to": [
+        13,
+        6.5,
+        10.75
+      ],
+      "rotation": {
+        "origin": [
+          11,
+          2,
+          10.75
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            9.5,
+            3.5,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "east": {
+          "uv": [
+            5.25,
+            9.5,
+            6,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "south": {
+          "uv": [
+            12.5,
+            9.5,
+            13,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "west": {
+          "uv": [
+            10,
+            9.5,
+            10.75,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "up": {
+          "uv": [
+            12.5,
+            10,
+            13,
+            10.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "down": {
+          "uv": [
+            12.5,
+            5.25,
+            13,
+            6
+          ],
+          "texture": "#cp_brass"
+        }
+      }
+    },
+    {
+      "name": "frame_card",
+      "from": [
+        9.5,
+        2.5,
+        10.25
+      ],
+      "to": [
+        12.5,
+        6,
+        10.75
+      ],
+      "rotation": {
+        "origin": [
+          11,
+          2,
+          10.75
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3,
+            4
+          ],
+          "texture": "#cp_flower_card"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3,
+            4
+          ],
+          "texture": "#walnut"
+        }
+      }
+    }
+  ]
+}

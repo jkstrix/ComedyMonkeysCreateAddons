@@ -1,0 +1,147 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "seam_strip_lit": "comedymonkeysaddons:block/wastes/seam_strip_lit"
+  },
+  "elements": [
+    {
+      "name": "groove_g_0",
+      "from": [
+        7.5,
+        6.5,
+        -11
+      ],
+      "to": [
+        8.5,
+        6.5,
+        -0.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          6,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "shade": false,
+      "faces": {
+        "up": {
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            15.5
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "groove_g_1",
+      "from": [
+        7.5,
+        6.5,
+        16.5
+      ],
+      "to": [
+        8.5,
+        6.5,
+        27
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          6,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "shade": false,
+      "faces": {
+        "up": {
+          "uv": [
+            7.5,
+            0.5,
+            8.5,
+            11
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "groove_g_2",
+      "from": [
+        -11,
+        6.5,
+        7.5
+      ],
+      "to": [
+        -0.5,
+        6.5,
+        8.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          6,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "shade": false,
+      "faces": {
+        "up": {
+          "uv": [
+            5,
+            7.5,
+            15.5,
+            8.5
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "groove_g_3",
+      "from": [
+        16.5,
+        6.5,
+        7.5
+      ],
+      "to": [
+        27,
+        6.5,
+        8.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          6,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "shade": false,
+      "faces": {
+        "up": {
+          "uv": [
+            0.5,
+            7.5,
+            11,
+            8.5
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "neoforge:obj",
+  "model": "comedymonkeysaddons:models/block/wastes/city_vault_item.obj",
+  "flip_v": false,
+  "emissive_ambient": false,
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "vault_inner": "comedymonkeysaddons:block/wastes/vault_inner",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field",
+    "va": "comedymonkeysaddons:block/wastes/va",
+    "va_chipped": "comedymonkeysaddons:block/wastes/va_chipped",
+    "loot_gold": "comedymonkeysaddons:block/wastes/loot_gold",
+    "loot_gem": "comedymonkeysaddons:block/wastes/loot_gem",
+    "seam_strip_dark": "comedymonkeysaddons:block/wastes/seam_strip_dark"
+  },
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0.425,
+        -0.212,
+        0
+      ],
+      "scale": [
+        0.601,
+        0.601,
+        0.601
+      ]
+    }
+  }
+}

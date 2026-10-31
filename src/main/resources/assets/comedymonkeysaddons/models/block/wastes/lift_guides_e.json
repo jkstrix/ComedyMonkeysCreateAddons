@@ -1,0 +1,133 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field"
+  },
+  "elements": [
+    {
+      "name": "guide_2",
+      "from": [
+        16,
+        0,
+        5
+      ],
+      "to": [
+        18,
+        16,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            9,
+            0,
+            11,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            5,
+            0,
+            7,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            5,
+            2,
+            7
+          ],
+          "texture": "#va_field",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "guide_3",
+      "from": [
+        16,
+        0,
+        25
+      ],
+      "to": [
+        18,
+        16,
+        27
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            5,
+            0,
+            7,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            9,
+            0,
+            11,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            9,
+            2,
+            11
+          ],
+          "texture": "#va_field",
+          "cullface": "up"
+        }
+      }
+    }
+  ]
+}

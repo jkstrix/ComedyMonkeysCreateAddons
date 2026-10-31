@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "comedymonkeysaddons:stained_end_stone_bricks"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:stained_end_stone_brick_wall",
+    "count": 6
+  }
+}

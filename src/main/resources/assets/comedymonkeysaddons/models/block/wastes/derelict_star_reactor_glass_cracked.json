@@ -1,0 +1,2539 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:translucent",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "smoke_glass_cracked": "comedymonkeysaddons:block/wastes/smoke_glass_cracked"
+  },
+  "elements": [
+    {
+      "name": "sphere_-8_-5",
+      "from": [
+        4,
+        6,
+        3
+      ],
+      "to": [
+        12,
+        8,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            8,
+            12,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "east": {
+          "uv": [
+            11,
+            8,
+            13,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            3,
+            8,
+            5,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            4,
+            11,
+            12,
+            13
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-8_-3",
+      "from": [
+        3,
+        6,
+        5
+      ],
+      "to": [
+        13,
+        8,
+        7
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            8,
+            11,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            5,
+            8,
+            7,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            3,
+            9,
+            13,
+            11
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-8_-1",
+      "from": [
+        3,
+        6,
+        7
+      ],
+      "to": [
+        13,
+        8,
+        9
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            8,
+            9,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            7,
+            8,
+            9,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            3,
+            7,
+            13,
+            9
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-8_1",
+      "from": [
+        3,
+        6,
+        9
+      ],
+      "to": [
+        13,
+        8,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            8,
+            7,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            9,
+            8,
+            11,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            3,
+            5,
+            13,
+            7
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-8_3",
+      "from": [
+        4,
+        6,
+        11
+      ],
+      "to": [
+        12,
+        8,
+        13
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            3,
+            8,
+            5,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "south": {
+          "uv": [
+            4,
+            8,
+            12,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            11,
+            8,
+            13,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            4,
+            3,
+            12,
+            5
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-6_-7",
+      "from": [
+        3,
+        8,
+        1
+      ],
+      "to": [
+        13,
+        10,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            6,
+            13,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "east": {
+          "uv": [
+            13,
+            6,
+            15,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            1,
+            6,
+            3,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            3,
+            13,
+            13,
+            15
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-6_-5",
+      "from": [
+        1.5,
+        8,
+        3
+      ],
+      "to": [
+        14.5,
+        10,
+        5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            11,
+            6,
+            13,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            3,
+            6,
+            5,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            1.5,
+            11,
+            14.5,
+            13
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-6_-3",
+      "from": [
+        1,
+        8,
+        5
+      ],
+      "to": [
+        15,
+        10,
+        7
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            6,
+            11,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            1,
+            9,
+            15,
+            11
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-6_-1",
+      "from": [
+        1,
+        8,
+        7
+      ],
+      "to": [
+        15,
+        10,
+        9
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            6,
+            9,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            7,
+            6,
+            9,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            1,
+            7,
+            15,
+            9
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-6_1",
+      "from": [
+        1,
+        8,
+        9
+      ],
+      "to": [
+        15,
+        10,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            9,
+            6,
+            11,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            1,
+            5,
+            15,
+            7
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-6_3",
+      "from": [
+        1.5,
+        8,
+        11
+      ],
+      "to": [
+        14.5,
+        10,
+        13
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            3,
+            6,
+            5,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            11,
+            6,
+            13,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            1.5,
+            3,
+            14.5,
+            5
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-6_5",
+      "from": [
+        3,
+        8,
+        13
+      ],
+      "to": [
+        13,
+        10,
+        15
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1,
+            6,
+            3,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "south": {
+          "uv": [
+            3,
+            6,
+            13,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            13,
+            6,
+            15,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            3,
+            1,
+            13,
+            3
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-4_-8",
+      "from": [
+        2.5,
+        10,
+        0
+      ],
+      "to": [
+        13.5,
+        12,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            4,
+            13.5,
+            6
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            14,
+            4,
+            16,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            0,
+            4,
+            2,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            2.5,
+            14,
+            13.5,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-4_-6",
+      "from": [
+        1,
+        10,
+        2
+      ],
+      "to": [
+        15,
+        12,
+        4
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            12,
+            4,
+            14,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            2,
+            4,
+            4,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            1,
+            12,
+            15,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-4_-4",
+      "from": [
+        0.5,
+        10,
+        4
+      ],
+      "to": [
+        15.5,
+        12,
+        6
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            10,
+            4,
+            12,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            4,
+            4,
+            6,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            10,
+            15.5,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-4_-2",
+      "from": [
+        0,
+        10,
+        6
+      ],
+      "to": [
+        16,
+        12,
+        8
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            8,
+            4,
+            10,
+            6
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            6,
+            4,
+            8,
+            6
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "west"
+        },
+        "down": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-4_0",
+      "from": [
+        0,
+        10,
+        8
+      ],
+      "to": [
+        16,
+        12,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            4,
+            8,
+            6
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            8,
+            4,
+            10,
+            6
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "west"
+        },
+        "down": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-4_2",
+      "from": [
+        0.5,
+        10,
+        10
+      ],
+      "to": [
+        15.5,
+        12,
+        12
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4,
+            4,
+            6,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            10,
+            4,
+            12,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            4,
+            15.5,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-4_4",
+      "from": [
+        1,
+        10,
+        12
+      ],
+      "to": [
+        15,
+        12,
+        14
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2,
+            4,
+            4,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            12,
+            4,
+            14,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            15,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-4_6",
+      "from": [
+        2.5,
+        10,
+        14
+      ],
+      "to": [
+        13.5,
+        12,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            4,
+            2,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            4,
+            13.5,
+            6
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            14,
+            4,
+            16,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            2.5,
+            0,
+            13.5,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-2_-8",
+      "from": [
+        2.5,
+        12,
+        0
+      ],
+      "to": [
+        13.5,
+        14,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            2,
+            13.5,
+            4
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            14,
+            2,
+            16,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            2,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            2.5,
+            14,
+            13.5,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-2_-6",
+      "from": [
+        1,
+        12,
+        2
+      ],
+      "to": [
+        15,
+        14,
+        4
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            12,
+            2,
+            14,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            2,
+            2,
+            4,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            1,
+            12,
+            15,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-2_-4",
+      "from": [
+        0.5,
+        12,
+        4
+      ],
+      "to": [
+        15.5,
+        14,
+        6
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            10,
+            2,
+            12,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            4,
+            2,
+            6,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            10,
+            15.5,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-2_-2",
+      "from": [
+        0,
+        12,
+        6
+      ],
+      "to": [
+        16,
+        14,
+        8
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            8,
+            2,
+            10,
+            4
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            6,
+            2,
+            8,
+            4
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "west"
+        },
+        "down": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-2_0",
+      "from": [
+        0,
+        12,
+        8
+      ],
+      "to": [
+        16,
+        14,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            2,
+            8,
+            4
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            8,
+            2,
+            10,
+            4
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "west"
+        },
+        "down": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-2_2",
+      "from": [
+        0.5,
+        12,
+        10
+      ],
+      "to": [
+        15.5,
+        14,
+        12
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4,
+            2,
+            6,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            10,
+            2,
+            12,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            4,
+            15.5,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-2_4",
+      "from": [
+        1,
+        12,
+        12
+      ],
+      "to": [
+        15,
+        14,
+        14
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2,
+            2,
+            4,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            12,
+            2,
+            14,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            1,
+            2,
+            15,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_-2_6",
+      "from": [
+        2.5,
+        12,
+        14
+      ],
+      "to": [
+        13.5,
+        14,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            2,
+            2,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            2,
+            13.5,
+            4
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            14,
+            2,
+            16,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "down": {
+          "uv": [
+            2.5,
+            0,
+            13.5,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_0_-8",
+      "from": [
+        2.5,
+        14,
+        0
+      ],
+      "to": [
+        13.5,
+        16,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            0,
+            13.5,
+            2
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            14,
+            0,
+            16,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            0,
+            13.5,
+            2
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "sphere_0_-6",
+      "from": [
+        1,
+        14,
+        2
+      ],
+      "to": [
+        15,
+        16,
+        4
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            12,
+            0,
+            14,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            2,
+            0,
+            4,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            15,
+            4
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "sphere_0_-4",
+      "from": [
+        0.5,
+        14,
+        4
+      ],
+      "to": [
+        15.5,
+        16,
+        6
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            10,
+            0,
+            12,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            6,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            4,
+            15.5,
+            6
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "sphere_0_-2",
+      "from": [
+        0,
+        14,
+        6
+      ],
+      "to": [
+        16,
+        16,
+        8
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            8,
+            0,
+            10,
+            2
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            6,
+            0,
+            8,
+            2
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "sphere_0_0",
+      "from": [
+        0,
+        14,
+        8
+      ],
+      "to": [
+        16,
+        16,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            0,
+            8,
+            2
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            8,
+            0,
+            10,
+            2
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "sphere_0_2",
+      "from": [
+        0.5,
+        14,
+        10
+      ],
+      "to": [
+        15.5,
+        16,
+        12
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4,
+            0,
+            6,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            10,
+            0,
+            12,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            10,
+            15.5,
+            12
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "sphere_0_4",
+      "from": [
+        1,
+        14,
+        12
+      ],
+      "to": [
+        15,
+        16,
+        14
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2,
+            0,
+            4,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            12,
+            0,
+            14,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            1,
+            12,
+            15,
+            14
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "sphere_0_6",
+      "from": [
+        2.5,
+        14,
+        14
+      ],
+      "to": [
+        13.5,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            0,
+            13.5,
+            2
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            14,
+            0,
+            16,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            14,
+            13.5,
+            16
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "sphere_2_-8",
+      "from": [
+        2.5,
+        16,
+        0
+      ],
+      "to": [
+        13.5,
+        18,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            14,
+            13.5,
+            16
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            14,
+            14,
+            16,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            0,
+            14,
+            2,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            0,
+            13.5,
+            2
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_2_-6",
+      "from": [
+        1,
+        16,
+        2
+      ],
+      "to": [
+        15,
+        18,
+        4
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            12,
+            14,
+            14,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            2,
+            14,
+            4,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            15,
+            4
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_2_-4",
+      "from": [
+        0.5,
+        16,
+        4
+      ],
+      "to": [
+        15.5,
+        18,
+        6
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            10,
+            14,
+            12,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            4,
+            14,
+            6,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            4,
+            15.5,
+            6
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_2_-2",
+      "from": [
+        0,
+        16,
+        6
+      ],
+      "to": [
+        16,
+        18,
+        8
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            8,
+            14,
+            10,
+            16
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            6,
+            14,
+            8,
+            16
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_2_0",
+      "from": [
+        0,
+        16,
+        8
+      ],
+      "to": [
+        16,
+        18,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6,
+            14,
+            8,
+            16
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            8,
+            14,
+            10,
+            16
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_2_2",
+      "from": [
+        0.5,
+        16,
+        10
+      ],
+      "to": [
+        15.5,
+        18,
+        12
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4,
+            14,
+            6,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            10,
+            14,
+            12,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            10,
+            15.5,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_2_4",
+      "from": [
+        1,
+        16,
+        12
+      ],
+      "to": [
+        15,
+        18,
+        14
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2,
+            14,
+            4,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            12,
+            14,
+            14,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            1,
+            12,
+            15,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_2_6",
+      "from": [
+        2.5,
+        16,
+        14
+      ],
+      "to": [
+        13.5,
+        18,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            14,
+            2,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            14,
+            13.5,
+            16
+          ],
+          "texture": "#smoke_glass_cracked",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            14,
+            14,
+            16,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            14,
+            13.5,
+            16
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_4_-7",
+      "from": [
+        3,
+        18,
+        1
+      ],
+      "to": [
+        13,
+        20,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            12,
+            13,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "east": {
+          "uv": [
+            13,
+            12,
+            15,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            1,
+            12,
+            3,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            3,
+            1,
+            13,
+            3
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_4_-5",
+      "from": [
+        1.5,
+        18,
+        3
+      ],
+      "to": [
+        14.5,
+        20,
+        5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            11,
+            12,
+            13,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            3,
+            12,
+            5,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            1.5,
+            3,
+            14.5,
+            5
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_4_-3",
+      "from": [
+        1,
+        18,
+        5
+      ],
+      "to": [
+        15,
+        20,
+        7
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            12,
+            11,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            5,
+            12,
+            7,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            1,
+            5,
+            15,
+            7
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_4_-1",
+      "from": [
+        1,
+        18,
+        7
+      ],
+      "to": [
+        15,
+        20,
+        9
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            12,
+            9,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            7,
+            12,
+            9,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            1,
+            7,
+            15,
+            9
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_4_1",
+      "from": [
+        1,
+        18,
+        9
+      ],
+      "to": [
+        15,
+        20,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            12,
+            7,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            9,
+            12,
+            11,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            1,
+            9,
+            15,
+            11
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_4_3",
+      "from": [
+        1.5,
+        18,
+        11
+      ],
+      "to": [
+        14.5,
+        20,
+        13
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            3,
+            12,
+            5,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            11,
+            12,
+            13,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            1.5,
+            11,
+            14.5,
+            13
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_4_5",
+      "from": [
+        3,
+        18,
+        13
+      ],
+      "to": [
+        13,
+        20,
+        15
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1,
+            12,
+            3,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "south": {
+          "uv": [
+            3,
+            12,
+            13,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            13,
+            12,
+            15,
+            14
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            3,
+            13,
+            13,
+            15
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_6_-5",
+      "from": [
+        4,
+        20,
+        3
+      ],
+      "to": [
+        12,
+        22,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            10,
+            12,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "east": {
+          "uv": [
+            11,
+            10,
+            13,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            3,
+            10,
+            5,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            4,
+            3,
+            12,
+            5
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_6_-3",
+      "from": [
+        3,
+        20,
+        5
+      ],
+      "to": [
+        13,
+        22,
+        7
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            10,
+            11,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            5,
+            10,
+            7,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            3,
+            5,
+            13,
+            7
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_6_-1",
+      "from": [
+        3,
+        20,
+        7
+      ],
+      "to": [
+        13,
+        22,
+        9
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            10,
+            9,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            7,
+            10,
+            9,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            3,
+            7,
+            13,
+            9
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_6_1",
+      "from": [
+        3,
+        20,
+        9
+      ],
+      "to": [
+        13,
+        22,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            10,
+            7,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            9,
+            10,
+            11,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            3,
+            9,
+            13,
+            11
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    },
+    {
+      "name": "sphere_6_3",
+      "from": [
+        4,
+        20,
+        11
+      ],
+      "to": [
+        12,
+        22,
+        13
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            3,
+            10,
+            5,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "south": {
+          "uv": [
+            4,
+            10,
+            12,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "west": {
+          "uv": [
+            11,
+            10,
+            13,
+            12
+          ],
+          "texture": "#smoke_glass_cracked"
+        },
+        "up": {
+          "uv": [
+            4,
+            11,
+            12,
+            13
+          ],
+          "texture": "#smoke_glass_cracked"
+        }
+      }
+    }
+  ]
+}

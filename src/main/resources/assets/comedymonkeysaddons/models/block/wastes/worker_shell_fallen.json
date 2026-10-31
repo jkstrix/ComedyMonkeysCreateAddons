@@ -1,0 +1,16 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "neoforge:obj",
+  "model": "comedymonkeysaddons:models/block/wastes/worker_shell_fallen.obj",
+  "flip_v": false,
+  "emissive_ambient": false,
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "va": "comedymonkeysaddons:block/wastes/va",
+    "brass": "comedymonkeysaddons:block/wastes/brass",
+    "lens_ring": "comedymonkeysaddons:block/wastes/lens_ring",
+    "lens_dark": "comedymonkeysaddons:block/wastes/lens_dark"
+  }
+}

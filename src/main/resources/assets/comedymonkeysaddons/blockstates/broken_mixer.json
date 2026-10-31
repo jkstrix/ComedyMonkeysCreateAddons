@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/broken_mixer"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/broken_mixer",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/broken_mixer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/broken_mixer",
+      "y": 270
+    }
+  }
+}

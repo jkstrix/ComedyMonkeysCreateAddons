@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "comedymonkeysaddons:clockwork_scrap",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "comedymonkeysaddons:derelict_star_reactor",
+          "properties": {
+            "part": "4"
+          }
+        }
+      ]
+    }
+  ]
+}

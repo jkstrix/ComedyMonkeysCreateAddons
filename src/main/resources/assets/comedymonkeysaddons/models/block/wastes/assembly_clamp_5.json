@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "neoforge:obj",
+  "model": "comedymonkeysaddons:models/block/wastes/assembly_clamp_5.obj",
+  "flip_v": false,
+  "emissive_ambient": false,
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "va": "comedymonkeysaddons:block/wastes/va",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field",
+    "brass": "comedymonkeysaddons:block/wastes/brass",
+    "lens_ring": "comedymonkeysaddons:block/wastes/lens_ring",
+    "lens_dark": "comedymonkeysaddons:block/wastes/lens_dark",
+    "cp_lead": "comedymonkeysaddons:block/wastes/cp_lead"
+  }
+}

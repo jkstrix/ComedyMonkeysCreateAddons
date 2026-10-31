@@ -69,6 +69,8 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.MAINSPRING.get());
 				output.accept(ModItems.SPRING_ENGINE.get());
 				output.accept(ModItems.CLOCKWORK_JUGGERNAUT_SPAWN_EGG.get());
+				// the Clockwork Wastes: scrap, the Unknown Device, the decor set and the salvage
+				ModWastes.addToTab(output);
 				// Helper Bot, plain and in every dye
 				output.accept(ModItems.HELPER_BOT.get());
 				for (net.minecraft.world.item.DyeColor dye : net.minecraft.world.item.DyeColor.values()) {

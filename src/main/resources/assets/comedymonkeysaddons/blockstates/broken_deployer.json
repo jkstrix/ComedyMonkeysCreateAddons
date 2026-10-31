@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/broken_deployer"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/broken_deployer",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/broken_deployer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/broken_deployer",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/reactor_brass",
+    "pip_dark": "comedymonkeysaddons:block/wastes/pip_dark"
+  },
+  "elements": [
+    {
+      "name": "pipd_0",
+      "from": [
+        7.5,
+        16.25,
+        3
+      ],
+      "to": [
+        8.5,
+        16.25,
+        4
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            7.5,
+            3,
+            8.5,
+            4
+          ],
+          "texture": "#pip_dark"
+        }
+      }
+    },
+    {
+      "name": "pipd_1",
+      "from": [
+        10.5,
+        16.25,
+        4.5
+      ],
+      "to": [
+        11.5,
+        16.25,
+        5.5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            10.5,
+            4.5,
+            11.5,
+            5.5
+          ],
+          "texture": "#pip_dark"
+        }
+      }
+    },
+    {
+      "name": "pipd_2",
+      "from": [
+        12,
+        16.25,
+        7.5
+      ],
+      "to": [
+        13,
+        16.25,
+        8.5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            12,
+            7.5,
+            13,
+            8.5
+          ],
+          "texture": "#pip_dark"
+        }
+      }
+    },
+    {
+      "name": "pipd_3",
+      "from": [
+        10.5,
+        16.25,
+        10.5
+      ],
+      "to": [
+        11.5,
+        16.25,
+        11.5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            10.5,
+            10.5,
+            11.5,
+            11.5
+          ],
+          "texture": "#pip_dark"
+        }
+      }
+    },
+    {
+      "name": "pipd_4",
+      "from": [
+        7.5,
+        16.25,
+        12
+      ],
+      "to": [
+        8.5,
+        16.25,
+        13
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            7.5,
+            12,
+            8.5,
+            13
+          ],
+          "texture": "#pip_dark"
+        }
+      }
+    },
+    {
+      "name": "pipd_5",
+      "from": [
+        4.5,
+        16.25,
+        10.5
+      ],
+      "to": [
+        5.5,
+        16.25,
+        11.5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            4.5,
+            10.5,
+            5.5,
+            11.5
+          ],
+          "texture": "#pip_dark"
+        }
+      }
+    },
+    {
+      "name": "pipd_6",
+      "from": [
+        3,
+        16.25,
+        7.5
+      ],
+      "to": [
+        4,
+        16.25,
+        8.5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            3,
+            7.5,
+            4,
+            8.5
+          ],
+          "texture": "#pip_dark"
+        }
+      }
+    },
+    {
+      "name": "pipd_7",
+      "from": [
+        4.5,
+        16.25,
+        4.5
+      ],
+      "to": [
+        5.5,
+        16.25,
+        5.5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            4.5,
+            4.5,
+            5.5,
+            5.5
+          ],
+          "texture": "#pip_dark"
+        }
+      }
+    }
+  ]
+}

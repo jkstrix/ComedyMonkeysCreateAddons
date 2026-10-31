@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,state=sealed": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent"
+    },
+    "facing=north,state=live": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent"
+    },
+    "facing=north,state=open": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent"
+    },
+    "facing=east,state=sealed": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent",
+      "y": 90
+    },
+    "facing=east,state=live": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent",
+      "y": 90
+    },
+    "facing=east,state=open": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent",
+      "y": 90
+    },
+    "facing=south,state=sealed": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent",
+      "y": 180
+    },
+    "facing=south,state=live": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent",
+      "y": 180
+    },
+    "facing=south,state=open": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent",
+      "y": 180
+    },
+    "facing=west,state=sealed": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent",
+      "y": 270
+    },
+    "facing=west,state=live": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent",
+      "y": 270
+    },
+    "facing=west,state=open": {
+      "model": "comedymonkeysaddons:block/wastes/wall_vent",
+      "y": 270
+    }
+  }
+}

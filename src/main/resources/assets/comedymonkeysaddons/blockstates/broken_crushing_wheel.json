@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/broken_crushing_wheel"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/broken_crushing_wheel",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/broken_crushing_wheel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/broken_crushing_wheel",
+      "y": 270
+    }
+  }
+}

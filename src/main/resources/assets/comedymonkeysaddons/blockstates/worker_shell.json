@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,pose=slumped": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_slumped"
+    },
+    "facing=east,pose=slumped": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_slumped",
+      "y": 90
+    },
+    "facing=south,pose=slumped": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_slumped",
+      "y": 180
+    },
+    "facing=west,pose=slumped": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_slumped",
+      "y": 270
+    },
+    "facing=north,pose=fallen": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_fallen"
+    },
+    "facing=east,pose=fallen": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_fallen",
+      "y": 90
+    },
+    "facing=south,pose=fallen": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_fallen",
+      "y": 180
+    },
+    "facing=west,pose=fallen": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_fallen",
+      "y": 270
+    },
+    "facing=north,pose=frozen": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_frozen"
+    },
+    "facing=east,pose=frozen": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_frozen",
+      "y": 90
+    },
+    "facing=south,pose=frozen": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_frozen",
+      "y": 180
+    },
+    "facing=west,pose=frozen": {
+      "model": "comedymonkeysaddons:block/wastes/worker_shell_frozen",
+      "y": 270
+    }
+  }
+}

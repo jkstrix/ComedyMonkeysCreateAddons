@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_bricks_0",
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_bricks_1"
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_bricks_2"
+      }
+    ]
+  }
+}

@@ -1,0 +1,710 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/casing_aged",
+    "casing_cracked": "comedymonkeysaddons:block/wastes/casing_cracked",
+    "casing_aged_top": "comedymonkeysaddons:block/wastes/casing_aged_top",
+    "brass": "comedymonkeysaddons:block/wastes/brass",
+    "casing_aged": "comedymonkeysaddons:block/wastes/casing_aged",
+    "steel_worn": "comedymonkeysaddons:block/wastes/steel_worn"
+  },
+  "elements": [
+    {
+      "name": "base",
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        3,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            13,
+            14,
+            16
+          ],
+          "texture": "#casing_cracked"
+        },
+        "east": {
+          "uv": [
+            2,
+            13,
+            14,
+            16
+          ],
+          "texture": "#casing_cracked"
+        },
+        "south": {
+          "uv": [
+            2,
+            13,
+            14,
+            16
+          ],
+          "texture": "#casing_cracked"
+        },
+        "west": {
+          "uv": [
+            2,
+            13,
+            14,
+            16
+          ],
+          "texture": "#casing_cracked"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#casing_aged_top"
+        },
+        "down": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#casing_cracked",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring",
+      "from": [
+        4,
+        3,
+        4
+      ],
+      "to": [
+        12,
+        4,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            12,
+            12,
+            13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            4,
+            12,
+            12,
+            13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            4,
+            12,
+            12,
+            13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            4,
+            12,
+            12,
+            13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "turret",
+      "from": [
+        5,
+        4,
+        5
+      ],
+      "to": [
+        11,
+        7,
+        11
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "axis": "z",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            9,
+            11,
+            12
+          ],
+          "texture": "#casing_aged"
+        },
+        "east": {
+          "uv": [
+            5,
+            9,
+            11,
+            12
+          ],
+          "texture": "#casing_aged"
+        },
+        "south": {
+          "uv": [
+            5,
+            9,
+            11,
+            12
+          ],
+          "texture": "#casing_aged"
+        },
+        "west": {
+          "uv": [
+            5,
+            9,
+            11,
+            12
+          ],
+          "texture": "#casing_aged"
+        },
+        "up": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#casing_aged"
+        },
+        "down": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#casing_aged"
+        }
+      }
+    },
+    {
+      "name": "lower",
+      "from": [
+        7,
+        7,
+        7
+      ],
+      "to": [
+        9,
+        17,
+        9
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "axis": "z",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            0,
+            9,
+            10
+          ],
+          "texture": "#steel_worn"
+        },
+        "east": {
+          "uv": [
+            7,
+            0,
+            9,
+            10
+          ],
+          "texture": "#steel_worn"
+        },
+        "south": {
+          "uv": [
+            7,
+            0,
+            9,
+            10
+          ],
+          "texture": "#steel_worn"
+        },
+        "west": {
+          "uv": [
+            7,
+            0,
+            9,
+            10
+          ],
+          "texture": "#steel_worn"
+        },
+        "up": {
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "texture": "#steel_worn"
+        },
+        "down": {
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "texture": "#steel_worn"
+        }
+      }
+    },
+    {
+      "name": "elbow",
+      "from": [
+        6.5,
+        16,
+        6.5
+      ],
+      "to": [
+        9.5,
+        19,
+        9.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "axis": "z",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            13,
+            9.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            13,
+            9.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            13,
+            9.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            13,
+            9.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "upper",
+      "from": [
+        7,
+        17,
+        0
+      ],
+      "to": [
+        9,
+        18.5,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "axis": "z",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            13.5,
+            9,
+            15
+          ],
+          "texture": "#steel_worn"
+        },
+        "east": {
+          "uv": [
+            8,
+            13.5,
+            16,
+            15
+          ],
+          "texture": "#steel_worn"
+        },
+        "south": {
+          "uv": [
+            7,
+            13.5,
+            9,
+            15
+          ],
+          "texture": "#steel_worn"
+        },
+        "west": {
+          "uv": [
+            0,
+            13.5,
+            8,
+            15
+          ],
+          "texture": "#steel_worn"
+        },
+        "up": {
+          "uv": [
+            7,
+            0,
+            9,
+            8
+          ],
+          "texture": "#steel_worn"
+        },
+        "down": {
+          "uv": [
+            7,
+            8,
+            9,
+            16
+          ],
+          "texture": "#steel_worn"
+        }
+      }
+    },
+    {
+      "name": "wrist",
+      "from": [
+        6.5,
+        16,
+        -1.5
+      ],
+      "to": [
+        9.5,
+        18.75,
+        0.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "axis": "z",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            13.25,
+            9.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            13.25,
+            2,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            13.25,
+            9.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            14,
+            13.25,
+            16,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            14,
+            9.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            2
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "claw_l",
+      "from": [
+        1.139,
+        11.436,
+        -2.5
+      ],
+      "to": [
+        2.139,
+        15.436,
+        -1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.861,
+            0.564,
+            14.861,
+            4.564
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            1.5,
+            0.564,
+            2.5,
+            4.564
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            1.139,
+            0.564,
+            2.139,
+            4.564
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            13.5,
+            0.564,
+            14.5,
+            4.564
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            1.139,
+            13.5,
+            2.139,
+            14.5
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            1.139,
+            1.5,
+            2.139,
+            2.5
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "claw_r",
+      "from": [
+        3.911,
+        12.584,
+        -2.5
+      ],
+      "to": [
+        4.911,
+        16.584,
+        -1.5
+      ],
+      "rotation": {
+        "origin": [
+          4.411,
+          16.584,
+          -2
+        ],
+        "axis": "z",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            11.089,
+            0,
+            12.089,
+            4
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            1.5,
+            0,
+            2.5,
+            4
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            3.911,
+            0,
+            4.911,
+            4
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            13.5,
+            0,
+            14.5,
+            4
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            3.911,
+            13.5,
+            4.911,
+            14.5
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            3.911,
+            1.5,
+            4.911,
+            2.5
+          ],
+          "texture": "#brass"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        -1.251,
+        0.022,
+        0
+      ],
+      "scale": [
+        0.66,
+        0.66,
+        0.66
+      ]
+    }
+  }
+}

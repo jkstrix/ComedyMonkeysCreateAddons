@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_wall_lamp"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_wall_lamp",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_wall_lamp",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_wall_lamp",
+      "y": 270
+    }
+  }
+}

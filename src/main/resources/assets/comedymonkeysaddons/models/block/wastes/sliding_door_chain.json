@@ -1,0 +1,61 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "chain_lit": "comedymonkeysaddons:block/wastes/chain_lit"
+  },
+  "elements": [
+    {
+      "name": "chain_lit_l",
+      "from": [
+        8,
+        16,
+        4.5
+      ],
+      "to": [
+        16,
+        21,
+        4.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            5,
+            16,
+            10
+          ],
+          "texture": "#chain_lit"
+        }
+      }
+    },
+    {
+      "name": "chain_lit_r",
+      "from": [
+        16,
+        16,
+        4.5
+      ],
+      "to": [
+        24,
+        21,
+        4.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            5,
+            8,
+            10
+          ],
+          "texture": "#chain_lit"
+        }
+      }
+    }
+  ]
+}

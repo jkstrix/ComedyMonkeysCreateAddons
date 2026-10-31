@@ -48,7 +48,13 @@ public class UpgradedChestMenu extends ChestMenu implements UpgradedChestView, Q
 
 	/** {@code rows} is 3 or 6. */
 	public UpgradedChestMenu(int containerId, Inventory inventory, Container container, int rows, ChestTier tier) {
-		super(ModMenus.UPGRADED_CHEST.get(), containerId, inventory, container, rows);
+		this(ModMenus.UPGRADED_CHEST.get(), containerId, inventory, container, rows, tier);
+	}
+
+	/** The same slots under a menu type of its own (the City Vault's, with its own screen). */
+	protected UpgradedChestMenu(net.minecraft.world.inventory.MenuType<?> type, int containerId, Inventory inventory, Container container, int rows,
+								ChestTier tier) {
+		super(type, containerId, inventory, container, rows);
 		this.tier = tier;
 		chestSlots = rows * 9;
 		for (int i = 0; i < chestSlots; i++) {

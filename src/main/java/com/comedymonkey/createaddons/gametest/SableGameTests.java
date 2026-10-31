@@ -77,6 +77,47 @@ public final class SableGameTests {
 		});
 	}
 
+	/**
+	 * The Star Reactor on an Aeronautics ship (P14, D23: its edge is fuel-free power anywhere, airships included): fuelled,
+	 * then made a physics object, it keeps running there flat out (a tick of star burned and 8,192 FE made a tick), keeps
+	 * its star, and takes another by its item handler.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void starReactorRunsOnAShip(GameTestHelper helper) {
+		BlockPos at = new BlockPos(3, 2, 7);
+		helper.setBlock(at, com.comedymonkey.createaddons.registry.ModWastes.STAR_REACTOR.get().defaultBlockState()
+			.setValue(com.comedymonkey.createaddons.content.wastes.StarReactorBlock.FACING, Direction.UP));
+		helper.runAtTickTime(2, () -> {
+			var items = helper.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, helper.absolutePos(at), Direction.NORTH);
+			if (items == null || !items.insertItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.NETHER_STAR), false).isEmpty())
+				helper.fail("didn't take the star");
+		});
+		BlockPos[] moved = new BlockPos[1];
+		long[] before = new long[2];
+		helper.runAtTickTime(10, () -> moved[0] = com.comedymonkey.createaddons.compat.sable.SableAssembly.assemble(helper.getLevel(), helper.absolutePos(at),
+			List.of(helper.absolutePos(at))));
+		helper.runAtTickTime(20, () -> {
+			if (!(helper.getLevel().getBlockEntity(moved[0]) instanceof com.comedymonkey.createaddons.content.wastes.StarReactorBlockEntity be)) {
+				helper.fail("no Star Reactor on the physics object at " + moved[0]);
+				return;
+			}
+			if (be.burn() <= 0)
+				helper.fail("its star didn't come with it");
+			// drained, so a full tick's output shows every tick
+			be.energy().setEnergy(0);
+			before[0] = be.burn();
+		});
+		helper.runAtTickTime(40, () -> {
+			var be = (com.comedymonkey.createaddons.content.wastes.StarReactorBlockEntity) helper.getLevel().getBlockEntity(moved[0]);
+			long burned = before[0] - be.burn(), made = be.energy().getEnergyStored();
+			if (burned != 20)
+				helper.fail("on the ship it burned " + burned + " ticks of star in 20");
+			if (made != 20L * com.comedymonkey.createaddons.config.CMConfig.SERVER.starReactorOutput())
+				helper.fail("on the ship it made " + made + " FE in 20 ticks");
+			helper.succeed();
+		});
+	}
+
 	/** The generator at {@code pos} with two shafts east of it. */
 	private static void place(GameTestHelper helper, BlockPos pos, BlockState generator) {
 		helper.setBlock(pos, generator);

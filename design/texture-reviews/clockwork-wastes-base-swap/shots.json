@@ -1,0 +1,215 @@
+[
+ {
+  "id": "void_alloy_plate",
+  "looks": [
+   "before",
+   "after"
+  ],
+  "position": [
+   72,
+   26,
+   -152.79999999999998
+  ],
+  "target": [
+   72,
+   21,
+   8
+  ]
+ },
+ {
+  "id": "seamed_void_alloy_plate",
+  "looks": [
+   "before",
+   "after"
+  ],
+  "position": [
+   216,
+   26,
+   -92
+  ],
+  "target": [
+   216,
+   14,
+   8
+  ]
+ },
+ {
+  "id": "void_alloy_pillar",
+  "looks": [
+   "before",
+   "after"
+  ],
+  "position": [
+   312,
+   26,
+   -107.19999999999999
+  ],
+  "target": [
+   312,
+   21,
+   8
+  ]
+ },
+ {
+  "id": "charging_alcove",
+  "looks": [
+   "before",
+   "after",
+   "field"
+  ],
+  "position": [
+   408,
+   26,
+   -107.19999999999999
+  ],
+  "target": [
+   408,
+   21,
+   8
+  ]
+ },
+ {
+  "id": "assembly_clamp",
+  "looks": [
+   "before",
+   "after",
+   "field"
+  ],
+  "position": [
+   520,
+   26,
+   -92
+  ],
+  "target": [
+   520,
+   14,
+   8
+  ]
+ },
+ {
+  "id": "city_vault",
+  "looks": [
+   "before",
+   "after",
+   "field"
+  ],
+  "position": [
+   632,
+   26,
+   -92
+  ],
+  "target": [
+   632,
+   7,
+   8
+  ]
+ },
+ {
+  "id": "sliding_door",
+  "looks": [
+   "before",
+   "after",
+   "field"
+  ],
+  "position": [
+   768,
+   26,
+   -137.6
+  ],
+  "target": [
+   768,
+   21,
+   8
+  ]
+ },
+ {
+  "id": "conduit_pylon",
+  "looks": [
+   "before",
+   "after",
+   "field"
+  ],
+  "position": [
+   904,
+   26,
+   -107.19999999999999
+  ],
+  "target": [
+   904,
+   21,
+   8
+  ]
+ },
+ {
+  "id": "derelict_star_reactor",
+  "looks": [
+   "before",
+   "after",
+   "field"
+  ],
+  "position": [
+   1064,
+   26,
+   -183.2
+  ],
+  "target": [
+   1064,
+   14,
+   8
+  ]
+ },
+ {
+  "id": "derelict_cable_riser_foot",
+  "looks": [
+   "before",
+   "after",
+   "field"
+  ],
+  "position": [
+   1224,
+   26,
+   -92
+  ],
+  "target": [
+   1224,
+   7,
+   8
+  ]
+ },
+ {
+  "id": "lift",
+  "looks": [
+   "before",
+   "after",
+   "field"
+  ],
+  "position": [
+   1360,
+   26,
+   -137.6
+  ],
+  "target": [
+   1360,
+   7,
+   8
+  ]
+ },
+ {
+  "id": "wall_vent",
+  "looks": [
+   "before",
+   "after",
+   "field"
+  ],
+  "position": [
+   1496,
+   26,
+   -92
+  ],
+  "target": [
+   1496,
+   7,
+   8
+  ]
+ }
+]

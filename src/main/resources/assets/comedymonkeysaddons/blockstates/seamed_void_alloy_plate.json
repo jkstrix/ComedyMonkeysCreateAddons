@@ -1,0 +1,17 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/seamed_void_alloy_plate"
+      }
+    },
+    {
+      "when": {
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/seamed_void_alloy_plate_seams"
+      }
+    }
+  ]
+}

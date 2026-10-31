@@ -1,0 +1,40 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/cable",
+    "seam_strip_lit": "comedymonkeysaddons:block/wastes/seam_strip_lit"
+  },
+  "elements": [
+    {
+      "name": "riser_line",
+      "from": [
+        7.75,
+        0,
+        18.5
+      ],
+      "to": [
+        8.25,
+        5,
+        18.5
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7.75,
+            11,
+            8.25,
+            16
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    }
+  ]
+}

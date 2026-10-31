@@ -1,0 +1,124 @@
+{
+  "variants": {
+    "facing=north,leaning=false,part=foot": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_foot"
+    },
+    "facing=north,leaning=false,part=pole": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_pole"
+    },
+    "facing=north,leaning=false,part=head,snapped=false": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head"
+    },
+    "facing=north,leaning=false,part=head,snapped=true": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_snapped"
+    },
+    "facing=north,leaning=true,part=foot": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_foot_leaning"
+    },
+    "facing=north,leaning=true,part=pole": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_pole_leaning"
+    },
+    "facing=north,leaning=true,part=head,snapped=false": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_leaning"
+    },
+    "facing=north,leaning=true,part=head,snapped=true": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_snapped_leaning"
+    },
+    "facing=east,leaning=false,part=foot": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_foot",
+      "y": 90
+    },
+    "facing=east,leaning=false,part=pole": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_pole",
+      "y": 90
+    },
+    "facing=east,leaning=false,part=head,snapped=false": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head",
+      "y": 90
+    },
+    "facing=east,leaning=false,part=head,snapped=true": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_snapped",
+      "y": 90
+    },
+    "facing=east,leaning=true,part=foot": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_foot_leaning",
+      "y": 90
+    },
+    "facing=east,leaning=true,part=pole": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_pole_leaning",
+      "y": 90
+    },
+    "facing=east,leaning=true,part=head,snapped=false": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_leaning",
+      "y": 90
+    },
+    "facing=east,leaning=true,part=head,snapped=true": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_snapped_leaning",
+      "y": 90
+    },
+    "facing=south,leaning=false,part=foot": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_foot",
+      "y": 180
+    },
+    "facing=south,leaning=false,part=pole": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_pole",
+      "y": 180
+    },
+    "facing=south,leaning=false,part=head,snapped=false": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head",
+      "y": 180
+    },
+    "facing=south,leaning=false,part=head,snapped=true": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_snapped",
+      "y": 180
+    },
+    "facing=south,leaning=true,part=foot": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_foot_leaning",
+      "y": 180
+    },
+    "facing=south,leaning=true,part=pole": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_pole_leaning",
+      "y": 180
+    },
+    "facing=south,leaning=true,part=head,snapped=false": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_leaning",
+      "y": 180
+    },
+    "facing=south,leaning=true,part=head,snapped=true": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_snapped_leaning",
+      "y": 180
+    },
+    "facing=west,leaning=false,part=foot": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_foot",
+      "y": 270
+    },
+    "facing=west,leaning=false,part=pole": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_pole",
+      "y": 270
+    },
+    "facing=west,leaning=false,part=head,snapped=false": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head",
+      "y": 270
+    },
+    "facing=west,leaning=false,part=head,snapped=true": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_snapped",
+      "y": 270
+    },
+    "facing=west,leaning=true,part=foot": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_foot_leaning",
+      "y": 270
+    },
+    "facing=west,leaning=true,part=pole": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_pole_leaning",
+      "y": 270
+    },
+    "facing=west,leaning=true,part=head,snapped=false": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_leaning",
+      "y": 270
+    },
+    "facing=west,leaning=true,part=head,snapped=true": {
+      "model": "comedymonkeysaddons:block/wastes/derelict_street_lamp_head_snapped_leaning",
+      "y": 270
+    }
+  }
+}

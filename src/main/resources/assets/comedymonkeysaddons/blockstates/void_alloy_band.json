@@ -1,0 +1,181 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "axis": "y"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band"
+      }
+    },
+    {
+      "when": {
+        "axis": "y",
+        "north": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_north"
+      }
+    },
+    {
+      "when": {
+        "axis": "y",
+        "east": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_east"
+      }
+    },
+    {
+      "when": {
+        "axis": "y",
+        "south": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_south"
+      }
+    },
+    {
+      "when": {
+        "axis": "y",
+        "west": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_west"
+      }
+    },
+    {
+      "when": {
+        "axis": "y",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_glow"
+      }
+    },
+    {
+      "when": {
+        "axis": "x"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "down": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_north",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "south": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_east",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "up": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_south",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "north": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_west",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_glow",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "down": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_north",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "east": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_east",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "up": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_south",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "west": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_fill_west",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/void_alloy_band_glow",
+        "x": 90
+      }
+    }
+  ]
+}

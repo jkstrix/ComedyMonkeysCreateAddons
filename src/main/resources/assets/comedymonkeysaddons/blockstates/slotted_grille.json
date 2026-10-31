@@ -1,0 +1,930 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "axis": "z"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ns": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_north_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ns": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_north_l"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ns": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_north_r"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ew": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ew": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_l"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ew": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_r"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ns": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_south_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ns": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_south_l"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ns": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_south_r"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ew": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ew": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_l"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "bond_ew": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_r"
+      }
+    },
+    {
+      "when": {
+        "axis": "z"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_up_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_down_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_glow"
+      }
+    },
+    {
+      "when": {
+        "axis": "x"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ew": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_north_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ew": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_north_l",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ew": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_north_r",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ns": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ns": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_l",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ns": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_r",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ew": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_south_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ew": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_south_l",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ew": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_south_r",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ns": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ns": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_l",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "bond_ns": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_r",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_up_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_down_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_glow",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ns": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_north_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ns": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_north_l"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ns": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_north_r"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ew": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_east_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ew": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_east_l"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ew": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_east_r"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ns": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_south_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ns": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_south_l"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ns": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_south_r"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ew": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_west_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ew": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_west_l"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "bond_ew": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_west_r"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_up_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_down_s"
+      }
+    },
+    {
+      "when": {
+        "axis": "z_lying",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_glow"
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ew": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_north_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ew": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_north_l",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ew": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_north_r",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ns": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_east_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ns": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_east_l",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ns": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_east_r",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ew": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_south_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ew": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_south_l",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ew": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_south_r",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ns": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_west_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ns": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_west_l",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "bond_ns": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_west_r",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_up_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_down_s",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x_lying",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_lying_glow",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_north_s",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ns": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_s",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ns": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_l",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ns": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_r",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_south_s",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ns": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_s",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ns": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_l",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ns": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_r",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ew": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_up_s",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ew": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_up_l",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ew": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_up_r",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ew": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_down_s",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ew": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_down_l",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "bond_ew": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_down_r",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_x",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_glow",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_north_s",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ew": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_s",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ew": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_l",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ew": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_east_r",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_south_s",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ew": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_s",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ew": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_l",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ew": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_west_r",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ns": "ss|sl|sr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_up_s",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ns": "ls|ll|lr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_up_l",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ns": "rs|rl|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_up_r",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ns": "ss|ls|rs"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_down_s",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ns": "sl|ll|rl"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_down_l",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "bond_ns": "sr|lr|rr"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_down_r",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "up_z",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/slotted_grille_glow",
+        "x": 90
+      }
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/iron",
+    "lens_lit": "comedymonkeysaddons:block/wastes/lens_lit",
+    "lamp_lens_ring": "comedymonkeysaddons:block/wastes/lamp_lens_ring"
+  },
+  "elements": [
+    {
+      "name": "lamp_glow_0",
+      "from": [
+        6,
+        8,
+        -1
+      ],
+      "to": [
+        10,
+        8,
+        1
+      ],
+      "shade": false,
+      "faces": {
+        "down": {
+          "uv": [
+            6,
+            7,
+            10,
+            9
+          ],
+          "texture": "#lens_lit"
+        }
+      }
+    },
+    {
+      "name": "lamp_glow_1",
+      "from": [
+        7,
+        8,
+        -2
+      ],
+      "to": [
+        9,
+        8,
+        2
+      ],
+      "shade": false,
+      "faces": {
+        "down": {
+          "uv": [
+            7,
+            6,
+            9,
+            10
+          ],
+          "texture": "#lens_lit"
+        }
+      }
+    },
+    {
+      "name": "lamp_glow_ring_n",
+      "from": [
+        5,
+        8,
+        -3.25
+      ],
+      "to": [
+        11,
+        8.5,
+        -3.25
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            7.5,
+            11,
+            8
+          ],
+          "texture": "#lamp_lens_ring"
+        }
+      }
+    },
+    {
+      "name": "lamp_glow_ring_s",
+      "from": [
+        5,
+        8,
+        3.25
+      ],
+      "to": [
+        11,
+        8.5,
+        3.25
+      ],
+      "shade": false,
+      "faces": {
+        "south": {
+          "uv": [
+            5,
+            7.5,
+            11,
+            8
+          ],
+          "texture": "#lamp_lens_ring"
+        }
+      }
+    },
+    {
+      "name": "lamp_glow_ring_w",
+      "from": [
+        4.75,
+        8,
+        -3
+      ],
+      "to": [
+        4.75,
+        8.5,
+        3
+      ],
+      "shade": false,
+      "faces": {
+        "west": {
+          "uv": [
+            10,
+            7.5,
+            16,
+            8
+          ],
+          "texture": "#lamp_lens_ring"
+        }
+      }
+    },
+    {
+      "name": "lamp_glow_ring_e",
+      "from": [
+        11.25,
+        8,
+        -3
+      ],
+      "to": [
+        11.25,
+        8.5,
+        3
+      ],
+      "shade": false,
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            7.5,
+            6,
+            8
+          ],
+          "texture": "#lamp_lens_ring"
+        }
+      }
+    }
+  ]
+}

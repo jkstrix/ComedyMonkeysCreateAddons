@@ -1,0 +1,40 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "contact_lit": "comedymonkeysaddons:block/wastes/contact_lit"
+  },
+  "elements": [
+    {
+      "name": "contact_lit",
+      "from": [
+        7,
+        0,
+        12.5
+      ],
+      "to": [
+        9,
+        3.5,
+        12.5
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            12.5,
+            9,
+            16
+          ],
+          "texture": "#contact_lit"
+        }
+      }
+    }
+  ]
+}

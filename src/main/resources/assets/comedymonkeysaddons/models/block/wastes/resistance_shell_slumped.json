@@ -1,0 +1,19 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "neoforge:obj",
+  "model": "comedymonkeysaddons:models/block/wastes/resistance_shell_slumped.obj",
+  "flip_v": false,
+  "emissive_ambient": false,
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/res_casing",
+    "res_casing": "comedymonkeysaddons:block/wastes/res_casing",
+    "casing_aged_top": "comedymonkeysaddons:block/wastes/casing_aged_top",
+    "res_patch": "comedymonkeysaddons:block/wastes/res_patch",
+    "brass": "comedymonkeysaddons:block/wastes/brass",
+    "press_steel": "comedymonkeysaddons:block/wastes/press_steel",
+    "casing_aged": "comedymonkeysaddons:block/wastes/casing_aged",
+    "glass_eye": "comedymonkeysaddons:block/wastes/glass_eye"
+  }
+}

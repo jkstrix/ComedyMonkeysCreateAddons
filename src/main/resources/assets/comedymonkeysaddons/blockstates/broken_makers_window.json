@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "axis=z": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/broken_makers_window_a"
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/broken_makers_window_b"
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/broken_makers_window_c"
+      }
+    ],
+    "axis=x": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/broken_makers_window_a",
+        "y": 90
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/broken_makers_window_b",
+        "y": 90
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/broken_makers_window_c",
+        "y": 90
+      }
+    ]
+  }
+}

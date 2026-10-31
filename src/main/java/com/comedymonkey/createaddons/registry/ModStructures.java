@@ -12,7 +12,7 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/** The Juggernaut Ruins (D31, D55): their structure type and its two kinds of piece. */
+/** The mod's structures: the Juggernaut Ruins (D31, D55) and the Clockwork Wastes cities (D66): their types and pieces. */
 public final class ModStructures {
 	public static final DeferredRegister<StructureType<?>> TYPES = DeferredRegister.create(Registries.STRUCTURE_TYPE, ComedyMonkeysCreateAddons.MOD_ID);
 	public static final DeferredRegister<StructurePieceType> PIECES = DeferredRegister.create(Registries.STRUCTURE_PIECE, ComedyMonkeysCreateAddons.MOD_ID);
@@ -25,6 +25,13 @@ public final class ModStructures {
 	/** The broken walls and fallen blocks round it, thinning out to the odd block at the edge. */
 	public static final Supplier<StructurePieceType> RUIN_FIELD = PIECES.register("juggernaut_ruin_field",
 		() -> (StructurePieceType.ContextlessType) RuinField::new);
+
+	/** A Clockwork Wastes city (off until the user approves it, D66: the server config's clockworkWastes.cities). */
+	public static final Supplier<StructureType<com.comedymonkey.createaddons.content.wastes.city.ClockworkCityStructure>> CLOCKWORK_CITY =
+		TYPES.register("clockwork_city", () -> () -> com.comedymonkey.createaddons.content.wastes.city.ClockworkCityStructure.CODEC);
+	/** The whole city as one piece, built a chunk at a time from its plan. */
+	public static final Supplier<StructurePieceType> CLOCKWORK_CITY_PIECE = PIECES.register("clockwork_city",
+		() -> (StructurePieceType.ContextlessType) com.comedymonkey.createaddons.content.wastes.city.ClockworkCityPiece::new);
 
 	private ModStructures() {}
 }

@@ -1,0 +1,480 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "cp_brass": "comedymonkeysaddons:block/wastes/cp_brass",
+    "key_hole": "comedymonkeysaddons:block/wastes/key_hole"
+  },
+  "elements": [
+    {
+      "name": "key_socket",
+      "from": [
+        10.5,
+        2,
+        11
+      ],
+      "to": [
+        11.5,
+        3.25,
+        12
+      ],
+      "rotation": {
+        "origin": [
+          11,
+          2,
+          11.5
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4.5,
+            12.75,
+            5.5,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "east": {
+          "uv": [
+            4,
+            12.75,
+            5,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "south": {
+          "uv": [
+            10.5,
+            12.75,
+            11.5,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "west": {
+          "uv": [
+            11,
+            12.75,
+            12,
+            14
+          ],
+          "texture": "#cp_brass"
+        },
+        "up": {
+          "uv": [
+            10.5,
+            11,
+            11.5,
+            12
+          ],
+          "texture": "#cp_brass"
+        },
+        "down": {
+          "uv": [
+            10.5,
+            4,
+            11.5,
+            5
+          ],
+          "texture": "#key_hole"
+        }
+      }
+    },
+    {
+      "name": "key_shaft",
+      "from": [
+        10.75,
+        3.25,
+        11.25
+      ],
+      "to": [
+        11.25,
+        4.75,
+        11.75
+      ],
+      "rotation": {
+        "origin": [
+          11,
+          2,
+          11.5
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4.75,
+            11.25,
+            5.25,
+            12.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            11.25,
+            4.75,
+            12.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "south": {
+          "uv": [
+            10.75,
+            11.25,
+            11.25,
+            12.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "west": {
+          "uv": [
+            11.25,
+            11.25,
+            11.75,
+            12.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "up": {
+          "uv": [
+            10.75,
+            11.25,
+            11.25,
+            11.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "down": {
+          "uv": [
+            10.75,
+            4.25,
+            11.25,
+            4.75
+          ],
+          "texture": "#cp_brass"
+        }
+      }
+    },
+    {
+      "name": "key_boss",
+      "from": [
+        10.5,
+        4.75,
+        11.25
+      ],
+      "to": [
+        11.5,
+        5.25,
+        11.75
+      ],
+      "rotation": {
+        "origin": [
+          11,
+          2,
+          11.5
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4.5,
+            10.75,
+            5.5,
+            11.25
+          ],
+          "texture": "#cp_brass"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            10.75,
+            4.75,
+            11.25
+          ],
+          "texture": "#cp_brass"
+        },
+        "south": {
+          "uv": [
+            10.5,
+            10.75,
+            11.5,
+            11.25
+          ],
+          "texture": "#cp_brass"
+        },
+        "west": {
+          "uv": [
+            11.25,
+            10.75,
+            11.75,
+            11.25
+          ],
+          "texture": "#cp_brass"
+        },
+        "up": {
+          "uv": [
+            10.5,
+            11.25,
+            11.5,
+            11.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "down": {
+          "uv": [
+            10.5,
+            4.25,
+            11.5,
+            4.75
+          ],
+          "texture": "#cp_brass"
+        }
+      }
+    },
+    {
+      "name": "key_bow",
+      "from": [
+        10.25,
+        5.25,
+        11.25
+      ],
+      "to": [
+        11.75,
+        6.5,
+        11.75
+      ],
+      "rotation": {
+        "origin": [
+          11,
+          2,
+          11.5
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4.25,
+            9.5,
+            5.75,
+            10.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            9.5,
+            4.75,
+            10.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "south": {
+          "uv": [
+            10.25,
+            9.5,
+            11.75,
+            10.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "west": {
+          "uv": [
+            11.25,
+            9.5,
+            11.75,
+            10.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "up": {
+          "uv": [
+            10.25,
+            11.25,
+            11.75,
+            11.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "down": {
+          "uv": [
+            10.25,
+            4.25,
+            11.75,
+            4.75
+          ],
+          "texture": "#cp_brass"
+        }
+      }
+    },
+    {
+      "name": "key_wing_w",
+      "from": [
+        9.25,
+        5,
+        11.25
+      ],
+      "to": [
+        10.25,
+        7.25,
+        11.75
+      ],
+      "rotation": {
+        "origin": [
+          11,
+          2,
+          11.5
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5.75,
+            8.75,
+            6.75,
+            11
+          ],
+          "texture": "#cp_brass"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            8.75,
+            4.75,
+            11
+          ],
+          "texture": "#cp_brass"
+        },
+        "south": {
+          "uv": [
+            9.25,
+            8.75,
+            10.25,
+            11
+          ],
+          "texture": "#cp_brass"
+        },
+        "west": {
+          "uv": [
+            11.25,
+            8.75,
+            11.75,
+            11
+          ],
+          "texture": "#cp_brass"
+        },
+        "up": {
+          "uv": [
+            9.25,
+            11.25,
+            10.25,
+            11.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "down": {
+          "uv": [
+            9.25,
+            4.25,
+            10.25,
+            4.75
+          ],
+          "texture": "#cp_brass"
+        }
+      }
+    },
+    {
+      "name": "key_wing_e",
+      "from": [
+        11.75,
+        5,
+        11.25
+      ],
+      "to": [
+        12.75,
+        7.25,
+        11.75
+      ],
+      "rotation": {
+        "origin": [
+          11,
+          2,
+          11.5
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3.25,
+            8.75,
+            4.25,
+            11
+          ],
+          "texture": "#cp_brass"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            8.75,
+            4.75,
+            11
+          ],
+          "texture": "#cp_brass"
+        },
+        "south": {
+          "uv": [
+            11.75,
+            8.75,
+            12.75,
+            11
+          ],
+          "texture": "#cp_brass"
+        },
+        "west": {
+          "uv": [
+            11.25,
+            8.75,
+            11.75,
+            11
+          ],
+          "texture": "#cp_brass"
+        },
+        "up": {
+          "uv": [
+            11.75,
+            11.25,
+            12.75,
+            11.75
+          ],
+          "texture": "#cp_brass"
+        },
+        "down": {
+          "uv": [
+            11.75,
+            4.25,
+            12.75,
+            4.75
+          ],
+          "texture": "#cp_brass"
+        }
+      }
+    }
+  ]
+}

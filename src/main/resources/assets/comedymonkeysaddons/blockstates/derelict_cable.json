@@ -1,0 +1,1386 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "girder": "none",
+        "surface": "down",
+        "north": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "down",
+        "south": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "down",
+        "west": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "down",
+        "east": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "girder": "none",
+            "surface": "down",
+            "north": "true",
+            "west": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "down",
+            "north": "true",
+            "east": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "down",
+            "south": "true",
+            "west": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "down",
+            "south": "true",
+            "east": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_knot",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "down",
+        "north": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "down",
+        "south": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "down",
+        "west": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "down",
+        "east": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow"
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "up",
+        "north": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 180,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "up",
+        "south": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 180,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "up",
+        "west": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 180,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "up",
+        "east": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "girder": "none",
+            "surface": "up",
+            "north": "true",
+            "west": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "up",
+            "north": "true",
+            "east": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "up",
+            "south": "true",
+            "west": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "up",
+            "south": "true",
+            "east": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_knot",
+        "x": 180,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "up",
+        "north": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 180,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "up",
+        "south": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 180,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "up",
+        "west": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 180,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "up",
+        "east": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "north",
+        "down": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_south",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "north",
+        "up": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_south",
+        "x": 90,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "north",
+        "west": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 90,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "north",
+        "east": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "girder": "none",
+            "surface": "north",
+            "down": "true",
+            "west": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "north",
+            "down": "true",
+            "east": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "north",
+            "up": "true",
+            "west": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "north",
+            "up": "true",
+            "east": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_knot",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "north",
+        "down": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow_south",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "north",
+        "up": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow_south",
+        "x": 90,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "north",
+        "west": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 90,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "north",
+        "east": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "south",
+        "down": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_south",
+        "x": 270,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "south",
+        "up": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_south",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "south",
+        "west": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 270,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "south",
+        "east": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "girder": "none",
+            "surface": "south",
+            "down": "true",
+            "west": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "south",
+            "down": "true",
+            "east": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "south",
+            "up": "true",
+            "west": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "south",
+            "up": "true",
+            "east": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_knot",
+        "x": 270,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "south",
+        "down": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow_south",
+        "x": 270,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "south",
+        "up": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow_south",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "south",
+        "west": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 270,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "south",
+        "east": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "west",
+        "down": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_south",
+        "x": 270,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "west",
+        "up": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_south",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "west",
+        "north": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 270,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "west",
+        "south": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "girder": "none",
+            "surface": "west",
+            "down": "true",
+            "north": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "west",
+            "down": "true",
+            "south": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "west",
+            "up": "true",
+            "north": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "west",
+            "up": "true",
+            "south": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_knot",
+        "x": 270,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "west",
+        "down": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow_south",
+        "x": 270,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "west",
+        "up": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow_south",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "west",
+        "north": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 270,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "west",
+        "south": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "east",
+        "down": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_south",
+        "x": 270,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "east",
+        "up": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_south",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "east",
+        "north": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "east",
+        "south": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "x": 270,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "girder": "none",
+            "surface": "east",
+            "down": "true",
+            "north": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "east",
+            "down": "true",
+            "south": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "east",
+            "up": "true",
+            "north": "true"
+          },
+          {
+            "girder": "none",
+            "surface": "east",
+            "up": "true",
+            "south": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_knot",
+        "x": 270,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "east",
+        "down": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow_south",
+        "x": 270,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "east",
+        "up": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow_south",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "east",
+        "north": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "none",
+        "surface": "east",
+        "south": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "x": 270,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_foot"
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "south",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_foot_glow"
+      }
+    },
+    {
+      "when": {
+        "girder": "run",
+        "surface": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_run"
+      }
+    },
+    {
+      "when": {
+        "girder": "run",
+        "surface": "south",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_run_glow"
+      }
+    },
+    {
+      "when": {
+        "girder": "top",
+        "surface": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_top"
+      }
+    },
+    {
+      "when": {
+        "girder": "top",
+        "surface": "south",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_top_glow"
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "south",
+        "north": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "south",
+        "north": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "south",
+        "east": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm"
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "south",
+        "east": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow"
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "south",
+        "west": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "south",
+        "west": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "girder": "foot",
+            "surface": "south",
+            "east": "true"
+          },
+          {
+            "girder": "foot",
+            "surface": "south",
+            "west": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_knot",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_foot",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "west",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_foot_glow",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "run",
+        "surface": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_run",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "run",
+        "surface": "west",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_run_glow",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "top",
+        "surface": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "top",
+        "surface": "west",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_top_glow",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "west",
+        "north": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "west",
+        "north": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "west",
+        "south": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "west",
+        "south": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "west",
+        "east": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm"
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "west",
+        "east": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "girder": "foot",
+            "surface": "west",
+            "north": "true"
+          },
+          {
+            "girder": "foot",
+            "surface": "west",
+            "south": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_knot"
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_foot",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "north",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_foot_glow",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "run",
+        "surface": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_run",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "run",
+        "surface": "north",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_run_glow",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "top",
+        "surface": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "top",
+        "surface": "north",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_top_glow",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "north",
+        "south": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "north",
+        "south": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "north",
+        "east": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm"
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "north",
+        "east": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow"
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "north",
+        "west": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "north",
+        "west": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "girder": "foot",
+            "surface": "north",
+            "east": "true"
+          },
+          {
+            "girder": "foot",
+            "surface": "north",
+            "west": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_knot",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_foot",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "east",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_foot_glow",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "run",
+        "surface": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_run",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "run",
+        "surface": "east",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_run_glow",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "top",
+        "surface": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "top",
+        "surface": "east",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_riser_top_glow",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "east",
+        "north": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "east",
+        "north": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "east",
+        "south": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "east",
+        "south": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "east",
+        "west": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "girder": "foot",
+        "surface": "east",
+        "west": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_arm_glow",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "girder": "foot",
+            "surface": "east",
+            "north": "true"
+          },
+          {
+            "girder": "foot",
+            "surface": "east",
+            "south": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_cable_knot"
+      }
+    }
+  ]
+}

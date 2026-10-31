@@ -1,0 +1,3208 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field",
+    "groove": "comedymonkeysaddons:block/wastes/groove"
+  },
+  "elements": [
+    {
+      "name": "ring_-24",
+      "from": [
+        -1.5,
+        0,
+        -16
+      ],
+      "to": [
+        17.5,
+        4,
+        -14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            14,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            0,
+            12,
+            2,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_-22",
+      "from": [
+        -5.5,
+        0,
+        -14
+      ],
+      "to": [
+        21.5,
+        4,
+        -12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            12,
+            12,
+            14,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            2,
+            12,
+            4,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            2,
+            16,
+            4
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_-20",
+      "from": [
+        -8,
+        0,
+        -12
+      ],
+      "to": [
+        24,
+        4,
+        -10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            10,
+            12,
+            12,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            4,
+            12,
+            6,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_-18",
+      "from": [
+        -10,
+        0,
+        -10
+      ],
+      "to": [
+        26,
+        4,
+        -8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            8,
+            12,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            6,
+            12,
+            8,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_-16",
+      "from": [
+        -11.5,
+        0,
+        -8
+      ],
+      "to": [
+        27.5,
+        4,
+        -6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            6,
+            12,
+            8,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            8,
+            12,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_-14",
+      "from": [
+        -13,
+        0,
+        -6
+      ],
+      "to": [
+        29,
+        4,
+        -4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            4,
+            12,
+            6,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            10,
+            12,
+            12,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_-12",
+      "from": [
+        -14,
+        0,
+        -4
+      ],
+      "to": [
+        30,
+        4,
+        -2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            2,
+            12,
+            4,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            12,
+            12,
+            14,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            2,
+            16,
+            4
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_-10",
+      "from": [
+        -14.5,
+        0,
+        -2
+      ],
+      "to": [
+        30.5,
+        4,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            0,
+            12,
+            2,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            14,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_-8",
+      "from": [
+        -15,
+        0,
+        0
+      ],
+      "to": [
+        31,
+        4,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            14,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            0,
+            12,
+            2,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_-6",
+      "from": [
+        -15.5,
+        0,
+        2
+      ],
+      "to": [
+        31.5,
+        4,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            12,
+            12,
+            14,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            2,
+            12,
+            4,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            2,
+            16,
+            4
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_-4",
+      "from": [
+        -16,
+        0,
+        4
+      ],
+      "to": [
+        32,
+        4,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            10,
+            12,
+            12,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            4,
+            12,
+            6,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_-2",
+      "from": [
+        -16,
+        0,
+        6
+      ],
+      "to": [
+        32,
+        4,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            8,
+            12,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            6,
+            12,
+            8,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_0",
+      "from": [
+        -16,
+        0,
+        8
+      ],
+      "to": [
+        32,
+        4,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            6,
+            12,
+            8,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            8,
+            12,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_2",
+      "from": [
+        -16,
+        0,
+        10
+      ],
+      "to": [
+        32,
+        4,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            4,
+            12,
+            6,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            10,
+            12,
+            12,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_4",
+      "from": [
+        -15.5,
+        0,
+        12
+      ],
+      "to": [
+        31.5,
+        4,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            2,
+            12,
+            4,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            12,
+            12,
+            14,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            2,
+            16,
+            4
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_6",
+      "from": [
+        -15,
+        0,
+        14
+      ],
+      "to": [
+        31,
+        4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            0,
+            12,
+            2,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            14,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_8",
+      "from": [
+        -14.5,
+        0,
+        16
+      ],
+      "to": [
+        30.5,
+        4,
+        18
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            14,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            0,
+            12,
+            2,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_10",
+      "from": [
+        -14,
+        0,
+        18
+      ],
+      "to": [
+        30,
+        4,
+        20
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            12,
+            12,
+            14,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            2,
+            12,
+            4,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            2,
+            16,
+            4
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_12",
+      "from": [
+        -13,
+        0,
+        20
+      ],
+      "to": [
+        29,
+        4,
+        22
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            10,
+            12,
+            12,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            4,
+            12,
+            6,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_14",
+      "from": [
+        -11.5,
+        0,
+        22
+      ],
+      "to": [
+        27.5,
+        4,
+        24
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            8,
+            12,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            6,
+            12,
+            8,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_16",
+      "from": [
+        -10,
+        0,
+        24
+      ],
+      "to": [
+        26,
+        4,
+        26
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            6,
+            12,
+            8,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            8,
+            12,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_18",
+      "from": [
+        -8,
+        0,
+        26
+      ],
+      "to": [
+        24,
+        4,
+        28
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            4,
+            12,
+            6,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            10,
+            12,
+            12,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_20",
+      "from": [
+        -5.5,
+        0,
+        28
+      ],
+      "to": [
+        21.5,
+        4,
+        30
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            2,
+            12,
+            4,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            12,
+            12,
+            14,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            2,
+            16,
+            4
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_22",
+      "from": [
+        -1.5,
+        0,
+        30
+      ],
+      "to": [
+        17.5,
+        4,
+        32
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            0,
+            12,
+            2,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            14,
+            12,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "ring_top_-20",
+      "from": [
+        -0.5,
+        4,
+        -12
+      ],
+      "to": [
+        16.5,
+        6,
+        -10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            10,
+            10,
+            12,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            4,
+            10,
+            6,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_-18",
+      "from": [
+        -4,
+        4,
+        -10
+      ],
+      "to": [
+        20,
+        6,
+        -8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            8,
+            10,
+            10,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            6,
+            10,
+            8,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_-16",
+      "from": [
+        -6.5,
+        4,
+        -8
+      ],
+      "to": [
+        22.5,
+        6,
+        -6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            6,
+            10,
+            8,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            8,
+            10,
+            10,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_-14",
+      "from": [
+        -8,
+        4,
+        -6
+      ],
+      "to": [
+        24,
+        6,
+        -4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            4,
+            10,
+            6,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            10,
+            10,
+            12,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_-12",
+      "from": [
+        -9.5,
+        4,
+        -4
+      ],
+      "to": [
+        25.5,
+        6,
+        -2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            2,
+            10,
+            4,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            12,
+            10,
+            14,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            2,
+            16,
+            4
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_-10",
+      "from": [
+        -10.5,
+        4,
+        -2
+      ],
+      "to": [
+        26.5,
+        6,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            0,
+            10,
+            2,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            14,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_-8",
+      "from": [
+        -11,
+        4,
+        0
+      ],
+      "to": [
+        27,
+        6,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            14,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            0,
+            10,
+            2,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_-6",
+      "from": [
+        -11.5,
+        4,
+        2
+      ],
+      "to": [
+        27.5,
+        6,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            12,
+            10,
+            14,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            2,
+            10,
+            4,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            2,
+            16,
+            4
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_-4",
+      "from": [
+        -12,
+        4,
+        4
+      ],
+      "to": [
+        28,
+        6,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            10,
+            10,
+            12,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            4,
+            10,
+            6,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_-2",
+      "from": [
+        -12,
+        4,
+        6
+      ],
+      "to": [
+        28,
+        6,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            8,
+            10,
+            10,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            6,
+            10,
+            8,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_0",
+      "from": [
+        -12,
+        4,
+        8
+      ],
+      "to": [
+        28,
+        6,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            6,
+            10,
+            8,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            8,
+            10,
+            10,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_2",
+      "from": [
+        -12,
+        4,
+        10
+      ],
+      "to": [
+        28,
+        6,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            4,
+            10,
+            6,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            10,
+            10,
+            12,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_4",
+      "from": [
+        -11.5,
+        4,
+        12
+      ],
+      "to": [
+        27.5,
+        6,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            2,
+            10,
+            4,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            12,
+            10,
+            14,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            2,
+            16,
+            4
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_6",
+      "from": [
+        -11,
+        4,
+        14
+      ],
+      "to": [
+        27,
+        6,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            0,
+            10,
+            2,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            14,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_8",
+      "from": [
+        -10.5,
+        4,
+        16
+      ],
+      "to": [
+        26.5,
+        6,
+        18
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            14,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            0,
+            10,
+            2,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_10",
+      "from": [
+        -9.5,
+        4,
+        18
+      ],
+      "to": [
+        25.5,
+        6,
+        20
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            12,
+            10,
+            14,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            2,
+            10,
+            4,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            2,
+            16,
+            4
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            12,
+            16,
+            14
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_12",
+      "from": [
+        -8,
+        4,
+        20
+      ],
+      "to": [
+        24,
+        6,
+        22
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            10,
+            10,
+            12,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            4,
+            10,
+            6,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_14",
+      "from": [
+        -6.5,
+        4,
+        22
+      ],
+      "to": [
+        22.5,
+        6,
+        24
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            8,
+            10,
+            10,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            6,
+            10,
+            8,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_16",
+      "from": [
+        -4,
+        4,
+        24
+      ],
+      "to": [
+        20,
+        6,
+        26
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            6,
+            10,
+            8,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            8,
+            10,
+            10,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            16,
+            10
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            6,
+            16,
+            8
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "ring_top_18",
+      "from": [
+        -0.5,
+        4,
+        26
+      ],
+      "to": [
+        16.5,
+        6,
+        28
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            4,
+            10,
+            6,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            10,
+            10,
+            12,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            0,
+            10,
+            16,
+            12
+          ],
+          "texture": "#va_field"
+        },
+        "down": {
+          "uv": [
+            0,
+            4,
+            16,
+            6
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "groove_0",
+      "from": [
+        7,
+        6,
+        -11
+      ],
+      "to": [
+        9,
+        6.25,
+        -0.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          6,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "up": {
+          "uv": [
+            7,
+            5,
+            9,
+            15.5
+          ],
+          "texture": "#groove"
+        }
+      }
+    },
+    {
+      "name": "groove_1",
+      "from": [
+        7,
+        6,
+        16.5
+      ],
+      "to": [
+        9,
+        6.25,
+        27
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          6,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "up": {
+          "uv": [
+            7,
+            0.5,
+            9,
+            11
+          ],
+          "texture": "#groove"
+        }
+      }
+    },
+    {
+      "name": "groove_2",
+      "from": [
+        -11,
+        6,
+        7
+      ],
+      "to": [
+        -0.5,
+        6.25,
+        9
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          6,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "up": {
+          "uv": [
+            5,
+            7,
+            15.5,
+            9
+          ],
+          "texture": "#groove"
+        }
+      }
+    },
+    {
+      "name": "groove_3",
+      "from": [
+        16.5,
+        6,
+        7
+      ],
+      "to": [
+        27,
+        6.25,
+        9
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          6,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "up": {
+          "uv": [
+            0.5,
+            7,
+            11,
+            9
+          ],
+          "texture": "#groove"
+        }
+      }
+    }
+  ]
+}

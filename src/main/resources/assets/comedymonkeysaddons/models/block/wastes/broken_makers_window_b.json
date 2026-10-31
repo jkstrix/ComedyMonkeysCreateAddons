@@ -1,0 +1,43 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/win_b",
+    "win_b": "comedymonkeysaddons:block/wastes/win_b"
+  },
+  "elements": [
+    {
+      "name": "window",
+      "from": [
+        0,
+        0,
+        7
+      ],
+      "to": [
+        16,
+        16,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#win_b"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#win_b"
+        }
+      }
+    }
+  ]
+}

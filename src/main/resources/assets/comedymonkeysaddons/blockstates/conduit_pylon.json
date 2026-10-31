@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,part=bottom": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_bottom"
+    },
+    "facing=north,part=middle": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_middle"
+    },
+    "facing=north,part=top": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_top"
+    },
+    "facing=east,part=bottom": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_bottom",
+      "y": 90
+    },
+    "facing=east,part=middle": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_middle",
+      "y": 90
+    },
+    "facing=east,part=top": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_top",
+      "y": 90
+    },
+    "facing=south,part=bottom": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_bottom",
+      "y": 180
+    },
+    "facing=south,part=middle": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_middle",
+      "y": 180
+    },
+    "facing=south,part=top": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_top",
+      "y": 180
+    },
+    "facing=west,part=bottom": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_bottom",
+      "y": 270
+    },
+    "facing=west,part=middle": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_middle",
+      "y": 270
+    },
+    "facing=west,part=top": {
+      "model": "comedymonkeysaddons:block/wastes/conduit_pylon_top",
+      "y": 270
+    }
+  }
+}

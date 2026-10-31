@@ -1,0 +1,211 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "seam_strip_lit": "comedymonkeysaddons:block/wastes/seam_strip_lit"
+  },
+  "elements": [
+    {
+      "name": "s_w_g",
+      "from": [
+        2.25,
+        0.5,
+        -0.5
+      ],
+      "to": [
+        2.75,
+        12.75,
+        -0.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            13.25,
+            3.25,
+            13.75,
+            15.5
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "s_e_g",
+      "from": [
+        13.25,
+        0.5,
+        -0.5
+      ],
+      "to": [
+        13.75,
+        12.75,
+        -0.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            2.25,
+            3.25,
+            2.75,
+            15.5
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "s_w1_g",
+      "from": [
+        2.75,
+        12.75,
+        -0.5
+      ],
+      "to": [
+        3.75,
+        13.25,
+        -0.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            12.25,
+            2.75,
+            13.25,
+            3.25
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "s_e1_g",
+      "from": [
+        12.25,
+        12.75,
+        -0.5
+      ],
+      "to": [
+        13.25,
+        13.25,
+        -0.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            2.75,
+            2.75,
+            3.75,
+            3.25
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "s_w2_g",
+      "from": [
+        3.75,
+        13.25,
+        -0.5
+      ],
+      "to": [
+        4.25,
+        14.25,
+        -0.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            11.75,
+            1.75,
+            12.25,
+            2.75
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "s_e2_g",
+      "from": [
+        11.75,
+        13.25,
+        -0.5
+      ],
+      "to": [
+        12.25,
+        14.25,
+        -0.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            3.75,
+            1.75,
+            4.25,
+            2.75
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "s_top_g",
+      "from": [
+        4.25,
+        14.25,
+        -0.5
+      ],
+      "to": [
+        11.75,
+        14.75,
+        -0.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            4.25,
+            1.25,
+            11.75,
+            1.75
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "s_bottom_g",
+      "from": [
+        2.75,
+        0.25,
+        -0.5
+      ],
+      "to": [
+        13.25,
+        0.75,
+        -0.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            2.75,
+            15.25,
+            13.25,
+            15.75
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    }
+  ]
+}

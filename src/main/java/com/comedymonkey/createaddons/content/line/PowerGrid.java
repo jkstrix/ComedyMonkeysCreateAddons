@@ -129,6 +129,29 @@ public final class PowerGrid extends SavedData {
 		}
 	}
 
+	/**
+	 * A machine that draws power and keeps drawing it on paper while it's away (a Clockwork Wastes Substation's upkeep,
+	 * design/specs/clockwork-wastes.md, P24, D48): what the network has sent it while it was away and it hasn't used yet,
+	 * how much that can be, and what it draws a tick. While it runs it notes itself here once a second
+	 * ({@link #noteConsumer}); away, a network still running delivers into this record, and when none is running at all
+	 * it's drawn through the records of the generators and stores it reaches ({@code PowerLines.drawAway}). Back, it takes
+	 * what's left ({@link #consumerBack}).
+	 */
+	public static final class ConsumerPaper {
+		double energy;
+		long cap, perTick;
+		@Nullable
+		private IEnergyStorage view;
+
+		public double energy() {
+			return energy;
+		}
+
+		public long perTick() {
+			return perTick;
+		}
+	}
+
 	/** A block that makes power for a line (or the part of one a cable meets, recorded as the machine it belongs to). */
 	public interface Generator {
 		/** Where it's recorded: itself, or the machine it's part of (a turbine's port casing: its controller). */
@@ -395,6 +418,8 @@ public final class PowerGrid extends SavedData {
 		/** Shared stores' records by their key, and where lines meet them (a block of one, to its key). */
 		final Map<BlockPos, StorePaper> stores = new HashMap<>();
 		final Map<BlockPos, BlockPos> storeFaces = new HashMap<>();
+		/** Consumers that run on paper while away, by their block. */
+		final Map<BlockPos, ConsumerPaper> consumers = new HashMap<>();
 
 		static Records load(CompoundTag tag, HolderLookup.Provider registries) {
 			Records r = new Records();
@@ -436,6 +461,14 @@ public final class PowerGrid extends SavedData {
 			}
 			for (Tag t : tag.getList("StoreFaces", Tag.TAG_COMPOUND))
 				r.storeFaces.put(BlockPos.of(((CompoundTag) t).getLong("Face")), BlockPos.of(((CompoundTag) t).getLong("Key")));
+			for (Tag t : tag.getList("Consumers", Tag.TAG_COMPOUND)) {
+				CompoundTag c = (CompoundTag) t;
+				ConsumerPaper p = new ConsumerPaper();
+				p.energy = c.getDouble("Energy");
+				p.cap = c.getLong("Cap");
+				p.perTick = c.getLong("PerTick");
+				r.consumers.put(BlockPos.of(c.getLong("Pos")), p);
+			}
 			return r;
 		}
 
@@ -498,6 +531,16 @@ public final class PowerGrid extends SavedData {
 				faces.add(c);
 			}
 			tag.put("StoreFaces", faces);
+			ListTag consumerList = new ListTag();
+			for (Map.Entry<BlockPos, ConsumerPaper> e : consumers.entrySet()) {
+				CompoundTag c = new CompoundTag();
+				c.putLong("Pos", e.getKey().asLong());
+				c.putDouble("Energy", e.getValue().energy);
+				c.putLong("Cap", e.getValue().cap);
+				c.putLong("PerTick", e.getValue().perTick);
+				consumerList.add(c);
+			}
+			tag.put("Consumers", consumerList);
 			return tag;
 		}
 	}
@@ -993,6 +1036,124 @@ public final class PowerGrid extends SavedData {
 
 	/** An energy store that takes refunds too. */
 	public interface RefundingStorage extends IEnergyStorage, Refund {}
+
+	// ---------- consumers on paper ----------
+
+	/**
+	 * A consumer has run this second: its draw a tick and how much it can hold of what comes while it's away. It keeps a
+	 * record only while a line meets it (with none, nothing reaches it while it's away).
+	 */
+	public void noteConsumer(BlockPos pos, long perTick, long cap) {
+		ConsumerPaper p = records.consumers.get(pos);
+		if (endsAt(pos).isEmpty()) {
+			if (p != null && p.energy <= 0) {
+				records.consumers.remove(pos);
+				records.setDirty();
+			}
+			return;
+		}
+		if (p == null) {
+			p = new ConsumerPaper();
+			records.consumers.put(pos.immutable(), p);
+		}
+		if (p.perTick != perTick || p.cap != cap) {
+			p.perTick = perTick;
+			p.cap = cap;
+			records.setDirty();
+		}
+	}
+
+	/** A consumer is running again: what it was sent while away and didn't use, taken on once. */
+	public double consumerBack(BlockPos pos) {
+		ConsumerPaper p = records.consumers.get(pos);
+		if (p == null || p.energy <= 0)
+			return 0;
+		double back = p.energy;
+		p.energy = 0;
+		records.setDirty();
+		return back;
+	}
+
+	/** The block isn't that consumer any more (it was broken). */
+	public void forgetConsumer(BlockPos pos) {
+		if (records.consumers.remove(pos) != null)
+			records.setDirty();
+	}
+
+	@Nullable
+	public ConsumerPaper consumer(BlockPos pos) {
+		return records.consumers.get(pos);
+	}
+
+	/** A consumer's record as something a running network fills (up to what it can hold). */
+	IEnergyStorage consumerStore(ConsumerPaper p) {
+		if (p.view == null)
+			p.view = new IEnergyStorage() {
+				@Override
+				public int receiveEnergy(int max, boolean simulate) {
+					int got = (int) Math.max(0, Math.min(max, Math.floor(p.cap - p.energy)));
+					if (!simulate && got > 0) {
+						p.energy += got;
+						records.setDirty();
+					}
+					return got;
+				}
+
+				@Override
+				public int extractEnergy(int max, boolean simulate) {
+					return 0;
+				}
+
+				@Override
+				public int getEnergyStored() {
+					return (int) Math.min(Integer.MAX_VALUE, p.energy);
+				}
+
+				@Override
+				public int getMaxEnergyStored() {
+					return (int) Math.min(Integer.MAX_VALUE, p.cap);
+				}
+
+				@Override
+				public boolean canExtract() {
+					return false;
+				}
+
+				@Override
+				public boolean canReceive() {
+					return true;
+				}
+			};
+		return p.view;
+	}
+
+	/** Uses up to {@code fe} of what a consumer's record holds; returns how much. */
+	double spend(ConsumerPaper p, double fe) {
+		double took = Math.max(0, Math.min(fe, p.energy));
+		if (took > 0) {
+			p.energy -= took;
+			records.setDirty();
+		}
+		return took;
+	}
+
+	/** What a draw on paper brought, into a consumer's record. */
+	void bring(ConsumerPaper p, double fe) {
+		if (fe > 0) {
+			p.energy += fe;
+			records.setDirty();
+		}
+	}
+
+	/** Takes up to max FE (at most a second at its rate) straight from the record of a shared store that's on paper. */
+	int drawStore(StorePaper p, int max) {
+		int got = (int) Math.max(0, Math.min(max, Math.min(Math.floor(p.energy), p.perTick * 20.0)));
+		if (got > 0) {
+			p.energy -= got;
+			records.setDirty();
+		}
+		return got;
+	}
 
 	/** Takes up to max FE from a record's store this tick (or only says what it would). */
 	int draw(Paper p, int max, long now, boolean simulate, ServerLevel level) {

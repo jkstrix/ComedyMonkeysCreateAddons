@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,askew=false": {
+      "model": "comedymonkeysaddons:block/wastes/brass_plaque"
+    },
+    "facing=north,askew=true": {
+      "model": "comedymonkeysaddons:block/wastes/brass_plaque_askew"
+    },
+    "facing=east,askew=false": {
+      "model": "comedymonkeysaddons:block/wastes/brass_plaque",
+      "y": 90
+    },
+    "facing=east,askew=true": {
+      "model": "comedymonkeysaddons:block/wastes/brass_plaque_askew",
+      "y": 90
+    },
+    "facing=south,askew=false": {
+      "model": "comedymonkeysaddons:block/wastes/brass_plaque",
+      "y": 180
+    },
+    "facing=south,askew=true": {
+      "model": "comedymonkeysaddons:block/wastes/brass_plaque_askew",
+      "y": 180
+    },
+    "facing=west,askew=false": {
+      "model": "comedymonkeysaddons:block/wastes/brass_plaque",
+      "y": 270
+    },
+    "facing=west,askew=true": {
+      "model": "comedymonkeysaddons:block/wastes/brass_plaque_askew",
+      "y": 270
+    }
+  }
+}

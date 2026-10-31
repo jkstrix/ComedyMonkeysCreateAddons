@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/city_vault"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/city_vault",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/city_vault",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/city_vault",
+      "y": 270
+    }
+  }
+}

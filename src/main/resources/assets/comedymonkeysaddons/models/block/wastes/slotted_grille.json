@@ -1,0 +1,522 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_bond_s",
+    "va_reveal": "comedymonkeysaddons:block/wastes/va_reveal",
+    "va_step_lo": "comedymonkeysaddons:block/wastes/va_step_lo",
+    "va_step_hi": "comedymonkeysaddons:block/wastes/va_step_hi"
+  },
+  "elements": [
+    {
+      "name": "bar_0",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        3,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_reveal"
+        }
+      }
+    },
+    {
+      "name": "bar_1",
+      "from": [
+        5,
+        0,
+        0
+      ],
+      "to": [
+        7,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_reveal"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_reveal"
+        }
+      }
+    },
+    {
+      "name": "bar_2",
+      "from": [
+        9,
+        0,
+        0
+      ],
+      "to": [
+        11,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_reveal"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_reveal"
+        }
+      }
+    },
+    {
+      "name": "bar_3",
+      "from": [
+        13,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_reveal"
+        }
+      }
+    },
+    {
+      "name": "slot3_sill",
+      "from": [
+        3,
+        0,
+        0
+      ],
+      "to": [
+        5,
+        2,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            3,
+            0,
+            5,
+            16
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "slot3_head",
+      "from": [
+        3,
+        14,
+        0
+      ],
+      "to": [
+        5,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            3,
+            0,
+            5,
+            16
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "slot3_step_lo",
+      "from": [
+        3,
+        2,
+        1
+      ],
+      "to": [
+        5,
+        3,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            13,
+            13,
+            14
+          ],
+          "texture": "#va_step_lo"
+        },
+        "south": {
+          "uv": [
+            3,
+            13,
+            5,
+            14
+          ],
+          "texture": "#va_step_lo"
+        },
+        "up": {
+          "uv": [
+            3,
+            1,
+            5,
+            15
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "slot3_step_hi",
+      "from": [
+        3,
+        13,
+        1
+      ],
+      "to": [
+        5,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            2,
+            13,
+            3
+          ],
+          "texture": "#va_step_hi"
+        },
+        "south": {
+          "uv": [
+            3,
+            2,
+            5,
+            3
+          ],
+          "texture": "#va_step_hi"
+        },
+        "down": {
+          "uv": [
+            3,
+            1,
+            5,
+            15
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "slot7_sill",
+      "from": [
+        7,
+        0,
+        0
+      ],
+      "to": [
+        9,
+        2,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            7,
+            0,
+            9,
+            16
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "slot7_head",
+      "from": [
+        7,
+        14,
+        0
+      ],
+      "to": [
+        9,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            7,
+            0,
+            9,
+            16
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "slot7_step_lo",
+      "from": [
+        7,
+        2,
+        1
+      ],
+      "to": [
+        9,
+        3,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            13,
+            9,
+            14
+          ],
+          "texture": "#va_step_lo"
+        },
+        "south": {
+          "uv": [
+            7,
+            13,
+            9,
+            14
+          ],
+          "texture": "#va_step_lo"
+        },
+        "up": {
+          "uv": [
+            7,
+            1,
+            9,
+            15
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "slot7_step_hi",
+      "from": [
+        7,
+        13,
+        1
+      ],
+      "to": [
+        9,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            2,
+            9,
+            3
+          ],
+          "texture": "#va_step_hi"
+        },
+        "south": {
+          "uv": [
+            7,
+            2,
+            9,
+            3
+          ],
+          "texture": "#va_step_hi"
+        },
+        "down": {
+          "uv": [
+            7,
+            1,
+            9,
+            15
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "slot11_sill",
+      "from": [
+        11,
+        0,
+        0
+      ],
+      "to": [
+        13,
+        2,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            11,
+            0,
+            13,
+            16
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "slot11_head",
+      "from": [
+        11,
+        14,
+        0
+      ],
+      "to": [
+        13,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            11,
+            0,
+            13,
+            16
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "slot11_step_lo",
+      "from": [
+        11,
+        2,
+        1
+      ],
+      "to": [
+        13,
+        3,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            13,
+            5,
+            14
+          ],
+          "texture": "#va_step_lo"
+        },
+        "south": {
+          "uv": [
+            11,
+            13,
+            13,
+            14
+          ],
+          "texture": "#va_step_lo"
+        },
+        "up": {
+          "uv": [
+            11,
+            1,
+            13,
+            15
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    },
+    {
+      "name": "slot11_step_hi",
+      "from": [
+        11,
+        13,
+        1
+      ],
+      "to": [
+        13,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            2,
+            5,
+            3
+          ],
+          "texture": "#va_step_hi"
+        },
+        "south": {
+          "uv": [
+            11,
+            2,
+            13,
+            3
+          ],
+          "texture": "#va_step_hi"
+        },
+        "down": {
+          "uv": [
+            11,
+            1,
+            13,
+            15
+          ],
+          "texture": "#va_step_lo"
+        }
+      }
+    }
+  ]
+}

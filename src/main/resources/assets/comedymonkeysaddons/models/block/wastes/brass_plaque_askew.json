@@ -1,0 +1,704 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/cp_plaque_field",
+    "cp_plaque_field": "comedymonkeysaddons:block/wastes/cp_plaque_field",
+    "cp_plaque_rim": "comedymonkeysaddons:block/wastes/cp_plaque_rim",
+    "cp_plaque_bar": "comedymonkeysaddons:block/wastes/cp_plaque_bar",
+    "cp_bolt": "comedymonkeysaddons:block/wastes/cp_bolt"
+  },
+  "elements": [
+    {
+      "name": "plate",
+      "from": [
+        2,
+        3,
+        15.25
+      ],
+      "to": [
+        14,
+        12,
+        16
+      ],
+      "rotation": {
+        "origin": [
+          2.5,
+          11.5,
+          15
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            4,
+            14,
+            13
+          ],
+          "texture": "#cp_plaque_field"
+        },
+        "east": {
+          "uv": [
+            0,
+            4,
+            0.75,
+            13
+          ],
+          "texture": "#cp_plaque_field"
+        },
+        "west": {
+          "uv": [
+            15.25,
+            4,
+            16,
+            13
+          ],
+          "texture": "#cp_plaque_field"
+        },
+        "up": {
+          "uv": [
+            2,
+            15.25,
+            14,
+            16
+          ],
+          "texture": "#cp_plaque_field"
+        },
+        "down": {
+          "uv": [
+            2,
+            0,
+            14,
+            0.75
+          ],
+          "texture": "#cp_plaque_field"
+        }
+      }
+    },
+    {
+      "name": "rim_t",
+      "from": [
+        2,
+        11,
+        14.75
+      ],
+      "to": [
+        14,
+        12,
+        15.25
+      ],
+      "rotation": {
+        "origin": [
+          2.5,
+          11.5,
+          15
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            4,
+            14,
+            5
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            4,
+            1.25,
+            5
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "west": {
+          "uv": [
+            14.75,
+            4,
+            15.25,
+            5
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "up": {
+          "uv": [
+            2,
+            14.75,
+            14,
+            15.25
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "down": {
+          "uv": [
+            2,
+            0.75,
+            14,
+            1.25
+          ],
+          "texture": "#cp_plaque_rim"
+        }
+      }
+    },
+    {
+      "name": "rim_b",
+      "from": [
+        2,
+        3,
+        14.75
+      ],
+      "to": [
+        14,
+        4,
+        15.25
+      ],
+      "rotation": {
+        "origin": [
+          2.5,
+          11.5,
+          15
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            12,
+            14,
+            13
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            12,
+            1.25,
+            13
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "west": {
+          "uv": [
+            14.75,
+            12,
+            15.25,
+            13
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "up": {
+          "uv": [
+            2,
+            14.75,
+            14,
+            15.25
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "down": {
+          "uv": [
+            2,
+            0.75,
+            14,
+            1.25
+          ],
+          "texture": "#cp_plaque_rim"
+        }
+      }
+    },
+    {
+      "name": "rim_w",
+      "from": [
+        2,
+        4,
+        14.75
+      ],
+      "to": [
+        3,
+        11,
+        15.25
+      ],
+      "rotation": {
+        "origin": [
+          2.5,
+          11.5,
+          15
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13,
+            5,
+            14,
+            12
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            5,
+            1.25,
+            12
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "west": {
+          "uv": [
+            14.75,
+            5,
+            15.25,
+            12
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "up": {
+          "uv": [
+            2,
+            14.75,
+            3,
+            15.25
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "down": {
+          "uv": [
+            2,
+            0.75,
+            3,
+            1.25
+          ],
+          "texture": "#cp_plaque_rim"
+        }
+      }
+    },
+    {
+      "name": "rim_e",
+      "from": [
+        13,
+        4,
+        14.75
+      ],
+      "to": [
+        14,
+        11,
+        15.25
+      ],
+      "rotation": {
+        "origin": [
+          2.5,
+          11.5,
+          15
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            5,
+            3,
+            12
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            5,
+            1.25,
+            12
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "west": {
+          "uv": [
+            14.75,
+            5,
+            15.25,
+            12
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "up": {
+          "uv": [
+            13,
+            14.75,
+            14,
+            15.25
+          ],
+          "texture": "#cp_plaque_rim"
+        },
+        "down": {
+          "uv": [
+            13,
+            0.75,
+            14,
+            1.25
+          ],
+          "texture": "#cp_plaque_rim"
+        }
+      }
+    },
+    {
+      "name": "bar_l1",
+      "from": [
+        4,
+        9,
+        15
+      ],
+      "to": [
+        12,
+        10,
+        15.25
+      ],
+      "rotation": {
+        "origin": [
+          2.5,
+          11.5,
+          15
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            6,
+            12,
+            7
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            6,
+            1,
+            7
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "west": {
+          "uv": [
+            15,
+            6,
+            15.25,
+            7
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "up": {
+          "uv": [
+            4,
+            15,
+            12,
+            15.25
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "down": {
+          "uv": [
+            4,
+            0.75,
+            12,
+            1
+          ],
+          "texture": "#cp_plaque_bar"
+        }
+      }
+    },
+    {
+      "name": "bar_l2",
+      "from": [
+        4,
+        7,
+        15
+      ],
+      "to": [
+        10,
+        8,
+        15.25
+      ],
+      "rotation": {
+        "origin": [
+          2.5,
+          11.5,
+          15
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            8,
+            12,
+            9
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            8,
+            1,
+            9
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "west": {
+          "uv": [
+            15,
+            8,
+            15.25,
+            9
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "up": {
+          "uv": [
+            4,
+            15,
+            10,
+            15.25
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "down": {
+          "uv": [
+            4,
+            0.75,
+            10,
+            1
+          ],
+          "texture": "#cp_plaque_bar"
+        }
+      }
+    },
+    {
+      "name": "bar_l3a",
+      "from": [
+        4,
+        5,
+        15
+      ],
+      "to": [
+        7,
+        6,
+        15.25
+      ],
+      "rotation": {
+        "origin": [
+          2.5,
+          11.5,
+          15
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            10,
+            12,
+            11
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            10,
+            1,
+            11
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "west": {
+          "uv": [
+            15,
+            10,
+            15.25,
+            11
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "up": {
+          "uv": [
+            4,
+            15,
+            7,
+            15.25
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "down": {
+          "uv": [
+            4,
+            0.75,
+            7,
+            1
+          ],
+          "texture": "#cp_plaque_bar"
+        }
+      }
+    },
+    {
+      "name": "bar_l3b",
+      "from": [
+        8,
+        5,
+        15
+      ],
+      "to": [
+        11,
+        6,
+        15.25
+      ],
+      "rotation": {
+        "origin": [
+          2.5,
+          11.5,
+          15
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            10,
+            8,
+            11
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            10,
+            1,
+            11
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "west": {
+          "uv": [
+            15,
+            10,
+            15.25,
+            11
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "up": {
+          "uv": [
+            8,
+            15,
+            11,
+            15.25
+          ],
+          "texture": "#cp_plaque_bar"
+        },
+        "down": {
+          "uv": [
+            8,
+            0.75,
+            11,
+            1
+          ],
+          "texture": "#cp_plaque_bar"
+        }
+      }
+    },
+    {
+      "name": "bolt_nw",
+      "from": [
+        2.25,
+        11.25,
+        14.25
+      ],
+      "to": [
+        2.75,
+        11.75,
+        14.75
+      ],
+      "rotation": {
+        "origin": [
+          2.5,
+          11.5,
+          15
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.25,
+            4.25,
+            13.75,
+            4.75
+          ],
+          "texture": "#cp_bolt"
+        },
+        "east": {
+          "uv": [
+            1.25,
+            4.25,
+            1.75,
+            4.75
+          ],
+          "texture": "#cp_bolt"
+        },
+        "west": {
+          "uv": [
+            14.25,
+            4.25,
+            14.75,
+            4.75
+          ],
+          "texture": "#cp_bolt"
+        },
+        "up": {
+          "uv": [
+            2.25,
+            14.25,
+            2.75,
+            14.75
+          ],
+          "texture": "#cp_bolt"
+        },
+        "down": {
+          "uv": [
+            2.25,
+            1.25,
+            2.75,
+            1.75
+          ],
+          "texture": "#cp_bolt"
+        }
+      }
+    }
+  ]
+}

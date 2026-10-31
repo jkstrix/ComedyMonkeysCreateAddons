@@ -1,0 +1,283 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/iron",
+    "iron_chipped": "comedymonkeysaddons:block/wastes/iron_chipped",
+    "iron_flute_broken": "comedymonkeysaddons:block/wastes/iron_flute_broken",
+    "iron_flute": "comedymonkeysaddons:block/wastes/iron_flute",
+    "iron": "comedymonkeysaddons:block/wastes/iron",
+    "iron_shaft_rust": "comedymonkeysaddons:block/wastes/iron_shaft_rust",
+    "iron_shaft": "comedymonkeysaddons:block/wastes/iron_shaft"
+  },
+  "elements": [
+    {
+      "name": "plinth",
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        2,
+        12
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            14,
+            12,
+            16
+          ],
+          "texture": "#iron_chipped"
+        },
+        "east": {
+          "uv": [
+            4,
+            14,
+            12,
+            16
+          ],
+          "texture": "#iron_chipped"
+        },
+        "south": {
+          "uv": [
+            4,
+            14,
+            12,
+            16
+          ],
+          "texture": "#iron_chipped"
+        },
+        "west": {
+          "uv": [
+            4,
+            14,
+            12,
+            16
+          ],
+          "texture": "#iron_chipped"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#iron_chipped"
+        }
+      }
+    },
+    {
+      "name": "fluted",
+      "from": [
+        5,
+        2,
+        5
+      ],
+      "to": [
+        11,
+        6,
+        11
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            10,
+            11,
+            14
+          ],
+          "texture": "#iron_flute_broken"
+        },
+        "east": {
+          "uv": [
+            5,
+            10,
+            11,
+            14
+          ],
+          "texture": "#iron_flute"
+        },
+        "south": {
+          "uv": [
+            5,
+            10,
+            11,
+            14
+          ],
+          "texture": "#iron_flute"
+        },
+        "west": {
+          "uv": [
+            5,
+            10,
+            11,
+            14
+          ],
+          "texture": "#iron_flute"
+        },
+        "up": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "moulding",
+      "from": [
+        5.5,
+        6,
+        5.5
+      ],
+      "to": [
+        10.5,
+        7,
+        10.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            10
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            10
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            10
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            10
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "shaft",
+      "from": [
+        6,
+        7,
+        6
+      ],
+      "to": [
+        10,
+        16,
+        10
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            0,
+            10,
+            9
+          ],
+          "texture": "#iron_shaft_rust"
+        },
+        "east": {
+          "uv": [
+            6,
+            0,
+            10,
+            9
+          ],
+          "texture": "#iron_shaft"
+        },
+        "south": {
+          "uv": [
+            6,
+            0,
+            10,
+            9
+          ],
+          "texture": "#iron_shaft"
+        },
+        "west": {
+          "uv": [
+            6,
+            0,
+            10,
+            9
+          ],
+          "texture": "#iron_shaft"
+        }
+      }
+    }
+  ]
+}

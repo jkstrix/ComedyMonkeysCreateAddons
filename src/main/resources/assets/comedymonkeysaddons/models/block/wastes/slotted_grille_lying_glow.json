@@ -1,0 +1,130 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_bond_s",
+    "grille_glow": "comedymonkeysaddons:block/wastes/grille_glow"
+  },
+  "elements": [
+    {
+      "name": "glow_3",
+      "from": [
+        3,
+        3,
+        7.5
+      ],
+      "to": [
+        13,
+        5,
+        8.5
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            3,
+            13,
+            13
+          ],
+          "texture": "#grille_glow",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            3,
+            3,
+            5,
+            13
+          ],
+          "texture": "#grille_glow",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "glow_7",
+      "from": [
+        3,
+        7,
+        7.5
+      ],
+      "to": [
+        13,
+        9,
+        8.5
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            3,
+            9,
+            13
+          ],
+          "texture": "#grille_glow",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            7,
+            3,
+            9,
+            13
+          ],
+          "texture": "#grille_glow",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "glow_11",
+      "from": [
+        3,
+        11,
+        7.5
+      ],
+      "to": [
+        13,
+        13,
+        8.5
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            3,
+            5,
+            13
+          ],
+          "texture": "#grille_glow",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            11,
+            3,
+            13,
+            13
+          ],
+          "texture": "#grille_glow",
+          "rotation": 270
+        }
+      }
+    }
+  ]
+}

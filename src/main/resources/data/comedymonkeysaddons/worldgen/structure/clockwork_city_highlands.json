@@ -1,0 +1,8 @@
+{
+  "type": "comedymonkeysaddons:clockwork_city",
+  "biomes": "minecraft:end_highlands",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "highlands": true
+}

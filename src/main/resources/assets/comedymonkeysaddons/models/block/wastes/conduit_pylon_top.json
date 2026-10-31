@@ -1,0 +1,169 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field",
+    "va": "comedymonkeysaddons:block/wastes/va",
+    "seam_strip_dark": "comedymonkeysaddons:block/wastes/seam_strip_dark"
+  },
+  "elements": [
+    {
+      "name": "shaft_27",
+      "from": [
+        6,
+        0,
+        6
+      ],
+      "to": [
+        10,
+        8,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            8,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            6,
+            8,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            6,
+            8,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            6,
+            8,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "seam_27_6.5_north",
+      "from": [
+        6.5,
+        0,
+        5.75
+      ],
+      "to": [
+        7,
+        7.5,
+        5.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            8.5,
+            9.5,
+            16
+          ],
+          "texture": "#seam_strip_dark"
+        }
+      }
+    },
+    {
+      "name": "seam_27_9_north",
+      "from": [
+        9,
+        0,
+        5.75
+      ],
+      "to": [
+        9.5,
+        7.5,
+        5.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            8.5,
+            7,
+            16
+          ],
+          "texture": "#seam_strip_dark"
+        }
+      }
+    },
+    {
+      "name": "seam_27_6.5_south",
+      "from": [
+        6.5,
+        0,
+        10.25
+      ],
+      "to": [
+        7,
+        7.5,
+        10.25
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            6.5,
+            8.5,
+            7,
+            16
+          ],
+          "texture": "#seam_strip_dark"
+        }
+      }
+    },
+    {
+      "name": "seam_27_9_south",
+      "from": [
+        9,
+        0,
+        10.25
+      ],
+      "to": [
+        9.5,
+        7.5,
+        10.25
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            9,
+            8.5,
+            9.5,
+            16
+          ],
+          "texture": "#seam_strip_dark"
+        }
+      }
+    }
+  ]
+}

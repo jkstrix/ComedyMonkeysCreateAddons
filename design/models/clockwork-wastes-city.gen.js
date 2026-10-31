@@ -8,7 +8,7 @@
 const path = require('path');
 const { hash, preview } = require('./process-box.lib.js');
 const M = require('./clockwork-wastes-materials.gen.js');
-const { T, VA, STAR, STEEL, IRON, BRASS, COPPER, PATINA, RUST, GROUND, mott, edge, va, box, CHAIN } = M;
+const { T, VA, STAR, STEEL, IRON, BRASS, COPPER, PATINA, RUST, SOOT, GROUND, mott, edge, va, box, CHAIN, endbrick } = M;
 
 const OUT = path.resolve(__dirname, 'clockwork-wastes-city.bbmodel');
 const GLOW = { shade: false };
@@ -32,16 +32,32 @@ const cabSide = (upper) => (x, y) => {
   if (e === 0) return x === 0 || y === 0 ? BEVEL_HI : BEVEL_LO;
   if (e === 1) return STEEL[1];
   if (e === 2) return x === 2 || y === 2 ? BEVEL_LO : '#767873';
-  return mott(['#5e615d', '#6b6e6a', '#767873'], 42, 0.15, 0.9)(x, y);
+  return mott(['#5e615d', '#666964', '#6b6e6a'], 42, 0.35, 0.93)(x, y);
 };
 T.paint('cab_side_lo', cabSide(false));
+// the east side, round the knife switch's jaws (block y 10-12, z 6.5-9.5 -> u 6.5-9.5, v 4-6): a soot fan rising from where
+// it arced every time it slammed
+T.paint('cab_side_lo_scorch', (x, y) => {
+  const d = Math.hypot((x + 0.5 - 8) * 1.4, y + 0.5 - 6.5) + (hash(x, y, 49) - 0.5) * 1.6;
+  if (y <= 6 && d < 2.6) return SOOT[0];
+  if (y <= 7 && d < 4.4) return SOOT[1];
+  return cabSide(false)(x, y);
+});
 T.paint('cab_side_hi', cabSide(true));
 // settled End dust: clusters along the top edges only, never speckle
-const dusty = (base, s) => (x, y) => (edge(x, y) === 0 && hash(x, y, s) > 0.45 ? DUST[hash(x, y, s + 1) > 0.5 ? 1 : 0] : base(x, y));
+// End dust settles on up faces only and drifts: along the north edge (v 0) and into its two corners, nothing elsewhere
+const dusty = (base, s) => (x, y) => {
+  const r = hash(x, y, s), drift = y === 0 ? 0.25 : y === 1 && (x < 3 || x > 12) ? 0.4 : y === 2 && (x < 1 || x > 14) ? 0.6 : 1;
+  return r > drift ? DUST[hash(x, y, s + 1) > 0.5 ? 1 : 0] : base(x, y);
+};
 T.paint('cab_top', dusty((x, y) => steelField(x, y, 43), 44));
 T.paint('cab_back', (x, y) => steelField(x, y, 45));
 T.paint('glass_tube', (x, y) => (x === 7 ? '#34304a' : '#2a2833'));
-T.paint('column_lit', (x, y) => (y === 0 ? STAR.core : STAR.edge));
+// 4a: light in a glass tube, 3 texels across at u 6-9: dim either side, the edge tone down the middle, the core on the top row
+T.paint('column_lit', (x, y) => (x === 7 ? (y === 0 ? STAR.core : STAR.edge) : y === 0 ? STAR.edge : STAR.dim));
+// 4b: the frame seams dim, with the edge tone only at their ends, so the column alone is primary
+T.paint('seam_frame_lit', (x, y) => (y === 0 || y === 15 ? STAR.edge : STAR.dim));
+T.paint('lens_ring', () => STAR.dim);
 T.paint('flash', () => STAR.core);
 T.paint('steel', mott(STEEL, 46, 0.12, 0.9));
 T.paint('copper', mott(COPPER, 47, 0.15, 0.85));
@@ -53,19 +69,20 @@ T.paint('vault_inner', (x, y) => (hash(x, y, 48) > 0.9 ? '#16151c' : '#121118'))
 T.paint('loot_gold', () => '#a3873f');
 T.paint('loot_gem', () => '#5f9a9a');
 // the cast-iron lamp posts: our Cast Iron Lamp Post's family, older (rust streaks, a broken flute)
-T.paint('iron', mott(IRON, 51, 0.12, 0.9));
-T.paint('iron_shaft', (x, y) => (x % 2 === 0 ? '#2b2f33' : hash(x, y, 52) > 0.9 ? IRON[2] : '#33373c'));
 T.paint('iron_shaft_rust', (x, y) => (x === 5 && y > 2 && y < 11 ? (y < 8 ? RUST[1] : RUST[0]) : x % 2 === 0 ? '#2b2f33' : '#33373c'));
 T.paint('iron_flute', (x, y) => (x % 2 === 0 ? '#202326' : IRON[1]));
 T.paint('iron_flute_broken', (x, y) => (x === 9 && y > 5 ? '#151719' : x === 9 ? IRON[0] : x % 2 === 0 ? '#202326' : IRON[1]));
-T.paint('iron_chipped', (x, y) => ((x > 11 && y < 3) || (x === 11 && y === 0) ? '#5a5d58' : mott(IRON, 53, 0.12, 0.9)(x, y)));
+const PLINTH_CHIP = { '13,0': 'in', '14,0': 'in', '15,0': 'in', '14,1': 'in', '15,1': 'in', '15,2': 'in', '12,0': 'lip', '13,1': 'lip', '14,2': 'lip', '15,3': 'lip' };
+T.paint('iron_chipped', (x, y) => { const k = PLINTH_CHIP[x + ',' + y]; return k === 'in' ? '#151719' : k === 'lip' ? STEEL[2] : mott(IRON, 1, 0.12, 0.9)(x, y); });
 // lamp lenses, 4 px at uv 6-10: dark glass with one dull catchlight; lit: edge ring and a 2 x 2 core; cracked never lights
 T.paint('lens_dark', (x, y) => (x === 7 && y === 7 ? VA.glint : VA.glass));
 T.paint('lens_lit', (x, y) => (x >= 7 && x <= 8 && y >= 7 && y <= 8 ? STAR.core : STAR.edge));
 T.paint('lens_cracked', (x, y) => (x - 6 === y - 6 || (x === 9 && y === 7) ? '#4c475f' : VA.glass));
 // copper drawn from the makers' pipes, mostly gone to patina, copper showing in places
-T.paint('cable', (x, y) => (hash(x, y, 54) > 0.8 ? COPPER[1] : hash(x, y, 55) > 0.5 ? PATINA[0] : PATINA[1]));
-T.paint('endbrick_dusty', dusty((x, y) => (y % 4 === 3 || (x + ((y >> 2) % 2 ? 4 : 0)) % 8 === 7 ? '#6f6a50' : hash(x, y, 28) > 0.8 ? '#9c9672' : '#8f8a68'), 56));
+const patina = (x, y) => (hash(x, y, 55) > 0.55 ? PATINA[1] : PATINA[0]);
+T.paint('cable', patina);
+T.paint('cable_top', (x, y) => ((y === 7 || y === 8) && [2, 5, 10, 13].includes(x) ? COPPER[1] : patina(x, y)));
+T.paint('endbrick_dusty', dusty(endbrick, 56));
 
 // ---------- geometry helpers ----------
 // a round part along y (lenses pointing down, posts): crossed boxes; up/down faces mapped round the texture's centre (8, 8)
@@ -89,7 +106,7 @@ const COL = { x0: 6.5, x1: 9.5, y0: 3.5, y1: 21.5 };
 function substation() {
   const body = [
     box('plinth', [0.5, 0, 1.5], [15.5, 1, 14.5], { all: 'steel', down: null }),
-    box('cab_lo', [1, 1, 2], [15, 16, 14], { north: 'cab_front_lo', south: 'cab_back', east: 'cab_side_lo', west: 'cab_side_lo', up: null, down: null }),
+    box('cab_lo', [1, 1, 2], [15, 16, 14], { north: 'cab_front_lo', south: 'cab_back', east: 'cab_side_lo_scorch', west: 'cab_side_lo', up: null, down: null }),
     box('cab_hi', [1, 16, 2], [15, 31, 14], { north: 'cab_front_hi', south: 'cab_back', east: 'cab_side_hi', west: 'cab_side_hi', up: 'cab_top', down: null }),
     // the frame round the tube: four void-alloy bars (frames go round, not behind)
     box('frame_l', [5, 2, 1], [COL.x0, 23, 2], { all: 'va', south: null }), box('frame_r', [COL.x1, 2, 1], [11, 23, 2], { all: 'va', south: null }),
@@ -101,8 +118,8 @@ function substation() {
     // the sigil plate above the column, 6 x 6, uv 0-6 of its texture
     box('sigil', [5, 24, 1], [11, 30, 2], { north: 'sub_sigil', east: 'va', west: 'va', up: 'va', down: 'va', south: null }, { uv: { north: [0, 0, 6, 6] } }),
     // the lever's brass pivot boss and its two contact jaws below it
-    box('boss', [15, 19, 7], [16.5, 21, 9], { all: 'brass', west: null }),
-    box('jaw_n', [15, 10, 6.5], [17, 12, 7.25], { all: 'brass', west: null }), box('jaw_s', [15, 10, 8.75], [17, 12, 9.5], { all: 'brass', west: null }),
+    box('boss', [15, 19, 7], [16.5, 21, 9], { all: 'brass_aged', west: null }),
+    box('jaw_n', [15, 10, 6.5], [17, 12, 7.25], { all: 'brass_aged', west: null }), box('jaw_s', [15, 10, 8.75], [17, 12, 9.5], { all: 'brass_aged', west: null }),
     // FE in at the back face centre: a copper terminal
     box('terminal', [6, 6, 14], [10, 10, 15], { all: 'copper', north: null }),
     // the cable tray on top: two insulators where the district's cable leaves for the sky-web
@@ -112,11 +129,11 @@ function substation() {
   const seam = (tex, o) => [box('seam_l', [5.5, 2.5, 0.75], [6, 22.5, 0.75], { north: tex }, o), box('seam_r', [10, 2.5, 0.75], [10.5, 22.5, 0.75], { north: tex }, o)];
   return {
     body: [...body, ...seam('seam_strip_dark')],
-    lever: [box('blade', [16.5, 11, 7.5], [17.5, 20, 8.5], 'steel'), box('grip', [16.25, 10, 7.25], [17.75, 11, 8.75], 'walnut'), box('pin', [16.25, 19.5, 7.75], [17.75, 20.5, 8.25], 'brass')],
-    seams: seam('seam_strip_lit', GLOW),
+    lever: [box('blade', [16.5, 11, 7.5], [17.5, 20, 8.5], 'steel'), box('grip', [16.25, 10, 7.25], [17.75, 11, 8.75], 'walnut'), box('pin', [16.25, 19.5, 7.75], [17.75, 20.5, 8.25], 'brass_aged')],
+    seams: seam('seam_frame_lit', GLOW),
     sigil: [box('sigil_lens', [5, 24, 0.75], [11, 30, 0.75], { north: 'sub_sigil_lit' }, { ...GLOW, uv: { north: [0, 0, 6, 6] } })],
     flash: [box('flash_n', [17.25, 10.5, 6.75], [17.25, 11.75, 7], { east: 'flash' }, GLOW), box('flash_s', [17.25, 10.5, 9], [17.25, 11.75, 9.25], { east: 'flash' }, GLOW)],
-    column: [box('column', [COL.x0 + 0.25, COL.y0, 1.25], [COL.x1 - 0.25, COL.y1, 1.25], { north: 'column_lit' }, { ...GLOW, uv: { north: [6.75, 0, 9.25, 16] } })],
+    column: [box('column', [COL.x0, COL.y0, 1.25], [COL.x1, COL.y1, 1.25], { north: 'column_lit' }, { ...GLOW, uv: { north: [6, 0, 9, 16] } })],
   };
 }
 
@@ -124,10 +141,10 @@ function substation() {
 // the bezel (z 1-2) is a front plate with a 12 px stepped round opening; the walls round the recess; blades stacked 0.5 apart
 const OPEN = [[13, 6, 10], [12, 4, 12], [11, 3, 13], [10, 3, 13], [9, 2, 14], [8, 2, 14], [7, 2, 14], [6, 2, 14], [5, 3, 13], [4, 3, 13], [3, 4, 12], [2, 6, 10]];
 function vault() {
-  const out = [box('core', [0, 0, 7], [16, 16, 16], { all: 'va', north: 'vault_inner' }),
+  const out = [box('core', [0, 0, 7], [16, 16, 16], { all: M.VA_BODY, north: 'vault_inner' }),
     box('wall_w', [0, 0, 2], [2, 16, 7], 'va'), box('wall_e', [14, 0, 2], [16, 16, 7], 'va'),
     box('wall_b', [2, 0, 2], [14, 2, 7], 'va'), box('wall_t', [2, 14, 2], [14, 16, 7], 'va'),
-    box('bezel_t', [1, 14, 1], [15, 16, 2], { all: 'va', south: null }), box('bezel_b', [1, 0, 1], [15, 2, 2], { all: 'va', south: null })];
+    box('bezel_t', [1, 14, 1], [15, 16, 2], { all: 'va', south: null }), box('bezel_b', [1, 0, 1], [15, 2, 2], { all: 'va', north: 'va_chipped', south: null })];
   for (const [y, x0, x1] of OPEN) {
     if (x0 > 1) out.push(box(`bezel_w${y}`, [1, y, 1], [x0, y + 1, 2], { all: 'va', south: null }));
     if (x1 < 15) out.push(box(`bezel_e${y}`, [x1, y, 1], [15, y + 1, 2], { all: 'va', south: null }));
@@ -151,11 +168,11 @@ const bladeSeam = (k) => [box('blade_seam_' + k, [8 - 1, 8, BLADE_Z(k) - 0.5], [
 const TEETH = [[0, 12, 'l'], [12, 24, 'r'], [24, 36, 'l'], [36, 48, 'r']];
 function leaf(side) {
   const L = side === 'l', out = [];
-  out.push(box('leaf_' + side, L ? [0, 0, 6] : [17, 0, 6], L ? [15, 48, 10] : [32, 48, 10], 'va'));
+  out.push(box('leaf_' + side, L ? [0, 0, 6] : [17, 0, 6], L ? [15, 48, 10] : [32, 48, 10], M.VA_BODY));
   for (const [y0, y1, s] of TEETH) if (s === side) out.push(box(`tooth_${side}_${y0}`, [15, y0, 6], [17, y1, 10], 'va'));
   const px = L ? [1.5, 13.5] : [18.5, 30.5];
   [[2, 15], [17, 31], [33, 46]].forEach(([y0, y1], i) => {
-    out.push(box(`panel_${side}_${i}`, [px[0], y0, 5], [px[1], y1 - 1, 6], { all: 'va', south: null }));
+    out.push(box(`panel_${side}_${i}`, [px[0], y0, 5], [px[1], y1 - 1, 6], { all: 'va', north: L && i === 0 ? 'va_chipped' : 'va', south: null }));
     out.push(box(`panel_cap_${side}_${i}`, [px[0] + 1, y1 - 1, 5], [px[1] - 1, y1, 6], { all: 'va', south: null }));
   });
   // the chain plate's half on this leaf: 8 x 5 at chest height for a bot; viewed from the north, the east half shows art u 0-8
@@ -170,7 +187,7 @@ function doorSeam(tex, o = {}) {
   for (const y of [12, 24, 36]) out.push(box(`dseam_h${y}`, [14.75, y - 0.25, 5.75], [17.25, y + 0.25, 5.75], { north: tex }, o));
   return out;
 }
-const jamb = () => [box('jamb_w', [-2, 0, 4], [0, 50, 12], 'va'), box('jamb_e', [32, 0, 4], [34, 50, 12], 'va'), box('jamb_t', [0, 48, 4], [32, 50, 12], 'va')];
+const jamb = () => [box('jamb_w', [-2, 0, 4], [0, 50, 12], M.VA_BODY), box('jamb_e', [32, 0, 4], [34, 50, 12], M.VA_BODY), box('jamb_t', [0, 48, 4], [32, 50, 12], M.VA_BODY)];
 const jambGlow = () => [box('jglow_w', [-0.25, 1, 7.5], [-0.25, 47, 8.5], { east: 'seam_strip_lit' }, GLOW), box('jglow_e', [32.25, 1, 7.5], [32.25, 47, 8.5], { west: 'seam_strip_lit' }, GLOW)];
 
 // ---------- 4. Derelict lamps: makers' cast-iron oil-lamp posts, the uprising's hooded lens heads; and the cable ----------
@@ -208,7 +225,9 @@ function hood(dy, dz, lens = 'lens_dark') {
     box('hood_lip_w', [5, 8, -2], [6, 8.5, 2], 'va'), box('hood_lip_e', [10, 8, -2], [11, 8.5, 2], 'va'),
     ...ydisc('lens', 8, 0, 8.25, 8.5, 4, { down: lens, all: null })], [0, dy, dz]);
 }
-const lampGlow = (name) => ydisc(name, 8, 0, 8, 8, 4, { down: 'lens_lit', all: null }, GLOW);
+const lampGlow = (name) => [...ydisc(name, 8, 0, 8, 8, 4, { down: 'lens_lit', all: null }, GLOW),
+  box(name + '_ring_n', [5, 8, -3.25], [11, 8.5, -3.25], { north: 'lens_ring' }, GLOW), box(name + '_ring_s', [5, 8, 3.25], [11, 8.5, 3.25], { south: 'lens_ring' }, GLOW),
+  box(name + '_ring_w', [4.75, 8, -3], [4.75, 8.5, 3], { west: 'lens_ring' }, GLOW), box(name + '_ring_e', [11.25, 8, -3], [11.25, 8.5, 3], { east: 'lens_ring' }, GLOW)];
 // the wall lamp: a scrolled cast-iron bracket on the wall (south, z 16), the same hooded lens, tipped 22.5 degrees down and out
 function wallLamp() {
   const head = [box('clamp', [6.5, 11.5, 3.5], [9.5, 14, 5.5], 'va'), box('neck', [7.5, 10.5, 4], [8.5, 11.5, 5], 'va'), ...shift(hood(0, 0), [0, -2, 4])];
@@ -221,13 +240,14 @@ function wallLamp() {
 const wallLampGlow = () => rotAll(shift(lampGlow('wl_glow'), [0, -2, 4]), 'x', -22.5, [8, 12.75, 5.5]);
 // surface cable on the floor along x: two strands with a hairline gap, void-alloy clips every 8 px
 function floorCable(name) {
-  const out = [box(name + '_n', [0, 0, 7], [16, 1, 7.75], { all: 'cable', down: null }), box(name + '_s', [0, 0, 8.25], [16, 1, 9], { all: 'cable', down: null })];
+  const out = [box(name + '_n', [0, 0, 7], [16, 1, 7.75], { all: 'cable', up: 'cable_top', down: null }), box(name + '_s', [0, 0, 8.25], [16, 1, 9], { all: 'cable', up: 'cable_top', down: null })];
   for (const x of [3, 11]) out.push(box(`${name}_clip_${x}`, [x, 0, 6.5], [x + 2, 1.5, 9.5], { all: 'va', down: null }));
   return out;
 }
 const floorCableGlow = (name) => [box(name + '_g', [0, 0, 7.75], [16, 0.75, 8.25], { up: 'seam_strip_lit' }, GLOW)];
 
-// ---------- the scene ----------
+// ---------- the scene (only when run directly; the exporter takes the builders) ----------
+if (require.main === module) {
 const { cube, group, clip, write } = preview('clockwork_wastes_city', { 'w:': T });
 const outliner = [];
 const at = (bx, by, bz) => [bx * 16, by * 16, bz * 16];
@@ -249,7 +269,7 @@ G('floor', [8, 0, 8], [0, 0, 0], floor);
 // a void-alloy tower stand-in for the sky-web: a 3-tall pillar with an insulator on top, 4 blocks east
 {
   const off = at(4, 0, 0), list = [];
-  for (let i = 0; i < 3; i++) list.push(...shift([box('p_x' + i, [0, 0, 2], [16, 16, 14], 'va'), box('p_m' + i, [1, 0, 1], [15, 16, 15], 'va'), box('p_z' + i, [2, 0, 0], [14, 16, 16], 'va')], [0, i * 16, 0]));
+  for (let i = 0; i < 3; i++) list.push(...shift([box('p_x' + i, [0, 0, 2], [16, 16, 14], 'va_plain'), box('p_m' + i, [1, 0, 1], [15, 16, 15], 'va_plain'), box('p_z' + i, [2, 0, 0], [14, 16, 16], { all: 'va_plain', north: i === 0 ? 'va_cracked' : 'va_plain' })], [0, i * 16, 0]));
   list.push(...insulator('tower_ins', 8, 8, 48));
   G('tower', [8, 0, 8], off, put(list, off));
 }
@@ -283,8 +303,8 @@ const spanPoint = (t) => { const sag = 10; return [SPAN_A[0] + (SPAN_B[0] - SPAN
 {
   const off = at(9, 0, 0);
   const wall = [];
-  for (const bx of [-1, 2]) for (let y = 0; y < 3; y++) wall.push(box(`wall_${bx}_${y}`, [bx * 16 + (bx < 0 ? 0 : 2), y * 16, 4], [bx * 16 + (bx < 0 ? 14 : 16), y * 16 + 16, 12], 'endbrick_dusty'));
-  wall.push(box('wall_top', [-16, 50, 4], [48, 52, 12], 'endbrick_dusty'));
+  for (const bx of [-1, 2]) for (let y = 0; y < 3; y++) wall.push(box(`wall_${bx}_${y}`, [bx * 16 + (bx < 0 ? 0 : 2), y * 16, 4], [bx * 16 + (bx < 0 ? 14 : 16), y * 16 + 16, 12], { all: 'endbrick', up: 'endbrick_dusty' }));
+  wall.push(box('wall_top', [-16, 50, 4], [48, 52, 12], { all: 'endbrick', up: 'endbrick_dusty' }));
   G('door', [16, 0, 8], off, [...put([...jamb(), ...wall], off),
     sub('leaf_l', [8, 0, 8], off, leaf('l')), sub('leaf_r', [24, 0, 8], off, leaf('r')),
     sub('g_door_seam', [16, 24, 6], off, doorSeam('seam_strip_lit', GLOW)), sub('g_door_chain', [16, 34, 5], off, [...chainLit('l'), ...chainLit('r')]),
@@ -302,7 +322,7 @@ LAMPS.forEach(([name, bx, lean]) => {
 // the wall lamp on a brick wall block at (6, 0, 3)
 {
   const off = at(6, 0, 3);
-  G('wall_lamp', [8, 0, 8], off, [...put([box('wl_wall', [0, 0, 16], [16, 32, 20], 'endbrick_dusty'), ...shift(wallLamp(), [0, 16, 0])], off),
+  G('wall_lamp', [8, 0, 8], off, [...put([box('wl_wall', [0, 0, 16], [16, 32, 20], { all: 'endbrick', up: 'endbrick_dusty' }), ...shift(wallLamp(), [0, 16, 0])], off),
     sub('g_wall_lamp', [8, 26, 8], off, shift(wallLampGlow(), [0, 16, 0]))]);
 }
 // surface cable along the street, z 2, from the Substation's foot to the tower
@@ -366,7 +386,9 @@ write(OUT, outliner);
 // rest rotations the preview library doesn't set: each blade at 60k degrees round the iris, the leaning post's 12 degrees
 // (a block model can only do 22.5; see the notes). Written into both the outliner and the group list.
 {
-  const REST = { lamp_leaning: [12, 0, 0] };
+  // the leaning post tilts 22.5 degrees about its foot, the most a block model allows: in game each block of the post has its
+  // own leaning model, every part turned about the foot, so the three slices line up into one leaning post
+  const REST = { lamp_leaning: [22.5, 0, 0] };
   for (let k = 0; k < 6; k++) REST['blade_' + k] = [0, 0, 60 * k];
   const bb = JSON.parse(require('fs').readFileSync(OUT, 'utf8'));
   const walk = (n) => { if (n && typeof n === 'object' && n.children) { if (REST[n.name]) n.rotation = REST[n.name]; n.children.forEach(walk); } };
@@ -374,4 +396,5 @@ write(OUT, outliner);
   for (const g of bb.groups) if (REST[g.name]) g.rotation = REST[g.name];
   require('fs').writeFileSync(OUT, JSON.stringify(bb));
 }
-module.exports = { substation, vault, blade, leaf, postFoot, postPole, postHead, wallLamp, floorCable, ydisc, insulator };
+}
+module.exports = { substation, vault, blade, bladeSeam, leaf, chainLit, doorSeam, jamb, jambGlow, postFoot, postPole, postHead, hood, lampGlow, wallLamp, wallLampGlow, floorCable, floorCableGlow, ydisc, insulator, shift, rotAll, COL, BLADE_Z, TEETH };

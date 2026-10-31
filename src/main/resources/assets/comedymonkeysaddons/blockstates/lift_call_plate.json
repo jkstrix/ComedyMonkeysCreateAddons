@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/lift_call_plate"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/lift_call_plate",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/lift_call_plate",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/lift_call_plate",
+      "y": 270
+    }
+  }
+}

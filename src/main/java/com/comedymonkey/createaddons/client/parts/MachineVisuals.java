@@ -83,6 +83,9 @@ public final class MachineVisuals {
 			.factory(com.comedymonkey.createaddons.client.line.LinePostVisual::new)
 			.skipVanillaRender(be -> true)
 			.apply();
+		// the Clockwork Wastes' powered city: levers, irises, door leaves, pylon crowns, reactor arms and their glows
+		com.comedymonkey.createaddons.client.wastes.WastesRenderers.registerVisuals();
+		com.comedymonkey.createaddons.client.wastes.LiftRenderers.registerVisuals();
 		// the Compact Gyroscope and Torque Rotor only exist with Sable
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerVisuals();

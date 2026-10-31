@@ -1,0 +1,375 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "va": "comedymonkeysaddons:block/wastes/va",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field"
+  },
+  "elements": [
+    {
+      "name": "arm_foot_0",
+      "from": [
+        5,
+        -10,
+        -13
+      ],
+      "to": [
+        11,
+        -7,
+        -6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            7,
+            11,
+            10
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            6,
+            7,
+            13,
+            10
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            5,
+            7,
+            11,
+            10
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            3,
+            7,
+            10,
+            10
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            5,
+            3,
+            11,
+            10
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            5,
+            6,
+            11,
+            13
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "arm_shaft_0",
+      "from": [
+        6,
+        -7,
+        -12
+      ],
+      "to": [
+        10,
+        10,
+        -8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            8,
+            0,
+            12,
+            16
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            8,
+            16
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            6,
+            4,
+            10,
+            8
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            6,
+            8,
+            10,
+            12
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "arm_bend_0",
+      "from": [
+        6,
+        10,
+        -12
+      ],
+      "to": [
+        10,
+        16,
+        -8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          10,
+          -10
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            0,
+            10,
+            6
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            8,
+            0,
+            12,
+            6
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            6,
+            0,
+            10,
+            6
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            8,
+            6
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            6,
+            4,
+            10,
+            8
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            6,
+            8,
+            10,
+            12
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "arm_knuckle_0",
+      "from": [
+        6,
+        15.54,
+        -9.7
+      ],
+      "to": [
+        10,
+        20.54,
+        -5.7
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          15.54,
+          -7.7
+        ],
+        "axis": "x",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            0,
+            10,
+            5
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            5.7,
+            0,
+            9.7,
+            5
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            6,
+            0,
+            10,
+            5
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            6.3,
+            0,
+            10.3,
+            5
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            6,
+            6.3,
+            10,
+            10.3
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            6,
+            5.7,
+            10,
+            9.7
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "arm_tip_0",
+      "from": [
+        6.5,
+        18,
+        -4.6
+      ],
+      "to": [
+        9.5,
+        20,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            12,
+            9.5,
+            14
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            0,
+            12,
+            5.1,
+            14
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            12,
+            9.5,
+            14
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            10.9,
+            12,
+            16,
+            14
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            10.9,
+            9.5,
+            16
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            5.1
+          ],
+          "texture": "#va"
+        }
+      }
+    }
+  ]
+}

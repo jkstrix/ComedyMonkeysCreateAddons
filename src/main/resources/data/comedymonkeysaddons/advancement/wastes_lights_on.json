@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:root",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:derelict_street_lamp"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.wastes_lights_on"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.wastes_lights_on.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "wastes_lights_on"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

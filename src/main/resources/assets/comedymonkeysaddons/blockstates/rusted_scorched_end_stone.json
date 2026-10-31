@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/rusted_scorched_end_stone"
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/rusted_scorched_end_stone",
+        "y": 90
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/rusted_scorched_end_stone",
+        "y": 180
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/rusted_scorched_end_stone",
+        "y": 270
+      }
+    ]
+  }
+}

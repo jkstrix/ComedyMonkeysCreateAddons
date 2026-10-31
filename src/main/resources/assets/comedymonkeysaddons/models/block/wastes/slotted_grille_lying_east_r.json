@@ -1,0 +1,192 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_bond_s",
+    "va_bond_r": "comedymonkeysaddons:block/wastes/va_bond_r"
+  },
+  "elements": [
+    {
+      "name": "bar_0",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        3,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            3,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "rotation": 270,
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "name": "bar_1",
+      "from": [
+        0,
+        5,
+        0
+      ],
+      "to": [
+        16,
+        7,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            0,
+            7,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "rotation": 270,
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "name": "bar_2",
+      "from": [
+        0,
+        9,
+        0
+      ],
+      "to": [
+        16,
+        11,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            0,
+            11,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "rotation": 270,
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "name": "bar_3",
+      "from": [
+        0,
+        13,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            13,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "rotation": 270,
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "name": "slot3_sill",
+      "from": [
+        14,
+        3,
+        0
+      ],
+      "to": [
+        16,
+        5,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            3,
+            0,
+            5,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "rotation": 270,
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "name": "slot7_sill",
+      "from": [
+        14,
+        7,
+        0
+      ],
+      "to": [
+        16,
+        9,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            0,
+            9,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "rotation": 270,
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "name": "slot11_sill",
+      "from": [
+        14,
+        11,
+        0
+      ],
+      "to": [
+        16,
+        13,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            11,
+            0,
+            13,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "rotation": 270,
+          "cullface": "east"
+        }
+      }
+    }
+  ]
+}

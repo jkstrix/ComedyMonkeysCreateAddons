@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "comedymonkeysaddons:stained_end_stone_bricks"
+  },
+  "result": {
+    "id": "comedymonkeysaddons:stained_end_stone_brick_wall",
+    "count": 1
+  }
+}

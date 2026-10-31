@@ -1,0 +1,228 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor"
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_glass"
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "upgraded": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips8"
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "upgraded": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips12"
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_glass",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "upgraded": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips8",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "upgraded": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips12",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_glass",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "upgraded": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips8",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "upgraded": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips12",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_glass",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "upgraded": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips8",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "upgraded": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips12",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_glass",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "upgraded": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips8",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "upgraded": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips12",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_glass",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "upgraded": "false"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips8",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "upgraded": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/star_reactor_pips12",
+        "x": 270
+      }
+    }
+  ]
+}

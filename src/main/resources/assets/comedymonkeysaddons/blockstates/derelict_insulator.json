@@ -1,0 +1,250 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "mount": "top",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_top"
+      }
+    },
+    {
+      "when": {
+        "mount": "top",
+        "facing": "west",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_top_ring"
+      }
+    },
+    {
+      "when": {
+        "mount": "top",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "mount": "top",
+        "facing": "north",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_top_ring",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "mount": "top",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "mount": "top",
+        "facing": "east",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_top_ring",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "mount": "top",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "mount": "top",
+        "facing": "south",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_top_ring",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "mount": "wall",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_wall"
+      }
+    },
+    {
+      "when": {
+        "mount": "wall",
+        "facing": "west",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_wall_ring"
+      }
+    },
+    {
+      "when": {
+        "mount": "wall",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_wall",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "mount": "wall",
+        "facing": "north",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_wall_ring",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "mount": "wall",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_wall",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "mount": "wall",
+        "facing": "east",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_wall_ring",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "mount": "wall",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_wall",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "mount": "wall",
+        "facing": "south",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_wall_ring",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "mount": "hanging",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_hanging"
+      }
+    },
+    {
+      "when": {
+        "mount": "hanging",
+        "facing": "west",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_hanging_ring"
+      }
+    },
+    {
+      "when": {
+        "mount": "hanging",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_hanging",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "mount": "hanging",
+        "facing": "north",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_hanging_ring",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "mount": "hanging",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_hanging",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "mount": "hanging",
+        "facing": "east",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_hanging_ring",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "mount": "hanging",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_hanging",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "mount": "hanging",
+        "facing": "south",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/derelict_insulator_hanging_ring",
+        "y": 270
+      }
+    }
+  ]
+}

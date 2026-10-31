@@ -1,0 +1,36 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "lift_sigil_lit": "comedymonkeysaddons:block/wastes/lift_sigil_lit"
+  },
+  "elements": [
+    {
+      "name": "call_lens",
+      "from": [
+        5,
+        11,
+        14.5
+      ],
+      "to": [
+        11,
+        17,
+        14.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6,
+            6
+          ],
+          "texture": "#lift_sigil_lit"
+        }
+      }
+    }
+  ]
+}

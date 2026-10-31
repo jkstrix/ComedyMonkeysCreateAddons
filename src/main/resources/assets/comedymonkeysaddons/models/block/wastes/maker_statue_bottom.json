@@ -1,0 +1,281 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/carved",
+    "carved": "comedymonkeysaddons:block/wastes/carved",
+    "brass": "comedymonkeysaddons:block/wastes/brass",
+    "carved_fold": "comedymonkeysaddons:block/wastes/carved_fold"
+  },
+  "elements": [
+    {
+      "name": "plinth",
+      "from": [
+        1.5,
+        0,
+        1.5
+      ],
+      "to": [
+        14.5,
+        3,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.5,
+            13,
+            14.5,
+            16
+          ],
+          "texture": "#carved"
+        },
+        "east": {
+          "uv": [
+            1.5,
+            13,
+            14.5,
+            16
+          ],
+          "texture": "#carved"
+        },
+        "south": {
+          "uv": [
+            1.5,
+            13,
+            14.5,
+            16
+          ],
+          "texture": "#carved"
+        },
+        "west": {
+          "uv": [
+            1.5,
+            13,
+            14.5,
+            16
+          ],
+          "texture": "#carved"
+        },
+        "up": {
+          "uv": [
+            1.5,
+            1.5,
+            14.5,
+            14.5
+          ],
+          "texture": "#carved"
+        },
+        "down": {
+          "uv": [
+            1.5,
+            1.5,
+            14.5,
+            14.5
+          ],
+          "texture": "#carved",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "plinth_band",
+      "from": [
+        2,
+        3,
+        2
+      ],
+      "to": [
+        14,
+        4,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            12,
+            14,
+            13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            2,
+            12,
+            14,
+            13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            2,
+            12,
+            14,
+            13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            2,
+            12,
+            14,
+            13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "hem",
+      "from": [
+        3,
+        4,
+        3.5
+      ],
+      "to": [
+        13,
+        12,
+        12.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            4,
+            13,
+            12
+          ],
+          "texture": "#carved_fold"
+        },
+        "east": {
+          "uv": [
+            3.5,
+            4,
+            12.5,
+            12
+          ],
+          "texture": "#carved_fold"
+        },
+        "south": {
+          "uv": [
+            3,
+            4,
+            13,
+            12
+          ],
+          "texture": "#carved_fold"
+        },
+        "west": {
+          "uv": [
+            3.5,
+            4,
+            12.5,
+            12
+          ],
+          "texture": "#carved_fold"
+        },
+        "up": {
+          "uv": [
+            3,
+            3.5,
+            13,
+            12.5
+          ],
+          "texture": "#carved_fold"
+        },
+        "down": {
+          "uv": [
+            3,
+            3.5,
+            13,
+            12.5
+          ],
+          "texture": "#carved_fold"
+        }
+      }
+    },
+    {
+      "name": "robe_mid",
+      "from": [
+        3.5,
+        12,
+        4
+      ],
+      "to": [
+        12.5,
+        16,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            0,
+            12.5,
+            4
+          ],
+          "texture": "#carved_fold"
+        },
+        "east": {
+          "uv": [
+            4,
+            0,
+            12,
+            4
+          ],
+          "texture": "#carved_fold"
+        },
+        "south": {
+          "uv": [
+            3.5,
+            0,
+            12.5,
+            4
+          ],
+          "texture": "#carved_fold"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            12,
+            4
+          ],
+          "texture": "#carved_fold"
+        },
+        "down": {
+          "uv": [
+            3.5,
+            4,
+            12.5,
+            12
+          ],
+          "texture": "#carved_fold"
+        }
+      }
+    }
+  ]
+}

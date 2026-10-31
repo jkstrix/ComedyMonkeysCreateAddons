@@ -1,0 +1,36 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_bond_s",
+    "va_bond_r": "comedymonkeysaddons:block/wastes/va_bond_r"
+  },
+  "elements": [
+    {
+      "name": "bar_0",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        3,
+        16
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "rotation": 270,
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,809 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/cable",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field",
+    "va": "comedymonkeysaddons:block/wastes/va",
+    "cable": "comedymonkeysaddons:block/wastes/cable",
+    "cable_top": "comedymonkeysaddons:block/wastes/cable_top"
+  },
+  "elements": [
+    {
+      "name": "guard_front",
+      "from": [
+        6,
+        0,
+        17.25
+      ],
+      "to": [
+        10,
+        16,
+        17.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            14.25,
+            0,
+            14.75,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            1.25,
+            0,
+            1.75,
+            16
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "guard_front",
+      "from": [
+        6,
+        16,
+        17.25
+      ],
+      "to": [
+        10,
+        19,
+        17.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            13,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            14.25,
+            13,
+            14.75,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            1.25,
+            13,
+            1.75,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            6,
+            1.25,
+            10,
+            1.75
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "guard_w",
+      "from": [
+        6,
+        0,
+        17.75
+      ],
+      "to": [
+        6.75,
+        16,
+        20
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.25,
+            0,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            12,
+            0,
+            14.25,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            6,
+            0,
+            6.75,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            1.75,
+            0,
+            4,
+            16
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "guard_w",
+      "from": [
+        6,
+        16,
+        17.75
+      ],
+      "to": [
+        6.75,
+        19,
+        20
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.25,
+            13,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            12,
+            13,
+            14.25,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            6,
+            13,
+            6.75,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            1.75,
+            13,
+            4,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            6,
+            1.75,
+            6.75,
+            4
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "guard_e",
+      "from": [
+        9.25,
+        0,
+        17.75
+      ],
+      "to": [
+        10,
+        16,
+        20
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            0,
+            6.75,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            12,
+            0,
+            14.25,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            9.25,
+            0,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            1.75,
+            0,
+            4,
+            16
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "guard_e",
+      "from": [
+        9.25,
+        16,
+        17.75
+      ],
+      "to": [
+        10,
+        19,
+        20
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            13,
+            6.75,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            12,
+            13,
+            14.25,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            9.25,
+            13,
+            10,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            1.75,
+            13,
+            4,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            9.25,
+            1.75,
+            10,
+            4
+          ],
+          "texture": "#va_field"
+        }
+      }
+    },
+    {
+      "name": "guard_lip",
+      "from": [
+        6,
+        19,
+        17.25
+      ],
+      "to": [
+        10,
+        19.75,
+        18.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            12.25,
+            10,
+            13
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            13.75,
+            12.25,
+            14.75,
+            13
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            6,
+            12.25,
+            10,
+            13
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            1.25,
+            12.25,
+            2.25,
+            13
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            6,
+            1.25,
+            10,
+            2.25
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "guard_strap",
+      "from": [
+        3.5,
+        15,
+        16.75
+      ],
+      "to": [
+        12.5,
+        16.5,
+        17.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            0,
+            12.5,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            14.75,
+            0,
+            15.25,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            0.75,
+            0,
+            1.25,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            3.5,
+            0.75,
+            12.5,
+            1.25
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            3.5,
+            14.75,
+            12.5,
+            15.25
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "guard_leg_w",
+      "from": [
+        3.5,
+        15,
+        17.25
+      ],
+      "to": [
+        4,
+        16.5,
+        21.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            0,
+            12.5,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            0,
+            14.75,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            3.5,
+            0,
+            4,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            1.25,
+            0,
+            5.5,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            3.5,
+            1.25,
+            4,
+            5.5
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            3.5,
+            10.5,
+            4,
+            14.75
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "guard_leg_e",
+      "from": [
+        12,
+        15,
+        17.25
+      ],
+      "to": [
+        12.5,
+        16.5,
+        21.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            0,
+            4,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            0,
+            14.75,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            12,
+            0,
+            12.5,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            1.25,
+            0,
+            5.5,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            12,
+            1.25,
+            12.5,
+            5.5
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            12,
+            10.5,
+            12.5,
+            14.75
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "riser_0",
+      "from": [
+        7,
+        0,
+        18.25
+      ],
+      "to": [
+        7.75,
+        16,
+        19.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.25,
+            0,
+            9,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "east": {
+          "uv": [
+            12.75,
+            0,
+            13.75,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "south": {
+          "uv": [
+            7,
+            0,
+            7.75,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "west": {
+          "uv": [
+            2.25,
+            0,
+            3.25,
+            16
+          ],
+          "texture": "#cable"
+        }
+      }
+    },
+    {
+      "name": "riser_1",
+      "from": [
+        8.25,
+        0,
+        18.25
+      ],
+      "to": [
+        9,
+        16,
+        19.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            0,
+            7.75,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "east": {
+          "uv": [
+            12.75,
+            0,
+            13.75,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "south": {
+          "uv": [
+            8.25,
+            0,
+            9,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "west": {
+          "uv": [
+            2.25,
+            0,
+            3.25,
+            16
+          ],
+          "texture": "#cable"
+        }
+      }
+    },
+    {
+      "name": "foot_run_a",
+      "from": [
+        7,
+        0,
+        8
+      ],
+      "to": [
+        7.75,
+        1,
+        17.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.25,
+            15,
+            9,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "east": {
+          "uv": [
+            0,
+            15,
+            9.25,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "south": {
+          "uv": [
+            7,
+            15,
+            7.75,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            15,
+            16,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "up": {
+          "uv": [
+            7,
+            6.75,
+            7.75,
+            16
+          ],
+          "texture": "#cable_top"
+        }
+      }
+    },
+    {
+      "name": "foot_run_b",
+      "from": [
+        8.25,
+        0,
+        8
+      ],
+      "to": [
+        9,
+        1,
+        17.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            15,
+            7.75,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "east": {
+          "uv": [
+            0,
+            15,
+            9.25,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "south": {
+          "uv": [
+            8.25,
+            15,
+            9,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            15,
+            16,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "up": {
+          "uv": [
+            8.25,
+            6.75,
+            9,
+            16
+          ],
+          "texture": "#cable_top"
+        }
+      }
+    }
+  ]
+}

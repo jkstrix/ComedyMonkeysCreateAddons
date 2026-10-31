@@ -1,0 +1,180 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/cable",
+    "cable": "comedymonkeysaddons:block/wastes/cable",
+    "cable_top": "comedymonkeysaddons:block/wastes/cable_top",
+    "va": "comedymonkeysaddons:block/wastes/va"
+  },
+  "elements": [
+    {
+      "name": "cable_n",
+      "from": [
+        8.25,
+        0,
+        8
+      ],
+      "to": [
+        9,
+        1,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            15,
+            8,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "south": {
+          "uv": [
+            8.25,
+            15,
+            9,
+            16
+          ],
+          "texture": "#cable",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            8,
+            15,
+            16,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "up": {
+          "uv": [
+            8,
+            7,
+            16,
+            7.75
+          ],
+          "texture": "#cable_top",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "cable_s",
+      "from": [
+        7,
+        0,
+        8
+      ],
+      "to": [
+        7.75,
+        1,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            15,
+            8,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "south": {
+          "uv": [
+            7,
+            15,
+            7.75,
+            16
+          ],
+          "texture": "#cable",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            8,
+            15,
+            16,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "up": {
+          "uv": [
+            8,
+            8.25,
+            16,
+            9
+          ],
+          "texture": "#cable_top",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "cable_clip_11",
+      "from": [
+        6.5,
+        0,
+        11
+      ],
+      "to": [
+        9.5,
+        1.5,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            14.5,
+            9.5,
+            16
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            3,
+            14.5,
+            5,
+            16
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            14.5,
+            9.5,
+            16
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            11,
+            14.5,
+            13,
+            16
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            11,
+            6.5,
+            13,
+            9.5
+          ],
+          "texture": "#va",
+          "rotation": 90
+        }
+      }
+    }
+  ]
+}

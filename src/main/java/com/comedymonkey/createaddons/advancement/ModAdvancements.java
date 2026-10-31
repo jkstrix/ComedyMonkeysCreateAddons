@@ -56,6 +56,13 @@ public final class ModAdvancements {
 	public static final String LINE_ENCASED = "line_encased";
 	/** Value: the span's length in blocks. */
 	public static final String SPAN_HUNG = "span_hung";
+	/** The Clockwork Wastes: a district woke near you, all four of a city did, a Nether Star went into a reactor. */
+	public static final String WASTES_LIGHTS_ON = "wastes_lights_on";
+	public static final String WASTES_CITY_OF_LIGHTS = "wastes_city_of_lights";
+	public static final String WASTES_STAR_POWER = "wastes_star_power";
+	/** The Custodian's fight (P56): a pylon broken, and the Custodian defeated. */
+	public static final String WASTES_SHORT_CIRCUIT = "wastes_short_circuit";
+	public static final String WASTES_CUSTODIAN_DOWN = "wastes_custodian_down";
 	/** Trades one Trade Bot makes in a day for his challenge, and emeralds one trip earns for his goal. */
 	public static final int TRADE_BOT_DAY_TRADES = 64, TRADE_BOT_STACK_EMERALDS = 64;
 	/** Villagers one Cuckoo Clock has to keep time for, for its challenge. */

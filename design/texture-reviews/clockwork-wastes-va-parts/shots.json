@@ -1,0 +1,461 @@
+{
+ "gameplay": [
+  {
+   "id": "assembly_clamp_5",
+   "position": [
+    16,
+    26,
+    -80
+   ],
+   "target": [
+    16,
+    14,
+    0
+   ]
+  },
+  {
+   "id": "assembly_clamp_2",
+   "position": [
+    96,
+    26,
+    -80
+   ],
+   "target": [
+    96,
+    14,
+    0
+   ]
+  },
+  {
+   "id": "city_vault",
+   "position": [
+    176,
+    26,
+    -80
+   ],
+   "target": [
+    176,
+    7,
+    0
+   ]
+  },
+  {
+   "id": "sliding_door",
+   "position": [
+    272,
+    26,
+    -107.19999999999999
+   ],
+   "target": [
+    272,
+    21,
+    0
+   ]
+  },
+  {
+   "id": "clamp_bracket",
+   "position": [
+    384,
+    26,
+    -92
+   ],
+   "target": [
+    384,
+    14,
+    0
+   ]
+  },
+  {
+   "id": "derelict_cable",
+   "position": [
+    496,
+    26,
+    -107.19999999999999
+   ],
+   "target": [
+    496,
+    21,
+    0
+   ]
+  },
+  {
+   "id": "charging_alcove",
+   "position": [
+    592,
+    26,
+    -107.19999999999999
+   ],
+   "target": [
+    592,
+    21,
+    0
+   ]
+  },
+  {
+   "id": "lift",
+   "position": [
+    704,
+    26,
+    -122.39999999999999
+   ],
+   "target": [
+    704,
+    14,
+    0
+   ]
+  },
+  {
+   "id": "substation",
+   "position": [
+    832,
+    26,
+    -92
+   ],
+   "target": [
+    832,
+    14,
+    0
+   ]
+  },
+  {
+   "id": "conduit_pylon",
+   "position": [
+    928,
+    26,
+    -107.19999999999999
+   ],
+   "target": [
+    928,
+    21,
+    0
+   ]
+  },
+  {
+   "id": "derelict_star_reactor",
+   "position": [
+    1040,
+    26,
+    -122.39999999999999
+   ],
+   "target": [
+    1040,
+    14,
+    0
+   ]
+  },
+  {
+   "id": "wall_vent",
+   "position": [
+    1152,
+    26,
+    -80
+   ],
+   "target": [
+    1152,
+    7,
+    0
+   ]
+  },
+  {
+   "id": "insulator_and_lamp",
+   "position": [
+    1248,
+    26,
+    -107.19999999999999
+   ],
+   "target": [
+    1248,
+    21,
+    0
+   ]
+  }
+ ],
+ "close": [
+  {
+   "id": "assembly_clamp_5-jaws-before",
+   "position": [
+    39,
+    24,
+    -20
+   ],
+   "target": [
+    32,
+    22,
+    0
+   ]
+  },
+  {
+   "id": "assembly_clamp_5-jaws-after",
+   "position": [
+    7,
+    24,
+    -20
+   ],
+   "target": [
+    0,
+    22,
+    0
+   ]
+  },
+  {
+   "id": "assembly_clamp_2-cage-before",
+   "position": [
+    119,
+    24,
+    -20
+   ],
+   "target": [
+    112,
+    22,
+    0
+   ]
+  },
+  {
+   "id": "assembly_clamp_2-cage-after",
+   "position": [
+    87,
+    24,
+    -20
+   ],
+   "target": [
+    80,
+    22,
+    0
+   ]
+  },
+  {
+   "id": "city_vault-bezel_blades-before",
+   "position": [
+    198.3,
+    9,
+    -24
+   ],
+   "target": [
+    192,
+    8,
+    -6
+   ]
+  },
+  {
+   "id": "city_vault-bezel_blades-after",
+   "position": [
+    166.3,
+    9,
+    -24
+   ],
+   "target": [
+    160,
+    8,
+    -6
+   ]
+  },
+  {
+   "id": "sliding_door-panels-before",
+   "position": [
+    296.4,
+    20,
+    -28
+   ],
+   "target": [
+    288,
+    20,
+    -4
+   ]
+  },
+  {
+   "id": "sliding_door-panels-after",
+   "position": [
+    248.4,
+    20,
+    -28
+   ],
+   "target": [
+    240,
+    20,
+    -4
+   ]
+  },
+  {
+   "id": "clamp_bracket-straps-before",
+   "position": [
+    416.4,
+    16,
+    -22
+   ],
+   "target": [
+    408,
+    12,
+    2
+   ]
+  },
+  {
+   "id": "clamp_bracket-straps-after",
+   "position": [
+    368.4,
+    16,
+    -22
+   ],
+   "target": [
+    360,
+    12,
+    2
+   ]
+  },
+  {
+   "id": "derelict_cable-knot_and_clamp-before",
+   "position": [
+    527.7,
+    12,
+    -20
+   ],
+   "target": [
+    520,
+    6,
+    2
+   ]
+  },
+  {
+   "id": "derelict_cable-knot_and_clamp-after",
+   "position": [
+    479.7,
+    12,
+    -20
+   ],
+   "target": [
+    472,
+    6,
+    2
+   ]
+  },
+  {
+   "id": "charging_alcove-shelf-before",
+   "position": [
+    617,
+    18,
+    -20
+   ],
+   "target": [
+    610,
+    18,
+    0
+   ]
+  },
+  {
+   "id": "charging_alcove-shelf-after",
+   "position": [
+    585,
+    18,
+    -20
+   ],
+   "target": [
+    578,
+    18,
+    0
+   ]
+  },
+  {
+   "id": "lift-post_and_clamps-before",
+   "position": [
+    745.1,
+    13,
+    -30
+   ],
+   "target": [
+    736,
+    8,
+    -4
+   ]
+  },
+  {
+   "id": "lift-post_and_clamps-after",
+   "position": [
+    681.1,
+    13,
+    -30
+   ],
+   "target": [
+    672,
+    8,
+    -4
+   ]
+  },
+  {
+   "id": "substation-sigil-before",
+   "position": [
+    854.3,
+    27,
+    -25
+   ],
+   "target": [
+    848,
+    27,
+    -7
+   ]
+  },
+  {
+   "id": "substation-sigil-after",
+   "position": [
+    806.3,
+    27,
+    -25
+   ],
+   "target": [
+    800,
+    27,
+    -7
+   ]
+  },
+  {
+   "id": "conduit_pylon-crown-before",
+   "position": [
+    951.7,
+    41,
+    -22
+   ],
+   "target": [
+    944,
+    40,
+    0
+   ]
+  },
+  {
+   "id": "conduit_pylon-crown-after",
+   "position": [
+    919.7,
+    41,
+    -22
+   ],
+   "target": [
+    912,
+    40,
+    0
+   ]
+  },
+  {
+   "id": "wall_vent-lip-before",
+   "position": [
+    1174.3,
+    9,
+    -26
+   ],
+   "target": [
+    1168,
+    8,
+    -8
+   ]
+  },
+  {
+   "id": "wall_vent-lip-after",
+   "position": [
+    1142.3,
+    9,
+    -26
+   ],
+   "target": [
+    1136,
+    8,
+    -8
+   ]
+  }
+ ]
+}

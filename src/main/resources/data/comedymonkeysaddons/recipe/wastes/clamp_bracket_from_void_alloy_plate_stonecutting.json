@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "comedymonkeysaddons:void_alloy_plate"
+  },
+  "result": {
+    "id": "comedymonkeysaddons:clamp_bracket",
+    "count": 1
+  }
+}

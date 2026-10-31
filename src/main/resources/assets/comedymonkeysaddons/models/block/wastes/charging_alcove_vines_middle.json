@@ -1,0 +1,83 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "cp_vine_lower": "comedymonkeysaddons:block/wastes/cp_vine_lower"
+  },
+  "elements": [
+    {
+      "name": "vine_back_lo",
+      "from": [
+        3,
+        4,
+        12.75
+      ],
+      "to": [
+        6,
+        16,
+        12.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            0,
+            13,
+            12
+          ],
+          "texture": "#cp_vine_lower"
+        }
+      }
+    },
+    {
+      "name": "vine_cheek_lo",
+      "from": [
+        3.25,
+        9,
+        6
+      ],
+      "to": [
+        3.25,
+        16,
+        12.75
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            3.25,
+            0,
+            10,
+            7
+          ],
+          "texture": "#cp_vine_lower"
+        }
+      }
+    },
+    {
+      "name": "vine_front_lo",
+      "from": [
+        1,
+        10,
+        3.75
+      ],
+      "to": [
+        3,
+        16,
+        3.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13,
+            0,
+            15,
+            6
+          ],
+          "texture": "#cp_vine_lower"
+        }
+      }
+    }
+  ]
+}

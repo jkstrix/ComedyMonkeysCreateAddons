@@ -1,0 +1,425 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "va": "comedymonkeysaddons:block/wastes/va"
+  },
+  "elements": [
+    {
+      "name": "crown_plate",
+      "from": [
+        5,
+        8,
+        5
+      ],
+      "to": [
+        11,
+        9.5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            6.5,
+            11,
+            8
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            5,
+            6.5,
+            11,
+            8
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            5,
+            6.5,
+            11,
+            8
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            5,
+            6.5,
+            11,
+            8
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "cage_top",
+      "from": [
+        5.5,
+        14.5,
+        5.5
+      ],
+      "to": [
+        10.5,
+        15,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            1,
+            10.5,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            5.5,
+            1,
+            10.5,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            1,
+            10.5,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            1,
+            10.5,
+            1.5
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "cage_bar_0",
+      "from": [
+        5.5,
+        9.5,
+        5.5
+      ],
+      "to": [
+        6,
+        14.5,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            1.5,
+            10.5,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            10,
+            1.5,
+            10.5,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            1.5,
+            6,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            1.5,
+            6,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            5.5,
+            6,
+            6
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            10,
+            6,
+            10.5
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "cage_bar_1",
+      "from": [
+        10,
+        9.5,
+        5.5
+      ],
+      "to": [
+        10.5,
+        14.5,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            1.5,
+            6,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            10,
+            1.5,
+            10.5,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            10,
+            1.5,
+            10.5,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            5.5,
+            1.5,
+            6,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            10,
+            5.5,
+            10.5,
+            6
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            10,
+            10,
+            10.5,
+            10.5
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "cage_bar_2",
+      "from": [
+        5.5,
+        9.5,
+        10
+      ],
+      "to": [
+        6,
+        14.5,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            1.5,
+            10.5,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            5.5,
+            1.5,
+            6,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            1.5,
+            6,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            10,
+            1.5,
+            10.5,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            10,
+            6,
+            10.5
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            5.5,
+            6,
+            6
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "cage_bar_3",
+      "from": [
+        10,
+        9.5,
+        10
+      ],
+      "to": [
+        10.5,
+        14.5,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            1.5,
+            6,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            5.5,
+            1.5,
+            6,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            10,
+            1.5,
+            10.5,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            10,
+            1.5,
+            10.5,
+            6.5
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            10,
+            10,
+            10.5,
+            10.5
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            10,
+            5.5,
+            10.5,
+            6
+          ],
+          "texture": "#va"
+        }
+      }
+    }
+  ]
+}

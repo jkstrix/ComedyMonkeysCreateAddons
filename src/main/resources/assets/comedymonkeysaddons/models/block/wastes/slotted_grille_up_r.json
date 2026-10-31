@@ -1,0 +1,185 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_bond_s",
+    "va_bond_r": "comedymonkeysaddons:block/wastes/va_bond_r"
+  },
+  "elements": [
+    {
+      "name": "bar_0",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        3,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            3,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "bar_1",
+      "from": [
+        5,
+        0,
+        0
+      ],
+      "to": [
+        7,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            5,
+            0,
+            7,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "bar_2",
+      "from": [
+        9,
+        0,
+        0
+      ],
+      "to": [
+        11,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            9,
+            0,
+            11,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "bar_3",
+      "from": [
+        13,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            13,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "slot3_head",
+      "from": [
+        3,
+        14,
+        0
+      ],
+      "to": [
+        5,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            3,
+            0,
+            5,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "slot7_head",
+      "from": [
+        7,
+        14,
+        0
+      ],
+      "to": [
+        9,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            7,
+            0,
+            9,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "name": "slot11_head",
+      "from": [
+        11,
+        14,
+        0
+      ],
+      "to": [
+        13,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            11,
+            0,
+            13,
+            16
+          ],
+          "texture": "#va_bond_r",
+          "cullface": "up"
+        }
+      }
+    }
+  ]
+}

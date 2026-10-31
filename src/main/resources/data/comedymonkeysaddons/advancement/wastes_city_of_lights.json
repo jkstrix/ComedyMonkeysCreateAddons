@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:wastes_lights_on",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:substation"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.wastes_city_of_lights"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.wastes_city_of_lights.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "wastes_city_of_lights"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

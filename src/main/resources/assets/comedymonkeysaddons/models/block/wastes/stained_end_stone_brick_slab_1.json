@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "comedymonkeysaddons:block/wastes/seb_1",
+    "top": "comedymonkeysaddons:block/wastes/seb_top",
+    "side": "comedymonkeysaddons:block/wastes/seb_1"
+  }
+}

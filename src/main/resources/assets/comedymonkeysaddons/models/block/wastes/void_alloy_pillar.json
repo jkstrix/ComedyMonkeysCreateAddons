@@ -1,0 +1,325 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field",
+    "seam_strip_dark": "comedymonkeysaddons:block/wastes/seam_strip_dark"
+  },
+  "elements": [
+    {
+      "name": "pillar_x",
+      "from": [
+        0,
+        0,
+        2
+      ],
+      "to": [
+        16,
+        16,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            2,
+            0,
+            14,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            2,
+            0,
+            14,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#va_field",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "pillar_m",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            0,
+            15,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "east": {
+          "uv": [
+            1,
+            0,
+            15,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            1,
+            0,
+            15,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "west": {
+          "uv": [
+            1,
+            0,
+            15,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#va_field",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "pillar_z",
+      "from": [
+        2,
+        0,
+        0
+      ],
+      "to": [
+        14,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            0,
+            14,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "south": {
+          "uv": [
+            2,
+            0,
+            14,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#va_field"
+        },
+        "up": {
+          "uv": [
+            2,
+            0,
+            14,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            2,
+            0,
+            14,
+            16
+          ],
+          "texture": "#va_field",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "pillar_s_nw",
+      "from": [
+        1,
+        0,
+        0.75
+      ],
+      "to": [
+        2,
+        16,
+        0.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            0,
+            15,
+            16
+          ],
+          "texture": "#seam_strip_dark"
+        }
+      }
+    },
+    {
+      "name": "pillar_s_ne",
+      "from": [
+        14,
+        0,
+        0.75
+      ],
+      "to": [
+        15,
+        16,
+        0.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            0,
+            2,
+            16
+          ],
+          "texture": "#seam_strip_dark"
+        }
+      }
+    },
+    {
+      "name": "pillar_s_sw",
+      "from": [
+        1,
+        0,
+        15.25
+      ],
+      "to": [
+        2,
+        16,
+        15.25
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            1,
+            0,
+            2,
+            16
+          ],
+          "texture": "#seam_strip_dark"
+        }
+      }
+    },
+    {
+      "name": "pillar_s_se",
+      "from": [
+        14,
+        0,
+        15.25
+      ],
+      "to": [
+        15,
+        16,
+        15.25
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            14,
+            0,
+            15,
+            16
+          ],
+          "texture": "#seam_strip_dark"
+        }
+      }
+    }
+  ]
+}

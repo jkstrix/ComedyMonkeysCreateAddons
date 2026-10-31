@@ -76,6 +76,8 @@ public class ComedyMonkeysCreateAddons {
 		// Adds its blocks to the registers below, so it has to come first
 		if (SableCompat.LOADED)
 			AeronauticsContent.init();
+		// the Clockwork Wastes' blocks and items join the registers below
+		com.comedymonkey.createaddons.registry.ModWastes.init();
 		ModBlocks.BLOCKS.register(modBus);
 		ModItems.ITEMS.register(modBus);
 		ModBlockEntities.BLOCK_ENTITY_TYPES.register(modBus);
@@ -94,6 +96,7 @@ public class ComedyMonkeysCreateAddons {
 		com.comedymonkey.createaddons.registry.ModStructures.PIECES.register(modBus);
 		ModDataComponents.DATA_COMPONENTS.register(modBus);
 		modBus.addListener(ModEntities::registerAttributes);
+		modBus.addListener(com.comedymonkey.createaddons.registry.ModWastes::registerAttributes);
 		// Trade Bot's test courses (run with ./gradlew runGameTestServer, or /test in a dev world)
 		modBus.addListener(TradeBotGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.StorageGameTests::register);
@@ -106,6 +109,12 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.CageFieldGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.HelperBotGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.JuggernautGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesCityGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesBotGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesLiftGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesWorldGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesKitGameTests::register);
 		if (SableCompat.LOADED)
 			modBus.addListener(com.comedymonkey.createaddons.gametest.SableGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
@@ -115,10 +124,12 @@ public class ComedyMonkeysCreateAddons {
 		// Helper Bot's test courses (/helperbot testsetup), and the follow-up once Create has registered their stations
 		// Helper Bot's test railway and shop: the command is a dev tool (testtrain go gives every train a schedule), so
 		// not in releases; its queue runs everywhere, for the game tests
-		// ...and the Electric Lights' test street (/lights testsetup), likewise a dev tool
+		// ...and the Electric Lights' test street (/lights testsetup) and the Clockwork Wastes' test district (/wastes testsetup),
+		// likewise dev tools
 		if (!net.neoforged.fml.loading.FMLEnvironment.production) {
 			NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.helperbot.HelperBotTestSetup::register);
 			NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.light.LightTestSetup::register);
+			NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.wastes.WastesTestSetup::register);
 		}
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.helperbot.HelperBotTestSetup::onLevelTick);
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.helperbot.HelperBotTestSetup::onServerStopped);
@@ -132,6 +143,11 @@ public class ComedyMonkeysCreateAddons {
 		// Both specs show up in Create's "Access configs of other mods" screen
 		container.registerConfig(ModConfig.Type.SERVER, CMConfig.SERVER_SPEC);
 		container.registerConfig(ModConfig.Type.CLIENT, CMConfig.CLIENT_SPEC);
+		// startup settings: the End biome weights, handed to TerraBlender in common setup
+		container.registerConfig(ModConfig.Type.COMMON, CMConfig.COMMON_SPEC);
+		// P53: one warning if this world's End can't hold the Clockwork Wastes (another mod replaced its biomes)
+		NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerStartedEvent e) ->
+			com.comedymonkey.createaddons.content.wastes.EndBiomes.checkEnd(e.getServer()));
 
 		NeoForge.EVENT_BUS.addListener(ChestEvents::onRightClickBlock);
 		NeoForge.EVENT_BUS.addListener(ChestEvents::onBlockBreak);
@@ -156,6 +172,9 @@ public class ComedyMonkeysCreateAddons {
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onChunkSent);
 		}
 		modBus.addListener(this::registerCapabilities);
+		// the Clockwork Wastes' powered city: its blocks' capabilities, and the city records' events
+		modBus.addListener(com.comedymonkey.createaddons.registry.ModWastes::registerCapabilities);
+		com.comedymonkey.createaddons.registry.ModWastes.registerEvents();
 		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::registerPayloads);
 
@@ -384,6 +403,8 @@ public class ComedyMonkeysCreateAddons {
 			}
 
 			ModDisplaySources.bindBlocks();
+			// the Clockwork Wastes in TerraBlender's End slots, and its tooltips
+			com.comedymonkey.createaddons.registry.ModWastes.commonSetup();
 			// Dispensers catch and release with the jars and the Capture Bottle
 			com.comedymonkey.createaddons.content.cage.CatcherDispensing.register();
 

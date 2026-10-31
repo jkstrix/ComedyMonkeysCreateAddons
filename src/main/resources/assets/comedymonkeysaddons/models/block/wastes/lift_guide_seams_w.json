@@ -1,0 +1,61 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_field",
+    "seam_strip_lit": "comedymonkeysaddons:block/wastes/seam_strip_lit"
+  },
+  "elements": [
+    {
+      "name": "guide_seam_0",
+      "from": [
+        0.25,
+        0,
+        5.75
+      ],
+      "to": [
+        0.25,
+        16,
+        6.25
+      ],
+      "shade": false,
+      "faces": {
+        "east": {
+          "uv": [
+            9.75,
+            0,
+            10.25,
+            16
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    },
+    {
+      "name": "guide_seam_1",
+      "from": [
+        0.25,
+        0,
+        25.75
+      ],
+      "to": [
+        0.25,
+        16,
+        26.25
+      ],
+      "shade": false,
+      "faces": {
+        "east": {
+          "uv": [
+            5.75,
+            0,
+            6.25,
+            16
+          ],
+          "texture": "#seam_strip_lit"
+        }
+      }
+    }
+  ]
+}

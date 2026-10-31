@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###",
+    "#D#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:end_stone_bricks"
+    },
+    "D": {
+      "tag": "c:dyes/brown"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:stained_end_stone_bricks",
+    "count": 8
+  }
+}

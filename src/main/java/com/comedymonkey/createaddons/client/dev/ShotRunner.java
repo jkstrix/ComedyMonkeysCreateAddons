@@ -29,6 +29,8 @@ public final class ShotRunner {
 	private static int step = -1, wait, ticks;
 	/** A label starting "gui-": one shot with the HUD showing (the goggles' overlay), on the backend as it is. */
 	private static boolean gui;
+	/** A label starting "solo-": one shot with the HUD hidden, on the backend as it is (the building kit's catalogue set). */
+	private static boolean solo;
 	/** What it changes, to put back afterwards. */
 	private static String backendBefore;
 	private static boolean vsyncBefore, hideGuiBefore;
@@ -85,6 +87,8 @@ public final class ShotRunner {
 				for (String line : lines)
 					if (!line.isBlank())
 						mc.player.connection.sendCommand(line.strip().replaceFirst("^/", ""));
+				// a mouse held by the game would turn the view between a teleport and its shot
+				mc.mouseHandler.releaseMouse();
 			} catch (IOException e) {
 				return;
 			}
@@ -110,13 +114,18 @@ public final class ShotRunner {
 			step = 0;
 			wait = 0;
 			gui = label.startsWith("gui-");
+			solo = label.startsWith("solo-");
 			backendBefore = Backend.REGISTRY.getIdOrThrow(BackendManager.currentBackend()).toString();
 			vsyncBefore = mc.options.enableVsync().get();
 			frameLimitBefore = mc.options.framerateLimit().get();
 			hideGuiBefore = mc.options.hideGui;
 		}
 		if (wait == 0) {
-			if (!gui)
+			mc.mouseHandler.releaseMouse();
+			// the catalogue's set at a size worth reading (a window left small shoots small)
+			if (solo && !mc.getWindow().isFullscreen() && mc.getWindow().getWidth() < 1600)
+				org.lwjgl.glfw.GLFW.glfwSetWindowSize(mc.getWindow().getWindow(), 1660, 1020);
+			if (!gui && !solo)
 				ClientCommandHandler.runCommand("flywheel backend " + BACKENDS[step]);
 			mc.options.hideGui = !gui; // no chat, hand or hotbar in the shots (unless the HUD is what's being looked at)
 			// uncapped, so the frame rates measure the renderer, not the limit
@@ -125,15 +134,15 @@ public final class ShotRunner {
 		}
 		if (++wait < SETTLE_TICKS)
 			return;
-		String name = gui ? "cmca/" + label + ".png" : "cmca/" + label + "-" + BACKENDS[step].substring("flywheel:".length()) + ".png";
+		String name = gui || solo ? "cmca/" + label + ".png" : "cmca/" + label + "-" + BACKENDS[step].substring("flywheel:".length()) + ".png";
 		Screenshot.grab(mc.gameDirectory, name, mc.getMainRenderTarget(), message -> {});
 		try {
-			Files.writeString(mc.gameDirectory.toPath().resolve("cmca-shots.fps"), label + " " + (gui ? backendBefore : BACKENDS[step]) + " " + mc.getFps() + " fps\n",
+			Files.writeString(mc.gameDirectory.toPath().resolve("cmca-shots.fps"), label + " " + (gui || solo ? backendBefore : BACKENDS[step]) + " " + mc.getFps() + " fps\n",
 				StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 		} catch (IOException ignored) {
 		}
 		wait = 0;
-		if (++step == BACKENDS.length || gui) {
+		if (++step == BACKENDS.length || gui || solo) {
 			step = -1;
 			ClientCommandHandler.runCommand("flywheel backend " + backendBefore);
 			mc.options.hideGui = hideGuiBefore;

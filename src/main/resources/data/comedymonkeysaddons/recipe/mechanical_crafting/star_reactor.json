@@ -1,0 +1,29 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "key": {
+    "U": {
+      "item": "comedymonkeysaddons:unknown_device"
+    },
+    "C": {
+      "item": "create:brass_casing"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "S": {
+      "item": "comedymonkeysaddons:clockwork_scrap"
+    }
+  },
+  "pattern": [
+    "SUS",
+    "UCU",
+    "SPS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "comedymonkeysaddons:star_reactor"
+  },
+  "show_notification": true
+}

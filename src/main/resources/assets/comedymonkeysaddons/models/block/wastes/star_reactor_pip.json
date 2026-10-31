@@ -1,0 +1,36 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/reactor_brass",
+    "pip_lit": "comedymonkeysaddons:block/wastes/pip_lit"
+  },
+  "elements": [
+    {
+      "name": "pip",
+      "from": [
+        7.5,
+        16.5,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16.5,
+        8.5
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "uv": [
+            7.5,
+            7.5,
+            8.5,
+            8.5
+          ],
+          "texture": "#pip_lit"
+        }
+      }
+    }
+  ]
+}

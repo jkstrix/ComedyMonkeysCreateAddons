@@ -1,0 +1,639 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/cable",
+    "cable": "comedymonkeysaddons:block/wastes/cable",
+    "va": "comedymonkeysaddons:block/wastes/va"
+  },
+  "elements": [
+    {
+      "name": "riser_0",
+      "from": [
+        7,
+        0,
+        18.25
+      ],
+      "to": [
+        7.75,
+        16,
+        19.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.25,
+            0,
+            9,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "east": {
+          "uv": [
+            12.75,
+            0,
+            13.75,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "south": {
+          "uv": [
+            7,
+            0,
+            7.75,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "west": {
+          "uv": [
+            2.25,
+            0,
+            3.25,
+            16
+          ],
+          "texture": "#cable"
+        }
+      }
+    },
+    {
+      "name": "riser_1",
+      "from": [
+        8.25,
+        0,
+        18.25
+      ],
+      "to": [
+        9,
+        16,
+        19.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            0,
+            7.75,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "east": {
+          "uv": [
+            12.75,
+            0,
+            13.75,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "south": {
+          "uv": [
+            8.25,
+            0,
+            9,
+            16
+          ],
+          "texture": "#cable"
+        },
+        "west": {
+          "uv": [
+            2.25,
+            0,
+            3.25,
+            16
+          ],
+          "texture": "#cable"
+        }
+      }
+    },
+    {
+      "name": "clamp_38_strap",
+      "from": [
+        6,
+        6,
+        17.75
+      ],
+      "to": [
+        10,
+        7.5,
+        18.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            8.5,
+            10,
+            10
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            13.75,
+            8.5,
+            14.25,
+            10
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            1.75,
+            8.5,
+            2.25,
+            10
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            6,
+            1.75,
+            10,
+            2.25
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            6,
+            13.75,
+            10,
+            14.25
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "clamp_38_stand",
+      "from": [
+        7,
+        6,
+        19.25
+      ],
+      "to": [
+        9,
+        7.5,
+        20
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            8.5,
+            9,
+            10
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            12,
+            8.5,
+            12.75,
+            10
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            7,
+            8.5,
+            9,
+            10
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            3.25,
+            8.5,
+            4,
+            10
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            7,
+            3.25,
+            9,
+            4
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            7,
+            12,
+            9,
+            12.75
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "clamp_38_bar",
+      "from": [
+        3.5,
+        6,
+        19.25
+      ],
+      "to": [
+        7,
+        7.5,
+        20
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            8.5,
+            12.5,
+            10
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            12,
+            8.5,
+            12.75,
+            10
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            3.25,
+            8.5,
+            4,
+            10
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            3.5,
+            3.25,
+            7,
+            4
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            3.5,
+            12,
+            7,
+            12.75
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "clamp_38_bar_e",
+      "from": [
+        9,
+        6,
+        19.25
+      ],
+      "to": [
+        12.5,
+        7.5,
+        20
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            8.5,
+            7,
+            10
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            12,
+            8.5,
+            12.75,
+            10
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            3.25,
+            8.5,
+            4,
+            10
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            9,
+            3.25,
+            12.5,
+            4
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            9,
+            12,
+            12.5,
+            12.75
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "clamp_38_leg_w",
+      "from": [
+        3.5,
+        6,
+        20
+      ],
+      "to": [
+        4,
+        7.5,
+        21.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            8.5,
+            12.5,
+            10
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            8.5,
+            12,
+            10
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            3.5,
+            8.5,
+            4,
+            10
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            4,
+            8.5,
+            5.5,
+            10
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            3.5,
+            4,
+            4,
+            5.5
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            3.5,
+            10.5,
+            4,
+            12
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "clamp_38_leg_e",
+      "from": [
+        12,
+        6,
+        20
+      ],
+      "to": [
+        12.5,
+        7.5,
+        21.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            8.5,
+            4,
+            10
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            8.5,
+            12,
+            10
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            12,
+            8.5,
+            12.5,
+            10
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            4,
+            8.5,
+            5.5,
+            10
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            12,
+            4,
+            12.5,
+            5.5
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            12,
+            10.5,
+            12.5,
+            12
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "clamp_38_side_w",
+      "from": [
+        6,
+        6,
+        18.25
+      ],
+      "to": [
+        7,
+        7.5,
+        19.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            8.5,
+            10,
+            10
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            12.75,
+            8.5,
+            13.75,
+            10
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            6,
+            8.5,
+            7,
+            10
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            2.25,
+            8.5,
+            3.25,
+            10
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            6,
+            2.25,
+            7,
+            3.25
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            6,
+            12.75,
+            7,
+            13.75
+          ],
+          "texture": "#va"
+        }
+      }
+    },
+    {
+      "name": "clamp_38_side_e",
+      "from": [
+        9,
+        6,
+        18.25
+      ],
+      "to": [
+        10,
+        7.5,
+        19.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            8.5,
+            7,
+            10
+          ],
+          "texture": "#va"
+        },
+        "east": {
+          "uv": [
+            12.75,
+            8.5,
+            13.75,
+            10
+          ],
+          "texture": "#va"
+        },
+        "south": {
+          "uv": [
+            9,
+            8.5,
+            10,
+            10
+          ],
+          "texture": "#va"
+        },
+        "west": {
+          "uv": [
+            2.25,
+            8.5,
+            3.25,
+            10
+          ],
+          "texture": "#va"
+        },
+        "up": {
+          "uv": [
+            9,
+            2.25,
+            10,
+            3.25
+          ],
+          "texture": "#va"
+        },
+        "down": {
+          "uv": [
+            9,
+            12.75,
+            10,
+            13.75
+          ],
+          "texture": "#va"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "neoforge:obj",
+  "model": "comedymonkeysaddons:models/block/wastes/assembly_clamp_4.obj",
+  "flip_v": false,
+  "emissive_ambient": false,
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va",
+    "va": "comedymonkeysaddons:block/wastes/va",
+    "va_field": "comedymonkeysaddons:block/wastes/va_field",
+    "cp_socket": "comedymonkeysaddons:block/wastes/cp_socket",
+    "cp_lead": "comedymonkeysaddons:block/wastes/cp_lead"
+  }
+}

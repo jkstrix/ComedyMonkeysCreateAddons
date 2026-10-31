@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,half=lower": {
+      "model": "comedymonkeysaddons:block/wastes/substation_lower"
+    },
+    "facing=north,half=upper": {
+      "model": "comedymonkeysaddons:block/wastes/substation_upper"
+    },
+    "facing=east,half=lower": {
+      "model": "comedymonkeysaddons:block/wastes/substation_lower",
+      "y": 90
+    },
+    "facing=east,half=upper": {
+      "model": "comedymonkeysaddons:block/wastes/substation_upper",
+      "y": 90
+    },
+    "facing=south,half=lower": {
+      "model": "comedymonkeysaddons:block/wastes/substation_lower",
+      "y": 180
+    },
+    "facing=south,half=upper": {
+      "model": "comedymonkeysaddons:block/wastes/substation_upper",
+      "y": 180
+    },
+    "facing=west,half=lower": {
+      "model": "comedymonkeysaddons:block/wastes/substation_lower",
+      "y": 270
+    },
+    "facing=west,half=upper": {
+      "model": "comedymonkeysaddons:block/wastes/substation_upper",
+      "y": 270
+    }
+  }
+}

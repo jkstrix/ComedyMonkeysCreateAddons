@@ -1,0 +1,795 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/casing_aged",
+    "casing_aged": "comedymonkeysaddons:block/wastes/casing_aged",
+    "casing_aged_rust": "comedymonkeysaddons:block/wastes/casing_aged_rust",
+    "casing_aged_top": "comedymonkeysaddons:block/wastes/casing_aged_top",
+    "press_steel": "comedymonkeysaddons:block/wastes/press_steel",
+    "steel_worn": "comedymonkeysaddons:block/wastes/steel_worn",
+    "copper": "comedymonkeysaddons:block/wastes/copper",
+    "brass": "comedymonkeysaddons:block/wastes/brass"
+  },
+  "elements": [
+    {
+      "name": "casing",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#casing_aged",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#casing_aged",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#casing_aged",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#casing_aged_rust",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#casing_aged_top",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#casing_aged",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "collar",
+      "from": [
+        5,
+        5,
+        -1
+      ],
+      "to": [
+        11,
+        11,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#press_steel"
+        },
+        "east": {
+          "uv": [
+            0,
+            5,
+            1,
+            11
+          ],
+          "texture": "#press_steel"
+        },
+        "south": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#press_steel"
+        },
+        "west": {
+          "uv": [
+            15,
+            5,
+            16,
+            11
+          ],
+          "texture": "#press_steel"
+        },
+        "up": {
+          "uv": [
+            5,
+            15,
+            11,
+            16
+          ],
+          "texture": "#press_steel"
+        },
+        "down": {
+          "uv": [
+            5,
+            0,
+            11,
+            1
+          ],
+          "texture": "#press_steel"
+        }
+      }
+    },
+    {
+      "name": "arm",
+      "from": [
+        7,
+        7,
+        -8
+      ],
+      "to": [
+        9,
+        9,
+        -1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "texture": "#steel_worn"
+        },
+        "east": {
+          "uv": [
+            1,
+            7,
+            8,
+            9
+          ],
+          "texture": "#steel_worn"
+        },
+        "south": {
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "texture": "#steel_worn"
+        },
+        "west": {
+          "uv": [
+            8,
+            7,
+            15,
+            9
+          ],
+          "texture": "#steel_worn"
+        },
+        "up": {
+          "uv": [
+            7,
+            8,
+            9,
+            15
+          ],
+          "texture": "#steel_worn"
+        },
+        "down": {
+          "uv": [
+            7,
+            1,
+            9,
+            8
+          ],
+          "texture": "#steel_worn"
+        }
+      }
+    },
+    {
+      "name": "elbow",
+      "from": [
+        6.5,
+        6.5,
+        -9
+      ],
+      "to": [
+        9.5,
+        9.5,
+        -7.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#press_steel"
+        },
+        "east": {
+          "uv": [
+            7.5,
+            6.5,
+            9,
+            9.5
+          ],
+          "texture": "#press_steel"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#press_steel"
+        },
+        "west": {
+          "uv": [
+            7,
+            6.5,
+            8.5,
+            9.5
+          ],
+          "texture": "#press_steel"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            7,
+            9.5,
+            8.5
+          ],
+          "texture": "#press_steel"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            7.5,
+            9.5,
+            9
+          ],
+          "texture": "#press_steel"
+        }
+      }
+    },
+    {
+      "name": "forearm",
+      "from": [
+        7,
+        1.5,
+        -9
+      ],
+      "to": [
+        9,
+        7,
+        -7
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          7,
+          -8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            9,
+            9,
+            14.5
+          ],
+          "texture": "#steel_worn"
+        },
+        "east": {
+          "uv": [
+            7,
+            9,
+            9,
+            14.5
+          ],
+          "texture": "#steel_worn"
+        },
+        "south": {
+          "uv": [
+            7,
+            9,
+            9,
+            14.5
+          ],
+          "texture": "#steel_worn"
+        },
+        "west": {
+          "uv": [
+            7,
+            9,
+            9,
+            14.5
+          ],
+          "texture": "#steel_worn"
+        },
+        "up": {
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "texture": "#steel_worn"
+        },
+        "down": {
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "texture": "#steel_worn"
+        }
+      }
+    },
+    {
+      "name": "cable",
+      "from": [
+        7.75,
+        0.5,
+        -12
+      ],
+      "to": [
+        8.25,
+        1,
+        -8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.75,
+            15,
+            8.25,
+            15.5
+          ],
+          "texture": "#copper"
+        },
+        "east": {
+          "uv": [
+            8.5,
+            15,
+            12,
+            15.5
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            7.75,
+            15,
+            8.25,
+            15.5
+          ],
+          "texture": "#copper"
+        },
+        "west": {
+          "uv": [
+            4,
+            15,
+            7.5,
+            15.5
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            7.75,
+            4,
+            8.25,
+            7.5
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            7.75,
+            8.5,
+            8.25,
+            12
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "cable_drop",
+      "from": [
+        7.75,
+        1,
+        -8.5
+      ],
+      "to": [
+        8.25,
+        7,
+        -8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.75,
+            9,
+            8.25,
+            15
+          ],
+          "texture": "#copper"
+        },
+        "east": {
+          "uv": [
+            8,
+            9,
+            8.5,
+            15
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            7.75,
+            9,
+            8.25,
+            15
+          ],
+          "texture": "#copper"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            9,
+            8,
+            15
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            7.75,
+            7.5,
+            8.25,
+            8
+          ],
+          "texture": "#copper"
+        },
+        "down": {
+          "uv": [
+            7.75,
+            8,
+            8.25,
+            8.5
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "hand_palm",
+      "from": [
+        6,
+        0,
+        -15
+      ],
+      "to": [
+        10,
+        1.5,
+        -12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            14.5,
+            10,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            12,
+            14.5,
+            15,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            6,
+            14.5,
+            10,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            1,
+            14.5,
+            4,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            6,
+            1,
+            10,
+            4
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            6,
+            12,
+            10,
+            15
+          ],
+          "texture": "#brass",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "finger_a",
+      "from": [
+        6,
+        0,
+        -16
+      ],
+      "to": [
+        7,
+        1,
+        -15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            15,
+            10,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            15,
+            15,
+            16,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            6,
+            15,
+            7,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            15,
+            1,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            6,
+            0,
+            7,
+            1
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            6,
+            15,
+            7,
+            16
+          ],
+          "texture": "#brass",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "finger_b",
+      "from": [
+        7.5,
+        0,
+        -16
+      ],
+      "to": [
+        8.5,
+        1,
+        -15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            15,
+            8.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            15,
+            15,
+            16,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            15,
+            8.5,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            15,
+            1,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            1
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            7.5,
+            15,
+            8.5,
+            16
+          ],
+          "texture": "#brass",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "finger_c",
+      "from": [
+        9,
+        0,
+        -16
+      ],
+      "to": [
+        10,
+        1,
+        -15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            15,
+            7,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            15,
+            15,
+            16,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            9,
+            15,
+            10,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            15,
+            1,
+            16
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            9,
+            0,
+            10,
+            1
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            9,
+            15,
+            10,
+            16
+          ],
+          "texture": "#brass",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

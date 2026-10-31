@@ -1,0 +1,67 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/va_seamed",
+    "seam_lit": "comedymonkeysaddons:block/wastes/seam_lit"
+  },
+  "elements": [
+    {
+      "name": "seam_overlay",
+      "from": [
+        -0.25,
+        0,
+        -0.25
+      ],
+      "to": [
+        16.25,
+        16,
+        16.25
+      ],
+      "shade": false,
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#seam_lit"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#seam_lit"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#seam_lit"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#seam_lit"
+        }
+      }
+    }
+  ]
+}

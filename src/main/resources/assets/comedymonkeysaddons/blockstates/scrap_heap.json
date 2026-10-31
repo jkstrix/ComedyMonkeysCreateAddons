@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/scrap_heap"
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/scrap_heap",
+        "y": 90
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/scrap_heap",
+        "y": 180
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/scrap_heap",
+        "y": 270
+      }
+    ]
+  }
+}

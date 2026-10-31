@@ -12,7 +12,9 @@
     "VillagerMixin",
     "StockTickerBlockEntityMixin",
     "RecipeApplierMixin",
-    "ContraptionMixin"
+    "ContraptionMixin",
+    "BlockStateBaseMixin",
+    "ServerGamePacketListenerImplAccessor"
   ],
   "client": [
     "PipeRendererMixin",

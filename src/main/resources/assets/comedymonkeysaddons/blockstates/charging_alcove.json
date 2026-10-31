@@ -1,0 +1,508 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north",
+        "part": "bottom"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_bottom"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "bottom",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_bottom"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "bottom"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_bottom",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "bottom",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_bottom",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "bottom"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_bottom",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "bottom",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_bottom",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "bottom"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_bottom",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "bottom",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_bottom",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "middle"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_middle"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "middle",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_middle"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "middle"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_middle",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "middle",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_middle",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "middle"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_middle",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "middle",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_middle",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "middle"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_middle",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "middle",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_middle",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "top"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "top",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "top"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "top",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "top"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "top",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "top"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "top",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_contact_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "middle",
+        "trinket": "cog"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_cog"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "middle",
+        "trinket": "cog"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_cog",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "middle",
+        "trinket": "cog"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_cog",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "middle",
+        "trinket": "cog"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_cog",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "middle",
+        "trinket": "key"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_key"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "middle",
+        "trinket": "key"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_key",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "middle",
+        "trinket": "key"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_key",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "middle",
+        "trinket": "key"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_key",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "middle",
+        "trinket": "cart"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_cart"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "middle",
+        "trinket": "cart"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_cart",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "middle",
+        "trinket": "cart"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_cart",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "middle",
+        "trinket": "cart"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_cart",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "middle",
+        "trinket": "flower"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_flower"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "middle",
+        "trinket": "flower"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_flower",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "middle",
+        "trinket": "flower"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_flower",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "middle",
+        "trinket": "flower"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_trinket_flower",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "middle",
+        "vines": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_middle"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "middle",
+        "vines": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_middle",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "middle",
+        "vines": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_middle",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "middle",
+        "vines": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_middle",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "top",
+        "vines": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "top",
+        "vines": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "top",
+        "vines": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "top",
+        "vines": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_top",
+        "y": 270
+      }
+    }
+  ]
+}
