@@ -334,6 +334,31 @@
   ]
  },
  {
+  "id": "comedymonkeysaddons:brass_clockwork_inlet",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "create:brass_casing",
+    "count": 1
+   },
+   {
+    "item": "create:brass_funnel",
+    "count": 1
+   },
+   {
+    "item": "comedymonkeysaddons:clockwork_tube",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:brass_clockwork_inlet",
+    "count": 1
+   }
+  ]
+ },
+ {
   "id": "comedymonkeysaddons:brass_flooded_monster_cage",
   "type": "crafting_shapeless",
   "machine": "minecraft",
@@ -577,6 +602,92 @@
    {
     "item": "comedymonkeysaddons:clockwork_dynamo",
     "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:clockwork_inlet",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "create:andesite_casing",
+    "count": 1
+   },
+   {
+    "item": "create:andesite_funnel",
+    "count": 1
+   },
+   {
+    "item": "comedymonkeysaddons:clockwork_tube",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:clockwork_inlet",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:clockwork_receiver",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "create:andesite_casing",
+    "count": 1
+   },
+   {
+    "item": "create:encased_fan",
+    "count": 1
+   },
+   {
+    "item": "create:cogwheel",
+    "count": 1
+   },
+   {
+    "item": "comedymonkeysaddons:clockwork_tube",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:clockwork_receiver",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:clockwork_tube",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:glass",
+     "tag": "c:glass_blocks",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:clockwork_tube",
+    "count": 4
    }
   ]
  },

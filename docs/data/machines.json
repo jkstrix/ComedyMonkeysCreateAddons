@@ -4049,6 +4049,222 @@
     ]
   },
   {
+    "id": "clockwork-tubes",
+    "name": "Clockwork Tubes",
+    "registry": [
+      "comedymonkeysaddons:clockwork_receiver",
+      "comedymonkeysaddons:clockwork_tube",
+      "comedymonkeysaddons:clockwork_inlet",
+      "comedymonkeysaddons:brass_clockwork_inlet"
+    ],
+    "summary": "A bot-built suction network: Inlets take items from chests, depots, belts or the floor, glass tubes carry them, and one Receiver pulls them out through the middle of its hollow cog.",
+    "tags": [
+      "logistics",
+      "items",
+      "rotation"
+    ],
+    "stage": "early",
+    "requires": [],
+    "teach": {
+      "what": "Three blocks that move items from many places into one. A **Clockwork Inlet** takes items from whatever is in front of its mouth, **Clockwork Tubes** carry them behind glass, and a **Clockwork Receiver**, turned by a cogwheel meshed with its hollow cog, pulls them through and pushes them out into a chest, a belt or a depot, or drops them out with nothing there.",
+      "why": "Nothing else in Create gathers from many places into one, in any direction, without belts. Every farm becomes an Inlet and a few tubes: a mob farm's floor, a row of depots under presses, a wall of chests.",
+      "when": "Early, in the andesite age: andesite alloy, glass, casings, a funnel, an Encased Fan and a cogwheel. The Brass Inlet comes with brass.",
+      "interacts": "Mesh any Create cogwheel with the Receiver's cog: faster means more items and quicker travel. Inlets read chests, vaults, barrels, depots and belts, and items lying in front of them. The Receiver fills chests, funnels, belts and depots. A Clutch stops the whole network; redstone stops one Inlet.",
+      "mistakes": [
+        "One Receiver to a network: a tube that would join a second stays capped. A Wrench on a tube's arm shuts that joint, so two networks can run side by side.",
+        "A plain Inlet takes one item at a time; for whole stacks or sorting, use a Brass Inlet.",
+        "When the Receiver's chest is full, everything waits in the tubes, one load a tube: give it somewhere to put things."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress",
+        "value": "4",
+        "unit": "SU per RPM"
+      },
+      {
+        "label": "At 256 RPM",
+        "value": "4",
+        "unit": "loads a second"
+      },
+      {
+        "label": "Reach",
+        "value": "256",
+        "unit": "tubes",
+        "gauge": 1
+      }
+    ],
+    "specs": [
+      [
+        "Stress",
+        "4 SU per RPM (1,024 SU at 256 RPM, config)"
+      ],
+      [
+        "Loads a second",
+        "RPM ÷ 64, shared by the Inlets in turn (config)"
+      ],
+      [
+        "A load",
+        "One item (Inlet), up to a stack (Brass Inlet)"
+      ],
+      [
+        "Travel",
+        "RPM ÷ 16 blocks a second (config)"
+      ],
+      [
+        "Inlet cooldown",
+        "8 ticks between loads, like a funnel"
+      ],
+      [
+        "Reach",
+        "256 tubes from the Receiver (config)"
+      ],
+      [
+        "Each tube holds",
+        "One load"
+      ],
+      [
+        "Facing",
+        "Inlets and Receiver: any; tubes branch every way"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM",
+      "speed": "Any: faster moves more"
+    },
+    "inputs": [
+      "Items from what's in front of each Inlet's mouth: a chest, vault or barrel, a depot or belt, or items lying there."
+    ],
+    "outputs": [
+      "Items out of the Receiver's output, through the middle of its cog: into a chest, funnel, belt or depot, or dropped out if nothing is there."
+    ],
+    "rules": [
+      "The Receiver is powered through its cog: mesh a cogwheel with it. It has no shaft.",
+      "Placed on a tube, an Inlet or Receiver joins it; placed on anything else, it faces into that block. An Inlet right against a Receiver joins it with no tube at all.",
+      "Inlets take turns, and at a join the load that has waited longest goes first.",
+      "Each tube holds one load. When the Receiver can't empty, loads queue back and the Inlets behind them stop.",
+      "Breaking a tube drops the load inside it: nothing is lost and nothing is copied.",
+      "It moves nothing while its chunk isn't running, and never loads a chunk."
+    ],
+    "efficiency": [
+      "At 64 RPM (256 SU) a network moves one load a second: one item a second from plain Inlets, a stack from a Brass Inlet.",
+      "At 256 RPM (1,024 SU) it moves four loads a second: up to 256 items a second with Brass Inlets."
+    ],
+    "variants": [
+      {
+        "id": "receiver",
+        "name": "Clockwork Receiver",
+        "registry": [
+          "comedymonkeysaddons:clockwork_receiver"
+        ],
+        "summary": "One to a network. Turned by a cogwheel meshed with its hollow ring gear, it pulls loads in and pushes them out through the middle of the cog.",
+        "specs": [
+          [
+            "Recipe",
+            "Andesite Casing, Encased Fan, cogwheel, Clockwork Tube"
+          ],
+          [
+            "Sound",
+            "A cogwheel's, nothing more"
+          ]
+        ]
+      },
+      {
+        "id": "tube",
+        "name": "Clockwork Tube",
+        "registry": [
+          "comedymonkeysaddons:clockwork_tube"
+        ],
+        "summary": "Glass between steel rails: you see every item go by. Joins whatever it can on all six sides; a Wrench on an arm shuts that joint.",
+        "specs": [
+          [
+            "Recipe",
+            "4 from andesite alloy and glass"
+          ],
+          [
+            "Holds",
+            "One load"
+          ]
+        ]
+      },
+      {
+        "id": "inlet",
+        "name": "Clockwork Inlet",
+        "registry": [
+          "comedymonkeysaddons:clockwork_inlet"
+        ],
+        "summary": "A hood that gulps up one item at a time from what's in front of its mouth, any way it faces.",
+        "specs": [
+          [
+            "Recipe",
+            "Andesite Casing, Andesite Funnel, Clockwork Tube"
+          ],
+          [
+            "Takes",
+            "One item a load"
+          ]
+        ]
+      },
+      {
+        "id": "brass-inlet",
+        "name": "Brass Clockwork Inlet",
+        "registry": [
+          "comedymonkeysaddons:brass_clockwork_inlet"
+        ],
+        "summary": "An Inlet with a filter on its sides that takes up to a stack at a time, only what the filter passes.",
+        "specs": [
+          [
+            "Recipe",
+            "Brass Casing, Brass Funnel, Clockwork Tube"
+          ],
+          [
+            "Takes",
+            "Up to the filter's count (a stack with none set)"
+          ]
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "A mob farm's drops into one chest",
+        "steps": [
+          {
+            "label": "Items on the kill floor",
+            "kind": "source"
+          },
+          {
+            "ref": "clockwork-tubes",
+            "kind": "machine",
+            "note": "Inlet over the floor",
+            "via": "gulp"
+          },
+          {
+            "item": "minecraft:chest",
+            "label": "Chest",
+            "kind": "result",
+            "via": "out"
+          }
+        ]
+      }
+    ],
+    "tips": [
+      "Hang an Inlet one block over a farm's floor, mouth down: it sweeps whatever lands there.",
+      "A Brass Inlet over a depot under a Mechanical Press, filtered to the pressed item, takes only what's finished.",
+      "Watch the glass to find a jam: the stuck items sit still in the windows."
+    ],
+    "facts": [
+      "Built from the Trade Bot's own parts: his brass waist band, his dark-brass bolts, and the steel lid plate he blinks with, which here is the Inlet's gulping flap.",
+      "Items really do pass through the middle of the Receiver's ring gear.",
+      "Sending your first item through earns \"Down the Tubes\"."
+    ],
+    "related": [
+      "clockwork-dynamo",
+      "trade-bot",
+      "upgraded-chest"
+    ]
+  },
+  {
     "id": "battery",
     "name": "Battery",
     "registry": [
