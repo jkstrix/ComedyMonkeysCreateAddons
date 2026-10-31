@@ -1,0 +1,396 @@
+<title>Clockwork Tubes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of short blocks like the other spec quick reads; the user's own diagram, live, as the centrepiece. Bot palette: andesite, blue-grey steel, muted brass, glass, cyan / amber lamps (no copper: nothing electric here) */
+:root {
+  --bg: #e5e6e2; --surface: #f1f2ee; --fg: #22242a; --muted: #5d6068; --line: #c8c9c3;
+  --steel: #3c424a; --steel-hi: #4a5059; --andesite: #7c7f79; --andesite-hi: #8a8c86;
+  --brass: #8f7638; --brass-hi: #b08f45; --walnut: #634532; --glass: #cfe0e2; --glass-edge: #9fb6b9;
+  --glow: #3f8f9c; --glow-soft: #d3e6e8; --lamp: #6fb7c4; --amber: #c98a3e;
+  --item-a: #a3873f; --item-b: #5f7f4f; --item-c: #8a6a5a;
+  --ok: #4c7a46; --warn: #a3712a;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #191a1d; --surface: #222428; --fg: #e3e3de; --muted: #9fa1a6; --line: #373a40;
+  --steel: #2f343b; --steel-hi: #444a53; --andesite: #6b6e6a; --andesite-hi: #7c7f79;
+  --brass: #b08f45; --brass-hi: #c9a75a; --walnut: #6f4d36; --glass: #2a3a3d; --glass-edge: #4d6569;
+  --glow: #7cc3cf; --glow-soft: #1e3236; --lamp: #8fcad4; --amber: #d99a4a;
+  --item-a: #c9a75a; --item-b: #84a870; --item-c: #b08a78;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #191a1d; --surface: #222428; --fg: #e3e3de; --muted: #9fa1a6; --line: #373a40;
+  --steel: #2f343b; --steel-hi: #444a53; --andesite: #6b6e6a; --andesite-hi: #7c7f79;
+  --brass: #b08f45; --brass-hi: #c9a75a; --walnut: #6f4d36; --glass: #2a3a3d; --glass-edge: #4d6569;
+  --glow: #7cc3cf; --glow-soft: #1e3236; --lamp: #8fcad4; --amber: #d99a4a;
+  --item-a: #c9a75a; --item-b: #84a870; --item-c: #b08a78;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.15rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+
+header { display: grid; gap: 14px }
+.band { height: 10px; border-radius: 2px; background: linear-gradient(90deg, var(--andesite) 0 46%, var(--bg) 46% 47%, var(--steel) 47% 82%, var(--bg) 82% 83%, var(--brass) 83% 93%, var(--bg) 93% 94%, var(--glass-edge) 94% 100%) }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { padding: 8px 0 8px 14px; border-left: 3px solid var(--glow); font-weight: 500 }
+
+.rig { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; display: grid }
+.rig-bar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--line) }
+.rig-bar label { font: 500 .82rem/1 var(--mono); display: flex; gap: 10px; align-items: center }
+.rig-bar input[type="range"] { accent-color: var(--glow); width: 180px; max-width: 45vw }
+.rig-bar input[type="checkbox"] { accent-color: var(--glow); width: 16px; height: 16px }
+.toggles { display: flex; flex-wrap: wrap; gap: 12px 20px }
+.setting { font: 600 1.1rem/1 var(--display); font-variant-numeric: tabular-nums; min-width: 7ch }
+.scene { overflow-x: auto; padding: 8px 4px }
+.scene svg { display: block; width: 100%; min-width: 540px; height: auto }
+.note { font: 400 .78rem/1.3 var(--mono); color: var(--muted); padding: 0 16px 10px }
+.meters { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px; background: var(--line); border-top: 1px solid var(--line) }
+.meter { background: var(--surface); padding: 12px 16px; display: grid; gap: 4px }
+.meter b { font: 600 1.45rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.meter span { color: var(--muted); font-size: .85rem }
+.meter.made b { color: var(--glow) }
+.lbl { font: 500 11px var(--mono); fill: var(--fg) }
+.lbl.dim { fill: var(--muted) }
+.tube-outer { fill: none; stroke: var(--steel); stroke-width: 16; stroke-linejoin: round }
+.tube-inner { fill: none; stroke: var(--glass); stroke-width: 9; stroke-linejoin: round }
+.tube-ring { fill: var(--brass) }
+#cog { animation: spin 1s linear infinite; transform-origin: 392px 84px; transform-box: view-box }
+#teeth { stroke-dasharray: 4 4; animation: teeth 1s linear infinite }
+.full #lamp { fill: var(--amber) }
+.flap { transform-box: fill-box; transform-origin: center top }
+.flap.gulp { animation: gulp .28s cubic-bezier(.3, 1.5, .5, 1) }
+.brass .inlet-band { fill: var(--brass-hi) }
+#fullLbl { visibility: hidden }
+.full #fullLbl { visibility: visible }
+@keyframes spin { to { transform: rotate(360deg) } }
+@keyframes teeth { to { stroke-dashoffset: -16 } }
+@keyframes gulp { 40% { transform: scaleY(.45) } }
+@media (prefers-reduced-motion: reduce) { #cog, #teeth, .flap.gulp { animation: none } }
+
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: step }
+.loop li { counter-increment: step; display: grid; gap: 6px; align-content: start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.loop li::before { content: counter(step); font: 600 1.4rem/1 var(--display); color: var(--brass) }
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; background: var(--surface) }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; min-width: 520px }
+th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line) }
+th { font: 500 .75rem/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted) }
+tr:last-child td { border-bottom: 0 }
+td.n { font-family: var(--mono); text-align: right }
+th.n { text-align: right }
+tr.top td { font-weight: 600 }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.pairs > div { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 8px; align-content: start }
+.pairs ul { margin: 0; padding-left: 18px; display: grid; gap: 6px }
+.does h3 { color: var(--ok) }
+.doesnt h3 { color: var(--warn) }
+
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 24px }
+.qa div { display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.qa b { font-weight: 600 }
+.qa span { color: var(--muted) }
+
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center }
+.score .bar { height: 10px; background: var(--line); border-radius: 2px; overflow: hidden }
+.score .bar i { display: block; height: 100%; background: var(--glow) }
+.score b { font: 500 .85rem var(--mono); text-align: right; font-variant-numeric: tabular-nums }
+.score span { font-weight: 500 }
+.score p { grid-column: 1 / -1; color: var(--muted); font-size: .86rem; margin-top: -4px }
+.score.overall span, .score.overall b { font-weight: 700 }
+.score.overall .bar i { background: var(--brass) }
+@media (max-width: 480px) { .score { grid-template-columns: 1fr 48px } .score .bar { grid-column: 1 / -1; grid-row: 2 } .score p { grid-row: 3 } }
+
+.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.open div { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 6px; align-content: start }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 16px }
+code { font-family: var(--mono); font-size: .9em }
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="band" aria-hidden="true"></div>
+  <p class="eyebrow">Systems spec · quick read · bot-built machines</p>
+  <h1>Clockwork Tubes</h1>
+  <p class="pitch">Suck items from many places into one. Inlets take them in, tubes carry them where you can see them, and one cog-driven Receiver pushes them out through the middle of its hollow cog.</p>
+  <div class="chips">
+    <span class="chip ready">Ready for development · 85%</span>
+    <span class="chip">Andesite age · Brass Inlet: brass</span>
+    <span class="chip">4 SU per RPM</span>
+    <span class="chip">Look: to be designed</span>
+  </div>
+</header>
+
+<section aria-labelledby="h-idiot">
+  <h2 id="h-idiot">If you read nothing else</h2>
+  <ul class="idiot">
+    <li>Inlets suck items in, facing any way.</li>
+    <li>One Receiver spits them out.</li>
+    <li>Tubes carry items between them; you can see them.</li>
+    <li>Only one Receiver per network.</li>
+    <li>Receiver runs on a cog; items pass through its middle.</li>
+    <li>Faster cog: more items, more stress.</li>
+    <li>Plain Inlet: one item. Brass: stacks, with a filter.</li>
+    <li>Redstone turns an Inlet off; a Clutch stops everything.</li>
+    <li>Full chest at the end: everything waits, nothing lost.</li>
+    <li>Max 256 tubes; no chunk loading.</li>
+  </ul>
+</section>
+
+<section aria-labelledby="h-rig">
+  <h2 id="h-rig">Your diagram, running</h2>
+  <p class="sub">Three Inlets, one network, one Receiver. Change the cog's speed, swap in Brass Inlets, or fill the chest at the top to see the network wait.</p>
+  <div class="rig" id="rig">
+    <div class="rig-bar">
+      <label for="speed">Cog speed <input type="range" id="speed" min="0" max="5" value="5"> <span class="setting" id="rpm">256 RPM</span></label>
+      <div class="toggles">
+        <label for="brassT"><input type="checkbox" id="brassT"> Brass Inlets</label>
+        <label for="fullT"><input type="checkbox" id="fullT"> Chest full</label>
+      </div>
+    </div>
+    <div class="scene">
+      <svg viewBox="0 0 640 330" role="img" aria-label="The user's diagram: three Clockwork Inlets at the bottom, on a chest, over a depot and over the floor, with tubes rising and joining into one tube that runs up into the Clockwork Receiver. A cogwheel meshes with the Receiver's hollow cog, and items leave through the middle of the cog into a chest above.">
+        <!-- chest the Receiver fills -->
+        <rect x="294" y="4" width="52" height="34" rx="3" fill="var(--walnut)"/>
+        <rect x="294" y="16" width="52" height="3" fill="var(--steel)"/>
+        <rect x="316" y="14" width="8" height="8" rx="1" fill="var(--brass)"/>
+        <text class="lbl dim" x="356" y="26">chest</text>
+        <text class="lbl" x="356" y="40" id="fullLbl" fill="var(--amber)">full: everything waits</text>
+
+        <!-- tubes -->
+        <path class="tube-outer" d="M90 262 V200 H320 M550 262 V200 H320 M320 262 V110"/>
+        <path class="tube-inner" d="M90 262 V200 H320 M550 262 V200 H320 M320 262 V110"/>
+        <g class="tube-ring"><rect x="80" y="226" width="20" height="4"/><rect x="190" y="190" width="4" height="20"/><rect x="440" y="190" width="4" height="20"/><rect x="540" y="226" width="20" height="4"/><rect x="310" y="150" width="20" height="4"/><rect x="310" y="232" width="20" height="4"/></g>
+
+        <!-- Receiver: andesite panel in a steel frame, hollow cog round its middle, glass slot through it -->
+        <rect x="292" y="44" width="56" height="70" rx="6" fill="var(--steel)"/>
+        <rect x="299" y="51" width="42" height="56" rx="3" fill="var(--andesite)"/>
+        <rect x="314" y="40" width="12" height="74" fill="var(--glass)" stroke="var(--glass-edge)" stroke-width="1"/>
+        <rect x="282" y="78" width="76" height="12" rx="2" fill="var(--brass)"/>
+        <line id="teeth" x1="282" y1="84" x2="358" y2="84" stroke="var(--brass-hi)" stroke-width="16" opacity=".55"/>
+        <rect x="314" y="78" width="12" height="12" fill="var(--glass)"/>
+        <circle id="lamp" cx="338" cy="60" r="4" fill="var(--lamp)"/>
+        <!-- meshing cogwheel -->
+        <g id="cog">
+          <circle cx="392" cy="84" r="16" fill="var(--andesite-hi)"/>
+          <g fill="var(--steel-hi)"><rect x="389" y="64" width="6" height="40"/><rect x="372" y="81" width="40" height="6"/><rect x="389" y="64" width="6" height="40" transform="rotate(45 392 84)"/><rect x="389" y="64" width="6" height="40" transform="rotate(-45 392 84)"/></g>
+          <circle cx="392" cy="84" r="9" fill="var(--andesite-hi)"/>
+          <circle cx="392" cy="84" r="3" fill="var(--steel)"/>
+        </g>
+        <text class="lbl" x="418" y="80">Clockwork Receiver</text>
+        <text class="lbl dim" x="418" y="96">hollow cog, meshed with a cogwheel</text>
+
+        <!-- items layer, under the inlets -->
+        <g id="items"></g>
+
+        <!-- Inlets: mouth flap down, brass band when brass -->
+        <g id="inlets">
+          <g><rect x="70" y="250" width="40" height="22" rx="4" fill="var(--steel)"/><rect class="inlet-band" x="70" y="258" width="40" height="5" fill="var(--andesite-hi)"/><rect class="flap" id="f0" x="76" y="272" width="28" height="5" rx="1" fill="var(--steel-hi)"/></g>
+          <g><rect x="300" y="250" width="40" height="22" rx="4" fill="var(--steel)"/><rect class="inlet-band" x="300" y="258" width="40" height="5" fill="var(--andesite-hi)"/><rect class="flap" id="f1" x="306" y="272" width="28" height="5" rx="1" fill="var(--steel-hi)"/></g>
+          <g><rect x="530" y="250" width="40" height="22" rx="4" fill="var(--steel)"/><rect class="inlet-band" x="530" y="258" width="40" height="5" fill="var(--andesite-hi)"/><rect class="flap" id="f2" x="536" y="272" width="28" height="5" rx="1" fill="var(--steel-hi)"/></g>
+        </g>
+        <!-- what each Inlet takes from -->
+        <rect x="68" y="278" width="44" height="34" rx="3" fill="var(--walnut)"/><rect x="68" y="290" width="44" height="3" fill="var(--steel)"/>
+        <rect x="298" y="296" width="44" height="16" rx="2" fill="var(--andesite)"/><rect x="304" y="292" width="32" height="4" fill="var(--steel-hi)"/><rect x="315" y="285" width="10" height="7" fill="var(--item-b)"/>
+        <rect x="500" y="306" width="100" height="6" fill="var(--andesite)"/><rect x="540" y="298" width="8" height="8" fill="var(--item-a)"/><rect x="554" y="300" width="7" height="6" fill="var(--item-c)"/>
+        <text class="lbl dim" x="60" y="326">Inlet on a chest</text>
+        <text class="lbl dim" x="282" y="326">over a depot</text>
+        <text class="lbl dim" x="506" y="326">over the floor</text>
+
+        <!-- motion paths: Inlet mouth to the chest, through the hollow cog -->
+        <path id="p0" d="M90 266 V200 H320 V22" fill="none" stroke="none"/>
+        <path id="p1" d="M320 266 V22" fill="none" stroke="none"/>
+        <path id="p2" d="M550 266 V200 H320 V22" fill="none" stroke="none"/>
+      </svg>
+    </div>
+    <p class="note">Items shown at a quarter of real speed.</p>
+    <div class="meters" aria-live="polite">
+      <div class="meter"><span>Stress on the network</span><b id="su">1,024 SU</b></div>
+      <div class="meter"><span>Loads a second (whole network)</span><b id="loads">4</b></div>
+      <div class="meter made"><span>Items a second, at most</span><b id="items-s">4</b></div>
+      <div class="meter"><span>Travel speed</span><b id="travel">16 blocks/s</b></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="h-loop">
+  <h2 id="h-loop">How you use it</h2>
+  <ol class="loop">
+    <li>Put an Inlet where items collect, facing any way: on a chest, over a depot or belt, over a floor.</li>
+    <li>Run tubes from every Inlet to one spot. Branch and join as you like.</li>
+    <li>Put the Receiver there, its output into a chest, vault or belt.</li>
+    <li>Mesh a cogwheel with its hollow cog.</li>
+    <li>Watch items slide past the windows and pop out through the cog.</li>
+  </ol>
+</section>
+
+<section aria-labelledby="h-num">
+  <h2 id="h-num">Speed buys items, and costs stress</h2>
+  <p class="sub">One load per turn. A plain Inlet's load is one item; a Brass Inlet's is up to a stack. Each Inlet also waits 8 ticks between loads, like a funnel.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th class="n">Cog speed</th><th class="n">Stress</th><th class="n">Loads/s</th><th class="n">Plain, items/s</th><th class="n">Brass, items/s</th><th class="n">Travel</th></tr></thead>
+      <tbody>
+        <tr><td class="n">16 RPM</td><td class="n">64 SU</td><td class="n">0.25</td><td class="n">0.25</td><td class="n">16</td><td class="n">1 block/s</td></tr>
+        <tr><td class="n">64 RPM</td><td class="n">256 SU</td><td class="n">1</td><td class="n">1</td><td class="n">64</td><td class="n">4 blocks/s</td></tr>
+        <tr><td class="n">128 RPM</td><td class="n">512 SU</td><td class="n">2</td><td class="n">2</td><td class="n">128</td><td class="n">8 blocks/s</td></tr>
+        <tr class="top"><td class="n">256 RPM</td><td class="n">1,024 SU</td><td class="n">4</td><td class="n">4</td><td class="n">256</td><td class="n">16 blocks/s</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section aria-labelledby="h-rules">
+  <h2 id="h-rules">The rules</h2>
+  <div class="pairs">
+    <div class="does">
+      <h3>Does</h3>
+      <ul>
+        <li>Take from chests, vaults, depots, belts and the floor</li>
+        <li>Let Inlets face any of the six directions</li>
+        <li>Branch in every direction</li>
+        <li>Insert into the block in front of the Receiver, or drop if there's none</li>
+        <li>Wait when the end is full: one load per tube, nothing lost</li>
+        <li>Work on Aeronautics ships</li>
+        <li>Close a tube joint with a wrench, so networks run side by side</li>
+      </ul>
+    </div>
+    <div class="doesnt">
+      <h3>Doesn't</h3>
+      <ul>
+        <li>Allow two Receivers on one network (the tube stays capped)</li>
+        <li>Send items backwards, or to more than one place</li>
+        <li>Load chunks, or move items in chunks that aren't running</li>
+        <li>Join Create's Chutes and Funnels, or the Fluid and Power Lines</li>
+        <li>Hide inside other blocks</li>
+        <li>Run while on a moving contraption</li>
+        <li>Grow past 256 tubes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="h-qa">
+  <h2 id="h-qa">What if…?</h2>
+  <div class="qa">
+    <div><b>You break a tube with an item in it?</b><span>The item drops there. The rest carry on, or wait for the gap to be mended.</span></div>
+    <div><b>The chest at the end fills up?</b><span>Items queue back up the tubes and the Inlets stop pulling.</span></div>
+    <div><b>Two networks, each with a Receiver, touch?</b><span>The tube between them stays capped. Goggles say why.</span></div>
+    <div><b>An Inlet's chunk isn't loaded?</b><span>It skips its turn. Nothing is lost.</span></div>
+    <div><b>The cog stops, or the network overstresses?</b><span>Nothing moves; items stay in their tubes.</span></div>
+    <div><b>An Inlet faces up?</b><span>It takes items lying on top of it, like a collecting floor.</span></div>
+    <div><b>A floor Inlet and a hopper both see an item?</b><span>Whichever takes it first gets it.</span></div>
+    <div><b>You die under a floor Inlet?</b><span>Your drops get sucked up, as a hopper would take them.</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-scores">
+  <h2 id="h-scores">How ready it is</h2>
+  <div class="scores">
+    <div class="score"><span>Gameplay</span><div class="bar"><i style="width:95%"></i></div><b>95%</b><p>The gulp's exact motion is the art director's to set.</p></div>
+    <div class="score"><span>World integration</span><div class="bar"><i style="width:90%"></i></div><b>90%</b><p>Belt pickup and claim-mod handling are assumed, not tried.</p></div>
+    <div class="score"><span>Balance</span><div class="bar"><i style="width:85%"></i></div><b>85%</b><p>4 SU per RPM and RPM ÷ 64 are untested in play; check against belts and Brass Funnels.</p></div>
+    <div class="score"><span>Progression</span><div class="bar"><i style="width:90%"></i></div><b>90%</b><p>Recipes not checked for JEI conflicts; the Encased Fan makes the Receiver need iron.</p></div>
+    <div class="score"><span>Automation</span><div class="bar"><i style="width:95%"></i></div><b>95%</b><p>Redstone and Clutch control are shown only in Ponder.</p></div>
+    <div class="score"><span>Edge cases</span><div class="bar"><i style="width:90%"></i></div><b>90%</b><p>Piston-pushed tubes and join order under heavy load need game tests.</p></div>
+    <div class="score overall"><span>Overall</span><div class="bar"><i style="width:85%"></i></div><b>85%</b><p>The lowest area sets it. Nothing blocks development; tune the numbers in the first playtest.</p></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-open">
+  <h2 id="h-open">Still open</h2>
+  <div class="open">
+    <div><h3>Nothing undecided</h3><p class="sub">Every question is answered. The small numbers were approved as proposed defaults and are all in the server config.</p></div>
+    <div><h3>Next: the look</h3><p class="sub">A design brief in the bot family (Trade Bot, Helper Bot, Clockwork Dynamo), previewed in Blockbench before anything goes into the mod.</p></div>
+  </div>
+</section>
+
+<footer>Full spec: <code>design/specs/clockwork-tubes.md</code> · 40 decisions · 2026-10-31</footer>
+</div>
+
+<script>
+(() => {
+  const speeds = [8, 16, 32, 64, 128, 256];
+  const $ = id => document.getElementById(id);
+  const fmt = n => n.toLocaleString('en-GB', { maximumFractionDigits: 2 });
+  const rig = $('rig'), speed = $('speed'), brassT = $('brassT'), fullT = $('fullT');
+  const paths = [0, 1, 2].map(i => $('p' + i)), lens = paths.map(p => p.getTotalLength());
+  const flaps = [0, 1, 2].map(i => $('f' + i));
+  const layer = $('items'), NS = 'http://www.w3.org/2000/svg';
+  const colours = ['var(--item-a)', 'var(--item-b)', 'var(--item-c)'];
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let items = [], acc = 0, turn = 0, last = 0;
+
+  function update() {
+    const rpm = speeds[+speed.value], brass = brassT.checked, loads = rpm / 64;
+    $('rpm').textContent = rpm + ' RPM';
+    $('su').textContent = fmt(rpm * 4) + ' SU';
+    $('loads').textContent = fmt(loads);
+    $('items-s').textContent = fmt(brass ? loads * 64 : loads);
+    $('travel').textContent = fmt(rpm / 16) + ' blocks/s';
+    const period = (240 / rpm).toFixed(2) + 's';
+    $('cog').style.animationDuration = period;
+    $('teeth').style.animationDuration = period;
+    rig.classList.toggle('brass', brass);
+    rig.classList.toggle('full', fullT.checked);
+  }
+
+  function spawn(i, s = 0) {
+    const g = document.createElementNS(NS, 'g');
+    const add = (dx, dy, c) => { const r = document.createElementNS(NS, 'rect'); r.setAttribute('x', dx); r.setAttribute('y', dy); r.setAttribute('width', 7); r.setAttribute('height', 7); r.setAttribute('fill', c); g.appendChild(r); };
+    const c = colours[Math.floor(Math.random() * colours.length)];
+    if (brassT.checked) { add(-2, -2, c); add(-5, -5, c); } else add(-3.5, -3.5, c);
+    layer.appendChild(g);
+    const it = { i, s, g };
+    place(it);
+    items.push(it);
+    const f = flaps[i]; f.classList.remove('gulp'); void f.getBBox(); f.classList.add('gulp');
+  }
+  function place(it) { const p = paths[it.i].getPointAtLength(it.s); it.g.setAttribute('transform', `translate(${p.x} ${p.y})`); }
+
+  function frame(t) {
+    const dt = last ? Math.min(0.1, (t - last) / 1000) : 0; last = t;
+    const rpm = speeds[+speed.value];
+    if (!fullT.checked) {
+      acc += dt * rpm / 64;
+      while (acc >= 1) { acc -= 1; spawn(turn); turn = (turn + 1) % 3; }
+      const v = rpm / 16 * 40 * 0.25; // blocks/s × 40 px a block × quarter speed
+      items = items.filter(it => {
+        it.s += v * dt;
+        if (it.s >= lens[it.i]) { it.g.remove(); return false; }
+        place(it); return true;
+      });
+    }
+    requestAnimationFrame(frame);
+  }
+
+  speed.addEventListener('input', update);
+  brassT.addEventListener('change', update);
+  fullT.addEventListener('change', update);
+  update();
+  if (still) { spawn(0, 60); spawn(1, 90); spawn(2, 200); }
+  else requestAnimationFrame(frame);
+})();
+</script>

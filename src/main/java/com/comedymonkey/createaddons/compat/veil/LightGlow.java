@@ -62,6 +62,14 @@ public final class LightGlow {
 
 	/** Lit lights in the player's world, and the Veil light each has while coloured light is on. */
 	private static final Map<LightBlockEntity, Glow> GLOWS = new IdentityHashMap<>();
+	/**
+	 * Veil's light pass turns its albedo and normal buffers on only on frames where a light is in view, and off again on
+	 * frames with none; each change deletes its framebuffers and swaps its shaders, and skips that frame's lights. Turning
+	 * quickly by a lamp did that every few frames: hitches, and in a window a flashing screen. While any of our glows is
+	 * lit, the buffers are held on under this name, so Veil's own on and off never changes them.
+	 */
+	private static final net.minecraft.resources.ResourceLocation HOLD = ComedyMonkeysCreateAddons.asResource("light_glow");
+	private static boolean held;
 	/** Where each light's lens sits in its block, by the way it faces (read from its lit lens model). */
 	private static final Map<LightKind, Vec3[]> LENSES = new EnumMap<>(LightKind.class);
 
@@ -113,8 +121,10 @@ public final class LightGlow {
 	}
 
 	private static void frame(RenderFrameEvent.Pre event) {
-		if (GLOWS.isEmpty())
+		if (GLOWS.isEmpty()) {
+			hold(false);
 			return;
+		}
 		Minecraft mc = Minecraft.getInstance();
 		boolean on = CMConfig.CLIENT.lightColouredLight.get(), shadows = CMConfig.CLIENT.lightColouredLightShadows.get();
 		float pt = event.getPartialTick().getGameTimeDeltaPartialTick(false);
@@ -133,6 +143,22 @@ public final class LightGlow {
 			}
 			update(be, glow, shadows, pt);
 		}
+		boolean lit = false;
+		for (Glow glow : GLOWS.values())
+			lit |= glow.handle != null && glow.handle.isValid();
+		hold(lit);
+	}
+
+	/** Holds Veil's light buffers on (or lets them go), so lights coming into and out of view don't rebuild them. */
+	private static void hold(boolean on) {
+		if (on == held)
+			return;
+		held = on;
+		if (on)
+			VeilRenderSystem.renderer().enableBuffers(HOLD, foundry.veil.api.client.render.dynamicbuffer.DynamicBufferType.ALBEDO,
+				foundry.veil.api.client.render.dynamicbuffer.DynamicBufferType.NORMAL);
+		else
+			VeilRenderSystem.renderer().disableBuffers(HOLD);
 	}
 
 	private static void update(LightBlockEntity be, Glow glow, boolean shadows, float pt) {

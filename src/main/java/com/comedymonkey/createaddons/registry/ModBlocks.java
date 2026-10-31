@@ -310,6 +310,15 @@ public final class ModBlocks {
 	public static final DeferredBlock<com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock> CLOCKWORK_DYNAMO = BLOCKS.register("clockwork_dynamo",
 		() -> new com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock(machine()
 			.lightLevel(state -> state.getValue(com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock.WORKING) ? 6 : 0)));
+	// ---- Clockwork Tubes (design/specs/clockwork-tubes.md): Inlets take, tubes carry, one cog-driven Receiver delivers
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.tube.ClockworkTubeBlock> CLOCKWORK_TUBE = BLOCKS.register("clockwork_tube",
+		() -> new com.comedymonkey.createaddons.content.tube.ClockworkTubeBlock(tubeProperties()));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.tube.ClockworkInletBlock> CLOCKWORK_INLET = BLOCKS.register("clockwork_inlet",
+		() -> new com.comedymonkey.createaddons.content.tube.ClockworkInletBlock(machine().strength(2.0f, 6.0f), false));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.tube.ClockworkInletBlock> BRASS_CLOCKWORK_INLET = BLOCKS.register("brass_clockwork_inlet",
+		() -> new com.comedymonkey.createaddons.content.tube.ClockworkInletBlock(machine().strength(2.0f, 6.0f), true));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.tube.ClockworkReceiverBlock> CLOCKWORK_RECEIVER = BLOCKS.register("clockwork_receiver",
+		() -> new com.comedymonkey.createaddons.content.tube.ClockworkReceiverBlock(machine().strength(2.0f, 6.0f)));
 	/** The Clockwork Juggernaut's ritual key (D16-D18): fitted to a T of Brass Blocks and wound with a shaft. */
 	public static final DeferredBlock<com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlock> WINDING_KEY = BLOCKS.register("winding_key",
 		() -> new com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlock(machine()));
@@ -459,6 +468,16 @@ public final class ModBlocks {
 				.lightLevel(state -> com.comedymonkey.createaddons.content.light.LightBlock.lightLevel(kind, state)))));
 		}
 		return java.util.Collections.unmodifiableMap(out);
+	}
+
+	/** A glass tube in steel rails: not flammable, waterloggable, its neighbours' faces show round it. */
+	private static BlockBehaviour.Properties tubeProperties() {
+		return BlockBehaviour.Properties.of()
+			.mapColor(MapColor.METAL)
+			.strength(1.5f, 4.0f)
+			.sound(SoundType.METAL)
+			.requiresCorrectToolForDrops()
+			.noOcclusion();
 	}
 
 	private static BlockBehaviour.Properties machine() {

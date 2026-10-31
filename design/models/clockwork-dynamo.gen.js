@@ -18,11 +18,17 @@ T.paint('field', (x, y) => { const r = hash(x, y, 81); return r > 0.93 ? '#8a8c8
 T.paint('steel', (x, y) => mot('steel', x, y, 82));
 T.paint('dark', (x, y) => (hash(x, y, 83) > 0.85 ? '#24282d' : '#1f2327'));
 T.paint('floor', (x, y) => (hash(x, y, 84) > 0.8 ? '#1a1d20' : '#16181b'));
-T.paint('brass', (x, y) => mot('midBrass', x, y, 85));
+// the Trade Bot's brass (as the Clockwork Tubes): his base pair, #b08f45 over #8f7638, no highlight on trims this size
+T.paint('brass', (x, y) => (hash(x, y, 85) > 0.7 ? '#8f7638' : '#b08f45'));
 T.paint('brass_edge', () => '#6e5a2a');
-// the waist band: rivets along row 0 (for faces mapped across it) and column 0 (for faces mapped down it), every 3 px,
-// a shade apart so they read as rivets, not stripes
-T.paint('band', (x, y) => ((x === 0 || y === 0) && (x + y) % 3 === 1 ? '#a3873f' : '#8f7638'));
+// the waist band: the Trade Bot's own (and the Clockwork Tubes'), brass with dark brass every other pixel along its
+// length. Faces mapped across it (top, bottom) run along u in rows 0-1; faces mapped down it (sides) run along v
+const TB_BRASS = ['#8f7638', '#b08f45', '#c9a75a'];
+T.paint('band', (x, y) => {
+  if ((y < 2 ? x : y) % 2 === 1) return '#6e5a2a';
+  const r = hash(x, y, 93);
+  return r < 0.18 ? TB_BRASS[0] : r < 0.84 ? TB_BRASS[1] : TB_BRASS[2];
+});
 T.paint('rim', (x, y) => mot('steelLight', x, y, 92));
 T.paint('copper', (x, y) => mot('copper', x, y, 86));
 T.paint('carbon', (x, y) => (hash(x, y, 87) > 0.7 ? '#323337' : '#26272a'));
@@ -60,7 +66,7 @@ T.paint('base', (u, v) => {
 });
 // vents: the Helper Bot's whisker grille, muted brass with three dark slots (mapped explicitly, 4 x 7); three, so it
 // reads as a grille and never as a pair of eyes when the block stands up
-T.paint('vent', (u, v) => (u === 0 || u === 3 || v === 0 || v === 6 ? '#8f7638' : v % 2 === 1 ? '#2a2f35' : '#6e5a2a'));
+T.paint('vent', (u, v) => (u === 0 || u === 3 || v === 0 || v === 6 ? '#b08f45' : v % 2 === 1 ? '#2a2f35' : '#6e5a2a'));
 T.paint('lamp_off', (x, y) => (hash(x, y, 91) > 0.8 ? '#24383c' : '#1e3236'));
 // the electric family's running lamp, painted as the motor's and the generators' are
 T.paint('lamp_cyan', (x, y) => (edge(x % 4, y % 4) === 0 ? '#4f8f99' : '#6fb7c4'));

@@ -1,0 +1,493 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "north": "none",
+        "east": "open",
+        "south": "none",
+        "west": "open",
+        "up": "none",
+        "down": "none"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_spine",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "north": "none",
+        "east": "none",
+        "south": "none",
+        "west": "none",
+        "up": "open",
+        "down": "open"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_spine"
+      }
+    },
+    {
+      "when": {
+        "north": "open",
+        "east": "none",
+        "south": "open",
+        "west": "none",
+        "up": "none",
+        "down": "none"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_spine",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "north": "open"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm"
+      }
+    },
+    {
+      "when": {
+        "north": "capped"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm_capped"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "north": "none"
+          },
+          {
+            "OR": [
+              {
+                "north": "open|capped"
+              },
+              {
+                "east": "none|capped"
+              },
+              {
+                "south": "open|capped"
+              },
+              {
+                "west": "none|capped"
+              },
+              {
+                "up": "open|capped"
+              },
+              {
+                "down": "open|capped"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
+                "north": "open|capped"
+              },
+              {
+                "east": "open|capped"
+              },
+              {
+                "south": "open|capped"
+              },
+              {
+                "west": "open|capped"
+              },
+              {
+                "up": "none|capped"
+              },
+              {
+                "down": "none|capped"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_plate"
+      }
+    },
+    {
+      "when": {
+        "east": "open"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "capped"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm_capped",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "east": "none"
+          },
+          {
+            "OR": [
+              {
+                "north": "open|capped"
+              },
+              {
+                "east": "open|capped"
+              },
+              {
+                "south": "open|capped"
+              },
+              {
+                "west": "open|capped"
+              },
+              {
+                "up": "none|capped"
+              },
+              {
+                "down": "none|capped"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
+                "north": "none|capped"
+              },
+              {
+                "east": "open|capped"
+              },
+              {
+                "south": "none|capped"
+              },
+              {
+                "west": "open|capped"
+              },
+              {
+                "up": "open|capped"
+              },
+              {
+                "down": "open|capped"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_plate",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "open"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "capped"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm_capped",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "south": "none"
+          },
+          {
+            "OR": [
+              {
+                "north": "open|capped"
+              },
+              {
+                "east": "none|capped"
+              },
+              {
+                "south": "open|capped"
+              },
+              {
+                "west": "none|capped"
+              },
+              {
+                "up": "open|capped"
+              },
+              {
+                "down": "open|capped"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
+                "north": "open|capped"
+              },
+              {
+                "east": "open|capped"
+              },
+              {
+                "south": "open|capped"
+              },
+              {
+                "west": "open|capped"
+              },
+              {
+                "up": "none|capped"
+              },
+              {
+                "down": "none|capped"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_plate",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "open"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "capped"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm_capped",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "west": "none"
+          },
+          {
+            "OR": [
+              {
+                "north": "open|capped"
+              },
+              {
+                "east": "open|capped"
+              },
+              {
+                "south": "open|capped"
+              },
+              {
+                "west": "open|capped"
+              },
+              {
+                "up": "none|capped"
+              },
+              {
+                "down": "none|capped"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
+                "north": "none|capped"
+              },
+              {
+                "east": "open|capped"
+              },
+              {
+                "south": "none|capped"
+              },
+              {
+                "west": "open|capped"
+              },
+              {
+                "up": "open|capped"
+              },
+              {
+                "down": "open|capped"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_plate",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "open"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "up": "capped"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm_capped",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "up": "none"
+          },
+          {
+            "OR": [
+              {
+                "north": "open|capped"
+              },
+              {
+                "east": "none|capped"
+              },
+              {
+                "south": "open|capped"
+              },
+              {
+                "west": "none|capped"
+              },
+              {
+                "up": "open|capped"
+              },
+              {
+                "down": "open|capped"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
+                "north": "none|capped"
+              },
+              {
+                "east": "open|capped"
+              },
+              {
+                "south": "none|capped"
+              },
+              {
+                "west": "open|capped"
+              },
+              {
+                "up": "open|capped"
+              },
+              {
+                "down": "open|capped"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_plate",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "open"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "down": "capped"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_arm_capped",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "down": "none"
+          },
+          {
+            "OR": [
+              {
+                "north": "open|capped"
+              },
+              {
+                "east": "none|capped"
+              },
+              {
+                "south": "open|capped"
+              },
+              {
+                "west": "none|capped"
+              },
+              {
+                "up": "open|capped"
+              },
+              {
+                "down": "open|capped"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
+                "north": "none|capped"
+              },
+              {
+                "east": "open|capped"
+              },
+              {
+                "south": "none|capped"
+              },
+              {
+                "west": "open|capped"
+              },
+              {
+                "up": "open|capped"
+              },
+              {
+                "down": "open|capped"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/clockwork_tube_plate",
+        "x": 90
+      }
+    }
+  ]
+}

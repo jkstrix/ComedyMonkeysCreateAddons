@@ -22,6 +22,8 @@ public final class ModDisplaySources {
 		SOURCES.register("magma_engine_output", MagmaEngineDisplaySources.Output::new);
 	public static final DeferredHolder<DisplaySource, com.comedymonkey.createaddons.content.electric.ClockworkDynamoDisplaySource> CLOCKWORK_DYNAMO_OUTPUT =
 		SOURCES.register("clockwork_dynamo_output", com.comedymonkey.createaddons.content.electric.ClockworkDynamoDisplaySource::new);
+	public static final DeferredHolder<DisplaySource, com.comedymonkey.createaddons.content.tube.ClockworkReceiverDisplaySource> CLOCKWORK_RECEIVER_ITEMS =
+		SOURCES.register("clockwork_receiver_items", com.comedymonkey.createaddons.content.tube.ClockworkReceiverDisplaySource::new);
 	public static final DeferredHolder<DisplaySource, WellspringDisplaySources.Fluid> WELLSPRING_FLUID =
 		SOURCES.register("wellspring_fluid", WellspringDisplaySources.Fluid::new);
 	public static final DeferredHolder<DisplaySource, WellspringDisplaySources.FillPercent> WELLSPRING_FILL =
@@ -53,6 +55,7 @@ public final class ModDisplaySources {
 		DisplaySource.BY_BLOCK.add(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.get(), MAGMA_ENGINE_LAVA.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.SUPERCHARGED_MAGMA_ENGINE.get(), MAGMA_ENGINE_OUTPUT.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.CLOCKWORK_DYNAMO.get(), CLOCKWORK_DYNAMO_OUTPUT.get());
+		DisplaySource.BY_BLOCK.add(ModBlocks.CLOCKWORK_RECEIVER.get(), CLOCKWORK_RECEIVER_ITEMS.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_FLUID.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_FILL.get());
 		DisplaySource.BY_BLOCK.add(ModBlocks.WELLSPRING.get(), WELLSPRING_FILL_BAR.get());

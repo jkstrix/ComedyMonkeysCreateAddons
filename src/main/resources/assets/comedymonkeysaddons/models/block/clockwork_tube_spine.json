@@ -1,0 +1,349 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/clockwork_tubes_collar",
+    "steel": "comedymonkeysaddons:block/clockwork_tubes_steel",
+    "glass_bv": "comedymonkeysaddons:block/clockwork_tubes_glass_bv",
+    "glass_v": "comedymonkeysaddons:block/clockwork_tubes_glass_v"
+  },
+  "elements": [
+    {
+      "name": "rail",
+      "from": [
+        4,
+        4,
+        4
+      ],
+      "to": [
+        5,
+        12,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            4,
+            12,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            11,
+            4,
+            12,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            4,
+            4,
+            5,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            4,
+            4,
+            5,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "rail",
+      "from": [
+        4,
+        4,
+        11
+      ],
+      "to": [
+        5,
+        12,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            4,
+            12,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            4,
+            4,
+            5,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            4,
+            4,
+            5,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            11,
+            4,
+            12,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "rail",
+      "from": [
+        11,
+        4,
+        4
+      ],
+      "to": [
+        12,
+        12,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            4,
+            5,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            11,
+            4,
+            12,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            11,
+            4,
+            12,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            4,
+            4,
+            5,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "rail",
+      "from": [
+        11,
+        4,
+        11
+      ],
+      "to": [
+        12,
+        12,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            4,
+            5,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            4,
+            4,
+            5,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            11,
+            4,
+            12,
+            12
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            11,
+            4,
+            12,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "pane",
+      "from": [
+        4.5,
+        4,
+        5
+      ],
+      "to": [
+        4.5,
+        12,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            6,
+            8
+          ],
+          "texture": "#glass_bv"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            6,
+            8
+          ],
+          "texture": "#glass_v"
+        }
+      }
+    },
+    {
+      "name": "pane",
+      "from": [
+        11.5,
+        4,
+        5
+      ],
+      "to": [
+        11.5,
+        12,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            6,
+            8
+          ],
+          "texture": "#glass_v"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            6,
+            8
+          ],
+          "texture": "#glass_bv"
+        }
+      }
+    },
+    {
+      "name": "pane",
+      "from": [
+        5,
+        4,
+        4.5
+      ],
+      "to": [
+        11,
+        12,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6,
+            8
+          ],
+          "texture": "#glass_v"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6,
+            8
+          ],
+          "texture": "#glass_bv"
+        }
+      }
+    },
+    {
+      "name": "pane",
+      "from": [
+        5,
+        4,
+        11.5
+      ],
+      "to": [
+        11,
+        12,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6,
+            8
+          ],
+          "texture": "#glass_bv"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6,
+            8
+          ],
+          "texture": "#glass_v"
+        }
+      }
+    }
+  ]
+}

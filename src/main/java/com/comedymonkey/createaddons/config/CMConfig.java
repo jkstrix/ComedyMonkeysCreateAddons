@@ -104,6 +104,11 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue motorMaxStress;
 		public final ModConfigSpec.DoubleValue motorFePerStress;
 		public final ModConfigSpec.DoubleValue dynamoEfficiency;
+		public final ModConfigSpec.DoubleValue clockworkReceiverStress;
+		public final ModConfigSpec.DoubleValue clockworkTubeLoadsPerRpm;
+		public final ModConfigSpec.DoubleValue clockworkTubeBlocksPerRpm;
+		public final ModConfigSpec.IntValue clockworkInletCooldown;
+		public final ModConfigSpec.IntValue clockworkTubeMaxLength;
 		public final ModConfigSpec.IntValue generatorFePerTick;
 		public final ModConfigSpec.IntValue generatorLavaPerSecond;
 		public final ModConfigSpec.IntValue turbineFePerTick;
@@ -457,6 +462,31 @@ public final class CMConfig {
 				.comment("Lava burned while running, in millibuckets per second.")
 				.translation("comedymonkeysaddons.configuration.superchargedMagmaEngineLavaPerSecond")
 				.defineInRange("lavaPerSecond", 20, 0, 1000);
+			builder.pop();
+
+			builder.comment("Clockwork Tubes: Inlets take items, tubes carry them, and one Receiver, turned by its cog, pulls them",
+					"all to itself. Its speed sets how fast they move and how many it takes; its stress follows its speed.").push("clockworkTubes");
+			clockworkReceiverStress = builder
+				.comment("Stress a Clockwork Receiver takes for each RPM it turns at (Create's Mechanical Pump takes 4).")
+				.translation("comedymonkeysaddons.configuration.clockworkReceiverStress")
+				.defineInRange("receiverStressPerRpm", 4.0, 0.0, 1024.0);
+			clockworkTubeLoadsPerRpm = builder
+				.comment("Loads a network's Inlets take each second, between them, for each RPM its Receiver turns at",
+					"(0.015625 = RPM / 64: 4 loads a second at 256 RPM). A load is one item, or up to a stack from a Brass Inlet.")
+				.translation("comedymonkeysaddons.configuration.clockworkTubeLoadsPerRpm")
+				.defineInRange("loadsPerRpm", 0.015625, 0.0, 1.0);
+			clockworkTubeBlocksPerRpm = builder
+				.comment("Blocks a second items travel along the tubes for each RPM the Receiver turns at (0.0625 = RPM / 16).")
+				.translation("comedymonkeysaddons.configuration.clockworkTubeBlocksPerRpm")
+				.defineInRange("blocksPerRpm", 0.0625, 0.0, 1.0);
+			clockworkInletCooldown = builder
+				.comment("Ticks an Inlet waits after taking a load before it can take another, like a funnel.")
+				.translation("comedymonkeysaddons.configuration.clockworkInletCooldown")
+				.defineInRange("inletCooldown", 8, 1, 200);
+			clockworkTubeMaxLength = builder
+				.comment("The most tubes a Receiver's network can have. A tube that would make it longer stays capped.")
+				.translation("comedymonkeysaddons.configuration.clockworkTubeMaxLength")
+				.defineInRange("maxTubes", 256, 1, 4096);
 			builder.pop();
 
 			builder.comment("Electricity: the Lava Generator and Geothermal Turbine make Forge Energy (FE), the Electric Motor",
@@ -897,6 +927,26 @@ public final class CMConfig {
 
 		public double dynamoEfficiency() {
 			return get(dynamoEfficiency);
+		}
+
+		public double clockworkReceiverStress() {
+			return get(clockworkReceiverStress);
+		}
+
+		public double clockworkTubeLoadsPerRpm() {
+			return get(clockworkTubeLoadsPerRpm);
+		}
+
+		public double clockworkTubeBlocksPerRpm() {
+			return get(clockworkTubeBlocksPerRpm);
+		}
+
+		public int clockworkInletCooldown() {
+			return get(clockworkInletCooldown);
+		}
+
+		public int clockworkTubeMaxLength() {
+			return get(clockworkTubeMaxLength);
 		}
 
 		public int generatorFePerTick() {

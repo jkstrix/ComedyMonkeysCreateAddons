@@ -85,6 +85,10 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.BATTERY.get());
 				output.accept(ModItems.ELECTRIC_MOTOR.get());
 				output.accept(ModItems.CLOCKWORK_DYNAMO.get());
+				output.accept(ModItems.CLOCKWORK_RECEIVER.get());
+				output.accept(ModItems.CLOCKWORK_TUBE.get());
+				output.accept(ModItems.CLOCKWORK_INLET.get());
+				output.accept(ModItems.BRASS_CLOCKWORK_INLET.get());
 				output.accept(ModItems.FE_COIL.get());
 				output.accept(ModItems.GEOTHERMAL_CONTROLLER.get());
 				output.accept(ModItems.GEOTHERMAL_CASING.get());

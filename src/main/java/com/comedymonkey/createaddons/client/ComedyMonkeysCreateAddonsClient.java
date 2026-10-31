@@ -214,6 +214,9 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.MAGMA_ENGINE.get(), MagmaEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ELECTRIC_MOTOR.get(), ElectricRenderers.Motor::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.CLOCKWORK_DYNAMO.get(), ElectricRenderers.Dynamo::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.CLOCKWORK_RECEIVER.get(), TubeRenderers.Receiver::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.CLOCKWORK_INLET.get(), TubeRenderers.Inlet::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.CLOCKWORK_TUBE.get(), TubeRenderers.Tube::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.WINDING_KEY.get(), com.comedymonkey.createaddons.client.juggernaut.WindingKeyRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.SPRING_ENGINE.get(), com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);
@@ -267,6 +270,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		CuckooClockRenderer.registerModels(event);
 		MagmaEngineRenderer.registerModels(event);
 		ElectricRenderers.registerModels(event);
+		TubeRenderers.registerModels(event);
 		BatteryRenderer.registerModels(event);
 		LightRenderer.registerModels(event);
 		BatteryTowerModel.registerModels(event);

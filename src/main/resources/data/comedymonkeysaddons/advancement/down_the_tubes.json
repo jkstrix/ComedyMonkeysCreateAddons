@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:root",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:clockwork_receiver"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.down_the_tubes"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.down_the_tubes.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "tube_delivery"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

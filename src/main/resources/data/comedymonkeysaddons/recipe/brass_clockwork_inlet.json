@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create:brass_casing"
+    },
+    {
+      "item": "create:brass_funnel"
+    },
+    {
+      "item": "comedymonkeysaddons:clockwork_tube"
+    }
+  ],
+  "result": {
+    "id": "comedymonkeysaddons:brass_clockwork_inlet",
+    "count": 1
+  }
+}

@@ -99,6 +99,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.StorageGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.MachineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.DynamoGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.TubeGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LightGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.BatteryGameTests::register);
@@ -331,6 +332,7 @@ public class ComedyMonkeysCreateAddons {
 			// Stress impact per RPM, read from the config each time Create asks
 			BlockStressValues.IMPACTS.register(ModBlocks.PRESSURE_CRUCIBLE.get(), CMConfig.SERVER::crucibleStressImpact);
 			BlockStressValues.IMPACTS.register(ModBlocks.WINDING_KEY.get(), CMConfig.SERVER::windingKeyStressImpact);
+			BlockStressValues.IMPACTS.register(ModBlocks.CLOCKWORK_RECEIVER.get(), CMConfig.SERVER::clockworkReceiverStress);
 			registerCreateTooltip(ModItems.WINDING_KEY.get());
 			registerCreateTooltip(ModItems.SPRING_ENGINE.get());
 			// Every generator, by tier: the Brass ones make 16 at a time and load the network to match
@@ -370,6 +372,10 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.SUPERCHARGED_MAGMA_ENGINE.get());
 			registerCreateTooltip(ModItems.ELECTRIC_MOTOR.get());
 			registerCreateTooltip(ModItems.CLOCKWORK_DYNAMO.get());
+			registerCreateTooltip(ModItems.CLOCKWORK_RECEIVER.get());
+			registerCreateTooltip(ModItems.CLOCKWORK_TUBE.get());
+			registerCreateTooltip(ModItems.CLOCKWORK_INLET.get());
+			registerCreateTooltip(ModItems.BRASS_CLOCKWORK_INLET.get());
 			registerCreateTooltip(ModItems.LAVA_GENERATOR.get());
 			registerCreateTooltip(ModItems.BATTERY.get());
 			registerCreateTooltip(ModItems.GEOTHERMAL_CONTROLLER.get());

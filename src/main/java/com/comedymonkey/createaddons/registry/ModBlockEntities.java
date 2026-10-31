@@ -157,6 +157,21 @@ public final class ModBlockEntities {
 			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlockEntity::new, ModBlocks.SPRING_ENGINE.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.tube.ClockworkTubeBlockEntity>> CLOCKWORK_TUBE =
+		BLOCK_ENTITY_TYPES.register("clockwork_tube",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.tube.ClockworkTubeBlockEntity::new, ModBlocks.CLOCKWORK_TUBE.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.tube.ClockworkInletBlockEntity>> CLOCKWORK_INLET =
+		BLOCK_ENTITY_TYPES.register("clockwork_inlet",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.tube.ClockworkInletBlockEntity::new, ModBlocks.CLOCKWORK_INLET.get(), ModBlocks.BRASS_CLOCKWORK_INLET.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.tube.ClockworkReceiverBlockEntity>> CLOCKWORK_RECEIVER =
+		BLOCK_ENTITY_TYPES.register("clockwork_receiver",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.tube.ClockworkReceiverBlockEntity::new, ModBlocks.CLOCKWORK_RECEIVER.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity>> CLOCKWORK_DYNAMO =
 		BLOCK_ENTITY_TYPES.register("clockwork_dynamo",
 			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity::new, ModBlocks.CLOCKWORK_DYNAMO.get()).build(null));
