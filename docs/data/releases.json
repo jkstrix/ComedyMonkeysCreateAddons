@@ -1,5 +1,42 @@
 [
   {
+    "version": "2.5.1",
+    "from": "2.5.0",
+    "date": "2026-11-01",
+    "title": "A harder fight in the ruins, and fixes",
+    "summary": "Fixes from the first days of 2.5.0, and a fight in the ruins that can no longer be pinned, kited or read.",
+    "highlights": [],
+    "sections": [
+      {
+        "title": "Changed",
+        "icon": "rotate",
+        "body": [
+          {
+            "list": [
+              "**[[ruin-sleeper]] no longer locks on to one player.** After every combo it goes for whoever has hurt it most lately, and blows on its back count double.",
+              "**It is harder to read.** Its combos vary in length, it sometimes reaches for a move meant for nearer or further off, now and then it throws a cog when it could have walked to you, and some wind-ups are feints.",
+              "**It can't be trapped.** Walled in, down a pit or cut off by water for 10 seconds, it goes up in steam and comes out of it beside you."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Fixed",
+        "icon": "check",
+        "body": [
+          {
+            "list": [
+              "**[[ruin-sleeper]] got stuck on its own ruins.** It breaks through their walls wherever it touches them, and a wall knocked out from under comes down whole. Ruins generated from now on are built from their own copies of their blocks, which it always breaks through; mined, they drop the ordinary block. Your own builds are never touched, nor the ruin's chest and brass.",
+              "**It floated on hillsides**, held up by one corner of its feet. It slides off and comes down.",
+              "**A gap between the [[winding-key]] and a Hand Crank or shaft.** The key now has a spindle out to the edge of its block.",
+              "**[[clockwork-tubes|Brass Clockwork Inlets]] didn't show their filter.** It now shows on the hood."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "version": "2.5.0",
     "from": "2.0.2",
     "date": "2026-10-27",

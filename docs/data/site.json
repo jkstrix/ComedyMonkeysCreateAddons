@@ -1,6 +1,6 @@
 {
   "modName": "ComedyMonkey's Create Addons",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "minecraft": "1.21.1",
   "create": "6.0.10",
   "neoforge": "21.1.248",
@@ -76,6 +76,7 @@
       ]
     },
     "notes": [
+      { "date": "2026-11-01", "title": "2.5.1: a harder fight in the ruins", "body": "Fixes from the first days of 2.5.0. What sleeps in the ruins no longer locks on to one player, can't be pinned or trapped, and is harder to read." },
       { "date": "2026-10-31", "title": "Clockwork Tubes", "body": "Gather items from many places into one, any way you like, without belts: **Clockwork Inlets** gulp them up from chests, depots, belts or the floor, glass tubes carry them, and one **Clockwork Receiver** pulls them out through the middle of its hollow cog." },
       { "date": "2026-10-31", "title": "Clockwork Dynamo", "body": "The Electric Motor run backwards, built from the bots' own parts: any Create power becomes electricity, water wheels and windmills included. It loses a quarter on the way, so a motor and a dynamo can never run each other." },
       { "date": "2026-10-28", "title": "Electric Lights", "body": "Lamp posts, wall, ceiling and hanging lamps, strips, edge trim, festoons and a Floodlight, all run off the Power Lines. Cut them from a **Light Assembly** in a stonecutter, colour them with a dye that isn't used up, and switch whole circuits with a **Light Switch**." },
