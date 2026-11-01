@@ -56,6 +56,10 @@ class ModBlocksTest {
 				assertSame(Items.AIR, item, "a Floodlight's spot of light is not an item");
 				continue;
 			}
+			if (entry.get() instanceof com.comedymonkey.createaddons.content.juggernaut.ruin.RuinBlocks.Ruin) {
+				assertSame(Items.AIR, item, "a Juggernaut Ruin's block is only ever built by the ruin: it drops its vanilla block");
+				continue;
+			}
 			if (entry.getId().equals(ModBlocks.HANGING_CABLE.getId())) {
 				assertSame(Items.AIR, item, "a hanging lamp's cable is made by lowering it, not an item");
 				continue;

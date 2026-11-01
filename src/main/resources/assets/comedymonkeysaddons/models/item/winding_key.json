@@ -515,6 +515,75 @@
       }
     },
     {
+      "name": "key_spindle",
+      "from": [
+        6,
+        6,
+        0
+      ],
+      "to": [
+        10,
+        10,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "east": {
+          "uv": [
+            12,
+            6,
+            16,
+            10
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "south": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            6,
+            4,
+            10
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "up": {
+          "uv": [
+            6,
+            0,
+            10,
+            4
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "down": {
+          "uv": [
+            6,
+            12,
+            10,
+            16
+          ],
+          "texture": "#winding_key_iron"
+        }
+      }
+    },
+    {
       "name": "loop_r_top",
       "from": [
         10.5,

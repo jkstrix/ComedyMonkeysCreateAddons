@@ -489,5 +489,10 @@ public final class ModBlocks {
 			.noOcclusion();
 	}
 
+	// the Juggernaut Ruins' copies of their vanilla blocks register here too
+	static {
+		com.comedymonkey.createaddons.content.juggernaut.ruin.RuinBlocks.register();
+	}
+
 	private ModBlocks() {}
 }

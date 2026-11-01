@@ -6,10 +6,12 @@ import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.juggernaut.ruin.RuinField;
 import com.comedymonkey.createaddons.content.juggernaut.ruin.RuinHall;
 import com.comedymonkey.createaddons.content.juggernaut.ruin.JuggernautRuinStructure;
+import com.comedymonkey.createaddons.content.juggernaut.ruin.RuinBlocksProcessor;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /** The Juggernaut Ruins (D31, D55): their structure type and its two kinds of piece. */
@@ -25,6 +27,10 @@ public final class ModStructures {
 	/** The broken walls and fallen blocks round it, thinning out to the odd block at the edge. */
 	public static final Supplier<StructurePieceType> RUIN_FIELD = PIECES.register("juggernaut_ruin_field",
 		() -> (StructurePieceType.ContextlessType) RuinField::new);
+	public static final DeferredRegister<StructureProcessorType<?>> PROCESSORS = DeferredRegister.create(Registries.STRUCTURE_PROCESSOR, ComedyMonkeysCreateAddons.MOD_ID);
+	/** Builds the hall from the ruin's own blocks, which he crumbles (RuinBlocks). */
+	public static final Supplier<StructureProcessorType<RuinBlocksProcessor>> RUIN_BLOCKS_PROCESSOR = PROCESSORS.register("juggernaut_ruin_blocks",
+		() -> () -> RuinBlocksProcessor.CODEC);
 
 	private ModStructures() {}
 }

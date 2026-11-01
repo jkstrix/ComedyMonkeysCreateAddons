@@ -11,6 +11,13 @@
     "minecraft:vine",
     "minecraft:moss_carpet",
     "minecraft:end_stone_bricks",
-    "minecraft:end_stone_brick_slab"
+    "minecraft:end_stone_brick_slab",
+    "minecraft:gravel",
+    "minecraft:chain",
+    "minecraft:end_stone",
+    "minecraft:purpur_block",
+    "minecraft:purpur_pillar",
+    "minecraft:chorus_plant",
+    "minecraft:chorus_flower"
   ]
 }

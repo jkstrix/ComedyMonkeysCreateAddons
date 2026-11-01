@@ -156,6 +156,14 @@ public final class ClockworkJuggernaut extends Monster {
 	public static final int FREEZE_AMPLIFIER = 6;
 	/** He can't find a way to his target for this long: he throws a cog instead (D22). */
 	static final int STUCK_TICKS = 100;
+	/** Going nowhere this long with them out of his reach (walled in, pinned in a pit): he steams out and comes to them. */
+	public static final int TRAPPED_TICKS = 200;
+	/** He rethinks who to go after this often while chasing, as well as after every combo. */
+	static final int RETHINK_TICKS = 120;
+	/** How often a move comes from the next distance band over, and a combo opens with a cog though he could reach them. */
+	static final float BLUR = 0.25f, SURPRISE_COG = 0.125f;
+	/** By stage, how often a wind-up is a fake-out that turns into another move. */
+	static final float[] FAKE_OUT = { 0.10f, 0.15f, 0.20f };
 	/** Circled up close this long without getting to face them: he stomps the ring round him instead. */
 	static final int CIRCLE_TICKS = 30;
 	/** Degrees a tick he turns to face his target before a move. */
@@ -179,8 +187,6 @@ public final class ClockworkJuggernaut extends Monster {
 	private boolean bursting;
 	/** A hop over a wall in his way: the break-out's path (up, across, down), lower, and breaking nothing. */
 	private boolean hopping;
-	/** Within his own ruin (looked up once a second): its walls crumble under him (D62). */
-	private boolean inRuin;
 	/** Where his ruin's hall stands, if he was found in one; its field reaches about 40 blocks round it. */
 	@Nullable
 	private BlockPos home;
@@ -194,6 +200,23 @@ public final class ClockworkJuggernaut extends Monster {
 	private final Set<UUID> fallen = new HashSet<>();
 	/** What else has hurt him this fight (pets, golems, mobs): his blows and cog may hit them; bystanders never (D27). Not saved. */
 	private final Set<UUID> attackers = new HashSet<>();
+	/**
+	 * Who's been hurting him lately, fading by half every 4 s; blows from behind count double. Whoever hurts him most
+	 * draws him (the user: one player kiting him while the rest worked his key made him "easy to cheese").
+	 */
+	private final java.util.Map<UUID, Float> threat = new java.util.HashMap<>();
+	/** He rethinks who to go after at the end of a combo, and every RETHINK_TICKS while chasing. */
+	private boolean rethink;
+	private int rethinkTicks;
+	/** Struck from behind mid-move by someone he isn't after: he rounds on them once the move's done. */
+	@Nullable
+	private UUID roundOn;
+	/** His last few moves, latest first: the ones he's just used are less likely (D46, loosened). */
+	private final Move[] recent = new Move[3];
+	/** When this move's wind-up turns out to be a fake-out into another move (clip seconds); 0 for an honest one. */
+	private float fakeOutAt;
+	/** The next combo opens with a cog, though he could reach them. */
+	private boolean surpriseCog;
 	/** The blow that killed him (not saved), and whether a player (or their pet) struck it and who: saved, so a reload in
 	 * his death clip still drops the Mainspring (the loot table wants a player's kill). */
 	@Nullable
@@ -207,9 +230,9 @@ public final class ClockworkJuggernaut extends Monster {
 	 * the next, as nothing may push him (D20, D56). Not saved. */
 	@Nullable
 	private Vec3 anchoredAt;
-	/** Game tests: a hall placed by hand has no structure in the world, so this box stands in for the ruin's pieces. */
+	/** Game tests: a hall or field placed by hand has no structure in the world, so this stands in for the ruin's pieces. */
 	@Nullable
-	private net.minecraft.world.level.levelgen.structure.BoundingBox testRuin;
+	private java.util.function.Predicate<BlockPos> testRuin;
 	/** His target's ground speed, blocks a tick, smoothed: where they're running, for the leap. */
 	private Vec3 targetVelocity = Vec3.ZERO;
 	@Nullable
@@ -223,6 +246,10 @@ public final class ClockworkJuggernaut extends Monster {
 	private int plannedBand, movesStarted;
 	private float moveTime, prevMoveTime;
 	private int comboLeft, restTicks, stuckTicks, circling, heartbeat, mannerismTicks;
+	/** Where he was when he last got anywhere, and how long he's been going nowhere since (see {@link #unpin}). */
+	@Nullable
+	private Vec3 trappedAt;
+	private int trappedTicks;
 	private boolean tock, charging;
 	@Nullable
 	private LivingEntity grabbed;
@@ -419,6 +446,7 @@ public final class ClockworkJuggernaut extends Monster {
 	protected void customServerAiStep() {
 		holdGround();
 		serverStep();
+		settle();
 		// standing (not walking, charging, spinning after them or in the air): from here, anything that moves him is a shove
 		anchoredAt = !leaping && !charging && zza == 0 && getDeltaMovement().horizontalDistanceSqr() < 1e-6 && !isPassenger()
 			? position() : null;
@@ -431,6 +459,37 @@ public final class ClockworkJuggernaut extends Monster {
 	 * give himself taken away, keeping his height and fall so he still falls. His own moves set their speed later in
 	 * the step, so they're untouched.
 	 */
+	/**
+	 * On a hillside a corner of his wide footprint can catch on the slope and hold the rest of him over thin air (the
+	 * user: "he ends up floating if he is on a hill"). Standing with under a third of his footprint on ground (within 2
+	 * blocks under his feet, so steps and slopes he can walk are ground), he slides off away from what's holding him up,
+	 * and comes down.
+	 */
+	private void settle() {
+		if (!onGround() || leaping || charging || noPhysics || zza != 0 || isPassenger())
+			return;
+		AABB box = getBoundingBox();
+		int feet = Mth.floor(getY() - 0.5), held = 0, cells = 0, under = 0;
+		double cx = 0, cz = 0;
+		for (int x = Mth.floor(box.minX); x <= Mth.floor(box.maxX - 1e-3); x++)
+			for (int z = Mth.floor(box.minZ); z <= Mth.floor(box.maxZ - 1e-3); z++) {
+				cells++;
+				boolean holding = solid(new BlockPos(x, feet, z));
+				if (holding || solid(new BlockPos(x, feet - 1, z)))
+					held++;
+				if (holding) {
+					cx += x + 0.5;
+					cz += z + 0.5;
+					under++;
+				}
+			}
+		if (held * 3 >= cells || under == 0)
+			return;
+		Vec3 off = new Vec3(getX() - cx / under, 0, getZ() - cz / under);
+		if (off.lengthSqr() > 1e-4)
+			move(net.minecraft.world.entity.MoverType.SELF, off.normalize().scale(0.2));
+	}
+
 	private void holdGround() {
 		if (anchoredAt == null || leaping)
 			return;
@@ -470,8 +529,13 @@ public final class ClockworkJuggernaut extends Monster {
 		}
 		if (overdrive && phase() != Phase.DYING)
 			overdriveSteam();
+		// what they've done to him fades, by half every 4 s
+		if (tickCount % 20 == 0 && !threat.isEmpty()) {
+			threat.replaceAll((p, t) -> t * 0.84f);
+			threat.values().removeIf(t -> t < 0.5f);
+		}
 		if (tickCount % 20 == 0)
-			inRuin = inRuin();
+			lookForLegacyRuin();
 		crumbleAhead();
 		// a beat after the wipe (the death screen), he kneels; mid-shed or mid-wake he finishes that first
 		if (wipePending > 0 && --wipePending == 0) {
@@ -527,6 +591,8 @@ public final class ClockworkJuggernaut extends Monster {
 	private void startWound() {
 		setPhase(Phase.WOUND);
 		woundTicks = 0;
+		trappedAt = null; // a fresh wind: going nowhere is counted afresh
+		trappedTicks = 0;
 		feinted = false;
 		jammed = false;
 		keyHits = 0;
@@ -549,6 +615,8 @@ public final class ClockworkJuggernaut extends Monster {
 		wipePending = 0;
 		fallen.clear(); // the fight's over
 		attackers.clear();
+		threat.clear();
+		roundOn = null;
 		playClip("dormant");
 	}
 
@@ -624,6 +692,8 @@ public final class ClockworkJuggernaut extends Monster {
 		// his spring only runs down in a fight: alone, he stands wound
 		if (target != null || move != null)
 			woundTicks++;
+		if (unpin(target))
+			return;
 		if (move != null) {
 			tickMove(target);
 			return;
@@ -674,19 +744,18 @@ public final class ClockworkJuggernaut extends Monster {
 			approach(target, d);
 			return;
 		}
-		if (comboLeft <= 0)
-			comboLeft = switch (stage()) {
-				case 1 -> 2;
-				case 2 -> 2 + random.nextInt(2);
-				default -> 3;
-			};
+		// a combo of 1 to stage + 1 moves, so there's no counting his rhythm; now and then it opens with a cog at range
+		if (comboLeft <= 0) {
+			comboLeft = 1 + random.nextInt(stage() + 1);
+			surpriseCog = d >= CLOSE && random.nextFloat() < SURPRISE_COG;
+		}
 		// the move is chosen once and kept while he turns to it (re-rolling every tick would favour the moves that need no
 		// facing); a new one only if they change distance band
 		int band = d < CLOSE ? 0 : d < FAR ? 1 : 2;
-		if (stuckTicks >= STUCK_TICKS)
+		if (stuckTicks >= STUCK_TICKS || surpriseCog)
 			planned = Move.COG;
 		else if (planned == null || planned == Move.COG || band != plannedBand) {
-			planned = pick(target, d);
+			planned = pick(target, d, null);
 			plannedBand = band;
 		}
 		Move next = planned;
@@ -711,43 +780,84 @@ public final class ClockworkJuggernaut extends Monster {
 		startMove(next, target);
 	}
 
-	/** D46: a move for the distance, never the same twice in a row, from this stage's set (D44). */
+	/**
+	 * D46, loosened at the user's asking ("be a bit more random"): a move for the distance from this stage's set (D44),
+	 * but one move in four from the next band over where it can still land; never the same twice in a row (nor
+	 * {@code not}), and the two before that less likely.
+	 */
 	@Nullable
-	private Move pick(LivingEntity target, double d) {
-		List<Move> options = new ArrayList<>();
+	private Move pick(LivingEntity target, double d, @Nullable Move not) {
+		int band = d < CLOSE ? 0 : d < FAR ? 1 : 2;
+		if (random.nextFloat() < BLUR) {
+			java.util.Map<Move, Double> other = options(target, d, band == 1 ? (random.nextBoolean() ? 0 : 2) : 1, not);
+			if (!other.isEmpty())
+				return weighted(other);
+		}
+		java.util.Map<Move, Double> options = options(target, d, band, not);
+		return options.isEmpty() ? null : weighted(options);
+	}
+
+	/** The moves of distance band {@code band} (0 close, 1 middle, 2 far) that can reach them at {@code d}, weighted. */
+	private java.util.Map<Move, Double> options(LivingEntity target, double d, int band, @Nullable Move not) {
+		java.util.Map<Move, Double> options = new java.util.EnumMap<>(Move.class);
 		int stage = stage();
-		if (d < CLOSE) {
-			options.add(Move.SWING);
-			options.add(Move.STOMP);
-			if (inFront(target, 50))
-				options.add(Move.GRAB);
-			if (stage >= 3)
-				options.add(Move.SPIN_START);
-		} else if (d < FAR) {
-			options.add(Move.CHARGE);
-			options.add(Move.STOMP);
+		if (band == 0) {
+			if (d < 7.5)
+				options.put(Move.SWING, 1.0);
+			if (inFront(target, 50) && d < 7.5)
+				options.put(Move.GRAB, 1.0);
+			if (stage >= 3 && d < 10)
+				options.put(Move.SPIN_START, 1.0);
+		} else if (band == 1) {
+			options.put(Move.CHARGE, 1.0);
 			if (stage >= 2)
-				options.add(Move.VENT);
+				options.put(Move.VENT, 1.0);
 			// strafing out of reach of a charge: he jumps on them instead
 			if (d >= 10 && strafing(target) && leapLanding(target, 1.5f) != null)
-				options.add(Move.LEAP);
+				options.put(Move.LEAP, 1.0);
 		} else {
-			options.add(Move.CHARGE);
-			// far off, he'd rather come down on them: twice the chance of a charge
-			if (leapLanding(target, 1.5f) != null) {
-				options.add(Move.LEAP);
-				options.add(Move.LEAP);
-			}
+			options.put(Move.CHARGE, 1.0);
+			// far off, he'd rather come down on them: twice the chance of a charge (and not from right on top of them)
+			if (d >= 8 && leapLanding(target, 1.5f) != null)
+				options.put(Move.LEAP, 2.0);
 		}
-		// a stomp only reaches 6 blocks: in the middle band it's for when they come in
-		if (d >= CLOSE + 2)
-			options.remove(Move.STOMP);
-		options.removeIf(m -> m == lastMove);
+		// a stomp only reaches 6 blocks: up close, or as they come in
+		if (band < 2 && d < CLOSE + 3)
+			options.put(Move.STOMP, 1.0);
+		options.remove(lastMove);
+		if (not != null)
+			options.remove(not);
 		if (lastMove == Move.SPIN_END)
 			options.remove(Move.SPIN_START);
-		if (options.isEmpty())
-			return null;
-		return options.get(random.nextInt(options.size()));
+		// what he's just done is less likely
+		if (recent[1] != null)
+			options.computeIfPresent(recent[1], (m, w) -> w * 0.4);
+		if (recent[2] != null)
+			options.computeIfPresent(recent[2], (m, w) -> w * 0.7);
+		return options;
+	}
+
+	private Move weighted(java.util.Map<Move, Double> options) {
+		double total = options.values().stream().mapToDouble(Double::doubleValue).sum(), r = random.nextDouble() * total;
+		for (var e : options.entrySet())
+			if ((r -= e.getValue()) <= 0)
+				return e.getKey();
+		return options.keySet().iterator().next();
+	}
+
+	/**
+	 * When a wind-up turns into another move (the user's fake-outs), in clip seconds: well before anything lands. Never
+	 * the leap (its landing ring is a promise), the spin or the cog.
+	 */
+	private float fakeOutTime(Move m) {
+		return switch (m) {
+			case CHARGE -> 0.4f;
+			case SWING -> 0.3f;
+			case STOMP, STOMP_DOUBLE -> 0.45f;
+			case GRAB -> 0.7f;
+			case VENT -> 1.3f;
+			default -> 0;
+		};
 	}
 
 	private void startMove(Move next, LivingEntity target) {
@@ -765,7 +875,28 @@ public final class ClockworkJuggernaut extends Monster {
 		grabbed = null;
 		coilAim = null;
 		coilAimTicks = 0; // a leap's coil aims at once
+		fakeOutAt = random.nextFloat() < FAKE_OUT[Math.min(stage(), 3) - 1] ? fakeOutTime(next) : 0;
+		surpriseCog = false; // it opens the combo, no more
 		playClip(next.clip);
+	}
+
+	/**
+	 * A fake-out: part-way through a wind-up he breaks off into another move, before anything of the first could land.
+	 * The new move is the one the combo counts; it never fakes out in turn.
+	 */
+	private boolean fakeOut(@Nullable LivingEntity target) {
+		if (fakeOutAt <= 0 || moveTime < fakeOutAt)
+			return false;
+		fakeOutAt = 0;
+		if (target == null)
+			return false;
+		Move other = pick(target, horizontalDistance(target), move);
+		// the vent's cone goes where he faces, and it doesn't turn him: only if he's already facing them
+		if (other == null || other == Move.VENT && !inFront(target, 30))
+			return false;
+		startMove(other, target);
+		fakeOutAt = 0;
+		return true;
 	}
 
 	/** The next part of a move that comes in parts (the gear spin), or the end of the combo's move. */
@@ -784,9 +915,16 @@ public final class ClockworkJuggernaut extends Monster {
 		}
 		if (move != null) {
 			lastMove = move == Move.STOMP_DOUBLE ? Move.STOMP : move == Move.GRAB_BLOCKED ? Move.GRAB : move;
+			System.arraycopy(recent, 0, recent, 1, recent.length - 1);
+			recent[0] = lastMove;
 			comboLeft--;
-			// relentless: a breath between moves, a short one between combos (shorter still in overdrive)
-			restTicks = overdrive ? (comboLeft > 0 ? 4 : 8 + random.nextInt(10)) : comboLeft > 0 ? 6 : 16 + random.nextInt(20);
+			if (comboLeft <= 0) {
+				surpriseCog = false;
+				rethink = true; // a combo done: who next?
+			}
+			// relentless: a breath between moves, a short one between combos (shorter still in overdrive); how long, he
+			// keeps you guessing
+			restTicks = overdrive ? (comboLeft > 0 ? 4 : 8 + random.nextInt(10)) : comboLeft > 0 ? 4 + random.nextInt(11) : 10 + random.nextInt(41);
 			// after a leap, a frozen player gets a moment of their legs back before the next move
 			if (lastMove == Move.LEAP)
 				restTicks = Math.max(restTicks, FREEZE_TICKS);
@@ -803,6 +941,8 @@ public final class ClockworkJuggernaut extends Monster {
 	private void tickMove(@Nullable LivingEntity target) {
 		prevMoveTime = moveTime;
 		moveTime += clipSpeed() / 20f;
+		if (fakeOut(target))
+			return;
 		float t = moveTime;
 		Vec3 fwd = forward();
 		switch (move) {
@@ -1083,6 +1223,80 @@ public final class ClockworkJuggernaut extends Monster {
 	/** Unable to reach them this long, he hops (before, at STUCK_TICKS, he gives up and throws a cog). */
 	static final int HOP_AFTER = 40;
 
+	/**
+	 * He can't be pinned or trapped (the user's "so he's easy"): with them out of his reach and him going nowhere for
+	 * {@link #TRAPPED_TICKS} (walled in, down a pit, across water he can't hop), he goes up in steam and comes out of it
+	 * beside them. With nowhere by them to stand (up a pillar), he keeps to his cogs and looks again in a while.
+	 */
+	private boolean unpin(@Nullable LivingEntity target) {
+		if (target == null || horizontalDistance(target) < CLOSE + 1 && Math.abs(target.getY() - getY()) <= 3) {
+			trappedAt = null;
+			trappedTicks = 0;
+			return false;
+		}
+		// getting somewhere counts only by a way he can walk to them: pacing a trench floor under them doesn't
+		if (trappedAt == null || trappedAt.distanceToSqr(position()) > 4) {
+			trappedAt = position();
+			if (stuckTicks == 0) {
+				trappedTicks = 0;
+				return false;
+			}
+		}
+		if (++trappedTicks < TRAPPED_TICKS || move != null)
+			return false;
+		Vec3 to = besideThem(target);
+		if (to == null) {
+			trappedTicks = TRAPPED_TICKS / 2;
+			return false;
+		}
+		steamOut();
+		stopWalking();
+		teleportTo(to.x, to.y, to.z);
+		float yaw = (float) (Mth.atan2(target.getZ() - to.z, target.getX() - to.x) * Mth.RAD_TO_DEG) - 90;
+		setYRot(yaw);
+		setYBodyRot(yaw);
+		setYHeadRot(yaw);
+		steamOut();
+		trappedAt = position();
+		trappedTicks = stuckTicks = 0;
+		planned = null;
+		// out of the steam he takes a moment to find his feet before he strikes
+		restTicks = Math.max(restTicks, 25);
+		playClip("idle");
+		return true;
+	}
+
+	/**
+	 * A spot beside them with room for him, about their height, nearest first, from where he can see them, and a good
+	 * deal nearer them than he is now, unless he's down a pit or up a ledge from them (else he'd only steam from one
+	 * out-of-reach spot to the next).
+	 */
+	@Nullable
+	private Vec3 besideThem(LivingEntity target) {
+		double now = horizontalDistance(target);
+		boolean level = Math.abs(target.getY() - getY()) <= 3;
+		for (int r = 5; r <= 11 && (!level || r <= now - 3); r += 2)
+			for (int k = 0; k < 16; k++) {
+				double a = k * Math.PI * 2 / 16;
+				double x = target.getX() + Math.cos(a) * r, z = target.getZ() + Math.sin(a) * r;
+				for (int dy : new int[] { 0, 1, -1, 2, -2, 3, -3 }) {
+					Vec3 at = new Vec3(x, Mth.floor(target.getY()) + dy, z);
+					if (footing(at) && level().noCollision(this, getDimensions(getPose()).makeBoundingBox(at))
+						&& level().clip(new net.minecraft.world.level.ClipContext(at.add(0, 3, 0), target.getEyePosition(),
+						net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, this))
+						.getType() == net.minecraft.world.phys.HitResult.Type.MISS)
+						return at;
+				}
+			}
+		return null;
+	}
+
+	/** A burst of steam where he stands, as he goes and as he comes. */
+	private void steamOut() {
+		sound("plates_burst", 0.7f);
+		((ServerLevel) level()).sendParticles(ParticleTypes.CLOUD, getX(), getY() + 3.5, getZ(), 60, 2, 2, 2, 0.05);
+	}
+
 	/** Springs over whatever's in his way to come down by {@code target}, if there's a clear way over and somewhere to land. */
 	private boolean tryHop(LivingEntity target) {
 		if (hopCooldown > 0 || move != null)
@@ -1189,52 +1403,77 @@ public final class ClockworkJuggernaut extends Monster {
 	public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> RUIN_BLOCKS = net.minecraft.tags.TagKey.create(
 		net.minecraft.core.registries.Registries.BLOCK, com.comedymonkey.createaddons.ComedyMonkeysCreateAddons.asResource("juggernaut_ruin_blocks"));
 
-	/** Within reach of his own ruin: the hall he was found in and the field of broken walls round it. What of it crumbles
-	 * is asked of the structure itself ({@link #crumbles}), so a ruin {@code /place} put down (which keeps no record of the
-	 * structure) stands firm. */
-	private boolean inRuin() {
-		return home != null && home.closerToCenterThan(position(), RUIN_REACH);
-	}
-
-	/** How far from his hall his ruin reaches (its field's radius, and a little). */
+	/** How far from his hall his ruin reaches (its field's radius, and a little). What of it crumbles is asked of the
+	 * structure itself ({@link #crumbles}), so a ruin {@code /place} put down (which keeps no record of the structure)
+	 * stands firm, but for its own blocks. */
 	static final double RUIN_REACH = 45;
 
+	/** A Juggernaut Ruin's own blocks (RuinBlocks), which any Juggernaut crumbles wherever he comes up against them. */
+	public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> CRUMBLES = net.minecraft.tags.TagKey.create(
+		net.minecraft.core.registries.Registries.BLOCK, com.comedymonkey.createaddons.ComedyMonkeysCreateAddons.asResource("juggernaut_crumbles"));
+
 	/**
-	 * A block of the ruin he's in, which crumbles as he walks into it or stomps by it (D62): its brick, and part of the
-	 * ruin itself, not a player's wall of the same brick beside it.
+	 * A block of a ruin, which crumbles as he walks into it or stomps by it (D62): the ruin's own blocks, wherever they
+	 * are; or, in a ruin built before it had them, its brick where the ruin itself put it, not a player's wall of the same
+	 * brick beside it. Never its chest, brass, casing or shafts.
 	 */
 	boolean crumbles(BlockPos p) {
-		return home != null && home.closerToCenterThan(Vec3.atCenterOf(p), RUIN_REACH) && level().getBlockState(p).is(RUIN_BLOCKS)
-			&& partOfRuin(p);
+		BlockState state = level().getBlockState(p);
+		if (state.is(CRUMBLES))
+			return true;
+		return legacyRuinNear && home != null && home.closerToCenterThan(Vec3.atCenterOf(p), RUIN_REACH) && state.is(RUIN_BLOCKS) && partOfRuin(p);
+	}
+
+	/** Near a ruin generated before it had its own blocks (looked up once a second): only then is the old check asked. */
+	private boolean legacyRuinNear;
+
+	private void lookForLegacyRuin() {
+		legacyRuinNear = home != null && home.closerToCenterThan(position(), RUIN_REACH)
+			&& (testRuin != null || level() instanceof ServerLevel server && JuggernautRuinStructure.legacyNear(server, blockPosition()));
 	}
 
 	/** Built by a Juggernaut Ruin: in its hall, or where its field put a wall, pillar or heap. */
 	private boolean partOfRuin(BlockPos p) {
 		if (testRuin != null)
-			return testRuin.isInside(p);
+			return testRuin.test(p);
 		return level() instanceof ServerLevel server && JuggernautRuinStructure.built(server, p);
 	}
 
-	/** Walking or charging, he goes through the ruin's walls: whatever of it is just ahead of him, above his feet. */
+	/**
+	 * He goes through a ruin's walls: walking or charging, whatever of it is just ahead of him; and whatever of it he's
+	 * pushed up against, whichever way; above his feet either way.
+	 */
 	private void crumbleAhead() {
-		if (!inRuin || !(zza > 0 || charging) || leaping)
+		if (leaping)
 			return;
-		AABB ahead = getBoundingBox().move(forward().scale(0.9)).setMinY(getY() + 1);
-		for (BlockPos p : BlockPos.betweenClosed(BlockPos.containing(ahead.minX, ahead.minY, ahead.minZ),
-			BlockPos.containing(ahead.maxX - 1e-3, ahead.maxY - 1e-3, ahead.maxZ - 1e-3)))
-			if (crumbles(p))
-				level().destroyBlock(p, false, this);
+		if (zza > 0 || charging)
+			crumble(getBoundingBox().move(forward().scale(0.9)).setMinY(getY() + 1));
+		if (horizontalCollision)
+			crumble(getBoundingBox().inflate(0.6, 0, 0.6).setMinY(getY() + 1));
 	}
 
 	/** His stomp brings down the ruin within {@code radius} blocks of his footprint, from his feet up to his knees. */
 	private void crumbleAround(double radius) {
-		if (!inRuin)
-			return;
-		AABB round = getBoundingBox().inflate(radius, 0, radius).setMinY(getY() + 1).setMaxY(getY() + 3);
-		for (BlockPos p : BlockPos.betweenClosed(BlockPos.containing(round.minX, round.minY, round.minZ),
-			BlockPos.containing(round.maxX - 1e-3, round.maxY - 1e-3, round.maxZ - 1e-3)))
-			if (crumbles(p))
-				level().destroyBlock(p, false, this);
+		crumble(getBoundingBox().inflate(radius, 0, radius).setMinY(getY() + 1).setMaxY(getY() + 3));
+	}
+
+	/**
+	 * Brings down what of a ruin is in {@code box}, and the rest of each of its columns above that: a wall knocked out
+	 * from under comes down whole, never left floating (no longer standing on the ground, an old ruin's would no longer
+	 * count as its, and stay in his way). All of it is judged before any of it falls.
+	 */
+	private void crumble(AABB box) {
+		java.util.Set<BlockPos> falls = new java.util.LinkedHashSet<>();
+		for (BlockPos p : BlockPos.betweenClosed(BlockPos.containing(box.minX, box.minY, box.minZ),
+			BlockPos.containing(box.maxX - 1e-3, box.maxY - 1e-3, box.maxZ - 1e-3))) {
+			if (falls.contains(p) || !crumbles(p))
+				continue;
+			BlockPos up = p.immutable();
+			for (int i = 0; i < 12 && (i == 0 || crumbles(up)); i++, up = up.above())
+				falls.add(up);
+		}
+		for (BlockPos p : falls)
+			level().destroyBlock(p, false, this);
 	}
 
 	/** Follows his target's ground speed (players' own motion isn't known to the server, so from their positions). */
@@ -1666,10 +1905,55 @@ public final class ClockworkJuggernaut extends Monster {
 			Player p = nearestPlayer(AGGRO, false);
 			if (p != null)
 				target = p;
+		} else if (target instanceof Player && move == null) {
+			// he never locks on to one (the user: that made him easy to cheese): whoever struck his back mid-move he rounds
+			// on; and after every combo, and every few seconds of chasing, he goes for whoever's hurting him most
+			Player round = roundOn == null ? null : level().getPlayerByUUID(roundOn);
+			roundOn = null;
+			if (round != null && fightable(round) && round.distanceTo(this) <= AGGRO) {
+				target = round;
+				rethink = false;
+				rethinkTicks = 0;
+			} else if (rethink || ++rethinkTicks >= RETHINK_TICKS) {
+				rethink = false;
+				rethinkTicks = 0;
+				Player p = mostThreatening();
+				if (p != null)
+					target = p;
+			}
 		}
-		if (target != getTarget())
+		if (target != getTarget()) {
 			setTarget(target);
+			planned = null; // a move for whoever he was after
+			trappedAt = null;
+			trappedTicks = 0;
+		}
 		return target;
+	}
+
+	/**
+	 * Who he goes after next: what each player near him has dealt him lately counts most (twice over from behind), how
+	 * near they are a little, and chance the rest, so it's never quite certain.
+	 */
+	@Nullable
+	private Player mostThreatening() {
+		return mostThreatening(level().players());
+	}
+
+	@Nullable
+	private Player mostThreatening(List<? extends Player> players) {
+		Player best = null;
+		double bestScore = -1;
+		for (Player p : players) {
+			if (!fightable(p) || fallen.contains(p.getUUID()) || p.distanceToSqr(this) > AGGRO * AGGRO)
+				continue;
+			double score = threat.getOrDefault(p.getUUID(), 0f) + 6 * (1 - p.distanceTo(this) / AGGRO) + random.nextDouble() * 10;
+			if (score > bestScore) {
+				best = p;
+				bestScore = score;
+			}
+		}
+		return best;
 	}
 
 	// ======================================================================== damage (D14, D23, D26, D50, D51)
@@ -1748,6 +2032,13 @@ public final class ClockworkJuggernaut extends Monster {
 		// only real blows on the key count toward a jam: not snowballs, not hits his armour's flinch turned away
 		if (hurt && onKey && amount >= 1)
 			keyHit();
+		// who's hurting him draws him: blows from behind twice over, and he rounds on whoever lands one there mid-move
+		if (hurt && source.getEntity() instanceof Player hitter) {
+			boolean behind = fromBehind(source);
+			threat.merge(hitter.getUUID(), amount * (behind ? 2 : 1), Float::sum);
+			if (behind && move != null && hitter != getTarget())
+				roundOn = hitter.getUUID();
+		}
 		if (hurt && open && !jammed && phase() == Phase.REWIND && clip().name().equals("rewind"))
 			playClip("hit_open");
 		else if (hurt && !open && phase() == Phase.WOUND && move == null)
@@ -2096,7 +2387,7 @@ public final class ClockworkJuggernaut extends Monster {
 	/** Found in a ruin, kneeling at {@code home}, without breaking out when he wakes (game tests). */
 	public void setRuinHome(BlockPos home) {
 		this.home = home;
-		inRuin = inRuin();
+		lookForLegacyRuin();
 	}
 
 	/**
@@ -2104,7 +2395,27 @@ public final class ClockworkJuggernaut extends Monster {
 	 * world, so the real check ({@link JuggernautRuinStructure#built}) can't see it.
 	 */
 	public void testRuinPieces(@Nullable net.minecraft.world.level.levelgen.structure.BoundingBox box) {
-		testRuin = box;
+		testRuin = box == null ? null : box::isInside;
+		lookForLegacyRuin();
+	}
+
+	/** Game tests: who of {@code players} he'd go after next. */
+	@Nullable
+	public Player nextTargetOf(List<? extends Player> players) {
+		return mostThreatening(players);
+	}
+
+	/** Game tests: the move he'd pick against {@code target} now. */
+	@Nullable
+	public String pickFor(LivingEntity target) {
+		Move m = pick(target, horizontalDistance(target), null);
+		return m == null ? null : m.name();
+	}
+
+	/** Game tests: treat {@code field} as his ruin's field, asking it what it built as the real check would. */
+	public void testRuinField(com.comedymonkey.createaddons.content.juggernaut.ruin.RuinField field) {
+		testRuin = p -> field.built(level(), p);
+		lookForLegacyRuin();
 	}
 
 	/** How many moves he has started (game tests). */

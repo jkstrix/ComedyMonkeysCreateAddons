@@ -30,16 +30,20 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 public class RuinHall extends TemplateStructurePiece {
 	private static final BlockPos PIVOT = new BlockPos(7, 0, 7);
 	private final boolean end;
+	/** Generated before the ruin had its own blocks (RuinBlocks): only then does the old "is it the ruin's?" check apply. */
+	private final boolean legacy;
 
 	public RuinHall(StructureTemplateManager templates, BlockPos centre, Rotation rotation, boolean end) {
 		super(ModStructures.RUIN_HALL.get(), 0, templates, template(end), template(end).toString(), settings(rotation),
 			centre.offset(-PIVOT.getX(), end ? -4 : -1, -PIVOT.getZ()));
 		this.end = end;
+		this.legacy = false;
 	}
 
 	public RuinHall(StructureTemplateManager templates, CompoundTag tag) {
 		super(ModStructures.RUIN_HALL.get(), tag, templates, id -> settings(Rotation.valueOf(tag.getString("Rot"))));
 		this.end = tag.getBoolean("End");
+		this.legacy = !tag.getBoolean("OwnBlocks");
 	}
 
 	private static ResourceLocation template(boolean end) {
@@ -47,7 +51,12 @@ public class RuinHall extends TemplateStructurePiece {
 	}
 
 	private static StructurePlaceSettings settings(Rotation rotation) {
-		return new StructurePlaceSettings().setRotation(rotation).setRotationPivot(PIVOT);
+		return new StructurePlaceSettings().setRotation(rotation).setRotationPivot(PIVOT).addProcessor(RuinBlocksProcessor.INSTANCE);
+	}
+
+	/** Generated before the ruin had its own blocks: the old check is how he tells its walls from a player's. */
+	public boolean legacy() {
+		return legacy;
 	}
 
 	@Override
@@ -55,6 +64,7 @@ public class RuinHall extends TemplateStructurePiece {
 		super.addAdditionalSaveData(context, tag);
 		tag.putString("Rot", placeSettings.getRotation().name());
 		tag.putBoolean("End", end);
+		tag.putBoolean("OwnBlocks", !legacy);
 	}
 
 	@Override
@@ -71,7 +81,7 @@ public class RuinHall extends TemplateStructurePiece {
 				for (int y = templatePosition.getY() + 10; y <= templatePosition.getY() + 32; y++) {
 					BlockState above = level.getBlockState(q.set(x, y, z));
 					if (!above.isAir() && !above.is(net.minecraft.tags.BlockTags.LEAVES) && !above.is(net.minecraft.tags.BlockTags.LOGS)
-						&& !above.is(ClockworkJuggernaut.RUIN_BLOCKS) && !above.is(ClockworkJuggernaut.BREAKS_OUT) && !above.is(Blocks.PURPUR_PILLAR))
+						&& !above.is(ClockworkJuggernaut.CRUMBLES) && !above.is(ClockworkJuggernaut.BREAKS_OUT) && !above.is(Blocks.PURPUR_PILLAR))
 						level.setBlock(q, Blocks.AIR.defaultBlockState(), 2);
 				}
 		// footings: under every floor block, down to the ground

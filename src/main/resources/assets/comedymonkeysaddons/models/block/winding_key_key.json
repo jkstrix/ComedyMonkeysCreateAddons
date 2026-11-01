@@ -7,6 +7,7 @@
     "winding_key_bronze_teeth": "comedymonkeysaddons:block/winding_key_bronze_teeth",
     "winding_key_key_hub": "comedymonkeysaddons:block/winding_key_key_hub",
     "winding_key_bronze": "comedymonkeysaddons:block/winding_key_bronze",
+    "winding_key_iron": "comedymonkeysaddons:block/winding_key_iron",
     "winding_key_key_bar": "comedymonkeysaddons:block/winding_key_key_bar"
   },
   "elements": [
@@ -145,6 +146,75 @@
             12
           ],
           "texture": "#winding_key_bronze"
+        }
+      }
+    },
+    {
+      "name": "key_spindle",
+      "from": [
+        6,
+        6,
+        0
+      ],
+      "to": [
+        10,
+        10,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "east": {
+          "uv": [
+            12,
+            6,
+            16,
+            10
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "south": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            6,
+            4,
+            10
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "up": {
+          "uv": [
+            6,
+            0,
+            10,
+            4
+          ],
+          "texture": "#winding_key_iron"
+        },
+        "down": {
+          "uv": [
+            6,
+            12,
+            10,
+            16
+          ],
+          "texture": "#winding_key_iron"
         }
       }
     },

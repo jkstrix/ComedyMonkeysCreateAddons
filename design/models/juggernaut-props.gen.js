@@ -145,6 +145,8 @@ const bar = (name, from, to) => C(name, from, to, { all: K + 'key_bar' });
 const keyTurning = [
   C('key_stem', [6.75, 6.75, 7], [9.25, 9.25, 11.5], { all: K + 'bronze_teeth' }),
   C('key_hub', [5.5, 5.5, 4], [10.5, 10.5, 7], { north: K + 'key_hub', all: K + 'bronze' }),
+  // an iron spindle, shaft-sized, out to the block face: a Hand Crank's stub or a shaft meets it there
+  C('key_spindle', [6, 6, 0], [10, 10, 4], { all: K + 'iron' }),
   // two loops either side of the hub, 1.5 px bars
   bar('loop_r_top', [10.5, 10, 4.5], [15, 11.5, 6.5]), bar('loop_r_bottom', [10.5, 4.5, 4.5], [15, 6, 6.5]), bar('loop_r_outer', [13.5, 6, 4.5], [15, 10, 6.5]),
   bar('loop_l_top', [1, 10, 4.5], [5.5, 11.5, 6.5]), bar('loop_l_bottom', [1, 4.5, 4.5], [5.5, 6, 6.5]), bar('loop_l_outer', [1, 6, 4.5], [2.5, 10, 6.5]),
@@ -206,7 +208,8 @@ const at = (list, off, shift) => list.map((c) => cube(c, off, shift));
 const EFF = [0, 0, 0];
 const brass = (n, x, y) => C('brass_' + n, [x, y, 16], [x + 16, y + 16, 32], { all: K + 'brass_block' });
 const effigy = [brass(0, -16, 16), brass(1, 0, 16), brass(2, 16, 16), brass(3, 0, 0)];
-const shaft = shaftStub().map((c) => ({ ...c, from: [6, 6, -10], to: [10, 10, 5], name: 'key_shaft' }));
+// it stops at the block face, as a shaft in the next block does in game
+const shaft = shaftStub().map((c) => ({ ...c, from: [6, 6, -10], to: [10, 10, 0], name: 'key_shaft' }));
 const outliner = [];
 outliner.push(group('effigy', [8, 16, 24], EFF, at(effigy, EFF)));
 outliner.push(group('winding_key', [8, 24, 8], EFF, [
