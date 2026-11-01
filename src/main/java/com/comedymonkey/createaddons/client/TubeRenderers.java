@@ -11,6 +11,7 @@ import com.comedymonkey.createaddons.content.tube.TubeLoad;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
+import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 
 import net.createmod.catnip.animation.AnimationTickHolder;
@@ -132,6 +133,9 @@ public final class TubeRenderers {
 		protected void renderSafe(ClockworkInletBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light,
 								  int overlay) {
 			parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
+			// the Brass Inlet's filter, on its hood
+			if (be.isBrass())
+				FilteringRenderer.renderOnBlockEntity(be, partialTicks, ms, buffer, light, overlay);
 		}
 
 		/** The flap: Trade Bot's lid plate across the mouth, hinged at its north edge, gulping inward. */

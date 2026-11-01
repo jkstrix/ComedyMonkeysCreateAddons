@@ -38,7 +38,8 @@ public final class MachineVisuals {
 		visual(ModBlockEntities.CLOCKWORK_DYNAMO, ElectricRenderers.Dynamo::parts, true);
 		// the Receiver's renderer still draws the items passing through its cog
 		visual(ModBlockEntities.CLOCKWORK_RECEIVER, com.comedymonkey.createaddons.client.TubeRenderers.Receiver::parts, false);
-		visual(ModBlockEntities.CLOCKWORK_INLET, com.comedymonkey.createaddons.client.TubeRenderers.Inlet::parts, true);
+		// the Brass Inlet's renderer still draws its filter on the hood
+		visualWhen(ModBlockEntities.CLOCKWORK_INLET, com.comedymonkey.createaddons.client.TubeRenderers.Inlet::parts, be -> !be.isBrass(), be -> true);
 		visual(ModBlockEntities.WINDING_KEY, com.comedymonkey.createaddons.client.juggernaut.WindingKeyRenderer::parts, true);
 		visual(ModBlockEntities.SPRING_ENGINE, com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer::parts, true);
 		visual(ModBlockEntities.LAVA_GENERATOR, ElectricRenderers.Generator::parts, true);
