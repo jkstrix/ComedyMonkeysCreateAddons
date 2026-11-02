@@ -334,29 +334,21 @@ public final class JuggernautGameTests {
 	public static void theRuinClaimsOnlyItsOwnColumns(GameTestHelper helper) {
 		BlockPos ground = helper.absolutePos(new BlockPos(12, 1, 12));
 		// a field laid, its hall 60 blocks below, so one of its columns (3 or more high, on bare ground) stands on this spot
-		RuinField probe = new RuinField(BlockPos.ZERO, 40, 777L, false), field = null;
-		for (int dx = -40; dx <= 40 && field == null; dx++)
-			for (int dz = -40; dz <= 40 && field == null; dz++) {
-				if (probe.height(dx, dz) < 3)
-					continue;
-				RuinField f = new RuinField(new BlockPos(ground.getX() - dx, ground.getY() - 60, ground.getZ() - dz), 40, 777L, false);
-				if (f.height(ground.getX(), ground.getZ()) >= 3 && !f.paved(ground.getX(), ground.getZ()))
-					field = f;
-			}
-		helper.assertTrue(field != null, "no column to try");
-		int top = field.height(ground.getX(), ground.getZ());
+		ColumnField cf = fieldWithColumnAt(helper, ground, false, 3);
+		RuinField field = cf.field();
+		int top = cf.top();
 		helper.setBlock(new BlockPos(12, 1, 12), Blocks.STONE);
 		for (int h = 0; h < top; h++)
 			helper.setBlock(new BlockPos(12, 2 + h, 12), h % 2 == 0 ? Blocks.DEEPSLATE_BRICKS : Blocks.COBBLED_DEEPSLATE);
 		helper.setBlock(new BlockPos(12, 2 + top, 12), Blocks.DEEPSLATE_BRICKS); // a player's, on top of the wall
 		helper.setBlock(new BlockPos(12, 4 + top, 12), Blocks.DEEPSLATE_BRICKS); // and one floating over it
 		for (int h = 0; h < top; h++)
-			helper.assertTrue(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 2 + h, 12))), "the wall's own block " + h + " up");
-		helper.assertFalse(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 2 + top, 12))), "a block on top of the wall");
-		helper.assertFalse(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 4 + top, 12))), "a block floating over it");
+			helper.assertTrue(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 2 + h, 12))), "the wall's own block " + h + " up" + cf);
+		helper.assertFalse(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 2 + top, 12))), "a block on top of the wall" + cf);
+		helper.assertFalse(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 4 + top, 12))), "a block floating over it" + cf);
 		// a wall knocked out from under is no longer standing, so no longer the ruin's: why he brings a column down whole
 		helper.setBlock(new BlockPos(12, 2, 12), Blocks.AIR);
-		helper.assertFalse(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 4, 12))), "what's left floating over a gap");
+		helper.assertFalse(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 4, 12))), "what's left floating over a gap" + cf);
 		// a player's block standing apart, on a spot the field built nothing on
 		for (int x = 1; x < 23; x++) {
 			BlockPos spot = helper.absolutePos(new BlockPos(x, 2, 3));
@@ -364,24 +356,38 @@ public final class JuggernautGameTests {
 				continue;
 			helper.setBlock(new BlockPos(x, 1, 3), Blocks.STONE);
 			helper.setBlock(new BlockPos(x, 2, 3), Blocks.DEEPSLATE_BRICKS);
-			helper.assertFalse(field.built(helper.getLevel(), spot), "a block where the field built nothing");
+			helper.assertFalse(field.built(helper.getLevel(), spot), "a block where the field built nothing" + cf);
 			break;
 		}
 		helper.succeed();
 	}
 
-	/** A field whose column (at least {@code minTop} high, not on its paving) stands at {@code spot}'s x and z. */
-	private static RuinField fieldWithColumnAt(GameTestHelper helper, BlockPos spot, boolean end, int minTop) {
-		RuinField probe = new RuinField(BlockPos.ZERO, 40, 777L, end);
-		for (int dx = -40; dx <= 40; dx++)
-			for (int dz = -40; dz <= 40; dz++) {
-				if (probe.height(dx, dz) < minTop)
-					continue;
-				RuinField f = new RuinField(new BlockPos(spot.getX() - dx, spot.getY() - 60, spot.getZ() - dz), 40, 777L, end);
-				if (f.height(spot.getX(), spot.getZ()) >= minTop && !f.paved(spot.getX(), spot.getZ()))
-					return f;
-			}
-		throw new net.minecraft.gametest.framework.GameTestAssertException("no column to try");
+	/** A field found for a spot, with what picked it (in every message: the spot changes run to run, so the field does too). */
+	private record ColumnField(RuinField field, BlockPos spot, long seed, int dx, int dz, int top) {
+		@Override
+		public String toString() {
+			return " (field seed " + seed + ", its centre " + dx + ", " + dz + " from the spot " + spot.toShortString() + ", the column " + top + " high)";
+		}
+	}
+
+	/**
+	 * A field whose column (at least {@code minTop} high, not on its paving) stands at {@code spot}'s x and z. The probe
+	 * at the origin only suggests offsets: a field's walls are hashed from world positions, so a field moved to the test's
+	 * spot (which changes run to run) lays them differently; several seeds make sure one fits wherever the test stands.
+	 */
+	private static ColumnField fieldWithColumnAt(GameTestHelper helper, BlockPos spot, boolean end, int minTop) {
+		for (long seed = 777L; seed < 777L + 32; seed++) {
+			RuinField probe = new RuinField(BlockPos.ZERO, 40, seed, end);
+			for (int dx = -40; dx <= 40; dx++)
+				for (int dz = -40; dz <= 40; dz++) {
+					if (probe.height(dx, dz) < minTop)
+						continue;
+					RuinField f = new RuinField(new BlockPos(spot.getX() - dx, spot.getY() - 60, spot.getZ() - dz), 40, seed, end);
+					if (f.height(spot.getX(), spot.getZ()) >= minTop && !f.paved(spot.getX(), spot.getZ()))
+						return new ColumnField(f, spot, seed, -dx, -dz, f.height(spot.getX(), spot.getZ()));
+				}
+		}
+		throw new net.minecraft.gametest.framework.GameTestAssertException("no column to try at " + spot.toShortString());
 	}
 
 	/**
@@ -391,8 +397,9 @@ public final class JuggernautGameTests {
 	 */
 	@GameTest(template = COURSE, timeoutTicks = 300)
 	public static void heBringsDownAWholeFieldWall(GameTestHelper helper) {
-		RuinField field = fieldWithColumnAt(helper, helper.absolutePos(new BlockPos(12, 2, 17)), false, 4);
-		int top = field.height(helper.absolutePos(new BlockPos(12, 2, 17)).getX(), helper.absolutePos(new BlockPos(12, 2, 17)).getZ());
+		ColumnField cf = fieldWithColumnAt(helper, helper.absolutePos(new BlockPos(12, 2, 17)), false, 4);
+		RuinField field = cf.field();
+		int top = cf.top();
 		helper.setBlock(new BlockPos(12, 1, 17), Blocks.STONE);
 		for (int h = 0; h < top; h++)
 			helper.setBlock(new BlockPos(12, 2 + h, 17), h % 2 == 0 ? Blocks.DEEPSLATE_BRICKS : Blocks.COBBLED_DEEPSLATE);
@@ -404,7 +411,7 @@ public final class JuggernautGameTests {
 		j.setTarget(dummy);
 		helper.succeedWhen(() -> {
 			for (int h = 1; h < top; h++)
-				helper.assertBlockPresent(Blocks.AIR, new BlockPos(12, 2 + h, 17));
+				helper.assertTrue(helper.getBlockState(new BlockPos(12, 2 + h, 17)).isAir(), "the wall still stands " + h + " up" + cf);
 		});
 	}
 
@@ -480,15 +487,16 @@ public final class JuggernautGameTests {
 	@GameTest(template = COURSE)
 	public static void anEndColumnStandsOnTheIsland(GameTestHelper helper) {
 		BlockPos spot = helper.absolutePos(new BlockPos(12, 2, 12));
-		RuinField field = fieldWithColumnAt(helper, spot, true, 3);
-		int top = field.height(spot.getX(), spot.getZ());
+		ColumnField cf = fieldWithColumnAt(helper, spot, true, 3);
+		RuinField field = cf.field();
+		int top = cf.top();
 		helper.setBlock(new BlockPos(12, 1, 12), Blocks.END_STONE);
 		for (int h = 0; h <= top; h++)
 			helper.setBlock(new BlockPos(12, 2 + h, 12), h % 2 == 0 ? Blocks.END_STONE : Blocks.END_STONE_BRICKS);
 		for (int h = 0; h < top; h++)
-			helper.assertTrue(field.builtOn(helper.getLevel(), spot.above(h), spot.getY()), "the column's block " + h + " up");
-		helper.assertFalse(field.builtOn(helper.getLevel(), spot.above(top), spot.getY()), "end stone on top of the column");
-		helper.assertFalse(field.builtOn(helper.getLevel(), spot.below(), spot.getY()), "the island under it");
+			helper.assertTrue(field.builtOn(helper.getLevel(), spot.above(h), spot.getY()), "the column's block " + h + " up" + cf);
+		helper.assertFalse(field.builtOn(helper.getLevel(), spot.above(top), spot.getY()), "end stone on top of the column" + cf);
+		helper.assertFalse(field.builtOn(helper.getLevel(), spot.below(), spot.getY()), "the island under it" + cf);
 		helper.succeed();
 	}
 

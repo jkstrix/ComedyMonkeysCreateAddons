@@ -59,20 +59,31 @@ public final class ShotRunner {
 
 	public static void onClientTick(ClientTickEvent.Post event) {
 		Minecraft mc = Minecraft.getInstance();
+		// dev runs never pause when the window loses focus (the user tabs out while agents drive the game; F3+P can't turn it back on)
+		if (!FMLEnvironment.production && mc.options.pauseOnLostFocus) {
+			mc.options.pauseOnLostFocus = false;
+			mc.options.save();
+		}
 		String world = System.getProperty("cmaddons.openWorld");
 		if (world != null && !worldOpened && !FMLEnvironment.production && mc.getOverlay() == null
 			&& mc.screen instanceof net.minecraft.client.gui.screens.TitleScreen) {
 			// from the title screen, not quick play: Inventory Profiles Next needs its screens set up first
 			worldOpened = true;
 			if (mc.getLevelSource().levelExists(world)) {
+				// -Pstructures only shapes a new world: this save keeps whatever it was made with
+				if (Boolean.getBoolean("cmaddons.openWorldStructures"))
+					com.mojang.logging.LogUtils.getLogger().warn("-Pstructures ignored: the world \"{}\" already exists, so it opens as it was made;"
+						+ " use a new name (-Pworld=<name>) or delete run/saves/{} for a world with structures", world, world);
 				mc.createWorldOpenFlows().openWorld(world, () -> mc.setScreen(new net.minecraft.client.gui.screens.TitleScreen()));
 				return;
 			}
-			// no such save: a new flat creative world with cheats, by that name (for test streets and courses)
+			// no such save: a new flat creative world with cheats, by that name (for test streets and courses); structures
+			// only with -Dcmaddons.openWorldStructures (runClientWorld -Pstructures), to see what world generation places
 			var settings = new net.minecraft.world.level.LevelSettings(world, net.minecraft.world.level.GameType.CREATIVE, false,
 				net.minecraft.world.Difficulty.PEACEFUL, true, new net.minecraft.world.level.GameRules(),
 				net.minecraft.world.level.WorldDataConfiguration.DEFAULT);
-			mc.createWorldOpenFlows().createFreshLevel(world, settings, new net.minecraft.world.level.levelgen.WorldOptions(0, false, false),
+			boolean structures = Boolean.getBoolean("cmaddons.openWorldStructures");
+			mc.createWorldOpenFlows().createFreshLevel(world, settings, new net.minecraft.world.level.levelgen.WorldOptions(0, structures, false),
 				registries -> registries.registryOrThrow(net.minecraft.core.registries.Registries.WORLD_PRESET)
 					.getHolderOrThrow(net.minecraft.world.level.levelgen.presets.WorldPresets.FLAT).value().createWorldDimensions(),
 				new net.minecraft.client.gui.screens.TitleScreen());

@@ -42,6 +42,10 @@ neoForge {
         clientWorld {
             client()
             systemProperty 'cmaddons.openWorld', project.findProperty('world') ?: 'New World'
+            // a new world with structures generating (-Pstructures), to see what world generation places; a save that already
+            // exists opens as it was made (ShotRunner warns), and Clockwork cities also need cities=true under [clockworkWastes]
+            // in the world's serverconfig/comedymonkeysaddons-server.toml
+            if (project.hasProperty('structures')) systemProperty 'cmaddons.openWorldStructures', 'true'
         }
         // Trade Bot's test courses, headless: builds each course, runs it, exits with the failures
         gameTestServer {
