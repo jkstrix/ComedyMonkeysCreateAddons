@@ -419,7 +419,7 @@ public final class WastesCityGameTests {
 			r.setFed(helper.getLevel(), origin(helper), District.QUARTERS, true, helper.absolutePos(foot));
 		});
 		helper.runAtTickTime(40, () -> {
-			if (!helper.getBlockState(head).getValue(BlockStateProperties.LIT) || helper.getBlockState(head).getLightEmission() != 15)
+			if (!helper.getBlockState(head).getValue(BlockStateProperties.LIT) || helper.getBlockState(head).getLightEmission(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, net.minecraft.core.BlockPos.ZERO) != 15)
 				helper.fail("the head didn't light at full brightness");
 			if (helper.getBlockState(foot).getValue(BlockStateProperties.LIT))
 				helper.fail("the foot lit");
@@ -913,7 +913,7 @@ public final class WastesCityGameTests {
 		});
 		helper.runAtTickTime(40, () -> {
 			BlockState head = helper.getBlockState(foot.above(2));
-			if (head.getValue(DerelictStreetLampBlock.PART) != DerelictStreetLampBlock.Part.HEAD || !lit(helper, foot.above(2)) || head.getLightEmission() != 15)
+			if (head.getValue(DerelictStreetLampBlock.PART) != DerelictStreetLampBlock.Part.HEAD || !lit(helper, foot.above(2)) || head.getLightEmission(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, net.minecraft.core.BlockPos.ZERO) != 15)
 				helper.fail("the leaning post's head didn't light at 15");
 			helper.succeed();
 		});
@@ -987,7 +987,7 @@ public final class WastesCityGameTests {
 				helper.fail("a chipped Scarred Plate lit");
 			if (lit(helper, loose))
 				helper.fail("a grille of no city lit");
-			if (helper.getBlockState(grille).getLightEmission() != 0)
+			if (helper.getBlockState(grille).getLightEmission(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, net.minecraft.core.BlockPos.ZERO) != 0)
 				helper.fail("lit decor casts light (D63)");
 			record(helper).setFed(level, origin(helper), District.QUARTERS, false, null);
 		});

@@ -39,11 +39,13 @@ public class SalvageBlock extends HorizontalDirectionalBlock implements IWrencha
 
 	private final Map<Direction, VoxelShape> shapes;
 
+	@SuppressWarnings("this-escape") // vanilla's registerDefaultState pattern: its subclasses override nothing it calls
 	public SalvageBlock(Properties properties) {
 		this(properties, new double[][] { { 0, 0, 0, 16, 16, 16 } });
 	}
 
 	/** @param northBoxes its shape facing north, in pixels: {x0, y0, z0, x1, y1, z1} each */
+	@SuppressWarnings("this-escape") // vanilla's registerDefaultState pattern: its subclasses override nothing it calls
 	public SalvageBlock(Properties properties, double[][] northBoxes) {
 		super(properties);
 		this.shapes = shapes(northBoxes);

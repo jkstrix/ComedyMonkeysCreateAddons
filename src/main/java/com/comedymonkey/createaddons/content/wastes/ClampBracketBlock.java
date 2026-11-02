@@ -25,7 +25,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * on that block's two faces along {@code facing}'s axis (the model reaches into the block below; its outline stays in its
  * own). Structural, so never lit. It needs no wall to stay up (as the Brass Plaque; provisional).
  */
-public class ClampBracketBlock extends HorizontalDirectionalBlock {
+public final class ClampBracketBlock extends HorizontalDirectionalBlock {
 	public static final MapCodec<ClampBracketBlock> CODEC = simpleCodec(ClampBracketBlock::new);
 
 	public enum Mount implements StringRepresentable {

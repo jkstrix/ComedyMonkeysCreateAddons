@@ -29,7 +29,7 @@ import net.minecraft.util.StringRepresentable;
  * its back and cheek and one strand hanging in its opening. Both are drawn by its blockstate on every part (the trinket in
  * the middle block, the vines in the middle and top), set by the city; one placed by a player has none of either.
  */
-public class ChargingAlcoveBlock extends ThreePartBlock implements EntityBlock, DerelictLightBlockEntity.DerelictLight {
+public final class ChargingAlcoveBlock extends ThreePartBlock implements EntityBlock, DerelictLightBlockEntity.DerelictLight {
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	public static final EnumProperty<Trinket> TRINKET = EnumProperty.create("trinket", Trinket.class);
 	public static final BooleanProperty VINES = BooleanProperty.create("vines");

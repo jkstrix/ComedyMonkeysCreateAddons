@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
  * its district is fed. Its field is in the void-alloy bond ({@link VoidAlloyBond}). Not a full occluder (you see through
  * the slots). It also lies on its side for a fallen tower top (D75): the {@code _lying} and {@code up_} orientations.
  */
-public class SlottedGrilleBlock extends CityDecorLightBlock {
+public final class SlottedGrilleBlock extends CityDecorLightBlock {
 	public static final MapCodec<SlottedGrilleBlock> CODEC = simpleCodec(SlottedGrilleBlock::new);
 
 	/** Which way its slots look through and which way they run. */

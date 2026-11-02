@@ -41,7 +41,7 @@ import net.minecraft.world.phys.Vec3;
  * its lenses to it; aiming holds them narrowed between shots; firing; a hit's flinch; the slow fold; and its death,
  * petals splaying and drooping, lenses going out in a spiral.
  */
-public class Sentry extends CityBot {
+public final class Sentry extends CityBot {
 	public static final String CLIPS = "/assets/comedymonkeysaddons/sentry/clips.json";
 	private static final EntityDataAccessor<Direction> FACE = SynchedEntityData.defineId(Sentry.class, EntityDataSerializers.DIRECTION);
 	private static final EntityDataAccessor<Float> AIM_YAW = SynchedEntityData.defineId(Sentry.class, EntityDataSerializers.FLOAT);
@@ -201,6 +201,7 @@ public class Sentry extends CityBot {
 	}
 
 	/** From an egg or a command (not the city): mounted on the floor where it appeared. */
+	@SuppressWarnings("deprecation") // overriding is the intended use; callers go through EventHooks.finalizeMobSpawn
 	@Override
 	public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor level, net.minecraft.world.DifficultyInstance difficulty,
 		net.minecraft.world.entity.MobSpawnType reason, @Nullable net.minecraft.world.entity.SpawnGroupData data) {
@@ -444,6 +445,7 @@ public class Sentry extends CityBot {
 	@Override
 	protected void pushEntities() {}
 
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	@Override
 	public boolean isPushedByFluid() {
 		return false;

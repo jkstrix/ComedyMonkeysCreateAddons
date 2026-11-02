@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
  * ({@link VoidAlloyBond}). Only the cracked one lights: the seam-coloured pixels beside its crack glow dim while its
  * district is fed. Damage marks the uprising's buildings by the rings' rules without random missing blocks.
  */
-public class ScarredPlateBlock extends CityDecorLightBlock implements IWrenchable {
+public final class ScarredPlateBlock extends CityDecorLightBlock implements IWrenchable {
 	public static final MapCodec<ScarredPlateBlock> CODEC = simpleCodec(ScarredPlateBlock::new);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
@@ -97,6 +97,7 @@ public class ScarredPlateBlock extends CityDecorLightBlock implements IWrenchabl
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));

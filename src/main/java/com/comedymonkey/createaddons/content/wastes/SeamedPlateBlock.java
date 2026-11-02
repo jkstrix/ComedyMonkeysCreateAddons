@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
  * in its block model, so a wall of them costs nothing to draw). One a player places belongs to no city and stays dark.
  * It casts no light.
  */
-public class SeamedPlateBlock extends Block implements EntityBlock, DerelictLightBlockEntity.DerelictLight {
+public final class SeamedPlateBlock extends Block implements EntityBlock, DerelictLightBlockEntity.DerelictLight {
 	public static final MapCodec<SeamedPlateBlock> CODEC = simpleCodec(SeamedPlateBlock::new);
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 

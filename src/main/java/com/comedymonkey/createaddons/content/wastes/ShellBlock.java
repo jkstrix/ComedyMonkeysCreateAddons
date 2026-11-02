@@ -60,7 +60,7 @@ public abstract class ShellBlock<P extends Enum<P> & StringRepresentable> extend
 	}
 
 	/** The Worker Shell. Shapes from where each posed model reaches (the exporter prints them), kept to the block. */
-	public static class Worker extends ShellBlock<WorkerPose> {
+	public static final class Worker extends ShellBlock<WorkerPose> {
 		public static final EnumProperty<WorkerPose> POSE = EnumProperty.create("pose", WorkerPose.class);
 
 		public Worker(Properties properties) {
@@ -84,7 +84,7 @@ public abstract class ShellBlock<P extends Enum<P> & StringRepresentable> extend
 	}
 
 	/** The Resistance Shell. */
-	public static class Resistance extends ShellBlock<ResistancePose> {
+	public static final class Resistance extends ShellBlock<ResistancePose> {
 		public static final EnumProperty<ResistancePose> POSE = EnumProperty.create("pose", ResistancePose.class);
 
 		public Resistance(Properties properties) {

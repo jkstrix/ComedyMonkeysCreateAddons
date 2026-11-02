@@ -40,7 +40,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * with it) leans 22.5 degrees away from its crook, about its foot: each block draws its slice of the leaning post, so
  * the three line up into one.
  */
-public class DerelictStreetLampBlock extends HorizontalDirectionalBlock implements EntityBlock, DerelictLightBlockEntity.DerelictLight {
+public final class DerelictStreetLampBlock extends HorizontalDirectionalBlock implements EntityBlock, DerelictLightBlockEntity.DerelictLight {
 	public static final MapCodec<DerelictStreetLampBlock> CODEC = simpleCodec(DerelictStreetLampBlock::new);
 	public static final EnumProperty<Part> PART = EnumProperty.create("part", Part.class);
 	public static final BooleanProperty SNAPPED = BooleanProperty.create("snapped");
@@ -154,6 +154,7 @@ public class DerelictStreetLampBlock extends HorizontalDirectionalBlock implemen
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));

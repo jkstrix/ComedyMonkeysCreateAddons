@@ -40,7 +40,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * the leaves slide into the walls ({@link SlidingDoorBlockEntity}). Open, it never closes and lets anything through
  * at once, so it can't close on anyone; it's an ordinary block from then on, broken as one like a door.
  */
-public class SlidingDoorBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
+public final class SlidingDoorBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
 	public static final MapCodec<SlidingDoorBlock> CODEC = simpleCodec(SlidingDoorBlock::new);
 	public static final IntegerProperty COL = IntegerProperty.create("col", 0, 1);
 	public static final IntegerProperty ROW = IntegerProperty.create("row", 0, 2);

@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
  * reads as one course). Its seam glows edge tone while its district is fed. {@link #AXIS} is its ring's axis: y upright;
  * x or z lying on its side, for a fallen tower top (D75).
  */
-public class VoidAlloyBandBlock extends CityDecorLightBlock {
+public final class VoidAlloyBandBlock extends CityDecorLightBlock {
 	public static final MapCodec<VoidAlloyBandBlock> CODEC = simpleCodec(VoidAlloyBandBlock::new);
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 	/** A block touches this side (only the sides round its axis count). */

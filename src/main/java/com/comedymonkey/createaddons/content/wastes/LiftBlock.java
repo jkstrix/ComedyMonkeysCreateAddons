@@ -39,7 +39,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * its district wakes; then it works for good (D24) and is an ordinary block (D42). Its renderer draws all of it: the
  * frame and drum on the rails' tops, the rails down the shaft, the deck.
  */
-public class LiftBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
+public final class LiftBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
 	public static final MapCodec<LiftBlock> CODEC = simpleCodec(LiftBlock::new);
 	public static final BooleanProperty LOCKED = SubstationBlock.LOCKED;
 	/** Its hardness and blast resistance once woken (bedrock's while locked: see CityLocks). */
@@ -129,6 +129,7 @@ public class LiftBlock extends HorizontalDirectionalBlock implements EntityBlock
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));

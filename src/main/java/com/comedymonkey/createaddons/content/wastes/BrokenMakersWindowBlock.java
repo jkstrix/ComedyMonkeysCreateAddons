@@ -21,7 +21,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * of its block, as the preview drew it, across {@link #AXIS} (z: its glass faces north and south). Three ways broken,
  * picked by its model's weighted variants. Not a pane: it joins nothing (provisional).
  */
-public class BrokenMakersWindowBlock extends Block {
+public final class BrokenMakersWindowBlock extends Block {
 	public static final MapCodec<BrokenMakersWindowBlock> CODEC = simpleCodec(BrokenMakersWindowBlock::new);
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 	private static final VoxelShape ACROSS_Z = Block.box(0, 0, 7, 16, 16, 9), ACROSS_X = Block.box(7, 0, 0, 9, 16, 16);

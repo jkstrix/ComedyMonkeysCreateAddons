@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
  * Key-Marked Stone (D73, D75): the clockwork resistance's winding key scratched into a Scorched End Stone cover stone, on
  * its {@code facing} face, one per siege segment. Never lit.
  */
-public class KeyMarkedStoneBlock extends HorizontalDirectionalBlock {
+public final class KeyMarkedStoneBlock extends HorizontalDirectionalBlock {
 	public static final MapCodec<KeyMarkedStoneBlock> CODEC = simpleCodec(KeyMarkedStoneBlock::new);
 
 	public KeyMarkedStoneBlock(Properties properties) {

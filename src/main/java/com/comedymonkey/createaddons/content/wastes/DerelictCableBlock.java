@@ -53,7 +53,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * district as any cable's. Which part a riser is follows the girders and risers round it (the top where the girder
  * column ends, the foot with no riser under it).
  */
-public class DerelictCableBlock extends BaseEntityBlock implements DerelictLightBlockEntity.DerelictLight {
+public final class DerelictCableBlock extends BaseEntityBlock implements DerelictLightBlockEntity.DerelictLight {
 	public static final MapCodec<DerelictCableBlock> CODEC = simpleCodec(DerelictCableBlock::new);
 	public static final BooleanProperty NORTH = BlockStateProperties.NORTH, EAST = BlockStateProperties.EAST,
 		SOUTH = BlockStateProperties.SOUTH, WEST = BlockStateProperties.WEST, UP = BlockStateProperties.UP, DOWN = BlockStateProperties.DOWN,

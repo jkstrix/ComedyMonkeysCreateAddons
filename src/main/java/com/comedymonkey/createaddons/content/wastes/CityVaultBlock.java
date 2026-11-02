@@ -38,7 +38,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * ({@code chests/clockwork_city_vault}) or, {@link #HEART}, the heart vault's ({@code chests/clockwork_city_heart_vault},
  * the Elytra), which opens on the Custodian's death, or on Peaceful once all four districts are awake (P41).
  */
-public class CityVaultBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
+public final class CityVaultBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
 	public static final MapCodec<CityVaultBlock> CODEC = simpleCodec(CityVaultBlock::new);
 	public static final BooleanProperty LOCKED = SubstationBlock.LOCKED;
 	/** The heart's vault (the Elytra), not a district's. */
@@ -137,6 +137,7 @@ public class CityVaultBlock extends HorizontalDirectionalBlock implements Entity
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));

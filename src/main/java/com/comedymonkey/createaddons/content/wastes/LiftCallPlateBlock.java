@@ -37,7 +37,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * lit while its call waits, and dark again when the deck arrives (D62). Placed
  * against a wall's face, it points away from it.
  */
-public class LiftCallPlateBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
+public final class LiftCallPlateBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
 	public static final MapCodec<LiftCallPlateBlock> CODEC = simpleCodec(LiftCallPlateBlock::new);
 	public static final BooleanProperty LOCKED = SubstationBlock.LOCKED;
 	public static final float HARDNESS = 3f, RESISTANCE = 9f;
@@ -115,6 +115,7 @@ public class LiftCallPlateBlock extends HorizontalDirectionalBlock implements En
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));

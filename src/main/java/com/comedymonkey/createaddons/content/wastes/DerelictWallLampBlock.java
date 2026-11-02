@@ -29,7 +29,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * tipped down and out toward the facing. Lit while its district is fed ({@link DerelictLightBlockEntity}); breaks into
  * scrap. Placed against a wall's face, it points away from it.
  */
-public class DerelictWallLampBlock extends HorizontalDirectionalBlock implements EntityBlock, DerelictLightBlockEntity.DerelictLight {
+public final class DerelictWallLampBlock extends HorizontalDirectionalBlock implements EntityBlock, DerelictLightBlockEntity.DerelictLight {
 	public static final MapCodec<DerelictWallLampBlock> CODEC = simpleCodec(DerelictWallLampBlock::new);
 	public static final BooleanProperty LIT = DerelictStreetLampBlock.LIT;
 	private static final Map<Direction, VoxelShape> SHAPES = SalvageBlock.shapes(new double[][] { { 6, 6, 15, 10, 14, 16 }, { 5, 5, 2, 11, 14, 15 } });
@@ -85,6 +85,7 @@ public class DerelictWallLampBlock extends HorizontalDirectionalBlock implements
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));

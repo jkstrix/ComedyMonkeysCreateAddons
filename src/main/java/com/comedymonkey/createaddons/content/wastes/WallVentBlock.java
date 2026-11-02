@@ -36,7 +36,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
  * Provisional, waiting for the user: unspent, it's locked (bedrock's hardness, so it can't be broken before its burst);
  * spent, it breaks like a Void-Alloy Plate, into one Clockwork Scrap.
  */
-public class WallVentBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
+public final class WallVentBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
 	public static final MapCodec<WallVentBlock> CODEC = simpleCodec(WallVentBlock::new);
 	public static final float HARDNESS = 5f, RESISTANCE = 9f;
 
@@ -109,6 +109,7 @@ public class WallVentBlock extends HorizontalDirectionalBlock implements EntityB
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));

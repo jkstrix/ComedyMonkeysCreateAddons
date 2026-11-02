@@ -33,7 +33,7 @@ import net.minecraft.world.phys.BlockHitResult;
  * {@link #FACING}, on the far side from whoever placed it: its front faces the placer, any of six ways, D47). An Unknown Device fitted ({@link #UPGRADED}, by hand or
  * Deployer) makes each star burn 12 hours, with a visible orbit ring. See {@link StarReactorBlockEntity}.
  */
-public class StarReactorBlock extends DirectionalBlock implements EntityBlock {
+public final class StarReactorBlock extends DirectionalBlock implements EntityBlock {
 	public static final MapCodec<StarReactorBlock> CODEC = simpleCodec(StarReactorBlock::new);
 	/** Overhauled: an Unknown Device fitted (P44). */
 	public static final BooleanProperty UPGRADED = BooleanProperty.create("upgraded");
@@ -121,6 +121,7 @@ public class StarReactorBlock extends DirectionalBlock implements EntityBlock {
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));

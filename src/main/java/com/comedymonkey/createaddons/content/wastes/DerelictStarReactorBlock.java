@@ -45,7 +45,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * spare power can be drawn off by a line. A Wrench (a player's sneak-click, or a Deployer holding one) salvages it for
  * two Unknown Devices, leaving a dead ruin ({@link #SALVAGED}) that only then can be broken.
  */
-public class DerelictStarReactorBlock extends BaseEntityBlock implements IWrenchable {
+public final class DerelictStarReactorBlock extends BaseEntityBlock implements IWrenchable {
 	public static final MapCodec<DerelictStarReactorBlock> CODEC = simpleCodec(DerelictStarReactorBlock::new);
 	public static final IntegerProperty PART = IntegerProperty.create("part", 0, 26);
 	public static final BooleanProperty SALVAGED = BooleanProperty.create("salvaged");

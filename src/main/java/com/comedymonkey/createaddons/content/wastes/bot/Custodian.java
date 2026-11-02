@@ -127,7 +127,7 @@ public class Custodian extends CityBot {
 	/** What its head turns to in wrath (an entity's id, or -1), and in a mourn or a glance at the vault (a block). */
 	private static final EntityDataAccessor<Integer> LOOK_ENTITY = SynchedEntityData.defineId(Custodian.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Optional<BlockPos>> LOOK_BLOCK = SynchedEntityData.defineId(Custodian.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"}) // a generic array can't be made directly
 	private static final EntityDataAccessor<Optional<BlockPos>>[] PYLON = new EntityDataAccessor[] {
 		SynchedEntityData.defineId(Custodian.class, EntityDataSerializers.OPTIONAL_BLOCK_POS),
 		SynchedEntityData.defineId(Custodian.class, EntityDataSerializers.OPTIONAL_BLOCK_POS),
@@ -438,6 +438,7 @@ public class Custodian extends CityBot {
 	 * From an egg or a command (not the city): it has no city, so nothing would wake it; it kneels where it appeared
 	 * and wakes at once (rises, bows, fights, unshielded: it has no pylons). Never on Peaceful.
 	 */
+	@SuppressWarnings("deprecation") // overriding is the intended use; callers go through EventHooks.finalizeMobSpawn
 	@Override
 	public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor level, net.minecraft.world.DifficultyInstance difficulty,
 		net.minecraft.world.entity.MobSpawnType reason, @Nullable net.minecraft.world.entity.SpawnGroupData data) {

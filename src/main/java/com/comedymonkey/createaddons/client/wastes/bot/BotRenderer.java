@@ -40,6 +40,7 @@ public class BotRenderer<T extends CityBot> extends MobRenderer<T, BotModel<T>> 
 
 	private final ResourceLocation texture;
 
+	@SuppressWarnings("this-escape") // the glow layer only keeps the renderer; it draws after construction
 	public BotRenderer(EntityRendererProvider.Context context, BotModel.Rig rig, float shadow) {
 		super(context, new BotModel<>(rig, context.bakeLayer(rig.layer())), shadow);
 		this.texture = ComedyMonkeysCreateAddons.asResource("textures/entity/" + rig.id() + ".png");

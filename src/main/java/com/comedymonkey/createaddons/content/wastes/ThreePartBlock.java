@@ -44,6 +44,7 @@ public class ThreePartBlock extends HorizontalDirectionalBlock {
 	 * @param lying whether it lies along the ground instead of standing
 	 * @param northBoxes each part's shape facing north, in pixels ({x0, y0, z0, x1, y1, z1}): bottom, middle, top
 	 */
+	@SuppressWarnings("this-escape") // vanilla's registerDefaultState pattern: its subclasses override nothing it calls
 	public ThreePartBlock(Properties properties, boolean lying, double[][][] northBoxes) {
 		super(properties);
 		this.lying = lying;
@@ -132,6 +133,7 @@ public class ThreePartBlock extends HorizontalDirectionalBlock {
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return lying ? state : state.rotate(mirror.getRotation(state.getValue(FACING)));

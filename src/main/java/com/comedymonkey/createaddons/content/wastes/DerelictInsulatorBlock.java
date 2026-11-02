@@ -39,7 +39,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * crown-arm ends). Its neck ring is lit while its district is fed (an emissive part in its block model). The city
  * places them and links their spans; a player's has none. Breaks into scrap, its spans with it.
  */
-public class DerelictInsulatorBlock extends HorizontalDirectionalBlock implements EntityBlock {
+public final class DerelictInsulatorBlock extends HorizontalDirectionalBlock implements EntityBlock {
 	public static final MapCodec<DerelictInsulatorBlock> CODEC = simpleCodec(DerelictInsulatorBlock::new);
 	public static final EnumProperty<Mount> MOUNT = EnumProperty.create("mount", Mount.class);
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -125,6 +125,7 @@ public class DerelictInsulatorBlock extends HorizontalDirectionalBlock implement
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));

@@ -65,6 +65,7 @@ public abstract class CityBot extends Monster {
 	/** Peaceful sent it to sleep (D56): it wakes again once the difficulty rises. */
 	private boolean peaceSlept;
 
+	@SuppressWarnings("this-escape") // vanilla's mob set-up calls: the bots override nothing it calls
 	protected CityBot(EntityType<? extends CityBot> type, Level level) {
 		super(type, level);
 		setPersistenceRequired();

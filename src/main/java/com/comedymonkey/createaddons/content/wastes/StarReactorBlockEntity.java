@@ -47,7 +47,7 @@ import net.neoforged.neoforge.items.IItemHandler;
  * (the burn left is its one fuel, burning a tick a tick while it makes power). It needs nothing special on an
  * Aeronautics ship: it ticks there like any block (as the Lava Generator does).
  */
-public class StarReactorBlockEntity extends BlockEntity implements IHaveGoggleInformation, PowerGrid.Generator {
+public final class StarReactorBlockEntity extends BlockEntity implements IHaveGoggleInformation, PowerGrid.Generator {
 	/** Real-time ticks in an hour of running: one pip a pip. */
 	public static final int TICKS_PER_HOUR = 72_000;
 	private static final int BUFFER = 1_000_000;
@@ -196,6 +196,7 @@ public class StarReactorBlockEntity extends BlockEntity implements IHaveGoggleIn
 	}
 
 	/** Like vanilla's chest: turned by a wrench, its terminal looks again. */
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	@Override
 	public void setBlockState(BlockState state) {
 		BlockState old = getBlockState();
@@ -284,6 +285,7 @@ public class StarReactorBlockEntity extends BlockEntity implements IHaveGoggleIn
 		burn = Math.max(0, input.getOrDefault(ModWastes.STAR_BURN.get(), 0L));
 	}
 
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	@Override
 	public void removeComponentsFromTag(CompoundTag tag) {
 		tag.remove("Burn");

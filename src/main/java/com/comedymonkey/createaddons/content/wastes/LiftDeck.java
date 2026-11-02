@@ -36,7 +36,7 @@ import net.neoforged.neoforge.entity.PartEntity;
  * way", P49). Its drive draws it (Flywheel parts); the deck itself has no renderer. Never saved: the drive makes a new
  * one when it loads.
  */
-public class LiftDeck extends Entity {
+public final class LiftDeck extends Entity {
 	private static final EntityDataAccessor<BlockPos> DRIVE = SynchedEntityData.defineId(LiftDeck.class, EntityDataSerializers.BLOCK_POS);
 	/** How close above (or how deep into) its top an entity's feet must be to stand on it. */
 	private static final double ON_TOP_ABOVE = 0.05, ON_TOP_BELOW = 0.1;

@@ -43,7 +43,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * beside it) into its lower half ({@link SubstationBlockEntity}); placed and broken like a door. Locked (unbreakable,
  * blast-proof, contraption-proof: {@link CityLocks}) until it wakes; afterwards an ordinary block that breaks into scrap.
  */
-public class SubstationBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
+public final class SubstationBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
 	public static final MapCodec<SubstationBlock> CODEC = simpleCodec(SubstationBlock::new);
 	public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 	/** Dormant: nothing but a woken district's Substation can be broken (P21). */
@@ -179,6 +179,7 @@ public class SubstationBlock extends HorizontalDirectionalBlock implements Entit
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));

@@ -22,7 +22,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * last bolt. {@code facing} is the way its face looks, its wall behind it. Decor: it drops itself. It needs no wall to
  * stay up (provisional, for the user's word: progress doc, "D72").
  */
-public class BrassPlaqueBlock extends HorizontalDirectionalBlock {
+public final class BrassPlaqueBlock extends HorizontalDirectionalBlock {
 	public static final MapCodec<BrassPlaqueBlock> CODEC = simpleCodec(BrassPlaqueBlock::new);
 	public static final BooleanProperty ASKEW = BooleanProperty.create("askew");
 	/** Its outline facing north, in pixels (the exporter's bounds: square, and hanging askew, each kept to the block). */

@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
  * (models/block/wastes/assembly_clamp_<stage>.obj: stages 4-5 stand 33.5 px tall, past a block model's reach), so it
  * needs no renderer; it collides as its own block only.
  */
-public class AssemblyClampBlock extends SalvageBlock {
+public final class AssemblyClampBlock extends SalvageBlock {
 	public static final IntegerProperty STAGE = IntegerProperty.create("stage", 1, 5);
 	/**
 	 * The stage the item places (provisional, for the user's word: progress doc, "D72"): the whole Worker, which its flat icon

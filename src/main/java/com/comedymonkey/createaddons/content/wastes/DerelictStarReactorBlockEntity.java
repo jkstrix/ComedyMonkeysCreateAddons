@@ -39,7 +39,7 @@ import net.neoforged.neoforge.items.IItemHandler;
  * burns, it makes the Star Reactor's output into a store a Power Line can draw from (its ports), and runs on paper as a
  * {@link PowerGrid.Generator} while unloaded. Salvaged, it's a ruin: no star, no power, ever.
  */
-public class DerelictStarReactorBlockEntity extends CityBlockEntity implements IHaveGoggleInformation, PowerGrid.Generator {
+public final class DerelictStarReactorBlockEntity extends CityBlockEntity implements IHaveGoggleInformation, PowerGrid.Generator {
 	private static final int BUFFER = 1_000_000;
 
 	private final EnergyBuffer energy = new EnergyBuffer(BUFFER, 0, BUFFER, this::setChanged);
