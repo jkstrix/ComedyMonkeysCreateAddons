@@ -930,3 +930,166 @@ The building kit (D71, D73, D75) and `/wastes buildcatalogue`, paused at the use
   3. On approval, flip `CityLayout.BUILDING_KIT` (D71).
   4. In-game walk via `/wastes buildcity`.
   5. Ponder, JEI, codex page, adversarial review, then sounds last.
+
+## Catalogue agent 2 — 2026-11-02
+
+D79 (the lore pass) in the kit, and the catalogue screenshots. Nothing committed; `CityLayout.BUILDING_KIT` left off.
+
+### D79, built
+- **Roof hatches** (`Terrace.hatches`): a walnut (dark oak) trapdoor in the front slope of houses 0 and 1 (the heart end), the course under the ridge over each house's middle, in the worn and damaged states only. House 1's is left open (the leaf standing up on the ridge side), house 0's shut, flush in the slope. The catalogue gained a worn terrace (`terrace_worn`) so both states show. The terrace's walnut stair now has a boxed-in walnut underside (three planks): the worn state's strike on the end wall left a tread hanging without it.
+- **The bridges' line shaft** (`CityLayout.lineShaft`, called from `ground()`, so the boxes' city and the kit's both get it): a Create Shaft down each bridge's middle, two below the deck (y -3), over the void only (as the deck), a chain hanger every 4 (`HANGER_EVERY`), a Cogwheel at each pier (the trestles, every 8: far 72, 80, 88). The north and east bridges snap past 82: the shaft stops at 82 and one length (two shafts, upright) hangs under the first plate of the fallen deck at 83.
+- **The wrecked winding tower** (`WindingTower`, catalogue exhibit `winding_tower`, damaged): built and passing the grammar, but **on hold for a Blockbench preview** (main session, 2026-11-02): not placed in `KitCity`, not shot, not reviewed. Note for the preview: `design/visual-language.md` says a mainspring is "always shown as a coil of strip, never as a block"; the provisional build draws it in full industrial-iron blocks.
+- `Model.Cause.SPRUNG` (the tower's burst hole) joins the causes cracked stone may sit near.
+
+### The screenshots (D71)
+- **In `design/texture-reviews/clockwork-wastes-buildings/`** (JPEG, 960 wide): every exhibit except the winding tower, street level, the brief's three-quarter and a closer three-quarter (`-close`), dormant and awake; the join close-ups (lined cut and plaque, plaque askew, clamp bite, launder on the hoop, heart portal, both hatch states, the open hatch from the side); each row down its length (`rowN-distance`, from beyond its east end: the rows stack north, so the old camera 200 south saw the rows in front of it); brief shot 5 (`awake-shot5-*`, a lit 3 x 3 tower behind a Cast Iron Lamp Post on the `/lights testsetup` street); the kit city's distance set (south, south-west, east, north, high) and the bridges from below (`kitcity-bridge-*`). Contact sheets: `sheet-row1-makers-sheds.jpg` to `sheet-row5-outskirts.jpg`, `sheet-joins-and-shot5.jpg`, `sheet-kit-city.jpg`.
+- Taken in the "Wastes Catalogue" save: the catalogue at 16000, 100, 3000 (End; the winding tower's pad cleared with `/fill`), the light street at 15871, 100, 2866, the kit city at 30000, 100, 3000. The kit-city and row shots were taken at render distance 32 (set back to 12 after). Driver scripts: `scratchpad/cat2/` (`shoot.js`, `views.js`, `mkextra.js`, `mkkit.js`, `sheets.ps1`).
+
+### Fixed during the review
+- **Workshops piers** (`Masonry.workshops().pier`): Create's andesite casing reads in game as tall walnut-faced panels, the warmest, most saturated thing on every Workshops facade (like a row of doors). Now `create:tuff_pillar` (provisional: choice 24). The siege works' stacked casing and the yard's gate posts keep their casing.
+- **The Band on horizontal runs** (the gantry's beam, the sky tower's T-head web): laid with axis x, its seam stood on end and lit as a row of short slanted strokes. Now upright (axis y), so the seam runs along the beam as one line.
+
+### Still weak (for the user's eye; not changed)
+- **Void-alloy, dormant and awake:** near-black silhouettes in End light either way. Awake adds only hairline bands and grille slots, so the towers, vault houses, gantry and alcove wall read as dark shapes with a few thin lines; the plate bond barely shows. Textures are approved; reported, not changed.
+- **The ridge roll** (Patina Rib, choice 1) reads from the street as a heavy green bar on every roof.
+- **The alcove wall:** its 2-deep decks and switchback ramp hide the lower tiers, so the honeycomb reads only on the top tier.
+- **The heart drum's flats:** big fields of stained brick between the plinth and the lintel band, the windows small in them.
+- **The kit city from a distance:** small under the spire; the "ring of broken teeth" doesn't read yet, and the End's own islands block floor-height views (the distance set is taken 22-30 up instead).
+- **The hatches** read as small warm squares in the slate; the open one only shows as open from the side.
+
+### Tests
+- `WastesKitGameTests.loreDetailsKeepTheirRules`: hatches (1-2, at least one open, worn and damaged only; none intact or ruined), the winding tower in every state (grammar, spring outside on the ground, the hole's cause, the drive snapped, under 30 high).
+- `WastesKitGameTests.bridgesCarryTheOldLineShaft`: in both cities, each bridge's shaft unbroken from 71 to its end or snap, over the void only, cogs at every 8, hangers at every 4, along the bridge, nothing past a snap but the hanging length.
+- The catalogue grammar test covers the worn terrace and the tower exhibit. Last run (after the review fixes): `compileJava test runGameTestServer`, all 400 game tests pass.
+
+### Choices needing the user's agreement (new, provisional as built)
+17. **Hatch houses:** the first two from the heart end, the second open, the first shut, the same in worn and damaged. Options: one hatch only in worn and two in damaged; the open one at the outer end; more than one open.
+18. **Hatch look:** a bare dark oak trapdoor in the slate, the open leaf standing up on the ridge side. Options: the leaf hanging down inside (only the dark hole shows); a walnut curb (slabs) round the hatch.
+19. **Line shaft hangers:** a chain every 4 blocks, shaft two below the deck (as choice 9's workshop line shaft). Options: every 2 or every 8 (at the piers only); Create girder stubs.
+20. **Cog at each pier:** Create's small Cogwheel in the shaft line between the trestle legs. Option: a Large Cogwheel.
+21. **The snapped end:** the shaft stops at the last standing deck block, and two upright lengths hang under the first fallen plate. Options: stop clean; a horizontal length lying on the fallen plate.
+22. **A worn terrace in the catalogue** (row 2), so both hatch states are shown. Option: drop it (the city's terrace is damaged).
+23. **Winding tower** (waiting on its preview): every part of it is open (block for the spring, height 22 to the rim, place at the Quarters' lot B edge u 53-66 v 14-28, the coil out of the heart-side wall, the wear by ring, no uprising join on it).
+24. **Workshops piers:** `create:tuff_pillar` (fluted, the wall's own stone; relief from shading). Options: back to andesite casing (the brief's, D73); `create:deepslate_pillar` (darker, as the Rail Yard and Quarters, less district identity); `create:andesite_pillar` (over mid grey).
+
+## Catalogue agent 2, pass 2 — 2026-11-02
+
+D83's next pass. Nothing committed; `BUILDING_KIT` off; the winding tower, void-alloy textures and choice 11 untouched.
+
+### Built (in the kit)
+- **Workshops dressings** (`Masonry.workshops()`): sills, corbels and the lintel band in Create's polished cut dripstone (116, a warm brown-grey at the tuff's value) on the cut tuff field, with the tuff pillar piers (choice 24) and the cut deepslate plinth. In game it reads as a warm stone course and sills against the grey; in Blockbench's brighter light it reads pinker. Provisional: choice 25.
+- **Hatch curbs** (`Terrace.hatches`): the eight slates round each hatch are walnut (dark oak) stairs of the same shape, so each hatch reads as a framed opening in the slope. Provisional: choice 26.
+- **The heart drum's diagonal flats** (`Drum.build`): the outermost step of each diagonal is cut back one between the sill course (y 3) and the lintel course (y 9), so the diagonal between them is a recessed stepped panel with the courses and the flats' end cells standing proud round it. Provisional: choice 27.
+
+### The ridge (not built: a new block)
+- No slab-height form of the Patina Rib exists (it's one plain cube_all block). Previewed in Blockbench, nothing registered: `design/models/clockwork-wastes-ridge.gen.js` writes `design/models/clockwork-wastes-ridge.bbmodel` (open in Blockbench as its own tab, `clockwork-wastes-ridge`): a Foundry shed and a worn Quarters terrace (with the new hatch curbs) per option, plus the option's two blocks alone; a fourth row shows the Workshops shed's new dressings. Screenshots in `design/texture-reviews/clockwork-wastes-ridge/` (`A-*`, `B-*`, `C-*`, `overview.png`, `D83-workshops-shed-*`).
+  - **A** the current full Patina Rib (as built).
+  - **B** a plain Patina Rib slab: half height, vanilla slab shapes, no facing. Simplest block (one slab block, the same texture).
+  - **C** a slab-height rounded roll: each half of the 2-wide ridge a stepped quarter-round (4 px base the full width, a 4 px step set back 4, a 2 px top at the ridge line: 10 px at the ridge), so the two halves meet as one round cap. Needs a facing (toward the ridge line) and the kit placing each half faced. Recommended: it reads as a copper roll from the gable and as a thin line from the street.
+
+### The reshoot (pass 2)
+- In `design/texture-reviews/clockwork-wastes-buildings/`, prefix `pass2-`: the Workshops shed, worn and damaged sheds, control hut, long workshop intact and damaged, the through-roof tower's shed, the worn and damaged terraces, the drum: street, three-quarter and close three-quarter, dormant and awake; the hatch close-ups and the drum's diagonal panel. Contact sheet `pass2-sheet.jpg`. Taken in the "Wastes Catalogue" save, the catalogue rebuilt in place at 16000, 100, 3000. Not reshot though touched by the dressing change: the slotted towers' and sky tower's old plinth caps (the Workshops band stone), the yard, the gantry.
+
+### Choices needing the user's agreement (new, provisional as built)
+25. **Workshops dressing stone:** polished cut dripstone (warm brown-grey). Options: polished cut deepslate (cool, dark: a stronger contrast, but the Rail Yard's and Quarters' dressing family); polished cut granite (redder).
+26. **Hatch curb:** the full ring of eight slates as walnut stairs. Options: only the two sides and the head (a U); a raised curb of walnut slabs on the slates.
+27. **Drum diagonal panels:** the whole diagonal between the courses set back one step, no window or infill. Options: a blind arch (stair head) in the panel; small infill brick in the panel back (the Quarters' stone has no small-brick variant: a new block, or cracked brick, which needs a cause).
+28. **Ridge roll:** A, B or C above (recommend C; it's a new block or block state, registered only after the user picks).
+
+## Catalogue agent 2, pass 3 — 2026-11-02
+
+D85. Nothing committed; `BUILDING_KIT` off; `WindingTower.java` not edited (only called).
+
+### Built
+- **Patina Ridge Roll** (`comedymonkeysaddons:patina_roll`, `PatinaRollBlock`; option C): a new block, `facing` toward the ridge line, a stepped quarter-round half (4 px base full width, a 4 px step set back 4, a 2 px cap at its facing edge, 10 px high there) with a matching shape; the Patina Rib's own texture (`rib_patina`), nothing new painted. Model, blockstate and item model exported by `node design/models/clockwork-wastes-ridge.gen.js --export` (checks: bounds, UVs on the texture, no zero-width UVs, no rotations, z-fight check); the lang name "Patina Ridge Roll", the pickaxe tag, loot dropping itself (D37), in the building block set's creative tab after the Patina Rib. No recipe yet (choice 29). The full Patina Rib is kept unchanged (the drum's ribs use it). `Masonry.ridge(...)` now gives the roll, each half faced in: sheds, the canopy, the furnace shed's monitor, the terraces.
+- **Hatch curbs: a thin U** (`Terrace.hatches`): walnut stairs either side of each hatch and across its head (the ridge side), five cells; nothing below it.
+- **Drum diagonals: a stair-headed blind arch** (`Drum.build`): in each recessed panel the two end steps given back at the top course (y 8) as upside-down Stained End Stone Brick Stairs, full side to the jamb (as the windows' heads).
+- **The winding tower in the kit city** (`KitCity.windingTower`, called after `KitCity.quarters`): the Quarters' lot B beside street B, the drum at u 43-53, v 17-27 (plinth u 41-55, v 15-29), its west (spring) side toward street B (u 30-34), the spring and stones out to u 35; a frame that is never mirrored (the modelled spring and rafters can turn but not mirror); in its ring's state (its outer corner, u 55 v 29, is in the damaged ring). The catalogue's `winding_tower` exhibit now stands in an unmirrored frame of its own too, its spring side to the camera (world south).
+- Workshops dressing: polished cut dripstone kept (D85).
+
+### Tests
+- `loreDetailsKeepTheirRules`: each hatch's curb is a 5-cell U with none below; the terrace's ridge rolls face the ridge line (south on the near course, north on the far), each pair facing each other where both stand; the kit city's one winding tower is in the Quarters, unmirrored, in the damaged ring and built damaged, a street cell within 14 blocks out from its west wall's middle. `KitCity.problems` (the swap test) covers it staying in its lot and nothing landing in it.
+- Last run: `compileJava runGameTestServer`, all 401 game tests pass; `test`, all 1042 unit tests pass. (An earlier run's two failures, the Sprung Mainspring's lang name and its spiral sections not joined to the ground in the catalogue, were the preview agent's work in progress and are fixed.)
+
+### The reshoot (pass 3)
+- `design/texture-reviews/clockwork-wastes-buildings/pass3-*`, sheet `pass3-sheet.jpg`: the ridge on the Foundry shed and the intact terrace (above the eaves and gable end on), the hatches (worn, damaged, the open one from the side), the drum's diagonal (street level and near), dormant and awake. **The tower in the kit city is held** until the spring's floating sections are fixed (main session).
+- Weak: the drum's diagonal panels and arches barely read. The diagonal is a staircase of 1-block steps, so setting its outer steps back leaves another staircase; the arch's two stairs sit in the step corners. A panel that reads would need the diagonal's face flattened between the courses (choice 30).
+
+### Choices needing the user's agreement (new)
+29. **Patina Ridge Roll recipe:** none yet. Options: a Stonecutter recipe from the Patina Rib (one rib, two rolls); crafted as a slab from three ribs; none (city-only).
+30. **Drum diagonal panels:** as built (they barely read). Options: flatten each diagonal between the courses into one plane (a 3-wide face of brick set back, with the stair arch over it); a deeper recess (two steps); leave the diagonals plain as before D83.
+31. **The winding tower's place:** the Quarters' lot B beside street B, its spring toward street B (a player comes up street B from the boulevard). Options: lot B's outer end facing street A (the spring would reach the street: needs the drum shifted inward against the terrace); lot C beside the alcove wall.
+
+## Catalogue agent 2, pass 4 — 2026-11-02
+
+D86. Nothing committed; `Drum.java` unchanged (the pass 3 panels stand until the new block is approved).
+
+- **Patina Ridge Roll recipe** (choice 29): `recipe/wastes/patina_roll_from_patina_rib_stonecutting.json`, one Patina Rib to two rolls in a Stonecutter.
+- **The drum's diagonals (choice 30, option a): a Blockbench preview, nothing registered.** `design/models/clockwork-wastes-drum-diagonal.gen.js` writes `design/models/clockwork-wastes-drum-diagonal.bbmodel` (its own tab, `clockwork-wastes-drum-diagonal`); shots in `design/texture-reviews/clockwork-wastes-drum-diagonal/` (A: the quarter as built; B: its north-east diagonal from the new block; street, the brief's three-quarter, a 20-block three-quarter, the panel close, both buttress corners, the courses from above and below, the forms alone, an overview).
+  - The proposed **Stained End Stone Brick Diagonal**: a half cell cut on the 45-degree line through two of its corners, one block-model box turned 45 degrees about y (22.6 px wide, 11.3 px deep, the rest of the box inside the wall behind), so its face runs corner to corner. States: `corner` (south_east, south_west, north_west, north_east; blockstate quarter turns) and `form` (full; arch_neg and arch_pos, the blind arch's springers: top half full, bottom half only toward the jamb). Faces in the drum's brick (seb_0), tops in its dusty top (seb_top). The generator checks its models as the Wastes exporter does (bounds, UVs, one 45-degree rotation).
+  - On a diagonal between the courses (y 4-8): the four notch cells outside the steps hold it, so the face is one plane through the steps' outer tips, buttress to buttress; the two middle notches stay open and the three steps behind them are cut on the plane through their middles (the same block), a flat back 11.3 px behind the face, the end notches its jambs; at y 8 the middle notches are the arch's springers.
+  - Seen: no gaps where the face meets the buttresses or the courses, no z-fights; the panel and arch read clearly.
+- The temporary game test that dumped the drum quarter (`build/kit-preview/drum_quarter.json`) is removed.
+
+### Choices needing the user's agreement (new)
+32. **The brick on the 45-degree face:** stretched 1.41x along the face (one texture across the 22.6 px; the course rhythm runs on, the bricks are longer). Options: two boxes per face with the texture on each (bricks 0.71x, shorter); a new painted diagonal brick texture (needs a texture review).
+33. **The courses over and under the flat face:** left stepped (the sill and lintel courses and the water table zigzag above and below it; the face overhangs their notches as small ledges). Options: a cut deepslate form of the same diagonal block so the courses run flat too (more variants: the course, the corbel and the water-table stair); leave stepped.
+34. **Brick variants:** one brick texture (seb_0) on every diagonal. Option: the three weighted variants like the Stained End Stone Bricks (three models a form).
+35. **The arch head:** a two-step head (each springer's bottom half on its jamb side, the middle open). Options: a single upside-down step across (no middle notch); a deeper head reaching y 7.
+
+## Catalogue agent 2, pass 5 — 2026-11-02
+
+D88 and the winding tower's city shots. Nothing committed; `BUILDING_KIT` off.
+
+- **Stained End Stone Brick Diagonal registered** (`stained_end_stone_brick_diagonal`, `StainedBrickDiagonalBlock`): states `corner` (south_east, south_west, north_west, north_east) and `form` (full, arch_neg, arch_pos); a 2 px stepped shape that follows the half cell; no occlusion (its neighbours' faces always draw). Models exported by `node design/models/clockwork-wastes-drum-diagonal.gen.js --export` (one model a form, each in the Stained End Stone Bricks' three weighted brick variants, seb_0 x2, seb_1, seb_2; the blockstate turns a quarter a corner); lang "Stained End Stone Brick Diagonal", the pickaxe tag, loot dropping itself (D37), in the building block set after the Stained End Stone Brick Wall. No recipe (choice 36). `Site.orient` turns its corner with the frame and swaps its arch springers in a mirrored frame (the catalogue's).
+- **`Drum.build`** lays it on each diagonal between the courses (y 4-8): the face through the steps' tips in the four notch cells, the panel's back cut through the three steps, the two jambs, the arch's springers at y 8 (each full toward its nearer jamb). The courses as they were (the cut deepslate forms wait on the user).
+- **The courses' 45-degree forms (choice 33): a Blockbench preview, not registered.** In the `clockwork-wastes-drum-diagonal` tab, as C beside A (pass 3) and B (built): 'course' (the sill at y 3, the lintel at y 9: the plain half cell in cut deepslate) and 'water_table' (y 2: its lower half 4 px proud, the upper flush), plus the brick diagonal between the lintel and the corbel table (y 10-11). Shots: `design/texture-reviews/clockwork-wastes-drum-diagonal/courses/`. With them the diagonal is flat from the water table to the corbel table; the plinth (y 0-1) and the corbel table and parapet (y 12-13) still step (choice 37).
+- **The winding tower in the kit city, shot** (`design/texture-reviews/clockwork-wastes-buildings/pass3-*kitcity*`, sheet `pass3-winding-tower-sheet.jpg`): from street B level with it, a street angle, 20 blocks off (in the yard across the street), and on the approach up street B from the boulevard (street level, 20, high), dormant and awake. **Weak:** the spiral stands parallel to the drum's west wall, so it reads face-on only from across street B as you pass it (3-9 blocks, the spring filling the view); along the approach it's edge-on, the terrace stands between the boulevard end and the tower, and the corner mast stands at the street corner in front of it (choice 38).
+- Tests: `compileJava test runGameTestServer`: all 400 game tests and all 1042 unit tests pass, no warnings. The in-game shot of the drum's new diagonal is still to take: another session's client holds the run folder's save.
+
+### Choices needing the user's agreement (new)
+36. **A recipe for the Stained End Stone Brick Diagonal:** none (the drum's only). Options: a Stonecutter recipe from Stained End Stone Bricks (one to two); none.
+37. **The drum's plinth (y 0-1) and corbel table and parapet (y 12-13) on the diagonals:** still stepped after choice 33. Options: 45-degree forms for them too (a plinth course, a corbel and a parapet piece); leave them stepped.
+38. **Reading the tower's spring from the street:** as built (face-on only beside it). Options: turn the tower so its spring side faces down street B (toward the approach; the spring would then face the terrace's back across a 3-block gap: the tower would move to lot B's open middle, u 40-55, v 14-24, its west wall facing -v); move the corner mast off the corner in front of it; leave it.
+
+## Catalogue agent 2, pass 6 — 2026-11-02
+
+D89. Nothing committed; `BUILDING_KIT` off.
+
+- **Cut Deepslate Brick Diagonal registered** (`cut_deepslate_brick_diagonal`, `CutDeepslateDiagonalBlock`): the brick diagonal's `corner` (the same property, so `Site.orient` turns it the same way) and `course` (course; water_table, its lower half 4 px proud). Models, blockstate and item exported by `node design/models/clockwork-wastes-drum-diagonal.gen.js --export` in Create's cut deepslate brick; lang "Cut Deepslate Brick Diagonal", the pickaxe tag, loot dropping itself (D37), in the building block set after the brick diagonal. The item places the plain course; the water table appears only in the drum (choice 39).
+- **`Drum.build`**: on each diagonal, in the four notch cells, the water table (y 2), the sill and lintel courses (y 3, 9) and the brick diagonal at y 10-11 up to the corbel table; the plinth, corbels and parapet step (choice 37: no further forms).
+- **Recipes** (Stonecutter): one Stained End Stone Bricks to two Stained End Stone Brick Diagonals (choice 36); one of Create's Cut Deepslate Bricks to two Cut Deepslate Brick Diagonals (the same pattern, for the courses). `WastesGameTests.buildingBlockRecipes` now expects them (and the Patina Rib to two Patina Ridge Rolls).
+- **Shots** (`design/texture-reviews/clockwork-wastes-buildings/pass4-*`, sheet `pass4-sheet.jpg`): the drum street and three-quarter, its diagonal at street level and near, dormant and awake, from a fresh catalogue at 20000, 100, 3000 (rebuilding in place at 16000 didn't replace the diagonal cells; the fresh build has them). In game: the diagonal is one flat face from the water table to the lintel, the panel and its arch read, the courses run straight across.
+- Tests: `compileJava test runGameTestServer`: all 400 game tests, all 1042 unit tests, no warnings. (One earlier run failed `JuggernautGameTests.anEndColumnStandsOnTheIsland`, "no column to try": not Wastes code; the next run passed.)
+
+### Choices needing the user's agreement (new)
+39. **The water table form for players:** the Cut Deepslate Brick Diagonal's item places the plain course; the water table form only appears in the drum. Options: placing it on the lower half of a block (or sneaking) gives the water table; leave it drum-only.
+
+
+## Catalogue agent 2, pass 7 — 2026-11-02
+
+D90. Nothing committed; `BUILDING_KIT` on.
+
+- **Choice 39 done:** the Cut Deepslate Brick Diagonal gives the water table when placed against the lower half of a block's side (or on the top of the block below), the plain course otherwise (`CutDeepslateDiagonalBlock.courseFor`). Test: `WastesKitGameTests.diagonalCourseGivesTheWaterTableLow`.
+- **The in-place rebuild bug** (the catalogue rebuilt at 16000 kept its old drum diagonals): the catalogue's plan is drawn round one record origin, so exhibits more than `CORE` (70) from it counted as outskirts and their blocks went in only `ON_GROUND`. `CityApplier.Live` finds the ground with the `WORLD_SURFACE` heightmap, which on a rebuild counts the last build's own walls; anywhere they stood more than 12 above the floor read as a cliff and the put was skipped, so the old exhibit stayed. Fix: a `CityPlan.drawn` plan (the catalogue) is all core (`allCore`), every put `ANYWHERE`. World generation uses `WORLD_SURFACE_WG` on fresh land and is unaffected; `/wastes buildcity` rebuilt over an old city can still skip outskirts puts the same way (dev only: build cities on fresh land). Test: `WastesKitGameTests.catalogueRebuildsInPlace`.
+- **The swap (D71): `CityLayout.BUILDING_KIT = true`.** Box-era test assumptions moved to the kit in `WastesWorldGameTests`: the corner masts' riser height (`Yard.MAST_LEGS` with the kit), the vine sites (the kit's alcove walls and split alcove towers: 29 with the kit, 51 for boxes), and the askew plaques (with the kit, on a placement whose wear reaches past worn). Elytra parity across seeds, the outskirts' one Elytra, district binding and waking, and the props all pass.
+- Tests: `compileJava test runGameTestServer`: all 402 game tests, all 1042 unit tests, no warnings.
+- **The walk:** a kit city, seed 7, its heart at 50000, 100, 50000 in the End (built with `/wastes buildcity 7` on the "Wastes Catalogue" save), dormant; the player in creative on the north boulevard at the city's edge (50000.5, 100, 49932.5) facing the heart. Check shots `run/screenshots/cmca/solo-walk-start-*.png`.
+
+## Edges agent — 2026-11-02
+
+D91's edges ("slopes plus scree"). Nothing committed.
+
+- **`city/CityEdge`** (new): the terrace is a rounded square (superellipse, power 4) with its edge at norm `TERRACE` 100, moved in and out by up to `WOBBLE` 4 by noise sampled round the city by bearing (two octaves), so it bends without steepening the climb across it. Past it the ground eases back over a band `BAND_MIN`-`BAND_MAX` 6-10 wide (noise again): levelled share = half straight, half smoothstep across the band, and never further from the floor than a `SLOPE` 1.25-a-block talus from the edge (a high hill at the edge takes the band and a little more rather than a cliff). Ground ops reach `REACH` 118 each way (was `OUT` 92); `ClockworkCityPiece`'s box, `CityBuild.writeMap` and the dev-city test's chunks follow it.
+- **Soft limits inside the terrace:** an outskirts hill more than 12 up or a dip more than 8 down was left as a wall; now ground up to `SOFT` 16 past those limits is levelled part way, rising straight to the island's own (at most 1.75 a block per block the island rises).
+- **Scree** (`CityApplier.blend`, palette in `CityEdge.screeBlock`/`looseBlock`): Scorched, Rusted and Littered Scorched End Stone, End Stone, Cracked Stained End Stone Bricks, the makers' rubble (cobbled deepslate); loose stones are Stained End Stone Brick and cobbled deepslate slabs. Its chance grows with how much ground the band moved there (none where the island was already level), lying toward a cut's foot and down a fill; a cut or fill shows scree on its face too; past the band a fan of debris lies on ground below filled edges. The city's scorched top thins out across the band.
+- **Outskirts:** everything the outskirts put inside the old 92 square stands where the terrace is full (tested), so no wreck, siege line or war-frame moved. An outskirts put only stands where its column's ground ended at the floor (`CityApplier.hasGround`).
+- Deterministic from the plan's origin and seed and each column's own ground; no level reads beyond the chunk's own columns.
+- Tests: `CityEdgeTest` (4 unit: no step over 2 in the band on ground within the levelling's limits over 8 seeds, the edge wobbles and isn't a square, the outskirts inside and nothing past the reach, the easing and soft limits); `WastesEdgeGameTests` (2 game: the outskirts stand on the terrace for 4 seeds, city and outskirts-only; built a chunk at a time on rolling ground across the east edge: floor inside, no step over 2 in the band, eased, scree on cut and filled ground and a fan below, a wobbling edge, the same block for block in the other chunk order). `compileJava test runGameTestServer`: all 406 game tests, all 1046 unit tests, no warnings.
+- Shots: `design/texture-reviews/clockwork-wastes-edges/` (`before-overhead`, `after-*`; `pass1/` and `pass2/` are earlier scree rules), from a fresh "Wastes Edges" world, seed 0 (the city's heart at 2584, 1136; the outskirts-only site near -3352, 2176).
+
+### Choices needing the user's agreement (new)
+40. **Edge wobble size:** ±4 blocks. On a long straight-ish side (the outskirts-only site's east side) it still reads fairly straight from above. Options: a bigger wobble (±5 or more needs the band a little gentler or the ground reaching an 8th chunk out); a rounder terrace (power 3: needs the siege winch moved a few blocks in); keep.
+41. **The scree's look:** light End Stone and stained brick on the scorched ground, so from high above the band reads as a pale broken ring where the island rises round the city (at eye level it reads as a graded cut bank). Options: darker scree (less End Stone and cracked brick, more scorched and cobbled deepslate); less scree overall; keep.
+42. **Soft limits** (hills more than 12 up, dips more than 8 down, levelled part way over a further 16): options: keep; narrower (steeper flanks); off (walls as before).
+43. **Hills right at the core's edge** are still cut to the floor with a wall (the core levels any height). Options: soften them too; keep (rare on End highland tops).

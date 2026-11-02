@@ -98,6 +98,8 @@ The detailed rules for the Wastes and for the Juggernaut's Norse makers. They co
 | Ember (`#9c3a2a` / `#b5452f`) | Hostile intent | A woken bot's pupil, one or two pixels | Surfaces, decoration |
 | Hazard yellow (`#a1832e` `#b39234` on `#25282c`) | Industrial danger | The Industrial Battery; the Wastes' Substation yards only (the exceptions to "no hazard stripes") | Ordinary blocks; more than one band per structure |
 | Patina green | Age (copper left alone) | Aged copper | A signal |
+| Battlefield blue (matte: leaf `#141c2e`-`#3b5886`, Crookwood leaf to `#7a8dab`) | Growth from the Twisted Battlefields (D92) | The overgrowth: vines, moss, lichen, crack plants, roots, trees | Made things |
+| Shiftcap glow (blue `#2b4180` `#4f6bb5` `#8095d8`, plum `#3f2848` `#8a4fa0` `#b483c8`) | Living light: the only glow that's alive; always on (D92) | The Shiftcaps' gills, lips and spots | A seam; the violet between blue and plum (the uprising's starlight) |
 
 ### Glow
 

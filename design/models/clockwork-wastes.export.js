@@ -13,6 +13,8 @@
 // -16..32, one rotation of 0/±22.5/±45 per element) and every model is z-fight checked (faces of different textures
 // closer than 0.2 px).
 // Usage: node design/models/clockwork-wastes.export.js
+// Run first: the props, overgrowth, electric-lights, drum-diagonal and ridge exporters follow (export-wastes-all.js runs
+// them all in order). It keeps the overgrowth's living-vine parts in charging_alcove's state.
 const fs = require('fs');
 const path = require('path');
 const { ASSETS, fitUv, DIRS, fitGui, hash } = require('./process-box.lib.js');
@@ -1184,6 +1186,9 @@ const PROP_IDS = ['assembly_clamp', 'brass_plaque'];
 
   // ---------- the Charging Alcove: shelf, trinkets, vines ----------
   const base = [...CP.alcoveBase(), ...CP.shelf()], lit = S.alcoveLit();
+  // the living vines' parts are clockwork-wastes-overgrowth.export.js's: kept, last, as it adds them
+  const alcoveFile = path.join(ASSETS, 'blockstates/charging_alcove.json');
+  const living = fs.existsSync(alcoveFile) ? (JSON.parse(fs.readFileSync(alcoveFile, 'utf8')).multipart || []).filter((p) => p.when && p.when.vines === 'living') : [];
   threePart('charging_alcove', base, 'y', M.VA_BODY, { parent: 'minecraft:item/generated', textures: { layer0: `${NS}:item/charging_alcove` } },
     'charging_alcove_contact');
   zcheckModel('charging_alcove (lit)', [...base, ...lit]);
@@ -1204,9 +1209,10 @@ const PROP_IDS = ['assembly_clamp', 'brass_plaque'];
   for (const [k, part] of [[1, 'middle'], [2, 'top']]) {
     blockJson('charging_alcove_vines_' + part, slice(vines, 'y', k * 16), M.VA_BODY);
     for (const [facing, y] of Object.entries(HORIZONTAL))
-      alcoveState.multipart.push({ when: { facing, part, vines: 'true' }, apply: { model: model('charging_alcove_vines_' + part), ...yrot(y) } });
+      alcoveState.multipart.push({ when: { facing, part, vines: 'dead' }, apply: { model: model('charging_alcove_vines_' + part), ...yrot(y) } });
   }
   if (slice(vines, 'y', 0).length) throw new Error('the vines reach the bottom block');
+  alcoveState.multipart.push(...living);
   writeJson('blockstates/charging_alcove.json', alcoveState);
 
   // ---------- the Brass Plaque ----------

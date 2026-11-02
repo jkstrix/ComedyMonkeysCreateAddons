@@ -3,10 +3,12 @@
 // by LightRenderer, full-bright, tinted by dye, brightness, flicker and warm-up), the multipart blockstate that turns
 // them to face their way, and an item model with the glass lit. Only the light textures the models use are written.
 // Usage: node design/models/electric-lights.export.js
+// In the Wastes run it's fourth, after the overgrowth (export-wastes-all.js); its emitters and textures are its own.
 const fs = require('fs');
 const path = require('path');
 const { ASSETS, fitUv, DIRS, fitGui, hash } = require('./process-box.lib.js');
 const G = require('./electric-lights.gen.js');
+const { writeEmitters } = require('./emitters.lib.js');
 
 const NS = 'comedymonkeysaddons';
 const r3 = (n) => Math.round(n * 1000) / 1000;
@@ -299,12 +301,14 @@ function castHex(dye) {
   rgb = rgb.map((v) => f(v / max));
   return '#' + rgb.map((v) => Math.floor(f(v * 255) + 0.5).toString(16).toUpperCase().padStart(2, '0')).join('');
 }
+// (only this exporter's own emitters: the file also holds the overgrowth's Shiftcaps, see emitters.lib.js)
+const LIGHT_IDS = [...Object.keys(KINDS), ...Object.keys(HANGING), BEACON, FLOOD, 'light_spot', 'light_strip', 'edge_light'];
 const emitters = {};
-for (const id of [...Object.keys(KINDS), ...Object.keys(HANGING), BEACON, FLOOD, 'light_spot', 'light_strip', 'edge_light']) {
+for (const id of LIGHT_IDS) {
   emitters[`${NS}:${id}`] = castHex(null);
   for (const dye of DYES) emitters[`${NS}:${id}[color=${dye}]`] = castHex(dye);
 }
-writeJson('light/emitters.json', emitters);
+writeEmitters('electric-lights.export.js', emitters);
 
 // ---------- the Light Assembly's item: a bulb in a brass cap on a copper plate (hand-drawn) ----------
 const ASSEMBLY = [
