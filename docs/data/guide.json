@@ -416,6 +416,16 @@
         ]
       },
       {
+        "id": "dynamo",
+        "title": "Power from a shaft",
+        "body": [
+          "No lava yet? A [[clockwork-dynamo]] makes power from rotation instead: set the stress it takes with a Wrench, and it makes 1 FE a tick for every 21⅓ SU out of its base. One water wheel runs a few lights.",
+          {
+            "tip": "It makes three quarters of what an Electric Motor draws for the same stress, so a motor can never run off the dynamo it turns."
+          }
+        ]
+      },
+      {
         "id": "battery",
         "title": "A Battery",
         "body": [
@@ -444,6 +454,7 @@
       "lava-generator",
       "power-lines",
       "electric-motor",
+      "clockwork-dynamo",
       "battery"
     ]
   },

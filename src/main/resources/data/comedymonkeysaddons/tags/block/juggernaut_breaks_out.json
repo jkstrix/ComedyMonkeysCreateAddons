@@ -5,6 +5,10 @@
     "minecraft:chain",
     "minecraft:vine",
     "minecraft:deepslate_tile_slab",
-    "minecraft:end_stone_brick_slab"
+    "minecraft:end_stone_brick_slab",
+    "comedymonkeysaddons:ruin_purpur_pillar",
+    "comedymonkeysaddons:ruin_chain",
+    "comedymonkeysaddons:ruin_deepslate_tile_slab",
+    "comedymonkeysaddons:ruin_end_stone_brick_slab"
   ]
 }

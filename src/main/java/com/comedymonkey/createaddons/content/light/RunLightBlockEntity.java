@@ -4,9 +4,14 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
+
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
@@ -20,8 +25,11 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 public abstract class RunLightBlockEntity extends LightBlockEntity {
 	/** The most pieces a run is followed through (a run longer than this lights only its first this many from a feed). */
 	public static final int MAX_RUN = 1024;
-	/** Bumped whenever a piece is added, taken away, loaded or unloaded anywhere: runs worked out before it are out of date. */
-	private static int changes;
+	/**
+	 * Each server level's count of pieces added, taken away, loaded or unloaded there: its runs worked out before the last
+	 * are out of date. The client keeps none (nothing there asks for runs often).
+	 */
+	private static final Map<Level, int[]> CHANGES = new WeakHashMap<>();
 
 	private List<BlockPos> run = List.of();
 	private int runAt = -1;
@@ -32,9 +40,8 @@ public abstract class RunLightBlockEntity extends LightBlockEntity {
 	 * run touching a line in several places isn't counted (and drawn for) several times over.
 	 */
 	private int feeds = 1;
-	/** The run's loaded pieces, worked out once a tick (the network asks several times a tick). */
+	/** The run's loaded pieces, kept until the run changes (the network asks several times a tick, every tick). */
 	private List<RunLightBlockEntity> pieces = List.of();
-	private long piecesAt = Long.MIN_VALUE;
 	private int piecesRun = -1;
 
 	private final IEnergyStorage runEnergy = new IEnergyStorage() {
@@ -88,9 +95,20 @@ public abstract class RunLightBlockEntity extends LightBlockEntity {
 	/** The places of the pieces the piece at p joins to directly (its neighbours along the run). */
 	protected abstract List<BlockPos> joined(BlockPos p, BlockState state);
 
-	/** Pieces were added or taken away: every run is worked out again when next asked for. */
-	static void runsChanged() {
-		changes++;
+	/** Pieces were added or taken away in this level: each of its runs is worked out again when next asked for. */
+	static void runsChanged(@Nullable Level level) {
+		if (level == null || level.isClientSide)
+			return;
+		synchronized (CHANGES) {
+			CHANGES.computeIfAbsent(level, l -> new int[1])[0]++;
+		}
+	}
+
+	private static int changes(Level level) {
+		synchronized (CHANGES) {
+			int[] n = CHANGES.get(level);
+			return n == null ? 0 : n[0];
+		}
 	}
 
 	/** What a Power Line touching this piece feeds: the whole run. */
@@ -126,13 +144,13 @@ public abstract class RunLightBlockEntity extends LightBlockEntity {
 	@Override
 	public void onLoad() {
 		super.onLoad();
-		runsChanged();
+		runsChanged(level);
 	}
 
 	@Override
 	public void onChunkUnloaded() {
 		super.onChunkUnloaded();
-		runsChanged();
+		runsChanged(level);
 	}
 
 	/** On the client: flickering, its baked model leaves the diffuser to RunFlickerRenderer; steady again, it's baked back. */
@@ -152,22 +170,37 @@ public abstract class RunLightBlockEntity extends LightBlockEntity {
 	public List<RunLightBlockEntity> run() {
 		if (level == null)
 			return List.of(this);
+		// the client keeps no count of changes: there it's worked out afresh each time
+		if (level.isClientSide)
+			return pieces(follow());
+		int changes = changes(level);
 		if (runAt != changes) {
 			run = follow();
 			runAt = changes;
 		}
-		long now = level.getGameTime();
-		if (piecesAt == now && piecesRun == runAt)
-			return pieces;
-		List<RunLightBlockEntity> out = new ArrayList<>(run.size());
-		for (BlockPos p : run)
+		// (a piece removed always changes the count; one found removed all the same is left out)
+		if (piecesRun != runAt || anyRemoved(pieces)) {
+			pieces = pieces(run);
+			piecesRun = runAt;
+		}
+		return pieces;
+	}
+
+	private static boolean anyRemoved(List<RunLightBlockEntity> pieces) {
+		for (RunLightBlockEntity piece : pieces)
+			if (piece.isRemoved())
+				return true;
+		return false;
+	}
+
+	/** The loaded pieces at these places, this one first. */
+	private List<RunLightBlockEntity> pieces(List<BlockPos> at) {
+		List<RunLightBlockEntity> out = new ArrayList<>(at.size());
+		for (BlockPos p : at)
 			if (level.isLoaded(p) && level.getBlockEntity(p) instanceof RunLightBlockEntity piece && piece.getClass() == getClass() && !piece.isRemoved())
 				out.add(piece);
 		if (out.isEmpty() || out.get(0) != this)
 			out.add(0, this);
-		pieces = out;
-		piecesAt = now;
-		piecesRun = runAt;
 		return out;
 	}
 

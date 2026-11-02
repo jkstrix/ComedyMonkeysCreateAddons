@@ -390,7 +390,7 @@ public final class CageScenes {
 			Level level = be.getLevel();
 			Entity monster = level == null ? null : type.create(level);
 			if (monster != null)
-				be.setPonderHorde(((MonsterJarItem) (netherite ? ModItems.NETHERITE_JAR : ModItems.IRON_JAR).get()).fill(monster), count, armed);
+				be.setPonderHorde((netherite ? ModItems.NETHERITE_JAR : ModItems.IRON_JAR).get().fill(monster), count, armed);
 		});
 	}
 

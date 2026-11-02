@@ -40,7 +40,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * docked (design/specs/trade-bot.md D2, D16, D21). Only its owner's wrench can pack it up (D27, D51); nothing else
  * breaks it. The block-entity renderer draws all of it, from the same geometry as the bot.
  */
-public class TradeBotStationBlock extends Block implements IBE<TradeBotStationBlockEntity>, IWrenchable {
+public final class TradeBotStationBlock extends Block implements IBE<TradeBotStationBlockEntity>, IWrenchable {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	/** He's docked and charging: the station glows (a little light, muted like his irises). */
 	public static final BooleanProperty GLOW = BooleanProperty.create("glow");
@@ -86,6 +86,7 @@ public class TradeBotStationBlock extends Block implements IBE<TradeBotStationBl
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

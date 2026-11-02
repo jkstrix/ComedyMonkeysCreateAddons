@@ -62,6 +62,7 @@ public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWa
 	private final LightKind kind;
 	private final Map<Direction, VoxelShape> shapes = new EnumMap<>(Direction.class);
 
+	@SuppressWarnings("this-escape") // vanilla's registerDefaultState pattern: its subclasses override nothing it calls
 	public LightBlock(LightKind kind, Properties properties) {
 		super(properties);
 		this.kind = kind;
@@ -278,6 +279,7 @@ public class LightBlock extends BaseEntityBlock implements IWrenchable, SimpleWa
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

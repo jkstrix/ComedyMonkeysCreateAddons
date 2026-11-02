@@ -28,7 +28,7 @@ import org.joml.Vector3f;
  * (right-click with a wrench), and it draws more power the more stress it's set to provide. The shaft comes out of {@code facing};
  * power goes in only through its base, the mounting flange opposite the shaft, whichever way it's placed.
  */
-public class ElectricMotorBlock extends DirectionalKineticBlock implements IBE<ElectricMotorBlockEntity> {
+public final class ElectricMotorBlock extends DirectionalKineticBlock implements IBE<ElectricMotorBlockEntity> {
 	/** Running: the lamp turns from red to cyan. */
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	private static final DustParticleOptions SPARK = new DustParticleOptions(new Vector3f(0.45f, 0.85f, 0.95f), 0.6f);

@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
  * Draws the Clockwork Juggernaut at full size (1 px = 1/16 block, D53), with his frost-blue runes, cracks and slit at
  * full brightness from a second texture holding only those pixels.
  */
-public class JuggernautRenderer extends MobRenderer<ClockworkJuggernaut, JuggernautModel> {
+public final class JuggernautRenderer extends MobRenderer<ClockworkJuggernaut, JuggernautModel> {
 	public static final ResourceLocation TEXTURE = ComedyMonkeysCreateAddons.asResource("textures/entity/clockwork_juggernaut.png");
 	public static final ResourceLocation GLOW = ComedyMonkeysCreateAddons.asResource("textures/entity/clockwork_juggernaut_glow.png");
 

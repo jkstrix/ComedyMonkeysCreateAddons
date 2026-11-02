@@ -73,7 +73,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.tags.ItemTags;
@@ -492,7 +491,7 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 				EntityType<?> type = MonsterJarItem.typeOf(stack);
 				if (!mayManage(player))
 					player.displayClientMessage(tr("not_owner", ownerName), true);
-				else if (type == null || !CageRules.fits(getTier(), isFlooded(), type))
+				else if (type == null || !MonsterJarItem.holdsItsMonster(stack) || !CageRules.fits(getTier(), isFlooded(), type))
 					player.displayClientMessage(tr("wrong_cage", type == null ? Component.empty() : type.getDescription()), true);
 				else {
 					// the jar goes in with its monster and comes back out with it (handing back an empty one duplicated jars)
@@ -562,9 +561,9 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 		DamageSource source = killer != null ? server.damageSources().playerAttack(killer) : server.damageSources().generic();
 		var enchantments = server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
 		boolean burning = !weapon.isEmpty()
-			&& EnchantmentHelper.getItemEnchantmentLevel(enchantments.getOrThrow(Enchantments.FIRE_ASPECT), weapon) > 0;
+			&& weapon.getEnchantmentLevel(enchantments.getOrThrow(Enchantments.FIRE_ASPECT)) > 0;
 		int looting = weapon.isEmpty() ? 0
-			: EnchantmentHelper.getItemEnchantmentLevel(enchantments.getOrThrow(Enchantments.LOOTING), weapon);
+			: weapon.getEnchantmentLevel(enchantments.getOrThrow(Enchantments.LOOTING));
 		if (burning)
 			monster.igniteForSeconds(4);
 		for (int i = 0; i < killed; i++) {
@@ -927,14 +926,14 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 		}
 		if (peaceful() || !CMConfig.Server.get(CMConfig.SERVER.cageEscapes))
 			return;
+		boolean near = playerNear();
 		if (escapeIn < 0) {
 			escapeIn = warningTicks();
-			paused = !playerNear();
+			paused = !near;
 			if (!paused)
 				announce("alarm_start", time(escapeIn));
 			sendData();
 		}
-		boolean near = playerNear();
 		if (!near) {
 			if (!paused) {
 				paused = true;
@@ -1116,8 +1115,16 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 		return best != null ? best : centre.add(0, 1, 0);
 	}
 
+	/** Whether anyone is within range, without a list: this runs every tick the field is down. */
 	private boolean playerNear() {
-		return !playersNear().isEmpty();
+		if (!(level instanceof ServerLevel server))
+			return false;
+		double range = CMConfig.Server.get(CMConfig.SERVER.cageAlarmRange);
+		double x = worldPosition.getX() + 0.5, y = worldPosition.getY() + 0.5, z = worldPosition.getZ() + 0.5;
+		for (ServerPlayer player : server.players())
+			if (!player.isSpectator() && player.distanceToSqr(x, y, z) <= range * range)
+				return true;
+		return false;
 	}
 
 	private List<ServerPlayer> playersNear() {
@@ -1125,8 +1132,9 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 		if (!(level instanceof ServerLevel server))
 			return near;
 		double range = CMConfig.Server.get(CMConfig.SERVER.cageAlarmRange);
+		Vec3 centre = Vec3.atCenterOf(worldPosition);
 		for (ServerPlayer player : server.players())
-			if (!player.isSpectator() && player.distanceToSqr(Vec3.atCenterOf(worldPosition)) <= range * range)
+			if (!player.isSpectator() && player.distanceToSqr(centre) <= range * range)
 				near.add(player);
 		return near;
 	}
@@ -1526,6 +1534,7 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void removeComponentsFromTag(CompoundTag tag) {
 		super.removeComponentsFromTag(tag);
 		tag.remove("Enchantments");
@@ -1748,7 +1757,8 @@ public class MonsterCageBlockEntity extends KineticBlockEntity implements Cleara
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
 			EntityType<?> type = MonsterJarItem.typeOf(stack);
-			return MonsterJarItem.isFilled(stack) && type != null && CageRules.fits(getTier(), isFlooded(), type);
+			return MonsterJarItem.isFilled(stack) && type != null && MonsterJarItem.holdsItsMonster(stack)
+				&& CageRules.fits(getTier(), isFlooded(), type);
 		}
 	}
 

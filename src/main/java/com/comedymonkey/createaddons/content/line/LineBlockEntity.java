@@ -118,7 +118,10 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 		return fitting;
 	}
 
-	/** Turned with a contraption or schematic: the fitting's side and the wrenched joints turn with the block. */
+	/**
+	 * Turned with a contraption or schematic: the fitting's side, the wrenched joints and the block it's encased in (a
+	 * log's axis, say) turn with the block.
+	 */
 	@Override
 	public void transform(BlockEntity be, com.simibubi.create.content.contraptions.StructureTransform transform) {
 		fittingSide = transform.rotateFacing(transform.mirrorFacing(fittingSide));
@@ -126,6 +129,8 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 		joints.forEach((d, j) -> turned.put(transform.rotateFacing(transform.mirrorFacing(d)), j));
 		joints.clear();
 		joints.putAll(turned);
+		if (encasing != null)
+			encasing = transform.apply(encasing);
 		setChanged();
 	}
 
@@ -534,6 +539,7 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void removeComponentsFromTag(CompoundTag tag) {
 		tag.remove("Dye");
 	}

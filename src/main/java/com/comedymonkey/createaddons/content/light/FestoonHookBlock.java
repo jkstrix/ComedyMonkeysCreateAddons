@@ -45,7 +45,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * Power Line on that block (or the post) feeds its run (LightMounts). A dye colours the run's bulbs, the wrench steps
  * their brightness, shears take it down.
  */
-public class FestoonHookBlock extends BaseEntityBlock implements IWrenchable, LitBlock {
+public final class FestoonHookBlock extends BaseEntityBlock implements IWrenchable, LitBlock {
 	public static final MapCodec<FestoonHookBlock> CODEC = simpleCodec(FestoonHookBlock::new);
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final BooleanProperty POST = BooleanProperty.create("post");
@@ -141,6 +141,7 @@ public class FestoonHookBlock extends BaseEntityBlock implements IWrenchable, Li
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // NeoForge's pick-block asks this one, and Create's Display Link screen calls it directly
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
 		return new ItemStack(ModItems.FESTOON_LIGHTS.get());
 	}

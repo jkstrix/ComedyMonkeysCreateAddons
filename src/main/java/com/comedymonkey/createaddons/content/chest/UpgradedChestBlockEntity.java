@@ -49,7 +49,7 @@ import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
  * contraptions). Opening sets the block's {@code open} state, which hides the static lid and lets
  * {@code UpgradedChestRenderer} animate it; the state is cleared once the closing animation has finished.
  */
-public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implements IHaveGoggleInformation, UpgradedStorage {
+public final class UpgradedChestBlockEntity extends BaseContainerBlockEntity implements IHaveGoggleInformation, UpgradedStorage {
 	private static final int LID_EVENT = 1;
 	/** Vanilla's lid closes over 10 ticks; leave a little slack before showing the static lid again. */
 	static final int LID_CLOSE_TICKS = 12;
@@ -175,16 +175,35 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 	}
 
 	/**
+	 * Client hook: it opened or shut (its {@code open} state changed). With Flywheel the open lid is a visual of its own,
+	 * which Flywheel doesn't make again for a change of block state, so the client has it made again.
+	 */
+	public static java.util.function.Consumer<UpgradedChestBlockEntity> clientLidShown = be -> {};
+
+	/** Whether going from one state to the other, in this level, is for the client hook: opened or shut, on the client. */
+	static boolean tellsClient(@Nullable Level level, BlockState old, BlockState now) {
+		return level != null && level.isClientSide && lidShownChanged(old, now);
+	}
+
+	/** Whether going from one state to the other opens or shuts it. */
+	static boolean lidShownChanged(BlockState old, BlockState now) {
+		return old.hasProperty(UpgradedChestBlock.OPEN) && now.hasProperty(UpgradedChestBlock.OPEN)
+			&& old.getValue(UpgradedChestBlock.OPEN) != now.getValue(UpgradedChestBlock.OPEN);
+	}
+
+	/**
 	 * Diamond doubles the slots, so the inventory grows or (compacting, already checked to fit) shrinks with the tier.
 	 * Joining or splitting a double chest, turning it, or a new tier (a new number of slots), changes what automation sees, so its
 	 * cached item handlers are dropped: a combined handler works out its slot ranges once, when it's made.
 	 */
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void setBlockState(BlockState state) {
 		BlockState old = getBlockState();
 		boolean repaired = old.getValue(UpgradedChestBlock.TYPE) != state.getValue(UpgradedChestBlock.TYPE)
 			|| old.getValue(UpgradedChestBlock.TIER) != state.getValue(UpgradedChestBlock.TIER)
 			|| old.getValue(UpgradedChestBlock.FACING) != state.getValue(UpgradedChestBlock.FACING);
+		boolean lid = tellsClient(level, old, state);
 		super.setBlockState(state);
 		int slots = tierOf(state).slots();
 		if (items.size() != slots)
@@ -204,6 +223,8 @@ public class UpgradedChestBlockEntity extends BaseContainerBlockEntity implement
 				level.invalidateCapabilities(worldPosition);
 			}
 		}
+		if (lid)
+			clientLidShown.accept(this);
 	}
 
 	// ---------------------------------------------------------------- lid

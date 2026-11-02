@@ -39,7 +39,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
-public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInformation, MenuProvider, Clearable {
+public final class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInformation, MenuProvider, Clearable {
 	private static final int SYNC_INTERVAL = 10;
 	/** Longest a small change in the level waits to reach clients (for the screen's and goggles' exact mB). */
 	private static final int SLOW_SYNC_TICKS = 40;
@@ -80,6 +80,10 @@ public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInf
 	// ---------------------------------------------------------------- ticking
 
 	void serverTick() {
+		// treated as away by a game test (as if its chunk weren't running): it does nothing, like a generator
+		if (level instanceof net.minecraft.server.level.ServerLevel server && com.comedymonkey.createaddons.content.line.PowerGrid.away(server, worldPosition))
+			return;
+
 		// Picks up config changes as well as installed/removed Capacity Upgrades
 		int capacity = CMConfig.SERVER.tankCapacity(getCapacityUpgradeCount());
 		if (tank.getCapacity() != capacity) {
@@ -102,6 +106,11 @@ public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInf
 		} else {
 			generationProgress = 0;
 		}
+
+		// a generator it feeds runs on paper from its record while both are away: taken back on here, and written as the
+		// tank stands after this tick's making (Fluid Lines draw after block entities tick, and take theirs off the record)
+		if (level instanceof net.minecraft.server.level.ServerLevel server)
+			com.comedymonkey.createaddons.content.line.PowerGrid.of(server).spring(this, server);
 
 		if (syncCooldown > 0)
 			syncCooldown--;
@@ -310,6 +319,11 @@ public class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInf
 
 	public FluidTank getTank() {
 		return tank;
+	}
+
+	/** What generators running on paper drew from its record comes out of its tank; returns how much did. */
+	public int drawnOnPaper(int amount) {
+		return amount > 0 ? tank.drain(amount, IFluidHandler.FluidAction.EXECUTE).getAmount() : 0;
 	}
 
 	/** Water or lava only, and only the fluid matching any installed generation upgrades. */

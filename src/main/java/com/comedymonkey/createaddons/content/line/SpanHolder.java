@@ -32,6 +32,9 @@ public interface SpanHolder {
 	/** The far end took a span down: it goes here too. Returns whether this end still held it. */
 	boolean removeSpan(Span span);
 
+	/** Spans whose far end is gone or no longer holds them come down (only the owner end pays the wire back). */
+	void dropBrokenSpans();
+
 	/** An Industrial Battery: it only takes spans to posts, and never draws them. */
 	default boolean isBattery() {
 		return false;

@@ -41,10 +41,14 @@ public class GeothermalCasingBlockEntity extends BlockEntity implements com.come
 	 * The turbine's lava, water and power connect only through the port flanges under its base: the bottom face of the
 	 * bottom layer of casings. {@code null} (no side, e.g. a mod looking inside) is let through as well.
 	 */
-	/** A cable on a port flange draws on the turbine: recorded as its controller. */
+	/**
+	 * A cable on a port flange draws on the turbine: recorded as its controller, while that's there, or out of reach in
+	 * an unloaded chunk (the turbine's on paper then). One taken away (by a contraption, which leaves the casings
+	 * pointing at it) no longer counts.
+	 */
 	@Override
 	public BlockPos generatorKey() {
-		return controller != null ? controller : worldPosition;
+		return controller != null && (level == null || !level.isLoaded(controller) || controller() != null) ? controller : worldPosition;
 	}
 
 	/** A line's network figures, met at a port casing, go to the turbine. */

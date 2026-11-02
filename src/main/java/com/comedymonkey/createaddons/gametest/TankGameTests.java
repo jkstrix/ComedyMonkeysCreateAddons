@@ -1,10 +1,13 @@
 package com.comedymonkey.createaddons.gametest;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.cage.MonsterCageBlock;
 import com.comedymonkey.createaddons.content.cage.MonsterCageBlockEntity;
+import com.comedymonkey.createaddons.content.cage.MonsterCageMenu;
 import com.comedymonkey.createaddons.content.cage.MonsterJarItem;
 import com.comedymonkey.createaddons.content.pen.AnimalCapture;
 import com.comedymonkey.createaddons.content.pen.AnimalPenBlockEntity;
@@ -15,10 +18,12 @@ import com.comedymonkey.createaddons.content.tank.TankRules;
 import com.comedymonkey.createaddons.registry.ModBlocks;
 import com.comedymonkey.createaddons.registry.ModItems;
 import com.mojang.authlib.GameProfile;
+import com.simibubi.create.content.kinetics.base.BlockBreakingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -28,14 +33,20 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
@@ -83,7 +94,7 @@ public final class TankGameTests {
 		helper.setBlock(pos, ModBlocks.MONSTER_CAGE.get().defaultBlockState().setValue(MonsterCageBlock.FACING, Direction.NORTH));
 		MonsterCageBlockEntity cage = helper.getBlockEntity(pos);
 		FakePlayer player = player(helper);
-		ItemStack jar = ((MonsterJarItem) ModItems.IRON_JAR.get()).fill(EntityType.ZOMBIE.create(helper.getLevel()));
+		ItemStack jar = ModItems.IRON_JAR.get().fill(EntityType.ZOMBIE.create(helper.getLevel()));
 		player.setItemInHand(InteractionHand.MAIN_HAND, jar);
 		helper.useBlock(pos, player);
 		if (!cage.hasMonster())
@@ -242,7 +253,7 @@ public final class TankGameTests {
 		if (slotWith(dispenser, stack -> MonsterJarItem.isFilled(stack)) >= 0 || count(dispenser, ModItems.IRON_JAR.get()) != 2)
 			helper.fail("releasing didn't leave two empty jars");
 
-		ItemStack wither = ((MonsterJarItem) ModItems.NETHERITE_JAR.get()).fill(EntityType.WITHER.create(helper.getLevel()));
+		ItemStack wither = ModItems.NETHERITE_JAR.get().fill(EntityType.WITHER.create(helper.getLevel()));
 		dispenser.setItem(1, wither);
 		dispense(helper, at, 1);
 		helper.assertEntityNotPresent(EntityType.WITHER);
@@ -294,11 +305,261 @@ public final class TankGameTests {
 		BlockPos walled = new BlockPos(6, 1, 4);
 		DispenserBlockEntity dispenser = dispenser(helper, walled);
 		helper.setBlock(walled.east(), Blocks.GLASS);
-		dispenser.setItem(0, ((MonsterJarItem) ModItems.IRON_JAR.get()).fill(EntityType.ZOMBIE.create(helper.getLevel())));
+		dispenser.setItem(0, ModItems.IRON_JAR.get().fill(EntityType.ZOMBIE.create(helper.getLevel())));
 		dispense(helper, walled, 0);
 		if (!MonsterJarItem.isFilled(dispenser.getItem(0)))
 			helper.fail("a zombie was let out into glass");
 		helper.succeed();
+	}
+
+	/**
+	 * A Netherite cage locked down (a Wither in, its field down) keeps its jar: the jar slot won't let it be picked up,
+	 * and a shift-click, by the click or straight into the menu, hands out no copy of it (D41). An ordinary cage still
+	 * hands its jar out on a shift-click, once, and is empty after.
+	 */
+	@GameTest(template = COURSE)
+	public static void lockedDownCageKeepsItsJarOnShiftClick(GameTestHelper helper) {
+		BlockPos lockedAt = new BlockPos(3, 1, 4), openAt = new BlockPos(6, 1, 4);
+		helper.setBlock(lockedAt, ModBlocks.NETHERITE_MONSTER_CAGE.get().defaultBlockState().setValue(MonsterCageBlock.FACING, Direction.NORTH));
+		helper.setBlock(openAt, ModBlocks.MONSTER_CAGE.get().defaultBlockState().setValue(MonsterCageBlock.FACING, Direction.NORTH));
+		MonsterCageBlockEntity locked = helper.getBlockEntity(lockedAt), open = helper.getBlockEntity(openAt);
+		ItemStack wither = ModItems.NETHERITE_JAR.get().fill(EntityType.WITHER.create(helper.getLevel()));
+		if (!locked.getCaptiveSlot().insertItem(0, wither, false).isEmpty() || !locked.isLockedDown())
+			helper.fail("the Netherite cage isn't locked down with a Wither and no power");
+		open.getCaptiveSlot().insertItem(0, ModItems.IRON_JAR.get().fill(EntityType.ZOMBIE.create(helper.getLevel())), false);
+		FakePlayer player = player(helper);
+
+		MonsterCageMenu menu = new MonsterCageMenu(0, player.getInventory(), locked);
+		if (menu.getSlot(0).mayPickup(player))
+			helper.fail("the jar slot lets the jar be picked up during lock-down");
+		menu.clicked(0, 0, ClickType.QUICK_MOVE, player);
+		ItemStack moved = menu.quickMoveStack(player, 0);
+		if (!moved.isEmpty() || count(player, ModItems.NETHERITE_JAR.get()) != 0)
+			helper.fail("a shift-click took a jar out of a locked-down cage: " + moved);
+		if (!locked.hasMonster())
+			helper.fail("the locked-down cage lost its Wither");
+
+		MonsterCageMenu openMenu = new MonsterCageMenu(1, player.getInventory(), open);
+		openMenu.clicked(0, 0, ClickType.QUICK_MOVE, player);
+		if (count(player, ModItems.IRON_JAR.get()) != 1 || open.hasMonster())
+			helper.fail("a shift-click on an ordinary cage left " + count(player, ModItems.IRON_JAR.get()) + " jars and "
+				+ (open.hasMonster() ? "the zombie in" : "the cage empty"));
+		helper.succeed();
+	}
+
+	/**
+	 * An Iron Jar edited to hold a Wither (only a command or an NBT editor makes one) lets nothing out and no cage takes
+	 * it: a Wither only ever comes out into a Netherite cage, from a Netherite Jar (D21). The same jar with a zombie
+	 * still lets it out.
+	 */
+	@GameTest(template = COURSE)
+	public static void wrongJarLetsNothingOut(GameTestHelper helper) {
+		MonsterJarItem iron = ModItems.IRON_JAR.get();
+		ItemStack bad = iron.fill(EntityType.WITHER.create(helper.getLevel()));
+		if (MonsterJarItem.create(bad, helper.getLevel()).isPresent())
+			helper.fail("an Iron Jar made a Wither");
+		FakePlayer player = player(helper);
+		player.setItemInHand(InteractionHand.MAIN_HAND, bad);
+		releaseOnto(helper, player, new BlockPos(2, 0, 2));
+		List<WitherBoss> out = helper.getLevel().getEntitiesOfClass(WitherBoss.class, new AABB(helper.absolutePos(new BlockPos(2, 1, 2))).inflate(8));
+		if (!out.isEmpty()) {
+			out.forEach(Entity::discard);
+			helper.fail("an Iron Jar let a Wither out");
+		}
+		if (!MonsterJarItem.isFilled(player.getMainHandItem()))
+			helper.fail("the jar was emptied");
+
+		BlockPos cageAt = new BlockPos(6, 1, 4);
+		helper.setBlock(cageAt, ModBlocks.NETHERITE_MONSTER_CAGE.get().defaultBlockState().setValue(MonsterCageBlock.FACING, Direction.NORTH));
+		MonsterCageBlockEntity cage = helper.getBlockEntity(cageAt);
+		if (cage.getCaptiveSlot().isItemValid(0, bad) || cage.getCaptiveSlot().insertItem(0, bad.copy(), false).isEmpty())
+			helper.fail("a Netherite cage's slot took a Wither in an Iron Jar");
+		helper.useBlock(cageAt, player);
+		if (cage.hasMonster())
+			helper.fail("a Netherite cage took a Wither in an Iron Jar from a click");
+
+		player.setItemInHand(InteractionHand.MAIN_HAND, iron.fill(EntityType.ZOMBIE.create(helper.getLevel())));
+		releaseOnto(helper, player, new BlockPos(2, 0, 6));
+		helper.assertEntityPresent(EntityType.ZOMBIE, new BlockPos(2, 1, 6));
+		helper.succeed();
+	}
+
+	/** Clicks the held jar on top of a block, as a player letting its monster out. */
+	private static void releaseOnto(GameTestHelper helper, FakePlayer player, BlockPos floor) {
+		BlockPos abs = helper.absolutePos(floor);
+		player.getMainHandItem().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND,
+			new BlockHitResult(Vec3.atCenterOf(abs).add(0, 0.5, 0), Direction.UP, abs, false)));
+	}
+
+	/**
+	 * Mechanical Drills never break a Netherite cage (it's in Create's non_breakable tag, D46), while the same drill
+	 * breaks an ordinary cage beside it.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 300)
+	public static void drillsLeaveTheNetheriteCage(GameTestHelper helper) {
+		BlockPos netheriteAt = new BlockPos(5, 1, 2), ordinaryAt = new BlockPos(5, 1, 6);
+		helper.setBlock(netheriteAt, ModBlocks.NETHERITE_MONSTER_CAGE.get().defaultBlockState().setValue(MonsterCageBlock.FACING, Direction.NORTH));
+		helper.setBlock(ordinaryAt, ModBlocks.MONSTER_CAGE.get().defaultBlockState().setValue(MonsterCageBlock.FACING, Direction.NORTH));
+		var netherite = helper.getLevel().getBlockState(helper.absolutePos(netheriteAt));
+		if (BlockBreakingKineticBlockEntity.isBreakable(netherite, netherite.getDestroySpeed(helper.getLevel(), helper.absolutePos(netheriteAt))))
+			helper.fail("Create counts the Netherite cage as breakable");
+		for (BlockPos at : new BlockPos[] {netheriteAt, ordinaryAt}) {
+			helper.setBlock(at.west(), BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("create", "mechanical_drill"))
+				.defaultBlockState().setValue(BlockStateProperties.FACING, Direction.EAST));
+			BlockPos motorAt = at.west(2);
+			helper.setBlock(motorAt, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("create", "creative_motor")).defaultBlockState()
+				.setValue(BlockStateProperties.FACING, Direction.EAST));
+			if (helper.getBlockEntity(motorAt) instanceof CreativeMotorBlockEntity motor)
+				motor.generatedSpeed.setValue(256);
+			else
+				helper.fail("no creative motor");
+		}
+		helper.runAtTickTime(250, () -> {
+			if (!helper.getLevel().getBlockState(helper.absolutePos(ordinaryAt)).isAir())
+				helper.fail("the drill didn't break the ordinary cage, so the test proves nothing");
+			if (!helper.getLevel().getBlockState(helper.absolutePos(netheriteAt)).is(ModBlocks.NETHERITE_MONSTER_CAGE.get()))
+				helper.fail("a drill broke the Netherite cage");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * A blue axolotl's young are all blue (F13): bred with the breeding and growing cut to a second, the school's blue
+	 * count is all its adults, two scoops both give blue axolotls, and the count still matches after. A save from before,
+	 * which counted only the captive blue, loads all blue. Its own batch: it changes the breeding times.
+	 */
+	@GameTest(template = COURSE, batch = "tank_blue_breeds_blue", timeoutTicks = 300)
+	public static void blueCaptiveBreedsBlue(GameTestHelper helper) {
+		int breed = CMConfig.Server.get(CMConfig.SERVER.fishTankBreedSeconds), grow = CMConfig.Server.get(CMConfig.SERVER.penGrowSeconds);
+		CMConfig.SERVER.fishTankBreedSeconds.set(1);
+		CMConfig.SERVER.penGrowSeconds.set(1);
+		Runnable restore = () -> {
+			CMConfig.SERVER.fishTankBreedSeconds.set(breed);
+			CMConfig.SERVER.penGrowSeconds.set(grow);
+		};
+		BlockPos at = new BlockPos(4, 1, 4);
+		FishTankBlockEntity tank;
+		try {
+			tank = tank(helper, at);
+			Axolotl blue = EntityType.AXOLOTL.create(helper.getLevel());
+			blue.setVariant(Axolotl.Variant.BLUE);
+			tank.setPonderSchool(BottledAnimalItem.of(blue), 2, 0, 2);
+			tank.getAutomationHandler().insertItem(0, new ItemStack(ModItems.FISH_FOOD.get(), 64), false);
+			tank.getWaterHandler().fill(new FluidStack(Fluids.WATER, 16000), IFluidHandler.FluidAction.EXECUTE);
+			motor(helper, at.south(), 64);
+		} catch (RuntimeException e) {
+			restore.run();
+			throw e;
+		}
+		helper.runAtTickTime(200, () -> {
+			try {
+				if (tank.getAdults() <= 2)
+					helper.fail("the tank bred no grown young in 10 s (" + tank.getAdults() + " adults, " + tank.getYoung() + " young)");
+				if (tank.getBlue() != tank.getAdults())
+					helper.fail(tank.getBlue() + " of " + tank.getAdults() + " adults are blue");
+				FakePlayer player = player(helper);
+				for (int i = 0; i < 2; i++) {
+					player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.WATER_BUCKET));
+					helper.useBlock(at, player);
+					ItemStack bucket = player.getMainHandItem();
+					var data = bucket.get(DataComponents.BUCKET_ENTITY_DATA);
+					if (!bucket.is(Items.AXOLOTL_BUCKET) || data == null || data.copyTag().getInt("Variant") != Axolotl.Variant.BLUE.getId())
+						helper.fail("scoop " + (i + 1) + " gave " + bucket + " " + data);
+				}
+				if (tank.getBlue() != tank.getAdults())
+					helper.fail("after scooping, " + tank.getBlue() + " of " + tank.getAdults() + " adults are blue");
+
+				var registries = helper.getLevel().registryAccess();
+				var saved = tank.saveWithoutMetadata(registries);
+				saved.putInt("Blue", 1);
+				tank.loadWithComponents(saved, registries);
+				if (tank.getBlue() != tank.getAdults())
+					helper.fail("an older save loaded " + tank.getBlue() + " of " + tank.getAdults() + " adults blue");
+			} finally {
+				restore.run();
+			}
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * A school of another colour holds one blue axolotl at most (F13): with every roll made to hit and the breeding and
+	 * growing cut to a second, litter after litter still gives just the one. The window shows it, it's the first scooped
+	 * and the next is the captive's colour, and once it's out the next litter can have a blue one again. Its own batch:
+	 * it changes the breeding times.
+	 */
+	@GameTest(template = COURSE, batch = "tank_one_blue_at_a_time", timeoutTicks = 400)
+	public static void oneBlueAtATime(GameTestHelper helper) {
+		int breed = CMConfig.Server.get(CMConfig.SERVER.fishTankBreedSeconds), grow = CMConfig.Server.get(CMConfig.SERVER.penGrowSeconds);
+		CMConfig.SERVER.fishTankBreedSeconds.set(1);
+		CMConfig.SERVER.penGrowSeconds.set(1);
+		Runnable restore = () -> {
+			CMConfig.SERVER.fishTankBreedSeconds.set(breed);
+			CMConfig.SERVER.penGrowSeconds.set(grow);
+		};
+		BlockPos at = new BlockPos(4, 1, 4);
+		FishTankBlockEntity tank;
+		try {
+			tank = tank(helper, at);
+			Axolotl wild = EntityType.AXOLOTL.create(helper.getLevel());
+			wild.setVariant(Axolotl.Variant.WILD);
+			tank.setPonderSchool(BottledAnimalItem.of(wild), 2, 0, 0);
+			tank.forceBlueRolls(true);
+			tank.getAutomationHandler().insertItem(0, new ItemStack(ModItems.FISH_FOOD.get(), 64), false);
+			tank.getWaterHandler().fill(new FluidStack(Fluids.WATER, 16000), IFluidHandler.FluidAction.EXECUTE);
+			motor(helper, at.south(), 64);
+		} catch (RuntimeException e) {
+			restore.run();
+			throw e;
+		}
+		helper.runAtTickTime(200, () -> {
+			try {
+				// several litters by now: 2 adults make 2, then 4, then 8...
+				if (tank.getAdults() < 8)
+					helper.fail("too few litters to show anything: " + tank.getAdults() + " adults, " + tank.getYoung() + " young");
+				if (tank.getBlueHeld() != 1 || tank.getBlue() != 1)
+					helper.fail("forced rolls over several litters made " + tank.getBlueHeld() + " blue (" + tank.getBlue() + " grown)");
+				int size = Math.min(tank.getCount(), FishTankBlockEntity.SHOWN), shownBlue = 0;
+				for (int i = 0; i < size; i++)
+					if (tank.shownBlue(i, size))
+						shownBlue++;
+				if (shownBlue != 1)
+					helper.fail("the window shows " + shownBlue + " blue of " + size);
+
+				FakePlayer player = player(helper);
+				int[] variants = new int[2];
+				for (int i = 0; i < 2; i++) {
+					player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.WATER_BUCKET));
+					helper.useBlock(at, player);
+					ItemStack bucket = player.getMainHandItem();
+					var data = bucket.get(DataComponents.BUCKET_ENTITY_DATA);
+					if (!bucket.is(Items.AXOLOTL_BUCKET) || data == null)
+						helper.fail("scoop " + (i + 1) + " gave " + bucket);
+					variants[i] = data.copyTag().getInt("Variant");
+				}
+				if (variants[0] != Axolotl.Variant.BLUE.getId() || variants[1] != Axolotl.Variant.WILD.getId())
+					helper.fail("the scoops gave variants " + variants[0] + " then " + variants[1] + ", not blue then wild");
+				if (tank.getBlueHeld() != 0)
+					helper.fail("after the blue was scooped " + tank.getBlueHeld() + " blue are left");
+				// the litters so far ate the food and drank the water: more of both for the next
+				tank.getAutomationHandler().insertItem(0, new ItemStack(ModItems.FISH_FOOD.get(), 16), false);
+				tank.getWaterHandler().fill(new FluidStack(Fluids.WATER, 4000), IFluidHandler.FluidAction.EXECUTE);
+			} catch (RuntimeException e) {
+				restore.run();
+				throw e;
+			}
+		});
+		// the scoops made room: the next litter has a blue one again
+		helper.runAtTickTime(300, () -> {
+			try {
+				if (tank.getBlueHeld() != 1)
+					helper.fail("once the blue was out, a forced roll made " + tank.getBlueHeld() + " blue");
+			} finally {
+				tank.forceBlueRolls(false);
+				restore.run();
+			}
+			helper.succeed();
+		});
 	}
 
 	// ---------------------------------------------------------------- helpers

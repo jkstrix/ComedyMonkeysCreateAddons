@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.comedymonkey.createaddons.content.juggernaut.ClockworkJuggernaut;
 import com.comedymonkey.createaddons.registry.ModStructures;
 
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -47,8 +52,16 @@ public class RuinField extends StructurePiece {
 	private final int radius;
 	private final long seed;
 	private final boolean end;
+	/** Generated before the ruin had its own blocks (RuinBlocks): only then does the old "is it the ruin's?" check apply. */
+	private final boolean legacy;
 	/** Worked out once, before any chunk is placed: several worldgen threads place the same piece at once. */
 	private final List<Column> columns;
+	/** How tall its column stands on each spot it built one (x, z packed as a ChunkPos long; the tallest where two meet),
+	 * and where it hung vines, for {@link #built}. */
+	private final Long2IntOpenHashMap heights = new Long2IntOpenHashMap();
+	private final LongOpenHashSet vines = new LongOpenHashSet();
+	/** In the End, the island's surface under each column, as {@link #built} has needed it (the server thread's only). */
+	private final Long2IntOpenHashMap islands = new Long2IntOpenHashMap();
 
 	/** A column of ruin: blocks of {@code kind} from {@code bottom} to below {@code top}, counted from the ground up. */
 	private record Column(int x, int z, int bottom, int top, Kind kind, Direction vine) {}
@@ -62,7 +75,9 @@ public class RuinField extends StructurePiece {
 		this.radius = radius;
 		this.seed = seed;
 		this.end = end;
+		this.legacy = false;
 		this.columns = layOut();
+		footprint();
 	}
 
 	public RuinField(CompoundTag tag) {
@@ -71,7 +86,110 @@ public class RuinField extends StructurePiece {
 		this.radius = tag.getInt("R");
 		this.seed = tag.getLong("Seed");
 		this.end = tag.getBoolean("End");
+		this.legacy = !tag.getBoolean("OwnBlocks");
 		this.columns = layOut();
+		footprint();
+	}
+
+	private void footprint() {
+		for (Column c : columns) {
+			int x = centre.getX() + c.x, z = centre.getZ() + c.z;
+			if (inHall(x, z) || distance(x, z) > 1)
+				continue;
+			long key = ChunkPos.asLong(x, z);
+			heights.put(key, Math.max(heights.get(key), c.top));
+			// vines are only hung within the wall's own chunk
+			int vx = c.vine == null ? x : x + c.vine.getStepX(), vz = c.vine == null ? z : z + c.vine.getStepZ();
+			if (c.vine != null && vx >> 4 == x >> 4 && vz >> 4 == z >> 4)
+				vines.add(ChunkPos.asLong(vx, vz));
+		}
+	}
+
+	/** How tall the field's column at (x, z) stands, from its ground up; 0 where it built none. */
+	public int height(int x, int z) {
+		return heights.get(ChunkPos.asLong(x, z));
+	}
+
+	/** Did the field lay old paving at (x, z), in place of the ground's top block? */
+	public boolean paved(int x, int z) {
+		double t = distance(x, z);
+		return t <= 1 && !inHall(x, z) && chance(x, z, 1) < 0.5 * (1 - t) * (1 - t);
+	}
+
+	private boolean mossAt(int x, int z) {
+		double t = distance(x, z);
+		return !end && t <= 1 && !inHall(x, z) && !paved(x, z) && chance(x, z, 2) < 0.06 * (1 - t);
+	}
+
+	/**
+	 * Could this ruin's field have put the block at {@code pos} there (D62: he crumbles its own blocks, never a player's)?
+	 * A vine where it hung vines, a moss carpet where it laid one, or a block of a column where it built one, no higher
+	 * than that column stands over the ground it stands on: the block must be part of an unbroken run of the ruin's
+	 * blocks reaching down to solid ground (or to the old paving the field laid there). A player's block on top of a
+	 * wall, floating over one or standing apart is not. Height is left to the land: walls follow it, however far it rises
+	 * or falls from the hall. Its rubble's gravel only ever lies on the ground, so gravel under a column is ground. In the
+	 * End, where the ruin's end stone can't be told from the island's, the column stands on the island's surface as the
+	 * world generator made it. Ruins built since its own blocks ({@link RuinBlocks}) need none of this: those crumble as
+	 * they are.
+	 */
+	public boolean built(BlockGetter level, BlockPos pos) {
+		int x = pos.getX(), z = pos.getZ();
+		if (x < boundingBox.minX() || x > boundingBox.maxX() || z < boundingBox.minZ() || z > boundingBox.maxZ())
+			return false;
+		BlockState state = level.getBlockState(pos);
+		long key = ChunkPos.asLong(x, z);
+		if (state.is(Blocks.VINE))
+			return vines.contains(key);
+		if (state.is(Blocks.MOSS_CARPET) && mossAt(x, z))
+			return true;
+		int top = heights.get(key);
+		if (top <= 0)
+			return false;
+		if (end && level instanceof ServerLevel server) {
+			int island = island(server, x, z);
+			// over the void (one of the small islands the generator's land doesn't know): too uncertain, it stands
+			return island > server.getMinBuildHeight() + 1 && builtOn(level, pos, island);
+		}
+		// down the run of ruin blocks it's part of (at most the column and its paving)
+		BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+		int low = pos.getY(), limit = pos.getY() - top - 1;
+		while (low > limit && level.getBlockState(p.set(x, low - 1, z)).is(ClockworkJuggernaut.RUIN_BLOCKS) && !level.getBlockState(p).is(Blocks.GRAVEL))
+			low--;
+		// on bare ground, the column starts at the run's lowest block...
+		if (pos.getY() - low < top && ground(level, p.set(x, low - 1, z)))
+			return true;
+		// ...on the old paving (of the ruin's own brick), one higher
+		return paved(x, z) && level.getBlockState(p.set(x, low, z)).is(paving(x, z).getBlock()) && pos.getY() > low
+			&& pos.getY() - (low + 1) < top;
+	}
+
+	/**
+	 * Is {@code pos} a block of the ruin's in the column it built here, standing on {@code ground} (its first block's y):
+	 * no higher than the column, and with an unbroken run of the ruin's blocks under it down to there?
+	 */
+	public boolean builtOn(BlockGetter level, BlockPos pos, int ground) {
+		int top = heights.get(ChunkPos.asLong(pos.getX(), pos.getZ()));
+		if (top <= 0 || pos.getY() < ground || pos.getY() >= ground + top)
+			return false;
+		BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+		for (int y = ground; y <= pos.getY(); y++)
+			if (!level.getBlockState(p.set(pos.getX(), y, pos.getZ())).is(ClockworkJuggernaut.RUIN_BLOCKS))
+				return false;
+		return true;
+	}
+
+	/** Where the field's column at (x, z) stood: on the land as the generator made it (looked up once per spot). */
+	private int island(ServerLevel level, int x, int z) {
+		long key = ChunkPos.asLong(x, z);
+		if (!islands.containsKey(key))
+			islands.put(key, level.getChunkSource().getGenerator().getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, level,
+				level.getChunkSource().randomState()));
+		return islands.get(key);
+	}
+
+	/** Generated before the ruin had its own blocks: the old check is how he tells its walls from a player's. */
+	public boolean legacy() {
+		return legacy;
 	}
 
 	@Override
@@ -82,6 +200,7 @@ public class RuinField extends StructurePiece {
 		tag.putInt("R", radius);
 		tag.putLong("Seed", seed);
 		tag.putBoolean("End", end);
+		tag.putBoolean("OwnBlocks", !legacy);
 	}
 
 	// ---- what goes where (from the seed)
@@ -210,13 +329,14 @@ public class RuinField extends StructurePiece {
 	private BlockState block(Column c, int x, int y, int z, boolean top) {
 		double n = chance(x, z, 3 + y);
 		return switch (c.kind) {
-			case WALL -> brick(n);
-			case PILLAR -> (end ? Blocks.PURPUR_PILLAR : Blocks.POLISHED_DEEPSLATE).defaultBlockState()
-				.trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Y);
-			case RUBBLE -> end ? (n < 0.5 ? Blocks.END_STONE : Blocks.END_STONE_BRICKS).defaultBlockState()
+			// its walls, pillars and rubble are the ruin's own blocks, which he crumbles
+			case WALL -> RuinBlocks.ruin(brick(n));
+			case PILLAR -> RuinBlocks.ruin((end ? Blocks.PURPUR_PILLAR : Blocks.POLISHED_DEEPSLATE).defaultBlockState()
+				.trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Y));
+			case RUBBLE -> RuinBlocks.ruin(end ? (n < 0.5 ? Blocks.END_STONE : Blocks.END_STONE_BRICKS).defaultBlockState()
 				: (n < 0.45 ? Blocks.COBBLED_DEEPSLATE : n < 0.7 ? Blocks.CRACKED_DEEPSLATE_BRICKS : n < 0.85 ? Blocks.GRAVEL
-					: Blocks.MOSSY_COBBLESTONE).defaultBlockState();
-			case SLAB -> (end ? Blocks.END_STONE_BRICK_SLAB : Blocks.DEEPSLATE_TILE_SLAB).defaultBlockState();
+					: Blocks.MOSSY_COBBLESTONE).defaultBlockState());
+			case SLAB -> RuinBlocks.ruin((end ? Blocks.END_STONE_BRICK_SLAB : Blocks.DEEPSLATE_TILE_SLAB).defaultBlockState());
 			case BRASS -> create("brass_block").defaultBlockState();
 			case CASING -> create("andesite_casing").defaultBlockState();
 			case SHAFT -> create("shaft").defaultBlockState().trySetValue(RotatedPillarBlock.AXIS, n < 0.5 ? Direction.Axis.X : Direction.Axis.Z);
@@ -248,8 +368,14 @@ public class RuinField extends StructurePiece {
 	private boolean groundOk(WorldGenLevel level, BlockPos.MutableBlockPos p, int x, int g, int z) {
 		if (g <= level.getMinBuildHeight() + 1)
 			return false;
-		BlockState below = level.getBlockState(p.set(x, g - 1, z));
-		return below.getFluidState().isEmpty() && below.isSolid() && !below.is(BlockTags.LEAVES) && !below.is(BlockTags.LOGS);
+		return ground(level, p.set(x, g - 1, z));
+	}
+
+	/** A block the ruin can stand on: dry, its top face whole (stone, dirt, sand), and not a tree's leaves or logs. */
+	public static boolean ground(BlockGetter level, BlockPos pos) {
+		BlockState below = level.getBlockState(pos);
+		return below.getFluidState().isEmpty() && below.isFaceSturdy(level, pos, Direction.UP) && !below.is(BlockTags.LEAVES)
+			&& !below.is(BlockTags.LOGS);
 	}
 
 	/** 0 at the hall, 1 at the ruin's edge. */

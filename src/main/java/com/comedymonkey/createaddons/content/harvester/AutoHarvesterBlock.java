@@ -33,7 +33,7 @@ import net.minecraft.world.phys.BlockHitResult;
  * Empty-handed, use takes out the harvest and sneak-use takes the plant back; a wrench opens a screen with both.
  * See {@link AutoHarvesterBlockEntity}.
  */
-public class AutoHarvesterBlock extends KineticBlock implements IBE<AutoHarvesterBlockEntity> {
+public final class AutoHarvesterBlock extends KineticBlock implements IBE<AutoHarvesterBlockEntity> {
 	/** The front, with the window. The shaft goes into the opposite face. */
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	/** What's planted, for the soil: farmland under crops, dirt otherwise. */
@@ -72,6 +72,7 @@ public class AutoHarvesterBlock extends KineticBlock implements IBE<AutoHarveste
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

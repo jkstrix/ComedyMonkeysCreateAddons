@@ -76,10 +76,14 @@ public class ThrownCog extends ThrowableItemProjectile {
 		victim.hurtMarked = true;
 	}
 
-	/** Living things only: it flies past item frames, paintings and end crystals, and out of his own hand. */
+	/**
+	 * Living things he may hit only (D27: players, his target, what's hurt him): it flies past villagers, golems,
+	 * livestock and other players' pets, item frames, paintings and end crystals, and out of his own hand.
+	 */
 	@Override
 	protected boolean canHitEntity(Entity target) {
-		return super.canHitEntity(target) && target instanceof LivingEntity && !(target instanceof ClockworkJuggernaut);
+		return super.canHitEntity(target) && target instanceof LivingEntity living && !(target instanceof ClockworkJuggernaut)
+			&& getOwner() instanceof ClockworkJuggernaut thrower && thrower.fairGame(living);
 	}
 
 	/** D2: a block it hits isn't told (no target block pulses, no bell rings); it just breaks on it. */

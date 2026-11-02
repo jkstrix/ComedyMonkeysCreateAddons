@@ -36,8 +36,8 @@ public class HelperBotMovement implements MovementBehaviour {
 	public static final String STATUS = "HelperBotStatus";
 	/** Status bits sent to clients ({@link HelperBotStatusPayload}). */
 	public static final int PAUSED = 1, MANUAL = 2, NO_PATH = 4, DERAILED = 8;
-	/** Ticks between status checks, and between resends of an unchanged status. */
-	private static final int CHECK = 5, RESEND = 100;
+	/** Ticks between status checks. An unchanged status isn't resent: a player who starts watching gets it from {@link #STATUS}. */
+	private static final int CHECK = 5;
 
 	/** Contraption Controls can't switch him off: he isn't doing anything to switch off. */
 	@Override
@@ -65,7 +65,7 @@ public class HelperBotMovement implements MovementBehaviour {
 			return;
 		int flags = status(train);
 		boolean changed = !context.data.contains(STATUS) || context.data.getByte(STATUS) != flags;
-		if (!changed && time % RESEND != 0)
+		if (!changed)
 			return;
 		context.data.putByte(STATUS, (byte) flags);
 		PacketDistributor.sendToPlayersTrackingEntity(cce, new HelperBotStatusPayload(cce.getId(), context.localPos, (byte) flags));

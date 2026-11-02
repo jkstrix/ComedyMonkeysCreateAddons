@@ -1,0 +1,142 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/clockwork_dynamo_copper",
+    "copper": "comedymonkeysaddons:block/clockwork_dynamo_copper",
+    "bead": "comedymonkeysaddons:block/clockwork_dynamo_bead",
+    "bead_top": "comedymonkeysaddons:block/clockwork_dynamo_bead_top"
+  },
+  "elements": [
+    {
+      "name": "aerial_rod",
+      "from": [
+        11.5,
+        14,
+        11.25
+      ],
+      "to": [
+        12,
+        15,
+        11.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            1,
+            4.5,
+            2
+          ],
+          "texture": "#copper"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            1,
+            4.75,
+            2
+          ],
+          "texture": "#copper"
+        },
+        "south": {
+          "uv": [
+            11.5,
+            1,
+            12,
+            2
+          ],
+          "texture": "#copper"
+        },
+        "west": {
+          "uv": [
+            11.25,
+            1,
+            11.75,
+            2
+          ],
+          "texture": "#copper"
+        },
+        "up": {
+          "uv": [
+            11.5,
+            11.25,
+            12,
+            11.75
+          ],
+          "texture": "#copper"
+        }
+      }
+    },
+    {
+      "name": "aerial_bead",
+      "from": [
+        11.25,
+        15,
+        11
+      ],
+      "to": [
+        12.25,
+        16,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.75,
+            0,
+            4.75,
+            1
+          ],
+          "texture": "#bead"
+        },
+        "east": {
+          "uv": [
+            4,
+            0,
+            5,
+            1
+          ],
+          "texture": "#bead"
+        },
+        "south": {
+          "uv": [
+            11.25,
+            0,
+            12.25,
+            1
+          ],
+          "texture": "#bead"
+        },
+        "west": {
+          "uv": [
+            11,
+            0,
+            12,
+            1
+          ],
+          "texture": "#bead"
+        },
+        "up": {
+          "uv": [
+            11.25,
+            11,
+            12.25,
+            12
+          ],
+          "texture": "#bead_top"
+        },
+        "down": {
+          "uv": [
+            11.25,
+            4,
+            12.25,
+            5
+          ],
+          "texture": "#bead"
+        }
+      }
+    }
+  ]
+}

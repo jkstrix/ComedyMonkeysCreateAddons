@@ -196,7 +196,7 @@ public final class CagePerformanceGameTests {
 		BlockPos pos = new BlockPos(4, 1, 4);
 		MonsterCageBlockEntity cage = cage(helper, pos, ModBlocks.NETHERITE_MONSTER_CAGE.get());
 		helper.runAtTickTime(3, () -> {
-			ItemStack wither = ((MonsterJarItem) ModItems.NETHERITE_JAR.get()).fill(EntityType.WITHER.create(helper.getLevel()));
+			ItemStack wither = ModItems.NETHERITE_JAR.get().fill(EntityType.WITHER.create(helper.getLevel()));
 			cage.getCaptiveSlot().insertItem(0, wither, false);
 			if (cage.getEscapeIn() >= 0)
 				helper.fail("the countdown started before the cage ticked");
@@ -273,7 +273,7 @@ public final class CagePerformanceGameTests {
 	public static void netheriteFeDoesNotSyncEveryTick(GameTestHelper helper) {
 		BlockPos pos = new BlockPos(4, 1, 4);
 		MonsterCageBlockEntity cage = cage(helper, pos, ModBlocks.NETHERITE_MONSTER_CAGE.get());
-		ItemStack wither = ((MonsterJarItem) ModItems.NETHERITE_JAR.get()).fill(EntityType.WITHER.create(helper.getLevel()));
+		ItemStack wither = ModItems.NETHERITE_JAR.get().fill(EntityType.WITHER.create(helper.getLevel()));
 		if (!cage.getCaptiveSlot().insertItem(0, wither, false).isEmpty())
 			helper.fail("the Netherite cage didn't take the Wither");
 		// up and full, with nothing coming in: it runs down its store, its FE changing every tick
@@ -342,7 +342,7 @@ public final class CagePerformanceGameTests {
 		Entity monster = type.create(helper.getLevel());
 		if (monster == null)
 			throw new IllegalStateException("can't make " + type);
-		return ((MonsterJarItem) ModItems.IRON_JAR.get()).fill(monster);
+		return ModItems.IRON_JAR.get().fill(monster);
 	}
 
 	private static ItemStack bottled(GameTestHelper helper, EntityType<?> type) {

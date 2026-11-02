@@ -38,7 +38,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * above. It hangs only down to more cable or its lamp: take any part away and the whole hanging lamp comes down, the lamp
  * dropping and each block of cable giving its Power Line back.
  */
-public class HangingCableBlock extends Block implements SimpleWaterloggedBlock, SpecialBlockItemRequirement {
+public final class HangingCableBlock extends Block implements SimpleWaterloggedBlock, SpecialBlockItemRequirement {
 	public static final MapCodec<HangingCableBlock> CODEC = simpleCodec(HangingCableBlock::new);
 	public static final EnumProperty<Rose> ROSE = EnumProperty.create("rose", Rose.class);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -138,6 +138,7 @@ public class HangingCableBlock extends Block implements SimpleWaterloggedBlock, 
 
 	/** Picked, it's the Power Line it was lowered with. */
 	@Override
+	@SuppressWarnings("deprecation") // NeoForge's pick-block asks this one, and Create's Display Link screen calls it directly
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
 		return new ItemStack(ModItems.COPPER_POWER_LINE.get());
 	}

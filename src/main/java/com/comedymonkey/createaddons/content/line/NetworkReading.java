@@ -29,6 +29,11 @@ public final class NetworkReading {
 	private long at = Long.MIN_VALUE / 2, sentAt = Long.MIN_VALUE / 2;
 	private int sentMakes = -1, sentUses = -1;
 
+	/** FE a tick its network last said it makes. */
+	public int makes() {
+		return makes;
+	}
+
 	/** Server: the network's figures now; true when clients should be told. */
 	public boolean set(int makes, int uses, long now) {
 		this.makes = makes;

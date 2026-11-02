@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModDataComponents;
@@ -27,6 +28,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -116,11 +119,12 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 	public void showFill(float fill) {
 		if (isOutput())
 			setStored((long) (fill * capacity()));
-		shownFill = fill;
+		shownFill = Mth.clamp(fill, 0, 1);
 	}
 
+	/** How wound, 0..1: never more than full, even after the capacity was lowered in the config. */
 	public float fill() {
-		return isOutput() ? (float) ((double) stored / capacity()) : shownFill;
+		return isOutput() ? Mth.clamp((float) ((double) stored / capacity()), 0, 1) : shownFill;
 	}
 
 	/** How wound it looks (either end), for the renderer. */
@@ -129,7 +133,7 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 	}
 
 	public int comparatorLevel() {
-		return stored <= 0 ? 0 : 1 + (int) Math.floor(fill() * 14.0);
+		return stored <= 0 ? 0 : Math.min(15, 1 + (int) Math.floor(fill() * 14.0));
 	}
 
 	private boolean running() {
@@ -241,8 +245,11 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 		stored = Math.min(capacity(), stored + amount);
 		if (wasEmpty && stored > 0)
 			updateGeneratedRotation(); // it can give again
-		if (!wasFull && stored >= capacity())
+		if (!wasFull && stored >= capacity()) {
 			sound("engine_full", 1);
+			// D41: "Tightly Wound", for whoever is by when it fills
+			ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.SPRING_ENGINE_FULL, ItemStack.EMPTY, 0);
+		}
 		setChanged();
 	}
 
@@ -318,9 +325,11 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 	@Override
 	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.read(tag, registries, clientPacket);
-		stored = tag.getLong("Stored");
+		// wound full and then the capacity lowered in the config: it reads back as full, not 200% (which the renderer has
+		// no frame for and the comparator no level)
+		stored = Math.max(0, Math.min(capacity(), tag.getLong("Stored")));
 		powered = tag.getBoolean("Powered");
-		shownFill = tag.getFloat("Fill");
+		shownFill = Mth.clamp(tag.getFloat("Fill"), 0, 1);
 	}
 
 	/** D38: picked up or broken, it keeps its wind. */
@@ -339,6 +348,7 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void removeComponentsFromTag(CompoundTag tag) {
 		super.removeComponentsFromTag(tag);
 		tag.remove("Stored");

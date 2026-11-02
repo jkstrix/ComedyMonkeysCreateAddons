@@ -16,7 +16,7 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
  * fence gates (he opens them himself), never through water or lava, and never up ladders or bubble columns. It only
  * plans; {@link TradeBotMotion} does the rolling, turning and hopping along the route.
  */
-public class TradeBotNavigation extends GroundPathNavigation {
+public final class TradeBotNavigation extends GroundPathNavigation {
 	public TradeBotNavigation(Mob mob, Level level) {
 		super(mob, level);
 		setCanOpenDoors(true);

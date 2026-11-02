@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "create:water_wheel",
+    "create:large_water_wheel",
+    "create:windmill_bearing",
+    "create:creative_motor"
+  ]
+}

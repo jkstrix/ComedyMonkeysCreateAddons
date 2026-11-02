@@ -54,7 +54,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * colours the whole run, a water bucket washes it and the wrench steps its brightness, all of it at once (D24, P26);
  * sneaking, just this block. One block of strips is one light: lit or dark, one colour, one brightness.
  */
-public class LightStripBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LitBlock {
+public final class LightStripBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LitBlock {
 	public static final MapCodec<LightStripBlock> CODEC = simpleCodec(LightStripBlock::new);
 	/** Per direction: a strip lies against that face of the block (the same properties as a Power Line's wires). */
 	public static final Map<Direction, BooleanProperty> FACES = PowerLineBlock.FACES;
@@ -175,7 +175,7 @@ public class LightStripBlock extends BaseEntityBlock implements IWrenchable, Sim
 	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState old, boolean moving) {
 		super.onPlace(state, level, pos, old, moving);
 		if (!old.is(this) || faces(old) != faces(state)) {
-			RunLightBlockEntity.runsChanged();
+			RunLightBlockEntity.runsChanged(level);
 			LightMounts.relinkBehind(level, state, pos);
 			if (old.is(this))
 				LightMounts.relinkBehind(level, old, pos);
@@ -185,7 +185,7 @@ public class LightStripBlock extends BaseEntityBlock implements IWrenchable, Sim
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
 		if (!newState.is(this))
-			RunLightBlockEntity.runsChanged();
+			RunLightBlockEntity.runsChanged(level);
 		super.onRemove(state, level, pos, newState, moving);
 		if (!newState.is(this))
 			LightMounts.relinkBehind(level, state, pos);

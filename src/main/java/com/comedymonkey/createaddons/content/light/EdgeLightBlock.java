@@ -51,7 +51,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * edges are in its block entity (EdgeLinks). Trim that joins is one run, fed through any piece a Power Line touches and
  * dyed, washed and stepped all at once, as Light Strips are; sneak for one block. One block is one light.
  */
-public class EdgeLightBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LitBlock,
+public final class EdgeLightBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LitBlock,
 	com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement {
 	public static final MapCodec<EdgeLightBlock> CODEC = simpleCodec(EdgeLightBlock::new);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -205,7 +205,7 @@ public class EdgeLightBlock extends BaseEntityBlock implements IWrenchable, Simp
 			LightMounts.relinkBehind(level, state, pos);
 		super.onRemove(state, level, pos, newState, moving);
 		if (gone)
-			RunLightBlockEntity.runsChanged();
+			RunLightBlockEntity.runsChanged(level);
 	}
 
 	// ---------- shape ----------

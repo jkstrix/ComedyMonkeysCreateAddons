@@ -94,6 +94,7 @@ public class ComedyMonkeysCreateAddons {
 		ModEntities.ENTITY_TYPES.register(modBus);
 		com.comedymonkey.createaddons.registry.ModStructures.TYPES.register(modBus);
 		com.comedymonkey.createaddons.registry.ModStructures.PIECES.register(modBus);
+		com.comedymonkey.createaddons.registry.ModStructures.PROCESSORS.register(modBus);
 		ModDataComponents.DATA_COMPONENTS.register(modBus);
 		modBus.addListener(ModEntities::registerAttributes);
 		modBus.addListener(com.comedymonkey.createaddons.registry.ModWastes::registerAttributes);
@@ -101,6 +102,8 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(TradeBotGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.StorageGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.MachineGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.DynamoGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.TubeGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LightGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.BatteryGameTests::register);
@@ -165,6 +168,7 @@ public class ComedyMonkeysCreateAddons {
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.FluidLines::onChunkUnload);
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.line.PowerLines.clear());
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.line.FluidLines.clear());
+		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.electric.BatteryTowers.clear());
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> ChestUpgrades.clearJustPlaced());
 		if (ModList.get().isLoaded(PipezBlazeBurnerCompat.PIPEZ_ID)) {
 			NeoForge.EVENT_BUS.addListener(PipeCoverEvents::onRightClickBlock);
@@ -244,6 +248,10 @@ public class ComedyMonkeysCreateAddons {
 		// gives FE at the sides; the turbine takes lava and water and gives FE through its controller or any of its casings
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.ELECTRIC_MOTOR.get(),
 			(be, side) -> side == null || ElectricMotorBlock.isInput(be.getBlockState(), side) ? be.getEnergy() : null);
+		// the Clockwork Dynamo gives FE through its base only, like the motor takes it
+		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.CLOCKWORK_DYNAMO.get(),
+			(be, side) -> side == null || com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock.isOutput(be.getBlockState(), side)
+				? be.getEnergyOut() : null);
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),
 			(be, side) -> side == null || side == LavaGeneratorBlock.inlet(be.getBlockState()) ? be.getFluidsOut() : null);
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.LAVA_GENERATOR.get(),
@@ -286,6 +294,8 @@ public class ComedyMonkeysCreateAddons {
 			QuickTransferPayload::handle);
 		// The Electric Motor's settings screen
 		event.registrar("1").playToServer(MotorSettingsPayload.TYPE, MotorSettingsPayload.STREAM_CODEC, MotorSettingsPayload::handle);
+		event.registrar("1").playToServer(com.comedymonkey.createaddons.network.DynamoSettingsPayload.TYPE,
+			com.comedymonkey.createaddons.network.DynamoSettingsPayload.STREAM_CODEC, com.comedymonkey.createaddons.network.DynamoSettingsPayload::handle);
 		event.registrar("1").playToServer(TurbineSettingsPayload.TYPE, TurbineSettingsPayload.STREAM_CODEC, TurbineSettingsPayload::handle);
 		event.registrar("1").playToServer(SplitterSettingsPayload.TYPE, SplitterSettingsPayload.STREAM_CODEC, SplitterSettingsPayload::handle);
 		event.registrar("1").playToClient(SplitterInfoPayload.TYPE, SplitterInfoPayload.STREAM_CODEC, SplitterInfoPayload::handle);
@@ -343,6 +353,7 @@ public class ComedyMonkeysCreateAddons {
 			// Stress impact per RPM, read from the config each time Create asks
 			BlockStressValues.IMPACTS.register(ModBlocks.PRESSURE_CRUCIBLE.get(), CMConfig.SERVER::crucibleStressImpact);
 			BlockStressValues.IMPACTS.register(ModBlocks.WINDING_KEY.get(), CMConfig.SERVER::windingKeyStressImpact);
+			BlockStressValues.IMPACTS.register(ModBlocks.CLOCKWORK_RECEIVER.get(), CMConfig.SERVER::clockworkReceiverStress);
 			registerCreateTooltip(ModItems.WINDING_KEY.get());
 			registerCreateTooltip(ModItems.SPRING_ENGINE.get());
 			// Every generator, by tier: the Brass ones make 16 at a time and load the network to match
@@ -381,6 +392,11 @@ public class ComedyMonkeysCreateAddons {
 			registerCreateTooltip(ModItems.MAGMA_ENGINE.get());
 			registerCreateTooltip(ModItems.SUPERCHARGED_MAGMA_ENGINE.get());
 			registerCreateTooltip(ModItems.ELECTRIC_MOTOR.get());
+			registerCreateTooltip(ModItems.CLOCKWORK_DYNAMO.get());
+			registerCreateTooltip(ModItems.CLOCKWORK_RECEIVER.get());
+			registerCreateTooltip(ModItems.CLOCKWORK_TUBE.get());
+			registerCreateTooltip(ModItems.CLOCKWORK_INLET.get());
+			registerCreateTooltip(ModItems.BRASS_CLOCKWORK_INLET.get());
 			registerCreateTooltip(ModItems.LAVA_GENERATOR.get());
 			registerCreateTooltip(ModItems.BATTERY.get());
 			registerCreateTooltip(ModItems.GEOTHERMAL_CONTROLLER.get());

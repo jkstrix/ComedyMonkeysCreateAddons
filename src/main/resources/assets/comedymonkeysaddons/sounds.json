@@ -2769,5 +2769,66 @@
         "attenuation_distance": 8
       }
     ]
+  },
+  "clockwork_dynamo.hum": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_dynamo.hum",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_dynamo/hum_loop",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_dynamo.start": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_dynamo.start",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_dynamo/start_1",
+      "comedymonkeysaddons:clockwork_dynamo/start_2"
+    ]
+  },
+  "clockwork_dynamo.stop": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_dynamo.stop",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_dynamo/stop_1",
+      "comedymonkeysaddons:clockwork_dynamo/stop_2"
+    ]
+  },
+  "clockwork_dynamo.aerial_up": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_dynamo.aerial_up",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_dynamo/aerial_up_1",
+      "comedymonkeysaddons:clockwork_dynamo/aerial_up_2"
+    ]
+  },
+  "clockwork_dynamo.aerial_boing": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_dynamo.aerial_boing",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_dynamo/aerial_boing_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_dynamo/aerial_boing_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_dynamo/aerial_boing_3",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_dynamo.aerial_fold": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_dynamo.aerial_fold",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_dynamo/aerial_fold_1",
+      "comedymonkeysaddons:clockwork_dynamo/aerial_fold_2"
+    ]
+  },
+  "clockwork_dynamo.adjust": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_dynamo.adjust",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_dynamo/adjust_1",
+      "comedymonkeysaddons:clockwork_dynamo/adjust_2"
+    ]
   }
 }

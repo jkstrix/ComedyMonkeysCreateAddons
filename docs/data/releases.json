@@ -1,16 +1,55 @@
 [
   {
+    "version": "2.5.1",
+    "from": "2.5.0",
+    "date": "2026-11-01",
+    "title": "A harder fight in the ruins, and fixes",
+    "summary": "Fixes from the first days of 2.5.0, and a fight in the ruins that can no longer be pinned, kited or read.",
+    "highlights": [],
+    "sections": [
+      {
+        "title": "Changed",
+        "icon": "rotate",
+        "body": [
+          {
+            "list": [
+              "**[[ruin-sleeper]] no longer locks on to one player.** After every combo it goes for whoever has hurt it most lately, and blows on its back count double.",
+              "**It is harder to read.** Its combos vary in length, it sometimes reaches for a move meant for nearer or further off, now and then it throws a cog when it could have walked to you, and some wind-ups are feints.",
+              "**It can't be trapped.** Walled in, down a pit or cut off by water for 10 seconds, it goes up in steam and comes out of it beside you."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Fixed",
+        "icon": "check",
+        "body": [
+          {
+            "list": [
+              "**[[ruin-sleeper]] got stuck on its own ruins.** It breaks through their walls wherever it touches them, and a wall knocked out from under comes down whole. Ruins generated from now on are built from their own copies of their blocks, which it always breaks through; mined, they drop the ordinary block. Your own builds are never touched, nor the ruin's chest and brass.",
+              "**It floated on hillsides**, held up by one corner of its feet. It slides off and comes down.",
+              "**A gap between the [[winding-key]] and a Hand Crank or shaft.** The key now has a spindle out to the edge of its block.",
+              "**[[clockwork-tubes|Brass Clockwork Inlets]] didn't show their filter.** It now shows on the hood."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "version": "2.5.0",
     "from": "2.0.2",
     "date": "2026-10-27",
     "title": "Pipes, wires, lights, batteries and bigger farms",
-    "summary": "Everything since 2.0.2: the mod's own pipes and wires, electric lights for every place you build, batteries up to grid scale, Monster Cages and Fish Tanks, a second robot, something asleep in a ruin, and a big performance pass, on screen and on the server.",
+    "summary": "Everything since 2.0.2: the mod's own pipes and wires, electric lights for every place you build, batteries up to grid scale, a dynamo that turns any shaft into power, tubes that gather items from many places into one, Monster Cages and Fish Tanks, a second robot, something asleep in a ruin, and a big performance pass, on screen and on the server.",
     "highlights": [
       "fluid-lines",
       "power-lines",
       "electric-lights",
       "light-assembly",
       "battery",
+      "clockwork-dynamo",
+      "clockwork-tubes",
       "monster-cage",
       "netherite-monster-cage",
       "fish-tank",
@@ -66,6 +105,38 @@
               "The **[[battery]]** stores 10,000,000 FE, in or out at 2,048 FE a tick. Batteries that touch share one store, and a broken Battery keeps its charge as an item.",
               "Fill a 3×3 footprint with Batteries 3 to 9 blocks high and they form an **Industrial Battery**: 20,000,000 FE a block, hung off the pole network through four insulators on its top corners. Place a Battery on top and it fills the whole layer, like a Create vault.",
               "A Lightning Rod on top of either adds 250,000 FE a strike."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Clockwork Dynamo",
+        "icon": "bolt",
+        "body": [
+          "The **[[clockwork-dynamo]]** is the [[electric-motor]] run backwards: rotation in, Forge Energy out, built from the bots' own parts.",
+          {
+            "list": [
+              "**Any Create power becomes electricity:** water wheels, windmills, steam boilers, Magma Engines. Set the stress it takes with a Wrench, from 256 SU (one water wheel) to 294,912.",
+              "**It loses a quarter on the way:** 1 FE a tick for every 21⅓ SU, three quarters of what a motor draws, so a motor and a dynamo can never run each other.",
+              "**Far away, it runs on paper** from water wheels and windmills only: motors and engines count for nothing while it's away.",
+              "**A little whimsy:** its copper aerial springs up when it starts and wobbles when you change its setting.",
+              "A Display Link source, a Ponder scene and two advancements."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Clockwork Tubes",
+        "icon": "cog",
+        "body": [
+          "The **[[clockwork-tubes]]** gather items from many places into one, in any direction, without belts: built from the bots' own parts.",
+          {
+            "list": [
+              "**Clockwork Inlets** take items from chests, depots, belts or the floor in front of their mouth, gulping each one down. A **Brass Inlet** filters, and takes up to a stack at a time.",
+              "**Clockwork Tubes** carry them behind glass, branching any way: you see every item go by, and a jam shows in the windows.",
+              "**One Clockwork Receiver** pulls them all through the middle of its hollow cog, into a chest, belt or depot. Mesh a cogwheel with it: the faster it turns, the more it moves (4 SU per RPM).",
+              "One Receiver to a network, up to 256 tubes; a full chest makes everything wait, and nothing is ever lost.",
+              "A Display Link source, a Ponder scene and an advancement."
             ]
           }
         ]

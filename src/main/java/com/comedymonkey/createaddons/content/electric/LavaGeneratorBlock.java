@@ -32,7 +32,7 @@ import net.neoforged.neoforge.fluids.FluidUtil;
  * Lava Generator: burns lava in a small turbine to make Forge Energy. Lava goes in at the middle of the back; power
  * comes out of the terminals in the middle of each side. The front, with its window and turbine intake, faces you.
  */
-public class LavaGeneratorBlock extends Block implements IBE<LavaGeneratorBlockEntity>, IWrenchable {
+public final class LavaGeneratorBlock extends Block implements IBE<LavaGeneratorBlockEntity>, IWrenchable {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	/** There's lava in the tank: the window shows it, burning or not. */
@@ -78,6 +78,7 @@ public class LavaGeneratorBlock extends Block implements IBE<LavaGeneratorBlockE
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

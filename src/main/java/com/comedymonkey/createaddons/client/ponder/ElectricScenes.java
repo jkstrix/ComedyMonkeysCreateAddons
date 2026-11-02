@@ -89,6 +89,93 @@ public final class ElectricScenes {
 		scene.markAsFinished();
 	}
 
+	/** The Clockwork Dynamo (design/specs/dynamo.md D28): rotation in, power out at three quarters, and what that means. */
+	public static void clockworkDynamo(SceneBuilder builder, SceneBuildingUtil util) {
+		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+		scene.title("clockwork_dynamo", "Charging Up");
+		scene.configureBasePlate(0, 0, 7);
+		scene.showBasePlate();
+		scene.idle(5);
+
+		// the row stands a block up (the Water Wheel is two blocks across), the dynamo and motor on Andesite Casings
+		BlockPos wheel = util.grid().at(1, 2, 2), clutch = util.grid().at(2, 2, 2), dynamo = util.grid().at(3, 2, 2),
+			motor = util.grid().at(4, 2, 2);
+		Selection drive = util.select().fromTo(1, 2, 2, 3, 2, 2), driven = util.select().fromTo(4, 2, 2, 5, 2, 2);
+		scene.world().showSection(util.select().fromTo(1, 1, 2, 3, 2, 2), Direction.DOWN);
+		scene.idle(15);
+		scene.overlay().showText(80)
+			.text("The Clockwork Dynamo turns rotation into Forge Energy: the Electric Motor, run backwards")
+			.pointAt(util.vector().topOf(dynamo))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(90);
+
+		scene.world().setKineticSpeed(drive, 8);
+		scene.world().modifyBlock(dynamo, s -> s.setValue(com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock.WORKING, true), false);
+		scene.overlay().showText(90)
+			.text("Its shaft goes in at the front. It takes the stress it's set to, at any speed, and its aerial springs up while it makes power")
+			.pointAt(util.vector().blockSurface(dynamo, Direction.WEST))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(100);
+
+		scene.overlay().showControls(util.vector().topOf(dynamo), Pointing.DOWN, 60)
+			.rightClick()
+			.withItem(new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("create", "wrench"))));
+		scene.overlay().showText(90)
+			.text("Right-click it with a Wrench to set how much it takes: from 256 SU, one water wheel, up to 294,912")
+			.pointAt(util.vector().topOf(dynamo))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(100);
+
+		scene.overlay().showText(90)
+			.text("It makes 1 FE a tick for every 21⅓ SU: three quarters of what a motor would draw for the same stress")
+			.pointAt(util.vector().topOf(dynamo))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(100);
+
+		scene.world().showSection(util.select().fromTo(4, 1, 2, 5, 2, 2), Direction.DOWN);
+		scene.idle(15);
+		scene.overlay().showText(90)
+			.text("Power goes out through its base, opposite the shaft: into a Power Line, a battery or a machine")
+			.pointAt(util.vector().blockSurface(dynamo, Direction.EAST))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(100);
+
+		scene.world().modifyBlock(motor, s -> s.setValue(ElectricMotorBlock.POWERED, true), false);
+		scene.world().setKineticSpeed(driven, 8);
+		scene.idle(30);
+		scene.world().modifyBlock(motor, s -> s.setValue(ElectricMotorBlock.POWERED, false), false);
+		scene.world().setKineticSpeed(driven, 0);
+		scene.overlay().showText(100)
+			.text("A motor set to the same stress needs a third more than the dynamo makes, so it soon runs short: something is always lost on the way")
+			.pointAt(util.vector().topOf(motor))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(110);
+
+		scene.world().modifyBlock(clutch, s -> s.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.POWERED, true), false);
+		scene.world().setKineticSpeed(util.select().position(dynamo), 0);
+		scene.world().modifyBlock(dynamo, s -> s.setValue(com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock.WORKING, false), false);
+		scene.overlay().showText(90)
+			.text("It has no redstone control: a Clutch or Gearshift on its shaft switches it off")
+			.pointAt(util.vector().topOf(clutch))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(100);
+
+		scene.overlay().showText(110)
+			.text("Far from any player it keeps feeding its Power Lines, but only from water wheels and windmills: motors and engines count for nothing while it's away")
+			.pointAt(util.vector().topOf(wheel))
+			.placeNearTarget()
+			.attachKeyFrame();
+		scene.idle(120);
+		scene.markAsFinished();
+	}
+
 	public static void electricMotor(SceneBuilder builder, SceneBuildingUtil util) {
 		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 		scene.title("electric_motor", "Plugging In");

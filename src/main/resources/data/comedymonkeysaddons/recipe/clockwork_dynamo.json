@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PEP",
+    "CMC",
+    "ASA"
+  ],
+  "key": {
+    "P": {
+      "tag": "c:plates/brass"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "C": {
+      "tag": "c:ingots/copper"
+    },
+    "M": {
+      "item": "create:precision_mechanism"
+    },
+    "A": {
+      "item": "create:andesite_casing"
+    },
+    "S": {
+      "item": "create:shaft"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:clockwork_dynamo",
+    "count": 1
+  }
+}

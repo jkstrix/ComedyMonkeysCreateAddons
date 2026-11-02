@@ -333,6 +333,16 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 		return priority.clone();
 	}
 
+	/** Turned with a contraption or schematic: a Splitter's priorities turn with its branches. */
+	@Override
+	public void transform(net.minecraft.world.level.block.entity.BlockEntity be, com.simibubi.create.content.contraptions.StructureTransform transform) {
+		super.transform(be, transform);
+		byte[] turned = {1, 1, 1, 1, 1, 1};
+		for (Direction d : Direction.values())
+			turned[transform.rotateFacing(transform.mirrorFacing(d)).ordinal()] = priority[d.ordinal()];
+		System.arraycopy(turned, 0, priority, 0, 6);
+	}
+
 	/** From its screen, checked on the server: only a real change rebuilds the network. */
 	public void setPriorities(byte[] levels) {
 		byte[] next = priority.clone();

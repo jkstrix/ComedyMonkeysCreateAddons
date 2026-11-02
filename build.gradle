@@ -13,6 +13,11 @@ base {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
+// every javac warning on: the tree builds clean, so a new one shows
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << '-Xlint:all'
+}
+
 neoForge {
     version = project.neo_version
 

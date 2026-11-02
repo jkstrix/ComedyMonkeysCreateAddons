@@ -75,21 +75,22 @@ public class AutoHarvesterRenderer extends SafeBlockEntityRenderer<AutoHarvester
 		ms.translate(0.5, 0.5, 0.5);
 		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
 		ms.translate(-0.5, -0.5, -0.5);
-		if (kind != PlantKind.NONE) {
-			float growth = be.getGrowth(partialTicks);
-			if (!RealPlants.render(be.getPlant(), kind, growth, ms, buffer, light, overlay))
-				renderPlant(ms, PartSink.screen(buffer, state, overlay), kind, growth, light);
-		}
+		// the real plant (the generic one, for anything it can't draw, is one of the parts)
+		if (kind != PlantKind.NONE)
+			RealPlants.render(be.getPlant(), kind, be.getGrowth(partialTicks), ms, buffer, light, overlay);
 		TrayItems.render(be.getOutput(), TRAY_Y, be.getLevel(), ms, buffer, light, overlay);
 		ms.popPose();
 	}
 
-	/** The part models: the shaft end and the head on its rail (for this renderer, or Flywheel's visual). */
+	/**
+	 * The part models: the shaft end, the head on its rail, and the generic plant when {@link RealPlants} can't draw the
+	 * real one (for this renderer, or Flywheel's visual).
+	 */
 	public static void parts(AutoHarvesterBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
 		parts(be, partialTicks, ms, sink, light, true);
 	}
 
-	/** The head is inside, left out when it can't be seen ({@code inside} false). */
+	/** The head and the plant are inside, left out when they can't be seen ({@code inside} false). */
 	private static void parts(AutoHarvesterBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light,
 							  boolean inside) {
 		BlockState state = be.getBlockState();
@@ -97,13 +98,26 @@ public class AutoHarvesterRenderer extends SafeBlockEntityRenderer<AutoHarvester
 			return;
 		Direction front = state.getValue(AutoHarvesterBlock.FACING);
 		CobbleGeneratorRenderer.shaft(be, front.getOpposite(), ms, sink, light);
-		if (!inside)
-			return;
+		if (inside)
+			inside(be, partialTicks, ms, sink, light);
+	}
+
+	/** The parts inside: the head on its rail, and the generic plant when {@link RealPlants} can't draw the real one. */
+	static void inside(AutoHarvesterBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
+		BlockState state = be.getBlockState();
+		Direction front = state.getValue(AutoHarvesterBlock.FACING);
 		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5);
 		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
 		ms.translate(-0.5, -0.5, -0.5);
-		renderHead(ms, sink, state.getValue(AutoHarvesterBlock.PLANT), be.getHarvestProgress(partialTicks), light);
+		PlantKind kind = state.getValue(AutoHarvesterBlock.PLANT);
+		renderHead(ms, sink, kind, be.getHarvestProgress(partialTicks), light);
+		// (last, so the head's parts keep their places among the visual's instances as the plant comes and goes)
+		if (kind != PlantKind.NONE) {
+			float growth = be.getGrowth(partialTicks);
+			if (!RealPlants.canRender(be.getPlant(), kind, growth))
+				renderPlant(ms, sink, kind, growth, light);
+		}
 		ms.popPose();
 	}
 

@@ -72,7 +72,7 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 	/** A master's spans of Power Line, from its four insulators (front-left, front-right, back-left, back-right) to posts. */
 	private final List<Span> spans = new ArrayList<>();
 	/** Server: what's on each side, for pushing into machines. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"}) // a generic array has to be made raw
 	private final BlockCapabilityCache<IEnergyStorage, Direction>[] sides = new BlockCapabilityCache[4];
 	/** What's shown, as the client last heard it: how full, which way it flows, the figures for the goggles. */
 	float shownFill;
@@ -107,6 +107,18 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 		public int extractEnergy(int max, boolean simulate) {
 			BatteryStore s = live();
 			return s == null ? 0 : s.extractEnergy(max, simulate);
+		}
+
+		@Override
+		public int planReceive(int max) {
+			BatteryStore s = live();
+			return s == null ? 0 : s.planReceive(max);
+		}
+
+		@Override
+		public int planExtract(int max) {
+			BatteryStore s = live();
+			return s == null ? 0 : s.planExtract(max);
 		}
 
 		@Override
@@ -156,6 +168,7 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 
 	/** Formed and plain have different connectors: what's round it looks again. */
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void setBlockState(BlockState state) {
 		BlockState old = getBlockState();
 		super.setBlockState(state);
@@ -316,7 +329,8 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 	}
 
 	/** Spans whose post is gone or no longer holds them come down (the post's end pays for a span, so nothing is dropped here). */
-	void dropBrokenSpans() {
+	@Override
+	public void dropBrokenSpans() {
 		if (level == null || level.isClientSide || spans.isEmpty())
 			return;
 		boolean changed = false;
@@ -472,18 +486,29 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 	/** The whole tower, if all of it is loaded. */
 	@Nullable
 	private BatteryStore buildTower() {
-		List<BatteryBlockEntity> found = new ArrayList<>();
-		for (BlockPos p : BatteryTowers.blocks(master, height, towerFacing)) {
-			if (!level.isLoaded(p) || com.comedymonkey.createaddons.content.line.PowerGrid.away(level, p))
-				return null;
-			if (!(level.getBlockEntity(p) instanceof BatteryBlockEntity be) || be.isRemoved() || !be.isFormed() || !master.equals(be.master)
-				|| be.formedAt != null && !p.equals(be.formedAt)) {
-				// all of it here, and something's wrong (a block gone without its tower knowing): worked out again
-				level.scheduleTick(worldPosition, getBlockState().getBlock(), 1);
-				return null;
-			}
-			found.add(be);
-		}
+		BlockPos c = BatteryTowers.center(master, towerFacing);
+		BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+		// its 3x3 footprint lies in the chunks of its four corners: one of them not loaded, it is not all here (asked
+		// every tick while that lasts: four looks, and nothing made to find out)
+		for (int dz = -1; dz <= 1; dz += 2)
+			for (int dx = -1; dx <= 1; dx += 2)
+				if (!level.isLoaded(p.setWithOffset(c, dx, 0, dz)))
+					return null;
+		List<BatteryBlockEntity> found = new ArrayList<>(height * 9);
+		for (int y = 0; y < height; y++)
+			for (int dz = -1; dz <= 1; dz++)
+				for (int dx = -1; dx <= 1; dx++) {
+					p.setWithOffset(c, dx, y, dz);
+					if (!level.isLoaded(p) || com.comedymonkey.createaddons.content.line.PowerGrid.away(level, p))
+						return null;
+					if (!(level.getBlockEntity(p) instanceof BatteryBlockEntity be) || be.isRemoved() || !be.isFormed() || !master.equals(be.master)
+						|| be.formedAt != null && !p.equals(be.formedAt)) {
+						// all of it here, and something's wrong (a block gone without its tower knowing): worked out again
+						level.scheduleTick(worldPosition, getBlockState().getBlock(), 1);
+						return null;
+					}
+					found.add(be);
+				}
 		// as much as its cables carry: no rate of its own
 		return assemble(found, true, (long) found.size() * CMConfig.SERVER.industrialBatteryCapacity(), Long.MAX_VALUE / 64);
 	}
@@ -536,14 +561,15 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 
 	/**
 	 * Gone from the world (not unloaded): broken, or taken by a contraption or Carry On, which take the block entity
-	 * before the block, so the block can't do it. Its tower comes apart, nothing re-forming (the rest may be going too);
-	 * after a break the block has done it already.
+	 * before the block, so the block can't do it. Its tower comes apart now, and whether what's left re-forms is worked
+	 * out when the block goes (a contraption's is moved: the rest may be going too); after a break the block has done it
+	 * all already.
 	 */
 	@Override
 	public void remove() {
 		super.remove();
 		if (level instanceof ServerLevel server)
-			BatteryTowers.removed(server, worldPosition, getBlockState(), this, true);
+			BatteryTowers.entityRemoved(server, worldPosition, getBlockState(), this);
 	}
 
 	/** Broken or unloaded: what it was part of goes on without it (it keeps its share). */
@@ -792,7 +818,7 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.read(tag, registries, clientPacket);
 		Tile beforeTile = clientPacket ? tile() : null;
-		charge = tag.getInt("Charge");
+		charge = Math.max(0, tag.getInt("Charge"));
 		if (tag.contains("Master")) {
 			master = BlockPos.of(tag.getLong("Master"));
 			height = tag.getInt("Height");
@@ -839,13 +865,23 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 			components.set(ModDataComponents.BATTERY_CHARGE.get(), share);
 	}
 
+	/** Placed from an item: never more than one block can hold (a stack made in creative can say anything). */
 	@Override
 	protected void applyImplicitComponents(DataComponentInput input) {
 		super.applyImplicitComponents(input);
-		charge = Math.max(0, input.getOrDefault(ModDataComponents.BATTERY_CHARGE.get(), 0));
+		charge = net.minecraft.util.Mth.clamp(input.getOrDefault(ModDataComponents.BATTERY_CHARGE.get(), 0), 0, mostCharge());
+	}
+
+	/**
+	 * The most one block can hold: a plain Battery's room, or its share of an Industrial Battery's (each block of a tower
+	 * holds its share, and keeps it when it's picked up or the tower comes apart), whichever is more.
+	 */
+	public static int mostCharge() {
+		return Math.max(CMConfig.SERVER.batteryCapacity(), CMConfig.SERVER.industrialBatteryCapacity());
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void removeComponentsFromTag(CompoundTag tag) {
 		super.removeComponentsFromTag(tag);
 		tag.remove("Charge");

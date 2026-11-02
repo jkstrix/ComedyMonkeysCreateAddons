@@ -34,6 +34,7 @@
       "required": false
     },
     "comedymonkeysaddons:electric_motor",
+    "comedymonkeysaddons:clockwork_dynamo",
     "comedymonkeysaddons:lava_generator",
     "comedymonkeysaddons:battery",
     "comedymonkeysaddons:geothermal_casing",
@@ -117,6 +118,23 @@
     "comedymonkeysaddons:stained_end_stone_brick_wall",
     "comedymonkeysaddons:key_marked_stone",
     "comedymonkeysaddons:broken_makers_window",
-    "comedymonkeysaddons:patina_rib"
+    "comedymonkeysaddons:patina_rib",
+    "comedymonkeysaddons:clockwork_tube",
+    "comedymonkeysaddons:clockwork_inlet",
+    "comedymonkeysaddons:brass_clockwork_inlet",
+    "comedymonkeysaddons:clockwork_receiver",
+    "comedymonkeysaddons:ruin_deepslate_bricks",
+    "comedymonkeysaddons:ruin_cracked_deepslate_bricks",
+    "comedymonkeysaddons:ruin_deepslate_tiles",
+    "comedymonkeysaddons:ruin_cobbled_deepslate",
+    "comedymonkeysaddons:ruin_polished_deepslate",
+    "comedymonkeysaddons:ruin_mossy_cobblestone",
+    "comedymonkeysaddons:ruin_end_stone",
+    "comedymonkeysaddons:ruin_end_stone_bricks",
+    "comedymonkeysaddons:ruin_purpur_block",
+    "comedymonkeysaddons:ruin_deepslate_tile_slab",
+    "comedymonkeysaddons:ruin_end_stone_brick_slab",
+    "comedymonkeysaddons:ruin_purpur_pillar",
+    "comedymonkeysaddons:ruin_chain"
   ]
 }

@@ -36,7 +36,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * belongs to the light that placed it (LightSpotBlockEntity) and looks every two seconds that it still does, so one left
  * behind (its light broken in a way that didn't take it, or unloaded) goes out by itself.
  */
-public class LightSpotBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+public final class LightSpotBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 	public static final MapCodec<LightSpotBlock> CODEC = simpleCodec(LightSpotBlock::new);
 	public static final IntegerProperty LIGHT = IntegerProperty.create("light", 1, 15);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;

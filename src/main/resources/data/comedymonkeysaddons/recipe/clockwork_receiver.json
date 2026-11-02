@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create:andesite_casing"
+    },
+    {
+      "item": "create:encased_fan"
+    },
+    {
+      "item": "create:cogwheel"
+    },
+    {
+      "item": "comedymonkeysaddons:clockwork_tube"
+    }
+  ],
+  "result": {
+    "id": "comedymonkeysaddons:clockwork_receiver",
+    "count": 1
+  }
+}

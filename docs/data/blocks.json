@@ -468,7 +468,7 @@
     ],
     "teach": {
       "what": "Cable for Forge Energy. Power flows by itself from anything that gives FE to anything that takes it, with no Intake. Copper carries 4,096 FE a tick, brass 65,536. Laid on a surface it clips flat to the face you placed it on; between [[line-post|Line Posts]] it hangs in spans.",
-      "why": "Your [[lava-generator|Lava Generators]], [[geothermal-turbine]] and [[battery|Batteries]] need to reach [[electric-motor|Electric Motors]], [[trade-bot|Trade Bot]]'s station and the [[netherite-monster-cage]]. Power Lines do it over any distance, without loss, and keep working when the far end's chunk isn't loaded.",
+      "why": "Your [[lava-generator|Lava Generators]], [[geothermal-turbine]], [[clockwork-dynamo|Clockwork Dynamos]] and [[battery|Batteries]] need to reach [[electric-motor|Electric Motors]], [[trade-bot|Trade Bot]]'s station and the [[netherite-monster-cage]]. Power Lines do it over any distance, without loss, and keep working when the far end's chunk isn't loaded.",
       "when": "Copper as soon as you have your first generator. Brass when a run carries more than four Lava Generators' worth, such as a turbine or a motor above 65,536 SU.",
       "interacts": "Machines on a line share what its generators make; [[battery|Batteries]] fill from the spare and give it back when generators fall short. A [[breaker]] cuts power, a [[power-meter]] measures it, and a [[power-splitter]] on a junction decides which branches come first when power is short.",
       "mistakes": [

@@ -448,6 +448,7 @@ public class AutoHarvesterBlockEntity extends KineticBlockEntity implements Clea
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void removeComponentsFromTag(CompoundTag tag) {
 		super.removeComponentsFromTag(tag);
 		tag.remove("Enchantments");

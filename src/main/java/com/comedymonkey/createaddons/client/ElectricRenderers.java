@@ -25,6 +25,8 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 /** The moving and whole-machine parts of the Electric Motor, Lava Generator and Geothermal Turbine. */
 public final class ElectricRenderers {
 	public static final ModelResourceLocation GENERATOR_ROTOR = model("lava_generator_rotor");
+	public static final ModelResourceLocation DYNAMO_AERIAL = model("clockwork_dynamo_aerial");
+	public static final ModelResourceLocation DYNAMO_COMMUTATOR = model("clockwork_dynamo_commutator");
 	public static final ModelResourceLocation TURBINE = model("geothermal_turbine");
 	public static final ModelResourceLocation TURBINE_GLOW = model("geothermal_turbine_glow");
 	public static final ModelResourceLocation GAUGE_LAVA = model("geothermal_turbine_gauge_lava");
@@ -42,7 +44,7 @@ public final class ElectricRenderers {
 	}
 
 	public static void registerModels(ModelEvent.RegisterAdditional event) {
-		for (ModelResourceLocation m : new ModelResourceLocation[] {GENERATOR_ROTOR, TURBINE, TURBINE_GLOW, GAUGE_LAVA, GAUGE_WATER,
+		for (ModelResourceLocation m : new ModelResourceLocation[] {GENERATOR_ROTOR, DYNAMO_AERIAL, DYNAMO_COMMUTATOR, TURBINE, TURBINE_GLOW, GAUGE_LAVA, GAUGE_WATER,
 			TURBINE_ROTOR, NEEDLE_ENERGY, NEEDLE_STEAM, LAMP_OUTPUT, LAMP_STALL})
 			event.register(m);
 	}
@@ -86,6 +88,67 @@ public final class ElectricRenderers {
 			face(ms, facing);
 			sink.part(CobbleGeneratorRenderer.SHAFT, ms, light);
 			ms.popPose();
+		}
+	}
+
+	/**
+	 * The Clockwork Dynamo's moving parts: its shaft end, the commutator in its top window turning with the shaft (on its
+	 * own axis above the shaft's, at the shaft's speed), and the aerial springing up, folding and wobbling (see {@link
+	 * com.comedymonkey.createaddons.content.electric.DynamoAerial}).
+	 */
+	public static class Dynamo extends SafeBlockEntityRenderer<com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity> {
+		public Dynamo(BlockEntityRendererProvider.Context context) {}
+
+		@Override
+		protected void renderSafe(com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity be, float partialTicks, PoseStack ms,
+								  MultiBufferSource buffer, int light, int overlay) {
+			parts(be, partialTicks, ms, PartSink.forRenderer(be, buffer, overlay), light);
+		}
+
+		public static void parts(com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity be, float partialTicks, PoseStack ms,
+								 PartSink sink, int light) {
+			Direction facing = be.getBlockState().getValue(com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock.FACING);
+			Direction.Axis axis = facing.getAxis();
+			float angle = KineticBlockEntityRenderer.getAngleForBe(be, be.getBlockPos(), axis);
+			// the shaft end, as the motor's
+			ms.pushPose();
+			ms.translate(0.5, 0.5, 0.5);
+			ms.mulPose(switch (axis) {
+				case X -> Axis.XP.rotation(angle);
+				case Y -> Axis.YP.rotation(angle);
+				case Z -> Axis.ZP.rotation(angle);
+			});
+			ms.translate(-0.5, -0.5, -0.5);
+			face(ms, facing);
+			sink.part(CobbleGeneratorRenderer.SHAFT, ms, light);
+			ms.popPose();
+
+			ms.pushPose();
+			face(ms, facing);
+			// the commutator turns about the model's Z, which faces away from the shaft's end: the same turn as the
+			// shaft's in the world, so for a shaft pointing the positive way along its axis it's the other way round
+			ms.pushPose();
+			ms.translate(8 / 16f, 11.25f / 16f, 0);
+			ms.mulPose(Axis.ZP.rotation(commutatorAngle(angle, facing)));
+			ms.translate(-8 / 16f, -11.25f / 16f, 0);
+			sink.part(DYNAMO_COMMUTATOR, ms, light);
+			ms.popPose();
+			// the aerial, hinged at the top of its collar
+			// the animation clock (it runs in Ponder too); until the block entity has ticked, the block's state shows the way
+			double time = be.getLevel() == null ? 0 : net.createmod.catnip.animation.AnimationTickHolder.getTicks(be.getLevel())
+				+ net.createmod.catnip.animation.AnimationTickHolder.getPartialTicks(be.getLevel());
+			boolean shown = be.getBlockState().getValue(com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock.WORKING);
+			ms.translate(11.75f / 16f, 14 / 16f, 11.5f / 16f);
+			ms.mulPose(Axis.XP.rotationDegrees(be.aerial.pitch(time, shown)));
+			ms.mulPose(Axis.ZP.rotationDegrees(be.aerial.roll(time)));
+			ms.translate(-11.75f / 16f, -14 / 16f, -11.5f / 16f);
+			sink.part(DYNAMO_AERIAL, ms, light);
+			ms.popPose();
+		}
+
+		/** The commutator's turn about the model's Z for a shaft turned {@code angle} about its world axis. */
+		static float commutatorAngle(float angle, Direction facing) {
+			return facing.getAxisDirection() == Direction.AxisDirection.POSITIVE ? -angle : angle;
 		}
 	}
 

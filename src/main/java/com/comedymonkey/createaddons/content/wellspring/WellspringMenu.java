@@ -20,7 +20,7 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 /** Upgrade GUI: three generation slots, three capacity slots and the player's inventory. */
 /* Upgrades only: no quick moves, ours or Inventory Profiles Next's. */
 @IPNIgnore
-public class WellspringMenu extends AbstractContainerMenu {
+public final class WellspringMenu extends AbstractContainerMenu {
 	public static final int SLOT_X = 8;
 	public static final int GENERATION_Y = 28;
 	public static final int CAPACITY_Y = 60;

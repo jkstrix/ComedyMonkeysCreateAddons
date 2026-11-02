@@ -32,7 +32,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
  * Incinerator: a Create-styled furnace that destroys whatever is piped, funnelled or poured into it, items and
  * fluids alike. While it's burning it heats a steam engine boiler above it like a lit Blaze Burner.
  */
-public class IncineratorBlock extends BaseEntityBlock implements IWrenchable {
+public final class IncineratorBlock extends BaseEntityBlock implements IWrenchable {
 	public static final MapCodec<IncineratorBlock> CODEC = simpleCodec(IncineratorBlock::new);
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	/** Something was burned in the last few seconds. */
@@ -64,6 +64,7 @@ public class IncineratorBlock extends BaseEntityBlock implements IWrenchable {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

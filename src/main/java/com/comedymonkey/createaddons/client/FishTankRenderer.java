@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -89,7 +88,7 @@ public class FishTankRenderer extends SafeBlockEntityRenderer<FishTankBlockEntit
 		ms.mulPose(Axis.YP.rotationDegrees(-(front.toYRot() + 180)));
 		ms.translate(-0.5, -0.5, -0.5);
 		if (state.getValue(FishTankBlock.GLOWING))
-			sink.part(GLOW, ms, LightTexture.FULL_BRIGHT, RenderType.eyes(TextureAtlas.LOCATION_BLOCKS));
+			sink.part(GLOW, ms, LightTexture.FULL_BRIGHT, RenderType.eyes(net.minecraft.world.inventory.InventoryMenu.BLOCK_ATLAS));
 		if (!hidden) {
 			renderFood(be, partialTicks, ms, buffer, light, overlay, camera);
 			renderCreatures(be, partialTicks, ms, buffer, light, camera);

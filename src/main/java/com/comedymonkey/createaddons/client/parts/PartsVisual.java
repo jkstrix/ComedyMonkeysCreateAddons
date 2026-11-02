@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.phys.Vec3;
 
 /**
  * A machine's model parts as Flywheel instances: every frame its renderer's part method poses them, exactly as it
@@ -35,7 +34,7 @@ import net.minecraft.world.phys.Vec3;
  * Only {@link #beginFrame} (and the constructor) touches the instances: Flywheel runs light updates on its worker
  * threads alongside the frame, so {@link #updateLight} just notes the new light for the next frame.
  */
-public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisual<T> implements SimpleDynamicVisual, LightUpdatedVisual {
+public final class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisual<T> implements SimpleDynamicVisual, LightUpdatedVisual {
 	/** A renderer's part method: poses its parts about {@code ms} (at the block's corner) into {@code sink}. */
 	@FunctionalInterface
 	public interface Parts<T> {
@@ -68,6 +67,8 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 	private int next;
 	/** Blocks above its own that its parts can reach (a tall tower's column and arcs): it moves while they're in view. */
 	private int above = 3;
+	/** Where its parts reach in the world when that's more than a few blocks round it (a lift's whole shaft), or null. */
+	private java.util.function.Function<T, net.minecraft.world.phys.AABB> reach;
 
 	public PartsVisual(VisualizationContext context, T be, float partialTick, Parts<T> parts) {
 		this(context, be, partialTick, parts, b -> true);
@@ -92,12 +93,24 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 	@Override
 	public boolean isVisible(FrustumIntersection frustum) {
 		float x = visualPos.getX(), y = visualPos.getY(), z = visualPos.getZ();
+		if (reach != null) {
+			// the box is in world space; the visual's own position is relative to the render origin
+			net.minecraft.world.phys.AABB r = reach.apply(blockEntity);
+			float dx = x - pos.getX(), dy = y - pos.getY(), dz = z - pos.getZ();
+			return frustum.testAab((float) r.minX + dx, (float) r.minY + dy, (float) r.minZ + dz, (float) r.maxX + dx, (float) r.maxY + dy, (float) r.maxZ + dz);
+		}
 		return frustum.testAab(x - 2, y - 2, z - 2, x + 3, y + above, z + 3);
 	}
 
 	/** Its parts reach this many blocks up (3 unless set). */
 	public PartsVisual<T> reaching(int above) {
 		this.above = above;
+		return this;
+	}
+
+	/** Its parts reach over this box in the world, so it moves while any of it is in view. */
+	public PartsVisual<T> reaching(java.util.function.Function<T, net.minecraft.world.phys.AABB> reach) {
+		this.reach = reach;
 		return this;
 	}
 
@@ -108,7 +121,7 @@ public class PartsVisual<T extends BlockEntity> extends AbstractBlockEntityVisua
 			return;
 		}
 		if (!embedded) {
-			if (context.camera().getPosition().distanceToSqr(Vec3.atCenterOf(pos)) > viewDistanceSqr) {
+			if (pos.distToCenterSqr(context.camera().getPosition()) > viewDistanceSqr) {
 				hideAll();
 				return;
 			}

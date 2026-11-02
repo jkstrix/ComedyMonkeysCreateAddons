@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 /* Just the upgrade slot: no quick moves, and Inventory Profiles Next's buttons have nothing to do here. */
 @IPNIgnore
-public class ChestUpgradeMenu extends AbstractContainerMenu {
+public final class ChestUpgradeMenu extends AbstractContainerMenu {
 	public static final int UPGRADE_X = 80;
 	public static final int UPGRADE_Y = 24;
 	/** In {@link #fittingTiers()}: a plain vanilla chest (or barrel) would do. Each tier has bit {@code ordinal()}. */

@@ -115,8 +115,16 @@ public class ComedyMonkeysCreateAddonsClient {
 					dev.engine_room.flywheel.lib.visualization.VisualizationHelper.queueUpdate(post);
 		};
 		com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity.clientTicker = ElectricSounds::tickMotor;
+		com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity.clientTicker = ElectricSounds::tickDynamo;
 		// Electric Lights: flicker and warm-up sounds (capped nearby), and a lit light's visual made when it comes on
 		com.comedymonkey.createaddons.content.light.LightBlockEntity.clientCue = LightSounds::cue;
+		// Festoon strings: a hook's visual lays them out again when they change
+		com.comedymonkey.createaddons.content.light.FestoonBlockEntity.clientSpansChanged = be -> {
+			if (be.getLevel() != null && dev.engine_room.flywheel.api.visualization.VisualizationManager.supportsVisualization(be.getLevel()))
+				dev.engine_room.flywheel.lib.visualization.VisualizationHelper.queueUpdate(be);
+		};
+		// an Upgraded Chest opened or shut: its visual is made again (an open one has the lid, a shut one nothing)
+		com.comedymonkey.createaddons.content.chest.UpgradedChestBlockEntity.clientLidShown = ComedyMonkeysCreateAddonsClient::revisualize;
 		// The Industrial Battery's hum runs from its master's client tick
 		com.comedymonkey.createaddons.content.electric.BatteryBlockEntity.clientTicker = ElectricSounds::tickBattery;
 		// The Magma Engines' sounds and exhaust puffs run from their client ticks
@@ -138,8 +146,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(QuickTransferControls::onMouseReleased);
 		// Electric Lights cast light in their glow's colour where Veil can draw it (it comes with Sable): not with Iris (its
 		// light pass fails there, shader pack or not), nor with Colorful Lighting (which colours their light itself)
-		if (net.neoforged.fml.ModList.get().isLoaded("veil") && !net.neoforged.fml.ModList.get().isLoaded("iris")
-			&& !net.neoforged.fml.ModList.get().isLoaded("colorful_lighting"))
+		if (com.comedymonkey.createaddons.compat.veil.VeilFlywheelOutputs.colouredLight())
 			com.comedymonkey.createaddons.compat.veil.LightGlow.install(modBus);
 		// Pipez Covers: covered pipes are drawn as their cover, tinted like its block
 		if (net.neoforged.fml.ModList.get().isLoaded("pipez")) {
@@ -168,6 +175,8 @@ public class ComedyMonkeysCreateAddonsClient {
 	private static void forgetModelReads(ModelEvent.BakingCompleted event) {
 		RealPlants.forget();
 		com.comedymonkey.createaddons.client.parts.PartModels.forget();
+		FestoonRenderer.forget();
+		FestoonVisual.forget();
 		com.comedymonkey.createaddons.client.line.PowerLineModel.forget();
 		com.comedymonkey.createaddons.client.line.StripModel.forget();
 		com.comedymonkey.createaddons.client.line.EdgeModel.forget();
@@ -221,6 +230,10 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.FISH_TANK.get(), FishTankRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.MAGMA_ENGINE.get(), MagmaEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ELECTRIC_MOTOR.get(), ElectricRenderers.Motor::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.CLOCKWORK_DYNAMO.get(), ElectricRenderers.Dynamo::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.CLOCKWORK_RECEIVER.get(), TubeRenderers.Receiver::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.CLOCKWORK_INLET.get(), TubeRenderers.Inlet::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.CLOCKWORK_TUBE.get(), TubeRenderers.Tube::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.WINDING_KEY.get(), com.comedymonkey.createaddons.client.juggernaut.WindingKeyRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.SPRING_ENGINE.get(), com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);
@@ -279,6 +292,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		CuckooClockRenderer.registerModels(event);
 		MagmaEngineRenderer.registerModels(event);
 		ElectricRenderers.registerModels(event);
+		TubeRenderers.registerModels(event);
 		BatteryRenderer.registerModels(event);
 		LightRenderer.registerModels(event);
 		BatteryTowerModel.registerModels(event);

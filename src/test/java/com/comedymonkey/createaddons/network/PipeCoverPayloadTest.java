@@ -49,7 +49,7 @@ class PipeCoverPayloadTest {
 
 	private static PipeCoverPayload roundTrip(PipeCoverPayload payload) {
 		RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(),
-			RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY));
+			RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), net.neoforged.neoforge.network.connection.ConnectionType.NEOFORGE);
 		PipeCoverPayload.STREAM_CODEC.encode(buf, payload);
 		PipeCoverPayload decoded = PipeCoverPayload.STREAM_CODEC.decode(buf);
 		assertEquals(0, buf.readableBytes(), "trailing bytes");

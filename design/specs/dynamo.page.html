@@ -1,0 +1,311 @@
+<title>Clockwork Dynamo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of short blocks like the other spec quick reads; a live dynamo with a setting slider as the centrepiece. Bot palette: andesite, blue-grey steel, muted brass, copper, cyan glow */
+:root {
+  --bg: #e5e6e2; --surface: #f1f2ee; --fg: #22242a; --muted: #5d6068; --line: #c8c9c3;
+  --steel: #3c424a; --steel-hi: #4a5059; --andesite: #7c7f79; --andesite-hi: #8a8c86;
+  --brass: #8f7638; --brass-hi: #b08f45; --copper: #9c5f3a; --copper-dk: #7a4a2e;
+  --glow: #3f8f9c; --glow-soft: #d3e6e8; --lamp: #6fb7c4; --lost: #a0533a;
+  --ok: #4c7a46; --warn: #a3712a;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #191a1d; --surface: #222428; --fg: #e3e3de; --muted: #9fa1a6; --line: #373a40;
+  --steel: #2f343b; --steel-hi: #444a53; --andesite: #6b6e6a; --andesite-hi: #7c7f79;
+  --brass: #b08f45; --brass-hi: #c9a75a; --copper: #b07048; --copper-dk: #8a5634;
+  --glow: #7cc3cf; --glow-soft: #1e3236; --lamp: #8fcad4; --lost: #d07a5a;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #191a1d; --surface: #222428; --fg: #e3e3de; --muted: #9fa1a6; --line: #373a40;
+  --steel: #2f343b; --steel-hi: #444a53; --andesite: #6b6e6a; --andesite-hi: #7c7f79;
+  --brass: #b08f45; --brass-hi: #c9a75a; --copper: #b07048; --copper-dk: #8a5634;
+  --glow: #7cc3cf; --glow-soft: #1e3236; --lamp: #8fcad4; --lost: #d07a5a;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.15rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+
+header { display: grid; gap: 14px }
+.band { height: 10px; border-radius: 2px; background: linear-gradient(90deg, var(--andesite) 0 46%, var(--bg) 46% 47%, var(--steel) 47% 82%, var(--bg) 82% 83%, var(--brass) 83% 93%, var(--bg) 93% 94%, var(--copper) 94% 100%) }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { padding: 8px 0 8px 14px; border-left: 3px solid var(--glow); font-weight: 500 }
+
+.rig { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; display: grid }
+.rig-bar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--line) }
+.rig-bar label { font: 500 .82rem/1 var(--mono); display: flex; gap: 10px; align-items: center }
+.rig-bar input[type="range"] { accent-color: var(--glow); width: 200px; max-width: 50vw }
+.rig-bar input[type="checkbox"] { accent-color: var(--glow); width: 16px; height: 16px }
+.setting { font: 600 1.1rem/1 var(--display); font-variant-numeric: tabular-nums; min-width: 8ch }
+.scene { overflow-x: auto; padding: 8px 4px }
+.scene svg { display: block; width: 100%; min-width: 520px; height: auto }
+.meters { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--line); border-top: 1px solid var(--line) }
+.meter { background: var(--surface); padding: 12px 16px; display: grid; gap: 4px }
+.meter b { font: 600 1.45rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.meter span { color: var(--muted); font-size: .85rem }
+.meter.lost b { color: var(--lost) }
+.meter.made b { color: var(--glow) }
+.lbl { font: 500 11px var(--mono); fill: var(--fg) }
+.lbl.dim { fill: var(--muted) }
+#aerial { transition: transform .5s cubic-bezier(.3, 1.6, .5, 1); transform-origin: 300px 66px; transform-box: view-box }
+.idle #aerial { transform: rotate(68deg) }
+.spin { animation: spin 1.2s linear infinite; transform-origin: 96px 130px; transform-box: view-box }
+.idle .spin, .idle .flow { animation-play-state: paused }
+.idle #lamp { fill: var(--steel-hi) }
+.flow { stroke-dasharray: 6 8; animation: flow .8s linear infinite }
+@keyframes spin { to { transform: rotate(360deg) } }
+@keyframes flow { to { stroke-dashoffset: -14 } }
+@media (prefers-reduced-motion: reduce) { .spin, .flow { animation: none } #aerial { transition: none } }
+
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: step }
+.loop li { counter-increment: step; display: grid; gap: 6px; align-content: start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.loop li::before { content: counter(step); font: 600 1.4rem/1 var(--display); color: var(--brass) }
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; background: var(--surface) }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; min-width: 460px }
+th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line) }
+th { font: 500 .75rem/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted) }
+tr:last-child td { border-bottom: 0 }
+td.n { font-family: var(--mono); text-align: right }
+th.n { text-align: right }
+tr.best td { color: var(--ok) }
+tr.ours td:first-child { font-weight: 600 }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.pairs ul { margin: 0; padding: 14px 16px 14px 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 6px }
+.pairs h3 { margin-bottom: 4px }
+.does h3 { color: var(--ok) }
+.doesnt h3 { color: var(--warn) }
+
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 24px }
+.qa div { display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.qa b { font-weight: 600 }
+.qa span { color: var(--muted) }
+
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center }
+.score .bar { height: 10px; background: var(--line); border-radius: 2px; overflow: hidden }
+.score .bar i { display: block; height: 100%; background: var(--glow) }
+.score b { font: 500 .85rem var(--mono); text-align: right; font-variant-numeric: tabular-nums }
+.score span { font-weight: 500 }
+.score p { grid-column: 1 / -1; color: var(--muted); font-size: .86rem; margin-top: -4px }
+.score.overall span, .score.overall b { font-weight: 700 }
+.score.overall .bar i { background: var(--brass) }
+@media (max-width: 480px) { .score { grid-template-columns: 1fr 48px } .score .bar { grid-column: 1 / -1; grid-row: 2 } .score p { grid-row: 3 } }
+
+.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.open div { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 6px }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 16px }
+code { font-family: var(--mono); font-size: .9em }
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="band" aria-hidden="true"></div>
+  <p class="eyebrow">Systems spec · quick read · bot-built machine</p>
+  <h1>Clockwork Dynamo</h1>
+  <p class="pitch">The Electric Motor in reverse. Rotation goes in the front, electricity comes out of the base, and three quarters of it survives the trip.</p>
+  <div class="chips">
+    <span class="chip ready">Ready for development · 90%</span>
+    <span class="chip">Brass tier</span>
+    <span class="chip">75% efficient</span>
+    <span class="chip">Look: to be designed</span>
+  </div>
+</header>
+
+<section aria-labelledby="h-idiot">
+  <h2 id="h-idiot">If you read nothing else</h2>
+  <ul class="idiot">
+    <li>The motor in reverse: rotation in, electricity out.</li>
+    <li>Shaft in the front, power out the base.</li>
+    <li>Wrench it to set how much stress it takes.</li>
+    <li>75% comes out as power. Always loses some.</li>
+    <li>More power takes more SU, always in step.</li>
+    <li>Not turning or overstressed: no power.</li>
+    <li>The aerial up means it's working.</li>
+    <li>Far away, only free power (water wheels, windmills) counts.</li>
+    <li>Use a Clutch to turn it off.</li>
+    <li>Bot parts, no face, one wobbly aerial.</li>
+  </ul>
+</section>
+
+<section aria-labelledby="h-rig">
+  <h2 id="h-rig">Turn it up, watch the cost</h2>
+  <p class="sub">Drag the setting. The power it makes and the SU it takes rise together. A motor at the same setting would need more than the dynamo makes; that gap is the loss.</p>
+  <div class="rig" id="rig">
+    <div class="rig-bar">
+      <label for="step">Setting <input type="range" id="step" min="0" max="13" value="0"> <span class="setting" id="setting">256 SU</span></label>
+      <label for="turning"><input type="checkbox" id="turning" checked> Shaft turning</label>
+    </div>
+    <div class="scene">
+      <svg viewBox="0 0 640 220" role="img" aria-label="A shaft turns into the front of the Clockwork Dynamo; power runs out of its base down a Power Line to a light. Its copper aerial stands up while it works.">
+        <!-- shaft -->
+        <rect x="20" y="124" width="160" height="12" fill="var(--andesite)"/>
+        <g class="spin"><rect x="84" y="102" width="24" height="56" rx="3" fill="var(--steel-hi)"/><rect x="72" y="118" width="48" height="24" rx="3" fill="var(--steel-hi)"/></g>
+        <circle cx="96" cy="130" r="7" fill="var(--brass)"/>
+        <text class="lbl dim" x="20" y="170">shaft from a water wheel, windmill, boiler…</text>
+        <!-- body: andesite casing, steel frame, brass band, copper windings -->
+        <rect x="180" y="80" width="200" height="100" rx="6" fill="var(--steel)"/>
+        <rect x="190" y="90" width="180" height="80" rx="3" fill="var(--andesite)"/>
+        <rect x="190" y="118" width="180" height="10" fill="var(--brass)"/>
+        <g fill="var(--brass-hi)"><circle cx="204" cy="123" r="2"/><circle cx="234" cy="123" r="2"/><circle cx="264" cy="123" r="2"/><circle cx="294" cy="123" r="2"/><circle cx="324" cy="123" r="2"/><circle cx="354" cy="123" r="2"/></g>
+        <g fill="var(--copper)"><rect x="206" y="138" width="10" height="24" rx="2"/><rect x="222" y="138" width="10" height="24" rx="2"/><rect x="238" y="138" width="10" height="24" rx="2"/></g>
+        <circle id="lamp" cx="350" cy="102" r="6" fill="var(--lamp)"/>
+        <!-- aerial -->
+        <g id="aerial">
+          <path d="M300 80 L300 66 Q300 40 312 22" stroke="var(--copper)" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <circle cx="312" cy="20" r="5.5" fill="var(--brass-hi)"/>
+        </g>
+        <rect x="292" y="74" width="16" height="8" rx="2" fill="var(--brass)"/>
+        <!-- base terminal and line -->
+        <rect x="380" y="112" width="14" height="36" fill="var(--copper-dk)"/>
+        <path class="flow" d="M394 130 H560" stroke="var(--glow)" stroke-width="4" fill="none"/>
+        <circle cx="580" cy="130" r="16" fill="var(--glow-soft)" stroke="var(--glow)" stroke-width="2"/>
+        <text class="lbl" x="196" y="200">Clockwork Dynamo</text>
+        <text class="lbl dim" x="410" y="162">FE out of the base only</text>
+        <text class="lbl dim" x="322" y="50" id="aerialLbl">aerial up: working</text>
+      </svg>
+    </div>
+    <div class="meters" aria-live="polite">
+      <div class="meter"><span>SU taken off the shaft</span><b id="su">256</b></div>
+      <div class="meter made"><span>Power it makes</span><b id="fe">12 FE/t</b></div>
+      <div class="meter"><span>A motor at this setting draws</span><b id="motor">16 FE/t</b></div>
+      <div class="meter lost"><span>Lost on the round trip</span><b id="loss">4 FE/t</b></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="h-loop">
+  <h2 id="h-loop">How you use it</h2>
+  <ol class="loop">
+    <li>Build a shaft source: water wheels, a windmill, a boiler.</li>
+    <li>Run the shaft into the dynamo's front.</li>
+    <li>Run a Power Line or machine off its base.</li>
+    <li>Wrench it and set the stress. The screen shows the power.</li>
+    <li>The aerial pops up. Lights and motors on the line run.</li>
+  </ol>
+</section>
+
+<section aria-labelledby="h-num">
+  <h2 id="h-num">Burning lava? Use the real generators</h2>
+  <p class="sub">The dynamo is for free rotation and steam. On lava, the purpose-built generators stay ahead.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Route</th><th class="n">Lava</th><th class="n">FE/t</th><th class="n">FE/t per mB/s</th></tr></thead>
+      <tbody>
+        <tr class="best"><td>Geothermal Turbine</td><td class="n">90 mB/s</td><td class="n">46,080</td><td class="n">512</td></tr>
+        <tr><td>Lava Generator</td><td class="n">20 mB/s</td><td class="n">1,024</td><td class="n">51.2</td></tr>
+        <tr class="ours"><td>Supercharged Magma Engine → dynamo</td><td class="n">20 mB/s</td><td class="n">768</td><td class="n">38.4</td></tr>
+        <tr class="ours"><td>Full superheated boiler → dynamo</td><td class="n">none</td><td class="n">13,824</td><td class="n">n/a</td></tr>
+        <tr class="ours"><td>Full 128-sail windmill → dynamo</td><td class="n">none</td><td class="n">384</td><td class="n">n/a</td></tr>
+        <tr class="ours"><td>One water wheel → dynamo</td><td class="n">none</td><td class="n">12</td><td class="n">n/a</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section aria-labelledby="h-rules">
+  <h2 id="h-rules">The rules</h2>
+  <div class="pairs">
+    <div class="does"><ul>
+      <h3>Does</h3>
+      <li>Take its set SU at any shaft speed</li>
+      <li>Make 1 FE/t for every 21⅓ SU</li>
+      <li>Push power out of its base every tick</li>
+      <li>Keep its stress even when nothing takes the power</li>
+      <li>Run on paper far away, on water wheels and windmills</li>
+      <li>Keep its setting on a contraption or in Carry On</li>
+    </ul></div>
+    <div class="doesnt"><ul>
+      <h3>Doesn't</h3>
+      <li>Make power when stopped, overstressed or moving</li>
+      <li>Count motors, Magma Engines or steam on paper</li>
+      <li>Take power in, or connect on any face but the base</li>
+      <li>Have redstone control (use a Clutch)</li>
+      <li>Keep its store or setting when broken</li>
+      <li>Have a face: bot parts, one aerial, nothing more</li>
+    </ul></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-qa">
+  <h2 id="h-qa">What if…?</h2>
+  <div class="qa">
+    <div><b>A motor and a dynamo share a shaft?</b><span>The motor needs 1,024 FE/t but gets 768. It runs down and stops.</span></div>
+    <div><b>Windmills and a Magma Engine on one shaft, far away?</b><span>On paper it gives only the windmills' share.</span></div>
+    <div><b>It's set higher than the shaft can give?</b><span>The network overstresses; the dynamo makes nothing.</span></div>
+    <div><b>Nothing is plugged into the base?</b><span>The store fills and the rest is lost. The aerial stays up.</span></div>
+    <div><b>The shaft speed keeps changing?</b><span>Same SU, same power. Only the setting matters.</span></div>
+    <div><b>Two dynamos on one shaft?</b><span>Each takes its own setting.</span></div>
+    <div><b>It was overstressed when the chunk unloaded?</b><span>Nothing on paper until it runs again.</span></div>
+    <div><b>A server sets efficiency to 100%?</b><span>The loop breaks even and ties the Lava Generator. The config warns about this.</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-scores">
+  <h2 id="h-scores">How ready it is</h2>
+  <div class="scores">
+    <div class="score"><span>Gameplay</span><div class="bar"><i style="width:95%"></i></div><b>95%</b><p>The aerial's exact wobble is the art director's to set.</p></div>
+    <div class="score"><span>World integration</span><div class="bar"><i style="width:90%"></i></div><b>90%</b><p>The Clockwork Wastes tie-in is parked for that branch.</p></div>
+    <div class="score"><span>Balance</span><div class="bar"><i style="width:90%"></i></div><b>90%</b><p>75% is untested in play; check the paper share on a real windmill farm.</p></div>
+    <div class="score"><span>Progression</span><div class="bar"><i style="width:95%"></i></div><b>95%</b><p>The recipe isn't checked against JEI conflicts yet.</p></div>
+    <div class="score"><span>Automation</span><div class="bar"><i style="width:95%"></i></div><b>95%</b><p>Nothing to feed; the Clutch control is shown in Ponder only.</p></div>
+    <div class="score"><span>Edge cases</span><div class="bar"><i style="width:90%"></i></div><b>90%</b><p>A shaft split across a chunk edge follows Create's rules, assumed and not yet tested.</p></div>
+    <div class="score overall"><span>Overall</span><div class="bar"><i style="width:90%"></i></div><b>90%</b><p>The lowest area sets it. Nothing blocks development.</p></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-open">
+  <h2 id="h-open">Still open</h2>
+  <div class="open">
+    <div><h3>Parked: the Wastes backstory</h3><p class="sub">No lore text now. The Clockwork Wastes branch ties it to the automatons who "found electricity".</p></div>
+    <div><h3>Next: the look</h3><p class="sub">A design brief in the bots' materials, previewed in Blockbench before anything goes into the mod.</p></div>
+  </div>
+</section>
+
+<footer>Full spec: <code>design/specs/dynamo.md</code> · 30 decisions · 2026-10-31</footer>
+</div>
+
+<script>
+(() => {
+  const steps = [256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 49152, 65536, 98304, 131072, 196608, 294912];
+  const fmt = n => n.toLocaleString('en-GB', { maximumFractionDigits: 1 });
+  const $ = id => document.getElementById(id);
+  const rig = $('rig'), step = $('step'), turning = $('turning');
+  function update() {
+    const su = steps[+step.value], on = turning.checked;
+    const motor = su * 0.0625, fe = on ? motor * 0.75 : 0;
+    $('setting').textContent = fmt(su) + ' SU';
+    $('su').textContent = fmt(on ? su : 0);
+    $('fe').textContent = fmt(fe) + ' FE/t';
+    $('motor').textContent = fmt(motor) + ' FE/t';
+    $('loss').textContent = on ? fmt(motor - fe) + ' FE/t' : 'n/a';
+    rig.classList.toggle('idle', !on);
+    $('aerialLbl').textContent = on ? 'aerial up: working' : 'aerial drooped: idle';
+  }
+  step.addEventListener('input', update);
+  turning.addEventListener('change', update);
+  update();
+})();
+</script>

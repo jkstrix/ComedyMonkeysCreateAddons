@@ -8,6 +8,8 @@ import java.util.function.DoubleSupplier;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlock;
 import com.comedymonkey.createaddons.content.electric.ElectricMotorBlockEntity;
 import com.comedymonkey.createaddons.content.electric.BatteryBlockEntity;
+import com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlock;
+import com.comedymonkey.createaddons.content.electric.ClockworkDynamoBlockEntity;
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlockEntity;
 import com.comedymonkey.createaddons.registry.ModSounds;
 
@@ -32,6 +34,7 @@ public final class ElectricSounds {
 	private static final int POP_CHANCE = 300;
 	private static final Map<LavaGeneratorBlockEntity, Generator> GENERATORS = new WeakHashMap<>();
 	private static final Map<ElectricMotorBlockEntity, Motor> MOTORS = new WeakHashMap<>();
+	private static final Map<ClockworkDynamoBlockEntity, Dynamo> DYNAMOS = new WeakHashMap<>();
 	private static final Map<BatteryBlockEntity, Battery> BATTERIES = new WeakHashMap<>();
 	private static final Map<com.comedymonkey.createaddons.content.light.LightBlockEntity, MachineLoop> BEACONS = new WeakHashMap<>();
 	/** Beacons drawn since the last tick that want their whirr (told from whichever thread draws them). */
@@ -43,6 +46,7 @@ public final class ElectricSounds {
 	public static void forget() {
 		GENERATORS.clear();
 		MOTORS.clear();
+		DYNAMOS.clear();
 		BATTERIES.clear();
 		BEACONS.clear();
 		BEACONS_SEEN.clear();
@@ -92,6 +96,12 @@ public final class ElectricSounds {
 
 	private static final class Motor {
 		boolean powered;
+		Loop hum;
+	}
+
+	private static final class Dynamo {
+		boolean working;
+		int stress;
 		Loop hum;
 	}
 
@@ -188,6 +198,45 @@ public final class ElectricSounds {
 		if (MachineLoop.ended(s.hum) && powered && Loop.canStart(ModSounds.motor("hum"), pos))
 			mc.getSoundManager().play(s.hum = new Loop(ModSounds.motor("hum"), pos, be::isRemoved,
 				() -> be.getBlockState().getValue(ElectricMotorBlock.POWERED) ? 1 : 0, () -> humPitch(be.getSpeedSetting())));
+	}
+
+	/**
+	 * The Clockwork Dynamo's sounds (design/sound/clockwork-dynamo/clockwork-dynamo.md): its start and stop with the
+	 * aerial springing up or folding, the aerial's wobble at a new setting, and a very quiet hum while it works, higher
+	 * the more it's set to make (the settings click is played by the server).
+	 */
+	public static void tickDynamo(ClockworkDynamoBlockEntity be) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.level == null || be.getLevel() != mc.level)
+			return;
+		boolean working = be.getBlockState().getValue(ClockworkDynamoBlock.WORKING);
+		Dynamo s = DYNAMOS.get(be);
+		if (s == null) {
+			// already running when it came into view: pick up the hum without replaying its start
+			s = new Dynamo();
+			s.working = working;
+			s.stress = be.getStressSetting();
+			DYNAMOS.keySet().removeIf(BlockEntity::isRemoved);
+			DYNAMOS.put(be, s);
+		}
+		BlockPos pos = be.getBlockPos();
+		float pitch = 0.97f + 0.06f * be.getLevel().random.nextFloat();
+		if (working != s.working) {
+			play(pos, ModSounds.dynamo(working ? "start" : "stop"), 1, pitch);
+			play(pos, ModSounds.dynamo(working ? "aerial_up" : "aerial_fold"), 1, pitch);
+		} else if (working && be.getStressSetting() != s.stress) {
+			play(pos, ModSounds.dynamo("aerial_boing"), 1, pitch);
+		}
+		s.working = working;
+		s.stress = be.getStressSetting();
+		if (MachineLoop.ended(s.hum) && working && Loop.canStart(ModSounds.dynamo("hum"), pos))
+			mc.getSoundManager().play(s.hum = new Loop(ModSounds.dynamo("hum"), pos, be::isRemoved,
+				() -> be.getBlockState().getValue(ClockworkDynamoBlock.WORKING) ? 1 : 0, () -> dynamoHumPitch(be.getStressSetting())));
+	}
+
+	/** The dynamo's hum rises with its setting: 0.8 at 256 SU to 1.25 at 294,912 SU, evenly on a log scale. */
+	static float dynamoHumPitch(int stress) {
+		return Mth.clamp(0.8f + 0.45f * (float) (Math.log(Math.max(stress, 256) / 256.0) / Math.log(1152)), 0.8f, 1.25f);
 	}
 
 	/** The hum rises with the set speed: about 0.7 at 16 RPM to 1.2 at 256 RPM. */

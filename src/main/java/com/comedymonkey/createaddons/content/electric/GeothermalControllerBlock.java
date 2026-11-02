@@ -38,7 +38,7 @@ import net.neoforged.neoforge.fluids.FluidUtil;
  * Geothermal Turbine Controller: the middle of the turbine's front. Behind it, a 3x3x3 of Geothermal Casings round a
  * Turbine Core. Formed, it draws the whole machine; running, the machine steams and its vents flicker with flame.
  */
-public class GeothermalControllerBlock extends Block implements IBE<GeothermalControllerBlockEntity>, IWrenchable {
+public final class GeothermalControllerBlock extends Block implements IBE<GeothermalControllerBlockEntity>, IWrenchable {
 	/**
 	 * Turned by a wrench, it faces a different 3x3x3: it comes out unformed and unlit (onRemove frees the old casings),
 	 * and forms again if the new cube is a turbine.
@@ -88,6 +88,7 @@ public class GeothermalControllerBlock extends Block implements IBE<GeothermalCo
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
@@ -113,10 +114,36 @@ public class GeothermalControllerBlock extends Block implements IBE<GeothermalCo
 		boolean turned = state.is(newState.getBlock()) && state.getValue(FACING) != newState.getValue(FACING);
 		if ((!state.is(newState.getBlock()) || turned) && level.getBlockEntity(pos) instanceof GeothermalControllerBlockEntity be)
 			be.unform();
+		else if (!state.is(newState.getBlock()) && !level.isClientSide)
+			freeCasings(state, level, pos);
 		// broken: no longer a generator its line can reach from afar
 		if (!state.is(newState.getBlock()) && level instanceof net.minecraft.server.level.ServerLevel server)
 			com.comedymonkey.createaddons.content.line.PowerGrid.of(server).forget(pos);
 		super.onRemove(state, level, pos, newState, movedByPiston);
+	}
+
+	/**
+	 * Gone without its block entity (a contraption takes that first): the casings still pointing at it are freed all the
+	 * same, from the 3x3x3 its facing gives, with the core they surround, as {@link GeothermalControllerBlockEntity#unform}
+	 * would have.
+	 */
+	private static void freeCasings(BlockState state, Level level, BlockPos pos) {
+		BlockPos centre = pos.relative(state.getValue(FACING).getOpposite());
+		boolean freed = false;
+		for (BlockPos p : BlockPos.betweenClosed(centre.offset(-1, -1, -1), centre.offset(1, 1, 1))) {
+			if (p.equals(pos) || !(level.getBlockEntity(p) instanceof GeothermalCasingBlockEntity casing) || !pos.equals(casing.getController()))
+				continue;
+			BlockPos at = p.immutable();
+			casing.setController(null);
+			BlockState s = level.getBlockState(at);
+			if (s.hasProperty(GeothermalPartBlock.FORMED) && s.getValue(GeothermalPartBlock.FORMED))
+				level.setBlock(at, s.setValue(GeothermalPartBlock.FORMED, false), 3);
+			level.invalidateCapabilities(at);
+			freed = true;
+		}
+		BlockState core = level.getBlockState(centre);
+		if (freed && GeothermalPartBlock.isPart(core, false) && core.getValue(GeothermalPartBlock.FORMED))
+			level.setBlock(centre, core.setValue(GeothermalPartBlock.FORMED, false), 3);
 	}
 
 	/**

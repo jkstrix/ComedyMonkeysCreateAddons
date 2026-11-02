@@ -38,7 +38,7 @@ import net.minecraft.world.phys.BlockHitResult;
  * on every face, a wrench opens the screen. The Netherite cage remembers who placed it: only they (and their team) can
  * wrench or break it, and nobody can while its field is down (D41, D46). See {@link MonsterCageBlockEntity}.
  */
-public class MonsterCageBlock extends KineticBlock implements IBE<MonsterCageBlockEntity> {
+public final class MonsterCageBlock extends KineticBlock implements IBE<MonsterCageBlockEntity> {
 	/** The front, with the bars. The shaft goes into the opposite face. */
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -94,6 +94,7 @@ public class MonsterCageBlock extends KineticBlock implements IBE<MonsterCageBlo
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

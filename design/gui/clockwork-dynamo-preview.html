@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Clockwork Dynamo screen</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+<style>
+  :root { --bg: #23262a; --fg: #d6d8d4; --muted: #8f918b; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, sans-serif; padding: 24px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  h2 { font-size: 15px; margin: 0 0 8px; color: var(--muted); font-weight: 500; }
+  p { margin: 0 0 16px; max-width: 80ch; color: var(--muted); }
+  .row { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 28px; }
+  .screen { position: relative; width: calc(224px * 3); background-size: calc(256px * 3) auto; background-repeat: no-repeat; image-rendering: pixelated; }
+  .dyn { height: calc(80px * 3); background-image: url(clockwork_dynamo.png); }
+  .mot { height: calc(132px * 3); background-image: url(../../src/main/resources/assets/comedymonkeysaddons/textures/gui/electric_motor.png); }
+  .t { position: absolute; font-family: VT323, monospace; font-size: 27px; line-height: 1; white-space: nowrap; color: #d8d2c4; text-shadow: 3px 3px 0 #3a3630; }
+  .title { color: #2b2724; text-shadow: none; left: 0; width: 100%; text-align: center; top: 9px; }
+  .teal { color: #8fd6cc; text-shadow: 3px 3px 0 #23403c; }
+  .confirm { position: absolute; width: 54px; height: 54px; background: #6c6a64; box-shadow: inset 3px 3px 0 #8d8a83, inset -3px -3px 0 #3f3d39;
+    display: grid; place-items: center; color: #8fd66f; font: 700 30px/1 system-ui; }
+</style>
+</head>
+<body>
+<h1>Clockwork Dynamo screen</h1>
+<p>Opened with a wrench. The dynamo follows its shaft's speed and direction, so its only setting is the stress it takes; the read-out says what that makes (no comparison with the generators). Same brass band and dark body as the Electric Motor's and the Trade Bot Station's screens. Shown at 3×, with the text the game draws.</p>
+<div class="row">
+  <div>
+    <h2>Clockwork Dynamo (new)</h2>
+    <div class="screen dyn">
+      <div class="t title">Clockwork Dynamo</div>
+      <div class="t" style="left:36px;top:84px">Stress</div>
+      <div class="t" style="left:270px;top:84px">16,384 SU</div>
+      <div class="t teal" style="left:48px;top:174px">Makes 768 FE a tick</div>
+      <div class="confirm" style="left:582px;top:159px">✓</div>
+    </div>
+  </div>
+  <div>
+    <h2>Electric Motor (for comparison)</h2>
+    <div class="screen mot">
+      <div class="t title">Electric Motor</div>
+      <div class="t" style="left:36px;top:96px">Speed</div>
+      <div class="t" style="left:270px;top:96px">64 RPM</div>
+      <div class="t" style="left:36px;top:162px">Stress</div>
+      <div class="t" style="left:270px;top:162px">16,384 SU</div>
+      <div class="t" style="left:36px;top:234px">Direction</div>
+      <div class="t teal" style="left:48px;top:309px">Draws 1,024 FE a tick</div>
+      <div class="t" style="left:48px;top:339px">1 Lava Generator</div>
+      <div class="confirm" style="left:582px;top:306px">✓</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

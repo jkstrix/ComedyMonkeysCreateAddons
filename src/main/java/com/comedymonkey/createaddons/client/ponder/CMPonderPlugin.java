@@ -109,6 +109,11 @@ public class CMPonderPlugin implements PonderPlugin {
 			.addStoryBoard("electric_power", ElectricScenes::lavaGenerator);
 		helper.forComponents(ModBlocks.ELECTRIC_MOTOR.getId())
 			.addStoryBoard("electric_power", ElectricScenes::electricMotor);
+		helper.forComponents(ModBlocks.CLOCKWORK_DYNAMO.getId())
+			.addStoryBoard("clockwork_dynamo", ElectricScenes::clockworkDynamo);
+		helper.forComponents(ModBlocks.CLOCKWORK_RECEIVER.getId(), ModBlocks.CLOCKWORK_TUBE.getId(), ModBlocks.CLOCKWORK_INLET.getId(),
+				ModBlocks.BRASS_CLOCKWORK_INLET.getId())
+			.addStoryBoard("clockwork_tubes", TubeScenes::downTheTubes);
 		helper.forComponents(ModBlocks.GEOTHERMAL_CONTROLLER.getId(), ModBlocks.GEOTHERMAL_CASING.getId(),
 				ModBlocks.GEOTHERMAL_CORE.getId())
 			.addStoryBoard("geothermal_turbine", ElectricScenes::geothermalTurbine);
@@ -148,6 +153,8 @@ public class CMPonderPlugin implements PonderPlugin {
 			.add(ModBlocks.COPPER_FLUID_LINE.getId())
 			.add(ModBlocks.BRASS_FLUID_LINE.getId());
 		helper.addToTag(CREATE_KINETIC_APPLIANCES_TAG)
+			.add(ModBlocks.CLOCKWORK_DYNAMO.getId())
+			.add(ModBlocks.CLOCKWORK_RECEIVER.getId())
 			.add(ModBlocks.PRESSURE_CRUCIBLE.getId())
 			.add(ModBlocks.ANDESITE_COBBLE_GENERATOR.getId())
 			.add(ModBlocks.BRASS_COBBLE_GENERATOR.getId())

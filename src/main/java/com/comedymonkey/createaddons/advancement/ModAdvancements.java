@@ -1,5 +1,8 @@
 package com.comedymonkey.createaddons.advancement;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 
 import net.minecraft.core.BlockPos;
@@ -34,6 +37,10 @@ public final class ModAdvancements {
 	/** Value: the tower's height. */
 	public static final String INDUSTRIAL_BATTERY_FORMED = "industrial_battery_formed";
 	public static final String MOTOR_FULL_POWER = "motor_full_power";
+	/** An Electric Motor running off a Clockwork Dynamo's power. */
+	public static final String DYNAMO_MOTOR = "dynamo_motor";
+	/** Items delivered by a Clockwork Receiver. Value: how many. */
+	public static final String TUBE_DELIVERY = "tube_delivery";
 	public static final String HARVESTER_HARVEST = "harvester_harvest";
 	public static final String PEN_CULL = "pen_cull";
 	public static final String PEN_FULL = "pen_full";
@@ -63,6 +70,12 @@ public final class ModAdvancements {
 	/** The Custodian's fight (P56): a pylon broken, and the Custodian defeated. */
 	public static final String WASTES_SHORT_CIRCUIT = "wastes_short_circuit";
 	public static final String WASTES_CUSTODIAN_DOWN = "wastes_custodian_down";
+	/** A Clockwork Juggernaut woken by the ritual ("Wound Up", D41). */
+	public static final String JUGGERNAUT_SUMMONED = "juggernaut_summoned";
+	/** A Spring Engine wound full ("Tightly Wound", D41). */
+	public static final String SPRING_ENGINE_FULL = "spring_engine_full";
+	/** How close a player has to be to the ritual to see him wake (as the ritual's own messages). */
+	public static final int SUMMON_NEARBY = 32;
 	/** Trades one Trade Bot makes in a day for his challenge, and emeralds one trip earns for his goal. */
 	public static final int TRADE_BOT_DAY_TRADES = 64, TRADE_BOT_STACK_EMERALDS = 64;
 	/** Villagers one Cuckoo Clock has to keep time for, for its challenge. */
@@ -70,6 +83,17 @@ public final class ModAdvancements {
 
 	/** How close a player has to be to machinery working on its own to earn its advancements. */
 	public static final int NEARBY = 16;
+
+	/**
+	 * Game tests: told of every {@link #awardNearby} (their mock players aren't in the level, so who'd get it can't be
+	 * seen any other way). Empty in play.
+	 */
+	public static final List<NearbyAward> TEST_LISTENERS = new CopyOnWriteArrayList<>();
+
+	@FunctionalInterface
+	public interface NearbyAward {
+		void awarded(Level level, BlockPos pos, String action, int range);
+	}
 
 	private ModAdvancements() {}
 
@@ -91,6 +115,8 @@ public final class ModAdvancements {
 	public static void awardNearby(Level level, BlockPos pos, String action, ItemStack stack, int value, int range) {
 		if (level == null || level.isClientSide)
 			return;
+		for (NearbyAward listener : TEST_LISTENERS)
+			listener.awarded(level, pos, action, range);
 		for (Player player : level.players())
 			if (player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= (double) range * range)
 				award(player, action, stack, value);

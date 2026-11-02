@@ -13,11 +13,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.util.BlockSnapshot;
+import net.neoforged.neoforge.event.EventHooks;
 
 /**
  * Festoon Lights (design/specs/electric-lights.md, D20, P13, P14): a string of bulbs hung between two hooks, each on a
@@ -105,9 +108,19 @@ public final class Festoons {
 
 	/**
 	 * Hangs a string from the hook at a (facing fa) to the hook at b, putting up either hook that isn't there; it's paid
-	 * for from {@code pay} (null: free, as in creative).
+	 * for from {@code pay} (null: free, as in creative). Each hook put up is a block placement by {@code player}, so
+	 * protection mods can refuse it (P31): refused, neither hook stays, no string hangs and nothing is paid.
 	 */
-	public static Result hang(Level level, BlockPos a, Direction fa, BlockPos b, Direction fb, @Nullable ItemStack pay) {
+	public static Result hang(Level level, BlockPos a, Direction fa, BlockPos b, Direction fb, @Nullable ItemStack pay, @Nullable Player player) {
+		return hang(level, a, fa, b, fb, pay, player, false);
+	}
+
+	/**
+	 * As above; a hook already at either end is asked about too (a string is hung on it, its spots go round it), unless
+	 * it's at b and {@code clickedB}: the player clicked that hook itself, so the click was already asked about.
+	 */
+	public static Result hang(Level level, BlockPos a, Direction fa, BlockPos b, Direction fb, @Nullable ItemStack pay, @Nullable Player player,
+							  boolean clickedB) {
 		if (a.equals(b) || !canHook(level, a, fa) || !canHook(level, b, fb))
 			return Result.NO_HOOK;
 		double length = eye(a, fa).distanceTo(eye(b, fb));
@@ -120,25 +133,59 @@ public final class Festoons {
 		int cost = cost(length);
 		if (pay != null && pay.getCount() < cost)
 			return Result.NOT_ENOUGH;
-		putUp(level, a, fa);
-		putUp(level, b, fb);
-		if (!(level.getBlockEntity(a) instanceof FestoonBlockEntity ha) || !(level.getBlockEntity(b) instanceof FestoonBlockEntity hb))
-			return Result.NO_HOOK;
-		ha.addSpan(new FestoonBlockEntity.Span(b, fb, true, pay != null));
-		hb.addSpan(new FestoonBlockEntity.Span(a, fa, false, pay != null));
+		// The hooks are placed here, each with its own event, not left to the item use's capture: that would fire one
+		// event after the string was already on a hook that was there (left hanging from it if refused), and count the
+		// spots of light a lit hook puts up as placed by the player too.
+		boolean capturing = level.captureBlockSnapshots;
+		level.captureBlockSnapshots = false;
+		try {
+			List<BlockSnapshot> put = new ArrayList<>(2);
+			if (!putUp(level, a, fa, player, true, put) || !putUp(level, b, fb, player, !clickedB, put)) {
+				takeDown(level, put);
+				return Result.NO_HOOK;
+			}
+			if (!(level.getBlockEntity(a) instanceof FestoonBlockEntity ha) || !(level.getBlockEntity(b) instanceof FestoonBlockEntity hb))
+				return Result.NO_HOOK;
+			ha.addSpan(new FestoonBlockEntity.Span(b, fb, true, pay != null));
+			hb.addSpan(new FestoonBlockEntity.Span(a, fa, false, pay != null));
+		} finally {
+			level.captureBlockSnapshots = capturing;
+		}
 		if (pay != null)
 			pay.shrink(cost);
-		RunLightBlockEntity.runsChanged();
+		RunLightBlockEntity.runsChanged(level);
 		level.playSound(null, a, SoundEvents.CHAIN_PLACE, SoundSource.BLOCKS, 0.6f, 1.3f);
 		return Result.HUNG;
 	}
 
-	private static void putUp(Level level, BlockPos cell, Direction facing) {
+	/**
+	 * Puts up a hook at cell if there isn't one, as a placement by player against the block it hangs on (as a block item
+	 * places one: placed, then the event, so listeners see the hook). False if the event was refused (the hook comes down
+	 * again); what it put up is added to {@code put}. A hook already there is asked about the same way if {@code askIfThere}
+	 * (it's someone's hook a string is going on to), and nothing is put up.
+	 */
+	private static boolean putUp(Level level, BlockPos cell, Direction facing, @Nullable Player player, boolean askIfThere, List<BlockSnapshot> put) {
 		if (level.getBlockState(cell).getBlock() instanceof FestoonHookBlock)
-			return;
+			return !askIfThere || !EventHooks.onBlockPlace(player, BlockSnapshot.create(level.dimension(), level, cell), facing);
 		boolean post = level.getBlockState(cell.relative(facing.getOpposite())).getBlock() instanceof com.comedymonkey.createaddons.content.line.LinePostBlock;
-		level.setBlock(cell, ModBlocks.FESTOON_HOOK.get().defaultBlockState().setValue(FestoonHookBlock.FACING, facing)
-			.setValue(FestoonHookBlock.POST, post), Block.UPDATE_ALL);
+		BlockSnapshot was = BlockSnapshot.create(level.dimension(), level, cell);
+		if (!level.setBlock(cell, ModBlocks.FESTOON_HOOK.get().defaultBlockState().setValue(FestoonHookBlock.FACING, facing)
+			.setValue(FestoonHookBlock.POST, post), Block.UPDATE_ALL))
+			return false;
+		put.add(was);
+		return !EventHooks.onBlockPlace(player, was, facing);
+	}
+
+	/** Hooks put up for a string that was refused come down again, leaving what was there before (nothing dropped). */
+	private static void takeDown(Level level, List<BlockSnapshot> put) {
+		for (int i = put.size() - 1; i >= 0; i--) {
+			level.restoringBlockSnapshots = true;
+			try {
+				put.get(i).restore(put.get(i).getFlags() | Block.UPDATE_CLIENTS);
+			} finally {
+				level.restoringBlockSnapshots = false;
+			}
+		}
 	}
 
 	/**
@@ -159,6 +206,6 @@ public final class Festoons {
 				level.removeBlock(span.other(), false);
 		}
 		be.clearSpans();
-		RunLightBlockEntity.runsChanged();
+		RunLightBlockEntity.runsChanged(level);
 	}
 }

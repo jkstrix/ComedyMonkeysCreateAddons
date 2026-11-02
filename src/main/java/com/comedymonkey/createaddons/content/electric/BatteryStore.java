@@ -14,8 +14,9 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
  * changes the store is dissolved: every member is given its share to keep, and the next to need it builds a new one.
  * <p>
  * A bank moves up to its rate a tick (the Battery's rate times its size); an Industrial Battery as much as its cables
- * carry. Asked without doing it (simulate), it answers for a second at that rate, the way the Power Lines ask: they plan
- * a second at once and hand it out a twentieth a tick, which the per-tick limit then lets through.
+ * carry. Asked without doing it (simulate), it answers for this tick, as every cable expects (a simulate followed by
+ * the real call moves the same). The Power Lines plan a second at once and hand it out a twentieth a tick: they ask
+ * {@link #planReceive} and {@link #planExtract}, which answer for a second at that rate.
  */
 public final class BatteryStore implements IEnergyStorage {
 	/** Ticks the Power Lines plan at once. */
@@ -159,7 +160,7 @@ public final class BatteryStore implements IEnergyStorage {
 		if (!valid || max <= 0)
 			return 0;
 		roll(now());
-		long limit = simulate ? perTick * SECOND : perTick - inNow;
+		long limit = perTick - inNow;
 		int got = (int) Math.max(0, Math.min(max, Math.min(capacity - energy, limit)));
 		if (!simulate && got > 0) {
 			energy += got;
@@ -175,7 +176,7 @@ public final class BatteryStore implements IEnergyStorage {
 		if (!valid || max <= 0)
 			return 0;
 		roll(now());
-		long limit = simulate ? perTick * SECOND : perTick - outNow;
+		long limit = perTick - outNow;
 		int got = (int) Math.max(0, Math.min(max, Math.min(energy, limit)));
 		if (!simulate && got > 0) {
 			energy -= got;
@@ -184,6 +185,20 @@ public final class BatteryStore implements IEnergyStorage {
 			changed();
 		}
 		return got;
+	}
+
+	/** What it could take in over the next second at its rate (the Power Lines' plan), up to max. */
+	int planReceive(int max) {
+		if (!valid || max <= 0)
+			return 0;
+		return (int) Math.max(0, Math.min(max, Math.min(capacity - energy, perTick * SECOND)));
+	}
+
+	/** What it could give over the next second at its rate (the Power Lines' plan), up to max. */
+	int planExtract(int max) {
+		if (!valid || max <= 0)
+			return 0;
+		return (int) Math.max(0, Math.min(max, Math.min(energy, perTick * SECOND)));
 	}
 
 	/** The members' chunks need saving (once a tick is enough). */

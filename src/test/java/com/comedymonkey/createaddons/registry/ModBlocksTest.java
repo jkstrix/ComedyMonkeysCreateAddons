@@ -56,6 +56,10 @@ class ModBlocksTest {
 				assertSame(Items.AIR, item, "a Floodlight's spot of light is not an item");
 				continue;
 			}
+			if (entry.get() instanceof com.comedymonkey.createaddons.content.juggernaut.ruin.RuinBlocks.Ruin) {
+				assertSame(Items.AIR, item, "a Juggernaut Ruin's block is only ever built by the ruin: it drops its vanilla block");
+				continue;
+			}
 			if (entry.getId().equals(ModBlocks.HANGING_CABLE.getId())) {
 				assertSame(Items.AIR, item, "a hanging lamp's cable is made by lowering it, not an item");
 				continue;
@@ -82,6 +86,6 @@ class ModBlocksTest {
 		assertFalse(ModBlocks.ANIMAL_PEN.get().isBrass());
 		assertTrue(ModBlocks.BRASS_ANIMAL_PEN.get().isBrass());
 		// The Brass pen is built like the Brass generator, but its window doesn't glow
-		assertEquals(0, ModBlocks.BRASS_ANIMAL_PEN.get().defaultBlockState().getLightEmission());
+		assertEquals(0, ModBlocks.BRASS_ANIMAL_PEN.get().defaultBlockState().getLightEmission(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, net.minecraft.core.BlockPos.ZERO));
 	}
 }

@@ -10,8 +10,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 /**
  * Server to client: what a driving Helper Bot's train is doing that clients can't see for themselves (spec, Technical
- * Notes): paused, driven by a player, lost (no path), derailed. Sent when it changes, and every few seconds so players
- * who arrive later catch up. {@code flags} is a set of the {@code HelperBotMovement} status bits.
+ * Notes): paused, driven by a player, lost (no path), derailed. Sent only when it changes: players who
+ * start watching later read it from the carriage's spawn data. {@code flags} is a set of the {@code HelperBotMovement} status bits.
  */
 public record HelperBotStatusPayload(int entityId, BlockPos localPos, byte flags) implements CustomPacketPayload {
 	public static final Type<HelperBotStatusPayload> TYPE = new Type<>(ComedyMonkeysCreateAddons.asResource("helper_bot_status"));

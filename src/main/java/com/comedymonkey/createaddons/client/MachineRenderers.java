@@ -368,6 +368,7 @@ public final class MachineRenderers {
 		}
 
 		/** The particle (side) sprite of a block item's block, or cobblestone if it isn't one. */
+		@SuppressWarnings("deprecation") // an item has no position, so the position-aware getTexture can't be used
 		private static TextureAtlasSprite blockSprite(ItemStack stack) {
 			if (stack.getItem() instanceof BlockItem item)
 				return Minecraft.getInstance().getBlockRenderer().getBlockModelShaper()

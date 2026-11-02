@@ -20,8 +20,9 @@ import net.minecraft.world.level.block.state.properties.ChestType;
  * Animates an upgraded chest's lid (and latch) while it is open, hinged at the back like a vanilla chest lid. When the
  * chest is closed the lid is part of the block model instead, so it also looks right anywhere block entity renderers
  * don't run (e.g. a chest carried with Carry On). The lid is a part model: with Flywheel on, a closed chest's visual
- * does nothing a frame, and an open one's moves the lid instance (Flywheel makes the visual again when it opens or
- * closes, a block state change; see {@link com.comedymonkey.createaddons.client.parts.MachineVisuals}).
+ * does nothing a frame, and an open one's moves the lid instance. Flywheel doesn't make a visual again for a change of
+ * block state, so the chest has it made again when it opens or shuts ({@code UpgradedChestBlockEntity.clientLidShown};
+ * see {@link com.comedymonkey.createaddons.client.parts.MachineVisuals}).
  */
 public class UpgradedChestRenderer implements BlockEntityRenderer<UpgradedChestBlockEntity> {
 	/** Hinge: top-back edge of the body, in block pixels (model space, front facing north). */

@@ -46,7 +46,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * of them in one block), clipped down, and folds round inside and outside corners to the next. Power runs along it from
  * anything that gives FE to anything that takes it (see {@link PowerLines}), and up Line Posts into hanging spans.
  */
-public class PowerLineBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LineBlock {
+public final class PowerLineBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LineBlock {
 	public static final MapCodec<PowerLineBlock> CODEC = simpleCodec(p -> new PowerLineBlock(LineTier.COPPER, p));
 	/** Per direction: a wire lies against that face of the block. */
 	public static final Map<Direction, BooleanProperty> FACES = new EnumMap<>(Direction.class);

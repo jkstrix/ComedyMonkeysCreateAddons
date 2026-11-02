@@ -39,7 +39,7 @@ public class HelperBotDyeRecipe extends ShapelessRecipe {
 	/** Vanilla's shapeless format. */
 	public static class Serializer implements RecipeSerializer<HelperBotDyeRecipe> {
 		@SuppressWarnings("unchecked")
-		private static final RecipeSerializer<ShapelessRecipe> SHAPELESS = (RecipeSerializer<ShapelessRecipe>) RecipeSerializer.SHAPELESS_RECIPE;
+		private static final RecipeSerializer<ShapelessRecipe> SHAPELESS = RecipeSerializer.SHAPELESS_RECIPE;
 		private static final MapCodec<HelperBotDyeRecipe> CODEC = SHAPELESS.codec().xmap(HelperBotDyeRecipe::new, r -> r);
 		private static final StreamCodec<RegistryFriendlyByteBuf, HelperBotDyeRecipe> STREAM_CODEC =
 			SHAPELESS.streamCodec().map(HelperBotDyeRecipe::new, r -> r);

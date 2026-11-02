@@ -43,7 +43,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
  * set on it (what its store can't hold is lost). While its chunk isn't running, its line runs it on paper. Pipes and energy pipes
  * reach it through any casing; it pushes power into anything that takes it touching the outside of the turbine.
  */
-public class GeothermalControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, PowerGrid.Generator, com.comedymonkey.createaddons.content.line.NetworkReading.Shown {
+public final class GeothermalControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, PowerGrid.Generator, com.comedymonkey.createaddons.content.line.NetworkReading.Shown {
 	public static final int TANK = 16000;
 	private static final int BUFFER = 4_000_000;
 
@@ -134,15 +134,20 @@ public class GeothermalControllerBlockEntity extends SmartBlockEntity implements
 	// ---------- its record, for running on paper while its chunk isn't running ----------
 
 	@Override
-	public PowerGrid.Paper newPaper() {
-		return new PowerGrid.Paper("geothermal_turbine", 2);
+	public String paperKind() {
+		return "geothermal_turbine";
+	}
+
+	@Override
+	public int paperFuels() {
+		return 2;
 	}
 
 	@Override
 	public void record(PowerGrid.Paper p, boolean refresh) {
 		p.set(formed ? outputSetting() : 0, energy.getEnergyStored(), BUFFER);
-		p.fuel(0).set(lava.getFluidAmount(), TANK, CMConfig.SERVER.turbineLavaPerSecond() / 20.0 * setShare());
-		p.fuel(1).set(water.getFluidAmount(), TANK, CMConfig.SERVER.turbineWaterPerSecond() / 20.0 * setShare());
+		p.fuel(0).set(lava.getFluidAmount(), TANK, CMConfig.SERVER.turbineLavaPerSecond() / 20.0 * setShare(), Fluids.LAVA);
+		p.fuel(1).set(water.getFluidAmount(), TANK, CMConfig.SERVER.turbineWaterPerSecond() / 20.0 * setShare(), Fluids.WATER);
 		if (refresh) {
 			feeds.into(p.fuel(0), 0, level);
 			feeds.into(p.fuel(1), 1, level);

@@ -358,6 +358,32 @@ public final class LineGameTests {
 		});
 	}
 
+	/**
+	 * A line into a tank with a little room shows its fluid moving while it delivers, and still once the tank is full
+	 * (the slots are only gone through when one can change, so that moment mustn't be missed).
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 140)
+	public static void lineStandsStillOnceItsTankFills(GameTestHelper helper) {
+		BlockPos[] t = tankToTank(helper, ModBlocks.COPPER_FLUID_LINE.get(), new FluidStack(Fluids.WATER, 8000), 4);
+		int cap = fluids(helper, t[1]).fill(new FluidStack(Fluids.WATER, 64000), IFluidHandler.FluidAction.EXECUTE);
+		// room for 40 ticks of copper's 100 mB a tick, once the line has filled (a block every 8 ticks: about tick 33)
+		fluids(helper, t[1]).drain(4000, IFluidHandler.FluidAction.EXECUTE);
+		BlockPos mid = t[0].east(2);
+		helper.runAtTickTime(50, () -> {
+			if (amount(helper, t[1]) >= cap)
+				helper.fail("tank B filled before the test could see the line deliver");
+			if (!line(helper, mid).moving())
+				helper.fail("the line delivering into tank B shows its fluid still");
+		});
+		helper.runAtTickTime(120, () -> {
+			if (amount(helper, t[1]) != cap)
+				helper.fail("tank B has " + amount(helper, t[1]) + " mB, not full (" + cap + ")");
+			if (line(helper, mid).flowing().isEmpty() || line(helper, mid).moving())
+				helper.fail("with tank B full the line should stand full and still");
+			helper.succeed();
+		});
+	}
+
 	/** A line fills from the Intake outwards, a block at a time, and once the source runs dry it drains the same way. */
 	@GameTest(template = COURSE, timeoutTicks = 180)
 	public static void lineFillsAndDrainsGradually(GameTestHelper helper) {
@@ -805,6 +831,100 @@ public final class LineGameTests {
 		});
 	}
 
+	/** Takes a block the way a Create contraption does: its block entity first, then the block, so it never takes anything down. */
+	static void carryOff(GameTestHelper helper, BlockPos pos) {
+		BlockPos at = helper.absolutePos(pos);
+		helper.getLevel().removeBlockEntity(at);
+		helper.getLevel().setBlock(at, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_MOVE_BY_PISTON);
+	}
+
+	/** Power Line items lying round a block (a span's wire paid back there). */
+	static int wiresDroppedAt(GameTestHelper helper, BlockPos pos) {
+		int n = 0;
+		for (net.minecraft.world.entity.item.ItemEntity item : helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+			new net.minecraft.world.phys.AABB(helper.absolutePos(pos)).inflate(2)))
+			if (item.getItem().is(com.comedymonkey.createaddons.registry.ModItems.COPPER_POWER_LINE.get()))
+				n += item.getItem().getCount();
+		return n;
+	}
+
+	/**
+	 * A Line Post carried off by a contraption never takes its spans down: the post left behind drops the span at once
+	 * (no waiting for its chunk to load again), and only the owner end ever pays its wire back: the one left behind if it
+	 * owns the span, else the carried-off one where it lands (not here).
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 40)
+	public static void postLeftBehindDropsACarriedOffSpan(GameTestHelper helper) {
+		// the owner end carried off (row 1), the other end carried off (row 2)
+		BlockPos a1 = new BlockPos(2, 1, 14), b1 = a1.east(6), a2 = new BlockPos(2, 1, 18), b2 = a2.east(6);
+		for (BlockPos p : new BlockPos[] {a1, b1, a2, b2})
+			helper.setBlock(p, ModBlocks.LINE_POST.get().defaultBlockState());
+		Span s = new Span(0, b1.subtract(a1), 0, LineTier.COPPER, null, true, 2);
+		helper.runAtTickTime(2, () -> {
+			for (BlockPos[] pair : new BlockPos[][] {{a1, b1}, {a2, b2}}) {
+				if (!(helper.getBlockEntity(pair[0]) instanceof LinePostBlockEntity a) || !(helper.getBlockEntity(pair[1]) instanceof LinePostBlockEntity b))
+					throw new IllegalStateException("no posts");
+				a.addSpan(s);
+				b.addSpan(s.reversed());
+			}
+		});
+		helper.runAtTickTime(10, () -> {
+			carryOff(helper, a1);
+			carryOff(helper, b2);
+		});
+		helper.runAtTickTime(15, () -> {
+			if (!(helper.getBlockEntity(b1) instanceof LinePostBlockEntity left1) || !(helper.getBlockEntity(a2) instanceof LinePostBlockEntity left2))
+				throw new IllegalStateException("the posts left behind are gone");
+			if (!left1.spans().isEmpty())
+				helper.fail("the post left behind still holds the span to its carried-off owner");
+			if (!left2.spans().isEmpty())
+				helper.fail("the owner left behind still holds the span to the carried-off post");
+			int paid1 = wiresDroppedAt(helper, b1), paid2 = wiresDroppedAt(helper, a2);
+			if (paid1 != 0)
+				helper.fail("the post left behind paid back " + paid1 + " wire for a span its carried-off owner pays for");
+			if (paid2 != s.wires())
+				helper.fail("the owner left behind paid back " + paid2 + " wire, not the span's " + s.wires());
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * The same with an Industrial Battery at the end left behind: a contraption carries off the post its span runs to,
+	 * and the tower drops the span at once. The post owns the span, so it pays the wire back where it's put down (once),
+	 * and the tower pays nothing.
+	 */
+	@GameTest(template = "battery_course", timeoutTicks = 60)
+	public static void towerDropsASpanToACarriedOffPost(GameTestHelper helper) {
+		BlockPos c = new BlockPos(1, 1, 2), post = new BlockPos(9, 1, 3), landed = post.south(6), master = BatteryGameTests.master(c);
+		BatteryGameTests.batteries(helper, c, 3, 3, 3, 0);
+		BatteryGameTests.post(helper, post);
+		// the tower's end of it, as the post's own (the owner) is its reverse
+		Span s = new Span(0, post.subtract(master), 0, LineTier.COPPER, null, false, 3);
+		helper.runAtTickTime(5, () -> {
+			BatteryGameTests.be(helper, master).addSpan(s);
+			((LinePostBlockEntity) helper.getBlockEntity(post)).addSpan(s.reversed());
+		});
+		helper.runAtTickTime(15, () -> {
+			if (BatteryGameTests.be(helper, master).spans().isEmpty())
+				helper.fail("the tower didn't take the span");
+			// carried off, and put down somewhere else with everything it held (as a contraption puts it down)
+			net.minecraft.nbt.CompoundTag held = helper.getBlockEntity(post).saveWithoutMetadata(helper.getLevel().registryAccess());
+			carryOff(helper, post);
+			BatteryGameTests.post(helper, landed);
+			helper.getBlockEntity(landed).loadWithComponents(held, helper.getLevel().registryAccess());
+		});
+		helper.runAtTickTime(25, () -> {
+			if (!BatteryGameTests.be(helper, master).spans().isEmpty())
+				helper.fail("the tower still holds the span to the post that was carried off");
+			int atTower = wiresDroppedAt(helper, master), atPost = wiresDroppedAt(helper, landed);
+			if (atTower != 0)
+				helper.fail("the tower paid back " + atTower + " wire for a span its post pays for");
+			if (atPost != s.wires())
+				helper.fail("the post put down paid back " + atPost + " wire, not the span's " + s.wires());
+			helper.succeed();
+		});
+	}
+
 	/** Generator, wire of one tier, a pole, a span of another, wire, motor: whether power gets from the one to the other. */
 	private static void acrossAPole(GameTestHelper helper, Block from, LineTier span, Block to, boolean expected, String fail) {
 		acrossAPole(helper, from, span, to, null, null, expected, fail);
@@ -922,7 +1042,7 @@ public final class LineGameTests {
 			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), p, Direction.DOWN);
 		helper.runAtTickTime(2, () -> relink(helper, a, t, b, c, s1, s2));
 		helper.runAtTickTime(5, () -> {
-			PowerLineBlock line = (PowerLineBlock) ModBlocks.COPPER_POWER_LINE.get();
+			PowerLineBlock line = ModBlocks.COPPER_POWER_LINE.get();
 			if (line.sideFor(Fitting.SPLITTER, helper.getLevel(), helper.absolutePos(t), helper.getBlockState(t)) == null)
 				helper.fail("a Splitter doesn't fit the junction");
 			if (line.sideFor(Fitting.SPLITTER, helper.getLevel(), helper.absolutePos(s1), helper.getBlockState(s1)) != null)
@@ -1225,6 +1345,168 @@ public final class LineGameTests {
 		});
 	}
 
+	/**
+	 * A Wellspring feeding a Lava Generator through a Fluid Line into its inlet at the back (the generator faces north,
+	 * the line runs south to the Wellspring, Intake at its end), a wire and a motor east of the generator, left to run
+	 * until the generator's record has learnt the income. Then the line is cut (or, {@code keepLine}, given a second end:
+	 * an empty tank west of its middle piece), the generator's lava and store emptied and the Wellspring left holding
+	 * {@code stock} mB, the motor taken off (nothing draws the store, so it shows what the record makes), and both
+	 * marked away.
+	 */
+	private static BlockPos[] springFeedsGeneratorThenAway(GameTestHelper helper, boolean generating, int stock, int awayFor, boolean keepLine) {
+		BlockPos gen = new BlockPos(5, 1, 2), spring = gen.south(4), m = gen.east(4);
+		helper.setBlock(spring, ModBlocks.WELLSPRING.get().defaultBlockState());
+		if (!(helper.getBlockEntity(spring) instanceof com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity w))
+			throw new IllegalStateException("no Wellspring");
+		if (generating)
+			w.getUpgrades().setStackInSlot(0, new ItemStack(com.comedymonkey.createaddons.registry.ModItems.DRIPSTONE_UPGRADE.get()));
+		w.getTank().fill(new FluidStack(Fluids.LAVA, 8000), IFluidHandler.FluidAction.EXECUTE);
+		generator(helper, gen);
+		run(helper, ModBlocks.COPPER_FLUID_LINE.get(), spring.north(), Direction.NORTH, 3);
+		line(helper, spring.north()).setIntake(Direction.SOUTH);
+		motor(helper, m);
+		for (int i = 1; i <= 3; i++)
+			wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
+		helper.runAtTickTime(2, () -> relink(helper, gen.east(1), gen.east(3)));
+		BlockPos key = helper.absolutePos(gen), ws = helper.absolutePos(spring);
+		helper.runAtTickTime(100, () -> {
+			if (PowerGridTesting.store(helper.getLevel(), key) < 0)
+				helper.fail("the generator a line meets has no record");
+			if (PowerGridTesting.springRecord(helper.getLevel(), ws) < 0)
+				helper.fail("the Wellspring feeding it has no record");
+			if (keepLine) {
+				tank(helper, spring.north(2).west(), FluidStack.EMPTY);
+				join(helper, spring.north(2));
+			} else {
+				helper.setBlock(spring.north(2), Blocks.AIR);
+			}
+			helper.setBlock(m, Blocks.AIR);
+			fluids(helper, gen).drain(8000, IFluidHandler.FluidAction.EXECUTE);
+			if (helper.getBlockEntity(gen) instanceof LavaGeneratorBlockEntity be)
+				be.getEnergy().setEnergy(0);
+			w.getTank().setFluid(stock > 0 ? new FluidStack(Fluids.LAVA, stock) : FluidStack.EMPTY);
+		});
+		helper.runAtTickTime(102, () -> {
+			PowerGridTesting.away(helper.getLevel(), key, true, awayFor);
+			PowerGridTesting.away(helper.getLevel(), ws, true, awayFor);
+		});
+		return new BlockPos[] {spring, gen, key, ws};
+	}
+
+	/**
+	 * Both away, a generator burns a Wellspring's stock on paper and no more: with 60 mB in it and no generation upgrade
+	 * it runs until those are burnt, then stops; back, the Wellspring holds 60 mB less what was burnt, never more.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 360)
+	public static void paperBurnsOnlyTheWellspringsStock(GameTestHelper helper) {
+		int stock = 60;
+		BlockPos[] at = springFeedsGeneratorThenAway(helper, false, stock, 300, false);
+		BlockPos spring = at[0], key = at[2], ws = at[3];
+		double[] store = new double[1], burnt = new double[1];
+		helper.runAtTickTime(160, () -> {
+			if (PowerGridTesting.springRecord(helper.getLevel(), ws) >= stock)
+				helper.fail("on paper the generator drew nothing from the Wellspring's record");
+			if (PowerGridTesting.store(helper.getLevel(), key) <= 0)
+				helper.fail("on paper the generator made nothing from the Wellspring's lava");
+		});
+		helper.runAtTickTime(290, () -> {
+			if (PowerGridTesting.springRecord(helper.getLevel(), ws) > 0.5)
+				helper.fail("the Wellspring's record still holds " + PowerGridTesting.springRecord(helper.getLevel(), ws) + " mB");
+			if (PowerGridTesting.makingAway(helper.getLevel(), key) > 0)
+				helper.fail("with the Wellspring's stock burnt, the generator still makes " + PowerGridTesting.makingAway(helper.getLevel(), key) + " FE a tick");
+			store[0] = PowerGridTesting.store(helper.getLevel(), key);
+		});
+		helper.runAtTickTime(318, () -> {
+			if (PowerGridTesting.store(helper.getLevel(), key) > store[0] + 1)
+				helper.fail("the generator's record went on filling (" + store[0] + " to " + PowerGridTesting.store(helper.getLevel(), key) + ") with no lava");
+			burnt[0] = stock - PowerGridTesting.springRecord(helper.getLevel(), ws);
+			PowerGridTesting.away(helper.getLevel(), key, false, 0);
+			PowerGridTesting.away(helper.getLevel(), ws, false, 0);
+		});
+		helper.runAtTickTime(322, () -> {
+			if (!(helper.getBlockEntity(spring) instanceof com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity w))
+				throw new IllegalStateException("no Wellspring");
+			int held = w.getTank().getFluidAmount();
+			if (held > stock || held > stock - burnt[0] + 1e-6 || held < stock - burnt[0] - 1)
+				helper.fail("back, the Wellspring holds " + held + " mB, not " + stock + " less the " + burnt[0] + " burnt");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Both away, an empty Wellspring with a Dripstone Upgrade gives a generator on paper no more than it makes (10 mB a
+	 * second, half the Lava Generator's burn), though the line used to bring it twice that.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 260)
+	public static void paperIncomeNeverBeatsTheWellspringsRate(GameTestHelper helper) {
+		BlockPos[] at = springFeedsGeneratorThenAway(helper, true, 0, 200, false);
+		BlockPos spring = at[0], key = at[2];
+		double[] start = new double[1];
+		helper.runAtTickTime(120, () -> start[0] = PowerGridTesting.store(helper.getLevel(), key));
+		helper.runAtTickTime(200, () -> {
+			if (!(helper.getBlockEntity(spring) instanceof com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity w))
+				throw new IllegalStateException("no Wellspring");
+			double perTick = w.getGenerationRate() / 20.0, use = CMConfig.SERVER.generatorLavaPerSecond() / 20.0;
+			double fe = CMConfig.SERVER.generatorFePerTick() * Math.min(1, perTick / use);
+			double gained = PowerGridTesting.store(helper.getLevel(), key) - start[0];
+			// 80 ticks at what the Wellspring's making keeps going, give or take one second's step of the record
+			if (gained > fe * 100)
+				helper.fail("on paper the generator made " + gained + " FE in 80 ticks: more than the Wellspring's " + perTick + " mB a tick keeps going ("
+					+ fe * 80 + ")");
+			if (gained <= 0)
+				helper.fail("on paper the generator made nothing from what the Wellspring makes");
+			if (PowerGridTesting.makingAway(helper.getLevel(), key) > fe + 1e-6)
+				helper.fail("the generator's record says it makes " + PowerGridTesting.makingAway(helper.getLevel(), key) + " FE a tick, over " + fe);
+			PowerGridTesting.away(helper.getLevel(), at[2], false, 0);
+			PowerGridTesting.away(helper.getLevel(), at[3], false, 0);
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * A Wellspring counted away while its chunk is still loaded (the band where chunks are loaded but don't tick): its
+	 * Fluid Line goes on draining it into a tank for real, and the generator on paper draws on its record. Between them
+	 * they never take more than it held, and back, it holds what's left of that.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 280)
+	public static void paperAndALiveLineNeverSpendTheStockTwice(GameTestHelper helper) {
+		BlockPos[] at = springFeedsGeneratorThenAway(helper, false, 8000, 200, true);
+		BlockPos spring = at[0], gen = at[1], ws = at[3], sink = spring.north(2).west();
+		// the Wellspring's stock, and where its lava was, as both go away
+		double[] start = new double[4];
+		helper.runAtTickTime(102, () -> {
+			if (!(helper.getBlockEntity(spring) instanceof com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity w))
+				throw new IllegalStateException("no Wellspring");
+			start[0] = w.getTank().getFluidAmount();
+			start[1] = amount(helper, sink);
+			start[2] = amount(helper, gen);
+			start[3] = PowerGridTesting.springGiven(helper.getLevel(), ws);
+		});
+		double[] spent = new double[1];
+		helper.runAtTickTime(240, () -> {
+			double real = amount(helper, sink) - start[1] + amount(helper, gen) - start[2];
+			double paper = PowerGridTesting.springGiven(helper.getLevel(), ws) - start[3];
+			if (real <= 0)
+				helper.fail("the line drained nothing from the Wellspring for real while it was away");
+			if (paper <= 0)
+				helper.fail("on paper the generator drew nothing from the Wellspring while it was away");
+			if (real + paper > start[0] + 1)
+				helper.fail("the line took " + real + " mB and paper " + paper + " mB of a Wellspring that held " + start[0]);
+			spent[0] = real + paper;
+			PowerGridTesting.away(helper.getLevel(), at[2], false, 0);
+			PowerGridTesting.away(helper.getLevel(), ws, false, 0);
+		});
+		helper.runAtTickTime(244, () -> {
+			if (!(helper.getBlockEntity(spring) instanceof com.comedymonkey.createaddons.content.wellspring.WellspringBlockEntity w))
+				throw new IllegalStateException("no Wellspring");
+			// (what the line took since, it took for real; paper settles a whole mB at a time, so less than one may be over)
+			int held = w.getTank().getFluidAmount();
+			if (held > Math.max(0, start[0] - spent[0]) + 1)
+				helper.fail("back, the Wellspring holds " + held + " mB, more than the " + (start[0] - spent[0]) + " left");
+			helper.succeed();
+		});
+	}
+
 	/** A copper line fed by two brass lines through two poles, one with nothing on it: the other gives copper all it wants. */
 	@GameTest(template = COURSE, timeoutTicks = 80)
 	public static void copperFedByTwoBrassLines(GameTestHelper helper) {
@@ -1268,6 +1550,55 @@ public final class LineGameTests {
 				helper.fail("copper got at most " + most[0] + " FE a tick from the brass, not its " + rate  + "; generator " + generated(helper, gen)
 					+ ", motor " + stored(helper, m) + ";" + why);
 			}
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * A formed turbine whose controller a contraption carries off (its block entity first, so it can't unform): its
+	 * casings are freed all the same and no longer stand for it on a line. A casing pointing at a controller in an
+	 * unloaded chunk still does (that turbine is on paper), and one pointing at nothing there doesn't.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 80)
+	public static void carriedOffTurbineFreesItsCasings(GameTestHelper helper) {
+		BlockPos centre = new BlockPos(13, 3, 5), controller = centre.north();
+		for (BlockPos p : BlockPos.betweenClosed(centre.offset(-1, -1, -1), centre.offset(1, 1, 1))) {
+			BlockPos at = p.immutable();
+			helper.setBlock(at, at.equals(centre) ? ModBlocks.GEOTHERMAL_CORE.get().defaultBlockState()
+				: at.equals(controller) ? ModBlocks.GEOTHERMAL_CONTROLLER.get().defaultBlockState()
+					.setValue(com.comedymonkey.createaddons.content.electric.GeothermalControllerBlock.FACING, Direction.NORTH)
+				: ModBlocks.GEOTHERMAL_CASING.get().defaultBlockState());
+		}
+		BlockPos port = centre.below(), key = helper.absolutePos(controller);
+		helper.runAtTickTime(45, () -> {
+			if (!(helper.getBlockEntity(port) instanceof com.comedymonkey.createaddons.content.electric.GeothermalCasingBlockEntity casing)
+				|| !key.equals(casing.getController()) || !key.equals(casing.generatorKey()))
+				helper.fail("the turbine didn't form (its port casing doesn't stand for its controller)");
+			carryOff(helper, controller);
+		});
+		helper.runAtTickTime(47, () -> {
+			for (BlockPos p : BlockPos.betweenClosed(centre.offset(-1, -1, -1), centre.offset(1, 1, 1))) {
+				BlockPos at = p.immutable();
+				if (at.equals(controller))
+					continue;
+				if (helper.getBlockState(at).getValue(com.comedymonkey.createaddons.content.electric.GeothermalPartBlock.FORMED))
+					helper.fail("the block at " + at + " still shows the turbine formed");
+				if (helper.getLevel().getBlockEntity(helper.absolutePos(at)) instanceof com.comedymonkey.createaddons.content.electric.GeothermalCasingBlockEntity casing
+					&& (casing.getController() != null || !casing.generatorKey().equals(helper.absolutePos(at))))
+					helper.fail("the casing at " + at + " still points at the controller that went");
+			}
+			if (!(helper.getBlockEntity(port) instanceof com.comedymonkey.createaddons.content.electric.GeothermalCasingBlockEntity casing))
+				throw new IllegalStateException("no port casing");
+			// left pointing at nothing (as before the fix a carried-off controller left them): it stands for itself
+			casing.setController(key);
+			if (!casing.generatorKey().equals(helper.absolutePos(port)))
+				helper.fail("a casing pointing at a controller that isn't there still stands for it");
+			// pointing into an unloaded chunk: that turbine is on paper, and the casing stands for it
+			BlockPos far = key.offset(1 << 20, 0, 0);
+			casing.setController(far);
+			if (!casing.generatorKey().equals(far))
+				helper.fail("a casing whose controller's chunk isn't loaded doesn't stand for it");
+			casing.setController(null);
 			helper.succeed();
 		});
 	}

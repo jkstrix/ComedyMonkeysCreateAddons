@@ -1,6 +1,6 @@
 {
   "modName": "ComedyMonkey's Create Addons",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "minecraft": "1.21.1",
   "create": "6.0.10",
   "neoforge": "21.1.248",
@@ -63,7 +63,7 @@
       "accent": "& machinery",
       "text": "Stone from nothing, herds in a single block, lava turned into grid power, and a clockwork shopkeeper who sells your goods to villagers. Every machine here is taught from the first block to full automation."
     },
-    "latest": ["electric-lights", "light-assembly", "ruin-sleeper", "clockwork-ruins", "spring-engine", "helper-bot", "fish-tank", "monster-cage", "netherite-monster-cage", "battery", "fluid-lines", "power-lines"],
+    "latest": ["clockwork-tubes", "clockwork-dynamo", "electric-lights", "light-assembly", "ruin-sleeper", "clockwork-ruins", "spring-engine", "helper-bot", "fish-tank", "monster-cage", "netherite-monster-cage", "battery", "fluid-lines", "power-lines"],
     "featuredMachines": ["pressure-crucible", "geothermal-turbine", "magma-engine", "auto-harvester", "animal-pen", "cobblestone-generator", "electric-motor", "cuckoo-clock"],
     "featuredBlocks": ["upgraded-chest", "fluid-lines", "power-lines", "flight-instruments"],
     "featuredMobs": ["trade-bot", "helper-bot", "contained-wither", "armed-drowned", "blue-axolotl"],
@@ -76,6 +76,9 @@
       ]
     },
     "notes": [
+      { "date": "2026-11-01", "title": "2.5.1: a harder fight in the ruins", "body": "Fixes from the first days of 2.5.0. What sleeps in the ruins no longer locks on to one player, can't be pinned or trapped, and is harder to read." },
+      { "date": "2026-10-31", "title": "Clockwork Tubes", "body": "Gather items from many places into one, any way you like, without belts: **Clockwork Inlets** gulp them up from chests, depots, belts or the floor, glass tubes carry them, and one **Clockwork Receiver** pulls them out through the middle of its hollow cog." },
+      { "date": "2026-10-31", "title": "Clockwork Dynamo", "body": "The Electric Motor run backwards, built from the bots' own parts: any Create power becomes electricity, water wheels and windmills included. It loses a quarter on the way, so a motor and a dynamo can never run each other." },
       { "date": "2026-10-28", "title": "Electric Lights", "body": "Lamp posts, wall, ceiling and hanging lamps, strips, edge trim, festoons and a Floodlight, all run off the Power Lines. Cut them from a **Light Assembly** in a stonecutter, colour them with a dye that isn't used up, and switch whole circuits with a **Light Switch**." },
       { "date": "2026-10-28", "title": "Something in the ruins", "body": "Rings of broken walls, in the Overworld and on the End's outer islands. Something kneels at the middle of each. It is not a statue." },
       { "date": "2026-10-27", "title": "Fish Tanks", "body": "Fish, squid and axolotls now breed underwater in one block on **Fish Food**. Cages and tanks got their Ponder scenes, Display Links, Dispensers and advancements." },
@@ -112,7 +115,7 @@
         "Drive an [[electric-motor]] from a [[lava-generator]]",
         "Store FE in a [[battery]]"
       ],
-      "entries": ["fluid-wellspring", "pressure-crucible", "magma-engine", "lava-generator", "power-lines", "electric-motor", "battery", "cuckoo-clock"]
+      "entries": ["fluid-wellspring", "pressure-crucible", "magma-engine", "lava-generator", "power-lines", "electric-motor", "clockwork-dynamo", "battery", "cuckoo-clock"]
     },
     {
       "id": "advanced", "title": "Advanced", "era": "heat and power",

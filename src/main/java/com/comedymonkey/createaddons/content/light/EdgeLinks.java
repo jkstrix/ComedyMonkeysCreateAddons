@@ -55,7 +55,7 @@ public final class EdgeLinks {
 
 	/** The edges of the Edge Light at pos (none if there's none, or its chunk isn't loaded: it isn't loaded to look). */
 	public static int edgesAt(BlockGetter level, BlockPos pos) {
-		if (level instanceof LevelReader reader && !reader.hasChunkAt(pos))
+		if (level instanceof LevelReader reader && !com.comedymonkey.createaddons.content.Loaded.at(reader, pos))
 			return 0;
 		return level.getBlockEntity(pos) instanceof EdgeLightBlockEntity be ? be.edges() : 0;
 	}

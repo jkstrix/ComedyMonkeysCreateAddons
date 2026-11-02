@@ -131,7 +131,7 @@ public final class HelperBotGameTests {
 			.byKey(ResourceLocation.fromNamespaceAndPath(ComedyMonkeysCreateAddons.MOD_ID, "dyed/red_helper_bot")).orElse(null);
 		if (holder == null || !(holder.value() instanceof HelperBotDyeRecipe recipe))
 			throw new GameTestAssertException("red_helper_bot isn't a Helper Bot dye recipe: " + holder);
-		RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), helper.getLevel().registryAccess());
+		RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), helper.getLevel().registryAccess(), net.neoforged.neoforge.network.connection.ConnectionType.NEOFORGE);
 		HelperBotDyeRecipe.Serializer serializer = (HelperBotDyeRecipe.Serializer) recipe.getSerializer();
 		serializer.streamCodec().encode(buf, recipe);
 		HelperBotDyeRecipe sent = serializer.streamCodec().decode(buf);
@@ -184,6 +184,24 @@ public final class HelperBotGameTests {
 		helper.assertTrue(drops.size() == 1 && drops.get(0).is(ModItems.HELPER_BOT.get()), "should drop one Helper Bot, dropped " + drops);
 		helper.assertTrue(drops.get(0).get(ModDataComponents.HELPER_BOT_DYE.get()) == DyeColor.LIME, "should keep his lime, has " + drops.get(0).get(ModDataComponents.HELPER_BOT_DYE.get()));
 		helper.assertTrue(Component.literal("Bolt").equals(drops.get(0).get(DataComponents.CUSTOM_NAME)), "should keep his name, has " + drops.get(0).get(DataComponents.CUSTOM_NAME));
+		helper.succeed();
+	}
+
+	/** Pick-block on a dyed, named bot gives him back with his colour and his name, as breaking him does. */
+	@GameTest(template = COURSE)
+	public static void pickingHimKeepsHisColourAndName(GameTestHelper helper) {
+		BlockPos pos = new BlockPos(5, 1, 5);
+		ItemStack stack = bot(DyeColor.LIME);
+		stack.set(DataComponents.CUSTOM_NAME, Component.literal("Bolt"));
+		placeFromItem(helper, pos, stack);
+		BlockPos abs = helper.absolutePos(pos);
+		BlockState state = helper.getLevel().getBlockState(abs);
+		// the path pick-block takes (NeoForge's extension, which asks the block)
+		ItemStack picked = state.getCloneItemStack(new BlockHitResult(Vec3.atCenterOf(abs), Direction.UP, abs, false), helper.getLevel(), abs,
+			helper.makeMockPlayer(GameType.CREATIVE));
+		helper.assertTrue(picked.is(ModItems.HELPER_BOT.get()), "should pick a Helper Bot, picked " + picked);
+		helper.assertTrue(picked.get(ModDataComponents.HELPER_BOT_DYE.get()) == DyeColor.LIME, "should keep his lime, has " + picked.get(ModDataComponents.HELPER_BOT_DYE.get()));
+		helper.assertTrue(Component.literal("Bolt").equals(picked.get(DataComponents.CUSTOM_NAME)), "should keep his name, has " + picked.get(DataComponents.CUSTOM_NAME));
 		helper.succeed();
 	}
 

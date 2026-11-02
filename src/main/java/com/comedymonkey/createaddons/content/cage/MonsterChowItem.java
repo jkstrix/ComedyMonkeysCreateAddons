@@ -22,7 +22,7 @@ import net.minecraft.world.phys.Vec3;
 public class MonsterChowItem extends Item {
 	/** Like rotten flesh: 4 hunger, and Hunger 80% of the time. */
 	public static final FoodProperties FOOD = new FoodProperties.Builder().nutrition(4).saturationModifier(0.1f)
-		.effect(new MobEffectInstance(MobEffects.HUNGER, 600, 0), 0.8f).build();
+		.effect(() -> new MobEffectInstance(MobEffects.HUNGER, 600, 0), 0.8f).build();
 	private static final SoundEvent[] BELCHES = {SoundEvents.ZOMBIE_AMBIENT, SoundEvents.CREEPER_PRIMED, SoundEvents.GHAST_AMBIENT,
 		SoundEvents.SKELETON_AMBIENT, SoundEvents.SPIDER_AMBIENT, SoundEvents.HUSK_AMBIENT, SoundEvents.WITCH_CELEBRATE};
 

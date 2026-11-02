@@ -32,7 +32,7 @@ import net.minecraft.world.phys.BlockHitResult;
  * animals (their drops), shears to shear its sheep, a bucket or bowl to milk it; empty-handed, use takes out what
  * it's made; a wrench opens its screen. See {@link AnimalPenBlockEntity}.
  */
-public class AnimalPenBlock extends KineticBlock implements IBE<AnimalPenBlockEntity> {
+public final class AnimalPenBlock extends KineticBlock implements IBE<AnimalPenBlockEntity> {
 	/** The front, with the window. The shaft goes into the opposite face. */
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -76,6 +76,7 @@ public class AnimalPenBlock extends KineticBlock implements IBE<AnimalPenBlockEn
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}

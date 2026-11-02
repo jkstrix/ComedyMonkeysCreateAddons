@@ -1,7 +1,5 @@
 package com.comedymonkey.createaddons.client.wastes;
 
-import org.joml.FrustumIntersection;
-
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.client.parts.MachineVisuals;
 import com.comedymonkey.createaddons.client.parts.PartSink;
@@ -62,7 +60,7 @@ public final class LiftRenderers {
 	/** At client setup: Flywheel draws the parts. */
 	public static void registerVisuals() {
 		SimpleBlockEntityVisualizer.builder(ModWastes.LIFT_BE.get())
-			.factory((context, be, partialTick) -> new ShaftVisual(context, be, partialTick))
+			.factory((context, be, partialTick) -> new PartsVisual<>(context, be, partialTick, LiftRenderers::lift).reaching(LiftRenderers::reach))
 			.skipVanillaRender(be -> true)
 			.apply();
 		MachineVisuals.visualWhen(ModWastes.LIFT_CALL_PLATE_BE, LiftRenderers::plate, true, LiftCallPlateBlockEntity::isCalling);
@@ -132,20 +130,6 @@ public final class LiftRenderers {
 	static AABB reach(LiftBlockEntity be) {
 		AABB s = be.shaft();
 		return new AABB(s.minX - 1, be.bottom() - 1, s.minZ - 1, s.maxX + 1, be.getBlockPos().getY() + 2, s.maxZ + 1);
-	}
-
-	static final class ShaftVisual extends PartsVisual<LiftBlockEntity> {
-		ShaftVisual(dev.engine_room.flywheel.api.visualization.VisualizationContext context, LiftBlockEntity be, float partialTick) {
-			super(context, be, partialTick, LiftRenderers::lift);
-		}
-
-		@Override
-		public boolean isVisible(FrustumIntersection frustum) {
-			// the visual's own position is the drive's (relative to the render origin); the shaft reaches from it
-			AABB r = reach(blockEntity).move(-blockEntity.getBlockPos().getX() + visualPos.getX(), -blockEntity.getBlockPos().getY() + visualPos.getY(),
-				-blockEntity.getBlockPos().getZ() + visualPos.getZ());
-			return frustum.testAab((float) r.minX, (float) r.minY, (float) r.minZ, (float) r.maxX, (float) r.maxY, (float) r.maxZ);
-		}
 	}
 
 	static final class LiftRenderer extends SafeBlockEntityRenderer<LiftBlockEntity> {

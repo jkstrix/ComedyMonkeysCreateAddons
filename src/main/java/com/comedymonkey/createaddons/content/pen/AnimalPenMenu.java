@@ -24,7 +24,7 @@ import net.neoforged.neoforge.items.SlotItemHandler;
  */
 /* Inventory Profiles Next's sorting would shuffle these machine slots. */
 @IPNIgnore
-public class AnimalPenMenu extends AbstractContainerMenu implements QuickTransferMenu {
+public final class AnimalPenMenu extends AbstractContainerMenu implements QuickTransferMenu {
 	public static final int ANIMAL_X = 8, ANIMAL_Y = 18;
 	public static final int OUTPUT_X = 62, OUTPUT_Y = 18;
 	public static final int TROUGH_X = 8, TROUGH_Y = 80;

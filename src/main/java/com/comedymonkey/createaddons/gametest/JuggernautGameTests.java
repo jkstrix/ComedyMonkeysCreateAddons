@@ -9,6 +9,9 @@ import com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlock;
 import com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlockEntity;
 import com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlock;
 import com.comedymonkey.createaddons.content.juggernaut.WindingKeyBlockEntity;
+import com.comedymonkey.createaddons.content.juggernaut.ruin.RuinBlocks;
+import com.comedymonkey.createaddons.content.juggernaut.ruin.RuinBlocksProcessor;
+import com.comedymonkey.createaddons.content.juggernaut.ruin.RuinField;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.registry.ModBlocks;
 import com.comedymonkey.createaddons.registry.ModEntities;
@@ -119,7 +122,7 @@ public final class JuggernautGameTests {
 		ClockworkJuggernaut j = spawn(helper);
 		j.forcePhase(ClockworkJuggernaut.Phase.REWIND); // even wide open
 		var sources = j.damageSources();
-		var deployer = FakePlayerFactory.getMinecraft((ServerLevel) helper.getLevel());
+		var deployer = FakePlayerFactory.getMinecraft(helper.getLevel());
 		List<DamageSource> harmless = List.of(sources.fall(), sources.onFire(), sources.lava(), sources.drown(), sources.inWall(), sources.generic(),
 			sources.cactus(), sources.playerAttack(deployer), sources.mobAttack(helper.spawn(EntityType.ZOMBIE, new BlockPos(2, 2, 2))));
 		for (DamageSource source : harmless)
@@ -252,6 +255,8 @@ public final class JuggernautGameTests {
 		helper.setBlock(new BlockPos(6, 6, 7), Blocks.STONE);
 		ClockworkJuggernaut j = juggernauts(helper).get(0);
 		j.forcePhase(ClockworkJuggernaut.Phase.WOUND);
+		// placed by hand, the hall is no structure in the world: its box stands in for the ruin's pieces
+		j.testRuinPieces(template.getBoundingBox(new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(), at));
 		ArmorStand dummy = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(11, 1, 1));
 		dummy.setInvulnerable(true);
 		j.setTarget(dummy);
@@ -275,6 +280,623 @@ public final class JuggernautGameTests {
 			for (int x = 6; x <= 18; x++)
 				for (int y = 0; y <= 3; y++)
 					helper.assertBlockPresent(Blocks.DEEPSLATE_BRICKS, new BlockPos(x, y, 17));
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * JUG-01, D62: one found in a ruin still leaves a player's wall of its very brick standing, when it's no part of the
+	 * ruin's pieces (here there's no ruin structure at all): he only crumbles what the ruin built.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void aRuinOneLeavesAPlayersWallStanding(GameTestHelper helper) {
+		for (int x = 6; x <= 18; x++)
+			for (int y = 2; y <= 5; y++)
+				helper.setBlock(new BlockPos(x, y, 17), Blocks.DEEPSLATE_BRICKS);
+		ClockworkJuggernaut j = spawn(helper);
+		j.setRuinHome(j.blockPosition());
+		ArmorStand dummy = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(12, 2, 21));
+		dummy.setInvulnerable(true);
+		j.setTarget(dummy);
+		helper.runAfterDelay(140, () -> {
+			for (int x = 6; x <= 18; x++)
+				for (int y = 2; y <= 5; y++)
+					helper.assertBlockPresent(Blocks.DEEPSLATE_BRICKS, new BlockPos(x, y, 17));
+			helper.succeed();
+		});
+	}
+
+	/** The real ruin check (JUG-01): the field builds on scattered spots of its own, none in the hall's square or past its edge. */
+	@GameTest(template = COURSE)
+	public static void theRuinFieldKnowsWhereItBuilt(GameTestHelper helper) {
+		BlockPos centre = new BlockPos(1000, 64, 1000);
+		RuinField field = new RuinField(centre, 40, 12345L, false);
+		int built = 0, spots = 0;
+		for (int x = -40; x <= 40; x++)
+			for (int z = -40; z <= 40; z++) {
+				spots++;
+				if (field.height(centre.getX() + x, centre.getZ() + z) > 0) {
+					built++;
+					helper.assertTrue(Math.max(Math.abs(x), Math.abs(z)) > 8, "the hall's square is the hall's, not the field's: " + x + ", " + z);
+					helper.assertTrue(x * x + z * z <= 40 * 40, "nothing past the field's edge: " + x + ", " + z);
+				}
+			}
+		helper.assertTrue(built > 0 && built < spots / 4, "the field should build on its own scattered spots, builds on " + built + " of " + spots);
+		helper.succeed();
+	}
+
+	/**
+	 * MOB-R03, R04: the field claims a block only as part of one of its columns, standing on the ground no higher than
+	 * that column was built, however far above or below the hall: a player's block of the same brick on top of a wall,
+	 * floating over it or standing apart is theirs.
+	 */
+	@GameTest(template = COURSE)
+	public static void theRuinClaimsOnlyItsOwnColumns(GameTestHelper helper) {
+		BlockPos ground = helper.absolutePos(new BlockPos(12, 1, 12));
+		// a field laid, its hall 60 blocks below, so one of its columns (3 or more high, on bare ground) stands on this spot
+		RuinField probe = new RuinField(BlockPos.ZERO, 40, 777L, false), field = null;
+		for (int dx = -40; dx <= 40 && field == null; dx++)
+			for (int dz = -40; dz <= 40 && field == null; dz++) {
+				if (probe.height(dx, dz) < 3)
+					continue;
+				RuinField f = new RuinField(new BlockPos(ground.getX() - dx, ground.getY() - 60, ground.getZ() - dz), 40, 777L, false);
+				if (f.height(ground.getX(), ground.getZ()) >= 3 && !f.paved(ground.getX(), ground.getZ()))
+					field = f;
+			}
+		helper.assertTrue(field != null, "no column to try");
+		int top = field.height(ground.getX(), ground.getZ());
+		helper.setBlock(new BlockPos(12, 1, 12), Blocks.STONE);
+		for (int h = 0; h < top; h++)
+			helper.setBlock(new BlockPos(12, 2 + h, 12), h % 2 == 0 ? Blocks.DEEPSLATE_BRICKS : Blocks.COBBLED_DEEPSLATE);
+		helper.setBlock(new BlockPos(12, 2 + top, 12), Blocks.DEEPSLATE_BRICKS); // a player's, on top of the wall
+		helper.setBlock(new BlockPos(12, 4 + top, 12), Blocks.DEEPSLATE_BRICKS); // and one floating over it
+		for (int h = 0; h < top; h++)
+			helper.assertTrue(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 2 + h, 12))), "the wall's own block " + h + " up");
+		helper.assertFalse(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 2 + top, 12))), "a block on top of the wall");
+		helper.assertFalse(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 4 + top, 12))), "a block floating over it");
+		// a wall knocked out from under is no longer standing, so no longer the ruin's: why he brings a column down whole
+		helper.setBlock(new BlockPos(12, 2, 12), Blocks.AIR);
+		helper.assertFalse(field.built(helper.getLevel(), helper.absolutePos(new BlockPos(12, 4, 12))), "what's left floating over a gap");
+		// a player's block standing apart, on a spot the field built nothing on
+		for (int x = 1; x < 23; x++) {
+			BlockPos spot = helper.absolutePos(new BlockPos(x, 2, 3));
+			if (field.height(spot.getX(), spot.getZ()) > 0)
+				continue;
+			helper.setBlock(new BlockPos(x, 1, 3), Blocks.STONE);
+			helper.setBlock(new BlockPos(x, 2, 3), Blocks.DEEPSLATE_BRICKS);
+			helper.assertFalse(field.built(helper.getLevel(), spot), "a block where the field built nothing");
+			break;
+		}
+		helper.succeed();
+	}
+
+	/** A field whose column (at least {@code minTop} high, not on its paving) stands at {@code spot}'s x and z. */
+	private static RuinField fieldWithColumnAt(GameTestHelper helper, BlockPos spot, boolean end, int minTop) {
+		RuinField probe = new RuinField(BlockPos.ZERO, 40, 777L, end);
+		for (int dx = -40; dx <= 40; dx++)
+			for (int dz = -40; dz <= 40; dz++) {
+				if (probe.height(dx, dz) < minTop)
+					continue;
+				RuinField f = new RuinField(new BlockPos(spot.getX() - dx, spot.getY() - 60, spot.getZ() - dz), 40, 777L, end);
+				if (f.height(spot.getX(), spot.getZ()) >= minTop && !f.paved(spot.getX(), spot.getZ()))
+					return f;
+			}
+		throw new net.minecraft.gametest.framework.GameTestAssertException("no column to try");
+	}
+
+	/**
+	 * The user's "he gets stuck on his ruins": in a ruin built before it had its own blocks, he walks into one of its
+	 * field's walls and the whole of it above his feet comes down, not just its bottom block (which left the rest
+	 * floating, no longer standing on the ground, so no longer the ruin's, and in his way for good).
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 300)
+	public static void heBringsDownAWholeFieldWall(GameTestHelper helper) {
+		RuinField field = fieldWithColumnAt(helper, helper.absolutePos(new BlockPos(12, 2, 17)), false, 4);
+		int top = field.height(helper.absolutePos(new BlockPos(12, 2, 17)).getX(), helper.absolutePos(new BlockPos(12, 2, 17)).getZ());
+		helper.setBlock(new BlockPos(12, 1, 17), Blocks.STONE);
+		for (int h = 0; h < top; h++)
+			helper.setBlock(new BlockPos(12, 2 + h, 17), h % 2 == 0 ? Blocks.DEEPSLATE_BRICKS : Blocks.COBBLED_DEEPSLATE);
+		ClockworkJuggernaut j = spawn(helper);
+		j.setRuinHome(j.blockPosition());
+		j.testRuinField(field);
+		ArmorStand dummy = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(12, 2, 22));
+		dummy.setInvulnerable(true);
+		j.setTarget(dummy);
+		helper.succeedWhen(() -> {
+			for (int h = 1; h < top; h++)
+				helper.assertBlockPresent(Blocks.AIR, new BlockPos(12, 2 + h, 17));
+		});
+	}
+
+	/**
+	 * A ruin's own blocks (RuinBlocks) crumble before any Juggernaut, summoned or found, wherever they are; its brass and
+	 * its chest never do (the user: "he shouldn't be able to destroy the chests or brass").
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 300)
+	public static void anyJuggernautCrumblesARuinsOwnBlocksButNotItsBrass(GameTestHelper helper) {
+		// up to the course's ceiling, so he can't leap over it: through it is the only way
+		for (int x = 0; x <= 23; x++)
+			for (int y = 0; y <= 11; y++)
+				helper.setBlock(new BlockPos(x, y, 17), (y % 2 == 0 ? RuinBlocks.DEEPSLATE_BRICKS : RuinBlocks.END_STONE).get());
+		// in the wall a step up from his feet (he stands at y 0 here), where he'd crumble them if he crumbled anything
+		BlockState brass = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("create", "brass_block")).defaultBlockState();
+		helper.setBlock(new BlockPos(10, 1, 17), brass);
+		helper.setBlock(new BlockPos(14, 1, 17), Blocks.CHEST);
+		ClockworkJuggernaut j = spawn(helper);
+		ArmorStand dummy = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(12, 2, 22));
+		dummy.setInvulnerable(true);
+		j.setTarget(dummy);
+		helper.succeedWhen(() -> {
+			for (int y = 1; y <= 6; y++)
+				helper.assertBlockPresent(Blocks.AIR, new BlockPos(12, y, 17));
+			helper.assertBlockState(new BlockPos(10, 1, 17), s -> s.is(brass.getBlock()), () -> "the brass should stand");
+			helper.assertBlockPresent(Blocks.CHEST, new BlockPos(14, 1, 17));
+		});
+	}
+
+	/** The hall is built of the ruin's own blocks, but for its floor (the ground), its chest and its brass. */
+	@GameTest(template = COURSE)
+	public static void theHallIsBuiltOfTheRuinsOwnBlocks(GameTestHelper helper) {
+		var template = helper.getLevel().getStructureManager().getOrCreate(ComedyMonkeysCreateAddons.asResource("juggernaut_ruin"));
+		BlockPos at = helper.absolutePos(new BlockPos(4, 0, 4));
+		var settings = new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings().addProcessor(RuinBlocksProcessor.INSTANCE);
+		template.placeInWorld(helper.getLevel(), at, at, settings, helper.getLevel().getRandom(), 2);
+		int own = 0, chests = 0, brass = 0;
+		for (BlockPos p : BlockPos.betweenClosed(at, at.offset(template.getSize()).offset(-1, -1, -1))) {
+			BlockState s = helper.getLevel().getBlockState(p);
+			if (p.getY() == at.getY())
+				helper.assertFalse(s.is(ClockworkJuggernaut.CRUMBLES), "the floor is the ground, not his to crumble: " + p);
+			else {
+				if (s.is(ClockworkJuggernaut.CRUMBLES))
+					own++;
+				helper.assertFalse(RuinBlocks.ruin(s) != s, "a vanilla block the ruin has its own of, above the floor: " + s + " at " + p);
+			}
+			chests += s.is(Blocks.CHEST) ? 1 : 0;
+			brass += BuiltInRegistries.BLOCK.getKey(s.getBlock()).getPath().equals("brass_block") ? 1 : 0;
+		}
+		helper.assertTrue(own > 200, "the hall should be built of the ruin's own blocks, has " + own);
+		helper.assertTrue(chests == 1 && brass == 1, "its chest and brass stay as they are: " + chests + " chests, " + brass + " brass");
+		helper.succeed();
+	}
+
+	/** Each of the ruin's own blocks is its vanilla block to a player: named as it, dropping it, crumbled by him. */
+	@GameTest(template = COURSE)
+	public static void theRuinsOwnBlocksAreTheirVanillaBlocks(GameTestHelper helper) {
+		int n = 0;
+		for (var entry : ModBlocks.BLOCKS.getEntries())
+			if (entry.get() instanceof RuinBlocks.Ruin ruin) {
+				n++;
+				net.minecraft.world.level.block.Block copy = entry.get(), original = ruin.original();
+				helper.assertTrue(copy.getLootTable().equals(original.getLootTable()), entry.getId() + " should drop as " + original);
+				helper.assertTrue(copy.getDescriptionId().equals(original.getDescriptionId()), entry.getId() + " should be named as " + original);
+				helper.assertTrue(copy.defaultBlockState().is(ClockworkJuggernaut.CRUMBLES), entry.getId() + " should crumble before him");
+				helper.assertTrue(RuinBlocks.ruin(original.defaultBlockState()).is(copy), "the ruin should build " + original + " as " + entry.getId());
+			}
+		helper.assertTrue(n == 14, "14 ruin blocks, found " + n);
+		helper.succeed();
+	}
+
+	/** In an End ruin built before it had its own blocks, a column's end stone is the ruin's; the island under it isn't. */
+	@GameTest(template = COURSE)
+	public static void anEndColumnStandsOnTheIsland(GameTestHelper helper) {
+		BlockPos spot = helper.absolutePos(new BlockPos(12, 2, 12));
+		RuinField field = fieldWithColumnAt(helper, spot, true, 3);
+		int top = field.height(spot.getX(), spot.getZ());
+		helper.setBlock(new BlockPos(12, 1, 12), Blocks.END_STONE);
+		for (int h = 0; h <= top; h++)
+			helper.setBlock(new BlockPos(12, 2 + h, 12), h % 2 == 0 ? Blocks.END_STONE : Blocks.END_STONE_BRICKS);
+		for (int h = 0; h < top; h++)
+			helper.assertTrue(field.builtOn(helper.getLevel(), spot.above(h), spot.getY()), "the column's block " + h + " up");
+		helper.assertFalse(field.builtOn(helper.getLevel(), spot.above(top), spot.getY()), "end stone on top of the column");
+		helper.assertFalse(field.builtOn(helper.getLevel(), spot.below(), spot.getY()), "the island under it");
+		helper.succeed();
+	}
+
+	/**
+	 * The user's "he shouldn't be able to be pinned or trapped": walled in with them out of reach, after a while going
+	 * nowhere he comes out of steam beside them.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 360)
+	public static void aTrappedOneComesToThem(GameTestHelper helper) {
+		for (int i = 8; i <= 16; i++)
+			for (int y = 1; y <= 11; y++) {
+				helper.setBlock(new BlockPos(i, y, 8), Blocks.OBSIDIAN);
+				helper.setBlock(new BlockPos(i, y, 16), Blocks.OBSIDIAN);
+				helper.setBlock(new BlockPos(8, y, i), Blocks.OBSIDIAN);
+				helper.setBlock(new BlockPos(16, y, i), Blocks.OBSIDIAN);
+			}
+		ClockworkJuggernaut j = spawn(helper);
+		ArmorStand dummy = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(3, 2, 3));
+		dummy.setInvulnerable(true);
+		j.setTarget(dummy);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(helper.getTick() >= ClockworkJuggernaut.TRAPPED_TICKS, "not before he's been trapped a while");
+			BlockPos at = helper.relativePos(j.blockPosition());
+			helper.assertTrue(at.getX() < 8 || at.getZ() < 8, "he should be out of the box, is at " + at);
+			helper.assertTrue(j.distanceTo(dummy) < 13, "he should be beside them, is " + j.distanceTo(dummy) + " off");
+		});
+	}
+
+	/** The user's "he ends up floating if he is on a hill": held up by one corner on a ledge, he slides off and comes down. */
+	@GameTest(template = COURSE, timeoutTicks = 200)
+	public static void heSlidesOffALedgeHeCaughtACornerOn(GameTestHelper helper) {
+		for (int x = 9; x <= 10; x++)
+			for (int z = 9; z <= 10; z++)
+				for (int y = 0; y <= 2; y++)
+					helper.setBlock(new BlockPos(x, y, z), Blocks.STONE);
+		ClockworkJuggernaut j = spawn(helper);
+		BlockPos at = helper.absolutePos(new BlockPos(12, 3, 12));
+		j.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+		helper.succeedWhen(() -> helper.assertTrue(j.onGround() && j.getY() < at.getY() - 2.5,
+			"he should come down off the ledge, is at " + helper.relativeVec(j.position())));
+	}
+
+	/** Half on a step he could walk up, he stands: the slide is only for being held up over thin air. */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void heStandsAStepHalfUnderHim(GameTestHelper helper) {
+		for (int x = 0; x <= 12; x++)
+			for (int z = 0; z <= 23; z++)
+				helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE);
+		ClockworkJuggernaut j = spawn(helper);
+		BlockPos at = helper.absolutePos(new BlockPos(12, 1, 12));
+		j.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+		helper.runAfterDelay(100, () -> {
+			helper.assertTrue(Math.abs(j.getX() - (at.getX() + 0.5)) < 0.1 && j.getY() >= at.getY() - 0.01,
+				"he should stand where he was, is at " + helper.relativeVec(j.position()));
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * The user's "he locks on one player and it makes it easy to cheese him": whoever's hurting him (from behind most of
+	 * all) is who he goes after next; with nobody hurting him, who it is varies.
+	 */
+	@GameTest(template = COURSE)
+	public static void heGoesAfterWhoeverIsHurtingHim(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		Player front = player(helper, j, 6), behind = player(helper, j, -6);
+		List<Player> both = List.of(front, behind);
+		int frontFirst = 0;
+		for (int i = 0; i < 200; i++)
+			frontFirst += j.nextTargetOf(both) == front ? 1 : 0;
+		helper.assertTrue(frontFirst > 20 && frontFirst < 180, "with nobody hurting him, either should do: front picked " + frontFirst + "/200");
+		for (int i = 0; i < 3; i++)
+			hit(j, j.damageSources().playerAttack(behind), 10);
+		for (int i = 0; i < 50; i++)
+			helper.assertTrue(j.nextTargetOf(both) == behind, "the one hammering his back should draw him");
+		helper.succeed();
+	}
+
+	/** The user's "be a bit more random in his attacks": now and then a move from the next distance band over. */
+	@GameTest(template = COURSE)
+	public static void hisMovesSpillOverTheirDistanceBands(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		// 7 blocks off, in front: the middle band (charge, stomp), with the close band's swing and grab still able to land
+		ArmorStand dummy = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(12, 2, 19));
+		java.util.Map<String, Integer> seen = new java.util.HashMap<>();
+		for (int i = 0; i < 400; i++)
+			seen.merge(String.valueOf(j.pickFor(dummy)), 1, Integer::sum);
+		helper.assertTrue(seen.getOrDefault("CHARGE", 0) > 100, "mostly the middle band's moves: " + seen);
+		helper.assertTrue(seen.getOrDefault("SWING", 0) + seen.getOrDefault("GRAB", 0) > 10, "now and then a close one: " + seen);
+		helper.succeed();
+	}
+
+	/** MOB-R01: saved in the moment between his death and his going, he loads dead: the Mainspring, loot and XP come once. */
+	@GameTest(template = COURSE, timeoutTicks = 260)
+	public static void aSaveAfterHisDeathPaysOutOnce(GameTestHelper helper) {
+		listenForDrops();
+		ClockworkJuggernaut j = spawn(helper);
+		j.forceStage(3);
+		j.forcePhase(ClockworkJuggernaut.Phase.REWIND);
+		hit(j, j.damageSources().playerAttack(player(helper, j, 6)), 10000);
+		ClockworkJuggernaut[] loaded = new ClockworkJuggernaut[1];
+		long[] at = { 0 };
+		helper.onEachTick(() -> {
+			if (loaded[0] != null || !j.isDeadOrDying() || j.isRemoved())
+				return;
+			// died this tick and not gone yet: the save the world might make now
+			CompoundTag tag = new CompoundTag();
+			j.saveWithoutId(tag);
+			j.discard();
+			loaded[0] = ModEntities.CLOCKWORK_JUGGERNAUT.get().create(helper.getLevel());
+			loaded[0].load(tag);
+			helper.getLevel().addFreshEntity(loaded[0]);
+			at[0] = helper.getTick();
+		});
+		helper.succeedWhen(() -> {
+			helper.assertTrue(loaded[0] != null && helper.getTick() > at[0] + 110, "waiting out a second death clip");
+			helper.assertTrue(loaded[0].isRemoved(), "he should stay dead and go");
+			List<ItemEntity> springs = helper.getLevel().getEntitiesOfClass(ItemEntity.class, loaded[0].getBoundingBox().inflate(6),
+				e -> e.getItem().is(ModItems.MAINSPRING.get()));
+			helper.assertTrue(springs.stream().mapToInt(e -> e.getItem().getCount()).sum() == 1, "exactly one Mainspring should drop");
+			int xp = XP_DROPS.getOrDefault(j.getUUID(), 0);
+			helper.assertTrue(xp == 1, "his XP should drop once, dropped " + xp + " times");
+		});
+	}
+
+	/** Times each Juggernaut's XP has dropped. */
+	private static final java.util.Map<java.util.UUID, Integer> XP_DROPS = new java.util.concurrent.ConcurrentHashMap<>();
+	private static boolean listeningForDrops;
+
+	private static synchronized void listenForDrops() {
+		if (listeningForDrops)
+			return;
+		listeningForDrops = true;
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent.class, e -> {
+			if (e.getEntity() instanceof ClockworkJuggernaut j)
+				XP_DROPS.merge(j.getUUID(), 1, Integer::sum);
+		});
+	}
+
+	/** MOB-R02: a shove that comes as speed (a train running him over, a slime block's bounce) doesn't carry him off either. */
+	@GameTest(template = COURSE, timeoutTicks = 40)
+	public static void aThrowDoesntMoveHim(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		double[] at = new double[2];
+		helper.runAfterDelay(2, j::wakeFromRuin); // getting up: no step of his stops him dead, as standing wound does
+		helper.runAfterDelay(6, () -> {
+			at[0] = j.getX();
+			at[1] = j.getZ();
+			j.setDeltaMovement(3, 0, 0); // what Create's train collision hands what it runs over
+		});
+		helper.runAfterDelay(10, () -> {
+			helper.assertTrue(j.phase() == ClockworkJuggernaut.Phase.WAKING, "he should still be getting up, is " + j.phase());
+			helper.assertTrue(Math.abs(j.getX() - at[0]) < 1e-3 && Math.abs(j.getZ() - at[1]) < 1e-3,
+				"he should be where he stood, is " + String.format("%.2f", j.getX() - at[0]) + " over");
+			helper.succeed();
+		});
+	}
+
+	/** WARN-05: the ruin stands on natural ground, never on water, a tree, plants, thin snow or air. */
+	@GameTest(template = COURSE)
+	public static void theRuinStandsOnNaturalGround(GameTestHelper helper) {
+		List<net.minecraft.world.level.block.Block> ground = List.of(Blocks.STONE, Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.SAND, Blocks.GRAVEL,
+			Blocks.DEEPSLATE, Blocks.END_STONE, Blocks.SNOW_BLOCK, Blocks.MOSS_BLOCK, Blocks.PODZOL, Blocks.COARSE_DIRT, Blocks.TERRACOTTA);
+		List<net.minecraft.world.level.block.Block> not = List.of(Blocks.WATER, Blocks.OAK_LEAVES, Blocks.OAK_LOG, Blocks.SHORT_GRASS, Blocks.SNOW,
+			Blocks.AIR, Blocks.POPPY);
+		int x = 1;
+		for (var block : ground) {
+			BlockPos p = new BlockPos(x++, 2, 2);
+			helper.setBlock(p, block);
+			helper.assertTrue(com.comedymonkey.createaddons.content.juggernaut.ruin.RuinField.ground(helper.getLevel(), helper.absolutePos(p)),
+				"the ruin should stand on " + block);
+		}
+		x = 1;
+		for (var block : not) {
+			BlockPos p = new BlockPos(x++, 2, 5);
+			helper.setBlock(p, block);
+			helper.assertFalse(com.comedymonkey.createaddons.content.juggernaut.ruin.RuinField.ground(helper.getLevel(), helper.absolutePos(p)),
+				"the ruin shouldn't stand on " + block);
+		}
+		helper.succeed();
+	}
+
+	/** JUG-04, D20: a shove from outside (a contraption sets his position) is undone the next step while he stands. */
+	@GameTest(template = COURSE, timeoutTicks = 40)
+	public static void aShoveDoesntMoveHim(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		double[] at = new double[2];
+		helper.runAfterDelay(10, () -> {
+			at[0] = j.getX();
+			at[1] = j.getZ();
+			j.setPos(j.getX() + 1, j.getY(), j.getZ()); // what Create's ContraptionCollider does
+		});
+		helper.runAfterDelay(11, () -> {
+			helper.assertTrue(Math.abs(j.getX() - at[0]) < 1e-3 && Math.abs(j.getZ() - at[1]) < 1e-3,
+				"he should be back where he stood, is " + String.format("%.2f", j.getX() - at[0]) + " over");
+			helper.succeed();
+		});
+	}
+
+	/** JUG-04: holding his ground never holds back his own moves: a charge still carries him on. */
+	@GameTest(template = COURSE, timeoutTicks = 60)
+	public static void aChargeStillMovesHim(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		ArmorStand dummy = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(12, 2, 22));
+		dummy.setInvulnerable(true);
+		double[] from = { Double.NaN };
+		helper.runAfterDelay(5, () -> {
+			from[0] = j.getZ();
+			j.forceCharge(dummy);
+		});
+		helper.runAfterDelay(45, () -> {
+			helper.assertTrue(j.getZ() - from[0] > 3, "the charge should carry him on, moved " + String.format("%.2f", j.getZ() - from[0]));
+			helper.succeed();
+		});
+	}
+
+	/** A player who struck him, with their death recorded by what the kill credits them with. */
+	private static Player killer(GameTestHelper helper, ClockworkJuggernaut j, List<String> seen) {
+		Player p = new Player(helper.getLevel(), BlockPos.ZERO, 0, new com.mojang.authlib.GameProfile(java.util.UUID.randomUUID(), "test-killer")) {
+			@Override
+			public boolean isSpectator() {
+				return false;
+			}
+
+			@Override
+			public boolean isCreative() {
+				return false;
+			}
+
+			@Override
+			public boolean killedEntity(ServerLevel level, net.minecraft.world.entity.LivingEntity entity) {
+				if (entity == j)
+					seen.add("blow"); // the death's source was this player's blow
+				return super.killedEntity(level, entity);
+			}
+
+			@Override
+			public void awardKillScore(net.minecraft.world.entity.Entity killed, int score, DamageSource source) {
+				if (killed == j)
+					seen.add("credit"); // what fires player_killed_entity ("Run Down") for a real player
+				super.awardKillScore(killed, score, source);
+			}
+		};
+		p.setPos(j.getX(), j.getY(), j.getZ() + 6);
+		return p;
+	}
+
+	/** JUG-03, JUG-07: he dies of the player's own killing blow at the end of his clip, and the kill is credited to them. */
+	@GameTest(template = COURSE, timeoutTicks = 140)
+	public static void heDiesOfTheKillingBlow(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		j.forceStage(3);
+		j.forcePhase(ClockworkJuggernaut.Phase.REWIND);
+		List<String> seen = new java.util.concurrent.CopyOnWriteArrayList<>();
+		hit(j, j.damageSources().playerAttack(killer(helper, j, seen)), 10000);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(j.isRemoved(), "he should be gone after his death clip");
+			helper.assertTrue(seen.contains("blow"), "he should die of the player's blow, not a generic one");
+			helper.assertTrue(seen.contains("credit"), "the player should get the kill");
+		});
+	}
+
+	/** JUG-03: saved in his death clip (a quit, a server stop) and loaded again, he still drops the Mainspring. */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void aReloadInHisDeathStillDropsTheMainspring(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		j.forceStage(3);
+		j.forcePhase(ClockworkJuggernaut.Phase.REWIND);
+		hit(j, j.damageSources().playerAttack(player(helper, j, 6)), 10000);
+		helper.assertTrue(j.phase() == ClockworkJuggernaut.Phase.DYING, "he should be dying, is " + j.phase());
+		ClockworkJuggernaut[] loaded = new ClockworkJuggernaut[1];
+		helper.runAfterDelay(20, () -> {
+			CompoundTag tag = new CompoundTag();
+			j.saveWithoutId(tag);
+			j.discard();
+			loaded[0] = ModEntities.CLOCKWORK_JUGGERNAUT.get().create(helper.getLevel());
+			loaded[0].load(tag);
+			helper.getLevel().addFreshEntity(loaded[0]);
+			helper.assertTrue(loaded[0].phase() == ClockworkJuggernaut.Phase.DYING, "he should load still dying, is " + loaded[0].phase());
+		});
+		helper.succeedWhen(() -> {
+			helper.assertTrue(loaded[0] != null && loaded[0].isRemoved(), "he should finish dying after the reload");
+			List<ItemEntity> springs = helper.getLevel().getEntitiesOfClass(ItemEntity.class, loaded[0].getBoundingBox().inflate(4),
+				e -> e.getItem().is(ModItems.MAINSPRING.get()));
+			helper.assertTrue(springs.stream().mapToInt(e -> e.getItem().getCount()).sum() == 1, "the Mainspring should still drop");
+		});
+	}
+
+	/** JUG-06, D27: villagers, livestock and pets that never touched him are no fair game; whatever hits him is. */
+	@GameTest(template = COURSE)
+	public static void heSparesBystanders(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		Player someone = player(helper, j, 8);
+		net.minecraft.world.entity.npc.Villager villager = helper.spawn(EntityType.VILLAGER, new BlockPos(14, 2, 14));
+		Pig pig = helper.spawn(EntityType.PIG, new BlockPos(10, 2, 14));
+		net.minecraft.world.entity.animal.Wolf wolf = helper.spawn(EntityType.WOLF, new BlockPos(14, 2, 10));
+		wolf.tame(someone);
+		net.minecraft.world.entity.animal.IronGolem golem = helper.spawn(EntityType.IRON_GOLEM, new BlockPos(10, 2, 10));
+		helper.assertTrue(j.fairGame(someone), "a survival player is fair game");
+		for (var bystander : List.of(villager, pig, wolf, golem))
+			helper.assertFalse(j.fairGame(bystander), bystander.getType() + " never touched him: no fair game");
+		j.hurt(j.damageSources().mobAttack(wolf), 4);
+		j.hurt(j.damageSources().mobAttack(golem), 4);
+		helper.assertTrue(j.fairGame(wolf), "a pet that bit him is fair game");
+		helper.assertTrue(j.fairGame(golem), "a golem that hit him is fair game");
+		helper.assertFalse(j.fairGame(villager), "the villager still isn't");
+		helper.succeed();
+	}
+
+	/** JUG-06: his stomp (the leap's landing) leaves a villager standing beside his target unhurt. */
+	@GameTest(template = COURSE, timeoutTicks = 100)
+	public static void hisLandingSparesAVillager(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		Pig pig = helper.spawn(EntityType.PIG, new BlockPos(12, 0, 20));
+		pig.setInvulnerable(true);
+		pig.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 10));
+		net.minecraft.world.entity.npc.Villager villager = helper.spawn(EntityType.VILLAGER, new BlockPos(14, 0, 20));
+		villager.setNoAi(true);
+		j.forceLeap(pig);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(pig.getTicksFrozen() > 0, "the landing should come down on the pig");
+			helper.assertTrue(villager.getHealth() == villager.getMaxHealth() && villager.getTicksFrozen() == 0,
+				"the villager by it should be untouched, health " + villager.getHealth());
+		});
+	}
+
+	/** JUG-06: his cog flies through a villager in its way and hits only what he may hit. */
+	@GameTest(template = COURSE, timeoutTicks = 60)
+	public static void hisCogPassesThroughBystanders(GameTestHelper helper) {
+		ClockworkJuggernaut j = spawn(helper);
+		net.minecraft.world.entity.npc.Villager villager = helper.spawn(EntityType.VILLAGER, new BlockPos(4, 2, 4));
+		villager.setNoAi(true);
+		Pig target = helper.spawn(EntityType.PIG, new BlockPos(20, 2, 4));
+		target.setNoAi(true);
+		j.forcePhase(ClockworkJuggernaut.Phase.REWIND); // standing still, so only the cogs reach them
+		j.setTarget(target);
+		for (net.minecraft.world.entity.LivingEntity at : List.of(villager, target)) {
+			com.comedymonkey.createaddons.content.juggernaut.ThrownCog cog = new com.comedymonkey.createaddons.content.juggernaut.ThrownCog(
+				ModEntities.THROWN_COG.get(), helper.getLevel());
+			cog.setOwner(j);
+			cog.setPos(at.getX(), at.getY(0.5), at.getZ() - 3);
+			cog.shoot(0, 0, 1, 1f, 0);
+			cog.setNoGravity(true);
+			helper.getLevel().addFreshEntity(cog);
+		}
+		helper.runAfterDelay(30, () -> {
+			helper.assertTrue(villager.getHealth() == villager.getMaxHealth(), "the cog should fly through the villager, health " + villager.getHealth());
+			helper.assertTrue(target.getHealth() < target.getMaxHealth(), "the cog should hit his target");
+			helper.succeed();
+		});
+	}
+
+	/** JUG-07 / WARN-01: the ritual's waking goes through NeoForge's spawn hook, and everyone by gets "Wound Up". */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void theRitualIsWoundUp(GameTestHelper helper) {
+		listenForSpawns();
+		BlockPos foot = new BlockPos(12, 0, 14);
+		WindingKeyBlockEntity key = effigy(helper, foot, true);
+		key.testSpeed = 64;
+		key.setWind(0.95f);
+		BlockPos keyAt = helper.absolutePos(foot.above().south());
+		boolean[] awarded = { false };
+		com.comedymonkey.createaddons.advancement.ModAdvancements.NearbyAward listener = (level, pos, action, range) -> {
+			if (level == helper.getLevel() && pos.equals(keyAt)
+				&& action.equals(com.comedymonkey.createaddons.advancement.ModAdvancements.JUGGERNAUT_SUMMONED) && range >= 32)
+				awarded[0] = true;
+		};
+		com.comedymonkey.createaddons.advancement.ModAdvancements.TEST_LISTENERS.add(listener);
+		helper.succeedWhen(() -> {
+			List<ClockworkJuggernaut> found = juggernauts(helper);
+			helper.assertTrue(found.size() == 1, "he should have woken, found " + found.size());
+			helper.assertTrue(SPAWN_HOOKED.contains(found.get(0).getUUID()), "his waking should go through FinalizeSpawnEvent");
+			helper.assertTrue(awarded[0], "\"Wound Up\" should be awarded near the key");
+			com.comedymonkey.createaddons.advancement.ModAdvancements.TEST_LISTENERS.remove(listener);
+		});
+	}
+
+	private static final Set<java.util.UUID> SPAWN_HOOKED = java.util.concurrent.ConcurrentHashMap.newKeySet();
+	private static boolean listening;
+
+	private static synchronized void listenForSpawns() {
+		if (listening)
+			return;
+		listening = true;
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent.class, e -> {
+			if (e.getEntity() instanceof ClockworkJuggernaut j && e.getSpawnType() == net.minecraft.world.entity.MobSpawnType.TRIGGERED)
+				SPAWN_HOOKED.add(j.getUUID());
+		});
+	}
+
+	/** JUG-07: a Spring Engine wound full gets everyone by "Tightly Wound", once. */
+	@GameTest(template = COURSE, timeoutTicks = 100)
+	public static void aFullSpringEngineIsTightlyWound(GameTestHelper helper) {
+		BlockPos out = new BlockPos(12, 0, 10);
+		SpringEngineBlockEntity engine = springEngine(helper, out);
+		engine.setStored(SpringEngineBlockEntity.capacity() - 1024L * 5);
+		BlockPos at = helper.absolutePos(out);
+		int[] awarded = { 0 };
+		com.comedymonkey.createaddons.advancement.ModAdvancements.NearbyAward listener = (level, pos, action, range) -> {
+			if (level == helper.getLevel() && pos.equals(at) && action.equals(com.comedymonkey.createaddons.advancement.ModAdvancements.SPRING_ENGINE_FULL))
+				awarded[0]++;
+		};
+		com.comedymonkey.createaddons.advancement.ModAdvancements.TEST_LISTENERS.add(listener);
+		helper.setBlock(out.south(2), creativeMotor(Direction.NORTH));
+		helper.runAfterDelay(80, () -> {
+			com.comedymonkey.createaddons.advancement.ModAdvancements.TEST_LISTENERS.remove(listener);
+			helper.assertTrue(engine.stored() == SpringEngineBlockEntity.capacity(), "it should be wound full, holds " + engine.stored());
+			helper.assertTrue(awarded[0] == 1, "\"Tightly Wound\" should be awarded once as it fills, was " + awarded[0]);
 			helper.succeed();
 		});
 	}

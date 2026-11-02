@@ -126,6 +126,7 @@ class MagmaEngineBlockTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation") // exercises the block's own rotate and mirror
 	void rotatesAndMirrors() {
 		BlockState north = plain().defaultBlockState().setValue(MagmaEngineBlock.FACING, Direction.NORTH);
 		assertEquals(Direction.EAST, north.rotate(Rotation.CLOCKWISE_90).getValue(MagmaEngineBlock.FACING));

@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.event.ModelEvent;
 
 /**
@@ -68,14 +69,14 @@ public class SpringEngineRenderer extends SafeBlockEntityRenderer<SpringEngineBl
 	public static void parts(SpringEngineBlockEntity be, float partialTicks, PoseStack ms, PartSink sink, int light) {
 		boolean output = SpringEngineBlock.isOutput(be.getBlockState());
 		Direction facing = be.facing();
-		float fill = be.shownFill();
+		float fill = Mth.clamp(be.shownFill(), 0, 1); // a frame index out of range here would crash every client in sight
 		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5);
 		ms.mulPose(Axis.YP.rotationDegrees(-(facing.toYRot() + 180)));
 		ms.translate(-0.5, -0.5, -0.5);
 		// the coil frame by wind (0 run down .. 3 full); the runes lit to the nearest quarter
-		sink.part((output ? COIL_FRONT : COIL_BACK)[Math.min(3, (int) (fill * 4))], ms, light);
-		int lit = Math.round(fill * 4);
+		sink.part((output ? COIL_FRONT : COIL_BACK)[Mth.clamp((int) (fill * 4), 0, 3)], ms, light);
+		int lit = Mth.clamp(Math.round(fill * 4), 0, 4);
 		if (lit > 0)
 			sink.part(RUNES[lit - 1], ms, LightTexture.FULL_BRIGHT);
 		// its shaft out of the end, turning with that end, while nothing's fitted there (a shaft or a machine shows its own)

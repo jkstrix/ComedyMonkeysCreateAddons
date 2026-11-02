@@ -37,7 +37,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * An upgraded barrel: like an upgraded chest (tiered stack size and slots, oversized stacks saved safely), but a
  * full block whose front shows open while someone is using it, like a vanilla barrel.
  */
-public class UpgradedBarrelBlockEntity extends BaseContainerBlockEntity implements IHaveGoggleInformation, UpgradedStorage {
+public final class UpgradedBarrelBlockEntity extends BaseContainerBlockEntity implements IHaveGoggleInformation, UpgradedStorage {
 	private NonNullList<ItemStack> items;
 	/** Set (not saved) once the upgrade has been taken out, just before the barrel turns back into a vanilla one. */
 	private boolean upgradeTaken;
@@ -98,6 +98,7 @@ public class UpgradedBarrelBlockEntity extends BaseContainerBlockEntity implemen
 
 	/** Diamond doubles the slots, so the inventory grows or (compacting, already checked to fit) shrinks with the tier. */
 	@Override
+	@SuppressWarnings("deprecation") // override-only API: overriding it is the intended use
 	public void setBlockState(BlockState state) {
 		super.setBlockState(state);
 		int slots = tierOf(state).slots();

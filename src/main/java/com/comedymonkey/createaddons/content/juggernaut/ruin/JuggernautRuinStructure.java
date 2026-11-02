@@ -9,10 +9,13 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 
 /**
@@ -66,6 +69,30 @@ public class JuggernautRuinStructure extends Structure {
 			builder.addPiece(new RuinHall(context.structureTemplateManager(), centre, rotation, end));
 			builder.addPiece(new RuinField(centre, RADIUS, context.random().nextLong(), end));
 		}));
+	}
+
+	/**
+	 * Is {@code pos} part of a Juggernaut Ruin in the world (D62): inside its hall, or on a spot its field built on? A
+	 * player's block of the same brick beside it is not. Only ruins world generation placed count: {@code /place} keeps no
+	 * record of the structure. Only ruins generated before they had their own blocks (RuinBlocks) are asked: in a newer
+	 * one, a vanilla block is never the ruin's.
+	 */
+	public static boolean built(ServerLevel level, BlockPos pos) {
+		for (StructureStart start : level.structureManager().startsForStructure(new ChunkPos(pos), s -> s.type() == ModStructures.JUGGERNAUT_RUIN.get()))
+			for (StructurePiece piece : start.getPieces())
+				if (piece instanceof RuinField field ? field.legacy() && field.built(level, pos)
+					: piece instanceof RuinHall hall && hall.legacy() && hall.getBoundingBox().isInside(pos))
+					return true;
+		return false;
+	}
+
+	/** Is there a ruin generated before its own blocks about {@code pos} (so the old check is worth asking at all)? */
+	public static boolean legacyNear(ServerLevel level, BlockPos pos) {
+		for (StructureStart start : level.structureManager().startsForStructure(new ChunkPos(pos), s -> s.type() == ModStructures.JUGGERNAUT_RUIN.get()))
+			for (StructurePiece piece : start.getPieces())
+				if (piece instanceof RuinField field ? field.legacy() : piece instanceof RuinHall hall && hall.legacy())
+					return true;
+		return false;
 	}
 
 	@Override

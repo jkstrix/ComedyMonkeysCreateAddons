@@ -1,0 +1,50 @@
+{
+  "variants": {
+    "facing=north,working=false": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo"
+    },
+    "facing=north,working=true": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo_working"
+    },
+    "facing=east,working=false": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo",
+      "y": 90
+    },
+    "facing=east,working=true": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo_working",
+      "y": 90
+    },
+    "facing=south,working=false": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo",
+      "y": 180
+    },
+    "facing=south,working=true": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo_working",
+      "y": 180
+    },
+    "facing=west,working=false": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo",
+      "y": 270
+    },
+    "facing=west,working=true": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo_working",
+      "y": 270
+    },
+    "facing=up,working=false": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo",
+      "x": 270
+    },
+    "facing=up,working=true": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo_working",
+      "x": 270
+    },
+    "facing=down,working=false": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo",
+      "x": 90
+    },
+    "facing=down,working=true": {
+      "model": "comedymonkeysaddons:block/clockwork_dynamo_working",
+      "x": 90
+    }
+  }
+}

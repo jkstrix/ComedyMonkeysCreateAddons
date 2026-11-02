@@ -22,9 +22,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * (see {@link WindingKeyBlockEntity}). {@code facing} is the way the key points, away from the block it's fixed to.
  */
 public class WindingKeyBlock extends DirectionalKineticBlock implements IBE<WindingKeyBlockEntity> {
-	/** The plate against the block behind and the key's hub, for a key facing north (the model's way round). */
+	/** The plate against the block behind, the key's hub and its spindle out to the face, for a key facing north (the model's way round). */
 	private static final VoxelShape NORTH = Shapes.or(Block.box(1, 1, 14, 15, 15, 16), Block.box(5, 5, 4, 11, 11, 14),
-		Block.box(1, 4.5, 4.5, 15, 11.5, 6.5));
+		Block.box(1, 4.5, 4.5, 15, 11.5, 6.5), Block.box(6, 6, 0, 10, 10, 4));
 
 	public WindingKeyBlock(Properties properties) {
 		super(properties);

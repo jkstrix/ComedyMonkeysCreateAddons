@@ -1,0 +1,54 @@
+{
+  "variants": {
+    "facing=down,powered=false": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet"
+    },
+    "facing=down,powered=true": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet"
+    },
+    "facing=up,powered=false": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet",
+      "x": 180
+    },
+    "facing=up,powered=true": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet",
+      "x": 180
+    },
+    "facing=north,powered=false": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet",
+      "x": 270
+    },
+    "facing=north,powered=true": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet",
+      "x": 270
+    },
+    "facing=south,powered=false": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet",
+      "x": 90
+    },
+    "facing=south,powered=true": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet",
+      "x": 90
+    },
+    "facing=east,powered=false": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet",
+      "x": 270,
+      "y": 90
+    },
+    "facing=east,powered=true": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet",
+      "x": 270,
+      "y": 90
+    },
+    "facing=west,powered=false": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet",
+      "x": 270,
+      "y": 270
+    },
+    "facing=west,powered=true": {
+      "model": "comedymonkeysaddons:block/clockwork_inlet",
+      "x": 270,
+      "y": 270
+    }
+  }
+}

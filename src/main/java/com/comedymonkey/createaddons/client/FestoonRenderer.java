@@ -1,9 +1,12 @@
 package com.comedymonkey.createaddons.client;
 
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.content.light.FestoonBlockEntity;
 import com.comedymonkey.createaddons.content.light.FestoonHookBlock;
-import com.comedymonkey.createaddons.content.light.Festoons;
 import com.comedymonkey.createaddons.content.light.LightBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -20,87 +23,103 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
 /**
  * Festoon Lights (Festoons): each string a hook holds, drawn from its eye to the far hook's, sagging, with a bulb on a
  * socket every 2 blocks: the unlit glass, or lit in its colour (as strong as a Light Strip's line, D13), flickering when
- * the run starves.
+ * the run starves. With Flywheel on, {@link FestoonVisual} draws them instead; this stays for Ponder and whenever
+ * Flywheel can't draw. Both lay the strings out with {@link FestoonGeometry}: here once per change of strings, then
+ * only the light is looked up a frame.
  */
 public class FestoonRenderer extends SafeBlockEntityRenderer<FestoonBlockEntity> {
-	/** The flex's half thickness and the bulbs' size (blocks). */
-	private static final float FLEX = 0.3f / 16, SOCKET = 0.5f / 16, BULB = 1.25f / 16;
+	/** How far away its strings are drawn (blocks). */
+	static final int VIEW_DISTANCE = 128;
+	/** The textures, looked up once per resource reload: flex, steel, unlit glass, lit glass. */
+	private static volatile TextureAtlasSprite[] sprites;
+
+	/** Each hook's strings as last laid out (render thread only; gone with the hook). */
+	private final Map<FestoonBlockEntity, Laid> laid = new WeakHashMap<>();
+	private final BlockPos.MutableBlockPos cellPos = new BlockPos.MutableBlockPos();
+	/** A corner being drawn: x, y, z and normal. */
+	private final float[] corner = new float[6];
+
+	/** What a hook's rods were laid out from, the rods, and room for the light where they hang. */
+	private record Laid(BlockPos pos, Direction facing, List<FestoonBlockEntity.Span> spans, FestoonGeometry.Layout layout, int[] lights) {}
 
 	public FestoonRenderer(BlockEntityRendererProvider.Context context) {}
 
+	/** Flex, steel, unlit glass and lit glass, from the block atlas. */
+	static TextureAtlasSprite[] sprites() {
+		TextureAtlasSprite[] s = sprites;
+		if (s == null)
+			sprites = s = new TextureAtlasSprite[] {sprite("flex"), sprite("steel"), sprite("glass_off"), sprite("glow_white")};
+		return s;
+	}
+
 	private static TextureAtlasSprite sprite(String name) {
 		return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ComedyMonkeysCreateAddons.asResource("block/light/" + name));
+	}
+
+	/** After the models (and the atlas) are baked again. */
+	public static void forget() {
+		sprites = null;
 	}
 
 	@Override
 	protected void renderSafe(FestoonBlockEntity be, float pt, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
 		if (be.getLevel() == null)
 			return;
-		BlockPos pos = be.getBlockPos();
-		Direction facing = be.getBlockState().getValue(FestoonHookBlock.FACING);
+		Laid strings = laidOut(be);
+		FestoonGeometry.Layout layout = strings.layout();
+		if (layout.rods() == 0)
+			return;
 		long time = be.getLevel().getGameTime();
 		boolean lit = be.phase() != LightBlockEntity.Phase.DARK && LightRenderer.lit(be, time, pt);
-		int glow = LightRenderer.runGlow(be.dye(), be.step());
+		int glow = lit ? LightRenderer.runGlow(be.dye(), be.step()) : 0xFFFFFF;
 		VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
-		TextureAtlasSprite flex = sprite("flex"), steel = sprite("steel"), bulb = sprite(lit ? "glow_white" : "glass_off");
-		Vec3 origin = Vec3.atLowerCornerOf(pos);
+		TextureAtlasSprite[] s = sprites();
+		TextureAtlasSprite bulb = lit ? s[3] : s[2];
 		// (the light where each block of string passes, looked up once a frame)
-		java.util.Map<Long, Integer> lights = new java.util.HashMap<>();
-		java.util.function.Function<Vec3, Integer> lightAt = p -> lights.computeIfAbsent(BlockPos.containing(p).asLong(),
-			k -> LevelRenderer.getLightColor(be.getLevel(), BlockPos.of(k)));
-		for (FestoonBlockEntity.Span span : be.spans()) {
-			if (!span.held())
-				continue;
-			Vec3 a = Festoons.eye(pos, facing), b = Festoons.eye(span.other(), span.facing());
-			double length = a.distanceTo(b);
-			int segments = Math.max(8, (int) Math.ceil(length * 3));
-			for (int i = 0; i < segments; i++) {
-				Vec3 p0 = Festoons.along(a, b, (double) i / segments), p1 = Festoons.along(a, b, (double) (i + 1) / segments);
-				int l = lightAt.apply(p0.add(p1).scale(0.5));
-				beam(vc, ms.last(), p0.subtract(origin), p1.subtract(origin), FLEX, flex, 0xFFFFFF, l);
-			}
-			for (double t : Festoons.bulbs(length)) {
-				Vec3 at = Festoons.along(a, b, t);
-				int l = lightAt.apply(at);
-				Vec3 top = at.subtract(origin), neck = top.subtract(0, 1.25 / 16, 0), base = neck.subtract(0, 2.5 / 16, 0);
-				beam(vc, ms.last(), top, neck, SOCKET, steel, 0xFFFFFF, l);
-				beam(vc, ms.last(), neck, base, BULB, bulb, lit ? glow : 0xFFFFFF, lit ? LightTexture.FULL_BRIGHT : l);
+		long[] cells = layout.cells();
+		int[] lights = strings.lights();
+		for (int i = 0; i < cells.length; i++)
+			lights[i] = LevelRenderer.getLightColor(be.getLevel(), cellPos.set(cells[i]));
+		PoseStack.Pose pose = ms.last();
+		for (int i = 0; i < layout.rods(); i++) {
+			int l = lights[layout.cell()[i]];
+			switch (layout.parts()[i]) {
+				case FLEX -> rod(vc, pose, layout.frame(), i, s[0], 0xFFFFFF, l, corner);
+				case SOCKET -> rod(vc, pose, layout.frame(), i, s[1], 0xFFFFFF, l, corner);
+				case BULB -> rod(vc, pose, layout.frame(), i, bulb, glow, lit ? LightTexture.FULL_BRIGHT : l, corner);
 			}
 		}
 	}
 
-	/** A square rod from a to b, half as thick as {@code half}, its four sides and two ends. */
-	private static void beam(VertexConsumer vc, PoseStack.Pose pose, Vec3 a, Vec3 b, float half, TextureAtlasSprite sprite, int rgb, int light) {
-		Vec3 d = b.subtract(a).normalize();
-		Vec3 u = d.cross(Math.abs(d.y) < 0.9 ? new Vec3(0, 1, 0) : new Vec3(1, 0, 0)).normalize().scale(half);
-		Vec3 v = d.cross(u).normalize().scale(half);
-		Vec3[] ring = {u.add(v), u.subtract(v), u.scale(-1).subtract(v), u.scale(-1).add(v)};
-		float r = (rgb >> 16 & 255) / 255f, g = (rgb >> 8 & 255) / 255f, bl = (rgb & 255) / 255f;
-		float u0 = sprite.getU(0.4f), u1 = sprite.getU(0.6f), v0 = sprite.getV(0.2f), v1 = sprite.getV(0.8f);
-		for (int i = 0; i < 4; i++) {
-			Vec3 s0 = ring[i], s1 = ring[(i + 1) % 4], n = s0.add(s1).normalize();
-			quad(vc, pose, a.add(s0), b.add(s0), b.add(s1), a.add(s1), n, r, g, bl, u0, u1, v0, v1, light);
+	/** Its rods, laid out again only when its strings (or where it hangs) changed. */
+	private Laid laidOut(FestoonBlockEntity be) {
+		BlockPos pos = be.getBlockPos();
+		Direction facing = be.getBlockState().getValue(FestoonHookBlock.FACING);
+		Laid strings = laid.get(be);
+		if (strings == null || strings.facing() != facing || !strings.pos().equals(pos) || !strings.spans().equals(be.spans())) {
+			List<FestoonBlockEntity.Span> spans = List.copyOf(be.spans());
+			FestoonGeometry.Layout layout = FestoonGeometry.layOut(pos, facing, spans);
+			strings = new Laid(pos.immutable(), facing, spans, layout, new int[layout.cells().length]);
+			laid.put(be, strings);
 		}
-		quad(vc, pose, a.add(ring[3]), a.add(ring[2]), a.add(ring[1]), a.add(ring[0]), d.scale(-1), r, g, bl, u0, u1, v0, v1, light);
-		quad(vc, pose, b.add(ring[0]), b.add(ring[1]), b.add(ring[2]), b.add(ring[3]), d, r, g, bl, u0, u1, v0, v1, light);
+		return strings;
 	}
 
-	private static void quad(VertexConsumer vc, PoseStack.Pose pose, Vec3 p0, Vec3 p1, Vec3 p2, Vec3 p3, Vec3 n, float r, float g, float b,
-							 float u0, float u1, float v0, float v1, int light) {
-		vertex(vc, pose, p0, n, r, g, b, u0, v0, light);
-		vertex(vc, pose, p1, n, r, g, b, u1, v0, light);
-		vertex(vc, pose, p2, n, r, g, b, u1, v1, light);
-		vertex(vc, pose, p3, n, r, g, b, u0, v1, light);
-	}
-
-	private static void vertex(VertexConsumer vc, PoseStack.Pose pose, Vec3 p, Vec3 n, float r, float g, float b, float u, float v, int light) {
-		vc.addVertex(pose, (float) p.x, (float) p.y, (float) p.z).setColor(r, g, b, 1f).setUv(u, v).setLight(light)
-			.setNormal(pose, (float) n.x, (float) n.y, (float) n.z);
+	/** Rod {@code i}: the rod shape stretched into place by its frame, every face showing the middle of the texture. */
+	private static void rod(VertexConsumer vc, PoseStack.Pose pose, double[] frame, int i, TextureAtlasSprite sprite, int rgb, int light,
+							float[] c) {
+		float r = (rgb >> 16 & 255) / 255f, g = (rgb >> 8 & 255) / 255f, b = (rgb & 255) / 255f;
+		float[] rod = FestoonGeometry.ROD;
+		for (int k = 0; k < FestoonGeometry.ROD_VERTICES; k++) {
+			int p = k * FestoonGeometry.ROD_STRIDE;
+			FestoonGeometry.corner(frame, i, k, c);
+			vc.addVertex(pose, c[0], c[1], c[2]).setColor(r, g, b, 1f).setUv(sprite.getU(rod[p + 6]), sprite.getV(rod[p + 7]))
+				.setLight(light).setNormal(pose, c[3], c[4], c[5]);
+		}
 	}
 
 	/** Its strings reach their far hooks. */
@@ -115,6 +134,6 @@ public class FestoonRenderer extends SafeBlockEntityRenderer<FestoonBlockEntity>
 
 	@Override
 	public int getViewDistance() {
-		return 128;
+		return VIEW_DISTANCE;
 	}
 }

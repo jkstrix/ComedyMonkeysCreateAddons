@@ -31,6 +31,10 @@ public final class ShotRunner {
 	private static boolean gui;
 	/** A label starting "solo-": one shot with the HUD hidden, on the backend as it is (the building kit's catalogue set). */
 	private static boolean solo;
+	/** A label starting "burst-": as "gui-", but {@link #BURST} frames in a row (one a tick), to catch flicker. */
+	private static boolean burst;
+	private static final int BURST = 16;
+	private static int burstFrame;
 	/** What it changes, to put back afterwards. */
 	private static String backendBefore;
 	private static boolean vsyncBefore, hideGuiBefore;
@@ -113,7 +117,9 @@ public final class ShotRunner {
 			}
 			step = 0;
 			wait = 0;
-			gui = label.startsWith("gui-");
+			burst = label.startsWith("burst-");
+			burstFrame = 0;
+			gui = burst || label.startsWith("gui-");
 			solo = label.startsWith("solo-");
 			backendBefore = Backend.REGISTRY.getIdOrThrow(BackendManager.currentBackend()).toString();
 			vsyncBefore = mc.options.enableVsync().get();
@@ -134,8 +140,16 @@ public final class ShotRunner {
 		}
 		if (++wait < SETTLE_TICKS)
 			return;
+		if (burst) {
+			Screenshot.grab(mc.gameDirectory, String.format("cmca/%s-%02d.png", label, burstFrame), mc.getMainRenderTarget(), message -> {});
+			if (++burstFrame < BURST) {
+				wait = SETTLE_TICKS - 1;
+				return;
+			}
+		}
 		String name = gui || solo ? "cmca/" + label + ".png" : "cmca/" + label + "-" + BACKENDS[step].substring("flywheel:".length()) + ".png";
-		Screenshot.grab(mc.gameDirectory, name, mc.getMainRenderTarget(), message -> {});
+		if (!burst)
+			Screenshot.grab(mc.gameDirectory, name, mc.getMainRenderTarget(), message -> {});
 		try {
 			Files.writeString(mc.gameDirectory.toPath().resolve("cmca-shots.fps"), label + " " + (gui || solo ? backendBefore : BACKENDS[step]) + " " + mc.getFps() + " fps\n",
 				StandardOpenOption.CREATE, StandardOpenOption.APPEND);

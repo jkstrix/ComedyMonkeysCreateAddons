@@ -31,7 +31,7 @@ import com.mojang.serialization.MapCodec;
  * of its own (the clock above draws all of it) and no item; it comes and goes with the clock, and breaking it breaks
  * the clock, which drops as usual.
  */
-public class CuckooClockWeightsBlock extends HorizontalDirectionalBlock {
+public final class CuckooClockWeightsBlock extends HorizontalDirectionalBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final MapCodec<CuckooClockWeightsBlock> CODEC = simpleCodec(CuckooClockWeightsBlock::new);
 
@@ -90,6 +90,7 @@ public class CuckooClockWeightsBlock extends HorizontalDirectionalBlock {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation") // NeoForge's pick-block asks this one, and Create's Display Link screen calls it directly
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
 		return new ItemStack(ModItems.CUCKOO_CLOCK.get());
 	}

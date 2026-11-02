@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
  * @IPNPlayerSideOnly, so, like the single chest, it's told to ignore this menu outright.
  */
 @IPNIgnore
-public class LargeUpgradedChestMenu extends AbstractContainerMenu implements UpgradedChestView, QuickTransferMenu {
+public final class LargeUpgradedChestMenu extends AbstractContainerMenu implements UpgradedChestView, QuickTransferMenu {
 	public static final int COLUMNS = 12;
 	public static final int ROWS = 9;
 	public static final int SLOTS = COLUMNS * ROWS;
