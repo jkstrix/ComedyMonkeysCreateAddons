@@ -460,6 +460,9 @@ public final class CityRecord extends SavedData {
 	public static void clear() {
 		MEMBERS.clear();
 		FILED.clear();
+		// a city placed as the server stopped belongs to that world, never the next one opened
+		PLACED.clear();
+		com.comedymonkey.createaddons.content.wastes.city.ClockworkCityPiece.forget();
 	}
 
 	/**

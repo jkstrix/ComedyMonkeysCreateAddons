@@ -1,0 +1,3987 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_plain",
+    "plain": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_plain",
+    "edge": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_edge",
+    "rust_b": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_rust_b",
+    "rust_c": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_rust_c",
+    "rust_a": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_rust_a"
+  },
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        1.249,
+        0.789,
+        0
+      ],
+      "scale": [
+        0.216,
+        0.216,
+        0.216
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.086,
+        0.086,
+        0.086
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.173,
+        0.173,
+        0.173
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.13,
+        0.13,
+        0.13
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.138,
+        0.138,
+        0.138
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.138,
+        0.138,
+        0.138
+      ]
+    }
+  },
+  "elements": [
+    {
+      "name": "spiral_193_1",
+      "from": [
+        0,
+        20.371,
+        27.657
+      ],
+      "to": [
+        16,
+        27.975,
+        29.657
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          24.323,
+          28.657
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            9.604,
+            0,
+            2,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            9.604,
+            0,
+            2,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            9.604,
+            16,
+            2,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            9.604,
+            2,
+            2,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            11.657,
+            16,
+            13.657
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            2.343,
+            16,
+            4.343
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_193_1",
+      "from": [
+        16,
+        20.371,
+        27.657
+      ],
+      "to": [
+        32,
+        27.975,
+        29.657
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          24.323,
+          28.657
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.604,
+            16,
+            6,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            13.604,
+            0,
+            6,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            13.604,
+            0,
+            6,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            13.604,
+            2,
+            6,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            11.657,
+            16,
+            13.657
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            2.343,
+            16,
+            4.343
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_194_1",
+      "from": [
+        0,
+        27.558,
+        25.561
+      ],
+      "to": [
+        16,
+        31.21,
+        27.561
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          29.384,
+          26.561
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8.652,
+            0,
+            5,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            8.652,
+            0,
+            5,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            8.652,
+            16,
+            5,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            8.652,
+            2,
+            5,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            9.561,
+            16,
+            11.561
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            4.439,
+            16,
+            6.439
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_194_1",
+      "from": [
+        16,
+        27.558,
+        25.561
+      ],
+      "to": [
+        32,
+        31.21,
+        27.561
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          29.384,
+          26.561
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6.652,
+            16,
+            3,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            6.652,
+            0,
+            3,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            6.652,
+            0,
+            3,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            6.652,
+            2,
+            3,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            9.561,
+            16,
+            11.561
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            4.439,
+            16,
+            6.439
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_195_1",
+      "from": [
+        0,
+        31.036,
+        24.688
+      ],
+      "to": [
+        16,
+        31.949,
+        26.688
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          31.493,
+          25.688
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0.913,
+            0,
+            0,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            0.913,
+            0,
+            0,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            0.913,
+            16,
+            0,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            0.913,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            8.688,
+            16,
+            10.688
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            5.313,
+            16,
+            7.313
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_195_1",
+      "from": [
+        16,
+        31.036,
+        24.688
+      ],
+      "to": [
+        32,
+        31.949,
+        26.688
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          31.493,
+          25.688
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            10.913,
+            16,
+            10,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            10.913,
+            0,
+            10,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            10.913,
+            0,
+            10,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            10.913,
+            2,
+            10,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            8.688,
+            16,
+            10.688
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            5.313,
+            16,
+            7.313
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_196_1",
+      "from": [
+        0,
+        31.912,
+        24.502
+      ],
+      "to": [
+        16,
+        31.969,
+        26.502
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          31.941,
+          25.502
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.057,
+            0,
+            13,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            13.057,
+            0,
+            13,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            13.057,
+            16,
+            13,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            13.057,
+            2,
+            13,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            8.502,
+            16,
+            10.502
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            5.498,
+            16,
+            7.498
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_196_1",
+      "from": [
+        16,
+        31.912,
+        24.502
+      ],
+      "to": [
+        32,
+        31.969,
+        26.502
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          31.941,
+          25.502
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.057,
+            16,
+            13,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            13.057,
+            0,
+            13,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            13.057,
+            0,
+            13,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            13.057,
+            2,
+            13,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            8.502,
+            16,
+            10.502
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            5.498,
+            16,
+            7.498
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_473_1",
+      "from": [
+        0,
+        4.142,
+        31.846
+      ],
+      "to": [
+        16,
+        6.142,
+        31.977
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          5.142,
+          31.911
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            9.859,
+            16,
+            11.859
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            1.131,
+            2,
+            1,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            9.859,
+            16,
+            11.859
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            1.131,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            1,
+            16,
+            1.131,
+            0
+          ],
+          "texture": "#rust_b",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            1.131,
+            16,
+            1,
+            0
+          ],
+          "texture": "#rust_b",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_473_1",
+      "from": [
+        16,
+        4.142,
+        31.846
+      ],
+      "to": [
+        32,
+        6.142,
+        31.977
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          5.142,
+          31.911
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            9.859,
+            16,
+            11.859
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            5.131,
+            2,
+            5,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            9.859,
+            16,
+            11.859
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            5,
+            2,
+            5.131,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            5,
+            0,
+            5.131,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            5.131,
+            0,
+            5,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_474_1",
+      "from": [
+        0,
+        4.267,
+        31.345
+      ],
+      "to": [
+        16,
+        6.267,
+        31.871
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          5.267,
+          31.608
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            9.733,
+            16,
+            11.733
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            12.526,
+            2,
+            12,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            9.733,
+            16,
+            11.733
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            12,
+            2,
+            12.526,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            12,
+            16,
+            12.526,
+            0
+          ],
+          "texture": "#rust_b",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            12.526,
+            16,
+            12,
+            0
+          ],
+          "texture": "#rust_b",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_474_1",
+      "from": [
+        16,
+        4.267,
+        31.345
+      ],
+      "to": [
+        32,
+        6.267,
+        31.871
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          5.267,
+          31.608
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            9.733,
+            16,
+            11.733
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            4.526,
+            2,
+            4,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            9.733,
+            16,
+            11.733
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            4,
+            2,
+            4.526,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            4,
+            0,
+            4.526,
+            16
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            4.526,
+            0,
+            4,
+            16
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_475_1",
+      "from": [
+        0,
+        4.77,
+        29.043
+      ],
+      "to": [
+        16,
+        6.77,
+        31.445
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          5.77,
+          30.394
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            9.23,
+            16,
+            11.23
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            10.402,
+            2,
+            8,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            9.23,
+            16,
+            11.23
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            8,
+            2,
+            10.402,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            8,
+            16,
+            10.402,
+            0
+          ],
+          "texture": "#rust_b",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            10.402,
+            16,
+            8,
+            0
+          ],
+          "texture": "#rust_b",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_475_1",
+      "from": [
+        16,
+        4.77,
+        29.043
+      ],
+      "to": [
+        32,
+        6.77,
+        31.445
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          5.77,
+          30.394
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            9.23,
+            16,
+            11.23
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            15.402,
+            2,
+            13,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            9.23,
+            16,
+            11.23
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            13,
+            2,
+            15.402,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            13,
+            0,
+            15.402,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            15.402,
+            0,
+            13,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_476_1",
+      "from": [
+        0,
+        4.416,
+        24.906
+      ],
+      "to": [
+        16,
+        14.661,
+        26.906
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          9.689,
+          25.906
+        ],
+        "axis": "x",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            15.246,
+            0,
+            5,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            15.246,
+            0,
+            5,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            15.246,
+            16,
+            5,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            15.246,
+            2,
+            5,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            8.906,
+            16,
+            10.906
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            5.094,
+            16,
+            7.094
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_476_1",
+      "from": [
+        16,
+        4.416,
+        24.906
+      ],
+      "to": [
+        32,
+        14.661,
+        26.906
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          9.689,
+          25.906
+        ],
+        "axis": "x",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            10.246,
+            16,
+            0,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            10.246,
+            0,
+            0,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            10.246,
+            0,
+            0,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            10.246,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            8.906,
+            16,
+            10.906
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            5.094,
+            16,
+            7.094
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_477_1",
+      "from": [
+        0,
+        11.748,
+        17.874
+      ],
+      "to": [
+        16,
+        21.994,
+        19.874
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          16.721,
+          18.874
+        ],
+        "axis": "x",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.246,
+            0,
+            3,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            13.246,
+            0,
+            3,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            13.246,
+            16,
+            3,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            13.246,
+            2,
+            3,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            1.874,
+            16,
+            3.874
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            12.126,
+            16,
+            14.126
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_477_1",
+      "from": [
+        16,
+        11.748,
+        17.874
+      ],
+      "to": [
+        32,
+        21.994,
+        19.874
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          16.721,
+          18.874
+        ],
+        "axis": "x",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            11.246,
+            16,
+            1,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            11.246,
+            0,
+            1,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            11.246,
+            0,
+            1,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            11.246,
+            2,
+            1,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            1.874,
+            16,
+            3.874
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            12.126,
+            16,
+            14.126
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_478_1",
+      "from": [
+        0,
+        19.689,
+        13.107
+      ],
+      "to": [
+        16,
+        26.525,
+        15.107
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          23.257,
+          14.107
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8.836,
+            0,
+            2,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            8.836,
+            0,
+            2,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            8.836,
+            16,
+            2,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            8.836,
+            2,
+            2,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            13.107,
+            16,
+            15.107
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.893,
+            16,
+            2.893
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_478_1",
+      "from": [
+        16,
+        19.689,
+        13.107
+      ],
+      "to": [
+        32,
+        26.525,
+        15.107
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          23.257,
+          14.107
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7.836,
+            16,
+            1,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            7.836,
+            0,
+            1,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            7.836,
+            0,
+            1,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            7.836,
+            2,
+            1,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            13.107,
+            16,
+            15.107
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.893,
+            16,
+            2.893
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_479_1",
+      "from": [
+        0,
+        26.151,
+        11.231
+      ],
+      "to": [
+        16,
+        29.419,
+        13.231
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          27.785,
+          12.231
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6.268,
+            0,
+            3,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            6.268,
+            0,
+            3,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            6.268,
+            16,
+            3,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            6.268,
+            2,
+            3,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            11.231,
+            16,
+            13.231
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            2.769,
+            16,
+            4.769
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_479_1",
+      "from": [
+        16,
+        26.151,
+        11.231
+      ],
+      "to": [
+        32,
+        29.419,
+        13.231
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          27.785,
+          12.231
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7.268,
+            16,
+            4,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            7.268,
+            0,
+            4,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            7.268,
+            0,
+            4,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            7.268,
+            2,
+            4,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            11.231,
+            16,
+            13.231
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            2.769,
+            16,
+            4.769
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_480_1",
+      "from": [
+        0,
+        29.233,
+        10.293
+      ],
+      "to": [
+        16,
+        30.867,
+        12.293
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          30.05,
+          11.293
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5.634,
+            0,
+            4,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            5.634,
+            0,
+            4,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            5.634,
+            16,
+            4,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            5.634,
+            2,
+            4,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            10.293,
+            16,
+            12.293
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            3.707,
+            16,
+            5.707
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_480_1",
+      "from": [
+        16,
+        29.233,
+        10.293
+      ],
+      "to": [
+        32,
+        30.867,
+        12.293
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          30.05,
+          11.293
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.634,
+            16,
+            12,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            13.634,
+            0,
+            12,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            13.634,
+            0,
+            12,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            13.634,
+            2,
+            12,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            10.293,
+            16,
+            12.293
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            3.707,
+            16,
+            5.707
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_481_1",
+      "from": [
+        0,
+        30.773,
+        9.824
+      ],
+      "to": [
+        16,
+        31.59,
+        11.824
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          31.182,
+          10.824
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            14.817,
+            0,
+            14,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            14.817,
+            0,
+            14,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            14.817,
+            16,
+            14,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            14.817,
+            2,
+            14,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            9.824,
+            16,
+            11.824
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            4.176,
+            16,
+            6.176
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_481_1",
+      "from": [
+        16,
+        30.773,
+        9.824
+      ],
+      "to": [
+        32,
+        31.59,
+        11.824
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          31.182,
+          10.824
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5.817,
+            16,
+            5,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            5.817,
+            0,
+            5,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            5.817,
+            0,
+            5,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            5.817,
+            2,
+            5,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            9.824,
+            16,
+            11.824
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            4.176,
+            16,
+            6.176
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_482_1",
+      "from": [
+        0,
+        31.544,
+        9.59
+      ],
+      "to": [
+        16,
+        31.952,
+        11.59
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          31.748,
+          10.59
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4.409,
+            0,
+            4,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            4.409,
+            0,
+            4,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            4.409,
+            16,
+            4,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            4.409,
+            2,
+            4,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            9.59,
+            16,
+            11.59
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            4.41,
+            16,
+            6.41
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_482_1",
+      "from": [
+        16,
+        31.544,
+        9.59
+      ],
+      "to": [
+        32,
+        31.952,
+        11.59
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          31.748,
+          10.59
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.409,
+            16,
+            13,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            13.409,
+            0,
+            13,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            13.409,
+            0,
+            13,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            13.409,
+            2,
+            13,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            9.59,
+            16,
+            11.59
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            4.41,
+            16,
+            6.41
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_483_1",
+      "from": [
+        0,
+        31.935,
+        9.502
+      ],
+      "to": [
+        16,
+        31.986,
+        11.502
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          31.96,
+          10.502
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            10.051,
+            0,
+            10,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            10.051,
+            0,
+            10,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            10.051,
+            16,
+            10,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            10.051,
+            2,
+            10,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            9.502,
+            16,
+            11.502
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            4.498,
+            16,
+            6.498
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_483_1",
+      "from": [
+        16,
+        31.935,
+        9.502
+      ],
+      "to": [
+        32,
+        31.986,
+        11.502
+      ],
+      "rotation": {
+        "origin": [
+          16,
+          31.96,
+          10.502
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7.051,
+            16,
+            7,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            7.051,
+            0,
+            7,
+            2
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            7.051,
+            0,
+            7,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            7.051,
+            2,
+            7,
+            0
+          ],
+          "texture": "#edge",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            0,
+            9.502,
+            16,
+            11.502
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            4.498,
+            16,
+            6.498
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "spiral_578_1",
+      "from": [
+        0,
+        -16,
+        31.75
+      ],
+      "to": [
+        16,
+        -14,
+        31.938
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            7.188,
+            2,
+            7,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            7,
+            2,
+            7.188,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            7,
+            16,
+            7.188,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            7.188,
+            16,
+            7,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_578_1",
+      "from": [
+        16,
+        -16,
+        31.75
+      ],
+      "to": [
+        32,
+        -14,
+        31.938
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            1.188,
+            2,
+            1,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            1.188,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            1,
+            0,
+            1.188,
+            16
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            1.188,
+            0,
+            1,
+            16
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_579_1",
+      "from": [
+        0,
+        -16,
+        31
+      ],
+      "to": [
+        16,
+        -14,
+        31.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            11.75,
+            2,
+            11,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            11,
+            2,
+            11.75,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            11,
+            16,
+            11.75,
+            0
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            11.75,
+            16,
+            11,
+            0
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_579_1",
+      "from": [
+        16,
+        -16,
+        31
+      ],
+      "to": [
+        32,
+        -14,
+        31.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            8.75,
+            2,
+            8,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            8,
+            2,
+            8.75,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            8,
+            0,
+            8.75,
+            16
+          ],
+          "texture": "#rust_a",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            8.75,
+            0,
+            8,
+            16
+          ],
+          "texture": "#rust_a",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_580_1",
+      "from": [
+        0,
+        -16,
+        28
+      ],
+      "to": [
+        16,
+        -14,
+        31
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            4,
+            2,
+            1,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            4,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            1,
+            16,
+            4,
+            0
+          ],
+          "texture": "#rust_b",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            4,
+            16,
+            1,
+            0
+          ],
+          "texture": "#rust_b",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_580_1",
+      "from": [
+        16,
+        -16,
+        28
+      ],
+      "to": [
+        32,
+        -14,
+        31
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            15,
+            2,
+            12,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            12,
+            2,
+            15,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            12,
+            0,
+            15,
+            16
+          ],
+          "texture": "#rust_a",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            15,
+            0,
+            12,
+            16
+          ],
+          "texture": "#rust_a",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_581_1",
+      "from": [
+        0,
+        -16,
+        16
+      ],
+      "to": [
+        16,
+        -14,
+        28
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            13,
+            2,
+            1,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            13,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            1,
+            16,
+            13,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            13,
+            16,
+            1,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_581_1",
+      "from": [
+        16,
+        -16,
+        16
+      ],
+      "to": [
+        32,
+        -14,
+        28
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            14,
+            2,
+            2,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            2,
+            2,
+            14,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            2,
+            0,
+            14,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            14,
+            0,
+            2,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_582_1",
+      "from": [
+        0,
+        -16,
+        4
+      ],
+      "to": [
+        16,
+        -14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            12,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            12,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            16,
+            12,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            12,
+            16,
+            0,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_582_1",
+      "from": [
+        16,
+        -16,
+        4
+      ],
+      "to": [
+        32,
+        -14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            12,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            12,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12,
+            16
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            12,
+            0,
+            0,
+            16
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_583_1",
+      "from": [
+        0,
+        -16,
+        -8
+      ],
+      "to": [
+        16,
+        -14,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            14,
+            2,
+            2,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            2,
+            2,
+            14,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            2,
+            16,
+            14,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            14,
+            16,
+            2,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_583_1",
+      "from": [
+        16,
+        -16,
+        -8
+      ],
+      "to": [
+        32,
+        -14,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            15,
+            2,
+            3,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            3,
+            2,
+            15,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            3,
+            0,
+            15,
+            16
+          ],
+          "texture": "#rust_b",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            15,
+            0,
+            3,
+            16
+          ],
+          "texture": "#rust_b",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_584_1",
+      "from": [
+        0,
+        -16,
+        -14
+      ],
+      "to": [
+        16,
+        -14,
+        -8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            12,
+            2,
+            6,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            6,
+            2,
+            12,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            6,
+            16,
+            12,
+            0
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            12,
+            16,
+            6,
+            0
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_584_1",
+      "from": [
+        16,
+        -16,
+        -14
+      ],
+      "to": [
+        32,
+        -14,
+        -8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            7,
+            2,
+            1,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            7,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            1,
+            0,
+            7,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            7,
+            0,
+            1,
+            16
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_585_1",
+      "from": [
+        0,
+        -16,
+        -15.5
+      ],
+      "to": [
+        16,
+        -14,
+        -14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            2,
+            1,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            2.5,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            1,
+            16,
+            2.5,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            2.5,
+            16,
+            1,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_585_1",
+      "from": [
+        16,
+        -16,
+        -15.5
+      ],
+      "to": [
+        32,
+        -14,
+        -14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            13.5,
+            2,
+            12,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            12,
+            2,
+            13.5,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            12,
+            0,
+            13.5,
+            16
+          ],
+          "texture": "#rust_a",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            13.5,
+            0,
+            12,
+            16
+          ],
+          "texture": "#rust_a",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_586_1",
+      "from": [
+        0,
+        -16,
+        -15.875
+      ],
+      "to": [
+        16,
+        -14,
+        -15.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            5.375,
+            2,
+            5,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            5,
+            2,
+            5.375,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            5,
+            16,
+            5.375,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            5.375,
+            16,
+            5,
+            0
+          ],
+          "texture": "#plain",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_586_1",
+      "from": [
+        16,
+        -16,
+        -15.875
+      ],
+      "to": [
+        32,
+        -14,
+        -15.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            5.375,
+            2,
+            5,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            5,
+            2,
+            5.375,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            5,
+            0,
+            5.375,
+            16
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            5.375,
+            0,
+            5,
+            16
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_587_1",
+      "from": [
+        0,
+        -16,
+        -15.969
+      ],
+      "to": [
+        16,
+        -14,
+        -15.875
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            3.094,
+            2,
+            3,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            3,
+            2,
+            3.094,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            3,
+            16,
+            3.094,
+            0
+          ],
+          "texture": "#rust_a",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            3.094,
+            16,
+            3,
+            0
+          ],
+          "texture": "#rust_a",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "spiral_587_1",
+      "from": [
+        16,
+        -16,
+        -15.969
+      ],
+      "to": [
+        32,
+        -14,
+        -15.875
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0.094,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            0.094,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.094,
+            16
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            0.094,
+            0,
+            0,
+            16
+          ],
+          "texture": "#rust_c",
+          "rotation": 90
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/overgrowth/root_bark",
+    "root_bark": "comedymonkeysaddons:block/wastes/overgrowth/root_bark",
+    "root_end": "comedymonkeysaddons:block/wastes/overgrowth/root_end"
+  },
+  "elements": [
+    {
+      "name": "run west",
+      "from": [
+        0,
+        0,
+        6
+      ],
+      "to": [
+        6,
+        4,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            12,
+            16,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            6,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "west": {
+          "uv": [
+            6,
+            12,
+            10,
+            16
+          ],
+          "texture": "#root_end"
+        },
+        "up": {
+          "uv": [
+            0,
+            6,
+            6,
+            10
+          ],
+          "texture": "#root_bark"
+        }
+      }
+    },
+    {
+      "name": "run kink",
+      "from": [
+        6,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        4.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            11.5,
+            10,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            11.5,
+            11,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "south": {
+          "uv": [
+            6,
+            11.5,
+            11,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "west": {
+          "uv": [
+            5,
+            11.5,
+            9.5,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "up": {
+          "uv": [
+            6,
+            5,
+            11,
+            9.5
+          ],
+          "texture": "#root_bark"
+        }
+      }
+    },
+    {
+      "name": "run east",
+      "from": [
+        11,
+        0,
+        6
+      ],
+      "to": [
+        16,
+        4,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            5,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "east": {
+          "uv": [
+            6,
+            12,
+            10,
+            16
+          ],
+          "texture": "#root_end"
+        },
+        "south": {
+          "uv": [
+            11,
+            12,
+            16,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "up": {
+          "uv": [
+            11,
+            6,
+            16,
+            10
+          ],
+          "texture": "#root_bark"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        5.401,
+        0
+      ],
+      "scale": [
+        1.039,
+        1.039,
+        1.039
+      ]
+    }
+  }
+}

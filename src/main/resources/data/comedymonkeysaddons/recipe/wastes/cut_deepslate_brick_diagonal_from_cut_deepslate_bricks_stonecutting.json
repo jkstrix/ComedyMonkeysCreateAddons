@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "create:cut_deepslate_bricks"
+  },
+  "result": {
+    "id": "comedymonkeysaddons:cut_deepslate_brick_diagonal",
+    "count": 2
+  }
+}

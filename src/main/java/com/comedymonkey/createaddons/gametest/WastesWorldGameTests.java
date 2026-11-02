@@ -44,6 +44,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.gametest.framework.GameTestInfo;
+import net.minecraft.gametest.framework.GameTestListener;
+import net.minecraft.gametest.framework.GameTestRunner;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -110,6 +113,11 @@ public final class WastesWorldGameTests {
 	private static void check(boolean ok, String message) {
 		if (!ok)
 			throw new GameTestAssertException(message);
+	}
+
+	/** A lattice mast's height in girders (its riser's length): the building kit's (D73, on since D90) or the boxes' five. */
+	static int mastHeight() {
+		return CityLayout.BUILDING_KIT ? com.comedymonkey.createaddons.content.wastes.city.kit.Yard.MAST_LEGS : CityLayout.MAST_HEIGHT;
 	}
 
 	/** The district a city block or bot at {@code pos} should be bound to. */
@@ -198,7 +206,7 @@ public final class WastesWorldGameTests {
 
 	private static List<ChunkPos> cityChunks(BlockPos o) {
 		List<ChunkPos> out = new ArrayList<>();
-		int r = (CityLayout.OUT >> 4) + 1;
+		int r = (com.comedymonkey.createaddons.content.wastes.city.CityEdge.REACH >> 4) + 1;
 		ChunkPos c = new ChunkPos(o);
 		for (int dx = -r; dx <= r; dx++)
 			for (int dz = -r; dz <= r; dz++)
@@ -227,9 +235,47 @@ public final class WastesWorldGameTests {
 	public static void devCityBindsAndWakesPerDistrict(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		BlockPos o = DEV_CITY.offset(level.random.nextInt(256) * 1024, 0, level.random.nextInt(256) * 1024);
-		for (ChunkPos c : cityChunks(o))
+		List<ChunkPos> chunks = cityChunks(o);
+		Runnable release = () -> {
+			for (ChunkPos c : chunks)
+				level.setChunkForced(c.x, c.z, false);
+		};
+		for (ChunkPos c : chunks)
 			level.setChunkForced(c.x, c.z, true);
+		// the chunks are saved with the world, so let go of them however the test ends: a failed or timed-out step (the
+		// listener), or a failure before the sequence starts (the finally)
+		helper.testInfo.addListener(new GameTestListener() {
+			@Override
+			public void testStructureLoaded(GameTestInfo info) {}
+
+			@Override
+			public void testPassed(GameTestInfo info, GameTestRunner runner) {
+				release.run();
+			}
+
+			@Override
+			public void testFailed(GameTestInfo info, GameTestRunner runner) {
+				release.run();
+			}
+
+			@Override
+			public void testAddedForRerun(GameTestInfo info, GameTestInfo rerun, GameTestRunner runner) {}
+		});
+		boolean started = false;
+		try {
+			devCity(helper, level, o);
+			started = true;
+		} finally {
+			if (!started)
+				release.run();
+		}
+	}
+
+	/** The dev city's checks, built at {@code o} with its chunks held: the synchronous ones, then the wake sequence. */
+	private static void devCity(GameTestHelper helper, ServerLevel level, BlockPos o) {
 		CityBuild.build(level, o, 0, true);
+		// the overgrowth (D92): every plant on what it needs
+		WastesOvergrowthGameTests.plantsSurvive(level, o, 0);
 		// a top-down picture of it, for reviewing the layout (run-gametest/wastes-city-map.png)
 		try {
 			CityBuild.writeMap(level, o, level.getServer().getServerDirectory().resolve("wastes-city-map.png"));
@@ -262,7 +308,7 @@ public final class WastesWorldGameTests {
 		// D72: the masts' risers stand beside their girders (two masts a district), dark asleep
 		List<BlockPos> risers = blocks.stream().filter(be -> be.getBlockState().getBlock() instanceof DerelictCableBlock
 			&& be.getBlockState().getValue(DerelictCableBlock.GIRDER) != DerelictCableBlock.Girder.NONE).map(BlockEntity::getBlockPos).toList();
-		check(risers.size() == 4 * 2 * CityLayout.MAST_HEIGHT, risers.size() + " riser blocks");
+		check(risers.size() == 4 * 2 * mastHeight(), risers.size() + " riser blocks");
 		for (BlockPos r : risers) {
 			BlockState s = level.getBlockState(r);
 			check(s.canSurvive(level, r), "the riser at " + r.subtract(o) + " has no girder");
@@ -354,10 +400,6 @@ public final class WastesWorldGameTests {
 				check(level.getBlockState(d).getValue(SlidingDoorBlock.OPEN), "a heart door is shut with four awake");
 			check(record.custodianAwake(o), "the Custodian didn't wake with the fourth district");
 		});
-		seq.thenExecute(() -> {
-			for (ChunkPos c : cityChunks(o))
-				level.setChunkForced(c.x, c.z, false);
-		});
 		seq.thenSucceed();
 	}
 
@@ -436,6 +478,14 @@ public final class WastesWorldGameTests {
 				check(group == CityPlan.TRINKET_EVERY ? n == 1 : n <= 1, "seed " + seed + ": alcoves " + i + "-" + (i + group - 1) + " hold " + n + " trinkets");
 			}
 			check(kinds.size() >= 2, "seed " + seed + ": every trinket is " + kinds);
+			// where vines may grow: the Quarters' alcove wall and split tower; with the building kit (D71, D90), the cells its
+			// "alcove wall" and "split alcove tower" stand in, else the boxes' places in the frame
+			java.util.Set<BlockPos> kitVineCells = new java.util.HashSet<>();
+			for (Object b : plan.buildings)
+				if (b instanceof com.comedymonkey.createaddons.content.wastes.city.kit.KitCity.Placement pl
+					&& (pl.what().equals("alcove wall") || pl.what().equals("split alcove tower")))
+					for (BlockPos q : pl.model().blocks().keySet())
+						kitVineCells.add(pl.site().at(q.getX(), q.getY(), q.getZ()));
 			for (CityPlan.Op.Put p : alcoves) {
 				// the whole alcove, as built, carries its trinket and vines in all three blocks
 				for (int k = 0; k < 3; k++) {
@@ -446,16 +496,21 @@ public final class WastesWorldGameTests {
 						"the alcove at " + p.at().subtract(o) + " isn't whole as built");
 				}
 				int[] f = frame(o, p.at());
-				boolean site = expected(o, p.at()) == District.QUARTERS && (f[1] == 40 && f[0] >= 38 && f[0] <= 52 || f[1] == 62 && (f[0] == 60 || f[0] == 63));
+				boolean site = expected(o, p.at()) == District.QUARTERS && (kitVineCells.isEmpty()
+					? f[1] == 40 && f[0] >= 38 && f[0] <= 52 || f[1] == 62 && (f[0] == 60 || f[0] == 63) : kitVineCells.contains(p.at()));
 				if (site)
 					vineSites++;
-				if (p.state().getValue(ChargingAlcoveBlock.VINES)) {
+				if (p.state().getValue(ChargingAlcoveBlock.VINES) != ChargingAlcoveBlock.Vines.NONE) {
 					check(site, "dead vines on an alcove at " + p.at().subtract(o) + " (frame " + f[0] + ", " + f[1] + ")");
 					vines++;
 				}
 			}
-			check(vineSites == 51, vineSites + " alcoves in the Quarters' wall and split tower");
-			check(vines >= 4 && vines <= 25, "seed " + seed + ": vines on " + vines + " of " + vineSites + " (about one in " + CityLayout.VINES_ONE_IN + ")");
+			check(vineSites == (kitVineCells.isEmpty() ? 51 : 29), vineSites + " alcoves in the Quarters' wall and split tower");
+			// about one in VINES_ONE_IN of the sites: within three standard deviations of that, and at least one
+			double mean = vineSites / (double) CityLayout.VINES_ONE_IN, spread = 3 * Math.sqrt(mean * (1 - 1.0 / CityLayout.VINES_ONE_IN));
+			int fewest = Math.max(1, (int) Math.ceil(mean - spread)), most = (int) Math.floor(mean + spread);
+			check(vines >= fewest && vines <= most, "seed " + seed + ": vines on " + vines + " of " + vineSites + " (about one in " + CityLayout.VINES_ONE_IN
+				+ ": " + fewest + "-" + most + ")");
 			// risers: two masts a district, each riser block beside an upright girder, the insulator on top, bound
 			Map<District, List<CityPlan.Op.Put>> risers = new EnumMap<>(District.class);
 			for (CityPlan.Op.Put p : last.values())
@@ -465,7 +520,7 @@ public final class WastesWorldGameTests {
 				}
 			for (District d : District.DISTRICTS) {
 				List<CityPlan.Op.Put> rs = risers.getOrDefault(d, List.of());
-				check(rs.size() == 2 * CityLayout.MAST_HEIGHT, d + " has " + rs.size() + " riser blocks");
+				check(rs.size() == 2 * mastHeight(), d + " has " + rs.size() + " riser blocks");
 				int feet = 0;
 				for (CityPlan.Op.Put p : rs) {
 					Direction side = p.state().getValue(DerelictCableBlock.SURFACE);
@@ -473,7 +528,7 @@ public final class WastesWorldGameTests {
 					check(last.containsKey(girder) && DerelictCableBlock.uprightGirder(last.get(girder).state()), d + "'s riser at " + p.at().subtract(o) + " has no girder");
 					DerelictCableBlock.Girder part = p.state().getValue(DerelictCableBlock.GIRDER);
 					int y = p.at().getY() - o.getY();
-					check(part == (y == 0 ? DerelictCableBlock.Girder.FOOT : y == CityLayout.MAST_HEIGHT - 1 ? DerelictCableBlock.Girder.TOP : DerelictCableBlock.Girder.RUN),
+					check(part == (y == 0 ? DerelictCableBlock.Girder.FOOT : y == mastHeight() - 1 ? DerelictCableBlock.Girder.TOP : DerelictCableBlock.Girder.RUN),
 						d + "'s riser at " + p.at().subtract(o) + " is its " + part);
 					if (part == DerelictCableBlock.Girder.TOP) {
 						CityPlan.Op.Put ins = last.get(girder.above());
@@ -505,19 +560,52 @@ public final class WastesWorldGameTests {
 					d + "'s corner mast: stage " + corner.stage() + ", hop " + hop);
 			}
 			// plaques: on a wall, beside each shed door; askew only out past PLAQUE_ASKEW_FROM
-			int plaques = 0;
+			int plaques = 0, askew = 0;
 			for (CityPlan.Op.Put p : last.values())
 				if (p.state().is(ModWastes.BRASS_PLAQUE.get())) {
 					plaques++;
+					if (p.state().getValue(BrassPlaqueBlock.ASKEW))
+						askew++;
 					Direction out = p.state().getValue(BrassPlaqueBlock.FACING);
 					CityPlan.Op.Put wall = last.get(p.at().relative(out.getOpposite()));
 					check(wall != null && !wall.state().isAir() && !wall.state().is(ModWastes.BRASS_PLAQUE.get()), "a plaque at " + p.at().subtract(o) + " has no wall behind it");
 					check(p.at().getY() - o.getY() == CityLayout.PLAQUE_Y, "a plaque at " + p.at().subtract(o) + " isn't " + CityLayout.PLAQUE_Y + " up");
 					int[] f = frame(o, p.at().relative(out.getOpposite()));
-					check(p.state().getValue(BrassPlaqueBlock.ASKEW) == Math.max(f[0], f[1]) >= CityLayout.PLAQUE_ASKEW_FROM,
-						"the plaque at " + p.at().subtract(o) + " (frame " + f[0] + ", " + f[1] + ") askew " + p.state().getValue(BrassPlaqueBlock.ASKEW));
+					if (plan.buildings.isEmpty())
+						check(p.state().getValue(BrassPlaqueBlock.ASKEW) == Math.max(f[0], f[1]) >= CityLayout.PLAQUE_ASKEW_FROM,
+							"the plaque at " + p.at().subtract(o) + " (frame " + f[0] + ", " + f[1] + ") askew " + p.state().getValue(BrassPlaqueBlock.ASKEW));
+					else {
+						// the building kit (D71, D90) tilts a building's plaques by its state: askew exactly on one reaching the
+						// damaged ring (a terrace only its outer two houses')
+						int ring = 0;
+						boolean inner = false;
+						for (Object b : plan.buildings)
+							if (b instanceof com.comedymonkey.createaddons.content.wastes.city.kit.KitCity.Placement pl) {
+								BlockPos local = null;
+								int r = 0;
+								for (BlockPos q : pl.model().blocks().keySet()) {
+									BlockPos w = pl.site().at(q.getX(), q.getY(), q.getZ());
+									if (w.equals(p.at()))
+										local = q;
+									r = Math.max(r, com.comedymonkey.createaddons.content.wastes.city.kit.Wear.ring(w.getX() - o.getX(), w.getZ() - o.getZ()));
+								}
+								if (local == null)
+									continue;
+								ring = Math.max(ring, r);
+								if (pl.what().equals("terrace")) {
+									int x = local.getX();
+									long outward = pl.model().blocks().entrySet().stream()
+										.filter(e -> e.getValue().is(ModWastes.BRASS_PLAQUE.get()) && e.getKey().getX() > x).count();
+									inner |= outward >= 2;
+								}
+							}
+						boolean tilted = ring > com.comedymonkey.createaddons.content.wastes.city.kit.Wear.WORN_TO && !inner;
+						check(p.state().getValue(BrassPlaqueBlock.ASKEW) == tilted, "seed " + seed + ": the plaque at " + p.at().subtract(o)
+							+ " (ring " + ring + (inner ? ", a terrace's inner house" : "") + ") askew " + p.state().getValue(BrassPlaqueBlock.ASKEW));
+					}
 				}
 			check(plaques >= 4 * 3, "seed " + seed + ": only " + plaques + " plaques");
+			check(askew >= 1, "seed " + seed + ": no plaque askew");
 		}
 		helper.succeed();
 	}
@@ -749,6 +837,54 @@ public final class WastesWorldGameTests {
 			fitAll += fit;
 		}
 		check(fitAll > 0, "no site in the Wastes fits a city");
+		helper.succeed();
+	}
+
+	/**
+	 * Island fit samples the terrain's density at the heart's floor, one point a chunk, rather than building a whole base
+	 * column for each (which made every candidate, and so /locate, crawl). It must judge sites as the columns did: over 40
+	 * Wastes sites a seed (at least 30 with ground under the heart on each), the same city-or-outskirts call on all but a
+	 * few edge cases, and the share close on average with no lean either way (the point samples skip the columns'
+	 * interpolation, so an island's very edge can fall a few samples either way). The limits are the logged numbers
+	 * (2026-11-02, five seeds, 180 sites: mean 0.007, worst 0.074 = 6 of 81 samples, signed mean 0.0015) with a
+	 * small margin: mean 0.015, worst 8 of 81 samples, signed mean within 0.005.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 40)
+	public static void islandFitMatchesTheColumns(GameTestHelper helper) {
+		int sites = 0, sameCall = 0;
+		double worst = 0, total = 0, signed = 0;
+		for (EndView v : ends(helper)) {
+			int here = 0;
+			for (ChunkPos c : wastesSites(v, 40, 160)) {
+				Optional<ClockworkCityStructure.Site> s = ClockworkCityStructure.site(v.generator(), v.random(), v.end(), c, 0.5);
+				if (s.isEmpty())
+					continue;
+				int x = c.getMiddleBlockX(), z = c.getMiddleBlockZ(), surface = s.get().origin().getY(), solid = 0, all = 0;
+				for (int cx = -ClockworkCityStructure.FOOTPRINT; cx <= ClockworkCityStructure.FOOTPRINT; cx++)
+					for (int cz = -ClockworkCityStructure.FOOTPRINT; cz <= ClockworkCityStructure.FOOTPRINT; cz++) {
+						all++;
+						if (!v.generator().getBaseColumn(x + cx * 16, z + cz * 16, v.end(), v.random()).getBlock(surface - 1).isAir())
+							solid++;
+					}
+				double columns = solid / (double) all;
+				sites++;
+				here++;
+				if ((columns >= 0.5) == s.get().fits())
+					sameCall++;
+				worst = Math.max(worst, Math.abs(columns - s.get().fit()));
+				total += Math.abs(columns - s.get().fit());
+				signed += columns - s.get().fit();
+			}
+			LOG.info("Island fit against whole columns, seed {}: {} sites", v.seed(), here);
+			check(here >= 30, "seed " + v.seed() + ": only " + here + " sites to compare");
+		}
+		double mean = total / Math.max(1, sites), lean = signed / Math.max(1, sites);
+		LOG.info("Island fit by density against whole columns: {} of {} sites judged alike, share difference mean {} worst {}, signed mean {}", sameCall, sites,
+			String.format("%.3f", mean), String.format("%.3f", worst), String.format("%.4f", lean));
+		check(sameCall >= sites * 0.95, "density and columns judge " + (sites - sameCall) + " of " + sites + " sites differently");
+		check(mean <= 0.015, "the shares differ by " + mean + " on average");
+		check(worst <= 8 / 81.0, "a site's share differs by " + worst + " (more than eight samples)");
+		check(Math.abs(lean) <= 0.005, "the samples lean " + (lean > 0 ? "under" : "over") + " the columns by " + lean + " on average");
 		helper.succeed();
 	}
 

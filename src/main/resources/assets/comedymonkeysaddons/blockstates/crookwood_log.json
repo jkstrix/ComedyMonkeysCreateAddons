@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/crookwood_log"
+    },
+    "axis=z": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/crookwood_log",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/crookwood_log",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

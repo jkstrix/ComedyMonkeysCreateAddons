@@ -279,7 +279,7 @@ public final class Tower {
 		for (int x = -2; x <= w; x++) {
 			md.set(x, ay, 1, Kit.pillar(Direction.Axis.X));
 			md.set(x, ay, 3, Kit.pillar(Direction.Axis.X));
-			md.set(x, ay, 2, x < 0 || x >= w ? Kit.plate() : Kit.band(Direction.Axis.X));
+			md.set(x, ay, 2, x < 0 || x >= w ? Kit.plate() : Kit.band()); // upright: its seam runs along the arm
 		}
 		// the arm's struts at its root: upside-down stairs under the reach toward the heart
 		md.set(-1, ay - 1, 1, Kit.vaStairs(Direction.EAST, true));

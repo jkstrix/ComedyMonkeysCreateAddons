@@ -782,7 +782,7 @@ public final class CMConfig {
 			// D66: the city goes into world generation only once the user has walked round it (/wastes buildcity) and approved it
 			clockworkCities = builder.comment("Clockwork cities generate in the Clockwork Wastes (and, with the fallback below, in the vanilla highlands).",
 					"OFF until the city is approved (D66): build one beside you with /wastes buildcity to look round it.",
-					"Their spacing is in the data pack (worldgen/structure_set/clockwork_city.json: 24 chunks, separation 12, 6 chunks from End cities).")
+					"Their spacing is in the data pack (worldgen/structure_set/clockwork_city.json: 32 chunks, separation 12, 6 chunks from End cities).")
 				.translation("comedymonkeysaddons.configuration.clockworkCities").define("cities", false);
 			cityIslandFit = builder.comment("The share of a city's 9 x 9-chunk footprint that must have End Stone at its heart's height (P46); short of it,",
 					"the spot gets only the outskirts. The rest of the city stands on struts and bridges over the void.")

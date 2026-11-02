@@ -1,0 +1,225 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/overgrowth/bramble_leaf",
+    "bramble_sprig": "comedymonkeysaddons:block/wastes/overgrowth/bramble_sprig",
+    "bramble_sprig_b": "comedymonkeysaddons:block/wastes/overgrowth/bramble_sprig_b",
+    "bramble_leaf": "comedymonkeysaddons:block/wastes/overgrowth/bramble_leaf"
+  },
+  "elements": [
+    {
+      "name": "sprig diagonal a",
+      "from": [
+        0,
+        0,
+        8
+      ],
+      "to": [
+        16,
+        16,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": 45,
+        "rescale": true
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bramble_sprig"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bramble_sprig"
+        }
+      }
+    },
+    {
+      "name": "sprig diagonal b",
+      "from": [
+        8,
+        0,
+        0
+      ],
+      "to": [
+        8,
+        16,
+        16
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": 45,
+        "rescale": true
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bramble_sprig"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bramble_sprig"
+        }
+      }
+    },
+    {
+      "name": "sprig straight a",
+      "from": [
+        0,
+        0,
+        5
+      ],
+      "to": [
+        16,
+        13.6,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bramble_sprig_b"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bramble_sprig_b"
+        }
+      }
+    },
+    {
+      "name": "sprig straight b",
+      "from": [
+        11,
+        0,
+        0
+      ],
+      "to": [
+        11,
+        13.6,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bramble_sprig_b"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bramble_sprig_b"
+        }
+      }
+    },
+    {
+      "name": "leaf core",
+      "from": [
+        2.5,
+        0,
+        2.5
+      ],
+      "to": [
+        13.5,
+        7.7,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            8.3,
+            13.5,
+            16
+          ],
+          "texture": "#bramble_leaf"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            8.3,
+            13.5,
+            16
+          ],
+          "texture": "#bramble_leaf"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            8.3,
+            13.5,
+            16
+          ],
+          "texture": "#bramble_leaf"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            8.3,
+            13.5,
+            16
+          ],
+          "texture": "#bramble_leaf"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            2.5,
+            13.5,
+            13.5
+          ],
+          "texture": "#bramble_leaf"
+        }
+      }
+    }
+  ]
+}

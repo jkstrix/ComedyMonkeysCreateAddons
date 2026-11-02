@@ -1,0 +1,254 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_plain",
+    "edge": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_edge",
+    "plain": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_plain"
+  },
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        2.45,
+        -1.225,
+        0
+      ],
+      "scale": [
+        0.433,
+        0.433,
+        0.433
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.173,
+        0.173,
+        0.173
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.346,
+        0.346,
+        0.346
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.26,
+        0.26,
+        0.26
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.277,
+        0.277,
+        0.277
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.277,
+        0.277,
+        0.277
+      ]
+    }
+  },
+  "elements": [
+    {
+      "name": "straight_1",
+      "from": [
+        0,
+        7,
+        0
+      ],
+      "to": [
+        16,
+        9,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            16,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#plain"
+        },
+        "down": {
+          "uv": [
+            0,
+            16,
+            16,
+            0
+          ],
+          "texture": "#plain"
+        }
+      }
+    },
+    {
+      "name": "straight_1",
+      "from": [
+        0,
+        7,
+        16
+      ],
+      "to": [
+        16,
+        9,
+        32
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            16,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            16,
+            16,
+            0
+          ],
+          "texture": "#plain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#plain"
+        }
+      }
+    }
+  ]
+}

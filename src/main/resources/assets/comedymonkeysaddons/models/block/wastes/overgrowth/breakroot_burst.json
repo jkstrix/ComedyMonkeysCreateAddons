@@ -1,0 +1,497 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/overgrowth/root_bark",
+    "root_bark": "comedymonkeysaddons:block/wastes/overgrowth/root_bark",
+    "root_end": "comedymonkeysaddons:block/wastes/overgrowth/root_end",
+    "scorched": "comedymonkeysaddons:block/wastes/scorched"
+  },
+  "elements": [
+    {
+      "name": "root tall",
+      "from": [
+        6,
+        0,
+        6
+      ],
+      "to": [
+        10,
+        15,
+        10
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            1,
+            10,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "east": {
+          "uv": [
+            6,
+            1,
+            10,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "south": {
+          "uv": [
+            6,
+            1,
+            10,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "west": {
+          "uv": [
+            6,
+            1,
+            10,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "up": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#root_end"
+        }
+      }
+    },
+    {
+      "name": "root tall tip",
+      "from": [
+        6.5,
+        12,
+        0.5
+      ],
+      "to": [
+        9.5,
+        16,
+        3.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          14,
+          2
+        ],
+        "axis": "x",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            4
+          ],
+          "texture": "#root_bark"
+        },
+        "east": {
+          "uv": [
+            12.5,
+            0,
+            15.5,
+            4
+          ],
+          "texture": "#root_bark"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            4
+          ],
+          "texture": "#root_bark"
+        },
+        "west": {
+          "uv": [
+            0.5,
+            0,
+            3.5,
+            4
+          ],
+          "texture": "#root_bark"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            0.5,
+            9.5,
+            3.5
+          ],
+          "texture": "#root_bark"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            12.5,
+            9.5,
+            15.5
+          ],
+          "texture": "#root_bark"
+        }
+      }
+    },
+    {
+      "name": "root west",
+      "from": [
+        0,
+        0,
+        6.5
+      ],
+      "to": [
+        8,
+        4,
+        9.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            12,
+            16,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            8,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            12,
+            9.5,
+            16
+          ],
+          "texture": "#root_end"
+        },
+        "up": {
+          "uv": [
+            0,
+            6.5,
+            8,
+            9.5
+          ],
+          "texture": "#root_bark"
+        }
+      }
+    },
+    {
+      "name": "root east",
+      "from": [
+        9,
+        0,
+        9
+      ],
+      "to": [
+        16,
+        3.5,
+        12
+      ],
+      "rotation": {
+        "origin": [
+          9,
+          0,
+          10
+        ],
+        "axis": "y",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12.5,
+            7,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "east": {
+          "uv": [
+            4,
+            12.5,
+            7,
+            16
+          ],
+          "texture": "#root_end"
+        },
+        "south": {
+          "uv": [
+            9,
+            12.5,
+            16,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "up": {
+          "uv": [
+            9,
+            9,
+            16,
+            12
+          ],
+          "texture": "#root_bark"
+        }
+      }
+    },
+    {
+      "name": "stone chunk a",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        4,
+        2,
+        4
+      ],
+      "rotation": {
+        "origin": [
+          2.5,
+          0,
+          2.5
+        ],
+        "axis": "y",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            14,
+            15,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "east": {
+          "uv": [
+            12,
+            14,
+            15,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "south": {
+          "uv": [
+            1,
+            14,
+            4,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "west": {
+          "uv": [
+            1,
+            14,
+            4,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            4,
+            4
+          ],
+          "texture": "#scorched"
+        }
+      }
+    },
+    {
+      "name": "stone chunk b",
+      "from": [
+        12,
+        0,
+        2
+      ],
+      "to": [
+        15,
+        3,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            13,
+            4,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "east": {
+          "uv": [
+            11,
+            13,
+            14,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "south": {
+          "uv": [
+            12,
+            13,
+            15,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "west": {
+          "uv": [
+            2,
+            13,
+            5,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "up": {
+          "uv": [
+            12,
+            2,
+            15,
+            5
+          ],
+          "texture": "#scorched"
+        }
+      }
+    },
+    {
+      "name": "stone chunk c",
+      "from": [
+        2,
+        0,
+        12
+      ],
+      "to": [
+        5,
+        2,
+        15
+      ],
+      "rotation": {
+        "origin": [
+          3.5,
+          0,
+          13.5
+        ],
+        "axis": "y",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            14,
+            14,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "east": {
+          "uv": [
+            1,
+            14,
+            4,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "south": {
+          "uv": [
+            2,
+            14,
+            5,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "west": {
+          "uv": [
+            12,
+            14,
+            15,
+            16
+          ],
+          "texture": "#scorched"
+        },
+        "up": {
+          "uv": [
+            2,
+            12,
+            5,
+            15
+          ],
+          "texture": "#scorched"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        -1.305,
+        2.387,
+        0
+      ],
+      "scale": [
+        0.845,
+        0.845,
+        0.845
+      ]
+    }
+  }
+}

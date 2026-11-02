@@ -1,0 +1,7 @@
+{
+  "parent": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full",
+  "textures": {
+    "brick": "comedymonkeysaddons:block/wastes/seb_1",
+    "particle": "comedymonkeysaddons:block/wastes/seb_1"
+  }
+}

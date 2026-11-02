@@ -1,0 +1,706 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_plain",
+    "edge": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_edge",
+    "rust_a": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_rust_a",
+    "rust_b": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_rust_b",
+    "plain": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_plain"
+  },
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        3.256,
+        0.652,
+        0
+      ],
+      "scale": [
+        0.326,
+        0.326,
+        0.326
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.13,
+        0.13,
+        0.13
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.261,
+        0.261,
+        0.261
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.196,
+        0.196,
+        0.196
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.209,
+        0.209,
+        0.209
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.209,
+        0.209,
+        0.209
+      ]
+    }
+  },
+  "elements": [
+    {
+      "name": "fallen_0_1",
+      "from": [
+        21,
+        0,
+        0
+      ],
+      "to": [
+        30,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            2,
+            1,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            1,
+            2,
+            10,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            1,
+            0,
+            10,
+            16
+          ],
+          "texture": "#rust_a"
+        },
+        "down": {
+          "uv": [
+            1,
+            16,
+            10,
+            0
+          ],
+          "texture": "#rust_a"
+        }
+      }
+    },
+    {
+      "name": "fallen_0_1",
+      "from": [
+        21,
+        0,
+        16
+      ],
+      "to": [
+        30,
+        2,
+        32
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            2,
+            5,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            5,
+            2,
+            14,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            5,
+            16,
+            14,
+            0
+          ],
+          "texture": "#rust_a"
+        },
+        "down": {
+          "uv": [
+            5,
+            0,
+            14,
+            16
+          ],
+          "texture": "#rust_a"
+        }
+      }
+    },
+    {
+      "name": "fallen_1_1",
+      "from": [
+        11.7,
+        0,
+        0
+      ],
+      "to": [
+        21,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.3,
+            2,
+            3,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            3,
+            2,
+            12.3,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            3,
+            0,
+            12.3,
+            16
+          ],
+          "texture": "#rust_a"
+        },
+        "down": {
+          "uv": [
+            3,
+            16,
+            12.3,
+            0
+          ],
+          "texture": "#rust_a"
+        }
+      }
+    },
+    {
+      "name": "fallen_1_1",
+      "from": [
+        11.7,
+        0,
+        16
+      ],
+      "to": [
+        21,
+        2,
+        32
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.3,
+            2,
+            1,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            1,
+            2,
+            10.3,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            1,
+            16,
+            10.3,
+            0
+          ],
+          "texture": "#rust_b"
+        },
+        "down": {
+          "uv": [
+            1,
+            0,
+            10.3,
+            16
+          ],
+          "texture": "#rust_b"
+        }
+      }
+    },
+    {
+      "name": "fallen_2_1",
+      "from": [
+        4.005,
+        1.531,
+        0
+      ],
+      "to": [
+        12.605,
+        3.531,
+        16
+      ],
+      "rotation": {
+        "origin": [
+          8.305,
+          2.531,
+          16
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8.6,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            12.469,
+            16,
+            14.469
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            8.6,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            12.469,
+            16,
+            14.469
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8.6,
+            16
+          ],
+          "texture": "#rust_a"
+        },
+        "down": {
+          "uv": [
+            0,
+            16,
+            8.6,
+            0
+          ],
+          "texture": "#rust_a"
+        }
+      }
+    },
+    {
+      "name": "fallen_2_1",
+      "from": [
+        4.005,
+        1.531,
+        16
+      ],
+      "to": [
+        12.605,
+        3.531,
+        32
+      ],
+      "rotation": {
+        "origin": [
+          8.305,
+          2.531,
+          16
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.6,
+            2,
+            5,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            12.469,
+            16,
+            14.469
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            5,
+            2,
+            13.6,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            12.469,
+            16,
+            14.469
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            5,
+            16,
+            13.6,
+            0
+          ],
+          "texture": "#plain"
+        },
+        "down": {
+          "uv": [
+            5,
+            0,
+            13.6,
+            16
+          ],
+          "texture": "#plain"
+        }
+      }
+    },
+    {
+      "name": "fallen_3_1",
+      "from": [
+        -2.219,
+        5.89,
+        0
+      ],
+      "to": [
+        6.081,
+        7.89,
+        16
+      ],
+      "rotation": {
+        "origin": [
+          1.781,
+          6.89,
+          16
+        ],
+        "axis": "z",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            14.3,
+            2,
+            6,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            8.11,
+            16,
+            10.11
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            6,
+            2,
+            14.3,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            8.11,
+            16,
+            10.11
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            6,
+            0,
+            14.3,
+            16
+          ],
+          "texture": "#plain"
+        },
+        "down": {
+          "uv": [
+            6,
+            16,
+            14.3,
+            0
+          ],
+          "texture": "#plain"
+        }
+      }
+    },
+    {
+      "name": "fallen_3_1",
+      "from": [
+        -2.219,
+        5.89,
+        16
+      ],
+      "to": [
+        6.081,
+        7.89,
+        32
+      ],
+      "rotation": {
+        "origin": [
+          1.781,
+          6.89,
+          16
+        ],
+        "axis": "z",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            14.3,
+            2,
+            6,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            8.11,
+            16,
+            10.11
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            6,
+            2,
+            14.3,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            8.11,
+            16,
+            10.11
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            6,
+            16,
+            14.3,
+            0
+          ],
+          "texture": "#plain"
+        },
+        "down": {
+          "uv": [
+            6,
+            0,
+            14.3,
+            16
+          ],
+          "texture": "#plain"
+        }
+      }
+    }
+  ]
+}

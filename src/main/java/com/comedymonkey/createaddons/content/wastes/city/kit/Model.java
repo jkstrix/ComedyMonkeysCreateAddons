@@ -42,7 +42,9 @@ public final class Model {
 		/** Arcing contacts (the yard's transformer bushings). */
 		ARC,
 		/** Where a fallen block landed and cracked what it hit. r 1. */
-		FALL
+		FALL,
+		/** Where a winding tower's mainspring burst out through its wall (D79): the hole's edge cracked. */
+		SPRUNG
 	}
 
 	/** A cause at local (x, y, z), reaching {@code reach} blocks (a soot fan's height, a crack ring's radius). */

@@ -499,8 +499,14 @@ public final class WastesGameTests {
 		makes(helper, craft, grid(3, 1, seb, seb, seb), modItem("stained_end_stone_brick_slab"), 6, "stained brick slab");
 		makes(helper, craft, grid(3, 2, seb, seb, seb, seb, seb, seb), modItem("stained_end_stone_brick_wall"), 6, "stained brick wall");
 		java.util.Map<Item, Integer> bricks = java.util.Map.of(modItem("stained_end_stone_brick_stairs"), 1, modItem("stained_end_stone_brick_slab"), 2,
-			modItem("stained_end_stone_brick_wall"), 1);
+			modItem("stained_end_stone_brick_wall"), 1, modItem("stained_end_stone_brick_diagonal"), 2);
 		helper.assertTrue(cuts(helper, seb).equals(bricks), "stained bricks cut into " + cuts(helper, seb) + ", not " + bricks);
+		// D85, D88, D89: the Patina Rib cuts into two ridge rolls; Create's cut deepslate bricks into two diagonal courses
+		helper.assertTrue(cuts(helper, modItem("patina_rib")).equals(java.util.Map.of(modItem("patina_roll"), 2)),
+			"the Patina Rib cuts into " + cuts(helper, modItem("patina_rib")));
+		Item cutDeepslate = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(net.minecraft.resources.ResourceLocation.parse("create:cut_deepslate_bricks"));
+		helper.assertTrue(cuts(helper, cutDeepslate).getOrDefault(modItem("cut_deepslate_brick_diagonal"), 0) == 2,
+			"cut deepslate bricks cut into " + cuts(helper, cutDeepslate));
 		makes(helper, net.minecraft.world.item.crafting.RecipeType.SMELTING, new net.minecraft.world.item.crafting.SingleRecipeInput(new ItemStack(seb)),
 			modItem("cracked_stained_end_stone_bricks"), 1, "smelted stained bricks");
 		for (Item copper : List.of(Items.COPPER_BLOCK, Items.EXPOSED_COPPER, Items.WEATHERED_COPPER, Items.OXIDIZED_COPPER, Items.WAXED_COPPER_BLOCK,

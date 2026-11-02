@@ -54,7 +54,7 @@ public final class Gantry {
 			md.set(x, BEAM, c0, Kit.pillar(Direction.Axis.X));
 			md.set(x, BEAM, c0 + 1, Kit.pillar(Direction.Axis.X));
 			if (x >= 2 && x <= L - 3)
-				md.set(x, BEAM, c0 - 1, Kit.band(Direction.Axis.X));
+				md.set(x, BEAM, c0 - 1, Kit.band()); // upright: its seam runs along the beam
 		}
 		// the hoist trolley over clamp 5, its chain down to the lens held over the body
 		int tx = 4;

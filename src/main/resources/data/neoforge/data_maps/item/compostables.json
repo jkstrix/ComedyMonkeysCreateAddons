@@ -1,0 +1,43 @@
+{
+  "values": {
+    "comedymonkeysaddons:knotvine": {
+      "chance": 0.3
+    },
+    "comedymonkeysaddons:scale_lichen": {
+      "chance": 0.3
+    },
+    "comedymonkeysaddons:twinerope": {
+      "chance": 0.3
+    },
+    "comedymonkeysaddons:dusk_moss_carpet": {
+      "chance": 0.3
+    },
+    "comedymonkeysaddons:springcurl": {
+      "chance": 0.3
+    },
+    "comedymonkeysaddons:corkscrew_rush": {
+      "chance": 0.3
+    },
+    "comedymonkeysaddons:crookwood_leaves": {
+      "chance": 0.3
+    },
+    "comedymonkeysaddons:shieldcrown_leaves": {
+      "chance": 0.3
+    },
+    "comedymonkeysaddons:vigil_bell": {
+      "chance": 0.65
+    },
+    "comedymonkeysaddons:bramblecoil": {
+      "chance": 0.65
+    },
+    "comedymonkeysaddons:shiftcap": {
+      "chance": 0.65
+    },
+    "comedymonkeysaddons:shiftcap_shelf": {
+      "chance": 0.65
+    },
+    "comedymonkeysaddons:dusk_moss": {
+      "chance": 0.65
+    }
+  }
+}

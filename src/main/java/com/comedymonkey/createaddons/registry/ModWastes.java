@@ -8,6 +8,8 @@ import com.comedymonkey.createaddons.content.wastes.AssemblyClampBlock;
 import com.comedymonkey.createaddons.content.wastes.BrassPlaqueBlock;
 import com.comedymonkey.createaddons.content.wastes.BrokenMakersWindowBlock;
 import com.comedymonkey.createaddons.content.wastes.ClampBracketBlock;
+import com.comedymonkey.createaddons.content.wastes.PropPieceBlock;
+import com.comedymonkey.createaddons.content.wastes.WindingTowerPieces;
 import com.comedymonkey.createaddons.content.wastes.KeyMarkedStoneBlock;
 import com.comedymonkey.createaddons.content.wastes.ScarredPlateBlock;
 import com.comedymonkey.createaddons.content.wastes.SlottedGrilleBlock;
@@ -157,6 +159,15 @@ public final class ModWastes {
 		() -> new SlabBlock(makersBrick()));
 	public static final DeferredBlock<WallBlock> STAINED_END_STONE_BRICK_WALL = ModBlocks.BLOCKS.register("stained_end_stone_brick_wall",
 		() -> new WallBlock(makersBrick().forceSolidOn()));
+	/** The heart drum's 45-degree brick (D88): half a cell cut corner to corner, so an octagon's diagonals can be flat. */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.StainedBrickDiagonalBlock> STAINED_END_STONE_BRICK_DIAGONAL =
+		ModBlocks.BLOCKS.register("stained_end_stone_brick_diagonal",
+			() -> new com.comedymonkey.createaddons.content.wastes.StainedBrickDiagonalBlock(makersBrick()));
+	/** The heart drum's courses on its 45-degree diagonals (D89): the sill and lintel course and the water table, in cut deepslate. */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.CutDeepslateDiagonalBlock> CUT_DEEPSLATE_BRICK_DIAGONAL =
+		ModBlocks.BLOCKS.register("cut_deepslate_brick_diagonal",
+			() -> new com.comedymonkey.createaddons.content.wastes.CutDeepslateDiagonalBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE)
+				.instrument(NoteBlockInstrument.BASEDRUM).strength(3.5f, 6.0f).sound(SoundType.DEEPSLATE_BRICKS).requiresCorrectToolForDrops()));
 	public static final DeferredBlock<KeyMarkedStoneBlock> KEY_MARKED_STONE = ModBlocks.BLOCKS.register("key_marked_stone",
 		() -> new KeyMarkedStoneBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).instrument(NoteBlockInstrument.BASEDRUM)
 			.strength(3.0f, 9.0f).requiresCorrectToolForDrops()));
@@ -166,12 +177,16 @@ public final class ModWastes {
 	public static final DeferredBlock<Block> PATINA_RIB = ModBlocks.BLOCKS.register("patina_rib",
 		() -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.WARPED_STEM).strength(3.0f, 6.0f).sound(SoundType.COPPER)
 			.requiresCorrectToolForDrops()));
+	/** The makers' ridge roll at half the Patina Rib's weight (D85): one half of a 2-wide ridge, faced toward the ridge line. */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.PatinaRollBlock> PATINA_ROLL = ModBlocks.BLOCKS.register("patina_roll",
+		() -> new com.comedymonkey.createaddons.content.wastes.PatinaRollBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WARPED_STEM)
+			.strength(3.0f, 6.0f).sound(SoundType.COPPER).requiresCorrectToolForDrops()));
 
 	/** The building block set (D75), in creative-tab order. */
 	public static List<DeferredBlock<? extends Block>> buildingBlocks() {
 		return List.of(VOID_ALLOY_STAIRS, VOID_ALLOY_SLAB, VOID_ALLOY_WALL, SLOTTED_GRILLE, VOID_ALLOY_BAND, CLAMP_BRACKET, SCARRED_VOID_ALLOY_PLATE,
 			STAINED_END_STONE_BRICKS, CRACKED_STAINED_END_STONE_BRICKS, STAINED_END_STONE_BRICK_STAIRS, STAINED_END_STONE_BRICK_SLAB,
-			STAINED_END_STONE_BRICK_WALL, KEY_MARKED_STONE, BROKEN_MAKERS_WINDOW, PATINA_RIB);
+			STAINED_END_STONE_BRICK_WALL, STAINED_END_STONE_BRICK_DIAGONAL, CUT_DEEPSLATE_BRICK_DIAGONAL, KEY_MARKED_STONE, BROKEN_MAKERS_WINDOW, PATINA_RIB, PATINA_ROLL);
 	}
 
 	// ---------------------------------------------------------------- salvage (D26: wrench for parts, anything else for scrap)
@@ -193,6 +208,17 @@ public final class ModWastes {
 	public static final DeferredBlock<BrassPlaqueBlock> BRASS_PLAQUE = ModBlocks.BLOCKS.register("brass_plaque",
 		() -> new BrassPlaqueBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_YELLOW).strength(1.5f, 6.0f).sound(SoundType.METAL)
 			.requiresCorrectToolForDrops().noOcclusion()));
+	/**
+	 * The winding tower's props (D80-D84, WindingTowerPieces): the Sprung Mainspring's pieces (spring steel, a pickaxe's)
+	 * then the Fallen Rafters (dark oak, an axe's); decor, each drops itself.
+	 */
+	public static final List<DeferredBlock<PropPieceBlock>> WINDING_TOWER_PIECES = java.util.Arrays.stream(WindingTowerPieces.PIECES)
+		.map(p -> ModBlocks.BLOCKS.register(p.id(), () -> new PropPieceBlock(p.id().startsWith("fallen_rafter")
+			? BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(2.0f, 3.0f).sound(SoundType.WOOD).noOcclusion().noCollission()
+			: BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(2.0f, 6.0f).sound(SoundType.METAL).requiresCorrectToolForDrops()
+				.noOcclusion().noCollission(),
+			new double[][] { p.box() }, p.reach())))
+		.toList();
 
 	// ---------------------------------------------------------------- the powered city (phase 2: locks open as districts wake)
 	public static final DeferredBlock<SubstationBlock> SUBSTATION = ModBlocks.BLOCKS.register("substation",
@@ -323,8 +349,124 @@ public final class ModWastes {
 			DERELICT_STAR_REACTOR, STAR_REACTOR, LIFT, LIFT_CALL_PLATE, WALL_VENT, DERELICT_INSULATOR));
 		// the building block set after the Pillar (the void-alloy family together, then the makers' masonry)
 		all.addAll(all.indexOf(VOID_ALLOY_PILLAR) + 1, buildingBlocks());
+		// the winding tower's props after the plaque (the makers' decor together)
+		all.addAll(all.indexOf(BRASS_PLAQUE) + 1, WINDING_TOWER_PIECES);
+		// the overgrowth after the Scrap Heap (the decor; D92)
+		all.addAll(all.indexOf(SCRAP_HEAP) + 1, overgrowth());
 		return List.copyOf(all);
 	}
+
+	// ---------------------------------------------------------------- the overgrowth (D91-D94): begin
+	// The Twisted Battlefields' first plants (design/briefs/clockwork-wastes-overgrowth.md). Models and loot from
+	// design/models/clockwork-wastes-overgrowth.export.js. Thin plants drop with shears or Silk Touch, the rest themselves;
+	// nothing spreads by itself, bone meal grows them all (D92).
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.CoverBlock> KNOTVINE = ModBlocks.BLOCKS.register("knotvine",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.CoverBlock(plant(MapColor.COLOR_BLUE, SoundType.VINE).noCollission().strength(0.2f).replaceable()));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.CoverBlock> SCALE_LICHEN = ModBlocks.BLOCKS.register("scale_lichen",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.CoverBlock(plant(MapColor.COLOR_LIGHT_GRAY, SoundType.GLOW_LICHEN).noCollission().strength(0.2f).replaceable()));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.TwineropeBlock> TWINEROPE = ModBlocks.BLOCKS.register("twinerope",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.TwineropeBlock(plant(MapColor.COLOR_BLUE, SoundType.WEEPING_VINES).noCollission()));
+	/** The rope above its tip: no item (bone meal and the city make it), as vanilla's weeping vines' body has none. */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.TwineropeBlock.Plant> TWINEROPE_PLANT = ModBlocks.BLOCKS.register("twinerope_plant",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.TwineropeBlock.Plant(plant(MapColor.COLOR_BLUE, SoundType.WEEPING_VINES).noCollission()));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.DuskMossBlock> DUSK_MOSS = ModBlocks.BLOCKS.register("dusk_moss",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.DuskMossBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).strength(0.1f)
+			.sound(SoundType.MOSS).pushReaction(PushReaction.DESTROY)));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.MossCarpetBlock> DUSK_MOSS_CARPET = ModBlocks.BLOCKS.register("dusk_moss_carpet",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.MossCarpetBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).strength(0.1f)
+			.sound(SoundType.MOSS_CARPET).noOcclusion().randomTicks().pushReaction(PushReaction.DESTROY)));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.SpringcurlBlock> SPRINGCURL = ModBlocks.BLOCKS.register("springcurl",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.SpringcurlBlock(plant(MapColor.COLOR_BLUE, SoundType.GRASS).noCollission().instabreak()
+			.offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.CrackPlantBlock> CORKSCREW_RUSH = ModBlocks.BLOCKS.register("corkscrew_rush",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.CrackPlantBlock(plant(MapColor.COLOR_BLUE, SoundType.GRASS).noCollission().instabreak()
+			.offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.CrackPlantBlock> VIGIL_BELL = ModBlocks.BLOCKS.register("vigil_bell",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.CrackPlantBlock(plant(MapColor.COLOR_BLUE, SoundType.GRASS).noCollission().instabreak()
+			.offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.BramblecoilBlock> BRAMBLECOIL = ModBlocks.BLOCKS.register("bramblecoil",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.BramblecoilBlock(plant(MapColor.COLOR_BLUE, SoundType.SWEET_BERRY_BUSH).noCollission().strength(0.2f)));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.ShiftcapBlock> SHIFTCAP = ModBlocks.BLOCKS.register("shiftcap",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.ShiftcapBlock(plant(MapColor.COLOR_BLUE, SoundType.FUNGUS).noCollission().instabreak()
+			.lightLevel(s -> 3)));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.ShiftcapShelfBlock> SHIFTCAP_SHELF = ModBlocks.BLOCKS.register("shiftcap_shelf",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.ShiftcapShelfBlock(plant(MapColor.COLOR_BLUE, SoundType.FUNGUS).noCollission().strength(0.2f)
+			.lightLevel(s -> 2)));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.BreakrootBlock> BREAKROOT_KNUCKLE = ModBlocks.BLOCKS.register("breakroot_knuckle",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.BreakrootBlock(root(), false));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.BreakrootBlock> BREAKROOT_RUN = ModBlocks.BLOCKS.register("breakroot_run",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.BreakrootBlock(root(), true));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.BreakrootBurstBlock> BREAKROOT_BURST = ModBlocks.BLOCKS.register("breakroot_burst",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.BreakrootBurstBlock(root()));
+	public static final DeferredBlock<RotatedPillarBlock> CROOKWOOD_LOG = ModBlocks.BLOCKS.register("crookwood_log",
+		() -> new RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).instrument(NoteBlockInstrument.BASS).strength(2.0f)
+			.sound(SoundType.WOOD).ignitedByLava()));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.CrookwoodLeavesBlock> CROOKWOOD_LEAVES = ModBlocks.BLOCKS.register("crookwood_leaves",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.CrookwoodLeavesBlock(leaves(MapColor.COLOR_LIGHT_BLUE)));
+	public static final DeferredBlock<RotatedPillarBlock> SHIELDCROWN_LOG = ModBlocks.BLOCKS.register("shieldcrown_log",
+		() -> new RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASS).strength(2.0f)
+			.sound(SoundType.WOOD).ignitedByLava()));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.wastes.overgrowth.ShieldcrownLeavesBlock> SHIELDCROWN_LEAVES = ModBlocks.BLOCKS.register("shieldcrown_leaves",
+		() -> new com.comedymonkey.createaddons.content.wastes.overgrowth.ShieldcrownLeavesBlock(leaves(MapColor.COLOR_BLUE)));
+	/** The pots (G8): Springcurl, Corkscrew Rush, the Vigil Bell and the Shiftcap in vanilla's flower pot (no items: the pot is used). */
+	public static final DeferredBlock<net.minecraft.world.level.block.FlowerPotBlock> POTTED_SPRINGCURL = potted("springcurl", SPRINGCURL, 0),
+		POTTED_CORKSCREW_RUSH = potted("corkscrew_rush", CORKSCREW_RUSH, 0), POTTED_VIGIL_BELL = potted("vigil_bell", VIGIL_BELL, 0),
+		POTTED_SHIFTCAP = potted("shiftcap", SHIFTCAP, 3);
+
+	/** The overgrowth's blocks that are items, in creative-tab order. */
+	public static List<DeferredBlock<? extends Block>> overgrowth() {
+		return List.of(KNOTVINE, SCALE_LICHEN, TWINEROPE, DUSK_MOSS, DUSK_MOSS_CARPET, SPRINGCURL, CORKSCREW_RUSH, VIGIL_BELL, BRAMBLECOIL, SHIFTCAP,
+			SHIFTCAP_SHELF, BREAKROOT_KNUCKLE, BREAKROOT_RUN, BREAKROOT_BURST, CROOKWOOD_LOG, CROOKWOOD_LEAVES, SHIELDCROWN_LOG, SHIELDCROWN_LEAVES);
+	}
+
+	/** The pots, the plants they hold. */
+	public static List<DeferredBlock<net.minecraft.world.level.block.FlowerPotBlock>> pots() {
+		return List.of(POTTED_SPRINGCURL, POTTED_CORKSCREW_RUSH, POTTED_VIGIL_BELL, POTTED_SHIFTCAP);
+	}
+
+	private static BlockBehaviour.Properties plant(MapColor color, SoundType sound) {
+		return BlockBehaviour.Properties.of().mapColor(color).sound(sound).noOcclusion().pushReaction(PushReaction.DESTROY).ignitedByLava();
+	}
+
+	private static BlockBehaviour.Properties root() {
+		return BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).instrument(NoteBlockInstrument.BASS).strength(1.5f).sound(SoundType.ROOTS)
+			.noOcclusion().pushReaction(PushReaction.DESTROY).ignitedByLava();
+	}
+
+	private static BlockBehaviour.Properties leaves(MapColor color) {
+		return BlockBehaviour.Properties.of().mapColor(color).strength(0.2f).randomTicks().sound(SoundType.GRASS).noOcclusion()
+			.isValidSpawn((s, l, p, t) -> false).isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p) -> false).ignitedByLava()
+			.pushReaction(PushReaction.DESTROY).isRedstoneConductor((s, l, p) -> false);
+	}
+
+	private static DeferredBlock<net.minecraft.world.level.block.FlowerPotBlock> potted(String plant, DeferredBlock<? extends Block> held, int light) {
+		return ModBlocks.BLOCKS.register("potted_" + plant, () -> new net.minecraft.world.level.block.FlowerPotBlock(
+			() -> (net.minecraft.world.level.block.FlowerPotBlock) Blocks.FLOWER_POT, held, BlockBehaviour.Properties.of().instabreak().noOcclusion()
+				.pushReaction(PushReaction.DESTROY).lightLevel(s -> light)));
+	}
+
+	/**
+	 * The pots into vanilla's flower pot; into fire at their vanilla kin's values (G8): the wood as logs, the leaves as
+	 * leaves, Knotvine, Scale Lichen and Twinerope as vines and glow lichen, the small plants as flowers. Moss doesn't burn,
+	 * as vanilla's doesn't. The composter's values are a data map.
+	 */
+	private static void overgrowthSetup() {
+		var pot = (net.minecraft.world.level.block.FlowerPotBlock) Blocks.FLOWER_POT;
+		pot.addPlant(SPRINGCURL.getId(), POTTED_SPRINGCURL);
+		pot.addPlant(CORKSCREW_RUSH.getId(), POTTED_CORKSCREW_RUSH);
+		pot.addPlant(VIGIL_BELL.getId(), POTTED_VIGIL_BELL);
+		pot.addPlant(SHIFTCAP.getId(), POTTED_SHIFTCAP);
+		var fire = (net.minecraft.world.level.block.FireBlock) Blocks.FIRE;
+		for (var b : List.of(CROOKWOOD_LOG, SHIELDCROWN_LOG, BREAKROOT_KNUCKLE, BREAKROOT_RUN, BREAKROOT_BURST))
+			fire.setFlammable(b.get(), 5, 5);
+		for (var b : List.of(CROOKWOOD_LEAVES, SHIELDCROWN_LEAVES))
+			fire.setFlammable(b.get(), 30, 60);
+		for (var b : List.of(KNOTVINE, SCALE_LICHEN, TWINEROPE, TWINEROPE_PLANT))
+			fire.setFlammable(b.get(), 15, 100);
+		for (var b : List.of(SPRINGCURL, CORKSCREW_RUSH, VIGIL_BELL, BRAMBLECOIL))
+			fire.setFlammable(b.get(), 60, 100);
+	}
+	// ---------------------------------------------------------------- the overgrowth: end
 
 	// ---------------------------------------------------------------- items
 	/** The salvage material (P15): crushes into nuggets; the Star Reactor and the next End biomes use it. */
@@ -359,6 +501,7 @@ public final class ModWastes {
 	public static final DeferredItem<DeferredSpawnEggItem> CUSTODIAN_SPAWN_EGG = ModItems.ITEMS.register("custodian_spawn_egg",
 		() -> new DeferredSpawnEggItem(CUSTODIAN, 0x16151c, 0xb5452f, new Item.Properties()));
 
+
 	private ModWastes() {}
 
 	/** Loads the class, so everything above is in the registers before they're handed to the mod bus. */
@@ -367,6 +510,7 @@ public final class ModWastes {
 	/** Common setup, on the main thread: the End biome slots and the Create-style tooltips. */
 	public static void commonSetup() {
 		EndBiomes.register();
+		overgrowthSetup();
 		for (Item item : List.of(CLOCKWORK_SCRAP.get(), UNKNOWN_DEVICE.get()))
 			TooltipModifier.REGISTRY.register(item, new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE));
 		for (var block : salvage())

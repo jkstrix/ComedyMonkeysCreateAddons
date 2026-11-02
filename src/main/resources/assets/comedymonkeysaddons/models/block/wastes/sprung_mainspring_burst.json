@@ -1,0 +1,842 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_plain",
+    "edge": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_edge",
+    "scuff": "comedymonkeysaddons:block/wastes/props/sprung_mainspring_scuff"
+  },
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        1.47,
+        -0.735,
+        0
+      ],
+      "scale": [
+        0.26,
+        0.26,
+        0.26
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.104,
+        0.104,
+        0.104
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.208,
+        0.208,
+        0.208
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.156,
+        0.156,
+        0.156
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.166,
+        0.166,
+        0.166
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.166,
+        0.166,
+        0.166
+      ]
+    }
+  },
+  "elements": [
+    {
+      "name": "burst_1",
+      "from": [
+        13.7,
+        7,
+        0
+      ],
+      "to": [
+        32,
+        9,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            16,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#scuff"
+        },
+        "down": {
+          "uv": [
+            0,
+            16,
+            16,
+            0
+          ],
+          "texture": "#scuff"
+        }
+      }
+    },
+    {
+      "name": "burst_1",
+      "from": [
+        13.7,
+        7,
+        16
+      ],
+      "to": [
+        32,
+        9,
+        32
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            16,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            16,
+            16,
+            0
+          ],
+          "texture": "#scuff"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#scuff"
+        }
+      }
+    },
+    {
+      "name": "burst_2",
+      "from": [
+        8.872,
+        9,
+        0
+      ],
+      "to": [
+        15.128,
+        11,
+        16
+      ],
+      "rotation": {
+        "origin": [
+          12,
+          10,
+          16
+        ],
+        "axis": "z",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7.257,
+            2,
+            1,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            5,
+            16,
+            7
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            1,
+            2,
+            7.257,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            5,
+            16,
+            7
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            1,
+            0,
+            7.257,
+            16
+          ],
+          "texture": "#scuff"
+        },
+        "down": {
+          "uv": [
+            1,
+            16,
+            7.257,
+            0
+          ],
+          "texture": "#scuff"
+        }
+      }
+    },
+    {
+      "name": "burst_2",
+      "from": [
+        8.872,
+        9,
+        16
+      ],
+      "to": [
+        15.128,
+        11,
+        32
+      ],
+      "rotation": {
+        "origin": [
+          12,
+          10,
+          16
+        ],
+        "axis": "z",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.257,
+            2,
+            7,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            5,
+            16,
+            7
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            7,
+            2,
+            13.257,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            5,
+            16,
+            7
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            7,
+            16,
+            13.257,
+            0
+          ],
+          "texture": "#scuff"
+        },
+        "down": {
+          "uv": [
+            7,
+            0,
+            13.257,
+            16
+          ],
+          "texture": "#scuff"
+        }
+      }
+    },
+    {
+      "name": "burst_3",
+      "from": [
+        5.7,
+        11,
+        0
+      ],
+      "to": [
+        10.3,
+        13,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.6,
+            2,
+            8,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            3,
+            16,
+            5
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            8,
+            2,
+            12.6,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            3,
+            16,
+            5
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            8,
+            0,
+            12.6,
+            16
+          ],
+          "texture": "#scuff"
+        },
+        "down": {
+          "uv": [
+            8,
+            16,
+            12.6,
+            0
+          ],
+          "texture": "#scuff"
+        }
+      }
+    },
+    {
+      "name": "burst_3",
+      "from": [
+        5.7,
+        11,
+        16
+      ],
+      "to": [
+        10.3,
+        13,
+        32
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.6,
+            2,
+            10,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            3,
+            16,
+            5
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            10,
+            2,
+            14.6,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            3,
+            16,
+            5
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            10,
+            16,
+            14.6,
+            0
+          ],
+          "texture": "#scuff"
+        },
+        "down": {
+          "uv": [
+            10,
+            0,
+            14.6,
+            16
+          ],
+          "texture": "#scuff"
+        }
+      }
+    },
+    {
+      "name": "burst_4",
+      "from": [
+        0.872,
+        9,
+        0
+      ],
+      "to": [
+        7.128,
+        11,
+        16
+      ],
+      "rotation": {
+        "origin": [
+          4,
+          10,
+          16
+        ],
+        "axis": "z",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13.257,
+            2,
+            7,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            5,
+            16,
+            7
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            7,
+            2,
+            13.257,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            5,
+            16,
+            7
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            7,
+            0,
+            13.257,
+            16
+          ],
+          "texture": "#scuff"
+        },
+        "down": {
+          "uv": [
+            7,
+            16,
+            13.257,
+            0
+          ],
+          "texture": "#scuff"
+        }
+      }
+    },
+    {
+      "name": "burst_4",
+      "from": [
+        0.872,
+        9,
+        16
+      ],
+      "to": [
+        7.128,
+        11,
+        32
+      ],
+      "rotation": {
+        "origin": [
+          4,
+          10,
+          16
+        ],
+        "axis": "z",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            9.257,
+            2,
+            3,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            5,
+            16,
+            7
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            3,
+            2,
+            9.257,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            5,
+            16,
+            7
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            3,
+            16,
+            9.257,
+            0
+          ],
+          "texture": "#scuff"
+        },
+        "down": {
+          "uv": [
+            3,
+            0,
+            9.257,
+            16
+          ],
+          "texture": "#scuff"
+        }
+      }
+    },
+    {
+      "name": "burst_5",
+      "from": [
+        -16,
+        7,
+        0
+      ],
+      "to": [
+        2.3,
+        9,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            16,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#scuff"
+        },
+        "down": {
+          "uv": [
+            0,
+            16,
+            16,
+            0
+          ],
+          "texture": "#scuff"
+        }
+      }
+    },
+    {
+      "name": "burst_5",
+      "from": [
+        -16,
+        7,
+        16
+      ],
+      "to": [
+        2.3,
+        9,
+        32
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            2,
+            0,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            16,
+            0
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            7,
+            16,
+            9
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            16,
+            16,
+            0
+          ],
+          "texture": "#scuff"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#scuff"
+        }
+      }
+    }
+  ]
+}

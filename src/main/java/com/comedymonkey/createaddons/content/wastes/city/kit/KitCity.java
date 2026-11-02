@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.comedymonkey.createaddons.content.wastes.DerelictInsulatorBlock;
 import com.comedymonkey.createaddons.content.wastes.District;
+import com.comedymonkey.createaddons.content.wastes.PropPieceBlock;
 import com.comedymonkey.createaddons.content.wastes.city.CityPlan;
 
 import net.minecraft.core.BlockPos;
@@ -168,6 +169,27 @@ public final class KitCity {
 		put("split alcove tower", f, 35, 35, 66, 66, sp, AlcoveWall.split(ctx(f, sp, Wear.DAMAGED, 43)));
 	}
 
+	/**
+	 * The city's one wrecked winding tower (D79, D84, D85), in the Quarters' lot B beside street B: the drum at u 43-53,
+	 * v 17-27 (its plinth and step to u 41-55, v 15-29), turned so its west side, where the sprung spring stands, faces
+	 * the street (design/briefs/clockwork-wastes-winding-tower.md, "Placing it in the city": the spiral reads only face-on);
+	 * the spring and its stones lie out toward the street, up to u 35. In the state its ring gives it (its outer corner,
+	 * u 55, v 29, is in the damaged ring).
+	 */
+	public static Placement windingTower(Frame f) {
+		// never a mirrored frame (its modelled spring and rafters turn but can't mirror): local z runs whichever way along v
+		// keeps it a plain turn, and the drum's 11 then cover v 17-27 either way
+		Direction a = f.U(), b = a.getClockWise();
+		Site s = site(f, 43, b == f.V() ? 17 : 27, a, b);
+		return put("winding tower", f, 35, 0, 66, 29, s, WindingTower.build(ctx(f, s, wear(f, 55, 29), 44)));
+	}
+
+	/** The street cells of a district (its two streets, u or v 30-34), for the winding tower's check. */
+	public static boolean isStreet(Frame f, BlockPos w) {
+		int[] uv = f.uv(w);
+		return uv[0] >= 30 && uv[0] <= 34 && uv[1] >= 0 && uv[1] <= 66 || uv[1] >= 30 && uv[1] <= 34 && uv[0] >= 0 && uv[0] <= 66;
+	}
+
 	// ================================================================ the heart
 
 	/** The drum (the whole octagon, doors north, east and west, pilasters inside) and the spire (its crown's insulators the districts'). */
@@ -226,27 +248,44 @@ public final class KitCity {
 	// ================================================================ the checks
 
 	/**
-	 * What's wrong with the kit in a plan (empty: nothing): a building's block outside its lot, or a later op of the city's
-	 * putting something into one of a building's blocks (a machine in a pier, a lamp in an eave).
+	 * Every world cell a building's blocks take, a prop's whole reach among them (D87: {@link PropPieceBlock#reach}), each
+	 * with the block that takes it.
+	 */
+	public static Map<BlockPos, BlockState> cells(Placement pl) {
+		Map<BlockPos, BlockState> out = new java.util.LinkedHashMap<>();
+		for (var e : pl.model().blocks().entrySet()) {
+			BlockPos q = e.getKey();
+			BlockPos w = pl.site().at(q.getX(), q.getY(), q.getZ());
+			BlockState s = pl.site().orient(e.getValue());
+			out.put(w, s);
+			if (s.getBlock() instanceof PropPieceBlock)
+				for (BlockPos r : PropPieceBlock.reach(w, s))
+					out.putIfAbsent(r, s);
+		}
+		return out;
+	}
+
+	/**
+	 * What's wrong with the kit in a plan (empty: nothing): a building's block (or a prop's reach) outside its lot, or a later
+	 * op of the city's putting something into one of a building's cells (a machine in a pier, a lamp in an eave, a post in
+	 * the spring's strip).
 	 */
 	public static List<String> problems(CityPlan p) {
 		List<String> out = new ArrayList<>();
-		Map<BlockPos, String> owner = new HashMap<>();
-		int lastBuilding = 0;
+		// each cell's first building (a put before it is overwritten by it; only later ones matter)
+		Map<BlockPos, Placement> owner = new HashMap<>();
 		for (Object o : p.buildings) {
 			if (!(o instanceof Placement pl))
 				continue;
-			lastBuilding = Math.max(lastBuilding, pl.to());
-			for (var e : pl.model().blocks().entrySet()) {
-				BlockPos q = e.getKey();
-				BlockPos w = pl.site().at(q.getX(), q.getY(), q.getZ());
+			for (var e : cells(pl).entrySet()) {
+				BlockPos w = e.getKey();
 				if (pl.f().d() != null && pl.u0() > -99) {
 					int[] uv = pl.f().uv(w);
 					if (uv[0] < pl.u0() || uv[0] > pl.u1() || uv[1] < pl.v0() || uv[1] > pl.v1())
 						out.add(pl.f().d() + " " + pl.what() + ": " + e.getValue().getBlock() + " at u " + uv[0] + ", v " + uv[1] + " is outside its lot");
 				}
-				if (q.getY() >= 0)
-					owner.put(w, pl.f().d() + " " + pl.what());
+				if (w.getY() >= pl.site().origin.getY())
+					owner.putIfAbsent(w, pl);
 			}
 		}
 		// every op after a building's own that lands in one of its blocks (cables come last: they're worked out after)
@@ -256,32 +295,21 @@ public final class KitCity {
 			if (o instanceof Placement pl)
 				for (int i = pl.from(); i < pl.to(); i++)
 					own.add(i);
-		for (int i = 0; i < ops.size(); i++) {
+		// (the overgrowth grows into the buildings on purpose: a tree through a roof, a root out of a wall, D92)
+		for (int i = 0; i < Math.min(ops.size(), p.overgrowthFrom); i++) {
 			if (own.contains(i) || !(ops.get(i) instanceof CityPlan.Op.Put put))
 				continue;
 			// cables are worked out last, the kit's own among them (and the streets' stay in the streets)
 			if (put.state().getBlock() instanceof com.comedymonkey.createaddons.content.wastes.DerelictCableBlock)
 				continue;
-			String who = owner.get(put.at());
-			if (who == null)
-				continue;
+			Placement who = owner.get(put.at());
 			// a put before the buildings is overwritten by them; only later ones matter
-			if (i < firstOwn(p, put.at()))
+			if (who == null || i < who.from())
 				continue;
 			BlockState s = put.state();
-			out.add(s.getBlock() + " at " + put.at().subtract(p.origin).toShortString() + " is put into " + who);
+			out.add(s.getBlock() + " at " + put.at().subtract(p.origin).toShortString() + " is put into " + who.f().d() + " " + who.what());
 		}
 		return out;
-	}
-
-	/** The first op index of the building that holds this block. */
-	static int firstOwn(CityPlan p, BlockPos w) {
-		for (Object o : p.buildings)
-			if (o instanceof Placement pl)
-				for (BlockPos q : pl.model().blocks().keySet())
-					if (pl.site().at(q.getX(), q.getY(), q.getZ()).equals(w))
-						return pl.from();
-		return Integer.MAX_VALUE;
 	}
 
 	/** For the crown insulators: the spire's arm tips (as {@code CityLayout.crownInsulator}). */

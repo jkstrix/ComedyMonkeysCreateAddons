@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "blue_dye",
+  "ingredients": [
+    {
+      "item": "comedymonkeysaddons:vigil_bell"
+    }
+  ],
+  "result": {
+    "id": "minecraft:blue_dye",
+    "count": 1
+  }
+}

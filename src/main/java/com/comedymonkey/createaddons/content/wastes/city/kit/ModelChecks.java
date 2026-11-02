@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.comedymonkey.createaddons.content.wastes.PropPieceBlock;
 import com.comedymonkey.createaddons.registry.ModWastes;
 
 import net.minecraft.core.BlockPos;
@@ -92,7 +93,7 @@ public final class ModelChecks {
 			BlockPos p = e.getKey();
 			BlockState s = e.getValue();
 			if (Masonry.isSpalled(s) && !nearCause(md, p.getX(), p.getY(), p.getZ(), Model.Cause.CLAMP, Model.Cause.CUT, Model.Cause.STRIKE, Model.Cause.BREAK,
-				Model.Cause.FALL))
+				Model.Cause.FALL, Model.Cause.SPRUNG))
 				out.add("spalled " + s.getBlock() + " at " + p.toShortString() + " with no cause near");
 			if (Masonry.isSoot(s) && !nearCause(md, p.getX(), p.getY(), p.getZ(), Model.Cause.STRIKE, Model.Cause.FIRE, Model.Cause.CHIMNEY, Model.Cause.FURNACE,
 				Model.Cause.ARC, Model.Cause.FALL))
@@ -112,13 +113,85 @@ public final class ModelChecks {
 		return n;
 	}
 
-	/** Cells not held up (joined face to face, through the building, to the ground). */
+	/** Cells not held up (joined face to face, through the building, to the ground; y 0 and below is the ground). */
 	public static List<BlockPos> floating(Model md) {
-		var held = md.held();
+		Map<BlockPos, BlockState> blocks = md.blocks();
+		java.util.Set<BlockPos> held = joined(blocks, p -> p.getY() <= 0);
 		List<BlockPos> out = new ArrayList<>();
-		for (BlockPos p : md.blocks().keySet())
-			if (!held.contains(p.asLong()))
+		for (BlockPos p : blocks.keySet())
+			if (!held.contains(p))
 				out.add(p);
 		return out;
+	}
+
+	/**
+	 * The blocks joined, face to face, to the ground. D87: a multi-block prop ({@link PropPieceBlock}: a piece whose model runs
+	 * on through the blocks round its own) counts as standing in every cell its model reaches ({@link PropPieceBlock#reach}),
+	 * its own among them. A reached cell may hold only a thin strip of it, so it joins only the pieces reaching it, a block
+	 * in the same cell, and the ordinary blocks straight above and below it (a stack); never a block beside it, and never
+	 * another prop's reach that only touches it. Two pieces join where their reaches share a cell (the Sprung Mainspring's,
+	 * one strip laid end to end, also where they touch), and a prop that stands on the ground (or on a block) at one cell
+	 * holds all its pieces. The reached cells only join; they're never reported.
+	 *
+	 * @param ground whether a cell (a block's, or a prop's reached cell) stands on the ground
+	 */
+	public static java.util.Set<BlockPos> joined(Map<BlockPos, BlockState> blocks, java.util.function.Predicate<BlockPos> ground) {
+		// the cells a prop reaches, each with the pieces that reach it
+		Map<BlockPos, List<BlockPos>> reached = new HashMap<>();
+		java.util.Set<BlockPos> spring = new java.util.HashSet<>();
+		for (var e : blocks.entrySet())
+			if (e.getValue().getBlock() instanceof PropPieceBlock)
+				for (BlockPos r : PropPieceBlock.reach(e.getKey(), e.getValue())) {
+					reached.computeIfAbsent(r, k -> new ArrayList<>()).add(e.getKey());
+					if (WindingTower.isSprung(e.getValue()))
+						spring.add(r);
+				}
+		java.util.function.Predicate<BlockPos> ordinary = p -> {
+			BlockState s = blocks.get(p);
+			return s != null && !(s.getBlock() instanceof PropPieceBlock);
+		};
+		java.util.Set<BlockPos> seen = new java.util.HashSet<>();
+		java.util.ArrayDeque<BlockPos> todo = new java.util.ArrayDeque<>();
+		java.util.function.Consumer<BlockPos> visit = p -> {
+			if ((blocks.containsKey(p) || reached.containsKey(p)) && seen.add(p))
+				todo.add(p);
+		};
+		for (BlockPos p : blocks.keySet())
+			if (ground.test(p))
+				visit.accept(p);
+		for (BlockPos p : reached.keySet())
+			if (ground.test(p))
+				visit.accept(p);
+		while (!todo.isEmpty()) {
+			BlockPos p = todo.poll();
+			boolean block = ordinary.test(p);
+			if (block)
+				// an ordinary block: its ordinary neighbours, face to face (a reached cell beside it joins only by a stack)
+				for (Direction d : Direction.values()) {
+					BlockPos n = p.relative(d);
+					if (ordinary.test(n) || d.getAxis() == Direction.Axis.Y && reached.containsKey(n))
+						visit.accept(n);
+				}
+			if (reached.containsKey(p)) {
+				// a reached cell: the pieces reaching it, and the ordinary blocks stacked on it and under it
+				for (BlockPos owner : reached.get(p))
+					visit.accept(owner);
+				for (BlockPos n : new BlockPos[] { p.above(), p.below() })
+					if (ordinary.test(n))
+						visit.accept(n);
+				// the Sprung Mainspring is one strip laid end to end in pieces: its reaches join where they touch
+				if (spring.contains(p))
+					for (Direction d : Direction.values())
+						if (spring.contains(p.relative(d)))
+							visit.accept(p.relative(d));
+			}
+			// a piece: every cell it reaches
+			BlockState s = blocks.get(p);
+			if (s != null && s.getBlock() instanceof PropPieceBlock)
+				for (BlockPos r : PropPieceBlock.reach(p, s))
+					visit.accept(r);
+		}
+		seen.retainAll(blocks.keySet());
+		return seen;
 	}
 }

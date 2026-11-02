@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "rim=false": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shieldcrown_leaves"
+    },
+    "rim=true": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shieldcrown_leaves_rim"
+    }
+  }
+}

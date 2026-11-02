@@ -1,0 +1,97 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/overgrowth/vigil_bell",
+    "vigil_bell": "comedymonkeysaddons:block/wastes/overgrowth/vigil_bell"
+  },
+  "elements": [
+    {
+      "name": "vigil_bell card a",
+      "from": [
+        0.8,
+        0,
+        8
+      ],
+      "to": [
+        15.2,
+        12,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": 45,
+        "rescale": true
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            4,
+            16,
+            16
+          ],
+          "texture": "#vigil_bell"
+        },
+        "south": {
+          "uv": [
+            0,
+            4,
+            16,
+            16
+          ],
+          "texture": "#vigil_bell"
+        }
+      }
+    },
+    {
+      "name": "vigil_bell card b",
+      "from": [
+        8,
+        0,
+        0.8
+      ],
+      "to": [
+        8,
+        12,
+        15.2
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": 45,
+        "rescale": true
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            4,
+            16,
+            16
+          ],
+          "texture": "#vigil_bell"
+        },
+        "west": {
+          "uv": [
+            0,
+            4,
+            16,
+            16
+          ],
+          "texture": "#vigil_bell"
+        }
+      }
+    }
+  ]
+}

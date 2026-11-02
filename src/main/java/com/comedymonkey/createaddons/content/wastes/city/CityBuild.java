@@ -59,7 +59,7 @@ public final class CityBuild {
 	 * reviewing the layout without a client. Writes a PNG.
 	 */
 	public static void writeMap(ServerLevel level, BlockPos origin, java.nio.file.Path file) throws java.io.IOException {
-		int r = CityLayout.OUT, scale = 3, n = 2 * r + 1;
+		int r = CityEdge.REACH, scale = 3, n = 2 * r + 1;
 		var img = new java.awt.image.BufferedImage(n * scale, n * scale, java.awt.image.BufferedImage.TYPE_INT_RGB);
 		for (int dx = -r; dx <= r; dx++)
 			for (int dz = -r; dz <= r; dz++) {

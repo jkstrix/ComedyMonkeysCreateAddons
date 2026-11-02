@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/breakroot_burst"
+    },
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/breakroot_burst_wall"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/breakroot_burst_wall",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/breakroot_burst_wall",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/breakroot_burst_wall",
+      "y": 270
+    }
+  }
+}

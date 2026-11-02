@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "comedymonkeysaddons:patina_rib"
+  },
+  "result": {
+    "id": "comedymonkeysaddons:patina_roll",
+    "count": 2
+  }
+}

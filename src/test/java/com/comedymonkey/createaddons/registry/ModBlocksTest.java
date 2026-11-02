@@ -60,6 +60,14 @@ class ModBlocksTest {
 				assertSame(Items.AIR, item, "a Juggernaut Ruin's block is only ever built by the ruin: it drops its vanilla block");
 				continue;
 			}
+			if (entry.getId().equals(com.comedymonkey.createaddons.registry.ModWastes.TWINEROPE_PLANT.getId())) {
+				assertSame(Items.AIR, item, "the Twinerope above its tip is grown, not an item (as vanilla's weeping vines' body)");
+				continue;
+			}
+			if (ModWastes.pots().stream().anyMatch(p -> p.getId().equals(entry.getId()))) {
+				assertSame(Items.AIR, item, "a potted plant is a flower pot used on its plant, not an item");
+				continue;
+			}
 			if (entry.getId().equals(ModBlocks.HANGING_CABLE.getId())) {
 				assertSame(Items.AIR, item, "a hanging lamp's cable is made by lowering it, not an item");
 				continue;

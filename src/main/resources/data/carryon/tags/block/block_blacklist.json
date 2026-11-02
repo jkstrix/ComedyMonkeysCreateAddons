@@ -48,6 +48,62 @@
     {
       "id": "comedymonkeysaddons:derelict_insulator",
       "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:knotvine",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:scale_lichen",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:twinerope",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:twinerope_plant",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:dusk_moss_carpet",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:springcurl",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:corkscrew_rush",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:vigil_bell",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:shiftcap",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:shiftcap_shelf",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:potted_springcurl",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:potted_corkscrew_rush",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:potted_vigil_bell",
+      "required": false
+    },
+    {
+      "id": "comedymonkeysaddons:potted_shiftcap",
+      "required": false
     }
   ]
 }

@@ -422,7 +422,7 @@
       "when": {
         "facing": "north",
         "part": "middle",
-        "vines": "true"
+        "vines": "dead"
       },
       "apply": {
         "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_middle"
@@ -432,7 +432,7 @@
       "when": {
         "facing": "east",
         "part": "middle",
-        "vines": "true"
+        "vines": "dead"
       },
       "apply": {
         "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_middle",
@@ -443,7 +443,7 @@
       "when": {
         "facing": "south",
         "part": "middle",
-        "vines": "true"
+        "vines": "dead"
       },
       "apply": {
         "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_middle",
@@ -454,7 +454,7 @@
       "when": {
         "facing": "west",
         "part": "middle",
-        "vines": "true"
+        "vines": "dead"
       },
       "apply": {
         "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_middle",
@@ -465,7 +465,7 @@
       "when": {
         "facing": "north",
         "part": "top",
-        "vines": "true"
+        "vines": "dead"
       },
       "apply": {
         "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_top"
@@ -475,7 +475,7 @@
       "when": {
         "facing": "east",
         "part": "top",
-        "vines": "true"
+        "vines": "dead"
       },
       "apply": {
         "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_top",
@@ -486,7 +486,7 @@
       "when": {
         "facing": "south",
         "part": "top",
-        "vines": "true"
+        "vines": "dead"
       },
       "apply": {
         "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_top",
@@ -497,10 +497,96 @@
       "when": {
         "facing": "west",
         "part": "top",
-        "vines": "true"
+        "vines": "dead"
       },
       "apply": {
         "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "middle",
+        "vines": "living"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_living_middle"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "middle",
+        "vines": "living"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_living_middle",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "middle",
+        "vines": "living"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_living_middle",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "middle",
+        "vines": "living"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_living_middle",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "top",
+        "vines": "living"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_living_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "top",
+        "vines": "living"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_living_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "top",
+        "vines": "living"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_living_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "top",
+        "vines": "living"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/charging_alcove_vines_living_top",
         "y": 270
       }
     }

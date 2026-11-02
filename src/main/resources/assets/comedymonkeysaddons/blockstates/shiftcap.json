@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "age=young": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_young"
+    },
+    "age=mature": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_mature"
+    },
+    "age=old": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_old"
+    }
+  }
+}

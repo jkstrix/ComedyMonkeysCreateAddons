@@ -1,0 +1,35 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/overgrowth/lichen_a",
+    "lichen_a": "comedymonkeysaddons:block/wastes/overgrowth/lichen_a"
+  },
+  "elements": [
+    {
+      "name": "lichen",
+      "from": [
+        0,
+        0,
+        15.75
+      ],
+      "to": [
+        16,
+        16,
+        15.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#lichen_a"
+        }
+      }
+    }
+  ]
+}

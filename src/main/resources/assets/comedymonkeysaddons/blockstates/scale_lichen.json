@@ -1,0 +1,79 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": [
+        {
+          "model": "comedymonkeysaddons:block/wastes/overgrowth/lichen_a"
+        },
+        {
+          "model": "comedymonkeysaddons:block/wastes/overgrowth/lichen_b"
+        }
+      ]
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": [
+        {
+          "model": "comedymonkeysaddons:block/wastes/overgrowth/lichen_a",
+          "y": 90
+        },
+        {
+          "model": "comedymonkeysaddons:block/wastes/overgrowth/lichen_b",
+          "y": 90
+        }
+      ]
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": [
+        {
+          "model": "comedymonkeysaddons:block/wastes/overgrowth/lichen_a",
+          "y": 180
+        },
+        {
+          "model": "comedymonkeysaddons:block/wastes/overgrowth/lichen_b",
+          "y": 180
+        }
+      ]
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": [
+        {
+          "model": "comedymonkeysaddons:block/wastes/overgrowth/lichen_a",
+          "y": 270
+        },
+        {
+          "model": "comedymonkeysaddons:block/wastes/overgrowth/lichen_b",
+          "y": 270
+        }
+      ]
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/overgrowth/lichen_floor"
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/overgrowth/lichen_floor",
+        "x": 180
+      }
+    }
+  ]
+}

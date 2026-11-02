@@ -72,7 +72,7 @@ public final class Canopy {
 				boolean barge = x == -1 || x == l;
 				Kit.pitchSlab(md, x, z, h, barge ? Masonry.walnutSlab() : Masonry.slateSlab());
 				if (h == hMax && !barge)
-					md.set(x, h % 2 == 1 ? h / 2 + 1 : h / 2, z, h % 2 == 1 ? Masonry.ridge() : Masonry.ridge());
+					md.set(x, h % 2 == 1 ? h / 2 + 1 : h / 2, z, Masonry.ridge(Kit.pitchHalf(z + 1, zE, zF, EAVE) == hMax));
 				// the beams' ends carry the roof (a slab under the eave at each post)
 			}
 		for (int x = 1; x < l; x += 6)

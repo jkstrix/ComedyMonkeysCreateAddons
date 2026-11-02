@@ -135,6 +135,16 @@ public final class Site {
 				out = out.setValue(DoorBlock.HINGE, s.getValue(DoorBlock.HINGE) == DoorHingeSide.LEFT ? DoorHingeSide.RIGHT : DoorHingeSide.LEFT);
 			}
 		}
+		// the drum's 45-degree brick (D88): its corner is two sides (turned each), and a mirror swaps its arch springers' sides
+		if (s.hasProperty(com.comedymonkey.createaddons.content.wastes.StainedBrickDiagonalBlock.CORNER)) {
+			var corner = s.getValue(com.comedymonkey.createaddons.content.wastes.StainedBrickDiagonalBlock.CORNER);
+			Direction ex = w(corner.sx > 0 ? Direction.EAST : Direction.WEST), ez = w(corner.sz > 0 ? Direction.SOUTH : Direction.NORTH);
+			out = out.setValue(com.comedymonkey.createaddons.content.wastes.StainedBrickDiagonalBlock.CORNER,
+				com.comedymonkey.createaddons.content.wastes.StainedBrickDiagonalBlock.Corner.of(ex.getStepX() + ez.getStepX(), ex.getStepZ() + ez.getStepZ()));
+			if (mirrored() && s.hasProperty(com.comedymonkey.createaddons.content.wastes.StainedBrickDiagonalBlock.FORM))
+				out = out.setValue(com.comedymonkey.createaddons.content.wastes.StainedBrickDiagonalBlock.FORM,
+					s.getValue(com.comedymonkey.createaddons.content.wastes.StainedBrickDiagonalBlock.FORM).mirrored());
+		}
 		// side properties (bars, fences, walls, pipes, band joins): each side's value goes to its turned side
 		for (Direction d : Direction.Plane.HORIZONTAL) {
 			Property<?> from = prop(s, SIDE.get(d));

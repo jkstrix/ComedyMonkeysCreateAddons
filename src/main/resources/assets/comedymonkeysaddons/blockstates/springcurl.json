@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "grown=false": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/springcurl_young"
+    },
+    "grown=true": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/springcurl_grown"
+    }
+  }
+}

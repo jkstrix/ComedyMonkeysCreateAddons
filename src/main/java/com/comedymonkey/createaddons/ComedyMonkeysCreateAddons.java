@@ -117,7 +117,10 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesBotGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesLiftGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesWorldGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesOvergrowthGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesKitGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesEdgeGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.WastesWorldgenGameTests::register);
 		if (SableCompat.LOADED)
 			modBus.addListener(com.comedymonkey.createaddons.gametest.SableGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);

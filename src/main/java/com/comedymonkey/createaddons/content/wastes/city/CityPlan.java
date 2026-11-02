@@ -71,9 +71,9 @@ public final class CityPlan {
 		/**
 		 * One column of the city's ground: its top at {@code y - 1} (Scorched End Stone); hills cut down to it, dips filled up to
 		 * it; over the void (or far below) a void-alloy deck, on a trestle where {@code trestle}. Outskirts ({@code core} false)
-		 * only scorch ground that's there.
+		 * only scorch ground that's there. {@code across}: where the column lies across the terrace's edge ({@link CityEdge#across}), the band {@code width} wide there.
 		 */
-		record Ground(BlockPos at, boolean core, boolean trestle, boolean deck) implements Op {}
+		record Ground(BlockPos at, boolean core, boolean trestle, boolean deck, float across, float width) implements Op {}
 
 		/** A sky-cable span kept by the insulator at {@code at}, to {@code other}; the bead runs it at {@code stage}. */
 		record Span(BlockPos at, BlockPos other, int stage, boolean fromHere) implements Op {}
@@ -98,9 +98,29 @@ public final class CityPlan {
 		 * does); nothing if no container stands there (an outskirts {@link Put} over the void).
 		 */
 		record Loot(BlockPos at, ResourceKey<LootTable> table, long seed) implements Op {}
+
+		/**
+		 * A plant of the overgrowth on the column's ground (D92): put on top of whatever the column's ground ends up as where it's
+		 * built (levelled to the floor, or eased back into the island past the terrace's edge: {@link CityEdge}), only if that
+		 * top is sturdy and the block above it is clear; never on a void-alloy deck. {@code at}: the column, at the floor's
+		 * height plus one. {@code floorOnly}: only where the ground is the city's floor (a plant leaning on a wall beside it).
+		 * {@code cracks}: a Breakroot Burst that cracks the brick it bursts from (the block behind its facing), only if it grows.
+		 */
+		record Surface(BlockPos at, BlockState state, boolean floorOnly, boolean cracks) implements Op {
+			public Surface(BlockPos at, BlockState state, boolean floorOnly) {
+				this(at, state, floorOnly, false);
+			}
+		}
 	}
 
 	public static final int ANYWHERE = 0, ON_GROUND = 1, OVER_VOID = 2;
+
+	/**
+	 * The plan's version, saved with each city's structure start: bump it when a change moves what a city puts where. A
+	 * start saved part-way through generation by an older build goes on with this build's plan (its chunks built before
+	 * may not meet the ones built after), logged once; the cities are unreleased and off by default (D66), so nothing more.
+	 */
+	public static final int VERSION = 1;
 
 	public final BlockPos origin;
 	public final long seed;
@@ -137,6 +157,9 @@ public final class CityPlan {
 		plan.kit = kit;
 		CityLayout.draw(plan);
 		plan.finish();
+		// the overgrowth last, over everything the city put (D92): the kit's city only
+		if (kit)
+			Overgrowth.grow(plan);
 		return plan;
 	}
 
@@ -146,6 +169,10 @@ public final class CityPlan {
 	 */
 	public static CityPlan drawn(BlockPos origin, long seed, java.util.function.Consumer<CityPlan> draw) {
 		CityPlan plan = new CityPlan(origin, seed, false);
+		// all of it core however far from its middle (the catalogue's rows reach hundreds of blocks out): an outskirts block
+		// stands only where the column's top is near the floor, and on a rebuild in place the last build's own walls count as
+		// that top, so everything taller than 12 was skipped and the old exhibit left standing
+		plan.allCore = true;
 		draw.accept(plan);
 		plan.district = null;
 		plan.finish();
@@ -167,6 +194,12 @@ public final class CityPlan {
 	 * is, its state, its world footprint and its local model, for the plan tests. Empty while the city keeps its boxes.
 	 */
 	public final List<Object> buildings = new ArrayList<>();
+
+	/**
+	 * Where the overgrowth's ops begin (D92; none yet: the end): it breaks a shed's roof for its tree and cracks the bricks a
+	 * root bursts from, on purpose, so the kit's checks stop there.
+	 */
+	public int overgrowthFrom = Integer.MAX_VALUE;
 
 	public List<Op> ops() {
 		return ops;
@@ -203,8 +236,11 @@ public final class CityPlan {
 	 * is levelled or decked, so everything in it stands only on ground, however near the middle (P46).
 	 */
 	public boolean inCore(BlockPos p) {
-		return !outskirtsOnly && Math.abs(p.getX() - origin.getX()) <= CityLayout.CORE && Math.abs(p.getZ() - origin.getZ()) <= CityLayout.CORE;
+		return allCore || !outskirtsOnly && Math.abs(p.getX() - origin.getX()) <= CityLayout.CORE && Math.abs(p.getZ() - origin.getZ()) <= CityLayout.CORE;
 	}
+
+	/** A plan with no outskirts (a {@link #drawn} one: the catalogue): every block put anywhere, never only on ground. */
+	private boolean allCore;
 
 	public void put(BlockPos p, BlockState s, int need) {
 		ops.add(new Op.Put(p.immutable(), s, district, need));
@@ -225,8 +261,25 @@ public final class CityPlan {
 					put(x, y, z, s);
 	}
 
-	public void ground(int x, int z, boolean core, boolean trestle, boolean deck) {
-		ops.add(new Op.Ground(at(x, 0, z), core, trestle, deck));
+	/** A plant on the column's ground at (x, z), as {@link Op.Surface}. */
+	public void surface(int x, int z, BlockState s, boolean floorOnly) {
+		surface(x, z, s, floorOnly, false);
+	}
+
+	/** As {@link #surface(int, int, BlockState, boolean)}; {@code cracks}: a Breakroot Burst cracking its brick as it grows. */
+	public void surface(int x, int z, BlockState s, boolean floorOnly, boolean cracks) {
+		ops.add(new Op.Surface(at(x, 0, z), s, floorOnly, cracks));
+	}
+
+	/** Every block put so far that {@code which} picks, set to {@code to} of its state in place (its op keeps its place in the order). */
+	void restate(java.util.function.Predicate<Op.Put> which, java.util.function.UnaryOperator<BlockState> to) {
+		for (int i = 0; i < ops.size(); i++)
+			if (ops.get(i) instanceof Op.Put put && which.test(put))
+				ops.set(i, new Op.Put(put.at(), to.apply(put.state()), put.district(), put.need()));
+	}
+
+	public void ground(int x, int z, boolean core, boolean trestle, boolean deck, double across, double width) {
+		ops.add(new Op.Ground(at(x, 0, z), core, trestle, deck, (float) across, (float) width));
 	}
 
 	// ---------------------------------------------------------------- blocks by name (the makers' and Create's)
@@ -334,7 +387,8 @@ public final class CityPlan {
 	/** A Charging Alcove three tall, opening toward {@code open}; dead vines on it if asked (D72), a trinket by the plan's draw. */
 	public void alcove(BlockPos bottom, Direction open, boolean vines) {
 		BlockState s = ModWastes.CHARGING_ALCOVE.get().defaultBlockState().setValue(ThreePartBlock.FACING, open)
-			.setValue(ChargingAlcoveBlock.TRINKET, nextTrinket()).setValue(ChargingAlcoveBlock.VINES, vines);
+			.setValue(ChargingAlcoveBlock.TRINKET, nextTrinket())
+			.setValue(ChargingAlcoveBlock.VINES, vines ? ChargingAlcoveBlock.Vines.DEAD : ChargingAlcoveBlock.Vines.NONE);
 		for (int i = 0; i < 3; i++)
 			put(bottom.above(i), s.setValue(ThreePartBlock.PART, ThreePartBlock.Part.values()[i]));
 	}

@@ -141,7 +141,7 @@ public final class FurnaceShed {
 				boolean ridge = z == D / 2 - 1 || z == D / 2;
 				md.set(x, sy + 3, z, Kit.slab(sl, ridge));
 				if (ridge && !barge)
-					md.set(x, sy + 4, z, Masonry.ridge());
+					md.set(x, sy + 4, z, Masonry.ridge(z == D / 2 - 1));
 			}
 		}
 		// ---- inside: hearths along the back wall (blast furnaces set in a scoria bench under small arches), crucibles

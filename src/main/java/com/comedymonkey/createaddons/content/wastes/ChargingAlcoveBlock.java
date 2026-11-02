@@ -25,21 +25,21 @@ import net.minecraft.util.StringRepresentable;
  * belongs to no city and stays dark. It casts no light.
  * <p>
  * D72: a small cast corner shelf in its middle block, holding a {@link #TRINKET} (nothing, a brass cog, a winding key
- * standing on its socket, the makers' toy cart, a pressed flower in a little brass frame), and {@link #VINES}, dead vines down
- * its back and cheek and one strand hanging in its opening. Both are drawn by its blockstate on every part (the trinket in
+ * standing on its socket, the makers' toy cart, a pressed flower in a little brass frame), and {@link #VINES} down its back and
+ * cheek and one strand hanging in its opening: dead, or (D92) living Knotvine where the overgrowth is heavy. Both are drawn by its blockstate on every part (the trinket in
  * the middle block, the vines in the middle and top), set by the city; one placed by a player has none of either.
  */
 public final class ChargingAlcoveBlock extends ThreePartBlock implements EntityBlock, DerelictLightBlockEntity.DerelictLight {
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	public static final EnumProperty<Trinket> TRINKET = EnumProperty.create("trinket", Trinket.class);
-	public static final BooleanProperty VINES = BooleanProperty.create("vines");
+	public static final EnumProperty<Vines> VINES = EnumProperty.create("vines", Vines.class);
 
 	private final double[][][] boxes;
 
 	public ChargingAlcoveBlock(Properties properties, double[][][] northBoxes) {
 		super(properties, false, northBoxes);
 		this.boxes = northBoxes;
-		registerDefaultState(defaultBlockState().setValue(LIT, false).setValue(TRINKET, Trinket.NONE).setValue(VINES, false));
+		registerDefaultState(defaultBlockState().setValue(LIT, false).setValue(TRINKET, Trinket.NONE).setValue(VINES, Vines.NONE));
 	}
 
 	@Override
@@ -67,6 +67,16 @@ public final class ChargingAlcoveBlock extends ThreePartBlock implements EntityB
 	@Override
 	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new DerelictLightBlockEntity(pos, state);
+	}
+
+	/** Its vines (D72, D92): none, the city's own dead ones, or living Knotvine from the Twisted Battlefields. */
+	public enum Vines implements StringRepresentable {
+		NONE, DEAD, LIVING;
+
+		@Override
+		public String getSerializedName() {
+			return name().toLowerCase(java.util.Locale.ROOT);
+		}
 	}
 
 	/** What its corner shelf holds (D72; world brief: a cog, a winding key, a toy cart, a pressed flower). */

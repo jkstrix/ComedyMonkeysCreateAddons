@@ -144,12 +144,8 @@ public final class Shed {
 		int rollY = hMax % 2 == 1 ? hMax / 2 + 1 : hMax / 2;
 		for (int x = -1; x <= l; x++)
 			for (int z = zE; z <= zFar; z++)
-				if (Kit.pitchHalf(z, zE, zFar, e) == hMax) {
-					if (hMax % 2 == 1)
-						md.set(x, rollY, z, Masonry.ridge());
-					else
-						md.set(x, rollY, z, Masonry.ridge());
-				}
+				if (Kit.pitchHalf(z, zE, zFar, e) == hMax)
+					md.set(x, rollY, z, Masonry.ridge(Kit.pitchHalf(z + 1, zE, zFar, e) == hMax));
 		// ---- trusses at every inner pier: a walnut slab tie beam and a walnut fence king post
 		int zc = d / 2 - 1;
 		if (!s.small())

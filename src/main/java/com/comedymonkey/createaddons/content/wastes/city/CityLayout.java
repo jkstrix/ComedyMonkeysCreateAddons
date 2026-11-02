@@ -89,10 +89,11 @@ public final class CityLayout {
 
 	/**
 	 * The city's buildings from the building kit (D71: "approved buildings then replace the boxes in the city"), or the old
-	 * one-material boxes. OFF until the user approves the catalogue ({@code /wastes buildcatalogue}); the swap is this one
-	 * word ({@code kit.KitCity} draws every building the boxes stood for, in the same lots).
+	 * one-material boxes. ON since the user approved the catalogue and the winding tower (D90: the swap); {@code kit.KitCity}
+	 * draws every building the boxes stood for, in the same lots. {@code CityPlan.of(..., false)} still draws the old boxes,
+	 * for the tests that compare the two.
 	 */
-	public static final boolean BUILDING_KIT = false;
+	public static final boolean BUILDING_KIT = true;
 
 	/** The district a block at (dx, dz) from the origin belongs to: the heart in the middle, else its quadrant. */
 	public static District districtAt(int dx, int dz) {
@@ -210,32 +211,68 @@ public final class CityLayout {
 		outskirts(p);
 	}
 
-	/** The ground: the core levelled to the heart's floor (decked and strutted over the void); the outskirts levelled where land is near. */
+	/**
+	 * The ground: the core levelled to the heart's floor (decked and strutted over the void); the outskirts levelled where land
+	 * is near, out to the terrace's wobbled edge, then easing back into the island over the band ({@link CityEdge}, D91).
+	 */
 	private static void ground(CityPlan p) {
-		for (int x = -OUT; x <= OUT; x++)
-			for (int z = -OUT; z <= OUT; z++) {
+		CityEdge edge = new CityEdge(p);
+		int reach = CityEdge.REACH;
+		for (int x = -reach; x <= reach; x++)
+			for (int z = -reach; z <= reach; z++) {
 				int ax = Math.abs(x), az = Math.abs(z);
 				boolean core = ax <= CORE && az <= CORE;
-				if (p.outskirtsOnly) {
-					if (ax * ax + az * az <= OUT * OUT)
-						p.ground(x, z, false, false, false);
+				if (core && !p.outskirtsOnly) {
+					p.ground(x, z, true, Math.floorMod(x, 8) == 0 && Math.floorMod(z, 8) == 0, true, 0, 0);
 					continue;
 				}
-				if (core) {
-					p.ground(x, z, true, Math.floorMod(x, 8) == 0 && Math.floorMod(z, 8) == 0, true);
+				double across = edge.across(x, z);
+				if (across >= 1 + CityEdge.FAN)
+					continue;
+				if (p.outskirtsOnly || ax > OUT || az > OUT) {
+					p.ground(x, z, false, false, false, across, edge.width(x, z));
 					continue;
 				}
 				// the boulevards run on as bridges over the void; two snap off (P3, the world brief)
 				boolean bridge = ax <= 2 || az <= 2;
 				int far = Math.max(ax, az);
 				boolean snaps = far > 82 && (ax <= 2 && z < 0 || az <= 2 && x > 0);
-				p.ground(x, z, false, bridge && !snaps && far % 8 == 0 && (ax <= 2 && ax % 4 == 2 || az <= 2 && az % 4 == 2), bridge && (!snaps));
+				p.ground(x, z, false, bridge && !snaps && far % 8 == 0 && (ax <= 2 && ax % 4 == 2 || az <= 2 && az % 4 == 2), bridge && (!snaps), across, edge.width(x, z));
 				// a bridge's rails where it crosses the void; a snapped one hanging down off its end on its cables
 				if (bridge && !snaps && (ax == 2 && az > 2 || az == 2 && ax > 2))
 					p.put(p.at(x, 0, z), Blocks.IRON_BARS.defaultBlockState(), CityPlan.OVER_VOID);
 				if (bridge && snaps && far <= 85)
 					p.put(p.at(x, -1 - (far - 82) * 2, z), (far == 85 ? Blocks.CHAIN : ModWastes.VOID_ALLOY_PLATE.get()).defaultBlockState(), CityPlan.OVER_VOID);
+				// under the deck down its middle, the makers' line shaft the uprising decked over (D79)
+				if (bridge && (ax == 0 || az == 0))
+					lineShaft(p, x, z, far, snaps, ax == 0 ? Direction.Axis.Z : Direction.Axis.X);
 			}
+	}
+
+	/** Where the makers' line shaft hangs under a bridge's deck (D79), and its hangers. */
+	public static final int SHAFT_Y = -3, HANGER_EVERY = 4, SNAP_FAR = 82;
+
+	/**
+	 * One block of the makers' line shaft under a bridge (D79, lore I: "bridges strung the islands together, and on every
+	 * bridge something turned"): a Create Shaft along the bridge's middle two below the deck, hung from it on a chain every
+	 * {@link #HANGER_EVERY}, a cogwheel at each pier (the trestles, every 8), still; where the bridge snaps it breaks off, its
+	 * last piece hanging from the deck that went down. Over the void only, as the deck is.
+	 */
+	private static void lineShaft(CityPlan p, int x, int z, int far, boolean snaps, Direction.Axis along) {
+		BlockState shaft = CityPlan.with(CityPlan.block("create:shaft", Blocks.CHAIN), "axis", along.getName());
+		BlockState cog = CityPlan.with(CityPlan.block("create:cogwheel", Blocks.CHAIN), "axis", along.getName());
+		if (!snaps) {
+			p.put(p.at(x, SHAFT_Y, z), far % 8 == 0 ? cog : shaft, CityPlan.OVER_VOID);
+			if (far % HANGER_EVERY == 0)
+				p.put(p.at(x, SHAFT_Y + 1, z), Blocks.CHAIN.defaultBlockState(), CityPlan.OVER_VOID);
+			return;
+		}
+		// the snapped end: one length hanging down under the first plate of the deck that fell
+		if (far == SNAP_FAR + 1) {
+			BlockState hanging = CityPlan.with(CityPlan.block("create:shaft", Blocks.CHAIN), "axis", "y");
+			p.put(p.at(x, -1 - 2 - 1, z), hanging, CityPlan.OVER_VOID);
+			p.put(p.at(x, -1 - 2 - 2, z), hanging, CityPlan.OVER_VOID);
+		}
 	}
 
 	// ================================================================ the heart
@@ -510,6 +547,7 @@ public final class CityLayout {
 			}
 			case QUARTERS -> {
 				KitCity.quarters(kf);
+				KitCity.windingTower(kf);
 				quarters(q, r);
 			}
 			default -> {}
@@ -1228,7 +1266,7 @@ public final class CityLayout {
 		if (!city)
 			resistanceCache(p);
 		// the two war-frames locked in a grapple (north-west of the city)
-		warFrames(p, city ? -88 : -20, city ? -40 : -6);
+		warFrames(p, grapple(city)[0], grapple(city)[1]);
 		// the siege lines: low walls of andesite casing and walnut in an arc facing the city, resistance shells behind them
 		int ring = city ? 84 : 30;
 		if (p.kit)
@@ -1282,6 +1320,11 @@ public final class CityLayout {
 	 * big dark lens, and the resistance's stocky andesite and brass frame, its mainspring drum split and the spring out, a
 	 * door-sized winding key, two glass eyes in brass rims; its hand on the other's lens.
 	 */
+	/** Where the two war-frames lie locked in a grapple (from the city's middle): north-west of a city, nearer on an outskirts-only site. */
+	public static int[] grapple(boolean city) {
+		return city ? new int[] { -88, -40 } : new int[] { -20, -6 };
+	}
+
 	private static void warFrames(CityPlan p, int x, int z) {
 		// the uprising frame lying along x: legs, a long torso, the head with its lens
 		for (int i = 0; i < 11; i++)

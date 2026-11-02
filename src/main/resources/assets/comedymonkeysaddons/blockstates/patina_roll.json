@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/patina_roll"
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/patina_roll",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/patina_roll",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/patina_roll",
+      "y": 270
+    }
+  }
+}

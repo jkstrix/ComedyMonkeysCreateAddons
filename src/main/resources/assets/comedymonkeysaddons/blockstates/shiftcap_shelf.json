@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "age=young,facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_young"
+    },
+    "age=mature,facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_mature"
+    },
+    "age=old,facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_old"
+    },
+    "age=young,facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_young",
+      "y": 90
+    },
+    "age=mature,facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_mature",
+      "y": 90
+    },
+    "age=old,facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_old",
+      "y": 90
+    },
+    "age=young,facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_young",
+      "y": 180
+    },
+    "age=mature,facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_mature",
+      "y": 180
+    },
+    "age=old,facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_old",
+      "y": 180
+    },
+    "age=young,facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_young",
+      "y": 270
+    },
+    "age=mature,facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_mature",
+      "y": 270
+    },
+    "age=old,facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/shiftcap_shelf_old",
+      "y": 270
+    }
+  }
+}

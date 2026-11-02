@@ -1,0 +1,150 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "brick": "comedymonkeysaddons:block/wastes/seb_0",
+    "top": "comedymonkeysaddons:block/wastes/seb_top",
+    "particle": "comedymonkeysaddons:block/wastes/seb_0"
+  },
+  "elements": [
+    {
+      "name": "head",
+      "from": [
+        -3.314,
+        8,
+        -3.314
+      ],
+      "to": [
+        19.314,
+        16,
+        8
+      ],
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "rescale": false
+      },
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#brick"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            11.314,
+            8
+          ],
+          "texture": "#brick"
+        },
+        "west": {
+          "uv": [
+            4.686,
+            0,
+            16,
+            8
+          ],
+          "texture": "#brick"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#top"
+        },
+        "down": {
+          "uv": [
+            0,
+            8,
+            16,
+            16
+          ],
+          "texture": "#brick"
+        }
+      }
+    },
+    {
+      "name": "springer",
+      "from": [
+        -3.314,
+        0,
+        -3.314
+      ],
+      "to": [
+        8,
+        8,
+        8
+      ],
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "rescale": false
+      },
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "texture": "#brick"
+        },
+        "east": {
+          "uv": [
+            0,
+            8,
+            11.314,
+            16
+          ],
+          "texture": "#brick"
+        },
+        "west": {
+          "uv": [
+            4.686,
+            8,
+            16,
+            16
+          ],
+          "texture": "#brick"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "texture": "#top"
+        },
+        "down": {
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "texture": "#brick"
+        }
+      }
+    }
+  ]
+}

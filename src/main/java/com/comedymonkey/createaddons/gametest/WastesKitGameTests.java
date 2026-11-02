@@ -1,8 +1,6 @@
 package com.comedymonkey.createaddons.gametest;
 
 import java.util.ArrayList;
-import java.util.ArrayDeque;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -50,6 +48,9 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 @PrefixGameTestTemplate(false)
 public final class WastesKitGameTests {
 	private static final String COURSE = "trade_bot_course";
+	/** The cities the swap's checks draw: several seeds and origins (the kit's dice and the plan's both change with them). */
+	private static final long[] SEEDS = { 0, 1, 12345 };
+	private static final BlockPos[] ORIGINS = { new BlockPos(1000, 70, -2000), new BlockPos(-37_000, 64, 52_000) };
 
 	private WastesKitGameTests() {}
 
@@ -168,10 +169,14 @@ public final class WastesKitGameTests {
 	 */
 	@GameTest(template = COURSE, timeoutTicks = 200)
 	public static void theSwapFitsTheLots(GameTestHelper helper) {
-		BlockPos o = new BlockPos(1000, 70, -2000);
-		CityPlan kit = CityPlan.of(o, 0, false, true);
-		List<String> out = KitCity.problems(kit);
+		List<String> out = new ArrayList<>();
+		for (BlockPos o : ORIGINS)
+			for (long seed : SEEDS)
+				for (String problem : KitCity.problems(CityPlan.of(o, seed, false, true)))
+					out.add("seed " + seed + " at " + o.toShortString() + ": " + problem);
 		none(out, "problems with the kit in the city");
+		BlockPos o = ORIGINS[0];
+		CityPlan kit = CityPlan.of(o, 0, false, true);
 		CityPlan boxes = CityPlan.of(o, 0, false, false);
 		// the city's own pieces are all still there: P4's bots per district, the spans, the doors, the vaults, the lift
 		for (District d : District.DISTRICTS) {
@@ -184,6 +189,260 @@ public final class WastesKitGameTests {
 		for (var block : new net.minecraft.world.level.block.Block[] { ModWastes.SUBSTATION.get(), ModWastes.CITY_VAULT.get(), ModWastes.SLIDING_DOOR.get(),
 			ModWastes.LIFT.get(), ModWastes.CONDUIT_PYLON.get(), ModWastes.WALL_VENT.get(), ModWastes.ASSEMBLY_CLAMP.get() })
 			check(blocks(kit, block) == blocks(boxes, block), "the kit's city puts " + blocks(kit, block) + " " + block + ", the boxes' " + blocks(boxes, block));
+		helper.succeed();
+	}
+
+	/**
+	 * D79, the lore pass: the terraces' roof hatches (one or two houses, worn and damaged only, at least one left open), the
+	 * wrecked winding tower in every state (keeps the grammar; its spring out through its west wall in a coil on the ground,
+	 * the hole's edge cracked by its cause; its drive shaft snapped; never up to the spire). The tower waits on its Blockbench
+	 * preview before it goes into the city.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 200)
+	public static void loreDetailsKeepTheirRules(GameTestHelper helper) {
+		java.util.Set<Direction> out = java.util.EnumSet.of(Direction.EAST, Direction.NORTH);
+		// the hatches
+		for (Wear w : Wear.values()) {
+			Model t = com.comedymonkey.createaddons.content.wastes.city.kit.Terrace.build(new Kit.Ctx(Masonry.quarters(), w, out, 3), 4);
+			int hatches = 0, open = 0;
+			for (var e : t.blocks().entrySet())
+				if (e.getValue().is(net.minecraft.world.level.block.Blocks.DARK_OAK_TRAPDOOR) && e.getKey().getY() > com.comedymonkey.createaddons.content.wastes.city.kit.Terrace.E) {
+					hatches++;
+					if (e.getValue().getValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN))
+						open++;
+				}
+			boolean want = w == Wear.WORN || w == Wear.DAMAGED;
+			check(want ? hatches >= 1 && hatches <= 2 && open >= 1 : hatches == 0, "a " + w + " terrace has " + hatches + " roof hatches (" + open + " open)");
+			check(ModelChecks.floating(t).isEmpty(), "a " + w + " terrace has blocks hanging");
+			// each hatch's thin walnut U (D85): walnut either side and across its head, none below it
+			if (want)
+				for (int h : com.comedymonkey.createaddons.content.wastes.city.kit.Terrace.HATCH_HOUSES) {
+					BlockPos p = com.comedymonkey.createaddons.content.wastes.city.kit.Terrace.hatchAt(h);
+					int walnut = 0;
+					for (int dx = -1; dx <= 1; dx++)
+						for (int dz = -1; dz <= 1; dz++)
+							for (int dy = -1; dy <= 1; dy++) {
+								BlockState s = t.get(p.getX() + dx, p.getY() + dy, p.getZ() + dz);
+								if (s != null && s.is(net.minecraft.world.level.block.Blocks.DARK_OAK_STAIRS)) {
+									walnut++;
+									check(dz >= 0, "a " + w + " terrace's hatch " + h + " has walnut below it");
+								}
+							}
+					check(walnut == 5, "a " + w + " terrace's hatch " + h + " has " + walnut + " walnut curb blocks (a U is 5)");
+				}
+			// the ridge: Patina Ridge Rolls, each pair faced toward each other (D85)
+			int rolls = 0;
+			for (var e : t.blocks().entrySet())
+				if (e.getValue().is(ModWastes.PATINA_ROLL.get())) {
+					rolls++;
+					Direction toward = e.getValue().getValue(net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING);
+					// the ridge line is between z 2 and 3: the near half faces south, the far half north (its other half may have
+					// fallen with the roof)
+					Direction want2 = e.getKey().getZ() == com.comedymonkey.createaddons.content.wastes.city.kit.Terrace.D / 2 - 1 ? Direction.SOUTH : Direction.NORTH;
+					BlockState other = t.get(e.getKey().getX() + toward.getStepX(), e.getKey().getY(), e.getKey().getZ() + toward.getStepZ());
+					check(toward == want2 && (other == null || other.is(ModWastes.PATINA_ROLL.get())
+						&& other.getValue(net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING) == toward.getOpposite()),
+						"a " + w + " terrace's ridge roll at " + e.getKey().toShortString() + " isn't faced toward its other half");
+				}
+			check(w == Wear.RUINED || rolls > 0, "a " + w + " terrace has no ridge roll");
+		}
+		// the winding tower in every state
+		List<String> problems = new ArrayList<>();
+		for (long seed : new long[] { 5, 0, 1, 12345, -7 })
+		for (Wear w : Wear.values()) {
+			Model md = com.comedymonkey.createaddons.content.wastes.city.kit.WindingTower.build(new Kit.Ctx(Masonry.quarters(), w, out, seed));
+			String id = "winding tower " + w + " (seed " + seed + ")";
+			for (BlockPos f : ModelChecks.floating(md))
+				problems.add(id + ": " + md.get(f.getX(), f.getY(), f.getZ()).getBlock() + " hanging at " + f.toShortString());
+			for (ModelChecks.Share s : ModelChecks.elevations(md))
+				if (s.share() > ModelChecks.MAX_SHARE && s.seen() > 20)
+					problems.add(id + ": " + s.side() + " is " + Math.round(s.share() * 100) + "% " + s.block());
+			for (var e : md.blocks().entrySet())
+				if (ModelChecks.excluded(e.getValue()))
+					problems.add(id + ": excluded " + e.getValue().getBlock());
+			for (String m : ModelChecks.marksWithoutCause(md))
+				problems.add(id + ": " + m);
+			int outside = 0, onGround = 0;
+			// (the spring's strip: every cell its prop pieces reach, D87)
+			for (BlockPos q : new java.util.HashSet<>(com.comedymonkey.createaddons.content.wastes.city.kit.WindingTower.sprungReach(md)))
+				if (q.getX() < -1) {
+					outside++;
+					if (q.getY() == 0)
+						onGround++;
+				}
+			if (outside < 30 || onGround < 2)
+				problems.add(id + ": its spring has " + outside + " blocks outside the west wall, " + onGround + " on the ground");
+			if (md.marks.stream().noneMatch(m -> m.cause() == Model.Cause.SPRUNG))
+				problems.add(id + ": no hole where the spring went out");
+			if (w != Wear.RUINED) {
+				int c = com.comedymonkey.createaddons.content.wastes.city.kit.WindingTower.C;
+				if (md.has(c, 5, 7) || md.has(c, 6, 7) || !md.has(c, 4, 7) || !md.has(c, 7, 7))
+					problems.add(id + ": its drive shaft isn't snapped (standing below, hanging above, a gap between)");
+				if (w.atLeast(Wear.DAMAGED) || w == Wear.WORN)
+					if (md.strikes < 1)
+						problems.add(id + ": no strike in the " + w + " ring");
+			}
+			if (w == Wear.INTACT && md.strikes > 0)
+				problems.add(id + ": struck");
+			if (com.comedymonkey.createaddons.content.wastes.city.kit.WindingTower.height(md) >= 30)
+				problems.add(id + ": stands " + com.comedymonkey.createaddons.content.wastes.city.kit.WindingTower.height(md) + " high (it mustn't rival the spire)");
+		}
+		none(problems, "winding tower problems");
+		// the swap's one tower (D84, D85): in the Quarters, in its ring's state, its west (spring) side toward a street
+		for (BlockPos o : ORIGINS)
+			for (long seed : SEEDS)
+				swapTower(CityPlan.of(o, seed, false, true), "seed " + seed + " at " + o.toShortString());
+		helper.succeed();
+	}
+
+	/** The swap's one winding tower, as {@link #loreDetailsKeepTheirRules} says. */
+	private static void swapTower(CityPlan kit, String city) {
+		List<KitCity.Placement> towers = new ArrayList<>();
+		for (Object o : kit.buildings)
+			if (o instanceof KitCity.Placement pl && pl.what().equals("winding tower"))
+				towers.add(pl);
+		check(towers.size() == 1, city + ": the kit's city has " + towers.size() + " winding towers");
+		KitCity.Placement tw = towers.get(0);
+		check(tw.f().d() == District.QUARTERS, city + ": the winding tower is in " + tw.f().d());
+		check(!tw.site().mirrored(), city + ": the winding tower stands in a mirrored frame (its modelled spring can't mirror)");
+		int ring = 0;
+		for (BlockPos q : tw.model().blocks().keySet()) {
+			BlockPos wpos = tw.site().at(q.getX(), q.getY(), q.getZ()).subtract(kit.origin);
+			ring = Math.max(ring, Wear.ring(wpos.getX(), wpos.getZ()));
+		}
+		check(Wear.forRing(ring) == Wear.DAMAGED && tw.model().marks.stream().anyMatch(m -> m.cause() == Model.Cause.BREAK) && tw.model().strikes >= 1,
+			city + ": the winding tower reaches ring " + ring + " (" + Wear.forRing(ring) + ") but isn't built damaged (its top broken, struck)");
+		// out from the middle of its west wall (local -x), a street cell within 14 blocks, and nothing of another building between
+		java.util.Set<BlockPos> others = new java.util.HashSet<>();
+		for (Object o : kit.buildings)
+			if (o instanceof KitCity.Placement pl && pl != tw)
+				others.addAll(KitCity.cells(pl).keySet());
+		int c = com.comedymonkey.createaddons.content.wastes.city.kit.WindingTower.C;
+		int toStreet = -1;
+		for (int k = 1; k <= 14 && toStreet < 0; k++) {
+			if (KitCity.isStreet(tw.f(), tw.site().at(-k, 0, c))) {
+				toStreet = k;
+				break;
+			}
+			for (int y = 0; y <= 4; y++)
+				check(!others.contains(tw.site().at(-k, y, c)), city + ": another building stands between the winding tower and the street, " + k + " out");
+		}
+		check(toStreet > 0, city + ": the winding tower's spring side doesn't face a street");
+	}
+
+	/**
+	 * The winding tower's props can be turned but not mirrored (their models only turn): put in a mirrored site, the tower
+	 * fails loudly rather than laying a spring that runs the wrong way; turned any way, it lays.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void aMirroredWindingTowerThrows(GameTestHelper helper) {
+		Model md = com.comedymonkey.createaddons.content.wastes.city.kit.WindingTower.build(
+			new Kit.Ctx(Masonry.quarters(), Wear.WORN, java.util.EnumSet.of(Direction.EAST, Direction.NORTH), 5));
+		BlockPos at = new BlockPos(-50_000, 90, -50_000);
+		for (Direction a : Direction.Plane.HORIZONTAL) {
+			boolean[] threw = { false };
+			CityPlan.drawn(at, 0, p -> {
+				com.comedymonkey.createaddons.content.wastes.city.kit.Site mirrored = new com.comedymonkey.createaddons.content.wastes.city.kit.Site(p,
+					p.origin, a, a.getCounterClockWise(), p.origin, District.QUARTERS);
+				check(mirrored.mirrored(), "the test's site isn't mirrored");
+				try {
+					md.emit(mirrored);
+				} catch (IllegalStateException e) {
+					threw[0] = true;
+				}
+			});
+			check(threw[0], "a winding tower in a mirrored site facing " + a + " didn't throw");
+			CityPlan.drawn(at, 0, p -> md.emit(new com.comedymonkey.createaddons.content.wastes.city.kit.Site(p, p.origin, a, a.getClockWise(), p.origin,
+				District.QUARTERS)));
+		}
+		helper.succeed();
+	}
+
+	/**
+	 * D79: under each void-alloy bridge (the four boulevards past the core), in the boxes' city and the kit's alike, the
+	 * makers' line shaft runs down the middle two below the deck, over the void only, unbroken from the core's edge to the
+	 * bridge's end or its snap; a cogwheel at each pier (every 8), a chain hanger every 4; past a snap nothing but the one
+	 * length hanging from the deck that fell.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 200)
+	public static void bridgesCarryTheOldLineShaft(GameTestHelper helper) {
+		for (boolean withKit : new boolean[] { false, true }) {
+			CityPlan p = CityPlan.of(new BlockPos(1000, 70, -2000), 0, false, withKit);
+			java.util.Map<BlockPos, CityPlan.Op.Put> under = new java.util.HashMap<>();
+			for (CityPlan.Op op : p.ops())
+				if (op instanceof CityPlan.Op.Put put) {
+					BlockPos q = put.at().subtract(p.origin);
+					String id = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(put.state().getBlock()).toString();
+					if (id.equals("create:shaft") || id.equals("create:cogwheel") || put.state().is(net.minecraft.world.level.block.Blocks.CHAIN))
+						if (Math.max(Math.abs(q.getX()), Math.abs(q.getZ())) > com.comedymonkey.createaddons.content.wastes.city.CityLayout.CORE && (q.getX() == 0 || q.getZ() == 0))
+							under.put(q, put);
+				}
+			String city = withKit ? "the kit's city" : "the boxes' city";
+			// north (snaps), east (snaps), south, west
+			int[][] bridges = { { 0, -1, 1 }, { 1, 0, 1 }, { 0, 1, 0 }, { -1, 0, 0 } };
+			int y = com.comedymonkey.createaddons.content.wastes.city.CityLayout.SHAFT_Y;
+			for (int[] b : bridges) {
+				boolean snaps = b[2] == 1;
+				int end = snaps ? com.comedymonkey.createaddons.content.wastes.city.CityLayout.SNAP_FAR : com.comedymonkey.createaddons.content.wastes.city.CityLayout.OUT;
+				String name = city + "'s bridge toward " + b[0] + ", " + b[1];
+				for (int far = com.comedymonkey.createaddons.content.wastes.city.CityLayout.CORE + 1; far <= com.comedymonkey.createaddons.content.wastes.city.CityLayout.OUT; far++) {
+					CityPlan.Op.Put s = under.get(new BlockPos(b[0] * far, y, b[1] * far)), h = under.get(new BlockPos(b[0] * far, y + 1, b[1] * far));
+					if (far > end) {
+						check(s == null && h == null, name + " has its shaft past the snap at " + far);
+						continue;
+					}
+					check(s != null && s.need() == CityPlan.OVER_VOID, name + " has no shaft (over the void only) at " + far);
+					String id = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(s.state().getBlock()).getPath();
+					check(id.equals(far % 8 == 0 ? "cogwheel" : "shaft"), name + " has a " + id + " at " + far);
+					check(s.state().getValue(net.minecraft.world.level.block.RotatedPillarBlock.AXIS) == (b[0] == 0 ? Direction.Axis.Z : Direction.Axis.X),
+						name + "'s shaft runs across the bridge at " + far);
+					check((h != null) == (far % com.comedymonkey.createaddons.content.wastes.city.CityLayout.HANGER_EVERY == 0), name + " has its hanger wrong at " + far);
+				}
+				if (snaps) {
+					int far = com.comedymonkey.createaddons.content.wastes.city.CityLayout.SNAP_FAR + 1;
+					check(under.containsKey(new BlockPos(b[0] * far, -4, b[1] * far)) && under.containsKey(new BlockPos(b[0] * far, -5, b[1] * far)),
+						name + " has no length hanging where it snaps");
+				}
+			}
+		}
+		helper.succeed();
+	}
+
+	/**
+	 * D90: the catalogue rebuilds in place. Its plan is all core: every block put anywhere, none only where the ground is
+	 * near the floor (on a rebuild the last build's own walls stood in for the ground, so the drum's new diagonals were
+	 * skipped and its old stepped cells left), and its drum's diagonals are in its plan.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 100)
+	public static void catalogueRebuildsInPlace(GameTestHelper helper) {
+		Catalogue.Built b = Catalogue.plan(new BlockPos(-40_000, 90, -40_000), 0);
+		long notAnywhere = b.plan().ops().stream().filter(op -> op instanceof CityPlan.Op.Put p && p.need() != CityPlan.ANYWHERE).count();
+		check(notAnywhere == 0, notAnywhere + " of the catalogue's blocks are put only on ground or only over the void");
+		check(blocks(b.plan(), ModWastes.STAINED_END_STONE_BRICK_DIAGONAL.get()) > 0 && blocks(b.plan(), ModWastes.CUT_DEEPSLATE_BRICK_DIAGONAL.get()) > 0,
+			"the catalogue's drum has no 45-degree diagonals");
+		helper.succeed();
+	}
+
+	/**
+	 * D90, choice 39: the Cut Deepslate Brick Diagonal is the water table when placed against the lower half of a block's
+	 * side or on top of the block below, the plain course on an upper half or under a block.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void diagonalCourseGivesTheWaterTableLow(GameTestHelper helper) {
+		var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.CREATIVE);
+		var stack = new net.minecraft.world.item.ItemStack(ModWastes.CUT_DEEPSLATE_BRICK_DIAGONAL.get());
+		BlockPos at = helper.absolutePos(new BlockPos(1, 2, 1));
+		java.util.function.BiFunction<Direction, Double, com.comedymonkey.createaddons.content.wastes.CutDeepslateDiagonalBlock.Course> place = (face, y) -> {
+			var hit = new net.minecraft.world.phys.BlockHitResult(new net.minecraft.world.phys.Vec3(at.getX() + 0.5, at.getY() + y, at.getZ() + 0.5), face, at, false);
+			var ctx = new net.minecraft.world.item.context.BlockPlaceContext(player, net.minecraft.world.InteractionHand.MAIN_HAND, stack, hit);
+			return ModWastes.CUT_DEEPSLATE_BRICK_DIAGONAL.get().getStateForPlacement(ctx).getValue(com.comedymonkey.createaddons.content.wastes.CutDeepslateDiagonalBlock.COURSE);
+		};
+		var water = com.comedymonkey.createaddons.content.wastes.CutDeepslateDiagonalBlock.Course.WATER_TABLE;
+		var course = com.comedymonkey.createaddons.content.wastes.CutDeepslateDiagonalBlock.Course.COURSE;
+		check(place.apply(Direction.NORTH, 0.25) == water, "a side's lower half doesn't give the water table");
+		check(place.apply(Direction.NORTH, 0.75) == course, "a side's upper half doesn't give the course");
+		check(place.apply(Direction.UP, 1.0) == water, "on top of a block doesn't give the water table");
+		check(place.apply(Direction.DOWN, 0.0) == course, "under a block doesn't give the course");
 		helper.succeed();
 	}
 
@@ -203,13 +462,14 @@ public final class WastesKitGameTests {
 	// ================================================================ the catalogue in a world
 
 	private static final BlockPos CATALOGUE = new BlockPos(-30_000, 110, 30_000);
+	private static final int CATALOGUE_TIMEOUT = 1200;
 
 	/**
 	 * {@code /wastes buildcatalogue} builds and binds: every city block in it is bound to the catalogue's record and to its
 	 * exhibit's district; every block stands joined to the ground; asleep nothing glows; woken and fed every grille, band,
 	 * seamed plate and cracked scar of it lights.
 	 */
-	@GameTest(template = COURSE, timeoutTicks = 1200, batch = "wastes_kit_catalogue")
+	@GameTest(template = COURSE, timeoutTicks = CATALOGUE_TIMEOUT, batch = "wastes_kit_catalogue")
 	public static void catalogueBuildsAndBinds(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		// somewhere new each run (the game-test world keeps the last run's catalogue, its blocks and their state)
@@ -221,8 +481,26 @@ public final class WastesKitGameTests {
 				chunks.add(new ChunkPos(cx, cz));
 				level.setChunkForced(cx, cz, true);
 			}
+		BlockPos[] rec = { null };
+		Runnable release = () -> {
+			for (ChunkPos c : chunks)
+				level.setChunkForced(c.x, c.z, false);
+			if (rec[0] != null)
+				CityRecord.of(level).forget(rec[0]);
+		};
+		try {
+			catalogueChecks(helper, level, o, rec, release);
+		} catch (RuntimeException e) {
+			release.run();
+			throw e;
+		}
+	}
+
+	/** The catalogue test's checks; {@code release} lets its chunks and record go (at the end, or when a check fails). */
+	private static void catalogueChecks(GameTestHelper helper, ServerLevel level, BlockPos o, BlockPos[] recOut, Runnable release) {
 		Catalogue.Built b = CatalogueBuild.build(level, o, 0);
 		BlockPos rec = b.recordOrigin();
+		recOut[0] = rec;
 		check(CityRecord.of(level).cities().contains(rec), "the catalogue has no record");
 		List<BlockPos> lights = new ArrayList<>();
 		int members = 0;
@@ -247,43 +525,49 @@ public final class WastesKitGameTests {
 			check(hanging.isEmpty(), p.id() + " has blocks hanging in the world: " + String.join(", ", hanging.subList(0, Math.min(6, hanging.size()))));
 		}
 		var seq = helper.startSequence();
-		seq.thenExecuteAfter(5, () -> {
+		seq.thenExecuteAfter(5, releasing(helper, release, false, () -> {
 			for (BlockPos q : lights)
 				check(!level.getBlockState(q).getValue(CityDecorLightBlock.LIT), level.getBlockState(q).getBlock() + " at " + q.toShortString() + " glows asleep");
 			CityRecord.of(level).wakeAll(level, rec, null);
 			CityRecord.of(level).burnHeart(level, rec, level.getGameTime() + 20 * 60 * 10, null);
-		});
-		seq.thenExecuteAfter(120, () -> {
+		}));
+		seq.thenExecuteAfter(120, releasing(helper, release, true, () -> {
 			for (BlockPos q : lights)
 				check(level.getBlockState(q).getValue(CityDecorLightBlock.LIT), level.getBlockState(q).getBlock() + " at " + q.toShortString() + " is dark awake and fed");
-			for (ChunkPos c : chunks)
-				level.setChunkForced(c.x, c.z, false);
-			CityRecord.of(level).forget(rec);
-		});
+		}));
 		seq.thenSucceed();
+	}
+
+	/**
+	 * A sequence step that lets the test's chunks and record go ({@code release}) once it has failed for good: an error at
+	 * once, a check (which the sequence retries every tick) as the test times out; and after it, if it's the {@code last}.
+	 */
+	private static Runnable releasing(GameTestHelper helper, Runnable release, boolean last, Runnable step) {
+		return () -> {
+			try {
+				step.run();
+			} catch (GameTestAssertException e) {
+				if (helper.getTick() >= CATALOGUE_TIMEOUT - 3)
+					release.run();
+				throw e;
+			} catch (RuntimeException e) {
+				release.run();
+				throw e;
+			}
+			if (last)
+				release.run();
+		};
 	}
 
 	/** Blocks in an exhibit's box not joined, face to face, to the ground under it. */
 	static List<String> hanging(ServerLevel level, Catalogue.Placed p) {
 		BlockPos min = p.min().offset(-2, -1, -2), max = p.max().offset(2, 0, 2);
-		Set<BlockPos> seen = new HashSet<>();
-		ArrayDeque<BlockPos> todo = new ArrayDeque<>();
-		for (int x = min.getX(); x <= max.getX(); x++)
-			for (int z = min.getZ(); z <= max.getZ(); z++) {
-				BlockPos q = new BlockPos(x, min.getY(), z);
-				if (!level.getBlockState(q).isAir() && seen.add(q))
-					todo.add(q);
-			}
-		while (!todo.isEmpty()) {
-			BlockPos q = todo.poll();
-			for (Direction d : Direction.values()) {
-				BlockPos n = q.relative(d);
-				if (n.getX() < min.getX() || n.getX() > max.getX() || n.getZ() < min.getZ() || n.getZ() > max.getZ() || n.getY() < min.getY() || n.getY() > max.getY())
-					continue;
-				if (!level.getBlockState(n).isAir() && seen.add(n))
-					todo.add(n);
-			}
-		}
+		// the box's blocks, joined from the pad (its lowest row) by the kit's own rule (props stand in all they reach, D87)
+		java.util.Map<BlockPos, BlockState> blocks = new java.util.HashMap<>();
+		for (BlockPos q : BlockPos.betweenClosed(min, max))
+			if (!level.getBlockState(q).isAir())
+				blocks.put(q.immutable(), level.getBlockState(q));
+		Set<BlockPos> seen = ModelChecks.joined(blocks, q -> q.getY() <= min.getY());
 		List<String> out = new ArrayList<>();
 		for (BlockPos q : BlockPos.betweenClosed(p.min(), p.max()))
 			if (!level.getBlockState(q).isAir() && !seen.contains(q))

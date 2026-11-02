@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 
 import com.comedymonkey.createaddons.content.wastes.DerelictInsulatorBlock;
+import com.comedymonkey.createaddons.content.wastes.CutDeepslateDiagonalBlock;
+import com.comedymonkey.createaddons.content.wastes.StainedBrickDiagonalBlock;
 import com.comedymonkey.createaddons.content.wastes.city.CityPlan;
 import com.comedymonkey.createaddons.content.wastes.city.kit.Kit.Ctx;
 import com.comedymonkey.createaddons.content.wastes.city.kit.Kit.Face;
@@ -122,6 +124,48 @@ public final class Drum {
 					md.set(x, 9, z, dress());
 					md.setIfEmpty(ox, TOP, oz, Kit.stairs(dressStairs(), d.getOpposite(), true));
 					md.setIfEmpty(ox, TOP + 1, oz, ModWastes.STAINED_END_STONE_BRICK_WALL.get().defaultBlockState());
+				}
+			}
+		// ---- each diagonal flat between the courses (y 4-8) one flat 45-degree face (D86, D88: the Stained End Stone Brick
+		// Diagonal, half a cell cut corner to corner), carrying a recessed panel and its stair-headed blind arch: the face runs
+		// through the steps' outer tips in the four notch cells outside them (|x| + |z| = 31), buttress to buttress; the two
+		// middle notches stay open and the three steps behind are cut on the plane through their middles (|x| + |z| = 31),
+		// the panel's flat back, the end notches its jambs; at the top course the middle notches are the arch's springers,
+		// each with its full side to its nearer jamb (as the windows' heads)
+		for (int sx = -1; sx <= 1; sx += 2)
+			for (int sz = -1; sz <= 1; sz += 2) {
+				var corner = StainedBrickDiagonalBlock.Corner.of(sx, sz);
+				BlockState diag = ModWastes.STAINED_END_STONE_BRICK_DIAGONAL.get().defaultBlockState().setValue(StainedBrickDiagonalBlock.CORNER, corner);
+				int[] u = StainedBrickDiagonalBlock.u(corner);
+				int[][] steps = { { 14, 16 }, { 15, 15 }, { 16, 14 } }, jambs = { { 14, 17 }, { 17, 14 } }, middle = { { 15, 16 }, { 16, 15 } };
+				for (int y = 4; y <= 8; y++) {
+					for (int[] cell : steps)
+						if (include.test(sx * cell[0], sz * cell[1]))
+							md.set(sx * cell[0], y, sz * cell[1], diag);
+					for (int[] cell : jambs)
+						if (include.test(sx * cell[0], sz * cell[1]))
+							md.set(sx * cell[0], y, sz * cell[1], diag);
+				}
+				// the courses flat with it (D89): the water table (y 2), the sill and lintel courses (y 3, 9) in cut deepslate, and the
+				// brick between the lintel and the corbel table (y 10-11), in the four notch cells (the plinth, corbels and parapet step)
+				BlockState course = ModWastes.CUT_DEEPSLATE_BRICK_DIAGONAL.get().defaultBlockState().setValue(CutDeepslateDiagonalBlock.CORNER, corner);
+				for (int[] cell : new int[][] { jambs[0], middle[0], middle[1], jambs[1] }) {
+					int x = sx * cell[0], z = sz * cell[1];
+					if (!include.test(x, z))
+						continue;
+					md.set(x, 2, z, course.setValue(CutDeepslateDiagonalBlock.COURSE, CutDeepslateDiagonalBlock.Course.WATER_TABLE));
+					md.set(x, 3, z, course);
+					md.set(x, 9, z, course);
+					md.set(x, 10, z, diag);
+					md.set(x, 11, z, diag);
+				}
+				for (int k = 0; k < 2; k++) {
+					int x = sx * middle[k][0], z = sz * middle[k][1];
+					if (!include.test(x, z))
+						continue;
+					int jx = sx * jambs[k][0] - x, jz = sz * jambs[k][1] - z;
+					var form = jx * u[0] + jz * u[1] < 0 ? StainedBrickDiagonalBlock.Form.ARCH_NEG : StainedBrickDiagonalBlock.Form.ARCH_POS;
+					md.set(x, 8, z, diag.setValue(StainedBrickDiagonalBlock.FORM, form));
 				}
 			}
 		// ---- the dome: eight ribs from the buttress tops to the collar, three snapped; shingles at its foot; the parapet gapped

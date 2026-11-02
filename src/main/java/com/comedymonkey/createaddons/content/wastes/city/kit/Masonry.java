@@ -30,11 +30,17 @@ public record Masonry(String name, BlockState wall, BlockState second, BlockStat
 			c("scoria", Blocks.BRICKS), c("cut_scoria_brick_wall", Blocks.BRICK_WALL));
 	}
 
-	/** Workshops: Create's andesite world a step darker (cut tuff bricks, 112) with andesite casing piers. */
+	/**
+	 * Workshops: Create's andesite world a step darker (cut tuff bricks, 112). The piers are Create's tuff pillar
+	 * (provisional, for the user's word: the brief's andesite casing reads in game as tall walnut-faced panels, the warmest
+	 * thing on the facade, like a row of doors; progress doc, "Catalogue agent 2"). The dressings (sills, corbels, the
+	 * lintel band) are Create's polished cut dripstone (116, a warm brown-grey at the tuff's value), so the facade isn't one
+	 * grey stone (D83; provisional, for the user's word: the progress doc, "Catalogue agent 2, pass 2").
+	 */
 	public static Masonry workshops() {
 		return new Masonry("workshops", c("cut_tuff_bricks", Blocks.TUFF_BRICKS), c("small_tuff_bricks", Blocks.TUFF_BRICKS),
-			c("andesite_casing", Blocks.POLISHED_ANDESITE), c("polished_cut_tuff_stairs", Blocks.POLISHED_TUFF_STAIRS),
-			c("polished_cut_tuff_slab", Blocks.POLISHED_TUFF_SLAB), c("polished_cut_tuff", Blocks.POLISHED_TUFF), c("cut_deepslate_bricks", Blocks.DEEPSLATE_BRICKS),
+			CityPlan.with(c("tuff_pillar", Blocks.POLISHED_TUFF), "axis", "y"), c("polished_cut_dripstone_stairs", Blocks.POLISHED_TUFF_STAIRS),
+			c("polished_cut_dripstone_slab", Blocks.POLISHED_TUFF_SLAB), c("polished_cut_dripstone", Blocks.POLISHED_TUFF), c("cut_deepslate_bricks", Blocks.DEEPSLATE_BRICKS),
 			c("cut_deepslate_brick_stairs", Blocks.DEEPSLATE_BRICK_STAIRS), c("cut_deepslate_brick_slab", Blocks.DEEPSLATE_BRICK_SLAB),
 			Blocks.TUFF.defaultBlockState(), c("cut_tuff_brick_wall", Blocks.TUFF_BRICK_WALL));
 	}
@@ -85,11 +91,17 @@ public record Masonry(String name, BlockState wall, BlockState second, BlockStat
 	}
 
 	/**
-	 * The copper ridge roll (patina from age; no rain): the Patina Rib (D75's muted patina) in place of the brief's vanilla
-	 * weathered cut copper slab, which read mint against the slate (provisional, for the user's word: progress doc).
+	 * The copper ridge roll (patina from age; no rain): one half of the 2-wide ridge in the Patina Ridge Roll (D85: half the
+	 * Patina Rib's weight, a stepped quarter-round), faced {@code toRidgeLine}, toward the other half, so the two meet as one
+	 * round cap.
 	 */
-	public static BlockState ridge() {
-		return ModWastes.PATINA_RIB.get().defaultBlockState();
+	public static BlockState ridge(net.minecraft.core.Direction toRidgeLine) {
+		return ModWastes.PATINA_ROLL.get().defaultBlockState().setValue(net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING, toRidgeLine);
+	}
+
+	/** A ridge cell's half: the lower of the pair (local z) faces south, toward the other; the higher faces north. */
+	public static BlockState ridge(boolean lowerOfPair) {
+		return ridge(lowerOfPair ? net.minecraft.core.Direction.SOUTH : net.minecraft.core.Direction.NORTH);
 	}
 
 	/** Walnut: barges, rafters, trusses, floors, benches. */

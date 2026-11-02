@@ -106,6 +106,10 @@ public final class Terrace {
 			md.set(x0 + 4, 1, D - 4, Kit.stairs(Masonry.walnutStairs(), Direction.SOUTH, false));
 			md.set(x0 + 4, 2, D - 3, Kit.stairs(Masonry.walnutStairs(), Direction.SOUTH, false));
 			md.set(x0 + 4, 3, D - 2, Kit.stairs(Masonry.walnutStairs(), Direction.SOUTH, false));
+			// its boxed-in underside (walnut planks under the treads: the flight stands on its own, whatever happens to the walls)
+			md.set(x0 + 4, 1, D - 3, Masonry.walnutPlanks());
+			md.set(x0 + 4, 1, D - 2, Masonry.walnutPlanks());
+			md.set(x0 + 4, 2, D - 2, Masonry.walnutPlanks());
 		}
 		// ---- the corbel course, eaves 1 over, a 1:1 slate roof (stairs) to a ridge with its copper roll
 		for (Face f : new Face[] { front, back })
@@ -131,8 +135,8 @@ public final class Terrace {
 			}
 			int ry = E + 1 + Math.min(D / 2 - 1 + 1, D - (D / 2 - 1)) + 1;
 			if (!barge) {
-				md.set(x, ry, D / 2 - 1, Masonry.ridge());
-				md.set(x, ry, D / 2, Masonry.ridge());
+				md.set(x, ry, D / 2 - 1, Masonry.ridge(true));
+				md.set(x, ry, D / 2, Masonry.ridge(false));
 			}
 		}
 		int ridgeY = E + 1 + Math.min(D / 2 - 1 + 1, D - (D / 2 - 1));
@@ -146,6 +150,9 @@ public final class Terrace {
 			}
 			md.mark(Model.Cause.CHIMNEY, x, ridgeY + 3, D / 2, 3);
 		}
+		// ---- the roof hatches (D79): where the Resistance came over the roofs and flew the makers out
+		if (c.wear() == Wear.WORN || c.wear() == Wear.DAMAGED)
+			hatches(md, houses);
 		// ---- the uprising: cable along the row at the upper windows, a Clamp Bracket on each party-wall pier holding it off
 		Map<BlockPos, BlockState> cable = new LinkedHashMap<>();
 		BlockState cb = ModWastes.DERELICT_CABLE.get().defaultBlockState();
@@ -161,6 +168,45 @@ public final class Terrace {
 		// ---- the state
 		damage(md, c, houses, l, front, east);
 		return md;
+	}
+
+	/** The houses with a roof hatch (D79), the heart end's first two: the second's left open, the first's shut. */
+	public static final int[] HATCH_HOUSES = { 0, 1 };
+	public static final int HATCH_OPEN = 1;
+
+	/** Where a house's hatch is: on the front slope, the course under the ridge, over the middle of the house. */
+	public static BlockPos hatchAt(int house) {
+		return new BlockPos(house * HOUSE + 2, E + 3, 1);
+	}
+
+	/**
+	 * D79: a walnut trapdoor in the slate of one or two houses' front slopes (the Resistance came over the roofs at night and
+	 * flew the makers out through them, lore V). A shut one lies flush in the slope; an open one stands up off its hinge on
+	 * the ridge side, the hole under it dark. A thin walnut curb round each (D83, D85): a U of walnut, its two sides and
+	 * its head.
+	 */
+	static void hatches(Model md, int houses) {
+		BlockState hatch = Blocks.DARK_OAK_TRAPDOOR.defaultBlockState().setValue(net.minecraft.world.level.block.TrapDoorBlock.HALF,
+			net.minecraft.world.level.block.state.properties.Half.BOTTOM).setValue(net.minecraft.world.level.block.TrapDoorBlock.FACING, Direction.NORTH);
+		for (int h : HATCH_HOUSES) {
+			if (h >= houses)
+				continue;
+			BlockPos p = hatchAt(h);
+			md.set(p.getX(), p.getY(), p.getZ(), hatch.setValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN, h == HATCH_OPEN));
+			// its curb (D83, D85): a thin walnut U, the slates either side of it and across its head (the ridge side) as walnut, the
+			// same stair shapes; nothing below it (a full ring read as a wooden patch)
+			for (int dx = -1; dx <= 1; dx++)
+				for (int dz = 0; dz <= 1; dz++) {
+					if (dx == 0 && dz == 0)
+						continue;
+					int x = p.getX() + dx, z = p.getZ() + dz, y = E + 1 + Math.min(z + 1, D - z);
+					BlockState s = md.get(x, y, z);
+					if (s != null && s.is(Blocks.DEEPSLATE_TILE_STAIRS))
+						md.set(x, y, z, Masonry.walnutStairs().setValue(net.minecraft.world.level.block.StairBlock.FACING,
+							s.getValue(net.minecraft.world.level.block.StairBlock.FACING)).setValue(net.minecraft.world.level.block.StairBlock.HALF,
+							s.getValue(net.minecraft.world.level.block.StairBlock.HALF)));
+				}
+		}
 	}
 
 	/**

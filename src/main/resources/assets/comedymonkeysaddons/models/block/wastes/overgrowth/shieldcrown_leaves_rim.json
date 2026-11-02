@@ -1,0 +1,82 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout_mipped",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/overgrowth/shield_leaves_rim",
+    "shield_leaves_rim": "comedymonkeysaddons:block/wastes/overgrowth/shield_leaves_rim",
+    "shield_leaves": "comedymonkeysaddons:block/wastes/overgrowth/shield_leaves",
+    "shield_under": "comedymonkeysaddons:block/wastes/overgrowth/shield_under"
+  },
+  "elements": [
+    {
+      "name": "leaves",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#shield_leaves_rim"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#shield_leaves_rim"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#shield_leaves_rim"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#shield_leaves_rim"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#shield_leaves"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#shield_under"
+        }
+      }
+    }
+  ]
+}

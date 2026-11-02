@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "large=false": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/bramblecoil_small"
+    },
+    "large=true": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/bramblecoil_large"
+    }
+  }
+}

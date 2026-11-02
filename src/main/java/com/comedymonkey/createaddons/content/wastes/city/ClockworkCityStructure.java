@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -57,14 +58,18 @@ public class ClockworkCityStructure extends Structure {
 		return Optional.of(new Site(new BlockPos(x, surface, z), fit, fit >= share));
 	}
 
-	/** The share of the 9 x 9-chunk footprint (one sample a chunk, at its middle) with End Stone at the heart's floor (P46). */
+	/**
+	 * The share of the 9 x 9-chunk footprint (one sample a chunk, at its middle) with End Stone at the heart's floor (P46).
+	 * Each sample is the terrain's density at that one height, not a whole base column: 81 columns of End island noise a
+	 * site made every candidate (each region's structure start, and every one a /locate walks) take seconds.
+	 */
 	public static double islandFit(ChunkGenerator generator, RandomState random, LevelHeightAccessor height, int x, int z, int surface) {
+		DensityFunction density = random.router().finalDensity();
 		int solid = 0, all = 0;
 		for (int cx = -FOOTPRINT; cx <= FOOTPRINT; cx++)
 			for (int cz = -FOOTPRINT; cz <= FOOTPRINT; cz++) {
 				all++;
-				var column = generator.getBaseColumn(x + cx * 16, z + cz * 16, height, random);
-				if (!column.getBlock(surface - 1).isAir())
+				if (density.compute(new DensityFunction.SinglePointContext(x + cx * 16, surface - 1, z + cz * 16)) > 0)
 					solid++;
 			}
 		return solid / (double) all;

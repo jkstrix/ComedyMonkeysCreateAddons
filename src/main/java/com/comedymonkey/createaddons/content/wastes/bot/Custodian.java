@@ -211,6 +211,8 @@ public class Custodian extends CityBot {
 	private final Set<UUID> scuttlers = new HashSet<>();
 	// ---- the fight (not saved: a reload mid-fight picks up fighting)
 	private final boolean[] standing = new boolean[4];
+	/** Each pylon read since it was loaded (or set): its first read is how it stands, not a break. */
+	private final boolean[] pylonRead = new boolean[4];
 	private boolean shieldWas, pylonsSeen;
 	@Nullable
 	private Move move;
@@ -379,11 +381,9 @@ public class Custodian extends CityBot {
 			if (pylons.size() < 4)
 				pylons.add(p.immutable());
 		syncPylons();
-		pylonsSeen = true;
-		for (int k = 0; k < pylons.size(); k++) {
-			ConduitPylonBlockEntity be = ConduitPylonBlock.pylonAt(level(), pylons.get(k));
-			standing[k] = be != null && be.isStanding();
-		}
+		// how they stand is read on its first awake tick (watchPylons), never here: the city's builder places it from world
+		// generation, where reading the level waits on the main thread while the main thread waits on the generation
+		pylonsSeen = false;
 	}
 
 	public List<BlockPos> pylons() {
@@ -591,25 +591,33 @@ public class Custodian extends CityBot {
 	/** Each tick: a pylon broken turns it on the breaker and calls Scuttlers; the last one down drops the shield. */
 	private void watchPylons() {
 		if (!pylonsSeen) {
-			// loaded (or first seen): how they stand now is no news
+			// loaded (or first seen): how each stands when it's first read is no news
 			pylonsSeen = true;
-			for (int k = 0; k < pylons.size(); k++) {
-				ConduitPylonBlockEntity be = ConduitPylonBlock.pylonAt(level(), pylons.get(k));
-				standing[k] = be != null && be.isStanding();
-			}
-			shieldWas = standingCount() > 0;
-			entityData.set(SHIELDED, shieldWas);
-			return;
+			java.util.Arrays.fill(pylonRead, false);
 		}
+		boolean first = false, anyRead = false;
 		for (int k = 0; k < pylons.size(); k++) {
+			anyRead |= pylonRead[k];
 			BlockPos at = pylons.get(k);
+			// an unloaded pylon waits until it's loaded (reading it would load its chunk)
 			if (!level().isLoaded(at))
 				continue;
 			ConduitPylonBlockEntity be = ConduitPylonBlock.pylonAt(level(), at);
 			boolean now = be != null && be.isStanding();
-			if (standing[k] && !now)
+			if (!pylonRead[k]) {
+				pylonRead[k] = true;
+				first = true;
+			} else if (standing[k] && !now)
 				pylonBroken(at, be != null ? be.lastHitter() : null);
 			standing[k] = now;
+		}
+		// (none read yet: the shield stays as it was until one is)
+		if (!anyRead && !first && !pylons.isEmpty())
+			return;
+		if (first) {
+			shieldWas = standingCount() > 0;
+			entityData.set(SHIELDED, shieldWas);
+			return;
 		}
 		boolean shield = standingCount() > 0;
 		if (shield != shielded())

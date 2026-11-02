@@ -1,0 +1,362 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "minecraft:block/dark_oak_log",
+    "log": "minecraft:block/dark_oak_log",
+    "log_top": "minecraft:block/dark_oak_log_top"
+  },
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0.229,
+        -0.727,
+        0
+      ],
+      "scale": [
+        0.324,
+        0.324,
+        0.324
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.13,
+        0.13,
+        0.13
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.259,
+        0.259,
+        0.259
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.194,
+        0.194,
+        0.194
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.207,
+        0.207,
+        0.207
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.207,
+        0.207,
+        0.207
+      ]
+    }
+  },
+  "elements": [
+    {
+      "name": "rafter_long_0",
+      "from": [
+        -14,
+        7,
+        4
+      ],
+      "to": [
+        2,
+        15,
+        12
+      ],
+      "rotation": {
+        "origin": [
+          9,
+          11,
+          8
+        ],
+        "axis": "z",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            0,
+            4,
+            16
+          ],
+          "texture": "#log",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#log_top"
+        },
+        "south": {
+          "uv": [
+            12,
+            16,
+            4,
+            0
+          ],
+          "texture": "#log",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#log_top"
+        },
+        "up": {
+          "uv": [
+            4,
+            16,
+            12,
+            0
+          ],
+          "texture": "#log",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            12,
+            16,
+            4,
+            0
+          ],
+          "texture": "#log",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "rafter_long_1",
+      "from": [
+        2,
+        7,
+        4
+      ],
+      "to": [
+        18,
+        15,
+        12
+      ],
+      "rotation": {
+        "origin": [
+          9,
+          11,
+          8
+        ],
+        "axis": "z",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            0,
+            4,
+            16
+          ],
+          "texture": "#log",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#log_top"
+        },
+        "south": {
+          "uv": [
+            12,
+            16,
+            4,
+            0
+          ],
+          "texture": "#log",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#log_top"
+        },
+        "up": {
+          "uv": [
+            4,
+            16,
+            12,
+            0
+          ],
+          "texture": "#log",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            12,
+            16,
+            4,
+            0
+          ],
+          "texture": "#log",
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "rafter_long_2",
+      "from": [
+        18,
+        7,
+        4
+      ],
+      "to": [
+        32,
+        15,
+        12
+      ],
+      "rotation": {
+        "origin": [
+          9,
+          11,
+          8
+        ],
+        "axis": "z",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            0,
+            4,
+            14
+          ],
+          "texture": "#log",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#log_top"
+        },
+        "south": {
+          "uv": [
+            12,
+            14,
+            4,
+            0
+          ],
+          "texture": "#log",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#log_top"
+        },
+        "up": {
+          "uv": [
+            4,
+            14,
+            12,
+            0
+          ],
+          "texture": "#log",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            12,
+            14,
+            4,
+            0
+          ],
+          "texture": "#log",
+          "rotation": 90
+        }
+      }
+    }
+  ]
+}

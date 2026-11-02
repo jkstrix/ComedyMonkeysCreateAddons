@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "hanging=none": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/crookwood_leaves"
+    },
+    "hanging=mid": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/crookwood_leaves_hanging_mid"
+    },
+    "hanging=end": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/crookwood_leaves_hanging"
+    }
+  }
+}

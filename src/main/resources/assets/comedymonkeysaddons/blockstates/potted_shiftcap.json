@@ -1,0 +1,14 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/overgrowth/potted_shiftcap"
+      }
+    },
+    {
+      "apply": {
+        "model": "comedymonkeysaddons:block/wastes/overgrowth/potted_shiftcap_glow"
+      }
+    }
+  ]
+}

@@ -90,12 +90,19 @@ public final class Catalogue {
 		for (Wear w : new Wear[] { Wear.WORN, Wear.DAMAGED, Wear.RUINED })
 			out.add(new Exhibit("furnace_" + w.name().toLowerCase(), "Furnace shed, chimney and blast furnace, " + w.name().toLowerCase(), 1, District.FOUNDRY,
 				Masonry.foundry(), w, (c, a) -> List.of(Part.of(FurnaceShed.build(c))), null));
-		for (Wear w : new Wear[] { Wear.INTACT, Wear.DAMAGED, Wear.RUINED })
+		for (Wear w : new Wear[] { Wear.INTACT, Wear.WORN, Wear.DAMAGED, Wear.RUINED })
 			out.add(new Exhibit("terrace_" + w.name().toLowerCase(), "Terrace of four, " + w.name().toLowerCase(), 1, District.QUARTERS, Masonry.quarters(), w,
 				(c, a) -> List.of(Part.of(Terrace.build(c, 4))), null));
 		for (Wear w : new Wear[] { Wear.INTACT, Wear.DAMAGED, Wear.RUINED })
 			out.add(new Exhibit("workshop_" + w.name().toLowerCase(), "Long workshop, " + w.name().toLowerCase(), 1, District.WORKSHOPS, Masonry.workshops(), w,
 				(c, a) -> List.of(Part.of(Workshop.build(c))), null));
+		// the wrecked winding tower (D79), in the state the city's gives it (its ring is the damaged one)
+		out.add(new Exhibit("winding_tower", "Wrecked winding tower: roof caved in, mainspring sprung out, shafts snapped (damaged)", 1, District.QUARTERS,
+			Masonry.quarters(), Wear.DAMAGED,
+			// in a frame of its own that isn't mirrored (the catalogue's is; its modelled spring and rafters turn but can't
+			// mirror): its local +x along the exhibit's +z (world north), +z along the exhibit's +x (world east), so its west
+			// side, where the spring is, faces the camera side (world south), as the city faces it to its street (D84, D85)
+			(c, a) -> List.of(new Part(WindingTower.build(c), 0, 0, Direction.SOUTH, Direction.EAST)), null));
 		// row 3: the uprising
 		for (Wear w : new Wear[] { Wear.INTACT, Wear.DAMAGED, Wear.RUINED })
 			out.add(new Exhibit("tower3_" + w.name().toLowerCase(), "Slotted tower 3 x 3 on old foundations, " + w.name().toLowerCase(), 2, District.WORKSHOPS,

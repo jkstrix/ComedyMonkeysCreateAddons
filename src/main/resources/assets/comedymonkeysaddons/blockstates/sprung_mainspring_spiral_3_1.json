@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/sprung_mainspring_spiral_3_1"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/sprung_mainspring_spiral_3_1",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/sprung_mainspring_spiral_3_1",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/sprung_mainspring_spiral_3_1",
+      "y": 270
+    }
+  }
+}

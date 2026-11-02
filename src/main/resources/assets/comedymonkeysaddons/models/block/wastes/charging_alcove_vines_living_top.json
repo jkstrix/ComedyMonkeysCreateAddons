@@ -1,0 +1,117 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/overgrowth/knotvine_a",
+    "knotvine_a": "comedymonkeysaddons:block/wastes/overgrowth/knotvine_a",
+    "item_twinerope": "comedymonkeysaddons:block/wastes/overgrowth/item_twinerope"
+  },
+  "elements": [
+    {
+      "name": "vine_back_hi",
+      "from": [
+        3,
+        0,
+        12.75
+      ],
+      "to": [
+        6,
+        12,
+        12.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            4,
+            3,
+            16
+          ],
+          "texture": "#knotvine_a"
+        }
+      }
+    },
+    {
+      "name": "vine_cheek_hi",
+      "from": [
+        3.25,
+        0,
+        6
+      ],
+      "to": [
+        3.25,
+        8,
+        12.75
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            8,
+            6.75,
+            16
+          ],
+          "texture": "#knotvine_a"
+        }
+      }
+    },
+    {
+      "name": "vine_front_hi",
+      "from": [
+        1,
+        0,
+        3.75
+      ],
+      "to": [
+        3,
+        12,
+        3.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            4,
+            2,
+            16
+          ],
+          "texture": "#knotvine_a"
+        }
+      }
+    },
+    {
+      "name": "vine_hang",
+      "from": [
+        5,
+        1,
+        6
+      ],
+      "to": [
+        9,
+        12,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            0,
+            12,
+            11
+          ],
+          "texture": "#item_twinerope"
+        },
+        "south": {
+          "uv": [
+            12,
+            0,
+            8,
+            11
+          ],
+          "texture": "#item_twinerope"
+        }
+      }
+    }
+  ]
+}

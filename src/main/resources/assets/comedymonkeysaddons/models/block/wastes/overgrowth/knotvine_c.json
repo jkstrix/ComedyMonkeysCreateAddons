@@ -1,0 +1,35 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/overgrowth/knotvine_c",
+    "knotvine_c": "comedymonkeysaddons:block/wastes/overgrowth/knotvine_c"
+  },
+  "elements": [
+    {
+      "name": "knotvine",
+      "from": [
+        0,
+        0,
+        15.2
+      ],
+      "to": [
+        16,
+        16,
+        15.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#knotvine_c"
+        }
+      }
+    }
+  ]
+}

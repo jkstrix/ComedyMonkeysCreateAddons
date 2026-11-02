@@ -1,0 +1,175 @@
+{
+  "variants": {
+    "corner=south_east,form=full": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full",
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full_1"
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full_2"
+      }
+    ],
+    "corner=south_east,form=arch_neg": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg",
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg_1"
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg_2"
+      }
+    ],
+    "corner=south_east,form=arch_pos": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos",
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos_1"
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos_2"
+      }
+    ],
+    "corner=south_west,form=full": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full",
+        "y": 90,
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full_1",
+        "y": 90
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full_2",
+        "y": 90
+      }
+    ],
+    "corner=south_west,form=arch_neg": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg",
+        "y": 90,
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg_1",
+        "y": 90
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg_2",
+        "y": 90
+      }
+    ],
+    "corner=south_west,form=arch_pos": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos",
+        "y": 90,
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos_1",
+        "y": 90
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos_2",
+        "y": 90
+      }
+    ],
+    "corner=north_west,form=full": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full",
+        "y": 180,
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full_1",
+        "y": 180
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full_2",
+        "y": 180
+      }
+    ],
+    "corner=north_west,form=arch_neg": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg",
+        "y": 180,
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg_1",
+        "y": 180
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg_2",
+        "y": 180
+      }
+    ],
+    "corner=north_west,form=arch_pos": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos",
+        "y": 180,
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos_1",
+        "y": 180
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos_2",
+        "y": 180
+      }
+    ],
+    "corner=north_east,form=full": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full",
+        "y": 270,
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full_1",
+        "y": 270
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_full_2",
+        "y": 270
+      }
+    ],
+    "corner=north_east,form=arch_neg": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg",
+        "y": 270,
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg_1",
+        "y": 270
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_neg_2",
+        "y": 270
+      }
+    ],
+    "corner=north_east,form=arch_pos": [
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos",
+        "y": 270,
+        "weight": 2
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos_1",
+        "y": 270
+      },
+      {
+        "model": "comedymonkeysaddons:block/wastes/stained_end_stone_brick_diagonal_arch_pos_2",
+        "y": 270
+      }
+    ]
+  }
+}

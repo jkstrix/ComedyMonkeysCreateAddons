@@ -1,0 +1,286 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/wastes/overgrowth/root_bark",
+    "root_bark": "comedymonkeysaddons:block/wastes/overgrowth/root_bark",
+    "root_hairs": "comedymonkeysaddons:block/wastes/overgrowth/root_hairs"
+  },
+  "elements": [
+    {
+      "name": "leg west",
+      "from": [
+        1,
+        -2,
+        6
+      ],
+      "to": [
+        5,
+        6,
+        10
+      ],
+      "rotation": {
+        "origin": [
+          3,
+          0,
+          8
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            8,
+            15,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "east": {
+          "uv": [
+            6,
+            8,
+            10,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "south": {
+          "uv": [
+            1,
+            8,
+            5,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "west": {
+          "uv": [
+            6,
+            8,
+            10,
+            16
+          ],
+          "texture": "#root_bark"
+        }
+      }
+    },
+    {
+      "name": "crown",
+      "from": [
+        4.5,
+        4,
+        6
+      ],
+      "to": [
+        11.5,
+        8,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.5,
+            8,
+            11.5,
+            12
+          ],
+          "texture": "#root_bark"
+        },
+        "east": {
+          "uv": [
+            6,
+            8,
+            10,
+            12
+          ],
+          "texture": "#root_bark"
+        },
+        "south": {
+          "uv": [
+            4.5,
+            8,
+            11.5,
+            12
+          ],
+          "texture": "#root_bark"
+        },
+        "west": {
+          "uv": [
+            6,
+            8,
+            10,
+            12
+          ],
+          "texture": "#root_bark"
+        },
+        "up": {
+          "uv": [
+            4.5,
+            6,
+            11.5,
+            10
+          ],
+          "texture": "#root_bark"
+        },
+        "down": {
+          "uv": [
+            4.5,
+            6,
+            11.5,
+            10
+          ],
+          "texture": "#root_bark"
+        }
+      }
+    },
+    {
+      "name": "leg east",
+      "from": [
+        11,
+        -2,
+        6
+      ],
+      "to": [
+        15,
+        6,
+        10
+      ],
+      "rotation": {
+        "origin": [
+          13,
+          0,
+          8
+        ],
+        "axis": "z",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            8,
+            5,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "east": {
+          "uv": [
+            6,
+            8,
+            10,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "south": {
+          "uv": [
+            11,
+            8,
+            15,
+            16
+          ],
+          "texture": "#root_bark"
+        },
+        "west": {
+          "uv": [
+            6,
+            8,
+            10,
+            16
+          ],
+          "texture": "#root_bark"
+        }
+      }
+    },
+    {
+      "name": "hairs west",
+      "from": [
+        0,
+        0,
+        8
+      ],
+      "to": [
+        4,
+        3,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            13,
+            4,
+            16
+          ],
+          "texture": "#root_hairs"
+        },
+        "south": {
+          "uv": [
+            4,
+            13,
+            0,
+            16
+          ],
+          "texture": "#root_hairs"
+        }
+      }
+    },
+    {
+      "name": "hairs east",
+      "from": [
+        12,
+        0,
+        8
+      ],
+      "to": [
+        16,
+        3,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            13,
+            14,
+            16
+          ],
+          "texture": "#root_hairs"
+        },
+        "south": {
+          "uv": [
+            14,
+            13,
+            10,
+            16
+          ],
+          "texture": "#root_hairs"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        5.049,
+        0
+      ],
+      "scale": [
+        1.081,
+        1.081,
+        1.081
+      ]
+    }
+  }
+}

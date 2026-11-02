@@ -796,6 +796,27 @@ public final class WastesBotGameTests {
 		});
 	}
 
+	/**
+	 * The city places its Custodian from world generation, where reading the level waits on the main thread while the main
+	 * thread waits on the generation (a natural city froze the game). Placing one with pylons in chunks that aren't loaded
+	 * must read none of them: it learns how they stand on its first awake tick.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void placingTheCustodianReadsNoPylonChunks(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos base = helper.absolutePos(new BlockPos(12, 1, 12)), far = base.offset(20_000, 0, 20_000);
+		List<BlockPos> pylons = List.of(far, far.offset(48, 0, 0), far.offset(0, 0, 48), far.offset(48, 0, 48));
+		for (BlockPos p : pylons)
+			helper.assertFalse(level.hasChunk(p.getX() >> 4, p.getZ() >> 4), "a pylon's chunk is loaded before the test");
+		Custodian c = WastesBots.placeCustodian(level, base, 0, base, pylons, null);
+		helper.assertTrue(c != null, "no Custodian");
+		for (BlockPos p : pylons)
+			helper.assertFalse(level.hasChunk(p.getX() >> 4, p.getZ() >> 4), "placing it loaded its pylon's chunk at " + p.toShortString());
+		helper.assertTrue(c.pylons().size() == 4, "it should keep all four pylons, has " + c.pylons().size());
+		c.discard();
+		helper.succeed();
+	}
+
 	/** D56: walking home with its way blocked, after 10 s getting no nearer it appears on its dais and kneels. */
 	@GameTest(template = COURSE, timeoutTicks = 420)
 	public static void aStuckCustodianAppearsOnItsDais(GameTestHelper helper) {

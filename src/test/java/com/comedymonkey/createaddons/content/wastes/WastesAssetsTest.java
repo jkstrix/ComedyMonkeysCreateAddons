@@ -555,7 +555,7 @@ class WastesAssetsTest {
 		for (String facing : List.of("north", "east", "south", "west"))
 			for (String part : List.of("bottom", "middle", "top"))
 				for (String trinket : List.of("none", "cog", "key", "cart", "flower"))
-					for (String vines : List.of("false", "true"))
+					for (String vines : List.of("none", "dead", "living"))
 						for (String lit : List.of("false", "true")) {
 							Map<String, String> st = Map.of("facing", facing, "part", part, "trinket", trinket, "vines", vines, "lit", lit);
 							int y = FACING_Y.get(facing);
@@ -564,8 +564,9 @@ class WastesAssetsTest {
 								want.add("charging_alcove_contact_" + part + "@" + y);
 							if (part.equals("middle") && !trinket.equals("none"))
 								want.add("charging_alcove_trinket_" + trinket + "@" + y);
-							if (vines.equals("true") && !part.equals("bottom"))
-								want.add("charging_alcove_vines_" + part + "@" + y);
+							// D92: dead vines (the city's own) or living Knotvine where the overgrowth is heavy
+							if (!vines.equals("none") && !part.equals("bottom"))
+								want.add((vines.equals("dead") ? "charging_alcove_vines_" : "charging_alcove_vines_living_") + part + "@" + y);
 							assertEquals(sorted(want), modelsFor(state, st), "alcove " + st);
 						}
 		List<String> middle = elementNames(json(modelPath(NS + ":block/wastes/charging_alcove_middle")));

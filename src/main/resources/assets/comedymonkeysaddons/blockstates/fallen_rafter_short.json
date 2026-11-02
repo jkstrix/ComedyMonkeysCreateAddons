@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/wastes/fallen_rafter_short"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/wastes/fallen_rafter_short",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/wastes/fallen_rafter_short",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/wastes/fallen_rafter_short",
+      "y": 270
+    }
+  }
+}

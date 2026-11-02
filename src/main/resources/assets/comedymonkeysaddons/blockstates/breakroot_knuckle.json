@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/breakroot_knuckle"
+    },
+    "axis=z": {
+      "model": "comedymonkeysaddons:block/wastes/overgrowth/breakroot_knuckle",
+      "y": 90
+    }
+  }
+}
