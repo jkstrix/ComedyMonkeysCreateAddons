@@ -1,13 +1,16 @@
 package com.comedymonkey.createaddons.content.wastes.bot;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +25,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -33,6 +37,7 @@ import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -46,6 +51,9 @@ import net.minecraft.world.phys.Vec3;
  * (at most once every 4 s, D67); a packmate's death turns every Scuttler near it to the body for a beat; it dies with its lens
  * cracking and its legs curling in. Standing with nothing to do it has its mannerisms, one every 4 to 8 s: wiping its
  * lens, sniffing the ground, chittering, stretching, picking at scrap (a spark), and huddling with a packmate beside it.
+ * <p>
+ * D97: a district woken from its Substation's breaker calls its pack: they stir together at the clunk and, once unrolled,
+ * run to where the player stood to throw it ({@link #callTo}), then fight as ever.
  * <p>
  * The Custodian calls fight Scuttlers out of the heart hall's wall vents (P35, D57): each tumbles out of its vent
  * ({@link #burstFromVent}); they drop nothing and crumble when it dies or resets.
@@ -93,6 +101,28 @@ public class Scuttler extends CityBot {
 	static final float SPARK_AT = 1.0f;
 	/** The mannerisms it has on its own (the huddle needs a packmate beside it). */
 	static final List<String> MANNERISMS = List.of("wipe_lens", "sniff", "chitter", "stretch", "pick_scrap");
+	/** D97: a pack called by its breaker's clunk stirs together, within this long of it (provisional, a choice: 1 s). */
+	public static final int CALL_SPREAD = 20;
+	/** D97: called, it runs at its run pace (as it runs at a player: {@link MeleeAttackGoal}'s 1.0). */
+	public static final double CALL_SPEED = 1.0;
+	/** D97: it's there once within this many blocks of where it was called to... */
+	public static final double CALL_NEAR = 3;
+	/** ...and gives up this long after it woke if it isn't (provisional, a choice: 30 s, the run takes about 10). */
+	public static final int CALL_TICKS = 600;
+	/**
+	 * D97: a call's paths are searched this far out (a district's dens lie 40-50 blocks from its yard, the way in by the
+	 * yard's gate longer), with this many times the nodes, so the search finds the way round (through the gate) rather than
+	 * stopping at the nearest point outside the fence.
+	 */
+	static final float CALL_RANGE = 64, CALL_NODES = 16;
+	/** D97: a path that falls short is searched again this often on the way (between, it climbs on toward the breaker). */
+	static final int CALL_REPATH = 20;
+	/**
+	 * D97: moved less than this in this long, it's stuck (up a wall under eaves, wedged between a lamp post and a fence): it
+	 * hops to one side at this speed, lands, and looks for the way again from the ground.
+	 */
+	static final double CALL_STUCK_MOVE = 0.5, CALL_HOP_OFF = 0.3, CALL_HOP_UP = 0.3;
+	static final int CALL_STUCK = 20, CALL_STRAIGHT = 40;
 
 	/** Called out by the Custodian for its fight (P35). */
 	private boolean fight;
@@ -111,6 +141,10 @@ public class Scuttler extends CityBot {
 	private int curiousTicks, curiousCooldown;
 	@Nullable
 	private Player curiousAbout;
+	/** D97: where its breaker's clunk called it to (where the player stood to throw it), or null; and when it gives up (-1: not woken yet). */
+	@Nullable
+	private BlockPos calledTo;
+	private long callUntil = -1;
 
 	public Scuttler(EntityType<? extends Scuttler> type, Level level) {
 		super(type, level);
@@ -157,6 +191,7 @@ public class Scuttler extends CityBot {
 			}
 		});
 		goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, true));
+		goalSelector.addGoal(5, new CalledGoal());
 		goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8));
 		goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 		targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -166,7 +201,144 @@ public class Scuttler extends CityBot {
 	/** Climbs walls like a spider (P18). */
 	@Override
 	protected PathNavigation createNavigation(Level level) {
-		return new WallClimberNavigation(this, level);
+		return new Nav(this, level);
+	}
+
+	/** Its wall-climbing navigation, which can also search a call's long path (D97: {@link #CALL_RANGE}). */
+	static final class Nav extends WallClimberNavigation {
+		private boolean far;
+		/** A call stuck up a wall has let go: it heads nowhere until it's back on the ground (then it looks for the way round). */
+		private boolean lettingGo;
+
+		Nav(Scuttler mob, Level level) {
+			super(mob, level);
+		}
+
+		/** Lets go: its path dropped, and no climbing straight on at the call's end until it has landed. */
+		void letGo() {
+			lettingGo = true;
+			stop();
+		}
+
+		@Override
+		public void tick() {
+			if (lettingGo) {
+				if (!mob.onGround())
+					return;
+				lettingGo = false;
+			}
+			super.tick();
+		}
+
+		/** Sets off toward {@code to} at {@code speed}, the path searched up to {@link #CALL_RANGE} out (the best way part of the way if not all). */
+		boolean moveFar(BlockPos to, double speed) {
+			// (with no path at all it still heads straight for it, climbing, at this speed)
+			setSpeedModifier(speed);
+			far = true;
+			setMaxVisitedNodesMultiplier(CALL_NODES);
+			try {
+				return moveTo(to.getX() + 0.5, to.getY(), to.getZ() + 0.5, speed);
+			} finally {
+				far = false;
+				resetMaxVisitedNodesMultiplier();
+			}
+		}
+
+		@Override
+		@Nullable
+		protected Path createPath(Set<BlockPos> targets, int regionOffset, boolean offsetUpward, int accuracy) {
+			return far ? createPath(targets, regionOffset, offsetUpward, accuracy, CALL_RANGE) : super.createPath(targets, regionOffset, offsetUpward, accuracy);
+		}
+	}
+
+	/**
+	 * D97: called by its breaker's clunk, once its wake clip is over it runs to where the player stood to throw it, climbing
+	 * what's in the way. A player it goes for (its targeting, as ever) ends the call; so does getting there or running out of
+	 * time ({@link #CALL_TICKS}). Then it's as it always is.
+	 */
+	private final class CalledGoal extends Goal {
+		private long nextPath, nextCheck;
+		@Nullable
+		private Vec3 checkedAt;
+
+		CalledGoal() {
+			setFlags(EnumSet.of(Goal.Flag.MOVE));
+		}
+
+		@Override
+		public boolean canUse() {
+			return calledTo != null && getTarget() == null && !dormant();
+		}
+
+		@Override
+		public void start() {
+			nextPath = nextCheck = 0;
+			checkedAt = null;
+		}
+
+		@Override
+		public void tick() {
+			if (calledTo == null)
+				return;
+			if (arrived()) {
+				endCall();
+				return;
+			}
+			long now = level().getGameTime();
+			// stuck up a wall (under eaves, say) climbing straight at the breaker: it lets go, drops, and finds the way round
+			if (now >= nextCheck) {
+				if (checkedAt != null && position().distanceToSqr(checkedAt) < CALL_STUCK_MOVE * CALL_STUCK_MOVE) {
+					((Nav) getNavigation()).letGo();
+					// a hop to one side (and a little back), so it tries the climb somewhere else rather than cling on
+					Vec3 to = Vec3.atBottomCenterOf(calledTo).subtract(position()).multiply(1, 0, 1);
+					Vec3 ahead = to.lengthSqr() < 1e-4 ? Vec3.directionFromRotation(0, getYRot()) : to.normalize();
+					Vec3 side = new Vec3(-ahead.z, 0, ahead.x).scale(random.nextBoolean() ? 1 : -1);
+					Vec3 off = side.scale(CALL_HOP_OFF).add(ahead.scale(-CALL_HOP_OFF / 2));
+					setDeltaMovement(off.x, onGround() ? CALL_HOP_UP : 0, off.z);
+					entityData.set(CLIMBING, false);
+					// and from where it lands it climbs straight at the breaker for a while (searched again, the way
+					// would only lead it back to the same spot)
+					nextPath = now + CALL_STRAIGHT;
+				}
+				checkedAt = position();
+				nextCheck = now + CALL_STUCK;
+			}
+			// a path that gets there is followed to its end; one that falls short (or is done, or none) is searched again
+			Path path = getNavigation().getPath();
+			// (searched from the ground: up a wall no path is found, and it would only climb straight on)
+			if (now >= nextPath && onGround() && (path == null || path.isDone() || !path.canReach())) {
+				nextPath = now + CALL_REPATH;
+				((Nav) getNavigation()).moveFar(calledTo, CALL_SPEED);
+			}
+		}
+
+		@Override
+		public void stop() {
+			getNavigation().stop();
+		}
+	}
+
+	/** D97: called to {@code stand} (where the player stands to throw its district's breaker); it goes once it has woken. */
+	public void callTo(BlockPos stand) {
+		if (peaceful())
+			return; // nothing wakes on Peaceful (P22), so nothing is called
+		calledTo = stand.immutable();
+		callUntil = dormant() ? -1 : level().getGameTime() + CALL_TICKS;
+	}
+
+	/** Where it's called to (D97), or null. */
+	@Nullable
+	public BlockPos calledTo() {
+		return calledTo;
+	}
+
+	private boolean arrived() {
+		return calledTo != null && Vec3.atBottomCenterOf(calledTo).distanceToSqr(position()) <= CALL_NEAR * CALL_NEAR;
+	}
+
+	private void endCall() {
+		calledTo = null;
+		callUntil = -1;
 	}
 
 	@Override
@@ -226,6 +398,16 @@ public class Scuttler extends CityBot {
 	protected void onWake() {
 		playClip("wake"); // sound: unrolling, the lens lighting
 		busyTicks = WAKE_TICKS;
+		// D97: called, it runs once it has unrolled, and gives up CALL_TICKS after
+		if (calledTo != null)
+			callUntil = level().getGameTime() + WAKE_TICKS + CALL_TICKS;
+	}
+
+	/** Put to sleep (the city places it so; Peaceful): a call it was on is over. */
+	@Override
+	protected void onDormant() {
+		if (callUntil >= 0)
+			endCall();
 	}
 
 	/** The wake clip, the first sight of a player, on its back, a beat of grief, out of a vent: it stands still for them. */
@@ -249,6 +431,9 @@ public class Scuttler extends CityBot {
 		if (curiousCooldown > 0)
 			curiousCooldown--;
 		LivingEntity target = getTarget();
+		// D97: a call is over once it has someone to go for, or its time is up
+		if (calledTo != null && (target != null || callUntil >= 0 && level().getGameTime() > callUntil))
+			endCall();
 		// anything else it does ends its curiosity (a target, running, climbing, a hit)
 		if (curiousTicks > 0 && (target != null || !playing("curious")))
 			endCurious();
@@ -276,8 +461,8 @@ public class Scuttler extends CityBot {
 		}
 		boolean moving = getDeltaMovement().horizontalDistanceSqr() > 1e-3 || getNavigation().isInProgress();
 		if (moving) {
-			// after a player it runs (0.3 s a cycle); otherwise it walks (0.45 s, D60)
-			if (target != null) {
+			// after a player, or called to its breaker (D97), it runs (0.3 s a cycle); otherwise it walks (0.45 s, D60)
+			if (target != null || calledTo != null) {
 				if (!playing("run"))
 					playClip("run");
 			} else if (!playing("walk"))
@@ -550,6 +735,10 @@ public class Scuttler extends CityBot {
 		tag.putBoolean("Fight", fight);
 		if (custodian != null)
 			tag.putUUID("Custodian", custodian);
+		if (calledTo != null) {
+			tag.putLong("CalledTo", calledTo.asLong());
+			tag.putLong("CallUntil", callUntil);
+		}
 	}
 
 	@Override
@@ -557,5 +746,8 @@ public class Scuttler extends CityBot {
 		super.readAdditionalSaveData(tag);
 		fight = tag.getBoolean("Fight");
 		custodian = tag.hasUUID("Custodian") ? tag.getUUID("Custodian") : null;
+		// D97: a call it was on goes on (unless its time ran out while it was away)
+		calledTo = tag.contains("CalledTo") ? BlockPos.of(tag.getLong("CalledTo")) : null;
+		callUntil = calledTo != null ? tag.getLong("CallUntil") : -1;
 	}
 }

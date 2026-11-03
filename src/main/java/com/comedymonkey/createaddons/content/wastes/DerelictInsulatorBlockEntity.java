@@ -30,7 +30,7 @@ import net.minecraft.world.phys.Vec3;
  * A Derelict Insulator's spans (D61, D64): the sky-cables the city slung from it, each to another insulator or to a
  * Substation's tray, and the snapped ones hanging from it. The city links them ({@link #addSpan}, {@link #addSnapped});
  * players can't make them. Each span is kept by one end (its owner, which draws it); the far end only knows it's
- * there. Lit while its district is fed. When its district wakes while it's loaded, the wake bead runs out of the
+ * there. Lit once its district wakes (D96). When it wakes while it's loaded, the wake bead runs out of the
  * Substation and hops span to span up to the crown, 2 s a span ({@link #BEAD_TICKS}), each span's line lighting in behind
  * it; the insulator's neck ring lights as the bead reaches its tie ({@link #hop}). Snapped spans never light. Broken, it
  * drops its spans as scrap ({@link #SCRAP_PER_BLOCKS} blocks of span a scrap), and so do the spans of anything that was
@@ -72,8 +72,8 @@ public class DerelictInsulatorBlockEntity extends CityBlockEntity {
 	private int hop;
 	/** It has seen its district awake (so a later wake while loaded is news, and runs the bead). */
 	private boolean sawAwake;
-	/** Looks: its district is fed (its spans' lines lit). */
-	private boolean fed;
+	/** Looks: its district is lit (its spans' lines too). */
+	private boolean lit;
 	/** Looks: the game time its district woke while it was loaded (the bead's start); NEVER if not. */
 	private long wakeAt = SubstationBlockEntity.NEVER;
 	/** The tick its ring lights (the bead's arrival); MAX while not waiting. */
@@ -91,8 +91,8 @@ public class DerelictInsulatorBlockEntity extends CityBlockEntity {
 		return hop;
 	}
 
-	public boolean fed() {
-		return fed;
+	public boolean lit() {
+		return lit;
 	}
 
 	public long wakeAt() {
@@ -170,7 +170,7 @@ public class DerelictInsulatorBlockEntity extends CityBlockEntity {
 			return;
 		long now = level.getGameTime();
 		boolean awake = link.bound() && record.awake(link.origin(), link.district());
-		boolean want = link.bound() && record.fed(link.origin(), link.district(), now);
+		boolean want = link.bound() && record.lit(link.origin(), link.district(), now);
 		boolean changed = false;
 		if (awake && !sawAwake) {
 			sawAwake = true;
@@ -182,8 +182,8 @@ public class DerelictInsulatorBlockEntity extends CityBlockEntity {
 				changed = true;
 			}
 		}
-		if (want != fed) {
-			fed = want;
+		if (want != lit) {
+			lit = want;
 			changed = true;
 		}
 		if (!want) {
@@ -290,7 +290,7 @@ public class DerelictInsulatorBlockEntity extends CityBlockEntity {
 		for (Span s : spans)
 			list.add(s.save());
 		tag.put("Spans", list);
-		tag.putBoolean("Fed", fed);
+		tag.putBoolean("Lit", lit);
 		tag.putLong("WakeAt", wakeAt);
 	}
 
@@ -299,7 +299,7 @@ public class DerelictInsulatorBlockEntity extends CityBlockEntity {
 		spans.clear();
 		for (Tag t : tag.getList("Spans", Tag.TAG_COMPOUND))
 			spans.add(Span.load((CompoundTag) t));
-		fed = tag.getBoolean("Fed");
+		lit = tag.getBoolean("Lit");
 		wakeAt = tag.contains("WakeAt") ? tag.getLong("WakeAt") : SubstationBlockEntity.NEVER;
 	}
 }

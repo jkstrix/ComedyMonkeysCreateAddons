@@ -193,6 +193,64 @@ public final class WastesKitGameTests {
 	}
 
 	/**
+	 * D97: in every district of every city drawn, the yard's Sentry is placed (always, whatever the count), on the
+	 * Substation's pad on a corner of it (diagonal: its petals and barrel never reach the cabinet or its lever), standing on
+	 * a whole block with clear air over it, beside the cell the player throws the breaker from. (That it can see that cell,
+	 * in the built world, is the dev city's check: WastesWorldGameTests.)
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 200)
+	public static void everyYardHasASentryBesideItsBreaker(GameTestHelper helper) {
+		List<String> out = new ArrayList<>();
+		for (BlockPos o : ORIGINS)
+			for (long seed : SEEDS) {
+				CityPlan p = CityPlan.of(o, seed, false, true);
+				java.util.Map<BlockPos, BlockState> last = new java.util.HashMap<>();
+				for (CityPlan.Op op : p.ops())
+					if (op instanceof CityPlan.Op.Put put)
+						last.put(put.at(), put.state());
+				for (District d : District.DISTRICTS) {
+					String where = "seed " + seed + " at " + o.toShortString() + ", " + d + ": ";
+					BlockPos lower = null;
+					Direction facing = null;
+					for (CityPlan.Op op : p.ops())
+						if (op instanceof CityPlan.Op.Put put && put.district() == d && put.state().is(ModWastes.SUBSTATION.get())
+							&& put.state().getValue(com.comedymonkey.createaddons.content.wastes.SubstationBlock.HALF) == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER) {
+							lower = put.at();
+							facing = put.state().getValue(com.comedymonkey.createaddons.content.wastes.SubstationBlock.FACING);
+						}
+					if (lower == null) {
+						out.add(where + "no Substation");
+						continue;
+					}
+					BlockPos sub = lower, stand = lower.relative(facing);
+					CityPlan.Op.Sentry yard = null;
+					for (CityPlan.Op op : p.ops())
+						if (op instanceof CityPlan.Op.Sentry s && s.district() == d && s.at().getY() == sub.getY()
+							&& Math.abs(s.at().getX() - sub.getX()) == 1 && Math.abs(s.at().getZ() - sub.getZ()) == 1)
+							yard = s;
+					if (yard == null) {
+						out.add(where + "no Sentry on a corner of the Substation");
+						continue;
+					}
+					if (yard.at().distManhattan(stand) != 1)
+						out.add(where + "the yard's Sentry isn't beside where the breaker is thrown from");
+					if (yard.face() != Direction.UP)
+						out.add(where + "the yard's Sentry isn't on the floor");
+					BlockState floor = last.get(yard.wall());
+					if (floor == null || !floor.isCollisionShapeFullBlock(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, BlockPos.ZERO))
+						out.add(where + "the yard's Sentry stands on " + floor);
+					for (BlockPos q : new BlockPos[] { yard.at(), yard.at().above() }) {
+						BlockState s = last.get(q);
+						if (s != null && !s.isAir())
+							out.add(where + "the yard's Sentry has " + s + " at " + q.subtract(yard.at()).toShortString());
+					}
+				}
+			}
+		none(out, "yard Sentries out of place");
+		helper.succeed();
+	}
+
+	/**
 	 * D79, the lore pass: the terraces' roof hatches (one or two houses, worn and damaged only, at least one left open), the
 	 * wrecked winding tower in every state (keeps the grammar; its spring out through its west wall in a coil on the ground,
 	 * the hole's edge cracked by its cause; its drive shaft snapped; never up to the spire). The tower waits on its Blockbench

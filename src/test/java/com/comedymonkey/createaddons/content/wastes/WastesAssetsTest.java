@@ -221,7 +221,7 @@ class WastesAssetsTest {
 		for (String d : List.of("foundry", "workshops", "rail_yard", "quarters", "heart"))
 			assertTrue(lang.has(NS + ".wastes.district." + d), "no name for the district " + d);
 		for (String key : List.of("wastes.wakes", "wastes.vault_sealed", "wastes.heart_vault_sealed", "gui.goggles.substation",
-			"gui.goggles.substation.charge", "gui.goggles.substation.fed", "gui.goggles.substation.unfed", "gui.goggles.star_reactor",
+			"gui.goggles.substation.dormant", "gui.goggles.substation.throw", "gui.goggles.substation.awake", "wastes.breaker_hint", "gui.goggles.star_reactor",
 			"gui.goggles.star_reactor.running", "gui.goggles.star_reactor.left", "gui.goggles.star_reactor.overhauled",
 			"gui.goggles.derelict_star_reactor"))
 			assertTrue(lang.has(NS + "." + key), "no text for " + key);

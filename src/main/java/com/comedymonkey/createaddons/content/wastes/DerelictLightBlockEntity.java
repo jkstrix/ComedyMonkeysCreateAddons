@@ -11,18 +11,25 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 /**
- * A Derelict lamp's or cable's light (design/specs/clockwork-wastes.md, D16, P25, P52): lit while its district is fed,
- * by the {@link CityRecord}'s word. It never ticks: a change in its city schedules one tick. A district coming on
- * ripples out over about a second from where its power came in (lamps nearer the Substation first, as the Electric
- * Lights' street does, P8); a district going unfed flickers each lamp for a second, then dark. After loading it catches
+ * A Derelict lamp's or cable's light (design/specs/clockwork-wastes.md, D16, P25, P52): lit once its district wakes
+ * (D96), by the {@link CityRecord}'s word. It never ticks: a change in its city schedules one tick. A district coming on
+ * ripples out over about a second from its Substation (lamps nearer it first, as the Electric Lights' street does, P8);
+ * a district going dark (its Substation broken, P50) flickers each lamp for a second, then dark. After loading it catches
  * up at once. A street lamp's foot and pole, and a snapped head, never light; they keep their city all the same, as any
  * part can become the head.
+ * <p>
+ * Asleep, two looks lead a player in (D96): a lamp head near a dormant Substation sputters as a player passes
+ * ({@link #beckon}), and the heart's spire seams flash up to the crown when another district wakes ({@link #pulse}).
  */
 public class DerelictLightBlockEntity extends CityBlockEntity {
 	/** Ticks a flicker lasts, going out (as the Electric Lights'). */
 	public static final int FLICKER_TICKS = 20;
 	/** Ticks a heart lamp surges and flickers when the Custodian overloads (D54), before it settles. */
 	public static final int SURGE_TICKS = 60;
+	/** Ticks a dark lamp sputters when it beckons (D96): a going-out flicker. */
+	public static final int BECKON_TICKS = 20;
+	/** The spire's pulse (D96): it climbs from the roof to the crown in this many ticks, each seam lit for {@link #PULSE_TICKS}. */
+	public static final int PULSE_CLIMB_TICKS = 40, PULSE_TICKS = 12;
 
 	public enum Phase {
 		DARK, LIT, FADING
@@ -37,6 +44,10 @@ public class DerelictLightBlockEntity extends CityBlockEntity {
 	private long onAt = Long.MAX_VALUE;
 	/** When the heart last surged (the Custodian's overload, D54); NEVER if not. */
 	private long surgeAt = SubstationBlockEntity.NEVER;
+	/** When it last sputtered for a passing player (D96); NEVER if not. */
+	private long beckonAt = SubstationBlockEntity.NEVER;
+	/** The tick its spire pulse lights it (D96); MAX if none is coming. Not saved: a pulse is a moment's look. */
+	private long pulseAt = Long.MAX_VALUE;
 
 	public DerelictLightBlockEntity(BlockPos pos, BlockState state) {
 		super(ModWastes.DERELICT_LIGHT_BE.get(), pos, state);
@@ -54,9 +65,18 @@ public class DerelictLightBlockEntity extends CityBlockEntity {
 		return surgeAt;
 	}
 
+	public long beckonAt() {
+		return beckonAt;
+	}
+
 	/** It's surging now: the heart's overload (D54), for {@link #SURGE_TICKS} from {@link #surgeAt}. */
 	public boolean surging(long now) {
 		return now >= surgeAt && now - surgeAt < SURGE_TICKS;
+	}
+
+	/** It's sputtering for a passing player now, or about to (D96). */
+	public boolean beckoning(long now) {
+		return beckonAt != SubstationBlockEntity.NEVER && now < beckonAt + BECKON_TICKS;
 	}
 
 	/**
@@ -71,14 +91,46 @@ public class DerelictLightBlockEntity extends CityBlockEntity {
 		sync();
 	}
 
+	/**
+	 * D96: a dark lamp head near a dormant Substation sputters for a second, {@code delay} ticks from now, as a player
+	 * passes (the Substation picks the lamps and their order). A look only.
+	 */
+	public void beckon(int delay) {
+		if (level == null || level.isClientSide || !isLamp() || phase != Phase.DARK)
+			return;
+		beckonAt = level.getGameTime() + Math.max(0, delay);
+		sync();
+	}
+
+	/**
+	 * D96: another district woke: a dark spire seam flashes on for a moment as the pulse climbs past it, roof to crown
+	 * over {@link #PULSE_CLIMB_TICKS}. Nothing else lights.
+	 */
+	public void pulse() {
+		if (level == null || level.isClientSide || phase != Phase.DARK || wanted())
+			return;
+		int wait = spireWait(PULSE_CLIMB_TICKS);
+		if (wait < 0)
+			return;
+		pulseAt = level.getGameTime() + wait;
+		scheduleAfter(wait);
+	}
+
 	/** Its block can light at all (a street lamp's whole head, a wall lamp, a cable). */
 	public boolean lightable() {
 		return getBlockState().getBlock() instanceof DerelictLight light && light.lightable(getBlockState());
 	}
 
+	/** A lamp with a lens (a street lamp's head, a wall lamp), not a cable or a lit building block. */
+	public boolean isLamp() {
+		BlockState state = getBlockState();
+		return state.getBlock() instanceof DerelictStreetLampBlock && state.getValue(DerelictStreetLampBlock.PART) == DerelictStreetLampBlock.Part.HEAD
+			|| state.getBlock() instanceof DerelictWallLampBlock;
+	}
+
 	private boolean wanted() {
 		CityRecord record = record();
-		return level != null && record != null && link.bound() && lightable() && record.fed(link.origin(), link.district(), level.getGameTime());
+		return level != null && record != null && link.bound() && lightable() && record.lit(link.origin(), link.district(), level.getGameTime());
 	}
 
 	@Override
@@ -87,6 +139,20 @@ public class DerelictLightBlockEntity extends CityBlockEntity {
 			return;
 		long now = level.getGameTime();
 		boolean want = wanted();
+		// the spire's pulse: on as it passes, then dark again (unless the heart comes on meanwhile)
+		if (pulseAt != Long.MAX_VALUE) {
+			if (want)
+				pulseAt = Long.MAX_VALUE;
+			else if (now < pulseAt) {
+				scheduleAfter((int) (pulseAt - now));
+				return;
+			} else if (now < pulseAt + PULSE_TICKS) {
+				show(true);
+				scheduleAfter((int) (pulseAt + PULSE_TICKS - now));
+				return;
+			} else
+				pulseAt = Long.MAX_VALUE;
+		}
 		if (want) {
 			if (phase == Phase.LIT)
 				return;
@@ -102,7 +168,7 @@ public class DerelictLightBlockEntity extends CityBlockEntity {
 			if (onAt == Long.MAX_VALUE) {
 				int wait = from == null ? 1 + level.random.nextInt(20)
 					: 1 + Math.min(18, (int) (Math.sqrt(from.distSqr(worldPosition)) / 3)) + level.random.nextInt(3);
-				int climb = spireWait();
+				int climb = spireWait(SPIRE_CLIMB_TICKS);
 				if (climb >= 0)
 					wait = climb;
 				onAt = now + wait;
@@ -120,7 +186,7 @@ public class DerelictLightBlockEntity extends CityBlockEntity {
 					light(false);
 					return;
 				}
-				// starved: a second's flicker, then dark
+				// its grid cut: a second's flicker, then dark
 				phase = Phase.FADING;
 				flickerAt = now;
 				scheduleAfter(FLICKER_TICKS);
@@ -140,11 +206,11 @@ public class DerelictLightBlockEntity extends CityBlockEntity {
 	public static final int SPIRE_CLIMB_TICKS = 80;
 
 	/**
-	 * A heart light on the spire (above the drum's roof): when the heart comes on, the crown's seams light at once and the
-	 * spire's corner seams climb from the bottom to the top over {@link #SPIRE_CLIMB_TICKS} (world brief, Interesting
-	 * Features). -1 for any other light (it ripples as usual).
+	 * A heart light on the spire (above the drum's roof): the crown's seams at once, the spire's corner seams climbing from
+	 * the bottom to the top over {@code climb} ticks (world brief, Interesting Features). -1 for any other light (it
+	 * ripples as usual).
 	 */
-	private int spireWait() {
+	private int spireWait(int climb) {
 		BlockPos o = link.origin();
 		if (o == null || link.district() != District.HEART)
 			return -1;
@@ -154,7 +220,7 @@ public class DerelictLightBlockEntity extends CityBlockEntity {
 			return -1;
 		if (dy >= crown)
 			return 1;
-		return 1 + (dy - roof) * SPIRE_CLIMB_TICKS / (crown - roof);
+		return 1 + (dy - roof) * climb / (crown - roof);
 	}
 
 	/** A later look at itself, as a change would (so it acts as a live change, not a catch-up). */
@@ -184,18 +250,25 @@ public class DerelictLightBlockEntity extends CityBlockEntity {
 		tag.putInt("Phase", phase.ordinal());
 		tag.putLong("FlickerAt", flickerAt);
 		tag.putLong("SurgeAt", surgeAt);
+		tag.putLong("BeckonAt", beckonAt);
 	}
 
 	@Override
 	protected void readLooks(CompoundTag tag) {
 		long now = level == null ? 0 : level.getGameTime();
-		boolean wasShown = phase != Phase.DARK || surging(now);
+		boolean wasShown = shown(now);
 		phase = Phase.values()[Math.floorMod(tag.getInt("Phase"), Phase.values().length)];
 		flickerAt = tag.contains("FlickerAt") ? tag.getLong("FlickerAt") : SubstationBlockEntity.NEVER;
 		surgeAt = tag.contains("SurgeAt") ? tag.getLong("SurgeAt") : SubstationBlockEntity.NEVER;
-		// a dark lamp has no visual: one is made for a surge as for lighting
-		if (level != null && level.isClientSide && wasShown != (phase != Phase.DARK || surging(now)))
+		beckonAt = tag.contains("BeckonAt") ? tag.getLong("BeckonAt") : SubstationBlockEntity.NEVER;
+		// a dark lamp has no visual: one is made for a surge or a sputter as for lighting
+		if (level != null && level.isClientSide && wasShown != shown(now))
 			clientLit.accept(this);
+	}
+
+	/** It has something to draw now or soon: lit, fading, surging or sputtering. */
+	public boolean shown(long now) {
+		return phase != Phase.DARK || surging(now) || beckoning(now);
 	}
 
 	/** A Derelict lamp or cable block: whether a block of it in this state lights at all. */

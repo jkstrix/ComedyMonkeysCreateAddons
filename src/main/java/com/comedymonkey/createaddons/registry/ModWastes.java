@@ -529,12 +529,11 @@ public final class ModWastes {
 	}
 
 	/**
-	 * What the powered city's blocks offer: a Substation takes FE on any side of either half (a Battery beside it, a
-	 * line at its back or underneath); a vault's items once it's open; stars into the reactors from any side (the
-	 * Derelict one through any of its blocks); FE out of the Star Reactor's terminal, and of the Derelict one's ports.
+	 * What the powered city's blocks offer: a vault's items once it's open; stars into the reactors from any side (the
+	 * Derelict one through any of its blocks); FE out of the Star Reactor's terminal, and of the Derelict one's ports. A
+	 * Substation takes no FE (D96: its breaker wakes it).
 	 */
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, SUBSTATION_BE.get(), (be, side) -> be.energy());
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CITY_VAULT_BE.get(), (be, side) -> be.items());
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, STAR_REACTOR_BE.get(), (be, side) -> be.items());
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, STAR_REACTOR_BE.get(),

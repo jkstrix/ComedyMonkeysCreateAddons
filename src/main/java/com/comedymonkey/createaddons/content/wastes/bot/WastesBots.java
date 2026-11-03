@@ -7,20 +7,23 @@ import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.content.wastes.CityRecord;
 import com.comedymonkey.createaddons.content.wastes.District;
+import com.comedymonkey.createaddons.content.wastes.SubstationBlock;
 import com.comedymonkey.createaddons.registry.ModWastes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * How the bots hear their city (P8, P9): the {@link CityRecord} listener. A district waking stirs its loaded Scuttlers
- * and Sentries, each within 5 s; a district's feed changing folds or unfolds its Sentries; the heart waking wakes the
- * Custodian. Bots that aren't loaded catch up from the record when they load ({@link CityBot#catchUp}), so nothing
- * here loads a chunk.
+ * How the bots hear their city (P8): the {@link CityRecord} listener. A district waking stirs its loaded Scuttlers and
+ * Sentries, each within 5 s; thrown from its breaker, its pack runs to the breaker (D97). The Custodian doesn't wait on the record: it rises when a player walks into its hall once
+ * all four are awake (D96, {@link Custodian}). Bots that aren't loaded catch up from the record when they load
+ * ({@link CityBot#catchUp}), so nothing here loads a chunk.
  */
 public final class WastesBots implements CityRecord.Listener {
 	public static final WastesBots LISTENER = new WastesBots();
@@ -40,22 +43,40 @@ public final class WastesBots implements CityRecord.Listener {
 		return out;
 	}
 
+	/**
+	 * D97: thrown from its breaker, the clunk calls the district's pack: its Scuttlers stir together and run to where the
+	 * player stands to throw it; a Sentry that can see that spot unfolds a beat after the clunk, as the lamps ripple on. The
+	 * rest stir within 5 s as before; woken with no breaker (the heart's star), every bot wakes where it lies.
+	 */
 	@Override
-	public void districtWoke(ServerLevel level, BlockPos origin, District district) {
-		for (CityBot bot : loaded(level, CityBot.class, origin, b -> !(b instanceof Custodian) && b.district() == district))
-			bot.wakeIn(level.random.nextInt(CityBot.WAKE_SPREAD));
+	public void districtWoke(ServerLevel level, BlockPos origin, District district, @Nullable BlockPos breaker) {
+		BlockPos stand = breaker == null ? null : breakerStand(level, breaker);
+		for (CityBot bot : loaded(level, CityBot.class, origin, b -> !(b instanceof Custodian) && b.district() == district)) {
+			if (stand != null && bot instanceof Scuttler s && !s.isFightScuttler()) {
+				s.callTo(stand);
+				s.wakeIn(level.random.nextInt(Scuttler.CALL_SPREAD));
+			} else if (stand != null && bot instanceof Sentry s && s.inSight(standEye(stand)))
+				s.wakeIn(Sentry.BEAT);
+			else
+				bot.wakeIn(level.random.nextInt(CityBot.WAKE_SPREAD));
+		}
 	}
 
-	@Override
-	public void fedChanged(ServerLevel level, BlockPos origin, District district, boolean fed) {
-		for (Sentry sentry : loaded(level, Sentry.class, origin, s -> s.district() == district))
-			sentry.setFed(fed);
+	/**
+	 * Where a player stands to throw the breaker at {@code breaker}: the block in front of its Substation (either half), or
+	 * {@code breaker} itself if no Substation stands there (the dev command's caller).
+	 */
+	public static BlockPos breakerStand(ServerLevel level, BlockPos breaker) {
+		BlockState s = level.getBlockState(breaker);
+		if (!(s.getBlock() instanceof SubstationBlock))
+			return breaker;
+		BlockPos lower = s.getValue(SubstationBlock.HALF) == DoubleBlockHalf.UPPER ? breaker.below() : breaker;
+		return lower.relative(s.getValue(SubstationBlock.FACING));
 	}
 
-	@Override
-	public void heartWoke(ServerLevel level, BlockPos origin) {
-		for (Custodian custodian : loaded(level, Custodian.class, origin, c -> true))
-			custodian.heartWoke();
+	/** The middle of a player standing in {@code stand} (where a Sentry aims at them). */
+	public static Vec3 standEye(BlockPos stand) {
+		return Vec3.atBottomCenterOf(stand).add(0, 0.9, 0);
 	}
 
 	// ---------------------------------------------------------------- placing them (the city's builder, phase 4; the dev setup)

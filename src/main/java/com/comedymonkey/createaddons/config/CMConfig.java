@@ -176,8 +176,6 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue springEngineMaxWindStress;
 		public final ModConfigSpec.BooleanValue juggernautRuins;
 		public final ModConfigSpec.BooleanValue juggernautEndRuins;
-		public final ModConfigSpec.IntValue wastesWakeCharge;
-		public final ModConfigSpec.IntValue wastesUpkeep;
 		public final ModConfigSpec.IntValue starReactorOutput;
 		public final ModConfigSpec.IntValue starBurnHours;
 		public final ModConfigSpec.DoubleValue starUpgradeMultiplier;
@@ -765,12 +763,8 @@ public final class CMConfig {
 				.translation("comedymonkeysaddons.configuration.juggernautEndRuins").define("juggernautEndRuins", true);
 			builder.pop();
 
-			builder.comment("Clockwork Wastes: the dead cities' power. A district wakes for good once its Substation has taken the wake charge;",
-					"after that its lamps (and Sentries) run only while it meets its upkeep.").push("clockworkWastes");
-			wastesWakeCharge = builder.comment("FE a district's Substation must take, in all, to wake it for good.")
-				.translation("comedymonkeysaddons.configuration.wastesWakeCharge").defineInRange("wakeCharge", 1_000_000, 1, 1_000_000_000);
-			wastesUpkeep = builder.comment("FE a tick a woken district's Substation draws to keep its lamps lit.")
-				.translation("comedymonkeysaddons.configuration.wastesUpkeep").defineInRange("upkeep", 500, 0, 1_000_000);
+			builder.comment("Clockwork Wastes: the dead cities' reactors and guardian. A district wakes for good when a player throws",
+					"its Substation's breaker; no power is needed.").push("clockworkWastes");
 			starReactorOutput = builder.comment("FE a tick a Star Reactor (and the heart's Derelict Star Reactor) makes while a Nether Star burns in it, flat out.")
 				.translation("comedymonkeysaddons.configuration.starReactorOutput").defineInRange("reactorOutput", 8192, 1, 1_000_000);
 			starBurnHours = builder.comment("Hours of running one Nether Star lasts in a reactor (real hours: 72,000 ticks each).")
@@ -1162,14 +1156,6 @@ public final class CMConfig {
 
 		public int tradeBotHostileRadius() {
 			return get(tradeBotHostileRadius);
-		}
-
-		public int wastesWakeCharge() {
-			return get(wastesWakeCharge);
-		}
-
-		public int wastesUpkeep() {
-			return get(wastesUpkeep);
 		}
 
 		public int starReactorOutput() {

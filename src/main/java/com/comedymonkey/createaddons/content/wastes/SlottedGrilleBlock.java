@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 /**
  * The Slotted Grille (D71, D75; the buildings brief's block set, #4): the uprising's window, a void-alloy block whose two
  * faces along its {@link #AXIS} carry three tall chamfered slots cut right through, a dim pane across each slot lit while
- * its district is fed. Its field is in the void-alloy bond ({@link VoidAlloyBond}). Not a full occluder (you see through
+ * its district is lit. Its field is in the void-alloy bond ({@link VoidAlloyBond}). Not a full occluder (you see through
  * the slots). It also lies on its side for a fallen tower top (D75): the {@code _lying} and {@code up_} orientations.
  */
 public final class SlottedGrilleBlock extends CityDecorLightBlock {

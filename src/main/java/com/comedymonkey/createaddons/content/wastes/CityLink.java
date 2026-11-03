@@ -59,7 +59,7 @@ public final class CityLink {
 		CityLink cityLink();
 
 		/**
-		 * Its city's record changed while it was loaded (a district woke, was fed or went unfed, the heart burned, the
+		 * Its city's record changed while it was loaded (a district woke, its grid was cut, the heart burned, the
 		 * Custodian woke or died): it may animate (a lever slams, an iris opens). {@code from}: where the change started (a
 		 * Substation, the heart's reactor), so lamps can ripple out from it; null if nowhere in particular.
 		 */

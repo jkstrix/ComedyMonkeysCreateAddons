@@ -110,6 +110,8 @@ Clarified: **an End biome holding a dead clockwork city of unknown make. Players
 | D93 | Edges approved | The terrace blend (`CityEdge`, `design/texture-reviews/clockwork-wastes-edges/`) is kept as built: a rounded terrace (superellipse, power 4) with a ±4 wobbled edge, a 6–10 block band easing back to the island with slopes no steeper than 1.25, the city's ground reaching 118 blocks, scree by how much ground was moved, and soft limits on outskirts hills and dips. The pale scree ring seen from the air stays (it marks the city's edge from afar). The edges agent's choices 40–43 stand as built | user, 2026-11-02 |
 | D94 | Overgrowth preview approved | `design/models/clockwork-wastes-overgrowth.bbmodel` (`design/texture-reviews/clockwork-wastes-overgrowth/`) approved as previewed, with the build agent's changes: Shiftcap caps `#1d2238 #283050 #36406a` and Breakroot `#171b2e #212845 #2c3558 #3a4672` (the brief's read as void-alloy and purple), a lit lip and spots on the Shiftcaps so they show from above, the stepped Shiftcap Shelf, see-through hanging Crookwood strands, sprig-card Bramblecoil, the Breakroot shapes as built plus a sideways wall-face burst, two-tone Twinerope, one Crookwood (the grapple) and one Shieldcrown (a burnt-out shed) per city. **Shiftcaps also grow in medium patches** (reaching the worn ring; none near the heart). Next: register the plants and grow them into the cities | user, 2026-11-02 |
 | D95 | Overgrowth approved in game | The registered overgrowth (`content/wastes/overgrowth/`, `city/Overgrowth.java`, `design/texture-reviews/clockwork-wastes-overgrowth/ingame/`) walked in a naturally generated city: "looking good". Kept as built, with the build agent's choices: no plants up wall faces past ring 70 (tops, overhangs and ground only); no Twinerope under the bridges' line shafts; tree blocks follow the city's ground rule; no ropes from crowns; the Shieldcrown's open-ground fallback; ground plants at about 25% of cells in heavy patches and 3% in light; root and Shiftcap shapes as built | user, 2026-11-02 |
+| D96 | Waking is an experience, not a power puzzle | Replaces the 1,000,000 FE wake charge and the 500 FE/t upkeep (D-wake rules, P-upkeep). **A district wakes when the player throws its Substation's breaker:** a big lever on the Substation, hold use about 3 s to haul it over (sparks, a clunk), then the lamps ripple on down the streets, the locks open and the district's bots unfold to fight. No power needed. **Guidance, no manual:** a dormant Substation crackles with faint violet sparks (and a low hum, in the sound pass), the lamps nearest it flicker as you pass; looking at the breaker shows "Hold to throw the breaker"; each district woken makes the heart's spire pulse and lights the sky-cable from that district to the heart. **The boss:** once all four are awake the heart's doors grind open, and the Custodian rises from its dais as the player walks into the hall; the Nether Star in the heart's reactor stays as the shortcut that wakes everything. **No upkeep:** a woken district stays lit for good (Sentries stay active); feeding a Substation power becomes optional (running your own machines off the city's grid). The breaker is a look change: previewed in Blockbench before it goes in | user, 2026-11-02 |
+| D97 | The breaker calls the pack | Waking a district from its Substation's breaker now shows at the breaker. **The pack comes running:** the clunk wakes the district's Scuttler pack (the same bots and counts, P4); they stir together within 1 s and, once unrolled, run at their run pace to where the player stood to throw it, climbing whatever is in the way, and fight a player they find on the way or there as ever (their own targeting). A run ends there, on finding a player, or after 30 s. From their dens (40-50 blocks off, in over the yard's fence) they get there 14-20 s after the clunk (the yard's gate gives no walking way in, so they climb its fence); the game test holds it under 25 s. Woken by the heart's star (no breaker), or catching up after loading, bots wake where they lie as before. **One Sentry in view of the breaker:** in the kit's yard the district's floor Sentry stands on the Substation's pad at its front corner, beside where the breaker is thrown from (always placed: one of the first two; on the corner so its petals and barrel never reach the cabinet or its lever), clear of the cable tray, the hazard band and the ground cable, within its 24 blocks and in line of sight of the spot the breaker is thrown from; a Sentry that can see that spot unfolds a beat (0.5 s) after the clunk as the lamps ripple on, so the fight starts there. Confirmed as built after play (the 1 s pack spread, the 30 s give-up, "there" at 3 blocks, the 0.5 s beat, the pad corner as the Sentry's spot, the stuck hop); the yard keeps its gate as built, so the pack climbs the fence | user, 2026-11-03 |
 
 ## Defaults (P1–P31 approved by the user, 2026-10-28)
 
@@ -122,7 +124,7 @@ Clarified: **an End biome holding a dead clockwork city of unknown make. Players
 | P5 | Land and air | Scorched, rust-stained End Stone, scrap heaps, toppled cogs, tangled cable; no chorus. Fog and sky tinted rust-brown; faint drifting brass-dust particles; distant ticking and creaks as ambience; no music. Look goes to the art director |
 | P6 | Mobs | Endermen spawn as in the rest of the outer End, at half the rate. Scuttlers, Sentries and the guardian are only ever placed by the city, never spawn naturally |
 | P7 | Substation | A block in each district. Takes FE from anything that gives it (Power Lines, a Battery beside it). Goggles show the wake charge (x / 1,000,000 FE), then once woken whether it's fed and its draw. Wake charge and upkeep in config. Short of upkeep, its lamps flicker and go dark like Electric Lights |
-| P8 | Waking | When a Substation wakes: the district's lamps ripple on down the streets, doors and the vault unlock with a heavy clunk, lifts start, and within 5 s its Sentries unfold and Scuttlers stir. Action bar for players nearby: "The Foundry wakes…" |
+| P8 | Waking | When a Substation wakes: the district's lamps ripple on down the streets, doors and the vault unlock with a heavy clunk, lifts start, and within 5 s its Sentries unfold and Scuttlers stir (D97: thrown from its breaker, a Sentry in view of it unfolds a beat after the clunk and the Scuttler pack stirs within 1 s and runs to the breaker, getting there some seconds later). Action bar for players nearby: "The Foundry wakes…" |
 | P9 | Sentries need power | Sentries run off their district's grid: while the district is unfed (dark), its Sentries fold up and stop. So a player can wake a district with a carried Battery, unhook it, and walk into the dark safely past the Sentries (Scuttlers stay awake) |
 | P10 | The heart | A Nether Star in the heart's Derelict Star Reactor wakes all four districts at once (everything wakes together) and runs the whole city's lamps for that star's 8 hours. Its spare power can be tapped with a Power Line, so a lit city can become an outpost |
 | P11 | Heart vault | Its doors open once all four districts have woken (by Substations or the heart), which wakes the Custodian; the vault itself opens on the Custodian's death (D31). Holds the Elytra (D19), 2 Unknown Devices and good loot |
@@ -187,9 +189,9 @@ None. Later, not v1: the next two End biomes (they share the End biome slot list
 
 1. **Find it.** Fly or bridge out across the outer End; a rust-brown haze and drifting brass dust mark the Wastes.
 2. **Salvage the streets.** Wrench broken machines and bot shells apart for Create parts and Clockwork Scrap (or send a Deployer with a Wrench).
-3. **Wake a district.** Carry power in (a charged Battery, a generator and a line) and put 1,000,000 FE into its Substation. Its lamps ripple on, its doors and vault unlock, and its Sentries and Scuttlers wake.
+3. **Wake a district.** Follow the faint violet sparks and the sputtering lamps to its Substation and hold use on it to haul its breaker over (about 3 s; no power needed). It clunks home, its lamps ripple on for good, its doors and vault unlock, and its Sentries and Scuttlers wake: one Sentry in view of the breaker, and the Scuttler pack comes running to it (D96, D97).
 4. **Fight and loot.** Clear the woken bots, open the vault: parts, scrap, one Unknown Device.
-5. **Light the heart.** Wake all four districts, or set one Nether Star in the heart's reactor to wake them all at once. The heart's doors open and the Custodian wakes, shielded by four pylons. Break the pylons, beat it, and the heart vault opens: the Elytra and more Unknown Devices.
+5. **Light the heart.** Wake all four districts (each one makes the heart's spire pulse and lights its sky-cable to the heart), or set one Nether Star in the heart's reactor to wake them all at once. The heart's doors grind open; walk into the hall and the Custodian rises, shielded by four pylons. Break the pylons, beat it, and the heart vault opens: the Elytra and more Unknown Devices.
 6. **Take it home.** Three Unknown Devices build a Star Reactor: a Nether Star becomes 8 hours of 8,192 FE/t anywhere, airships included. A fourth device upgrades it to 12 hours a star.
 
 Why players come back: Elytra (each Wastes patch holds 3–4 cities, at least as many as the End-city ships it replaces), Unknown Devices for reactors, and a lit city to use as an outpost.
@@ -200,11 +202,11 @@ Why players come back: Elytra (each Wastes patch holds 3–4 cities, at least as
 2. **End cities.** None start inside the Wastes (biome tag); none within 6 chunks of a Wastes city (exclusion zone) (D7, D13, P2, P47).
 3. **Cities.** Spacing 32 chunks, separation 12, about 144 blocks each: a heart and four districts (Foundry, Workshops, Rail Yard, Quarters). At least half the footprint on End Stone, or the spot gets outskirts only (D21, P3, P4, P45, P46).
 4. **Salvage.** Wrench (by hand or Deployer) gives full salvage; pickaxe, drill or saw gives scrap. Derelict lamps and cables give scrap only, never our Electric Lights or Power Lines (D16, D26, D32, P16, P25, P43).
-5. **Substation.** Dormant until it has taken 1,000,000 FE in total, then woken for good. Afterwards its lamps need 500 FE/t of upkeep (D24, P7).
+5. **Substation.** Dormant until a player holds use on it for about 3 s, hauling its breaker over (let go early and it springs back); then woken for good. It takes no power and needs no upkeep (D96).
 6. **Waking.** The lamps ripple on, doors slide open, lifts start, and the bots wake within 5 s. The city's saved record holds who's awake, so unloaded parts catch up when loaded (P8, P48, P49).
-7. **Sentries** fold and stop while their district is unfed; **Scuttlers** don't care (P9).
+7. **Sentries** and **Scuttlers** stay awake once their district wakes (D96).
 8. **Locks.** Locked doors, vaults, Substations and pylons are unbreakable, blast-proof and immune to contraptions until woken (P21, P43).
-9. **Heart.** Four districts awake opens the heart's doors and wakes the Custodian. Four pylons shield it and mend it; break each with 6 hits. At half health it overloads and re-lights one pylon. Its death opens the heart vault (only a player's kill drops its loot; nothing but a player can kill it). Everyone gone for 30 s or dead: it resets fully (D30, D31, P32–P40).
+9. **Heart.** Four districts awake opens the heart's doors; the Custodian rises when a player walks into the hall (D96). Four pylons shield it and mend it; break each with 6 hits. At half health it overloads and re-lights one pylon. Its death opens the heart vault (only a player's kill drops its loot; nothing but a player can kill it). Everyone gone for 30 s or dead: it resets fully (D30, D31, P32–P40).
 10. **Star Reactor.** Flat out at 8,192 FE/t while it holds a star, 8 hours a star (12 with an Unknown Device fitted); redstone pauses it; it keeps its burn and upgrade when broken (D23, D29, D33, P14, P44).
 11. **No respawns.** A city's bots and loot are a fixed set; the Custodian's Scuttlers drop nothing (D22, P35).
 12. **Peaceful.** Nothing wakes; locks open, and the heart vault opens once four districts are awake (P22, P41).
@@ -263,11 +265,11 @@ Why players come back: Elytra (each Wastes patch holds 3–4 cities, at least as
 
 # ONE MINUTE UNDERSTANDING
 
-Out in the End, about one big island in ten is the Clockwork Wastes: dead cities of unknown make, each built in four districts round a heart. Their streets are full of broken Create machines and slumped bots you can wrench apart for parts and Clockwork Scrap. Doors and vaults stay locked until you bring power: pour 1,000,000 FE into a district's Substation and the street lamps ripple on, the locks open, and its sleeping Sentries and Scuttlers wake to fight. Wake all four (or drop a Nether Star into the heart's reactor to wake them all at once) and the Custodian rises, shielded by four power pylons. Break the pylons, beat it, and the heart vault gives up the Elytra and the Unknown Devices to build your own Star Reactor: a Nether Star becomes 8 hours of 8,192 FE/t, anywhere.
+Out in the End, about one big island in ten is the Clockwork Wastes: dead cities of unknown make, each built in four districts round a heart. Their streets are full of broken Create machines and slumped bots you can wrench apart for parts and Clockwork Scrap. Doors and vaults stay locked until you wake the district: faint violet sparks and sputtering lamps lead you to its Substation, and holding use on it hauls its breaker over. It clunks home, the street lamps ripple on for good, the locks open, and its sleeping Sentries and Scuttlers wake to fight. Each district woken makes the heart's spire pulse and lights its sky-cable to the heart. Wake all four (or drop a Nether Star into the heart's reactor to wake them all at once) and the heart's doors grind open; walk into the hall and the Custodian rises, shielded by four power pylons. Break the pylons, beat it, and the heart vault gives up the Elytra and the Unknown Devices to build your own Star Reactor: a Nether Star becomes 8 hours of 8,192 FE/t, anywhere.
 
 # WHAT IT IS
 
-An End biome, the first of three, holding dead clockwork cities. Power is the key: each district wakes when you feed its Substation, opening its loot and waking its guards, and the heart's Custodian guards the Elytra. Nether Stars become fuel for Star Reactors.
+An End biome, the first of three, holding dead clockwork cities. Each district wakes when you throw its Substation's breaker, opening its loot and waking its guards, and the heart's Custodian guards the Elytra. Nether Stars become fuel for Star Reactors.
 
 # WHY IT EXISTS
 
@@ -278,9 +280,9 @@ An End biome, the first of three, holding dead clockwork cities. Power is the ke
 # HOW PLAYERS USE IT
 
 - Fly out, find the rust-brown haze, wrench apart wrecks for parts and scrap.
-- Carry a charged Battery in and wake a district's Substation (1M FE).
+- Follow the sparks and flickering lamps to a district's Substation; hold use to throw its breaker.
 - Fight the woken Sentries and Scuttlers; open the district vault.
-- Wake all four; break the Custodian's pylons, beat it for the Elytra.
+- Wake all four (or star the heart's reactor), walk into the hall; break the Custodian's pylons, beat it for the Elytra.
 - Build Star Reactors from Unknown Devices; power bases and airships with stars.
 
 # HOW IT FITS CREATE
@@ -295,11 +297,11 @@ An End biome, the first of three, holding dead clockwork cities. Power is the ke
 
 - Never inside or within 6 chunks of an End city, never on the central island.
 - Cities 32 chunks apart, heart plus four districts, about 144 blocks.
-- A district wakes for good at 1,000,000 FE; its lamps need 500 FE/t after.
+- A district wakes for good when its Substation's breaker is held over (about 3 s); no power, no upkeep.
 - Locked blocks are unbreakable, blast-proof and contraption-proof until woken.
 - City lamps and cables break into scrap, never free lights or lines.
 - Bots never respawn; a cleared district stays safe.
-- Sentries fold while their district is unfed.
+- The heart's doors open with all four awake; the Custodian rises when a player walks into the hall.
 - Custodian: shielded while any pylon stands; its death opens the heart vault.
 - One Elytra per city, shared.
 - Star Reactor: 8,192 FE/t flat out, 8 hours a star (12 upgraded), keeps its burn when broken.
@@ -307,9 +309,9 @@ An End biome, the first of three, holding dead clockwork cities. Power is the ke
 # EDGE CASES
 
 - **Peaceful:** nothing wakes; locks open; the heart vault opens with four districts awake.
-- **Two players power one Substation:** their FE adds up; it wakes for everyone.
+- **Two players haul one breaker:** each haul is their own; the first held all the way wakes it for everyone.
 - **District partly unloaded when it wakes:** the city record holds it; blocks catch up when loaded.
-- **Power cut after waking:** lamps go dark, Sentries fold, locks stay open.
+- **No power after waking:** none is needed; the district stays lit and its Sentries stay awake.
 - **Substation broken after waking:** the district stays awake; its lamps go dark for good.
 - **Everyone flees or dies mid-fight:** the Custodian resets, pylons re-light, vault stays locked.
 - **Custodian removed by /kill:** the vault opens (any death does), but it drops nothing; it can't reach the void, as it never leaves the hall.
@@ -349,10 +351,10 @@ An End biome, the first of three, holding dead clockwork cities. Power is the ke
 - Dead clockwork cities on one End island in ten.
 - Never near End cities.
 - Wrench wrecks for parts; pickaxe gives only scrap.
-- 1M FE into a Substation wakes its district.
-- Waking opens locks and wakes the bots.
-- Cut its power: lamps and Sentries go dark.
-- Four districts awake wakes the Custodian.
+- Hold use on a Substation to throw its breaker: its district wakes.
+- Waking opens locks and wakes the bots; the lamps stay lit for good.
+- Sparks and flickering lamps lead you to each Substation.
+- Four districts awake opens the heart; walk in and the Custodian rises.
 - Break its four pylons, then kill it.
 - Its death opens the vault: Elytra inside.
 - Nether Star in a Star Reactor: 8h of power.

@@ -9,7 +9,9 @@ import com.comedymonkey.createaddons.content.wastes.CityLink;
 import com.comedymonkey.createaddons.content.wastes.CityRecord;
 import com.comedymonkey.createaddons.content.wastes.CityVaultBlock;
 import com.comedymonkey.createaddons.content.wastes.ConduitPylonBlockEntity;
+import com.comedymonkey.createaddons.content.wastes.DerelictStarReactorBlock;
 import com.comedymonkey.createaddons.content.wastes.District;
+import com.comedymonkey.createaddons.content.wastes.SlidingDoorBlock;
 import com.comedymonkey.createaddons.content.wastes.ThreePartBlock;
 import com.comedymonkey.createaddons.content.wastes.WallVentBlock;
 import com.comedymonkey.createaddons.content.wastes.WallVentBlockEntity;
@@ -42,9 +44,10 @@ import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 /**
- * The Clockwork Wastes' bots, phase 3 (design/specs/clockwork-wastes.md, P8, P9, P22, P31-P41): dormant bots wake when
+ * The Clockwork Wastes' bots, phase 3 (design/specs/clockwork-wastes.md, P8, P22, P31-P41, D96): dormant bots wake when
  * their district does (and not another's), and catch up if they load after it woke; on Peaceful they never wake; a
- * Sentry folds and stops firing while its district is unfed and fires again when it's fed; the Custodian takes no damage
+ * woken Sentry fires with no power, its district's grid cut or not; the Custodian rises only when a player walks into its
+ * hall once all four districts are awake (by their breakers or the heart's star), and takes no damage
  * while a pylon stands and mends 2 a second for each, takes it once all four are down, calls its Scuttlers, overloads
  * once at half health re-lighting exactly one pylon, resets with every pylon re-lit and the vault still locked, opens
  * the heart vault on any death (/kill too) but drops its loot only for a player's kill; fight Scuttlers drop nothing.
@@ -167,8 +170,6 @@ public final class WastesBotGameTests {
 			helper.assertFalse(foundry.dormant(), "the Foundry's Scuttler is still asleep after 5 s");
 			helper.assertFalse(sentry.dormant(), "the Foundry's Sentry is still asleep after 5 s");
 			helper.assertTrue(workshops.dormant(), "the Workshops' Scuttler woke with the Foundry");
-			// woken but unfed (no Substation pays its upkeep): the Sentry folds at once (P9)
-			helper.assertTrue(sentry.folded(), "an unfed district's Sentry should be folded");
 			helper.succeed();
 		});
 	}
@@ -198,15 +199,19 @@ public final class WastesBotGameTests {
 		});
 	}
 
-	/** P22, P41: on Peaceful no bot wakes, not even the Custodian when the heart does. */
-	@GameTest(template = COURSE, timeoutTicks = 160)
+	/** P22, P41: on Peaceful no bot wakes, not even the Custodian with the heart awake and a player in its hall. */
+	@GameTest(template = COURSE, timeoutTicks = 160, batch = "wastes_peaceful_hall")
 	public static void onPeacefulBotsNeverWake(GameTestHelper helper) {
 		BlockPos o = origin(helper);
 		CityRecord.PEACEFUL_FOR_TESTS.add(o);
 		Scuttler scuttler = scuttler(helper, new BlockPos(4, 1, 4), District.QUARTERS);
 		Sentry sentry = sentry(helper, new BlockPos(6, 1, 4), District.QUARTERS);
 		Custodian custodian = hall(helper, false);
-		helper.runAtTickTime(2, () -> record(helper).wakeAll(helper.getLevel(), o, null));
+		StandIn[] who = new StandIn[1];
+		helper.runAtTickTime(2, () -> {
+			record(helper).wakeAll(helper.getLevel(), o, null);
+			who[0] = standIn(helper, new BlockPos(8, 1, 8), "in the hall");
+		});
 		helper.runAtTickTime(120, () -> {
 			try {
 				helper.assertTrue(scuttler.dormant(), "a Scuttler woke on Peaceful");
@@ -215,16 +220,154 @@ public final class WastesBotGameTests {
 				helper.assertFalse(record(helper).custodianAwake(o), "the record says the Custodian woke on Peaceful");
 			} finally {
 				CityRecord.PEACEFUL_FOR_TESTS.remove(o);
+				leave(helper, who[0]);
 			}
 			helper.succeed();
 		});
 	}
 
-	// ---------------------------------------------------------------- the Sentry (P9, P19)
+	// ---------------------------------------------------------------- the breaker calls the pack (D97)
 
-	/** Unfed it folds and doesn't fire at a player in plain sight; fed it opens and fires; unfed again it stops. */
+	private static final org.slf4j.Logger LOG = com.mojang.logging.LogUtils.getLogger();
+
+	/** A Substation (both halves) at {@code pos} facing {@code facing}, bound to the test's city: its breaker. */
+	private static BlockPos breaker(GameTestHelper helper, BlockPos pos, District district, Direction facing) {
+		BlockState lower = ModWastes.SUBSTATION.get().defaultBlockState().setValue(com.comedymonkey.createaddons.content.wastes.SubstationBlock.FACING, facing);
+		helper.setBlock(pos, lower);
+		helper.setBlock(pos.above(), lower.setValue(com.comedymonkey.createaddons.content.wastes.SubstationBlock.HALF,
+			net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER));
+		if (!CityLink.bind(helper.getLevel(), helper.absolutePos(pos), origin(helper), district))
+			helper.fail("no Substation to bind at " + pos);
+		return helper.absolutePos(pos);
+	}
+
+	/**
+	 * D97: thrown from its breaker (held for the whole haul), the clunk calls the district's pack: its Scuttlers stir
+	 * together within 1 s and, unrolled, run (the run clip) to where the player stands to throw it, over a wall 3 high in
+	 * the way; there, the call is over. Another district's Scuttler isn't called and sleeps on.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 560)
+	public static void aThrownBreakerCallsItsDistrictsScuttlersToIt(GameTestHelper helper) {
+		clear(helper);
+		// a wall across the course between the pack and the breaker: they climb it (P18)
+		for (int x = 0; x <= 23; x++)
+			for (int y = 1; y <= 3; y++)
+				helper.setBlock(new BlockPos(x, y, 11), net.minecraft.world.level.block.Blocks.STONE_BRICKS);
+		BlockPos sub = new BlockPos(3, 1, 3);
+		BlockPos at = breaker(helper, sub, District.FOUNDRY, Direction.SOUTH);
+		BlockPos stand = helper.absolutePos(sub.south());
+		List<Scuttler> pack = List.of(scuttler(helper, new BlockPos(20, 1, 20), District.FOUNDRY), scuttler(helper, new BlockPos(18, 1, 21), District.FOUNDRY),
+			scuttler(helper, new BlockPos(21, 1, 18), District.FOUNDRY));
+		Scuttler other = scuttler(helper, new BlockPos(14, 1, 20), District.WORKSHOPS);
+		helper.assertTrue(WastesBots.breakerStand(helper.getLevel(), at).equals(stand), "the breaker's stand should be in front of the Substation");
+		helper.assertTrue(WastesBots.breakerStand(helper.getLevel(), at.above()).equals(stand), "the upper half's stand should be the same");
+		int start = 5;
+		WastesCityGameTests.hold(helper, player(helper), sub.above(), start, com.comedymonkey.createaddons.content.wastes.SubstationBlockEntity.HOLD_TICKS + 4);
+		boolean[] ran = new boolean[pack.size()];
+		long[] woke = { -1 };
+		helper.onEachTick(() -> {
+			for (int i = 0; i < pack.size(); i++)
+				if (pack.get(i).calledTo() != null && !pack.get(i).dormant() && pack.get(i).clip().name().equals("run"))
+					ran[i] = true;
+		});
+		helper.startSequence()
+			.thenWaitUntil(() -> helper.assertTrue(record(helper).awake(origin(helper), District.FOUNDRY), "the breaker hasn't woken the Foundry"))
+			.thenExecute(() -> {
+				long now = helper.getLevel().getGameTime();
+				woke[0] = now;
+				for (Scuttler s : pack) {
+					helper.assertTrue(stand.equals(s.calledTo()), "a Foundry Scuttler was called to " + s.calledTo() + ", not the breaker's stand " + stand);
+					helper.assertTrue(s.wakeAt() >= now - 1 && s.wakeAt() < now + Scuttler.CALL_SPREAD, "a called Scuttler stirs at " + (s.wakeAt() - now)
+						+ " ticks, not within " + Scuttler.CALL_SPREAD);
+				}
+				helper.assertTrue(other.calledTo() == null && other.wakeAt() < 0, "the Workshops' Scuttler was called or stirred");
+			})
+			.thenWaitUntil(() -> {
+				for (Scuttler s : pack)
+					helper.assertTrue(s.calledTo() == null && Vec3.atBottomCenterOf(stand).distanceTo(s.position()) <= Scuttler.CALL_NEAR + 0.5,
+						"a Scuttler hasn't reached the breaker: " + String.format("%.1f", Vec3.atBottomCenterOf(stand).distanceTo(s.position())) + " blocks off");
+			})
+			.thenExecute(() -> {
+				LOG.info("D97: the called pack reached the breaker {} s after the clunk (over a 3-high wall, ~20 blocks)",
+					String.format("%.1f", (helper.getLevel().getGameTime() - woke[0]) / 20.0));
+				for (int i = 0; i < ran.length; i++)
+					helper.assertTrue(ran[i], "a called Scuttler never played its run clip on the way");
+				helper.assertTrue(other.dormant(), "the Workshops' Scuttler woke");
+			})
+			.thenSucceed();
+	}
+
+	/**
+	 * D97: a district woken by the heart's star (no breaker) wakes its Scuttlers where they lie, within 5 s, called nowhere;
+	 * with nothing to go for they stay put.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 260)
+	public static void aDistrictWokenByTheHeartsStarWakesItsScuttlersWhereTheyLie(GameTestHelper helper) {
+		clear(helper);
+		breaker(helper, new BlockPos(3, 1, 3), District.RAIL_YARD, Direction.SOUTH);
+		List<Scuttler> pack = List.of(scuttler(helper, new BlockPos(18, 1, 18), District.RAIL_YARD), scuttler(helper, new BlockPos(20, 1, 18), District.RAIL_YARD));
+		List<Vec3> lay = pack.stream().map(Entity::position).toList();
+		helper.runAtTickTime(2, () -> {
+			// the heart's reactor wakes them all, from where it stands
+			record(helper).wakeAll(helper.getLevel(), origin(helper), helper.absolutePos(new BlockPos(12, 1, 2)));
+			long now = helper.getLevel().getGameTime();
+			for (Scuttler s : pack) {
+				helper.assertTrue(s.calledTo() == null, "woken by the heart's star, a Scuttler was called to " + s.calledTo());
+				helper.assertTrue(s.wakeAt() >= now && s.wakeAt() < now + CityBot.WAKE_SPREAD, "it should stir within 5 s");
+			}
+		});
+		helper.runAtTickTime(240, () -> {
+			for (int i = 0; i < pack.size(); i++) {
+				Scuttler s = pack.get(i);
+				helper.assertFalse(s.dormant(), "a Scuttler is still asleep 5 s after the heart's star");
+				helper.assertTrue(s.calledTo() == null, "a Scuttler was called");
+				helper.assertTrue(s.position().distanceTo(lay.get(i)) < 2, "a Scuttler woken where it lay went " + String.format("%.1f", s.position().distanceTo(lay.get(i)))
+					+ " blocks");
+			}
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * D97: a Sentry that can see where the breaker is thrown from unfolds a beat after the clunk ({@link Sentry#BEAT}); one
+	 * that can't stirs within 5 s as before.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 160)
+	public static void theSentryInViewOfTheBreakerUnfoldsABeatAfterTheClunk(GameTestHelper helper) {
+		clear(helper);
+		BlockPos at = breaker(helper, new BlockPos(3, 1, 3), District.QUARTERS, Direction.SOUTH);
+		BlockPos stand = WastesBots.breakerStand(helper.getLevel(), at);
+		Sentry inView = sentry(helper, new BlockPos(6, 1, 9), District.QUARTERS);
+		// the other in a stone box
+		for (BlockPos p : BlockPos.betweenClosed(16, 1, 16, 20, 4, 20))
+			if (p.getX() == 16 || p.getX() == 20 || p.getZ() == 16 || p.getZ() == 20 || p.getY() == 4)
+				helper.setBlock(p, net.minecraft.world.level.block.Blocks.STONE);
+		Sentry boxed = sentry(helper, new BlockPos(18, 1, 18), District.QUARTERS);
+		long[] now = new long[1];
+		helper.runAtTickTime(2, () -> {
+			helper.assertTrue(inView.inSight(WastesBots.standEye(stand)), "the Sentry in the open should see the breaker's stand");
+			helper.assertFalse(boxed.inSight(WastesBots.standEye(stand)), "the boxed Sentry should not see it");
+			record(helper).wake(helper.getLevel(), origin(helper), District.QUARTERS, at);
+			now[0] = helper.getLevel().getGameTime();
+			helper.assertTrue(inView.wakeAt() == now[0] + Sentry.BEAT, "the Sentry in view stirs at " + (inView.wakeAt() - now[0]) + " ticks, not a beat ("
+				+ Sentry.BEAT + ")");
+			helper.assertTrue(boxed.wakeAt() >= now[0] && boxed.wakeAt() < now[0] + CityBot.WAKE_SPREAD, "the boxed Sentry should stir within 5 s");
+		});
+		helper.runAtTickTime(2 + Sentry.BEAT + 1, () -> {
+			helper.assertFalse(inView.dormant(), "the Sentry in view hasn't unfolded a beat after the clunk");
+			helper.assertTrue(inView.clip().name().equals("unfold"), "it should be unfolding, plays " + inView.clip().name());
+		});
+		helper.runAtTickTime(2 + CityBot.WAKE_SPREAD + 2, () -> {
+			helper.assertFalse(boxed.dormant(), "the boxed Sentry is still asleep after 5 s");
+			helper.succeed();
+		});
+	}
+
+	// ---------------------------------------------------------------- the Sentry (P19, D96)
+
+	/** Woken, it fires at a player in plain sight with no power anywhere, and goes on firing with its district's grid cut. */
 	@GameTest(template = COURSE, timeoutTicks = 460)
-	public static void sentryFoldsWhileUnfedAndFiresWhenFed(GameTestHelper helper) {
+	public static void aWokenSentryFiresWithNoPower(GameTestHelper helper) {
 		clear(helper);
 		Sentry sentry = sentry(helper, new BlockPos(5, 1, 5), District.FOUNDRY);
 		Player target = player(helper);
@@ -235,22 +378,17 @@ public final class WastesBotGameTests {
 			sentry.wake(); // now, not within 5 s
 		});
 		helper.runAtTickTime(10, () -> sentry.setTarget(target));
-		helper.runAtTickTime(120, () -> {
-			helper.assertTrue(sentry.folded(), "the district is unfed: it should be folded");
-			helper.assertTrue(sentry.shots() == 0, "it fired " + sentry.shots() + " bolts folded");
-			record(helper).setFed(helper.getLevel(), origin(helper), District.FOUNDRY, true, null);
-			helper.assertFalse(sentry.folded(), "fed, it should open");
+		helper.runAtTickTime(30, () -> sentry.setTarget(target));
+		int[] fired = new int[1];
+		helper.runAtTickTime(220, () -> {
+			helper.assertFalse(sentry.dormant(), "it went back to sleep");
+			helper.assertTrue(sentry.shots() >= 2, "with a player in sight and no power, it fired " + sentry.shots() + " bolts in 9 s");
+			record(helper).cut(helper.getLevel(), origin(helper), District.FOUNDRY);
+			fired[0] = sentry.shots();
 		});
-		helper.runAtTickTime(125, () -> sentry.setTarget(target));
-		int[] firedFed = new int[1];
-		helper.runAtTickTime(300, () -> {
-			helper.assertTrue(sentry.shots() >= 2, "fed, with a player in sight, it fired " + sentry.shots() + " bolts in 9 s");
-			record(helper).setFed(helper.getLevel(), origin(helper), District.FOUNDRY, false, null);
-			helper.assertTrue(sentry.folded(), "unfed again, it should fold");
-			firedFed[0] = sentry.shots();
-		});
+		helper.runAtTickTime(225, () -> sentry.setTarget(target));
 		helper.runAtTickTime(440, () -> {
-			helper.assertTrue(sentry.shots() == firedFed[0], "it kept firing folded");
+			helper.assertTrue(sentry.shots() > fired[0], "it stopped firing with its district's grid cut");
 			helper.assertTrue(sentry.position().equals(Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(5, 1, 5)))), "it moved off its mount");
 			helper.succeed();
 		});
@@ -717,8 +855,10 @@ public final class WastesBotGameTests {
 		BlockPos o = origin(helper);
 		StandIn[] who = new StandIn[2];
 		helper.runAtTickTime(1, () -> record(helper).wakeAll(helper.getLevel(), o, null));
+		// (no one in its hall: woken by hand, as a player walking in would)
+		helper.runAtTickTime(2, c::wake);
 		helper.runAtTickTime(3, () -> {
-			helper.assertFalse(c.dormant(), "the heart woke: it should wake");
+			helper.assertFalse(c.dormant(), "woken, it should be awake");
 			c.beginReset();
 		});
 		helper.runAtTickTime(80, () -> {
@@ -744,6 +884,90 @@ public final class WastesBotGameTests {
 				helper.assertTrue(record(helper).custodianAwake(o), "the record should say it's awake (pylons harmable)");
 			} finally {
 				leave(helper, who[1]);
+			}
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * D96: all four districts awake, it kneels on while the only player is outside its hall (19 blocks off), and rises
+	 * (lenses lighting, then its bow) once they walk in.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 160, batch = "wastes_custodian_hall")
+	public static void custodianRisesWhenAPlayerWalksIntoItsHall(GameTestHelper helper) {
+		Custodian c = hall(helper, true);
+		BlockPos o = origin(helper);
+		StandIn[] who = new StandIn[1];
+		helper.runAtTickTime(2, () -> {
+			who[0] = standIn(helper, new BlockPos(11, 1, -8), "outside");
+			record(helper).wakeAll(helper.getLevel(), o, null);
+		});
+		helper.runAtTickTime(60, () -> {
+			try {
+				helper.assertFalse(c.inHall(who[0]), "19 blocks off should be outside its hall");
+				helper.assertTrue(c.dormant() && !c.hasWoken(), "it rose with no one in its hall, is " + c.phase());
+				helper.assertFalse(record(helper).custodianAwake(o), "the record says it woke with no one in its hall");
+			} catch (RuntimeException e) {
+				leave(helper, who[0]);
+				throw e;
+			}
+			Vec3 in = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(8, 1, 8)));
+			who[0].moveTo(in.x, in.y, in.z, 0, 0);
+		});
+		helper.runAtTickTime(90, () -> {
+			try {
+				helper.assertTrue(c.inHall(who[0]), "the player should be in its hall");
+				helper.assertFalse(c.dormant(), "a player walked into its hall: it should rise");
+				helper.assertTrue(c.phase() == Custodian.Phase.WAKING || c.phase() == Custodian.Phase.BOWING, "it should rise and bow, is " + c.phase());
+				helper.assertTrue(record(helper).custodianAwake(o), "the record should say it's awake (pylons harmable)");
+			} finally {
+				leave(helper, who[0]);
+			}
+			helper.succeed();
+		});
+	}
+
+	/** A heart Sliding Door, two wide and three tall, its controller at {@code pos}, bound to the test's city. */
+	private static void heartDoor(GameTestHelper helper, BlockPos pos) {
+		BlockState state = ModWastes.SLIDING_DOOR.get().defaultBlockState().setValue(SlidingDoorBlock.HEART, true);
+		for (int c = 0; c < 2; c++)
+			for (int r = 0; r < 3; r++)
+				helper.setBlock(SlidingDoorBlock.part(pos, Direction.NORTH, c, r), state.setValue(SlidingDoorBlock.COL, c).setValue(SlidingDoorBlock.ROW, r));
+		CityLink.bind(helper.getLevel(), helper.absolutePos(pos), origin(helper), District.HEART);
+	}
+
+	/**
+	 * D96, the shortcut: a Nether Star in the heart's reactor wakes all four districts at once and the heart's doors open,
+	 * and still the Custodian rises only when a player walks into its hall.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 120, batch = "wastes_custodian_star")
+	public static void theHeartsStarWakesTheCityAndTheCustodianWaitsForTheHall(GameTestHelper helper) {
+		Custodian c = hall(helper, true);
+		BlockPos o = origin(helper), controller = new BlockPos(16, 1, 15), door = new BlockPos(5, 1, 21);
+		BlockState part = ModWastes.DERELICT_STAR_REACTOR.get().defaultBlockState();
+		for (int p = 0; p < 27; p++)
+			helper.setBlock(DerelictStarReactorBlock.partAt(controller, p), part.setValue(DerelictStarReactorBlock.PART, p));
+		CityLink.bind(helper.getLevel(), helper.absolutePos(controller), o, District.HEART);
+		heartDoor(helper, door);
+		StandIn[] who = new StandIn[1];
+		helper.runAtTickTime(3, () -> {
+			var items = helper.getLevel().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
+				helper.absolutePos(controller.above(2)), Direction.UP);
+			helper.assertTrue(items != null && items.insertItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.NETHER_STAR), false).isEmpty(),
+				"a star wouldn't go into the heart's reactor");
+			helper.assertTrue(record(helper).allAwake(o), "the star didn't wake all four districts");
+		});
+		helper.runAtTickTime(30, () -> {
+			helper.assertTrue(helper.getBlockState(door).getValue(SlidingDoorBlock.OPEN), "the heart's door stayed shut with the star in");
+			helper.assertTrue(c.dormant() && !c.hasWoken(), "it rose with the star, before anyone walked in");
+			who[0] = standIn(helper, new BlockPos(8, 1, 8), "walker");
+		});
+		helper.runAtTickTime(60, () -> {
+			try {
+				helper.assertFalse(c.dormant(), "a player walked into its hall after the star: it should rise");
+				helper.assertTrue(record(helper).custodianAwake(o), "the record should say it's awake");
+			} finally {
+				leave(helper, who[0]);
 			}
 			helper.succeed();
 		});

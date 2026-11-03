@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
  * The Scarred Void-Alloy Plate (D73, D75; the buildings brief's block set, #7): a Void-Alloy Plate whose {@link #FACING}
  * face carries the war's mark ({@link #SCAR}): a chip, a crack, or heat tint. Its other faces are the plate's bond
  * ({@link VoidAlloyBond}). Only the cracked one lights: the seam-coloured pixels beside its crack glow dim while its
- * district is fed. Damage marks the uprising's buildings by the rings' rules without random missing blocks.
+ * district is lit. Damage marks the uprising's buildings by the rings' rules without random missing blocks.
  */
 public final class ScarredPlateBlock extends CityDecorLightBlock implements IWrenchable {
 	public static final MapCodec<ScarredPlateBlock> CODEC = simpleCodec(ScarredPlateBlock::new);

@@ -55,6 +55,8 @@ public abstract class CityApplier {
 	protected final int floor;
 	/** The plan's seed, for the edge's scree ({@link CityEdge#roll}). */
 	protected final long seed;
+	/** The ground's patch noise ({@link CityGround#key}). */
+	private final long ground;
 	private final Map<Long, Integer> tops = new HashMap<>();
 	/** Outskirts columns whose ground ended off the floor (eased back into the island, D91). */
 	private final java.util.Set<Long> off = new java.util.HashSet<>();
@@ -66,6 +68,7 @@ public abstract class CityApplier {
 		this.origin = origin;
 		this.floor = origin.getY() - 1;
 		this.seed = seed;
+		this.ground = CityGround.key(seed, origin);
 	}
 
 	/** The top solid block of the column as it was before the city (MIN_VALUE: none). */
@@ -176,7 +179,8 @@ public abstract class CityApplier {
 
 	private void put(CityPlan.Op.Put p) {
 		int x = p.at().getX(), z = p.at().getZ();
-		if (p.need() == CityPlan.ON_GROUND && !hasGround(x, z) || p.need() == CityPlan.OVER_VOID && !overVoid(x, z))
+		if (p.need() == CityPlan.ON_GROUND && !hasGround(x, z) || p.need() == CityPlan.OVER_VOID && !overVoid(x, z)
+			|| p.need() == CityPlan.ON_LAND && top(x, z) < floor - FILL_DEPTH)
 			return;
 		// a void-alloy block's bond from where it stands (D75), as a player's or a command's placing gives it
 		set(p.at(), VoidAlloyBond.at(p.state(), p.at()));
@@ -239,7 +243,7 @@ public abstract class CityApplier {
 		if (land) {
 			for (int y = t + 1; y < floor; y++)
 				set(new BlockPos(x, y, z), Blocks.END_STONE.defaultBlockState());
-			set(new BlockPos(x, floor, z), CityLayout.scorched(x, z));
+			set(new BlockPos(x, floor, z), CityGround.top(ground, x - origin.getX(), z - origin.getZ()));
 			for (int y = floor + 1; y <= t; y++)
 				set(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState());
 			surfaces.put(BlockPos.asLong(x, 0, z), floor);
@@ -294,7 +298,7 @@ public abstract class CityApplier {
 			set(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState());
 		double scree = CityEdge.scree(d, across);
 		BlockState surface = CityEdge.roll(seed, x, z, 1, scree) ? CityEdge.screeBlock(seed, x, z)
-			: CityEdge.roll(seed, x, z, 2, w) ? CityLayout.scorched(x, z) : top > t ? stone : null;
+			: CityGround.across(ground, x - origin.getX(), z - origin.getZ(), w) instanceof BlockState city ? city : top > t ? stone : null;
 		if (surface != null)
 			set(new BlockPos(x, top, z), surface);
 		if (moved > 0 && CityEdge.roll(seed, x, z, 3, scree))

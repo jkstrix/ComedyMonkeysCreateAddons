@@ -10,6 +10,8 @@ import com.comedymonkey.createaddons.content.wastes.city.CityApplier;
 import com.comedymonkey.createaddons.content.wastes.city.CityEdge;
 import com.comedymonkey.createaddons.content.wastes.city.CityLayout;
 import com.comedymonkey.createaddons.content.wastes.city.CityPlan;
+import com.comedymonkey.createaddons.content.wastes.city.CityRoads;
+import com.comedymonkey.createaddons.content.wastes.city.kit.Wear;
 import com.comedymonkey.createaddons.registry.ModWastes;
 
 import net.minecraft.core.BlockPos;
@@ -75,6 +77,103 @@ public final class WastesEdgeGameTests {
 				check(ground > 30_000, "only " + ground + " ground columns");
 			}
 		helper.succeed();
+	}
+
+	/**
+	 * The roads' wear (CityRoads): tidy at the heart (no potholes there), more worn through the worn ring and more again
+	 * through the damaged one, more near what broke them than away from it; nothing stands over a pothole or a sunk sett,
+	 * and a pothole only goes in on land; most of every ring's roads still paving, so the streets still read.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 200, batch = "wastes_edge")
+	public static void theRoadsWearByTheirRings(GameTestHelper helper) {
+		double[] worn = new double[3], all = new double[3], paving = new double[3];
+		double near = 0, nearWorn = 0, far = 0, farWorn = 0;
+		int verges = 0, endStoneVerges = 0;
+		for (long seed : new long[] { 0, 1, 12345 })
+			for (BlockPos o : new BlockPos[] { new BlockPos(1000, 70, -2000), new BlockPos(2584, 64, 1136) }) {
+				CityPlan plan = CityPlan.of(o, seed, false);
+				Map<BlockPos, CityPlan.Op.Put> last = new HashMap<>();
+				java.util.Set<Long> causes = new java.util.HashSet<>();
+				// the city as the wear left it (the overgrowth comes after, its vines hanging on the walls beside)
+				for (CityPlan.Op op : plan.ops().subList(0, Math.min(plan.ops().size(), plan.overgrowthFrom)))
+					if (op instanceof CityPlan.Op.Put p) {
+						int y = p.at().getY() - o.getY();
+						if (y >= -2 && y <= 0)
+							last.put(p.at(), p);
+						if (y >= -1 && y <= 6 && CityRoads.cause(p.state()) > 0)
+							causes.add(BlockPos.asLong(p.at().getX(), 0, p.at().getZ()));
+					}
+				String at = " (seed " + seed + " at " + o.toShortString() + ")";
+				for (CityRoads.Paved c : plan.roads.paved()) {
+					int dx = c.at().getX() - o.getX(), dz = c.at().getZ() - o.getZ(), ring = Wear.ring(dx, dz);
+					BlockState f = last.get(c.at()).state();
+					CityPlan.Op.Put upOp = last.get(c.at().above());
+					if (c.kind() == CityRoads.Kind.VERGE) {
+						verges++;
+						if (f.is(Blocks.END_STONE))
+							endStoneVerges++;
+						continue;
+					}
+					// (a cell the city built over since isn't road any more)
+					if (!CityRoads.isPaving(f) && !f.isAir() && !scorched(f) && !f.is(Blocks.GRAVEL))
+						continue;
+					if (f.isAir() || f.getBlock() instanceof SlabBlock)
+						check(upOp == null, upOp == null ? "" : upOp.state() + " stands over a broken sett at " + dx + ", " + dz + at);
+					if (f.isAir())
+						check(last.get(c.at()).need() == CityPlan.ON_LAND && ring > Wear.INTACT_TO, "a pothole at " + dx + ", " + dz + at);
+					boolean broken = f != c.state() || upOp != null && rubble(upOp.state());
+					int band = ring <= Wear.INTACT_TO ? 0 : ring <= Wear.WORN_TO ? 1 : 2;
+					all[band]++;
+					if (broken)
+						worn[band]++;
+					if (CityRoads.isPaving(f))
+						paving[band]++;
+					if (band == 2) {
+						int d = nearest(causes, c.at(), 8);
+						if (d <= 3) {
+							near++;
+							if (broken)
+								nearWorn++;
+						} else if (d > 8) {
+							far++;
+							if (broken)
+								farWorn++;
+						}
+					}
+				}
+			}
+		String share = " (heart " + worn[0] / all[0] + ", worn " + worn[1] / all[1] + ", damaged " + worn[2] / all[2] + ")";
+		com.mojang.logging.LogUtils.getLogger().info("The roads' wear{}; still paving {}, {}, {}; near a cause {} worn, away {}; End Stone verges {} of {}", share,
+			paving[0] / all[0], paving[1] / all[1], paving[2] / all[2], nearWorn / near, farWorn / far, endStoneVerges, verges);
+		check(worn[0] / all[0] < 0.12, "the heart's plaza is too worn" + share);
+		check(worn[0] / all[0] < worn[1] / all[1] && worn[1] / all[1] < worn[2] / all[2], "the roads' wear doesn't follow the rings" + share);
+		check(worn[2] / all[2] > 0.35, "the damaged ring's roads are hardly worn" + share);
+		check(near > 50 && far > 50 && nearWorn / near > farWorn / far + 0.1, "the wear doesn't follow its causes: " + nearWorn + " of " + near
+			+ " near one worn, " + farWorn + " of " + far + " away from any");
+		for (int b = 0; b < 3; b++)
+			check(paving[b] > 0.8 * all[b], "only " + paving[b] + " of " + all[b] + " road cells in ring " + b + " are still paving");
+		check(endStoneVerges > 0 && endStoneVerges < verges / 3, endStoneVerges + " of " + verges + " road verges are End Stone");
+		helper.succeed();
+	}
+
+	private static boolean scorched(BlockState s) {
+		return s.is(ModWastes.SCORCHED_END_STONE.get()) || s.is(ModWastes.RUSTED_SCORCHED_END_STONE.get()) || s.is(ModWastes.LITTERED_SCORCHED_END_STONE.get());
+	}
+
+	/** What the wear leaves lying on a road: a heaved sett, broken stone, rubble, a spill of gravel. */
+	private static boolean rubble(BlockState s) {
+		return s.getBlock() instanceof SlabBlock || s.getBlock() instanceof net.minecraft.world.level.block.StairBlock || s.is(Blocks.COBBLED_DEEPSLATE)
+			|| s.is(Blocks.GRAVEL);
+	}
+
+	/** The distance (the larger of x and z) from {@code at} to the nearest of {@code columns}, up to {@code reach} (past it: reach + 1). */
+	private static int nearest(java.util.Set<Long> columns, BlockPos at, int reach) {
+		for (int r = 0; r <= reach; r++)
+			for (int x = -r; x <= r; x++)
+				for (int z = -r; z <= r; z++)
+					if ((Math.abs(x) == r || Math.abs(z) == r) && columns.contains(BlockPos.asLong(at.getX() + x, 0, at.getZ() + z)))
+						return r;
+		return reach + 1;
 	}
 
 	/** Rolling made-up ground, {@code d} above the floor: hills to cut and dips to fill, up to 8 either way. */
@@ -162,7 +261,7 @@ public final class WastesEdgeGameTests {
 			build(level, o, plan, chunks);
 			int x0 = chunks.getFirst().getMinBlockX(), x1 = chunks.getLast().getMaxBlockX();
 			int z0 = chunks.getFirst().getMinBlockZ(), z1 = chunks.getLast().getMaxBlockZ();
-			int band = 0, cutScree = 0, fillScree = 0, fan = 0, eased = 0;
+			int band = 0, cutScree = 0, fillScree = 0, fan = 0, eased = 0, levelled = 0, endStone = 0;
 			int edgeLo = Integer.MAX_VALUE, edgeHi = Integer.MIN_VALUE;
 			for (int z = z0; z <= z1; z++) {
 				int lastFull = Integer.MIN_VALUE;
@@ -173,6 +272,9 @@ public final class WastesEdgeGameTests {
 					if (across <= 0) {
 						lastFull = x;
 						check(here == 0, "levelled ground at " + (x - o.getX()) + ", " + (z - o.getZ()) + " is " + here + " off the floor");
+						levelled++;
+						if (level.getBlockState(new BlockPos(x, floor, z)).is(Blocks.END_STONE))
+							endStone++;
 						continue;
 					}
 					BlockState top = level.getBlockState(new BlockPos(x, floor + here, z)), above = level.getBlockState(new BlockPos(x, floor + here + 1, z));
@@ -205,6 +307,8 @@ public final class WastesEdgeGameTests {
 			check(eased > band / 2, "only " + eased + " of " + band + " band columns eased toward the floor");
 			check(cutScree >= 5 && fillScree >= 5, "scree on " + cutScree + " cut and " + fillScree + " filled columns in the band");
 			check(fan >= 3, "debris on only " + fan + " columns below the fill");
+			// the outskirts' scorched ground has its patches of End Stone (CityGround)
+			check(endStone > levelled / 12 && endStone < levelled / 2, endStone + " of " + levelled + " levelled columns are End Stone");
 			check(edgeHi - edgeLo >= 2, "the terrace's edge runs straight (" + edgeLo + " to " + edgeHi + ")");
 			// again in the other order: the same, block for block
 			Map<BlockPos, BlockState> first = new HashMap<>();

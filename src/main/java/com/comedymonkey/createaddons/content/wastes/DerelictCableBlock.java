@@ -43,7 +43,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * Derelict Cable (D16, P16, P25; brief §4): copper drawn from the makers' pipes on void-alloy clips, laid flat along a
  * floor, a wall or a ceiling ({@link #SURFACE}: the side of its block it lies on; placed on the face clicked) and joining
  * the cable beside it on that same side like a wire (on a floor, also the Substations and street lamps it runs to).
- * While its district is fed, a hairline of starlight runs along it (a lit part in its block model, so a street of it
+ * While its district is lit, a hairline of starlight runs along it (a lit part in its block model, so a street of it
  * costs nothing to draw). It casts no light, isn't walked into, and breaks into a little scrap (one in four).
  * <p>
  * The mast riser (D72): on the side of a Create Metal Girder standing upright, cable rises up a lattice mast ({@link #GIRDER}

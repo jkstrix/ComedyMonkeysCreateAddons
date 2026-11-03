@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 /**
- * A building block of the city whose glow lights while its district is fed, as the Seamed Plate's seams do (D75: the
+ * A building block of the city whose glow lights while its district is lit, as the Seamed Plate's seams do (D75: the
  * Slotted Grille's dim pane, the Band's seam, a cracked Scarred Plate's crack): a {@link DerelictLightBlockEntity} keeps
  * its district and sets {@link #LIT}, whose emissive part is in its block model. One a player places belongs to no city
  * and stays dark. It casts no light (D63: lit decor casts none). Subclasses add their own states to

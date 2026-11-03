@@ -85,7 +85,7 @@ public final class WastesRenderers {
 	static final ModelResourceLocation VENT_HATCH = model("wall_vent_hatch"), VENT_SEAM = model("wall_vent_seam"),
 		VENT_FLASH = model("wall_vent_flash"), VENT_CONTACT = model("wall_vent_contact"), VENT_GLINT = model("wall_vent_glint");
 
-	/** Dim starlight: a woken district's glows while it's unfed. */
+	/** Dim starlight: a dark lamp's sputter as it beckons (D96). */
 	static final int DIM = 0x737373;
 	private static final ItemStack STAR = new ItemStack(Items.NETHER_STAR);
 
@@ -225,6 +225,8 @@ public final class WastesRenderers {
 	// ---------------------------------------------------------------- Substation
 
 	static final float LEVER_OPEN = -130;
+	/** D96: hauled all the way, the lever stands this far off home; the clunk takes it the rest. */
+	static final float LEVER_HAULED = -16;
 
 	/** The slam (the clip's): down in 0.12 s, a hard bounce off the jaw and a short settle; 0 open, 1 shut. */
 	static float slam(float t) {
@@ -232,6 +234,16 @@ public final class WastesRenderers {
 			return 0;
 		float u = t / 0.12f;
 		return u < 1 ? u * u : 1 - 0.12f * (float) Math.exp(-(u - 1) * 1.6f) * Math.abs(Mth.sin((u - 1) * 2.2f));
+	}
+
+	/**
+	 * The breaker's angle while it's hauled (D96), {@code f} of the way over: heavy to start, easing as it comes, and
+	 * shuddering in the hand while it's held.
+	 */
+	static float hauledAngle(float f, boolean held, float seconds) {
+		float eased = f * f * 0.35f + f * 0.65f;
+		float shudder = held && f > 0 && f < 1 ? 1.4f * Mth.sin(seconds * 47) * (0.4f + f) : 0;
+		return LEVER_OPEN + (LEVER_HAULED - LEVER_OPEN) * eased + shudder;
 	}
 
 	public static void substation(SubstationBlockEntity be, float pt, PoseStack ms, PartSink sink, int light) {
@@ -242,28 +254,30 @@ public final class WastesRenderers {
 		face(ms, state.getValue(SubstationBlock.FACING));
 		boolean woken = be.isWoken();
 		float t = woken && be.wokeAt() != SubstationBlockEntity.NEVER ? since(be, be.wokeAt(), pt) : 1e6f;
-		// the knife switch: thrown open while dormant; it slams shut by itself as the district wakes
+		long now = be.getLevel() == null ? 0 : be.getLevel().getGameTime();
+		float hauled = be.shown(now, pt) / SubstationBlockEntity.HOLD_TICKS;
+		// the knife switch: thrown open while dormant, following a hand hauling it over (D96); woken, it clunks home
+		// from there (or slams the whole way when the city woke it: the heart's star)
 		ms.pushPose();
-		turn(ms, Axis.XP, woken ? LEVER_OPEN * (1 - slam(t)) : LEVER_OPEN, 16, 20, 8);
+		float lever = woken ? (be.thrown() ? LEVER_HAULED : LEVER_OPEN) * (1 - slam(t)) : hauledAngle(hauled, be.hauled(), seconds(be, pt));
+		turn(ms, Axis.XP, lever, 16, 20, 8);
 		sink.part(SUB_LEVER, ms, light);
 		ms.popPose();
 		if (t >= 0.08f && t <= 0.3f)
 			sink.part(SUB_FLASH, ms, LightTexture.FULL_BRIGHT);
-		// the column rises with the charge in ten steps; woken and unfed it's dim, the sigil's lens dark
-		int fill = be.fill();
-		boolean bright = !woken || be.isFed();
+		// the column climbs in ten steps as the lever comes over, and drains as it springs back; full once woken
+		int fill = woken ? SubstationBlockEntity.STEPS : (int) (hauled * SubstationBlockEntity.STEPS);
 		if (fill > 0) {
 			ms.pushPose();
 			px(ms, 0, 3.5f, 0);
 			ms.scale(1, fill / (float) SubstationBlockEntity.STEPS, 1);
 			px(ms, 0, -3.5f, 0);
-			sink.part(SUB_COLUMN, ms, LightTexture.FULL_BRIGHT, RenderType.cutout(), bright ? 0xFFFFFF : DIM);
+			sink.part(SUB_COLUMN, ms, LightTexture.FULL_BRIGHT);
 			ms.popPose();
 		}
 		if (woken && t >= 0.1f) {
-			sink.part(SUB_SEAMS, ms, LightTexture.FULL_BRIGHT, RenderType.cutout(), bright ? 0xFFFFFF : DIM);
-			if (be.isFed())
-				sink.part(SUB_SIGIL, ms, LightTexture.FULL_BRIGHT);
+			sink.part(SUB_SEAMS, ms, LightTexture.FULL_BRIGHT);
+			sink.part(SUB_SIGIL, ms, LightTexture.FULL_BRIGHT);
 		}
 		ms.popPose();
 	}
@@ -389,10 +403,7 @@ public final class WastesRenderers {
 	// ---------------------------------------------------------------- Derelict lamps
 
 	static boolean lampActive(DerelictLightBlockEntity be) {
-		BlockState state = be.getBlockState();
-		boolean lamp = state.getBlock() instanceof DerelictStreetLampBlock && state.getValue(DerelictStreetLampBlock.PART) == DerelictStreetLampBlock.Part.HEAD
-			|| state.getBlock() instanceof DerelictWallLampBlock;
-		return lamp && (be.phase() != DerelictLightBlockEntity.Phase.DARK || be.getLevel() != null && be.surging(be.getLevel().getGameTime()));
+		return be.isLamp() && be.getLevel() != null && be.shown(be.getLevel().getGameTime());
 	}
 
 	/** A surge's frame is on (D54): hard flicker at first, settling over its 3 s (more frames on as it goes). */
@@ -410,20 +421,27 @@ public final class WastesRenderers {
 		if (!lampActive(be) || !be.lightable())
 			return;
 		BlockState state = be.getBlockState();
+		int tint = 0xFFFFFF;
 		// the heart surging at the Custodian's overload (D54): about 3 s of flicker, lit or dark, then as it was
 		if (be.getLevel() != null && be.surging(be.getLevel().getGameTime())) {
 			if (!surgeOn(be.getBlockPos(), since(be, be.surgeAt(), pt) * 20))
 				return;
-		} else if (be.phase() == DerelictLightBlockEntity.Phase.DARK)
-			return;
-		// starving: a second's flicker, then dark
+		} else if (be.phase() == DerelictLightBlockEntity.Phase.DARK) {
+			// D96: a dark lamp near a dormant Substation sputters, dim, as a player passes
+			float b = since(be, be.beckonAt(), pt) * 20;
+			if (b < 0 || b >= DerelictLightBlockEntity.BECKON_TICKS || !flickerOn(be.getBlockPos(), b, false))
+				return;
+			tint = DIM;
+		}
+		// its grid cut: a second's flicker, then dark
 		else if (be.phase() == DerelictLightBlockEntity.Phase.FADING
 			&& !flickerOn(be.getBlockPos(), since(be, be.flickerAt(), pt) * 20, false))
 			return;
 		ms.pushPose();
 		boolean wall = state.getBlock() instanceof DerelictWallLampBlock;
 		face(ms, state.getValue(wall ? DerelictWallLampBlock.FACING : DerelictStreetLampBlock.FACING));
-		sink.part(wall ? WALL_GLOW : state.getValue(DerelictStreetLampBlock.LEANING) ? STREET_GLOW_LEANING : STREET_GLOW, ms, LightTexture.FULL_BRIGHT);
+		sink.part(wall ? WALL_GLOW : state.getValue(DerelictStreetLampBlock.LEANING) ? STREET_GLOW_LEANING : STREET_GLOW, ms, LightTexture.FULL_BRIGHT,
+			RenderType.cutout(), tint);
 		ms.popPose();
 	}
 

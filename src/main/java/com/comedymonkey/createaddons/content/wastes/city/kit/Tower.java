@@ -160,7 +160,7 @@ public final class Tower {
 				md.remove(p.getX(), p.getY(), p.getZ());
 			}
 		}
-		// the break's scars: the outward faces' middle columns, the top two blocks, cracked (they glow dim when fed)
+		// the break's scars: the outward faces' middle columns, the top two blocks, cracked (they glow dim when lit)
 		int mid = w / 2;
 		for (Direction d : Direction.Plane.HORIZONTAL) {
 			if (!c.outward(d))

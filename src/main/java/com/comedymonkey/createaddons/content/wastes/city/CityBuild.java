@@ -37,7 +37,7 @@ public final class CityBuild {
 			com.comedymonkey.createaddons.content.wastes.bot.CityBot.class, origin, b -> true))
 			bot.discard();
 		CityRecord.of(level).add(origin);
-		new CityApplier.Live(level, origin).apply(plan.ops());
+		new CityApplier.Live(level, origin, seed).apply(plan.ops());
 		return new Result(origin, plan, plan.ops().size());
 	}
 
@@ -50,7 +50,7 @@ public final class CityBuild {
 		if (withIsland)
 			island(level, origin);
 		CityPlan plan = CityPlan.of(origin, seed, true);
-		new CityApplier.Live(level, origin).apply(plan.ops());
+		new CityApplier.Live(level, origin, seed).apply(plan.ops());
 		return new Result(origin, plan, plan.ops().size());
 	}
 

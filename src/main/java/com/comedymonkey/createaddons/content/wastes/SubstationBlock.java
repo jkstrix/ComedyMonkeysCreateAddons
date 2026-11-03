@@ -4,13 +4,17 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
+import org.joml.Vector3f;
+
 import com.comedymonkey.createaddons.registry.ModWastes;
 import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -34,14 +38,16 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
- * A district's Substation (design/specs/clockwork-wastes.md, D24, P7, P8, P50): a makers' steel cabinet two blocks tall
- * with the uprising's charge column clamped into it. It takes FE from anything that gives it (a Power Line, a Battery
- * beside it) into its lower half ({@link SubstationBlockEntity}); placed and broken like a door. Locked (unbreakable,
- * blast-proof, contraption-proof: {@link CityLocks}) until it wakes; afterwards an ordinary block that breaks into scrap.
+ * A district's Substation (design/specs/clockwork-wastes.md, D96, P8, P50): a makers' steel cabinet two blocks tall
+ * with the uprising's charge column clamped into it and a breaker lever on its side. Holding use on either half hauls the
+ * breaker over and wakes its district ({@link SubstationBlockEntity}); it takes no power. Placed and broken like a door.
+ * Locked (unbreakable, blast-proof, contraption-proof: {@link CityLocks}) until it wakes, crackling with faint starlight;
+ * afterwards an ordinary block that breaks into scrap.
  */
 public final class SubstationBlock extends HorizontalDirectionalBlock implements EntityBlock, CityLocks.Lockable {
 	public static final MapCodec<SubstationBlock> CODEC = simpleCodec(SubstationBlock::new);
@@ -110,7 +116,7 @@ public final class SubstationBlock extends HorizontalDirectionalBlock implements
 		return super.playerWillDestroy(level, pos, state, player);
 	}
 
-	/** Broken after waking (P50): its district stays awake, but its own feed is gone for good. */
+	/** Broken after waking (P50): its district stays awake, but its own grid is cut for good. */
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
 		if (!newState.is(this) && state.getValue(HALF) == DoubleBlockHalf.LOWER && level.getBlockEntity(pos) instanceof SubstationBlockEntity be)
@@ -147,7 +153,32 @@ public final class SubstationBlock extends HorizontalDirectionalBlock implements
 			be.scheduledTick();
 	}
 
-	// ---------- comparator: the wake charge (P7) ----------
+	// ---------- the breaker (D96) ----------
+
+	/** A use, held or new, on either half of a dormant one hauls its breaker (no arm swing: it's a steady pull). */
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+		if (!state.getValue(LOCKED) || player.isSpectator())
+			return InteractionResult.PASS;
+		if (level.isClientSide)
+			return InteractionResult.CONSUME;
+		return level.getBlockEntity(lower(state, pos)) instanceof SubstationBlockEntity be && be.haul(player) ? InteractionResult.CONSUME
+			: InteractionResult.PASS;
+	}
+
+	/** Faint starlight, now and then: the uprising's edge tone (visual-language.md). */
+	private static final DustParticleOptions STARLIGHT = new DustParticleOptions(new Vector3f(0x7f / 255f, 0x76 / 255f, 0xa8 / 255f), 0.5f);
+
+	/** D96: dormant, it crackles with sparse, faint violet starlight round its cabinet (sound: its low hum, the sound pass). */
+	@Override
+	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+		if (!state.getValue(LOCKED) || random.nextInt(2) != 0)
+			return;
+		double x = pos.getX() + 0.1 + random.nextDouble() * 0.8, y = pos.getY() + random.nextDouble(), z = pos.getZ() + 0.1 + random.nextDouble() * 0.8;
+		level.addParticle(STARLIGHT, x, y, z, 0, 0.02, 0);
+	}
+
+	// ---------- comparator: dormant or awake ----------
 
 	@Override
 	protected boolean hasAnalogOutputSignal(BlockState state) {

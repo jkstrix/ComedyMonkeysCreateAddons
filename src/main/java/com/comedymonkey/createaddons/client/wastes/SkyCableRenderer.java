@@ -25,7 +25,7 @@ import net.minecraft.world.phys.Vec3;
 /**
  * The city's sky-cables (D61, D64; the look of design/models/clockwork-wastes-insulator.gen.js): each span a sagging
  * pair of patina'd copper strands 1.2 px across with a hairline gap down its top (copper showing where they rub at the
- * ties), drawn by the insulator that keeps it. While its district is fed a fine starlight line runs in the gap; when the
+ * ties), drawn by the insulator that keeps it. Once its district wakes a fine starlight line runs in the gap for good; when the
  * district wakes the 3 px bead runs the span in its 2 s turn and the line lights in behind it. A snapped span hangs about
  * 3 blocks from its tie with a curl, bare copper at the break, swaying a little; it never lights.
  */
@@ -68,7 +68,7 @@ public class SkyCableRenderer implements BlockEntityRenderer<DerelictInsulatorBl
 			Vec3 b = far.subtract(origin);
 			// how far the line has lit: all of it, or behind the bead during its turn after the wake
 			double lit = 0;
-			if (be.fed()) {
+			if (be.lit()) {
 				lit = 1;
 				if (be.wakeAt() != SubstationBlockEntity.NEVER) {
 					double t = now - be.wakeAt() - s.stage() * DerelictInsulatorBlockEntity.BEAD_TICKS;

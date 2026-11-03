@@ -23,6 +23,7 @@ import com.comedymonkey.createaddons.content.wastes.LiftBlockEntity;
 import com.comedymonkey.createaddons.content.wastes.ShellBlock;
 import com.comedymonkey.createaddons.content.wastes.SlidingDoorBlock;
 import com.comedymonkey.createaddons.content.wastes.SubstationBlock;
+import com.comedymonkey.createaddons.content.wastes.SubstationBlockEntity;
 import com.comedymonkey.createaddons.content.wastes.ThreePartBlock;
 import com.comedymonkey.createaddons.content.wastes.WallVentBlock;
 import com.comedymonkey.createaddons.content.wastes.bot.CityBot;
@@ -203,6 +204,8 @@ public final class WastesWorldGameTests {
 	 * game-test world is kept between runs, with the last run's city and record in it).
 	 */
 	private static final BlockPos DEV_CITY = new BlockPos(24_000, 100, 24_000);
+	/** D97: a breaker's pack reaches it from its dens (40-50 blocks, round by the yard's gate) within this long of the clunk. */
+	private static final int PACK_THERE_BY = 25 * 20;
 
 	private static List<ChunkPos> cityChunks(BlockPos o) {
 		List<ChunkPos> out = new ArrayList<>();
@@ -228,10 +231,12 @@ public final class WastesWorldGameTests {
 	 * The dev-built city (D66) is whole and bound, and wakes district by district: every city block is bound to the city
 	 * and its own district; each district's vault and doors stay shut and its bots asleep until it wakes, then its vault
 	 * and doors open and its bots stir within 5 s (P8), while the others don't; the Quarters' lift works once its district
-	 * wakes; with the Foundry fed as it wakes the sky-cable bead reaches the mast's insulator at 2 s, the tower's at 4 s and
-	 * the crown's at 6 s (D64); the fourth wake opens the heart's doors and wakes the Custodian.
+	 * wakes; the Foundry woken by its breaker held for the whole haul (D96), the sky-cable bead reaches the mast's insulator
+	 * at 2 s, the tower's at 4 s and the crown's at 6 s (D64); the fourth wake opens the heart's doors, and the Custodian
+	 * kneels on until a player walks into its hall (D96). D97: every district has a Sentry in view of where its breaker is
+	 * thrown from, and the Foundry's pack, called by its breaker, runs from its dens to it.
 	 */
-	@GameTest(template = COURSE, timeoutTicks = 2400, batch = "wastes_dev_city")
+	@GameTest(template = COURSE, timeoutTicks = 3000, batch = "wastes_dev_city")
 	public static void devCityBindsAndWakesPerDistrict(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		BlockPos o = DEV_CITY.offset(level.random.nextInt(256) * 1024, 0, level.random.nextInt(256) * 1024);
@@ -343,18 +348,25 @@ public final class WastesWorldGameTests {
 			check(WastesBots.loaded(level, Scuttler.class, o, b -> true).size() >= 12, "too few Scuttlers");
 			check(WastesBots.loaded(level, Custodian.class, o, b -> true).size() == 1, "no Custodian");
 			check(level.getBlockState(liftPos).getValue(LiftBlock.LOCKED), "the lift works asleep");
-			// the Foundry wakes by power, as a player would wake it: the wake charge into its Substation, then its upkeep
-			// every tick after (so it stays fed while the bead runs)
-			var energy = level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.EnergyStorage.BLOCK, subs.get(District.FOUNDRY), null);
-			check(energy != null, "the Foundry's Substation takes no FE");
-			for (int left = com.comedymonkey.createaddons.config.CMConfig.SERVER.wastesWakeCharge(); left > 0; ) {
-				int got = energy.receiveEnergy(Math.min(left, 100_000), false);
-				check(got > 0, "the Substation stopped taking FE");
-				left -= got;
+			// D97: every district has a Sentry that can see where the player stands to throw its breaker, so the fight starts there
+			for (District d : District.DISTRICTS) {
+				net.minecraft.world.phys.Vec3 eye = WastesBots.standEye(WastesBots.breakerStand(level, subs.get(d)));
+				check(!WastesBots.loaded(level, Sentry.class, o, s -> s.district() == d && s.inSight(eye)).isEmpty(),
+					d + " has no Sentry in view of its breaker");
+				BlockPos stand = WastesBots.breakerStand(level, subs.get(d));
+				var shape = level.getBlockState(stand).getCollisionShape(level, stand);
+				check(shape.isEmpty() || shape.max(Direction.Axis.Y) <= 0.5, d + "'s breaker has nowhere to stand: " + level.getBlockState(stand));
 			}
-			helper.onEachTick(() -> energy.receiveEnergy(com.comedymonkey.createaddons.config.CMConfig.SERVER.wastesUpkeep() * 40, false));
+			// the Foundry wakes as a player wakes it (D96): its breaker held, a use every 4 ticks, for the whole haul
+			BlockPos sub = subs.get(District.FOUNDRY);
+			net.minecraft.world.entity.player.Player hand = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+			var hit = new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(sub), Direction.SOUTH, sub, false);
+			for (int k = 0; k <= SubstationBlockEntity.HOLD_TICKS / 4 + 2; k++)
+				helper.runAfterDelay(4L * k, () -> level.getBlockState(sub).useWithoutItem(level, hand, hit));
 		});
 		seq.thenWaitUntil(() -> check(record.awake(o, District.FOUNDRY), "the Foundry hasn't woken"));
+		long[] clunk = { 0 };
+		seq.thenExecute(() -> clunk[0] = level.getGameTime());
 		// the bead: the crown's ring is still dark at 5 s, lit by 6.5 s; the mast's lit by 2.5 s
 		seq.thenExecuteAfter(50, () -> {
 			check(ringLit(level, o, District.FOUNDRY, 1), "the Foundry mast's ring is dark 2.5 s after the wake");
@@ -382,6 +394,24 @@ public final class WastesWorldGameTests {
 			for (BlockPos d : doors.get(District.WORKSHOPS))
 				check(!level.getBlockState(d).getValue(SlidingDoorBlock.OPEN), "a Workshops door opened with the Foundry");
 		});
+		// D97: thrown from its breaker, the Foundry's pack runs from its dens across the district to the breaker
+		BlockPos foundryStand = WastesBots.breakerStand(level, subs.get(District.FOUNDRY));
+		seq.thenExecute(() -> {
+			for (Scuttler s : WastesBots.loaded(level, Scuttler.class, o, s -> s.district() == District.FOUNDRY))
+				check(s.calledTo() == null || foundryStand.equals(s.calledTo()), "a Foundry Scuttler was called to " + s.calledTo());
+		});
+		seq.thenWaitUntil(() -> {
+			for (Scuttler s : WastesBots.loaded(level, Scuttler.class, o, s -> s.district() == District.FOUNDRY))
+				check(s.calledTo() == null && s.position().distanceTo(net.minecraft.world.phys.Vec3.atBottomCenterOf(foundryStand)) <= Scuttler.CALL_NEAR + 1,
+					"a Foundry Scuttler is " + String.format("%.1f", s.position().distanceTo(net.minecraft.world.phys.Vec3.atBottomCenterOf(foundryStand)))
+						+ " blocks from its breaker");
+		});
+		seq.thenExecute(() -> {
+			LOG.info("D97: the Foundry's pack reached its breaker {} s after the clunk", String.format("%.1f", (level.getGameTime() - clunk[0]) / 20.0));
+			// got there, not gave up near it: well inside its give-up time
+			check(level.getGameTime() - clunk[0] <= PACK_THERE_BY, "the Foundry's pack took " + (level.getGameTime() - clunk[0]) / 20.0
+				+ " s to reach its breaker (" + PACK_THERE_BY / 20 + " s at most)");
+		});
 		// the others, one by one; the Quarters' lift wakes with it
 		for (District d : new District[] { District.WORKSHOPS, District.RAIL_YARD, District.QUARTERS }) {
 			seq.thenExecute(() -> record.wake(level, o, d, subs.get(d)));
@@ -398,7 +428,20 @@ public final class WastesWorldGameTests {
 			check(((LiftBlockEntity) level.getBlockEntity(liftPos)).landings().size() >= 3, "the lift has too few landings");
 			for (BlockPos d : doors.get(District.HEART))
 				check(level.getBlockState(d).getValue(SlidingDoorBlock.OPEN), "a heart door is shut with four awake");
-			check(record.custodianAwake(o), "the Custodian didn't wake with the fourth district");
+		});
+		// D96: the Custodian kneels on with no one in its hall, and rises once a player walks in
+		net.neoforged.neoforge.common.util.FakePlayer[] walker = new net.neoforged.neoforge.common.util.FakePlayer[1];
+		seq.thenExecuteAfter(30, () -> {
+			check(!record.custodianAwake(o), "the Custodian woke with the fourth district, before anyone walked into its hall");
+			walker[0] = new net.neoforged.neoforge.common.util.FakePlayer(level, new com.mojang.authlib.GameProfile(java.util.UUID.randomUUID(), "walker"));
+			walker[0].moveTo(o.getX() + 4.5, o.getY() + 1, o.getZ() + 6.5, 0, 0);
+			CityBot.STAND_INS_FOR_TESTS.add(walker[0].getUUID());
+			level.addNewPlayer(walker[0]);
+		});
+		seq.thenWaitUntil(() -> check(record.custodianAwake(o), "the Custodian didn't rise with a player in its hall"));
+		seq.thenExecute(() -> {
+			CityBot.STAND_INS_FOR_TESTS.remove(walker[0].getUUID());
+			level.removePlayerImmediately(walker[0], net.minecraft.world.entity.Entity.RemovalReason.DISCARDED);
 		});
 		seq.thenSucceed();
 	}

@@ -36,7 +36,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * chamfered void-alloy insulator stack for the city's towers and masts, holding its sky-cable spans
  * ({@link DerelictInsulatorBlockEntity}). One block with three mounts by the face it's placed on: on top of a block (a
  * collar whose claws bite a girder), on a wall (a plate and a braced arm), or hanging under one (a socket; the spire's
- * crown-arm ends). Its neck ring is lit while its district is fed (an emissive part in its block model). The city
+ * crown-arm ends). Its neck ring is lit once its district wakes (an emissive part in its block model). The city
  * places them and links their spans; a player's has none. Breaks into scrap, its spans with it.
  */
 public final class DerelictInsulatorBlock extends HorizontalDirectionalBlock implements EntityBlock {

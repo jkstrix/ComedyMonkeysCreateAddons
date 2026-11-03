@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.config.CMConfig;
-import com.comedymonkey.createaddons.content.line.PowerGrid;
-import com.comedymonkey.createaddons.content.line.PowerGridTesting;
-import com.comedymonkey.createaddons.registry.ModBlocks;
 import com.simibubi.create.api.contraption.BlockMovementChecks;
 import com.simibubi.create.content.kinetics.base.BlockBreakingKineticBlockEntity;
 import com.comedymonkey.createaddons.content.wastes.CityLink;
@@ -66,11 +63,12 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.neoforged.neoforge.items.IItemHandler;
 
 /**
- * The Clockwork Wastes' powered city, phase 2 (design/specs/clockwork-wastes.md, P31, P55): a Substation wakes its
- * district at exactly the wake charge; locked blocks can't be broken by hand or blast until they open; vaults and doors
+ * The Clockwork Wastes' powered city, phase 2 (design/specs/clockwork-wastes.md, P31, P55, D96): a Substation's breaker
+ * held for the whole haul wakes its district (let go early, it springs back), which then stays lit with no power; the
+ * heart's doors open only with all four awake, the spire pulsing for each before; locked blocks can't be broken by hand or blast until they open; vaults and doors
  * open when the record says so, including ones that load after the district woke; the heart vault opens on the
- * Custodian's death (or on Peaceful once four districts are awake) with its one Elytra; lamps light and go dark with the
- * district's feed; the Star Reactor runs flat out, keeps its burn and upgrade as an item, and burns 12 h overhauled; the
+ * Custodian's death (or on Peaceful once four districts are awake) with its one Elytra; lamps light with their district and go
+ * dark with its grid cut; the Star Reactor runs flat out, keeps its burn and upgrade as an item, and burns 12 h overhauled; the
  * heart's reactor wakes the city and is salvaged for two Unknown Devices; a pylon breaks after six hits, only once the
  * Custodian is awake. Each test is its own city (its origin is its own corner), so they don't share a record.
  */
@@ -149,37 +147,47 @@ public final class WastesCityGameTests {
 		return helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(helper.absolutePos(pos)).inflate(reach));
 	}
 
-	// ---------------------------------------------------------------- the Substation
+	// ---------------------------------------------------------------- the Substation's breaker (D96)
 
-	/** 999,999 FE leaves it dormant; the millionth wakes its district for good, unlocks it, and reads 15 on a comparator. */
-	@GameTest(template = COURSE, timeoutTicks = 100)
-	public static void substationWakesAtExactlyTheWakeCharge(GameTestHelper helper) {
+	/** A use on {@code pos}, as a player's right-click on it. */
+	static void use(GameTestHelper helper, Player player, BlockPos pos) {
+		BlockPos abs = helper.absolutePos(pos);
+		helper.getBlockState(pos).useWithoutItem(helper.getLevel(), player, new BlockHitResult(Vec3.atCenterOf(abs), Direction.SOUTH, abs, false));
+	}
+
+	/** A player holding use on {@code pos} from {@code start} for {@code ticks}: a use every 4 ticks, as holding the key repeats it. */
+	static void hold(GameTestHelper helper, Player player, BlockPos pos, int start, int ticks) {
+		for (int t = 0; t <= ticks; t += 4)
+			helper.runAtTickTime(start + t, () -> use(helper, player, pos));
+	}
+
+	/**
+	 * Held for the whole haul (on its upper half: the use reaches the lower), the breaker clunks home and wakes its district
+	 * for good: both halves unlocked, the record awake, the comparator 15. Not a tick before; and it takes no FE at all.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 120)
+	public static void holdingTheBreakerWakesTheDistrict(GameTestHelper helper) {
 		BlockPos at = new BlockPos(2, 1, 2);
 		SubstationBlockEntity be = substation(helper, at, District.FOUNDRY);
-		IEnergyStorage energy = helper.getLevel().getCapability(Capabilities.EnergyStorage.BLOCK, helper.absolutePos(at), Direction.SOUTH);
-		int wake = CMConfig.SERVER.wastesWakeCharge();
+		int start = 5, hold = SubstationBlockEntity.HOLD_TICKS;
 		helper.runAtTickTime(2, () -> {
-			int took = 0;
-			// a Battery's or a line's deliveries, in pieces
-			for (int left = wake - 1; left > 0; ) {
-				int got = energy.receiveEnergy(Math.min(left, 100_000), false);
-				took += got;
-				left -= got;
-			}
-			if (took != wake - 1)
-				helper.fail("took " + took + ", not " + (wake - 1));
+			if (helper.getLevel().getCapability(Capabilities.EnergyStorage.BLOCK, helper.absolutePos(at), Direction.SOUTH) != null)
+				helper.fail("a Substation still takes FE");
+			if (be.comparator() != 0)
+				helper.fail("a dormant Substation reads " + be.comparator() + " on a comparator");
 		});
-		helper.runAtTickTime(30, () -> {
+		hold(helper, player(helper), at.above(), start, hold + 4);
+		helper.runAtTickTime(start + hold - 8, () -> {
 			if (be.isWoken() || record(helper).awake(origin(helper), District.FOUNDRY))
-				helper.fail("woke a joule short of the wake charge");
-			if (!helper.getBlockState(at).getValue(SubstationBlock.LOCKED))
-				helper.fail("unlocked before waking");
-			if (energy.receiveEnergy(5, false) != 1)
-				helper.fail("took more than the last joule it needed");
+				helper.fail("woke before the haul was over");
+			if (be.haulers() != 1)
+				helper.fail(be.haulers() + " hauls under way, not 1");
+			if (be.shown(helper.getLevel().getGameTime(), 0) <= hold / 2f)
+				helper.fail("the lever isn't over half way near the end of the haul");
 		});
-		helper.runAtTickTime(45, () -> {
-			if (!be.isWoken() || !record(helper).awake(origin(helper), District.FOUNDRY))
-				helper.fail("didn't wake at the wake charge");
+		helper.runAtTickTime(start + hold + 6, () -> {
+			if (!be.isWoken() || !be.thrown() || !record(helper).awake(origin(helper), District.FOUNDRY))
+				helper.fail("the full haul didn't throw the breaker and wake the Foundry");
 			if (helper.getBlockState(at).getValue(SubstationBlock.LOCKED) || helper.getBlockState(at.above()).getValue(SubstationBlock.LOCKED))
 				helper.fail("still locked after waking");
 			if (be.comparator() != 15)
@@ -188,28 +196,98 @@ public final class WastesCityGameTests {
 		});
 	}
 
-	/** Woken, it pays its upkeep from what it's given: fed while it's fed, unfed (lamps out) once it isn't. */
-	@GameTest(template = COURSE, timeoutTicks = 160)
-	public static void substationUpkeepFeedsTheDistrict(GameTestHelper helper) {
+	/** Let go before the end, the lever springs back and nothing wakes; a whole haul after (another player's) wakes it. */
+	@GameTest(template = COURSE, timeoutTicks = 220)
+	public static void lettingGoEarlySpringsTheBreakerBack(GameTestHelper helper) {
+		BlockPos at = new BlockPos(2, 1, 2);
+		SubstationBlockEntity be = substation(helper, at, District.RAIL_YARD);
+		int hold = SubstationBlockEntity.HOLD_TICKS;
+		hold(helper, player(helper), at, 5, 40);
+		helper.runAtTickTime(45 + SubstationBlockEntity.LET_GO_TICKS + 3, () -> {
+			if (be.haulers() != 0)
+				helper.fail("the haul wasn't let go with no use for " + (SubstationBlockEntity.LET_GO_TICKS + 3) + " ticks");
+			if (be.hauled())
+				helper.fail("clients are told a hand is still on it");
+		});
+		helper.runAtTickTime(100, () -> {
+			if (be.isWoken() || record(helper).awake(origin(helper), District.RAIL_YARD))
+				helper.fail("woke from a haul let go two thirds of the way");
+			if (!helper.getBlockState(at).getValue(SubstationBlock.LOCKED))
+				helper.fail("unlocked without waking");
+			if (be.shown(helper.getLevel().getGameTime(), 0) != 0)
+				helper.fail("the lever didn't spring back: " + be.shown(helper.getLevel().getGameTime(), 0));
+		});
+		hold(helper, player(helper), at, 110, hold + 4);
+		helper.runAtTickTime(110 + hold + 6, () -> {
+			if (!be.isWoken() || !record(helper).awake(origin(helper), District.RAIL_YARD))
+				helper.fail("a whole haul after a let-go one didn't wake it");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * No upkeep: thrown, its district's lamp ripples on at the wake and stays lit with no power ever given, long past where
+	 * the old upkeep fell due, and the record holds it lit for good.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 280)
+	public static void aWokenDistrictStaysLitWithNoPower(GameTestHelper helper) {
 		BlockPos at = new BlockPos(2, 1, 2);
 		SubstationBlockEntity be = substation(helper, at, District.WORKSHOPS);
-		IEnergyStorage energy = be.energy();
-		helper.runAtTickTime(2, () -> {
-			for (int i = 0; i < 20 && !be.isWoken(); i++)
-				energy.receiveEnergy(100_000, false);
+		BlockPos head = lampPost(helper, new BlockPos(5, 1, 2), District.WORKSHOPS);
+		hold(helper, player(helper), at, 2, SubstationBlockEntity.HOLD_TICKS + 4);
+		helper.runAtTickTime(SubstationBlockEntity.HOLD_TICKS + 30, () -> {
+			if (!be.isWoken())
+				helper.fail("didn't wake");
+			if (!lit(helper, head))
+				helper.fail("the lamp didn't light at the wake");
 		});
-		// a second's upkeep each second for a while, then nothing
-		for (int t = 25; t <= 85; t += 10)
-			helper.runAtTickTime(t, () -> energy.receiveEnergy(CMConfig.SERVER.wastesUpkeep() * 20, false));
-		helper.runAtTickTime(90, () -> {
-			if (!record(helper).fed(origin(helper), District.WORKSHOPS, helper.getLevel().getGameTime()))
-				helper.fail("not fed while its upkeep came in");
+		helper.runAtTickTime(260, () -> {
+			if (!lit(helper, head))
+				helper.fail("the lamp went dark with no power");
+			if (!record(helper).lit(origin(helper), District.WORKSHOPS, helper.getLevel().getGameTime()))
+				helper.fail("the record says the district is dark with no power");
+			helper.succeed();
 		});
-		helper.runAtTickTime(150, () -> {
-			if (record(helper).fed(origin(helper), District.WORKSHOPS, helper.getLevel().getGameTime()))
-				helper.fail("still fed with no power coming in");
-			if (!record(helper).awake(origin(helper), District.WORKSHOPS))
-				helper.fail("went back to sleep unfed (it wakes for good)");
+	}
+
+	/**
+	 * The heart's doors stay shut until all four districts are awake, then open; each district before the fourth makes
+	 * the spire pulse (a seam over the drum's roof flashes, then goes dark), and the fourth lights it for good.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 100)
+	public static void heartDoorsOpenOnlyAfterAllFour(GameTestHelper helper) {
+		BlockPos heart = new BlockPos(10, 1, 3), seam = new BlockPos(3, com.comedymonkey.createaddons.content.wastes.city.CityLayout.SPIRE_ROOF, 3);
+		door(helper, heart, true);
+		bind(helper, heart, District.HEART);
+		helper.setBlock(seam, ModWastes.SEAMED_VOID_ALLOY_PLATE.get().defaultBlockState());
+		bind(helper, seam, District.HEART);
+		ServerLevel level = helper.getLevel();
+		helper.runAtTickTime(3, () -> record(helper).wake(level, origin(helper), District.FOUNDRY, null));
+		helper.runAtTickTime(7, () -> {
+			if (!lit(helper, seam))
+				helper.fail("the spire didn't pulse as the Foundry woke");
+		});
+		helper.runAtTickTime(30, () -> {
+			if (lit(helper, seam))
+				helper.fail("the spire's pulse didn't go dark again");
+			record(helper).wake(level, origin(helper), District.WORKSHOPS, null);
+			record(helper).wake(level, origin(helper), District.RAIL_YARD, null);
+		});
+		helper.runAtTickTime(50, () -> {
+			if (helper.getBlockState(heart).getValue(SlidingDoorBlock.OPEN))
+				helper.fail("a heart door opened with three districts awake");
+			if (lit(helper, seam))
+				helper.fail("the spire is lit with three districts awake");
+			record(helper).wake(level, origin(helper), District.QUARTERS, null);
+		});
+		helper.runAtTickTime(70, () -> {
+			for (int c = 0; c < 2; c++)
+				for (int r = 0; r < 3; r++)
+					if (!helper.getBlockState(SlidingDoorBlock.part(heart, Direction.NORTH, c, r)).getValue(SlidingDoorBlock.OPEN))
+						helper.fail("a heart door stayed shut with all four awake");
+			if (!lit(helper, seam))
+				helper.fail("the spire didn't light with the heart");
+			helper.setBlock(seam, Blocks.AIR);
 			helper.succeed();
 		});
 	}
@@ -398,9 +476,12 @@ public final class WastesCityGameTests {
 
 	// ---------------------------------------------------------------- the lamps
 
-	/** A woken, fed district's lamp lights (as bright as an Electric Light) and its cable's line; unfed, they go dark. */
+	/**
+	 * A woken district's lamp lights (as bright as an Electric Light) and its cable's line; its grid cut (its Substation
+	 * broken, P50), they flicker and go dark.
+	 */
 	@GameTest(template = COURSE, timeoutTicks = 140)
-	public static void lampsFollowTheirDistrictsFeed(GameTestHelper helper) {
+	public static void lampsFollowTheirDistrict(GameTestHelper helper) {
 		BlockPos foot = new BlockPos(3, 1, 3), cable = new BlockPos(5, 1, 3);
 		BlockState post = ModWastes.DERELICT_STREET_LAMP.get().defaultBlockState();
 		helper.setBlock(foot, post);
@@ -416,7 +497,6 @@ public final class WastesCityGameTests {
 				helper.fail("the post didn't stack into foot, pole and head");
 			CityRecord r = record(helper);
 			r.wake(helper.getLevel(), origin(helper), District.QUARTERS, helper.absolutePos(foot));
-			r.setFed(helper.getLevel(), origin(helper), District.QUARTERS, true, helper.absolutePos(foot));
 		});
 		helper.runAtTickTime(40, () -> {
 			if (!helper.getBlockState(head).getValue(BlockStateProperties.LIT) || helper.getBlockState(head).getLightEmission(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, net.minecraft.core.BlockPos.ZERO) != 15)
@@ -425,15 +505,15 @@ public final class WastesCityGameTests {
 				helper.fail("the foot lit");
 			if (!helper.getBlockState(cable).getValue(BlockStateProperties.LIT))
 				helper.fail("the cable's line didn't light");
-			record(helper).setFed(helper.getLevel(), origin(helper), District.QUARTERS, false, null);
+			record(helper).cut(helper.getLevel(), origin(helper), District.QUARTERS);
 		});
 		helper.runAtTickTime(50, () -> {
 			if (((DerelictLightBlockEntity) helper.getBlockEntity(head)).phase() != DerelictLightBlockEntity.Phase.FADING)
-				helper.fail("the head didn't flicker as it starved");
+				helper.fail("the head didn't flicker as its grid was cut");
 		});
 		helper.runAtTickTime(80, () -> {
 			if (helper.getBlockState(head).getValue(BlockStateProperties.LIT) || helper.getBlockState(cable).getValue(BlockStateProperties.LIT))
-				helper.fail("still lit unfed");
+				helper.fail("still lit with its grid cut");
 			helper.succeed();
 		});
 	}
@@ -567,8 +647,8 @@ public final class WastesCityGameTests {
 			CityRecord r = record(helper);
 			if (!r.allAwake(origin(helper)) || !r.heartBurning(origin(helper), helper.getLevel().getGameTime()))
 				helper.fail("the star didn't wake all four and burn for the heart");
-			if (!r.fed(origin(helper), District.FOUNDRY, helper.getLevel().getGameTime()))
-				helper.fail("the heart's star doesn't feed the districts' lamps");
+			if (!r.lit(origin(helper), District.FOUNDRY, helper.getLevel().getGameTime()))
+				helper.fail("the heart's star didn't light the districts' lamps");
 		});
 		helper.runAtTickTime(10, () -> {
 			IEnergyStorage e = helper.getLevel().getCapability(Capabilities.EnergyStorage.BLOCK, helper.absolutePos(port), Direction.NORTH);
@@ -731,43 +811,15 @@ public final class WastesCityGameTests {
 			CityRecord r = record(helper);
 			r.wake(level, origin(helper), District.FOUNDRY, null);
 			r.cut(level, origin(helper), District.FOUNDRY);
-			if (r.fed(origin(helper), District.FOUNDRY, level.getGameTime()))
-				helper.fail("a cut district is fed with no heart burning");
+			if (r.lit(origin(helper), District.FOUNDRY, level.getGameTime()))
+				helper.fail("a cut district is lit with no heart burning");
 			r.burnHeart(level, origin(helper), level.getGameTime() + 10_000, null);
 		});
 		helper.runAtTickTime(40, () -> {
-			if (!record(helper).fed(origin(helper), District.FOUNDRY, level.getGameTime()))
-				helper.fail("the heart's star doesn't feed the cut district");
+			if (!record(helper).lit(origin(helper), District.FOUNDRY, level.getGameTime()))
+				helper.fail("the heart's star doesn't light the cut district");
 			if (!lit(helper, head))
 				helper.fail("the cut district's lamp is dark with the heart burning");
-			helper.succeed();
-		});
-	}
-
-	/**
-	 * D45: the lamps ripple on at the wake itself, with no upkeep paid yet; with none coming after, they flicker out once
-	 * the first second's upkeep falls due.
-	 */
-	@GameTest(template = COURSE, timeoutTicks = 100)
-	public static void lampsRippleOnAtTheWake(GameTestHelper helper) {
-		BlockPos at = new BlockPos(2, 1, 2);
-		SubstationBlockEntity be = substation(helper, at, District.WORKSHOPS);
-		BlockPos head = lampPost(helper, new BlockPos(5, 1, 2), District.WORKSHOPS);
-		helper.runAtTickTime(2, () -> {
-			if (be.energy().receiveEnergy(CMConfig.SERVER.wastesWakeCharge(), false) != CMConfig.SERVER.wastesWakeCharge())
-				helper.fail("didn't take the wake charge");
-		});
-		helper.runAtTickTime(14, () -> {
-			if (!be.isWoken())
-				helper.fail("didn't wake");
-			if (!lit(helper, head))
-				helper.fail("the lamp didn't light at the wake");
-		});
-		helper.runAtTickTime(90, () -> {
-			if (lit(helper, head))
-				helper.fail("still lit with no upkeep after the wake");
-			if (!record(helper).awake(origin(helper), District.WORKSHOPS))
-				helper.fail("went back to sleep");
 			helper.succeed();
 		});
 	}
@@ -868,7 +920,6 @@ public final class WastesCityGameTests {
 				helper.fail("the wall run should join the cable above it and run on straight (up and down), not the floor cable: " + s);
 			ServerLevel level = helper.getLevel();
 			record(helper).wake(level, origin(helper), District.QUARTERS, null);
-			record(helper).setFed(level, origin(helper), District.QUARTERS, true, null);
 		});
 		helper.runAtTickTime(40, () -> {
 			for (BlockPos p : List.of(a, a.above(), roof.below()))
@@ -909,7 +960,6 @@ public final class WastesCityGameTests {
 			}
 			ServerLevel level = helper.getLevel();
 			record(helper).wake(level, origin(helper), District.FOUNDRY, null);
-			record(helper).setFed(level, origin(helper), District.FOUNDRY, true, null);
 		});
 		helper.runAtTickTime(40, () -> {
 			BlockState head = helper.getBlockState(foot.above(2));
@@ -920,8 +970,8 @@ public final class WastesCityGameTests {
 	}
 
 	/**
-	 * The Seamed Void-Alloy Plate's seams and the Charging Alcove's contact plate light while their district is fed and go
-	 * dark unfed; ones of no city (a player's) never light, and the plate still drops itself.
+	 * The Seamed Void-Alloy Plate's seams and the Charging Alcove's contact plate light once their district wakes and go
+	 * dark with its grid cut; ones of no city (a player's) never light, and the plate still drops itself.
 	 */
 	@GameTest(template = COURSE, timeoutTicks = 120)
 	public static void seamsAndAlcoveLightWithTheirDistrict(GameTestHelper helper) {
@@ -938,7 +988,6 @@ public final class WastesCityGameTests {
 		ServerLevel level = helper.getLevel();
 		helper.runAtTickTime(3, () -> {
 			record(helper).wake(level, origin(helper), District.RAIL_YARD, null);
-			record(helper).setFed(level, origin(helper), District.RAIL_YARD, true, null);
 		});
 		helper.runAtTickTime(40, () -> {
 			for (BlockPos p : city)
@@ -946,12 +995,12 @@ public final class WastesCityGameTests {
 					helper.fail(helper.getBlockState(p).getBlock().getName().getString() + " at " + p + " didn't light with its district");
 			if (lit(helper, loose))
 				helper.fail("a plate of no city lit");
-			record(helper).setFed(level, origin(helper), District.RAIL_YARD, false, null);
+			record(helper).cut(level, origin(helper), District.RAIL_YARD);
 		});
 		helper.runAtTickTime(80, () -> {
 			for (BlockPos p : city)
 				if (lit(helper, p))
-					helper.fail(helper.getBlockState(p).getBlock().getName().getString() + " at " + p + " still lit unfed");
+					helper.fail(helper.getBlockState(p).getBlock().getName().getString() + " at " + p + " still lit with its grid cut");
 			if (!(helper.getBlockState(plate).getBlock() instanceof SeamedPlateBlock) || !(helper.getBlockState(alcove).getBlock() instanceof ChargingAlcoveBlock))
 				helper.fail("not the lit decor blocks");
 			helper.succeed();
@@ -959,7 +1008,7 @@ public final class WastesCityGameTests {
 	}
 
 	/**
-	 * D75: the building block set's glows light while their district is fed and go dark unfed (the Slotted Grille's pane,
+	 * D75: the building block set's glows light once their district wakes and go dark with its grid cut (the Slotted Grille's pane,
 	 * the Band's seam, a cracked Scarred Plate's crack); a chipped Scarred Plate never lights, nor a grille of no city.
 	 */
 	@GameTest(template = COURSE, timeoutTicks = 120)
@@ -977,7 +1026,6 @@ public final class WastesCityGameTests {
 		ServerLevel level = helper.getLevel();
 		helper.runAtTickTime(3, () -> {
 			record(helper).wake(level, origin(helper), District.QUARTERS, null);
-			record(helper).setFed(level, origin(helper), District.QUARTERS, true, null);
 		});
 		helper.runAtTickTime(40, () -> {
 			for (BlockPos p : lights)
@@ -989,12 +1037,12 @@ public final class WastesCityGameTests {
 				helper.fail("a grille of no city lit");
 			if (helper.getBlockState(grille).getLightEmission(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, net.minecraft.core.BlockPos.ZERO) != 0)
 				helper.fail("lit decor casts light (D63)");
-			record(helper).setFed(level, origin(helper), District.QUARTERS, false, null);
+			record(helper).cut(level, origin(helper), District.QUARTERS);
 		});
 		helper.runAtTickTime(80, () -> {
 			for (BlockPos p : lights)
 				if (lit(helper, p))
-					helper.fail(helper.getBlockState(p).getBlock().getName().getString() + " at " + p + " still lit unfed");
+					helper.fail(helper.getBlockState(p).getBlock().getName().getString() + " at " + p + " still lit with its grid cut");
 			helper.succeed();
 		});
 	}
@@ -1036,100 +1084,6 @@ public final class WastesCityGameTests {
 					com.comedymonkey.createaddons.content.wastes.city.CityPlan.ANYWHERE)));
 			if (level.getBlockState(at) != VoidAlloyBond.at(kinds.get(0), at))
 				helper.fail("the city's builder didn't set the plate's bond");
-			helper.succeed();
-		});
-	}
-
-	/** A Lava Generator, three wires east along the floor, and a woken Substation bound to the Foundry beyond them. */
-	private static SubstationBlockEntity linedSubstation(GameTestHelper helper, BlockPos gen, boolean fuelled) {
-		if (fuelled)
-			LineGameTests.generator(helper, gen);
-		else
-			helper.setBlock(gen, ModBlocks.LAVA_GENERATOR.get().defaultBlockState());
-		for (int i = 1; i <= 3; i++)
-			LineGameTests.wire(helper, ModBlocks.COPPER_POWER_LINE.get(), gen.east(i), Direction.DOWN);
-		SubstationBlockEntity be = substation(helper, gen.east(4), District.FOUNDRY);
-		helper.runAtTickTime(2, () -> {
-			LineGameTests.relink(helper, gen.east(1), gen.east(3));
-			be.energy().receiveEnergy(CMConfig.SERVER.wastesWakeCharge(), false);
-		});
-		return be;
-	}
-
-	private static void away(GameTestHelper helper, int ticks, BlockPos... where) {
-		for (BlockPos p : where)
-			PowerGridTesting.away(helper.getLevel(), helper.absolutePos(p), ticks > 0, ticks);
-	}
-
-	private static boolean fed(GameTestHelper helper) {
-		return record(helper).fed(origin(helper), District.FOUNDRY, helper.getLevel().getGameTime());
-	}
-
-	/**
-	 * D48 (P24): a Substation that's away draws its upkeep through the lines on paper. With its line still running, the
-	 * network sends its record what it needs and the district stays fed; its generator gone, it goes unfed.
-	 */
-	@GameTest(template = COURSE, timeoutTicks = 260)
-	public static void awaySubstationDrawsUpkeepFromARunningLine(GameTestHelper helper) {
-		BlockPos gen = new BlockPos(1, 1, 2), sub = gen.east(4);
-		linedSubstation(helper, gen, true);
-		helper.runAtTickTime(60, () -> {
-			if (!fed(helper))
-				helper.fail("not fed by its line while running");
-			if (PowerGrid.of(helper.getLevel()).consumer(helper.absolutePos(sub)) == null)
-				helper.fail("no record to run on paper with");
-			away(helper, 240, sub);
-			// from unfed: only the lines can make it fed again while it's away
-			record(helper).setFed(helper.getLevel(), origin(helper), District.FOUNDRY, false, null);
-		});
-		helper.runAtTickTime(120, () -> {
-			if (!fed(helper))
-				helper.fail("away, its upkeep didn't come through the running line");
-			helper.setBlock(gen, Blocks.AIR);
-		});
-		helper.runAtTickTime(220, () -> {
-			if (fed(helper))
-				helper.fail("still fed away with its generator gone");
-			away(helper, 0, sub);
-			helper.succeed();
-		});
-	}
-
-	/**
-	 * D48 (P24): with the Substation, its line and its generator all away (nothing on the network running), its upkeep is
-	 * drawn straight from the generator's record.
-	 */
-	@GameTest(template = COURSE, timeoutTicks = 200)
-	public static void awaySubstationDrawsUpkeepFromAGeneratorOnPaper(GameTestHelper helper) {
-		BlockPos gen = new BlockPos(1, 1, 2), sub = gen.east(4);
-		linedSubstation(helper, gen, true);
-		helper.runAtTickTime(60, () -> {
-			if (PowerGridTesting.store(helper.getLevel(), helper.absolutePos(gen)) < 0)
-				helper.fail("the generator has no record");
-			away(helper, 180, gen, gen.east(1), gen.east(2), gen.east(3), sub);
-			record(helper).setFed(helper.getLevel(), origin(helper), District.FOUNDRY, false, null);
-		});
-		helper.runAtTickTime(140, () -> {
-			if (!fed(helper))
-				helper.fail("all away, its upkeep didn't come from the generator's record");
-			away(helper, 0, gen, gen.east(1), gen.east(2), gen.east(3), sub);
-			helper.succeed();
-		});
-	}
-
-	/** D48: all away with a generator that has no fuel: the lines bring nothing, and the district goes unfed. */
-	@GameTest(template = COURSE, timeoutTicks = 200)
-	public static void awaySubstationGoesUnfedWithNothingOnTheLine(GameTestHelper helper) {
-		BlockPos gen = new BlockPos(1, 1, 2), sub = gen.east(4);
-		linedSubstation(helper, gen, false);
-		helper.runAtTickTime(60, () -> {
-			away(helper, 180, gen, gen.east(1), gen.east(2), gen.east(3), sub);
-			record(helper).setFed(helper.getLevel(), origin(helper), District.FOUNDRY, true, null);
-		});
-		helper.runAtTickTime(140, () -> {
-			if (fed(helper))
-				helper.fail("away with nothing on its line, it's still fed");
-			away(helper, 0, gen, gen.east(1), gen.east(2), gen.east(3), sub);
 			helper.succeed();
 		});
 	}

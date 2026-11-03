@@ -33,7 +33,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 /**
  * A Derelict Street Lamp (design/specs/clockwork-wastes.md, D16, P25; brief §4): the makers' cast-iron post with the
  * uprising's hooded lens on a crook, stacked a block at a time like the Lamp Posts (foot, pole, head: each block takes
- * its part from the lamps above and below it). The head lights while its district is fed ({@link DerelictLightBlockEntity}),
+ * its part from the lamps above and below it). The head lights once its district wakes ({@link DerelictLightBlockEntity}),
  * as bright as an Electric Light; a {@link #SNAPPED} head (the crook bent down, the lens cracked) never does. Not
  * dyeable, no brightness steps; it breaks into scrap (its loot table), never into an Electric Light. The crook reaches
  * over the street toward the facing. A {@link #LEANING} post (D41; the city sets it, and a block stacked on one leans

@@ -20,7 +20,7 @@ import net.minecraft.util.StringRepresentable;
 
 /**
  * The Charging Alcove (D37, brief §1): decor three tall that drops itself, whose contact plate lights with starlight
- * while its district is fed, as the city's lamps do. Each of its three blocks lights its own part of the plate
+ * while its district is lit, as the city's lamps do. Each of its three blocks lights its own part of the plate
  * ({@link DerelictLightBlockEntity}; the lit plate is an emissive part of each block's model). One a player places
  * belongs to no city and stays dark. It casts no light.
  * <p>

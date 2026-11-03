@@ -83,6 +83,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(TradeBotLinkPicking::onLeftClickBlock);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(TradeBotLinkPicking::onClientTick);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.tradebot.TradeBotLoopSounds::onClientTick);
+		// D96: a dormant Substation says to hold use on its breaker
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.wastes.BreakerHint::onClientTick);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ComedyMonkeysCreateAddonsClient::tickClipClock);
 		// The ground shakes under the Juggernaut's spring leap
 		com.comedymonkey.createaddons.client.juggernaut.JuggernautShake.register();

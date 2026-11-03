@@ -5,7 +5,6 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
-import com.comedymonkey.createaddons.content.wastes.CityRecord;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,17 +27,17 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * The Sentry (P19, P42, P9; brief: "a flower with eyes"): a turret fixed to a wall or floor, its mount on one face of a
- * block. It never moves (no push, no knockback, no fall). Woken and fed, it opens and watches; a player in its sight
- * within 24 blocks gets a starlight bolt every 2 s, 7 a bolt. While its district is unfed it folds up and stops (P9),
- * and opens again when the power's back. Asleep (its district not woken) it's a closed bud.
+ * The Sentry (P19, P42; brief: "a flower with eyes"): a turret fixed to a wall or floor, its mount on one face of a
+ * block. It never moves (no push, no knockback, no fall). Woken, it opens and watches for good (D96: a woken district
+ * needs no power); a player in its sight within 24 blocks gets a starlight bolt every 2 s, 7 a bolt. Asleep (its
+ * district not woken) it's a closed bud.
  * <p>
  * It aims with its yaw ring and pitch knuckle: the server turns its aim at up to 120°/s (synced), clients follow with a
  * spring that overshoots a few degrees and settles (brief: "turns smoothly with a slight overshoot").
  * <p>
  * Its clips (brief, Motion Set): watching (the slow sweep, lenses dim and rippling) with a mannerism every 6 to 10 s
  * (a barrel check, a petal twitch, a blink round the ring, a tilt to listen); a target seen snaps its petals open and
- * its lenses to it; aiming holds them narrowed between shots; firing; a hit's flinch; the slow fold; and its death,
+ * its lenses to it; aiming holds them narrowed between shots; firing; a hit's flinch; and its death,
  * petals splaying and drooping, lenses going out in a spiral.
  */
 public final class Sentry extends CityBot {
@@ -46,7 +45,6 @@ public final class Sentry extends CityBot {
 	private static final EntityDataAccessor<Direction> FACE = SynchedEntityData.defineId(Sentry.class, EntityDataSerializers.DIRECTION);
 	private static final EntityDataAccessor<Float> AIM_YAW = SynchedEntityData.defineId(Sentry.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Float> AIM_PITCH = SynchedEntityData.defineId(Sentry.class, EntityDataSerializers.FLOAT);
-	private static final EntityDataAccessor<Boolean> FOLDED = SynchedEntityData.defineId(Sentry.class, EntityDataSerializers.BOOLEAN);
 
 	/** P19, P42. */
 	public static final float HEALTH = 30, BOLT_DAMAGE = 7;
@@ -69,10 +67,14 @@ public final class Sentry extends CityBot {
 	static final float SWEEP_HALF = 3, SWEEP_SLACK = 0.1f;
 	/** A target seen: the petals have snapped open (the target clip's 0.25 s) before it may fire. */
 	static final float SNAPPED = 0.3f;
+	/**
+	 * D97: a Sentry that can see where the breaker is thrown from unfolds this long after the clunk, as the lamps ripple
+	 * on (provisional, a choice: "a beat").
+	 */
+	public static final int BEAT = 10;
 
 	@Nullable
 	private BlockPos anchor;
-	private boolean fed = true;
 	private int cooldown, shots;
 	/** The shot of the fire clip under way: fires when the clip reaches it. */
 	private boolean shotPending;
@@ -120,7 +122,6 @@ public final class Sentry extends CityBot {
 		builder.define(FACE, Direction.UP);
 		builder.define(AIM_YAW, 0f);
 		builder.define(AIM_PITCH, 0f);
-		builder.define(FOLDED, false);
 	}
 
 	// ======================================================================== the mount
@@ -195,11 +196,6 @@ public final class Sentry extends CityBot {
 		return entityData.get(AIM_PITCH);
 	}
 
-	/** Folded up (unfed, P9) or asleep: dark and still. */
-	public boolean folded() {
-		return dormant() || entityData.get(FOLDED);
-	}
-
 	/** From an egg or a command (not the city): mounted on the floor where it appeared. */
 	@SuppressWarnings("deprecation") // overriding is the intended use; callers go through EventHooks.finalizeMobSpawn
 	@Override
@@ -210,55 +206,11 @@ public final class Sentry extends CityBot {
 		return super.finalizeSpawn(level, difficulty, reason, data);
 	}
 
-	// ======================================================================== power
-
-	public boolean fed() {
-		return fed;
-	}
-
-	/** Its district's feed changed (P9): unfed it folds and stops; fed again it opens. */
-	public void setFed(boolean fed) {
-		this.fed = fed;
-		if (dormant() || level().isClientSide)
-			return;
-		if (!fed && !entityData.get(FOLDED)) {
-			entityData.set(FOLDED, true);
-			shotPending = false;
-			aimedAt = null;
-			setTarget(null);
-			playClip("fold"); // sound: the slow fold, lenses going out
-		} else if (fed && entityData.get(FOLDED)) {
-			entityData.set(FOLDED, false);
-			playClip("unfold"); // sound: the unfold
-		}
-	}
-
-	/** Its district's feed from the record; one with no city runs as fed (an egg's, for testing). */
-	private boolean fedNow() {
-		CityRecord record = record();
-		if (record == null || !link.bound())
-			return true;
-		return record.fed(link.origin(), link.district(), level().getGameTime());
-	}
-
-	@Override
-	protected void catchUp() {
-		super.catchUp();
-		if (!dormant())
-			setFed(fedNow());
-	}
+	// ======================================================================== waking
 
 	@Override
 	protected void onWake() {
-		entityData.set(FOLDED, false);
-		fed = true;
 		playClip("unfold"); // sound: the unfold
-		setFed(fedNow());
-	}
-
-	@Override
-	protected void onDormant() {
-		entityData.set(FOLDED, false);
 	}
 
 	// ======================================================================== watching and firing
@@ -268,19 +220,6 @@ public final class Sentry extends CityBot {
 		if (!level().isClientSide)
 			snap();
 		super.tick();
-	}
-
-	/** Folded (unfed) it stops: no aim, no fire. */
-	@Override
-	protected boolean isImmobile() {
-		return super.isImmobile() || entityData.get(FOLDED);
-	}
-
-	@Override
-	protected void cityTick() {
-		super.cityTick();
-		if (entityData.get(FOLDED) && getTarget() != null)
-			setTarget(null);
 	}
 
 	/** It thinks for itself (no goals): watch, aim, fire. */
@@ -350,7 +289,7 @@ public final class Sentry extends CityBot {
 	@Override
 	public boolean hurt(net.minecraft.world.damagesource.DamageSource source, float amount) {
 		boolean hurt = super.hurt(source, amount);
-		if (hurt && !level().isClientSide && isAlive() && !folded() && !(playing("fire") && !clipDone()) && !(playing("unfold") && !clipDone()))
+		if (hurt && !level().isClientSide && isAlive() && !dormant() && !(playing("fire") && !clipDone()) && !(playing("unfold") && !clipDone()))
 			playClip(hitClip(source, headPos(), headFacing(), headUp())); // sound: a clang, the lenses' blink
 		return hurt;
 	}
@@ -387,7 +326,12 @@ public final class Sentry extends CityBot {
 
 	/** Within 24 blocks, in its line of sight from the head, and not behind its own wall or floor. */
 	public boolean inSight(Entity e) {
-		Vec3 from = headPos(), to = e.getBoundingBox().getCenter();
+		return inSight(e.getBoundingBox().getCenter());
+	}
+
+	/** A point within 24 blocks, in its line of sight from the head, and not behind its own wall or floor. */
+	public boolean inSight(Vec3 to) {
+		Vec3 from = headPos();
 		if (from.distanceToSqr(to) > RANGE * RANGE)
 			return false;
 		Vector3f up = frame(face())[1];
@@ -407,7 +351,7 @@ public final class Sentry extends CityBot {
 	public void springAim(double now) {
 		double dt = Double.isNaN(lastSpring) ? 0 : Math.min(5, now - lastSpring) / 20;
 		lastSpring = now;
-		if (folded()) {
+		if (dormant()) {
 			shownYaw = shownPitch = yawSpeed = pitchSpeed = 0;
 			return;
 		}
@@ -469,8 +413,6 @@ public final class Sentry extends CityBot {
 		tag.putString("Face", face().getSerializedName());
 		if (anchor != null)
 			tag.putLong("Anchor", anchor.asLong());
-		tag.putBoolean("Folded", entityData.get(FOLDED));
-		tag.putBoolean("Fed", fed);
 	}
 
 	@Override
@@ -479,9 +421,7 @@ public final class Sentry extends CityBot {
 		Direction face = Direction.byName(tag.getString("Face"));
 		entityData.set(FACE, face == null || face == Direction.DOWN ? Direction.UP : face);
 		anchor = tag.contains("Anchor") ? BlockPos.of(tag.getLong("Anchor")) : null;
-		fed = !tag.contains("Fed") || tag.getBoolean("Fed");
-		entityData.set(FOLDED, tag.getBoolean("Folded"));
 		if (!dormant())
-			playClip(entityData.get(FOLDED) ? "fold" : "watching", 1, entityData.get(FOLDED) ? 3 : 0);
+			playClip("watching", 1, 0);
 	}
 }

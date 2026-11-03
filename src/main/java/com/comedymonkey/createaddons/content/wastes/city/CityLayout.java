@@ -209,6 +209,8 @@ public final class CityLayout {
 		}
 		p.district = null;
 		outskirts(p);
+		// the roads' wear, over everything standing on them
+		p.roads.wear(p);
 	}
 
 	/**
@@ -296,8 +298,10 @@ public final class CityLayout {
 		// the plaza round the drum: the makers' paving, End Stone brick bands
 		for (int x = -HEART; x <= HEART; x++)
 			for (int z = -HEART; z <= HEART; z++)
-				if (!inDrum(x, z))
-					p.put(x, -1, z, (Math.abs(x) == 20 || Math.abs(z) == 20) ? brick : paving(x, z));
+				if (!inDrum(x, z) && (Math.abs(x) == 20 || Math.abs(z) == 20))
+					p.put(x, -1, z, brick);
+				else if (!inDrum(x, z))
+					p.roads.pave(p, x, z, paving(x, z), CityRoads.Kind.PLAZA, 0);
 		// the hall's floor: void-alloy plate; the drum's wall, 14 high, End Stone brick (the makers' layer)
 		for (int x = -17; x <= 17; x++)
 			for (int z = -17; z <= 17; z++) {
@@ -444,13 +448,20 @@ public final class CityLayout {
 	// ================================================================ the boulevards
 
 	private static void boulevards(CityPlan p) {
+		long key = CityGround.key(p.seed, p.origin);
 		for (int a = HEART + 1; a <= CORE; a++)
-			for (int w = -3; w <= 3; w++) {
-				p.put(w, -1, a, Math.abs(w) == 3 ? scorched(w, a) : paving(w, a));
-				p.put(w, -1, -a, Math.abs(w) == 3 ? scorched(w, -a) : paving(w, -a));
-				p.put(a, -1, w, Math.abs(w) == 3 ? scorched(a, w) : paving(a, w));
-				p.put(-a, -1, w, Math.abs(w) == 3 ? scorched(-a, w) : paving(-a, w));
-			}
+			for (int w = -3; w <= 3; w++)
+				for (int[] c : new int[][] { { w, a }, { w, -a }, { a, w }, { -a, w } })
+					road(p, key, p.at(c[0], -1, c[1]), Math.abs(w) == 3, CityRoads.Kind.BOULEVARD, w);
+	}
+
+	/** A road's cell: its paving, or its scorched verge (End Stone where the scorching missed). */
+	private static void road(CityPlan p, long key, BlockPos at, boolean verge, CityRoads.Kind kind, int across) {
+		int dx = at.getX() - p.origin.getX(), dz = at.getZ() - p.origin.getZ();
+		if (verge)
+			p.roads.pave(p, at, CityGround.top(key, dx, dz), CityRoads.Kind.VERGE, across);
+		else
+			p.roads.pave(p, at, paving(dx, dz), kind, across);
 	}
 
 	// ================================================================ a district
@@ -556,10 +567,11 @@ public final class CityLayout {
 
 	/** Two streets of the makers' paving (v 30-34 along u, u 30-34 along v), lamps every 7 blocks alternating sides, cable feeding them. */
 	private static void streets(Q q, RandomSource r) {
+		long key = CityGround.key(q.p().seed, q.p().origin);
 		for (int a = 0; a <= 66; a++)
 			for (int w = 30; w <= 34; w++) {
-				q.put(a, -1, w, w == 30 || w == 34 ? scorched(a * 7 + w, q.d().ordinal()) : paving(q.sx() * a, q.sz() * w));
-				q.put(w, -1, a, w == 30 || w == 34 ? scorched(a * 5 + w, q.d().ordinal() + 9) : paving(q.sx() * w, q.sz() * a));
+				road(q.p(), key, q.at(a, -1, w), w == 30 || w == 34, CityRoads.Kind.STREET, w);
+				road(q.p(), key, q.at(w, -1, a), w == 30 || w == 34, CityRoads.Kind.STREET, w);
 			}
 		// lamps along street A (along u) and B (along v): the crook over the street; the outer ones lean and snap more (the war)
 		for (int k = 0; 2 + 7 * k <= 64; k++) {
@@ -873,14 +885,25 @@ public final class CityLayout {
 	// ---------------------------------------------------------------- the bots
 
 	/**
+	 * D97: the kit yard's floor Sentry, (u, v) in a district's frame: on the Substation's pad, a corner in front of it (the
+	 * yard's local (1, 7); the Substation at (2, 8), the breaker thrown from (2, 7)), in view of the player throwing it. On
+	 * the corner, not at its side, so its petals and barrel never reach the cabinet or the lever (on the cabinet's side, which
+	 * side depends on the district's mirroring).
+	 */
+	public static final int[] YARD_SENTRY = { 28, 22 };
+
+	/**
 	 * The district's dormant bots (P4): 2-4 Sentries (the vault house wall over the vault, the yard's floor, the sky tower's
-	 * street side, shed 2's wall) and one pack of 3-5 Scuttlers curled in the scrap heaps.
+	 * street side, shed 2's wall) and one pack of 3-5 Scuttlers curled in the scrap heaps. The yard's is always placed (one of
+	 * the first two) and stands in view of the breaker, so the fight starts there (D97): in the kit's yard on the
+	 * Substation's pad by it ({@link #YARD_SENTRY}), clear of the cable tray, the hazard band and the ground cable.
 	 */
 	private static void bots(Q q, RandomSource r) {
 		int sentries = 2 + r.nextInt(3), scuttlers = 3 + r.nextInt(3);
 		boolean kit = q.p().kit;
 		// in the kit's buildings the vault house stands a course higher (its plinth) and the sky tower is 5 x 5
-		BlockPos[] walls = { q.at(24, kit ? 3 : 2, 12), q.at(25, -1, 22), q.at(14, 3, kit ? 26 : 25), q.at(kit ? 18 : 17, 3, 47) };
+		BlockPos yard = kit ? q.at(YARD_SENTRY[0], -1, YARD_SENTRY[1]) : q.at(25, -1, 22);
+		BlockPos[] walls = { q.at(24, kit ? 3 : 2, 12), yard, q.at(14, 3, kit ? 26 : 25), q.at(kit ? 18 : 17, 3, 47) };
 		Direction[] faces = { q.V().getOpposite(), Direction.UP, q.V(), q.U().getOpposite() };
 		for (int i = 0; i < sentries; i++)
 			q.p().sentry(walls[i], faces[i]);

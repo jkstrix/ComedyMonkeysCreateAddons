@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 /**
  * The Seamed Void-Alloy Plate (D37, brief §1): a decor block that drops itself, whose seams light with starlight while
- * its district is fed, as the city's lamps do ({@link DerelictLightBlockEntity}: the lit seams are an emissive overlay
+ * its district is lit, as the city's lamps do ({@link DerelictLightBlockEntity}: the lit seams are an emissive overlay
  * in its block model, so a wall of them costs nothing to draw). One a player places belongs to no city and stays dark.
  * It casts no light.
  */

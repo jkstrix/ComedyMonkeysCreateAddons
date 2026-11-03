@@ -56,8 +56,8 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * The Custodian (D30, D31, D35, P32-P41; brief: "a robed priest on puppet strings"), the heart's guardian. It kneels
- * dark on its dais until the heart wakes (all four districts), then lights its lenses, rises and bows to the nearest
- * player before it fights. Four Conduit Pylons feed it: while any stands it takes no damage and mends 2 health a second
+ * dark on its dais until, with all four districts awake (the heart's doors open), a player walks into its hall (D96);
+ * then it lights its lenses, rises and bows to the nearest player before it fights. Four Conduit Pylons feed it: while any stands it takes no damage and mends 2 health a second
  * for each one standing (P34), arcs running from their crowns to the sockets on its back. Breaking a pylon turns it on
  * the breaker and calls two fight Scuttlers (eight a fight, P35); all four down, the shield drops. At half health it
  * overloads once (P36): 30% quicker, sparking, and one pylon re-lights. Its moves (P37): the slam, the shockwave ring,
@@ -158,6 +158,8 @@ public class Custodian extends CityBot {
 	public static final int CALL = 2, CALL_MAX = 8;
 	/** Its four pylons are within its hall: looked for this far round its dais. */
 	static final int HALL = 16;
+	/** D96: its hall, from its dais: the heart drum's 31 x 31 octagon (corners cut at |x| + |z| 27), floor to roof. */
+	public static final int HALL_HALF = 15, HALL_CORNER = 27, HALL_BELOW = 2, HALL_ABOVE = 13;
 	/** D51: after a reset it wakes again when a player is this near and in its sight. */
 	public static final double REWAKE_RANGE = 16;
 	/** D56: walking home, this long without getting nearer and it appears on its dais. */
@@ -451,36 +453,35 @@ public class Custodian extends CityBot {
 		return out;
 	}
 
-	/** The heart woke (all four districts, P11, D31): it wakes, unless it's dead or it's Peaceful (P41). */
-	public void heartWoke() {
-		wake();
-	}
-
+	/** The heart waking never wakes it by itself (D96): it waits for a player in its hall ({@link #cityTick}). */
 	@Override
-	protected void catchUp() {
-		// the heart woke while it was unloaded and it never has: it wakes now
-		CityRecord record = record();
-		if (dormant() && !woke && record != null && link.bound() && record.allAwake(link.origin()) && !record.custodianDead(link.origin()))
-			wake();
-	}
+	protected void catchUp() {}
 
 	/**
-	 * D51: kneeling after a reset (it has woken before, the heart is still awake and it isn't dead), it wakes again,
-	 * rising and bowing, when a fightable player comes within 16 blocks in its sight. Never on Peaceful.
+	 * Kneeling with the heart awake (all four districts) and alive, it rises and bows: D96, the first time, when a
+	 * fightable player walks into its hall; D51, kneeling after a reset, when one comes within 16 blocks in its sight.
+	 * Never on Peaceful.
 	 */
 	@Override
 	protected void cityTick() {
 		super.cityTick();
-		if (!dormant() || !woke || phase() != Phase.DORMANT || tickCount % 10 != 0 || peaceful())
+		if (!dormant() || phase() != Phase.DORMANT || tickCount % 10 != 0 || peaceful())
 			return;
 		CityRecord record = record();
 		if (link.bound() && (record == null || !record.allAwake(link.origin()) || record.custodianDead(link.origin())))
 			return;
 		for (Player p : level().players())
-			if (fightable(p) && p.distanceToSqr(this) <= REWAKE_RANGE * REWAKE_RANGE && hasLineOfSight(p)) {
+			if (fightable(p) && (woke ? p.distanceToSqr(this) <= REWAKE_RANGE * REWAKE_RANGE && hasLineOfSight(p) : inHall(p))) {
 				wake();
 				return;
 			}
+	}
+
+	/** D96: someone stands in its hall (round its dais, inside the drum, floor to roof). */
+	public boolean inHall(Entity e) {
+		BlockPos d = dais != null ? dais : blockPosition();
+		int dx = Math.abs(e.getBlockX() - d.getX()), dz = Math.abs(e.getBlockZ() - d.getZ()), dy = e.getBlockY() - d.getY();
+		return dx <= HALL_HALF && dz <= HALL_HALF && dx + dz <= HALL_CORNER && dy >= -HALL_BELOW && dy <= HALL_ABOVE;
 	}
 
 	/**

@@ -29,16 +29,15 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
  * Derelict Street Lamps and a Wall Lamp, a district vault and the heart vault, a district Sliding Door and a heart one,
  * a Conduit Pylon, the Derelict Star Reactor and a Star Reactor. The district is the Foundry; the heart's blocks are the
  * heart's. Then, for the nearest city: {@code /wastes wake <district|all>}, {@code /wastes heart <minutes>} (the heart's
- * star burns that long: every lamp lit), {@code /wastes custodian wake|die|reset}. Waking by power: a charged Battery
- * beside the Substation.
+ * star burns that long: every lamp lit, a cut district's too), {@code /wastes custodian wake|die|reset}. Waking as a player
+ * does: hold use on the Substation to throw its breaker (D96).
  * <p>
  * {@code /wastes testheart}: a small heart hall round you (the bots, phase 3): the Custodian kneeling on a dais in the
  * middle, a Conduit Pylon in each corner, two wall vents beside each (live once the heart wakes; each bursts once when
  * the Custodian calls its Scuttlers), the heart vault behind it, walls round it; and outside its south wall a bit
  * of the Foundry with a Substation, four dormant Scuttlers, a Sentry on the floor and one on the wall. Wake the
- * Foundry ({@code /wastes wake foundry}: its bots stir within 5 s; feed it with a charged Battery on the Substation or
- * {@code /wastes heart <minutes>}, or its Sentries fold), then all four ({@code /wastes wake all}: the Custodian rises).
- * {@code /wastes custodian wake} also wakes a Custodian kneeling after a reset.
+ * Foundry (hold use on its Substation, or {@code /wastes wake foundry}: its bots stir within 5 s), then all four
+ * ({@code /wastes wake all}: walk into the hall and the Custodian rises). {@code /wastes custodian wake} wakes it at once.
  */
 public final class WastesTestSetup {
 	private WastesTestSetup() {}
@@ -123,7 +122,7 @@ public final class WastesTestSetup {
 		CityLink.bindAll(level, net.minecraft.world.level.levelgen.structure.BoundingBox.fromCorners(o.offset(24, 0, 1), o.offset(26, 2, 1)), o, District.HEART);
 		CityLink.bindAll(level, net.minecraft.world.level.levelgen.structure.BoundingBox.fromCorners(o.offset(28, 0, 4), o.offset(33, 3, 6)), o, District.HEART);
 		source.sendSuccess(() -> Component.literal("Clockwork Wastes test district built; its city is at " + o.toShortString()
-			+ ". Wake it: a charged Battery beside the Substation, or /wastes wake foundry; /wastes heart <minutes>; /wastes custodian wake|die."), true);
+			+ ". Wake it: hold use on the Substation, or /wastes wake foundry; /wastes heart <minutes>; /wastes custodian wake|die."), true);
 		return 1;
 	}
 
@@ -201,8 +200,8 @@ public final class WastesTestSetup {
 		WastesBots.placeSentry(level, o.offset(3, -1, 18), Direction.UP, o, District.FOUNDRY);
 		WastesBots.placeSentry(level, o.offset(-5, 2, 12), Direction.SOUTH, o, District.FOUNDRY);
 		source.sendSuccess(() -> Component.literal("Clockwork Wastes heart hall built; its city is at " + o.toShortString()
-			+ ". /wastes wake foundry (its bots stir; feed it: a charged Battery on the Substation, or /wastes heart <minutes>), "
-			+ "/wastes wake all (the Custodian rises), /wastes custodian wake|die|reset."), true);
+			+ ". Hold use on the Substation or /wastes wake foundry (its bots stir), "
+			+ "/wastes wake all (then walk into the hall: the Custodian rises), /wastes custodian wake|die|reset."), true);
 		return 1;
 	}
 
@@ -250,7 +249,7 @@ public final class WastesTestSetup {
 	 * {@code /wastes buildcity [seed]} (D66): the whole city, its heart where you stand, on an End Stone island of its own
 	 * (test it in a void or End world), every block bound to its district and its bots asleep; then you're put on the north
 	 * boulevard looking at the heart. The same plan world generation would build (seed 0 unless given). Wake it with
-	 * {@code /wastes wake <district|all>}, or power a Substation; {@code /wastes heart <minutes>} lights every lamp.
+	 * {@code /wastes wake <district|all>}, or throw a Substation's breaker (hold use on it).
 	 */
 	private static int buildCity(CommandContext<CommandSourceStack> context, long seed) {
 		return buildCity(context, seed, com.comedymonkey.createaddons.content.wastes.city.CityLayout.BUILDING_KIT);
@@ -288,7 +287,7 @@ public final class WastesTestSetup {
 		if (source.getEntity() instanceof net.minecraft.server.level.ServerPlayer player)
 			player.teleportTo(level, o.getX() + 6.5, o.getY(), o.getZ() + 14.5, 180, 0);
 		source.sendSuccess(() -> Component.literal("Building kit catalogue built (" + built.placed().size() + " exhibits, " + built.plan().ops().size() + " steps, "
-			+ ms + " ms): five rows going north from " + o.toShortString() + ", fronts to the south, a sign on each pad. /wastes wake all, then /wastes heart 60, "
+			+ ms + " ms): five rows going north from " + o.toShortString() + ", fronts to the south, a sign on each pad. /wastes wake all "
 			+ "lights them. Camera marks: wastes-catalogue.json in the game folder."), true);
 		return 1;
 	}

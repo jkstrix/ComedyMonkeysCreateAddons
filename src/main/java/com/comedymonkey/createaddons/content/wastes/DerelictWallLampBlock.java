@@ -26,7 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * A Derelict Wall Lamp (D16, P25; brief §4): a makers' cast-iron bracket on a wall holding the uprising's hooded lens,
- * tipped down and out toward the facing. Lit while its district is fed ({@link DerelictLightBlockEntity}); breaks into
+ * tipped down and out toward the facing. Lit once its district wakes ({@link DerelictLightBlockEntity}); breaks into
  * scrap. Placed against a wall's face, it points away from it.
  */
 public final class DerelictWallLampBlock extends HorizontalDirectionalBlock implements EntityBlock, DerelictLightBlockEntity.DerelictLight {

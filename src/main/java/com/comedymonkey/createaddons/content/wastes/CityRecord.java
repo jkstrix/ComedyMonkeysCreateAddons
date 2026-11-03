@@ -26,38 +26,35 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
-import com.comedymonkey.createaddons.config.CMConfig;
-import com.comedymonkey.createaddons.content.line.PowerGrid;
-import com.comedymonkey.createaddons.content.line.PowerLines;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 /**
  * The Clockwork Wastes' wake records (design/specs/clockwork-wastes.md, P48): one per level, keyed by each city's origin.
- * For every city it holds which of the four districts are awake (woken for good, D24), which are fed (their Substation
- * meets its upkeep), whether a Substation was broken after waking (its own feed gone for good, P50), how long the heart's
- * star burns (P10), and whether the Custodian is awake or dead (D31, D35).
+ * For every city it holds which of the four districts are awake (woken for good by their Substation's breaker, D96),
+ * whether a Substation was broken after waking (its district's own grid cut for good, P50), how long the heart's star
+ * burns (P10), and whether the Custodian is awake or dead (D31, D35). A woken district stays lit with no power (D96).
  * <p>
  * City blocks never hold this state themselves: each reads its district's from here when it loads ({@link CityLink.Member}),
  * so a district half unloaded when it woke catches up without loading anything. While loaded, they hear every change
  * to their city at once. Other systems (the city's builder, the bots) use the same calls and can listen for changes
  * ({@link #listen}).
  * <p>
- * The API for the later phases: {@link #of}, {@link #awake}, {@link #fed}, {@link #wake}, {@link #wakeAll},
- * {@link #wakeCustodian}, {@link #custodianDied}, {@link #vaultOpen}, {@link #doorOpen}, and {@link Listener}.
+ * The API: {@link #of}, {@link #awake}, {@link #lit}, {@link #wake}, {@link #wakeAll}, {@link #wakeCustodian},
+ * {@link #custodianDied}, {@link #vaultOpen}, {@link #doorOpen}, and {@link Listener}.
  */
 public final class CityRecord extends SavedData {
 	private static final String NAME = "comedymonkeysaddons_clockwork_cities";
 	private static final int DISTRICTS = District.DISTRICTS.length;
 
-	/** Something that wants to know when a city changes (the bots: Sentries fold while their district is unfed, P9). */
+	/** Something that wants to know when a city changes (the bots). */
 	public interface Listener {
-		/** A district woke for good: its locks open, its bots wake (within 5 s, P8). */
-		default void districtWoke(ServerLevel level, BlockPos origin, District district) {}
+		/**
+		 * A district woke for good: its locks open, its bots wake (within 5 s, P8). {@code breaker}: where it was woken from,
+		 * its Substation's breaker (D97: the pack runs to it); null when the heart's star woke it (or all four at once).
+		 */
+		default void districtWoke(ServerLevel level, BlockPos origin, District district, @Nullable BlockPos breaker) {}
 
-		/** A district's lamps (and its Sentries) went from fed to unfed or back. The heart is reported as {@link District#HEART}. */
-		default void fedChanged(ServerLevel level, BlockPos origin, District district, boolean fed) {}
-
-		/** All four districts are awake: the heart's doors open (P11), and with them the Custodian should wake. */
+		/** All four districts are awake: the heart's doors open (P11); the Custodian waits for a player in its hall (D96). */
 		default void heartWoke(ServerLevel level, BlockPos origin) {}
 
 		/** The Custodian died, by any means (D35): the heart vault opens. */
@@ -85,15 +82,11 @@ public final class CityRecord extends SavedData {
 	static final class City {
 		final BlockPos origin;
 		final boolean[] awake = new boolean[DISTRICTS];
-		/** Its Substation says it's meeting its upkeep. */
-		final boolean[] fed = new boolean[DISTRICTS];
-		/** Its Substation was broken after waking: its own feed is gone for good (the heart can still light it). */
+		/** Its Substation was broken after waking: its own grid is cut for good (the heart's star can still light it). */
 		final boolean[] cut = new boolean[DISTRICTS];
 		boolean custodianAwake, custodianDead;
 		/** The game time the heart's star burns until (0: none). */
 		long heartUntil;
-		/** Where each district's Substation stands (as it last said, running), to pay its upkeep on paper while it's away (D48). */
-		final BlockPos[] substation = new BlockPos[DISTRICTS];
 
 		City(BlockPos origin) {
 			this.origin = origin.immutable();
@@ -171,7 +164,7 @@ public final class CityRecord extends SavedData {
 		return true;
 	}
 
-	/** The heart's star is burning (P10): it feeds the whole city's lamps. */
+	/** The heart's star is burning (P10): it lights the whole city, a cut district too. */
 	public boolean heartBurning(@Nullable BlockPos origin, long now) {
 		City c = get(origin);
 		return c != null && c.heartUntil > now;
@@ -184,26 +177,26 @@ public final class CityRecord extends SavedData {
 	}
 
 	/**
-	 * A district's lamps are lit (and its Sentries run, P9): it's awake and either its own Substation meets its upkeep
-	 * or the heart's star is burning. The heart is fed while its star burns or all four districts are fed.
+	 * A district's lamps are lit: it's awake, for good (D96), unless its Substation was broken (P50) and the heart's star
+	 * isn't burning. The heart is lit while its star burns or all four districts are lit.
 	 */
-	public boolean fed(@Nullable BlockPos origin, District district, long now) {
+	public boolean lit(@Nullable BlockPos origin, District district, long now) {
 		City c = get(origin);
-		return c != null && fed(c, district, now);
+		return c != null && lit(c, district, now);
 	}
 
-	private static boolean fed(City c, District district, long now) {
+	private static boolean lit(City c, District district, long now) {
 		boolean heart = c.heartUntil > now;
 		if (district.isHeart()) {
 			if (heart)
 				return true;
 			for (District d : District.DISTRICTS)
-				if (!fed(c, d, now))
+				if (!lit(c, d, now))
 					return false;
 			return true;
 		}
 		int i = district.ordinal();
-		return c.awake[i] && (heart || c.fed[i] && !c.cut[i]);
+		return c.awake[i] && (heart || !c.cut[i]);
 	}
 
 	public boolean custodianAwake(@Nullable BlockPos origin) {
@@ -216,7 +209,7 @@ public final class CityRecord extends SavedData {
 		return c != null && c.custodianDead;
 	}
 
-	/** A Substation was broken after waking (P50): its district's own feed is gone for good. */
+	/** A Substation was broken after waking (P50): its district's own grid is cut for good. */
 	public boolean cut(@Nullable BlockPos origin, District district) {
 		City c = get(origin);
 		return c != null && !district.isHeart() && c.cut[district.ordinal()];
@@ -241,9 +234,9 @@ public final class CityRecord extends SavedData {
 	// ---------- changing ----------
 
 	/**
-	 * Wakes a district for good (D24): its record says so from now on, its loaded blocks hear at once (lamps ripple on
-	 * from {@code from}, locks open), and the action bar tells players within 64 blocks. Waking the fourth wakes the
-	 * heart. Nothing happens if it was already awake.
+	 * Wakes a district for good (D96): its record says so from now on, its loaded blocks hear at once (lamps ripple on
+	 * from {@code from}, locks open), and the action bar tells players within 64 blocks. The heart's spire pulses for it;
+	 * waking the fourth wakes the heart instead. Nothing happens if it was already awake.
 	 */
 	public void wake(ServerLevel level, BlockPos origin, District district, @Nullable BlockPos from) {
 		if (district.isHeart()) {
@@ -253,91 +246,57 @@ public final class CityRecord extends SavedData {
 		City c = make(origin);
 		if (c.awake[district.ordinal()])
 			return;
-		boolean[] before = fedNow(c, level);
 		c.awake[district.ordinal()] = true;
 		setDirty();
-		woke(level, c, district, from);
+		woke(level, c, district, from, from);
 		if (allAwake(c))
 			heartWoke(level, c);
-		changed(level, c, before, from);
+		else
+			pulseSpire(level, c);
+		tell(level, c, from);
 	}
 
 	/** Wakes all four districts at once (a Nether Star in the heart's reactor, P10). */
 	public void wakeAll(ServerLevel level, BlockPos origin, @Nullable BlockPos from) {
 		City c = make(origin);
-		boolean[] before = fedNow(c, level);
 		boolean any = false;
 		for (District d : District.DISTRICTS)
 			if (!c.awake[d.ordinal()]) {
 				c.awake[d.ordinal()] = true;
 				any = true;
-				woke(level, c, d, from);
+				// no breaker: each district's bots wake where they lie (D97)
+				woke(level, c, d, from, null);
 			}
 		if (!any)
 			return;
 		setDirty();
 		heartWoke(level, c);
-		changed(level, c, before, from);
+		tell(level, c, from);
 	}
 
-	/** A Substation's word, once a second: whether its district meets its upkeep. */
-	public void setFed(ServerLevel level, BlockPos origin, District district, boolean fed, @Nullable BlockPos from) {
-		if (district.isHeart())
-			return;
-		City c = make(origin);
-		if (c.fed[district.ordinal()] == fed)
-			return;
-		boolean[] before = fedNow(c, level);
-		c.fed[district.ordinal()] = fed;
-		setDirty();
-		changed(level, c, before, from);
-	}
-
-	/** A woken district's Substation says where it stands (once a second while it runs), so its upkeep runs on paper while it's away. */
-	public void substationAt(BlockPos origin, District district, BlockPos pos) {
-		if (district.isHeart())
-			return;
-		City c = make(origin);
-		if (!pos.equals(c.substation[district.ordinal()])) {
-			c.substation[district.ordinal()] = pos.immutable();
-			setDirty();
-		}
-	}
-
-	/** Where a district's Substation stands, as it last said (null: not known, or broken). */
-	@Nullable
-	public BlockPos substation(@Nullable BlockPos origin, District district) {
-		City c = get(origin);
-		return c == null || district.isHeart() ? null : c.substation[district.ordinal()];
-	}
-
-	/** A woken district's Substation was broken (P50): it stays awake, but its own feed is gone for good. */
+	/** A woken district's Substation was broken (P50): it stays awake, but its own grid is cut for good. */
 	public void cut(ServerLevel level, BlockPos origin, District district) {
 		if (district.isHeart())
 			return;
 		City c = make(origin);
 		if (c.cut[district.ordinal()])
 			return;
-		boolean[] before = fedNow(c, level);
 		c.cut[district.ordinal()] = true;
-		c.fed[district.ordinal()] = false;
-		c.substation[district.ordinal()] = null;
 		setDirty();
-		changed(level, c, before, null);
+		tell(level, c, null);
 	}
 
-	/** The heart's star burns until {@code until} (game time; 0 puts it out): the whole city's lamps run on it (P10). */
+	/** The heart's star burns until {@code until} (game time; 0 puts it out): it lights the whole city (P10). */
 	public void burnHeart(ServerLevel level, BlockPos origin, long until, @Nullable BlockPos from) {
 		City c = make(origin);
 		if (c.heartUntil == until)
 			return;
-		boolean[] before = fedNow(c, level);
 		c.heartUntil = until;
 		setDirty();
-		changed(level, c, before, from);
+		tell(level, c, from);
 	}
 
-	/** The Custodian woke (phase 4 calls this): the heart's pylons can be harmed from now on (P33). */
+	/** The Custodian woke: the heart's pylons can be harmed from now on (P33). */
 	public void wakeCustodian(ServerLevel level, BlockPos origin) {
 		City c = make(origin);
 		if (c.custodianAwake || c.custodianDead)
@@ -375,36 +334,21 @@ public final class CityRecord extends SavedData {
 	 * was. Nothing is saved (a lamp loaded later never saw it).
 	 */
 	public void surgeHeart(ServerLevel level, BlockPos origin) {
-		Map<BlockPos, Set<CityLink.Member>> byCity = MEMBERS.get(level.dimension());
-		Set<CityLink.Member> members = byCity == null ? null : byCity.get(origin);
-		if (members == null)
-			return;
-		for (CityLink.Member m : new ArrayList<>(members))
+		for (CityLink.Member m : members(level, origin))
 			if (m.cityLink().district().isHeart())
 				m.surged();
 	}
 
-	private boolean[] fedNow(City c, ServerLevel level) {
-		long now = level.getGameTime();
-		boolean[] out = new boolean[District.values().length];
-		for (District d : District.values())
-			out[d.ordinal()] = fed(c, d, now);
-		return out;
+	/** D96: a district woke (not the fourth): the spire's loaded seams flash from its roof to its crown and go dark again. */
+	private static void pulseSpire(ServerLevel level, City c) {
+		for (CityLink.Member m : members(level, c.origin))
+			if (m instanceof DerelictLightBlockEntity light && m.cityLink().district().isHeart())
+				light.pulse();
 	}
 
-	/** After a change: the listeners hear which districts' feed changed, and every loaded block of the city hears. */
-	private void changed(ServerLevel level, City c, boolean[] before, @Nullable BlockPos from) {
-		boolean[] after = fedNow(c, level);
-		for (District d : District.values())
-			if (before[d.ordinal()] != after[d.ordinal()])
-				for (Listener l : LISTENERS)
-					l.fedChanged(level, c.origin, d, after[d.ordinal()]);
-		tell(level, c, from);
-	}
-
-	private static void woke(ServerLevel level, City c, District d, @Nullable BlockPos from) {
+	private static void woke(ServerLevel level, City c, District d, @Nullable BlockPos from, @Nullable BlockPos breaker) {
 		for (Listener l : LISTENERS)
-			l.districtWoke(level, c.origin, d);
+			l.districtWoke(level, c.origin, d, breaker);
 		// "The Foundry wakes…" for everyone near where it started (or near the city, if it woke from afar)
 		BlockPos at = from != null ? from : c.origin;
 		Component text = Component.translatable("comedymonkeysaddons.wastes.wakes", d.displayName());
@@ -425,15 +369,18 @@ public final class CityRecord extends SavedData {
 
 	/** Every loaded block of the city catches up with its record. */
 	private static void tell(ServerLevel level, City c, @Nullable BlockPos from) {
-		Map<BlockPos, Set<CityLink.Member>> byCity = MEMBERS.get(level.dimension());
-		Set<CityLink.Member> members = byCity == null ? null : byCity.get(c.origin);
-		if (members == null)
-			return;
-		for (CityLink.Member m : new ArrayList<>(members))
+		for (CityLink.Member m : members(level, c.origin))
 			m.cityChanged(from);
 	}
 
 	// ---------- the loaded city blocks ----------
+
+	/** The loaded blocks of a city, as a copy (they may leave while it's walked). */
+	static List<CityLink.Member> members(ServerLevel level, @Nullable BlockPos origin) {
+		Map<BlockPos, Set<CityLink.Member>> byCity = MEMBERS.get(level.dimension());
+		Set<CityLink.Member> members = byCity == null || origin == null ? null : byCity.get(origin);
+		return members == null ? List.of() : new ArrayList<>(members);
+	}
 
 	/** A city block loaded (or was bound again): it hears its city's changes until it's removed. */
 	public static void track(CityLink.Member member, ServerLevel level) {
@@ -466,9 +413,8 @@ public final class CityRecord extends SavedData {
 	}
 
 	/**
-	 * Once a second: a heart star that burned out puts the city's lamps out (the reactor may not be loaded to say so), and
-	 * each woken district whose Substation is away pays its upkeep on paper through the Power Lines (P24, D48): fed while
-	 * the lines bring a second's worth, unfed when they don't. Nothing is loaded to do it.
+	 * Every tick, the cities world generation placed are recorded; once a second, a heart star that burned out puts out
+	 * what only it lit (the reactor may not be loaded to say so). Nothing is loaded to do it.
 	 */
 	public static void onLevelTick(LevelTickEvent.Post event) {
 		if (!(event.getLevel() instanceof ServerLevel level))
@@ -489,24 +435,9 @@ public final class CityRecord extends SavedData {
 		long now = level.getGameTime();
 		for (City c : record.cities.values())
 			if (c.heartUntil > 0 && c.heartUntil <= now) {
-				// burned out: as it stood a moment ago, it was burning
-				boolean[] before = record.fedNow(c, level);
-				before[District.HEART.ordinal()] = true;
-				for (District d : District.DISTRICTS)
-					before[d.ordinal()] = c.awake[d.ordinal()];
 				c.heartUntil = 0;
 				record.setDirty();
-				record.changed(level, c, before, null);
-			}
-		int need = CMConfig.SERVER.wastesUpkeep() * 20;
-		for (City c : new ArrayList<>(record.cities.values()))
-			for (District d : District.DISTRICTS) {
-				int i = d.ordinal();
-				BlockPos sub = c.substation[i];
-				if (sub == null || !c.awake[i] || c.cut[i] || PowerGrid.givesHere(level, sub))
-					continue;
-				boolean paid = PowerLines.of(level).drawAway(sub, need) >= need;
-				record.setFed(level, c.origin, d, paid, null);
+				tell(level, c, null);
 			}
 	}
 
@@ -517,18 +448,14 @@ public final class CityRecord extends SavedData {
 		for (Tag t : tag.getList("Cities", Tag.TAG_COMPOUND)) {
 			CompoundTag ct = (CompoundTag) t;
 			City c = r.make(BlockPos.of(ct.getLong("Origin")));
-			int awake = ct.getInt("Awake"), fed = ct.getInt("Fed"), cut = ct.getInt("Cut");
+			int awake = ct.getInt("Awake"), cut = ct.getInt("Cut");
 			for (int i = 0; i < DISTRICTS; i++) {
 				c.awake[i] = (awake >> i & 1) != 0;
-				c.fed[i] = (fed >> i & 1) != 0;
 				c.cut[i] = (cut >> i & 1) != 0;
 			}
 			c.custodianAwake = ct.getBoolean("CustodianAwake");
 			c.custodianDead = ct.getBoolean("CustodianDead");
 			c.heartUntil = ct.getLong("HeartUntil");
-			long[] subs = ct.getLongArray("Substations");
-			for (int i = 0; i < DISTRICTS && i < subs.length; i++)
-				c.substation[i] = (ct.getInt("SubstationsKnown") >> i & 1) != 0 ? BlockPos.of(subs[i]) : null;
 		}
 		return r;
 	}
@@ -539,27 +466,16 @@ public final class CityRecord extends SavedData {
 		for (City c : cities.values()) {
 			CompoundTag ct = new CompoundTag();
 			ct.putLong("Origin", c.origin.asLong());
-			int awake = 0, fed = 0, cut = 0;
+			int awake = 0, cut = 0;
 			for (int i = 0; i < DISTRICTS; i++) {
 				awake |= c.awake[i] ? 1 << i : 0;
-				fed |= c.fed[i] ? 1 << i : 0;
 				cut |= c.cut[i] ? 1 << i : 0;
 			}
 			ct.putInt("Awake", awake);
-			ct.putInt("Fed", fed);
 			ct.putInt("Cut", cut);
 			ct.putBoolean("CustodianAwake", c.custodianAwake);
 			ct.putBoolean("CustodianDead", c.custodianDead);
 			ct.putLong("HeartUntil", c.heartUntil);
-			long[] subs = new long[DISTRICTS];
-			int known = 0;
-			for (int i = 0; i < DISTRICTS; i++)
-				if (c.substation[i] != null) {
-					subs[i] = c.substation[i].asLong();
-					known |= 1 << i;
-				}
-			ct.putLongArray("Substations", subs);
-			ct.putInt("SubstationsKnown", known);
 			list.add(ct);
 		}
 		tag.put("Cities", list);

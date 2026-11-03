@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
  * The Void-Alloy Band (D71, D75; the buildings brief's block set, #5): the trim and cornice. A raised 10 px band round
  * the block's sides with one horizontal seam along its middle, its top and bottom 3 px set back 1 px; where a block
  * touches a side, that side's set-back is filled flush (the connection states, so a run of bands or a band between plates
- * reads as one course). Its seam glows edge tone while its district is fed. {@link #AXIS} is its ring's axis: y upright;
+ * reads as one course). Its seam glows edge tone while its district is lit. {@link #AXIS} is its ring's axis: y upright;
  * x or z lying on its side, for a fallen tower top (D75).
  */
 public final class VoidAlloyBandBlock extends CityDecorLightBlock {

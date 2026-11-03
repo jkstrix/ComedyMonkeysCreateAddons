@@ -114,13 +114,15 @@ public final class CityPlan {
 	}
 
 	public static final int ANYWHERE = 0, ON_GROUND = 1, OVER_VOID = 2;
+	/** Only where the core levelled land to the floor, never a deck (a pothole, a spill of gravel). */
+	public static final int ON_LAND = 3;
 
 	/**
 	 * The plan's version, saved with each city's structure start: bump it when a change moves what a city puts where. A
 	 * start saved part-way through generation by an older build goes on with this build's plan (its chunks built before
 	 * may not meet the ones built after), logged once; the cities are unreleased and off by default (D66), so nothing more.
 	 */
-	public static final int VERSION = 1;
+	public static final int VERSION = 3;
 
 	public final BlockPos origin;
 	public final long seed;
@@ -130,6 +132,8 @@ public final class CityPlan {
 	private final List<Op> ops = new ArrayList<>();
 	/** The cables, set last with their arms worked out from what's beside them (so chunk edges can't break a run). */
 	private final Map<BlockPos, Op.Put> cables = new LinkedHashMap<>();
+	/** The roads as paved, worn once the city is drawn ({@link CityRoads}). */
+	public final CityRoads roads = new CityRoads();
 	/** What cables join (Substation feet, lamp feet, other cables), for working out their arms. */
 	private final Map<BlockPos, BlockState> joins = new HashMap<>();
 	private Map<Long, List<Op>> byChunk;
@@ -305,6 +309,11 @@ public final class CityPlan {
 	}
 
 	// ---------------------------------------------------------------- the city's blocks
+
+	/** Whether a cable goes in at {@code p} (set last, in {@link #finish}). */
+	boolean cableAt(BlockPos p) {
+		return cables.containsKey(p);
+	}
 
 	public void cable(BlockPos p, Direction surface) {
 		BlockState s = ModWastes.DERELICT_CABLE.get().defaultBlockState().setValue(DerelictCableBlock.SURFACE, surface);
