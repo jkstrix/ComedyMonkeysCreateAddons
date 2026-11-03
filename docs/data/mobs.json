@@ -95,7 +95,7 @@
       "He trades from two blocks away, across the villager's workstation: one animation per visit in which he makes every trade he can pay for, at real prices and stock. Villagers gain XP and level up as usual, and he sells any new trades that opens on the same trip.",
       "His own reputation with each villager grows with every trade and earns him a discount, up to vanilla's cap. Your reputation and Hero of the Village don't count.",
       "Players come first: if someone is trading with his villager he waits, and if the villager stands up or goes he shrugs and tries someone else. Two bots never share one villager at once.",
-      "He rolls over anything up to 4 pixels high, hops slabs, stairs and full blocks, opens doors and fence gates (and shuts the ones he opened). He can't climb ladders or use bubble columns, and keeps out of water and lava.",
+      "He rolls over anything up to 4 pixels high, hops slabs, stairs and full blocks (rolling round them instead when that's quicker), opens doors and fence gates (and shuts the ones he opened). He can't climb ladders or use bubble columns, and keeps out of water and lava.",
       "He goes home at night, in thunderstorms, on a redstone signal, or when there's nothing to sell, and charges there.",
       "He works whenever his area is loaded, chunk loaders included, with or without players near."
     ],

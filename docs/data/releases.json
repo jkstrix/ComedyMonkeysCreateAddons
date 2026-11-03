@@ -1,5 +1,39 @@
 [
   {
+    "version": "2.6.3",
+    "from": "2.6.2",
+    "date": "2026-11-03",
+    "title": "Stairs and stonecutters",
+    "summary": "Hover lets you walk down stairs, and [[trade-bot|Trade Bot]] lands on stonecutters and rolls round steps instead of hopping them.",
+    "highlights": [],
+    "sections": [
+      {
+        "title": "Changed",
+        "icon": "rotate",
+        "body": [
+          {
+            "list": [
+              "**[[trade-bot|Trade Bot]] favours rolling.** A hop takes him about as long as rolling ten blocks, so he now rolls round a step when the way round is quicker, and hops only when it isn't."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Fixed",
+        "icon": "check",
+        "body": [
+          {
+            "list": [
+              "**Hover caught you on stairs and slabs.** With hover on, the [[clockwork-jetpack]] held you just above each step. It now waits for a real drop: walking down stairs or off a slab, you step down as normal and spend no wind.",
+              "**[[trade-bot|Trade Bot]] sank into stonecutters and got stuck.** Every hop now lands on the real height of the block he's hopping onto, whatever it is: stonecutters, beds, chests, daylight sensors, snow.",
+              "**He could try to reach his station from behind**, roll into its post and give up. He now always comes round to the front to dock."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "version": "2.6.2",
     "from": "2.6.1",
     "date": "2026-11-03",

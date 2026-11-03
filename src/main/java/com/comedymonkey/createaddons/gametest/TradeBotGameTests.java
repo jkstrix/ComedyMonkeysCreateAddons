@@ -44,6 +44,7 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
@@ -112,6 +113,43 @@ public final class TradeBotGameTests {
 			for (TradeBotMotion.Hop hop : bot.motion.hops())
 				if (hop.from().getX() != hop.to().getX() && hop.from().getZ() != hop.to().getZ())
 					h.fail("a diagonal hop from " + h.relativePos(hop.from()).toShortString() + " to " + h.relativePos(hop.to()).toShortString());
+		});
+	}
+
+	/**
+	 * Over a stonecutter (9 px) in his lane, out and back: each hop lands on the floor it's going to, whatever its
+	 * height. The slab clip rises 8 px, and landing a pixel inside left him stuck in it (user, 2026-11-03).
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 1600)
+	public static void hopsOverAStonecutter(GameTestHelper helper) {
+		lane(helper, 3, 2, 16);
+		BlockPos cutter = new BlockPos(3, 1, 8);
+		helper.setBlock(cutter, Blocks.STONECUTTER.defaultBlockState());
+		BlockPos at = helper.absolutePos(cutter);
+		AABB shape = helper.getBlockState(cutter).getCollisionShape(helper.getLevel(), at).bounds().move(at);
+		TradeBotEntity bot = station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
+		run(helper, bot, List.of(new BlockPos(3, 1, 12)), h -> {
+			// off a hop's path, he's never inside it (a hop that lands short drops him through it to the floor)
+			if (!bot.noPhysics && bot.getBoundingBox().deflate(1e-3).intersects(shape))
+				h.fail(String.format(Locale.ROOT, "he's inside the stonecutter, feet at %.4f (its top is %.4f)", bot.getY(), shape.maxY));
+		}, h -> {
+			if (bot.motion.hops().isEmpty())
+				h.fail("he never hopped onto the stonecutter");
+		});
+	}
+
+	/**
+	 * D64: a strip of slabs across his way with open floor a few blocks to the side. Hopping over and back would be the
+	 * shortest way, but rolling round is quicker, so he never hops.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 1600)
+	public static void rollsRoundAStepWhenThatsQuicker(GameTestHelper helper) {
+		floor(helper, 0, 0, 0, 23, 23, FLOOR);
+		solid(helper, 0, 1, 8, 6, 1, 8, Blocks.STONE_SLAB.defaultBlockState());
+		TradeBotEntity bot = station(helper, new BlockPos(3, 1, 2), Direction.SOUTH);
+		run(helper, bot, List.of(new BlockPos(3, 1, 14)), h -> {
+			if (!bot.motion.hops().isEmpty())
+				h.fail("he hopped " + bot.motion.hops().size() + " times instead of rolling round the slabs");
 		});
 	}
 
@@ -1155,6 +1193,11 @@ public final class TradeBotGameTests {
 
 	/** Sends him round {@code stops}; passes once he has stood on each, in order, and docked again. */
 	static void run(GameTestHelper helper, TradeBotEntity bot, List<BlockPos> stops, Consumer<GameTestHelper> finalChecks) {
+		run(helper, bot, stops, h -> {}, finalChecks);
+	}
+
+	/** As {@link #run(GameTestHelper, TradeBotEntity, List, Consumer)}, with checks every tick on the way (a test has one tick task). */
+	static void run(GameTestHelper helper, TradeBotEntity bot, List<BlockPos> stops, Consumer<GameTestHelper> eachTick, Consumer<GameTestHelper> finalChecks) {
 		TradeBotMotion.debug = true;
 		List<BlockPos> absolute = new ArrayList<>();
 		for (BlockPos stop : stops)
@@ -1171,6 +1214,7 @@ public final class TradeBotGameTests {
 			if (bot.motion.failed())
 				helper.fail(String.format(Locale.ROOT, "he gave up a route at %s, %d of %d stops reached",
 					helper.relativePos(bot.blockPosition()).toShortString(), bot.brain.visited().size(), stops.size()));
+			eachTick.accept(helper);
 		});
 		helper.succeedWhen(() -> {
 			if (bot.brain.visited().size() < absolute.size())

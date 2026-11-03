@@ -458,10 +458,12 @@ public class TradeBotMotion {
 			case STAIRS_DOWN -> "stairs_down";
 		});
 		Vec3 to = points.get(next);
-		// stretch the clip's ground travel so he lands on the next block's centre
-		double want = horizontal(to.subtract(bot.position()));
-		double has = Math.abs(ClipRoot.travel(clip, clip.length(), new Vector3f()).z);
-		bot.playClip(clip, 1, has > 1e-3 ? (float) (want / has) : 1);
+		// stretch the clip's ground travel so he lands on the next block's centre, and its rise so he lands on its floor:
+		// a stonecutter is 9 px, the slab clip rises 8, and landing a pixel inside the block left him stuck in it
+		Vector3f travel = ClipRoot.travel(clip, clip.length(), new Vector3f());
+		double want = horizontal(to.subtract(bot.position())), has = Math.abs(travel.z);
+		double rise = to.y - bot.getY();
+		bot.playClip(clip, 1, has > 1e-3 ? (float) (want / has) : 1, Math.abs(travel.y) > 1e-3 ? (float) (rise / travel.y) : 1);
 		if (hops.size() >= MAX_HOPS)
 			hops.remove(0);
 		hops.add(new Hop(nodes.get(next - 1), nodes.get(next)));

@@ -178,10 +178,12 @@ public final class JetpackGameTests {
 		helper.succeed();
 	}
 
-	/** A server player outside the level (NeoForge's fake player): its packets go nowhere. */
+	/** A server player outside the level (NeoForge's fake player): its packets go nowhere. It starts high over the course. */
 	private static ServerPlayer player(GameTestHelper helper) {
 		ServerPlayer player = net.neoforged.neoforge.common.util.FakePlayerFactory.get(helper.getLevel(),
 			new com.mojang.authlib.GameProfile(java.util.UUID.randomUUID(), "jetpack_test"));
+		Vec3 high = helper.absoluteVec(new Vec3(4.5, 8, 4.5));
+		player.moveTo(high.x, high.y, high.z, 0, 0);
 		player.setGameMode(GameType.SURVIVAL);
 		player.setData(ModAttachments.JETPACK, JetpackState.DEFAULT);
 		for (EquipmentSlot slot : EquipmentSlot.values())
@@ -214,6 +216,50 @@ public final class JetpackGameTests {
 		for (int i = 0; i < 40; i++)
 			JetpackFlight.serverTick(player);
 		helper.assertTrue(Jetpacks.wind(player.getItemBySlot(EquipmentSlot.CHEST)) == 940, "sneaking on the ground shouldn't spend wind");
+		helper.succeed();
+	}
+
+	/**
+	 * Hover only catches a real drop (user, 2026-11-03): off the ground but half a block or less over it (stepping down
+	 * a stair or off a slab) it lets you land, spending nothing; higher, it holds you.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void hoverLetsYouStepDownHalfABlock(GameTestHelper helper) {
+		ServerPlayer player = player(helper);
+		ItemStack jetpack = new ItemStack(ModItems.CLOCKWORK_JETPACK.get());
+		Jetpacks.setWind(jetpack, 1000);
+		player.setItemSlot(EquipmentSlot.CHEST, jetpack);
+		JetpackState hover = JetpackState.DEFAULT.withHover(true);
+		player.setData(ModAttachments.JETPACK, hover);
+		player.setOnGround(false);
+		JetpackFlight.setInput(player, 0);
+		BlockPos step = new BlockPos(6, 1, 6);
+		helper.setBlock(step, net.minecraft.world.level.block.Blocks.STONE);
+		for (double above : new double[] { 0.1, 0.3, 0.5 }) {
+			Vec3 at = helper.absoluteVec(new Vec3(6.5, 2 + above, 6.5));
+			player.moveTo(at.x, at.y, at.z, 0, 0);
+			helper.assertFalse(JetpackFlight.hovering(player, hover), above + " over the step: hover shouldn't catch you");
+			helper.assertFalse(JetpackFlight.move(player, jetpack, 0, 0, 0), above + " over the step: the jetpack shouldn't run");
+			for (int i = 0; i < 40; i++)
+				JetpackFlight.serverTick(player);
+			helper.assertTrue(Jetpacks.wind(player.getItemBySlot(EquipmentSlot.CHEST)) == 1000, above + " over the step: no wind should be spent");
+		}
+		Vec3 at = helper.absoluteVec(new Vec3(6.5, 2.8, 6.5));
+		player.moveTo(at.x, at.y, at.z, 0, 0);
+		helper.assertTrue(JetpackFlight.hovering(player, hover), "0.8 over the step: hover should hold you");
+		helper.assertTrue(JetpackFlight.move(player, jetpack, 0, 0, 0), "0.8 over the step: the jetpack should run");
+
+		// walking down stairs you fall behind the steps: just past a slab, 0.55 over the floor, the slab still counts
+		helper.setBlock(new BlockPos(14, 1, 6), net.minecraft.world.level.block.Blocks.STONE_SLAB);
+		at = helper.absoluteVec(new Vec3(14.5, 1.55, 7.3));
+		player.moveTo(at.x, at.y, at.z, 0, 0);
+		helper.assertFalse(JetpackFlight.hovering(player, hover), "just past a step down, falling behind it: hover shouldn't catch you");
+		// a wall at your height isn't a floor: hovering beside one still holds you
+		for (int y = 1; y <= 8; y++)
+			helper.setBlock(new BlockPos(18, y, 12), net.minecraft.world.level.block.Blocks.STONE);
+		at = helper.absoluteVec(new Vec3(19.3, 4.3, 12.5));
+		player.moveTo(at.x, at.y, at.z, 0, 0);
+		helper.assertTrue(JetpackFlight.hovering(player, hover), "beside a wall, high over the floor: hover should hold you");
 		helper.succeed();
 	}
 

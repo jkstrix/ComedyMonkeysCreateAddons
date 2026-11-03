@@ -179,7 +179,7 @@ public final class JetpackClient {
 		// the wearer's own client knows its controls; for others, rising or holding still in the air means it's working
 		if (!flying && wearer != Minecraft.getInstance().player && wearer.getDeltaMovement().y < -0.15)
 			return;
-		if (!flying && wearer == Minecraft.getInstance().player && keys((LocalPlayer) wearer) == 0 && !state.hover())
+		if (!flying && wearer == Minecraft.getInstance().player && keys((LocalPlayer) wearer) == 0 && !JetpackFlight.hovering(wearer, state))
 			return;
 		float yaw = wearer.yBodyRot * Mth.DEG_TO_RAD;
 		Vec3 behind = new Vec3(Mth.sin(yaw), 0, -Mth.cos(yaw)), right = new Vec3(-Mth.cos(yaw), 0, -Mth.sin(yaw));

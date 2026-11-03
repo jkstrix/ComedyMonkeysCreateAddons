@@ -28,7 +28,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -52,6 +54,10 @@ public final class JetpackFlight {
 	public static final double ROCKET_SPEED = 1.5;
 	/** How hard the fans push along the look while under boosting speed. */
 	private static final double FLIGHT_THRUST = 0.06;
+	/** Hover doesn't catch drops this deep or less (blocks): a slab, a stair or a path edge is just stepped down. */
+	private static final double HOVER_MIN_DROP = 0.5;
+	/** How far apart (blocks) the columns are that {@link #nearFloor} looks down; under half a stair's step. */
+	private static final double FLOOR_SAMPLE = 0.25;
 	/** Toggle keys are taken at most this often (ticks), so a client can't flood its neighbours with sounds and states. */
 	private static final int TOGGLE_TICKS = 4;
 	private static final net.minecraft.resources.ResourceLocation SWIM_ID = ComedyMonkeysCreateAddons.asResource("clockwork_jetpack_swim");
@@ -94,6 +100,35 @@ public final class JetpackFlight {
 	/** In lava only the Netherite jetpack keeps working; the plain one's thrust, hover, boost and wings cut out (D19). */
 	public static boolean works(Player player, ItemStack jetpack) {
 		return !player.isInLava() || jetpack.is(ModItems.NETHERITE_CLOCKWORK_JETPACK.get());
+	}
+
+	/**
+	 * Whether hover holds the wearer up: switched on, in the air, and with no floor close by, so walking down stairs or
+	 * off a slab lands as normal instead of catching them just above the step.
+	 */
+	public static boolean hovering(Player player, JetpackState state) {
+		return state.hover() && !player.onGround() && !nearFloor(player);
+	}
+
+	/**
+	 * Whether there's floor within half a block below the feet, under the wearer or up to half a block beside them.
+	 * Walking down stairs you fall a little behind the steps and skip the half step between, so for a tick or two
+	 * there's more than half a block under you: the step just left still counts (user, 2026-11-03: "I step down the
+	 * first half of the stairs but then start to float"). A floor is open above, so a wall or a ledge at your height
+	 * isn't one, and hovering beside a wall or over a pit still works.
+	 */
+	static boolean nearFloor(Player player) {
+		AABB box = player.getBoundingBox();
+		double feet = box.minY, reach = HOVER_MIN_DROP;
+		Level level = player.level();
+		for (double x = box.minX - reach; x <= box.maxX + reach + 1e-6; x += FLOOR_SAMPLE)
+			for (double z = box.minZ - reach; z <= box.maxZ + reach + 1e-6; z += FLOOR_SAMPLE) {
+				AABB below = new AABB(x - 0.01, feet - reach - 1e-3, z - 0.01, x + 0.01, feet, z + 0.01);
+				AABB above = new AABB(x - 0.01, feet + 0.01, z - 0.01, x + 0.01, feet + reach, z + 0.01);
+				if (!level.noCollision(below) && level.noCollision(above))
+					return true;
+			}
+		return false;
 	}
 
 	/** Whether the wearer has wind to use (Creative never uses any, D27). */
@@ -195,7 +230,7 @@ public final class JetpackFlight {
 				use = Jetpacks.flightRate();
 			}
 		} else if (state.engine() && !player.getAbilities().flying && !player.isFallFlying() && !player.isPassenger() && wind) {
-			if (up || down || (state.hover() && !player.onGround())) {
+			if (up || down || hovering(player, state)) {
 				use = up || down || moving ? 1 : Jetpacks.hoverRate();
 				running = true;
 				// the height limit holds on the server too: climbing past it, nothing excuses the flight
@@ -356,7 +391,7 @@ public final class JetpackFlight {
 		}
 		if (!state.engine() || player.getAbilities().flying || player.isFallFlying() || player.isPassenger())
 			return false;
-		boolean hovering = state.hover() && !player.onGround();
+		boolean hovering = hovering(player, state);
 		if (!up && !down && !hovering)
 			return false;
 		double vertical = CMConfig.Server.get(CMConfig.SERVER.jetpackVerticalSpeed);

@@ -75,6 +75,9 @@ public final class TradeBotEntity extends PathfinderMob {
 	 * stretched across the ground (so a hop lands exactly on the next block). */
 	private static final EntityDataAccessor<Float> CLIP_SPEED = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Float> CLIP_SCALE = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.FLOAT);
+	/** How far a physical clip's rise is stretched, so a hop lands on the next floor whatever its height (a
+	 * stonecutter's 9 px, not the slab clip's 8). */
+	private static final EntityDataAccessor<Float> CLIP_LIFT = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Byte> FLAGS = SynchedEntityData.defineId(TradeBotEntity.class, EntityDataSerializers.BYTE);
 	private static final byte FLAG_CHARGING = 1, FLAG_WOUND_DOWN = 2;
 
@@ -313,6 +316,7 @@ public final class TradeBotEntity extends PathfinderMob {
 		builder.define(CLIP_ANCHOR_YAW, 0f);
 		builder.define(CLIP_SPEED, 1f);
 		builder.define(CLIP_SCALE, 1f);
+		builder.define(CLIP_LIFT, 1f);
 		builder.define(FLAGS, (byte) 0);
 	}
 
@@ -515,10 +519,16 @@ public final class TradeBotEntity extends PathfinderMob {
 
 	/** Starts a clip at {@code speed} times its own pace; a physical one's ground travel is stretched by {@code scale}. */
 	public void playClip(Clip clip, float speed, float scale) {
+		playClip(clip, speed, scale, 1);
+	}
+
+	/** As {@link #playClip(Clip, float, float)}, with a physical clip's rise stretched by {@code lift}. */
+	public void playClip(Clip clip, float speed, float scale, float lift) {
 		entityData.set(CLIP, ClipLibrary.get().id(clip));
 		entityData.set(CLIP_START, (int) now());
 		entityData.set(CLIP_SPEED, speed);
 		entityData.set(CLIP_SCALE, scale);
+		entityData.set(CLIP_LIFT, lift);
 		if (clip.root() == Clip.Root.PHYSICAL) {
 			setClipAnchor(position());
 			entityData.set(CLIP_ANCHOR_YAW, getYRot());
@@ -554,6 +564,7 @@ public final class TradeBotEntity extends PathfinderMob {
 		entityData.set(CLIP_START, (int) (now() - Mth.ceil(clip.length() * 20) - 1));
 		entityData.set(CLIP_SPEED, 1f);
 		entityData.set(CLIP_SCALE, 1f);
+		entityData.set(CLIP_LIFT, 1f);
 	}
 
 	/** Puts him at the end of a held physical clip, as if he'd just played it to {@code end}, facing {@code yaw}. */
@@ -566,6 +577,7 @@ public final class TradeBotEntity extends PathfinderMob {
 		entityData.set(CLIP_ANCHOR_YAW, startYaw);
 		entityData.set(CLIP_SPEED, 1f);
 		entityData.set(CLIP_SCALE, 1f);
+		entityData.set(CLIP_LIFT, 1f);
 		setYRot(yaw);
 		moveTo(end.x, end.y, end.z, yaw, 0);
 	}
@@ -649,7 +661,7 @@ public final class TradeBotEntity extends PathfinderMob {
 	public Vec3 rootPosition(Clip clip, float seconds) {
 		Vector3f travel = ClipRoot.travel(clip, seconds, new Vector3f());
 		float scale = entityData.get(CLIP_SCALE);
-		return ClipRoot.place(clipAnchor(), clipAnchorYaw(), travel.set(travel.x * scale, travel.y, travel.z * scale));
+		return ClipRoot.place(clipAnchor(), clipAnchorYaw(), travel.set(travel.x * scale, travel.y * entityData.get(CLIP_LIFT), travel.z * scale));
 	}
 
 	public float rootYaw(Clip clip, float seconds) {
