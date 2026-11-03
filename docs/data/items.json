@@ -2197,7 +2197,7 @@
       ],
       [
         "Keys",
-        "Jump up, Sneak down, G engine, H hover, J wings (double-tap Jump too)"
+        "Jump up, Sneak down, both to hold level, G engine, H hover, J wings (double-tap Jump too)"
       ]
     ],
     "variants": [
@@ -2250,6 +2250,10 @@
                   "Rise / drop while the engine is on. Movement keys push you along"
                 ],
                 [
+                  "Jump and Sneak together",
+                  "Stop and hold your height in the air. On the ground they do nothing"
+                ],
+                [
                   "G",
                   "Engine on or off (on by default). Off, it neither thrusts nor hovers"
                 ],
@@ -2263,7 +2267,7 @@
                 ],
                 [
                   "Jump, wings out",
-                  "Boost along your look; a level gaze holds height"
+                  "Boost along your look, faster the longer you hold it; a level gaze holds height"
                 ]
               ]
             }
@@ -2278,7 +2282,7 @@
         "id": "flight-mode",
         "title": "Flight mode",
         "body": [
-          "The wings glide exactly as an Elytra does, and gliding uses no wind. Hold Jump and the fans push you along your look at about 14 blocks a second, holding your height when you look level. That uses wind: a full wind is 15 minutes of boost.",
+          "The wings glide exactly as an Elytra does, and gliding uses no wind. Hold Jump and the fans push you along your look, faster and faster, up to 37.5 blocks a second: a quarter faster than spamming firework rockets. Looking level holds your height. That uses wind: a full wind is 15 minutes of boost.",
           "Out of wind, the wings stay out and glide, so you always land. They fold by themselves when you land, swim or ride.",
           {
             "fact": "Once the wings are out, the drum slides in against the plate to fill the gap they left, and slides back out before they fold."

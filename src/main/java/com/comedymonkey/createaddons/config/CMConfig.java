@@ -790,8 +790,9 @@ public final class CMConfig {
 				.translation("comedymonkeysaddons.configuration.jetpackElytraBoost").defineInRange("elytra_boost", 1.25, 1.0, 100.0);
 			builder.pop();
 			builder.push("flight");
-			jetpackFlightSpeedModifier = builder.comment("Flight mode's boosting speed, against an Elytra's shallow glide (1.4 = 40% faster), before the elytra boost.")
-				.translation("comedymonkeysaddons.configuration.jetpackFlightSpeedModifier").defineInRange("speed_modifier", 1.4, 0.1, 10.0);
+			// (was speed_modifier, against an Elytra's shallow glide; renamed so a world's old 1.4 isn't read against rockets)
+			jetpackFlightSpeedModifier = builder.comment("Flight mode's top boosting speed, against an Elytra kept going by firework rockets (1.0 = as fast), before the elytra boost.")
+				.translation("comedymonkeysaddons.configuration.jetpackFlightSpeedModifier").defineInRange("rocket_speed_modifier", 1.0, 0.1, 10.0);
 			builder.pop();
 			builder.push("enchantments");
 			jetpackEnchantments = builder.comment("Enchantments the jetpack refuses (or, with is_blacklist false, the only ones it takes).")

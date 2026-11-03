@@ -40,6 +40,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -216,6 +217,34 @@ public final class JetpackGameTests {
 		helper.succeed();
 	}
 
+	/**
+	 * Jump and Sneak held together keep you level: falling or rising, the thrust brings you to a stop and holds you
+	 * there. On the ground together they do nothing, so you don't hop up or spend wind.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void jumpAndSneakTogetherHoldHeight(GameTestHelper helper) {
+		ServerPlayer player = player(helper);
+		ItemStack jetpack = new ItemStack(ModItems.CLOCKWORK_JETPACK.get());
+		Jetpacks.setWind(jetpack, 1000);
+		player.setItemSlot(EquipmentSlot.CHEST, jetpack);
+		int both = JetpackInputPayload.UP | JetpackInputPayload.DOWN;
+		player.setOnGround(false);
+		for (double start : new double[] { -0.6, 0.4 }) {
+			player.setDeltaMovement(0, start, 0);
+			for (int i = 0; i < 40; i++)
+				helper.assertTrue(JetpackFlight.move(player, jetpack, both, 0, 0), "in the air, both keys should run the jetpack");
+			helper.assertTrue(player.getDeltaMovement().y == 0, "from " + start + ", both keys should hold height, moving " + player.getDeltaMovement().y);
+		}
+		player.setOnGround(true);
+		player.setDeltaMovement(Vec3.ZERO);
+		helper.assertFalse(JetpackFlight.move(player, jetpack, both, 0, 0), "on the ground, both keys shouldn't lift you");
+		JetpackFlight.setInput(player, both);
+		for (int i = 0; i < 40; i++)
+			JetpackFlight.serverTick(player);
+		helper.assertTrue(Jetpacks.wind(player.getItemBySlot(EquipmentSlot.CHEST)) == 1000, "on the ground, both keys shouldn't spend wind");
+		helper.succeed();
+	}
+
 	/** D16: with the wings out, gliding is an Elytra's and spends nothing; holding Jump boosts, 40 ticks for 20 of wind. */
 	@GameTest(template = COURSE, timeoutTicks = 20)
 	public static void glidingIsFreeAndTheBoostSpendsWind(GameTestHelper helper) {
@@ -236,6 +265,34 @@ public final class JetpackGameTests {
 		JetpackFlight.setInput(player, 0);
 		int afterBoost = Jetpacks.wind(player.getItemBySlot(EquipmentSlot.CHEST));
 		helper.assertTrue(afterBoost == 980, "40 ticks of boost should spend 20, left " + afterBoost);
+		helper.succeed();
+	}
+
+	/**
+	 * D16 (user, 2026-11-03): held, the boost keeps speeding you up from a glide, every tick, until 1.25 x a
+	 * rocket-boosted Elytra's speed, and holds there.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void aHeldBoostKeepsSpeedingUpToItsTop(GameTestHelper helper) {
+		ServerPlayer player = player(helper);
+		ItemStack jetpack = new ItemStack(ModItems.CLOCKWORK_JETPACK.get());
+		Jetpacks.setWind(jetpack, 1000);
+		player.setItemSlot(EquipmentSlot.CHEST, jetpack);
+		player.setOnGround(false);
+		player.setData(ModAttachments.JETPACK, JetpackState.DEFAULT.withWings(true));
+		player.startFallFlying();
+		player.setXRot(0);
+		player.setYRot(0);
+		player.setDeltaMovement(player.getLookAngle().scale(0.5));
+		double top = JetpackFlight.boostSpeed(), last = player.getDeltaMovement().length();
+		for (int i = 0; i < 60; i++) {
+			helper.assertTrue(JetpackFlight.move(player, jetpack, JetpackInputPayload.UP, 0, 0), "holding Jump with the wings out should boost");
+			double speed = player.getDeltaMovement().length();
+			if (last < top)
+				helper.assertTrue(speed > last, "under top speed, each tick of boost should speed you up (" + last + " to " + speed + ")");
+			last = speed;
+		}
+		helper.assertTrue(last >= top && last < top + 0.1, "the boost should top out at " + top + ", is " + last);
 		helper.succeed();
 	}
 

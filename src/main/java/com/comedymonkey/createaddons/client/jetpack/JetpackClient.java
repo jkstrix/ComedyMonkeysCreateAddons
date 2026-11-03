@@ -174,7 +174,7 @@ public final class JetpackClient {
 			return;
 		// winged, only the boost blows: the wearer's own client knows Jump; others are boosting if they hold its speed and height
 		if (flying && (wearer == Minecraft.getInstance().player ? !Minecraft.getInstance().options.keyJump.isDown()
-			: wearer.getDeltaMovement().length() < 0.9 * JetpackFlight.boostSpeed() || wearer.getDeltaMovement().y < -0.1))
+			: wearer.getDeltaMovement().length() < 0.5 * JetpackFlight.boostSpeed() || wearer.getDeltaMovement().y < -0.1))
 			return;
 		// the wearer's own client knows its controls; for others, rising or holding still in the air means it's working
 		if (!flying && wearer != Minecraft.getInstance().player && wearer.getDeltaMovement().y < -0.15)

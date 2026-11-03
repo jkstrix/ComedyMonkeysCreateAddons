@@ -53,7 +53,7 @@ Clarified: a spring-driven jetpack worn in its own Curios slot. It flies exactly
 | D13 | Flight mode feel | **Revised by D16 (2026-11-03):** it glides exactly like an elytra, free; holding Jump boosts, a little faster than an elytra, on wind. (Was: powered level flight draining wind the whole time) | user, round 1; revised 2026-11-03 |
 | D14 | Entering flight mode | A new rebindable **Wings** key (default J) toggles it in the air: the wings unfold and glide controls take over. Landing folds them and returns to jetpack mode | user, round 1 |
 | D15 | Flight code | Our own thrust, hover and flight logic with Create Jetpack's numbers and controls; no flightlib, no Create Jetpack dependency | user, round 1 |
-| D16 | Flight rules | **Works like an elytra.** Without Jump, the wings glide exactly as an elytra does, and gliding uses no wind. **Holding Jump boosts:** the fans push along your look up to an elytra's shallow-glide speed (1.4 × 1.25: about 14 blocks/s; options `flight.speed_modifier` and `elytra_boost`; raised from 1.15 after testing, 2026-11-03); a level gaze holds height and looking up climbs while boosting. The boost uses wind at the hover rate: 900 s of boost a wind (`wind.seconds_per_wind_flight`). Fireworks still work on top | user, round 2 ("Cheaper flight"); revised 2026-11-03 ("pressing or hold space should boost your speed, while gliding feels exactly the same") |
+| D16 | Flight rules | **Works like an elytra.** Without Jump, the wings glide exactly as an elytra does, and gliding uses no wind. **Holding Jump boosts:** the fans push along your look, speeding you up for as long as it's held, to 1.25 × an elytra kept going by firework rockets (1.5 b/t × 1.0 × 1.25: 37.5 blocks/s; options `flight.rocket_speed_modifier` and `elytra_boost`; was 14 b/s off the shallow glide until 2026-11-03: "boost is not fast enough, rocket spam is a lot faster"); a level gaze holds height and looking up climbs while boosting. The boost uses wind at the hover rate: 900 s of boost a wind (`wind.seconds_per_wind_flight`). Fireworks still work on top | user, round 2 ("Cheaper flight"); revised 2026-11-03 ("pressing or hold space should boost your speed, while gliding feels exactly the same") |
 | D17 | Out of wind | The wings stay out and it becomes a plain unpowered elytra glide, so you can land. Low wind: one warning sound as it crosses 10% (D32), the gauge turns amber, and below 10% the key on your back ticks at half speed (no sound), so others can see too | user, round 2; revised 2026-11-03 |
 | D18 | Without Curios | Worn in the chest armour slot, like the Create Jetpack. With Curios it fits its own slot as well | user, round 2 |
 | D19 | Netherite | A Netherite Clockwork Jetpack by smithing (Netherite Upgrade Template + Clockwork Jetpack + Netherite Ingot), keeping its wind and enchantments. Fire-proof as an item and keeps working in lava, like the Netherite Jetpack. **In lava the plain one cuts out:** no thrust, hover or boost, and its wings fold | user, round 2; lava rule 2026-11-03 |
@@ -105,7 +105,7 @@ Handed on, not gameplay: the look (wings, thrusters, where the Mainspring shows,
 1. **Off** (engine off, G): no thrust or hover, and the wings glide without boosting (D47); a chest Elytra glides as normal (D23).
 2. **Jetpack:** Create Jetpack's movement and numbers exactly (D4). Jump thrusts up at `speed.vertical`, Sneak goes down, horizontal control at `speed.horizontal` with `speed.acceleration`. Uses wind at 450 s per wind.
 3. **Hover** (H): holds the player in the air; `speed.hover_descend` 0, so they hold height dead still (D5). Uses wind at 900 s per wind.
-4. **Flight** (J, or double-tap Jump with the second tap in the air; in the air only): the wings unfold and you glide exactly as with an elytra, using no wind. Hold Jump to boost along your look (about 14 blocks/s, holding height when level), at 900 s of boost a wind. Fireworks still work (D16).
+4. **Flight** (J, or double-tap Jump with the second tap in the air; in the air only): the wings unfold and you glide exactly as with an elytra, using no wind. Hold Jump to boost along your look, speeding up to 37.5 blocks/s (holding height when level), at 900 s of boost a wind. Fireworks still work (D16).
 5. Flight mode ends, and the wings fold, when you touch the ground, press J again, enter water (D28) or mount anything (D29).
 6. **Out of wind:** in flight mode the wings stay out and it glides like a plain elytra (D17); in jetpack or hover mode the player falls. At 10% left a single warning sounds and the key ticks slower from then on (D17).
 
@@ -124,11 +124,11 @@ It sits beside Create Jetpack rather than above it. Create Jetpack is mid-to-lat
 
 ## Balance
 - **Cost:** a boss kill (one Mainspring each, no farm: Juggernaut spec D15, D30), 3 Precision Mechanisms, 6 Brass Sheets, 4 Chutes, a Shaft. Netherite: one ingot and a template.
-- **Reward:** 450 s of thrust, 900 s of hover, or 900 s of boosting (about 14 b/s, ≈ 12 km) per wind, and gliding is free; a Hand Crank or a Spring Engine refills it. Overwound III doubles every figure (≈ 25 km of boost) for the price of Librarian trades and a longer wind.
+- **Reward:** 450 s of thrust, 900 s of hover, or 900 s of boosting (up to 37.5 b/s, ≈ 33 km) per wind, and gliding is free; a Hand Crank or a Spring Engine refills it. Overwound III doubles every figure (≈ 67 km of boost) for the price of Librarian trades and a longer wind.
 - **Overwound on the Spring Engine (D36):** doubles its store to two hours at 16,384 SU. It's still lossless and gives back only what went in, so it's more buffer, not more power. Winding a doubled engine takes twice as long at the same stress.
 - **Risk:** running dry mid-air in jetpack or hover mode means a fall. Flight mode always glides down safely.
 - **Armour stacking (accepted):** a chestplate plus jetpack armour in the slot is more than vanilla allows (D20). The cost and the single slot limit it. Watch it in play.
-- **Elytra and rockets still matter:** rockets are faster than our ~14 b/s boost, and an elytra costs no boss.
+- **Elytra and rockets still matter:** an elytra and rockets cost no boss; our boost is a quarter faster than rocket spam, but runs on wind.
 - **Exploits and fixes:**
   - Dupe by breaking or moving the Winding Station mid-wind: the hung jetpack (with its wind on the item) lives in the station's block entity and drops once. Contraptions, Carry On and pistons must move the block entity whole (Create removes the block entity first; checked in review). Breaking is covered by a game test.
   - Backing in to wind someone else's worn jetpack: winding only ever applies to the jetpack worn by the sneaking player on the front block.
@@ -165,7 +165,7 @@ It sits beside Create Jetpack rather than above it. Create Jetpack is mid-to-lat
 - **Chest fallback:** an armour-type chest item; flight logic reads the slot first, then the chest.
 - **Flight logic (own code, D15):** client input → per-player toggle state (engine, hover, wings) synced to the server; server-authoritative wind use from the keys the client reports; movement applied on the client for the local player, as Create Jetpack does (the fly-kick is excused while it runs, except climbing past the height limit, D48).
 - **Flight mode:** uses the vanilla fall-flying pose and its physics, plus, while Jump is held, the boost's push along the look to its speed cap (a level gaze holds height). Other players see the wings through a synced flag.
-- **Config, server (synced, `CMConfig` section `clockworkJetpack`):** `wind.seconds_per_wind` 450, `wind.seconds_per_wind_hover` 900, `wind.seconds_per_wind_flight` 900, `speed.horizontal` 0.02, `speed.vertical` 0.4, `speed.acceleration` 0.6, `speed.hover_descend` **0.0** (−100–0), `speed.swim_modifier` 1.8, `features.elytra_boost` 1.25, `flight.speed_modifier` 1.4, `enchantments.list` [], `enchantments.is_blacklist` true, `heightAboveGroundLimit` −1. **Client:** `overlay.enabled` true, `overlay.position.x` 6, `overlay.position.y` 6, `overlay.scale` 1.0, `effects.seasonal` true.
+- **Config, server (synced, `CMConfig` section `clockworkJetpack`):** `wind.seconds_per_wind` 450, `wind.seconds_per_wind_hover` 900, `wind.seconds_per_wind_flight` 900, `speed.horizontal` 0.02, `speed.vertical` 0.4, `speed.acceleration` 0.6, `speed.hover_descend` **0.0** (−100–0), `speed.swim_modifier` 1.8, `features.elytra_boost` 1.25, `flight.rocket_speed_modifier` 1.0, `enchantments.list` [], `enchantments.is_blacklist` true, `heightAboveGroundLimit` −1. **Client:** `overlay.enabled` true, `overlay.position.x` 6, `overlay.position.y` 6, `overlay.scale` 1.0, `effects.seasonal` true.
 - **Keys:** `key.comedymonkeysaddons.jetpack_engine` G, `…jetpack_hover` H, `…jetpack_wings` J, in their own key category.
 - **Saving:** toggles go in a player attachment that persists across death; wind lives on the item and the block entity.
 - **Licences:** our own art; Create Jetpack's MIT code may guide the behaviour but isn't copied wholesale; flightlib is not used.
@@ -199,7 +199,7 @@ A Mainspring-powered jetpack, worn in its own Curios slot, with a jetpack mode a
 - Same options and defaults as Create Jetpack, but hover descend is 0.
 - Overwound I–III raises max wind; III doubles it (jetpack and Spring Engine).
 - 450 s of thrust, 900 s of hover, 900 s of boost a wind; gliding is free.
-- Flight glides exactly like an elytra, free; holding Jump boosts (about 14 b/s) on wind.
+- Flight glides exactly like an elytra, free; holding Jump boosts, speeding up to 37.5 b/s, on wind.
 - Out of wind with the wings out: an elytra glide, never a drop.
 - Only one flyer works at a time; the Clockwork Jetpack goes first.
 - It gives backtank armour in the slot or the chest (chest only without Curios); it holds no air.
@@ -256,7 +256,7 @@ Gameplay: 95% · World Integration: 90% · Balance: 85% · Progression: 95% · A
 
 - Gameplay 95%: the exact flight-mode climb rate and dive speed cap get tuned in play.
 - World Integration 90%: the slot icon and seasonal effects wait on the art brief.
-- Balance 85%: armour stacking in the slot was accepted but is untested; the boost was raised to ~14 b/s after the first feel check.
+- Balance 85%: armour stacking in the slot was accepted but is untested; the boost was raised to ~14 b/s after the first feel check, then to 37.5 b/s (1.25 × rocket spam).
 - Progression 95%: fixed by the Juggernaut; no advancement named yet.
 - Automation 90%: the backtank fill rate is matched rather than given in numbers; read it from Create at implementation.
 - Edge Cases 90%: Create Jetpack can't be worn with it (D23); its keys sharing G/H with ours is untested with both mods installed.

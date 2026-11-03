@@ -44,7 +44,7 @@ class JetpacksTest {
 		assertEquals(0.0, CMConfig.SERVER.jetpackHoverDescend.getDefault());
 		assertEquals(1.8, CMConfig.SERVER.jetpackSwimModifier.getDefault());
 		assertEquals(1.25, CMConfig.SERVER.jetpackElytraBoost.getDefault());
-		assertEquals(1.4, CMConfig.SERVER.jetpackFlightSpeedModifier.getDefault());
+		assertEquals(1.0, CMConfig.SERVER.jetpackFlightSpeedModifier.getDefault());
 		assertEquals(-1, CMConfig.SERVER.jetpackHeightAboveGroundLimit.getDefault());
 		assertTrue(CMConfig.SERVER.jetpackEnchantmentsIsBlacklist.getDefault());
 		assertTrue(CMConfig.CLIENT.jetpackOverlay.getDefault());
@@ -52,10 +52,13 @@ class JetpacksTest {
 		assertEquals(6, CMConfig.CLIENT.jetpackOverlayY.getDefault());
 	}
 
-	/** D16 (user, 2026-11-03): boosting flies at 1.4 x 1.25 an Elytra's shallow glide, about 14 blocks a second. */
+	/**
+	 * D16 (user, 2026-11-03: "1.25 * rocket spam + elytra"): held, the boost speeds up to 1.25 x an Elytra kept going
+	 * by firework rockets, 37.5 blocks a second.
+	 */
 	@Test
-	void boostIsAbout14BlocksASecond() {
-		assertEquals(14, JetpackFlight.boostSpeed() * 20, 1e-6);
+	void boostTopsOutAtAQuarterFasterThanRockets() {
+		assertEquals(37.5, JetpackFlight.boostSpeed() * 20, 1e-6);
 	}
 
 	/** D12, D16: a full wind is 450 s of thrust, 900 of hover or of boost in flight mode (gliding is free). */

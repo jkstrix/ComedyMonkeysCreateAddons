@@ -1,6 +1,6 @@
 {
   "modName": "ComedyMonkey's Create Addons",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "minecraft": "1.21.1",
   "create": "6.0.10",
   "neoforge": "21.1.248",
@@ -76,6 +76,7 @@
       ]
     },
     "notes": [
+      { "date": "2026-11-03", "title": "2.6.2: a faster jetpack boost", "body": "Hold Jump with the wings out and the [[clockwork-jetpack]] keeps speeding up, to a quarter faster than spamming firework rockets. Jump and Sneak together hold you level in the air." },
       { "date": "2026-11-03", "title": "2.6.1: villagers through the goggles", "body": "Look at a villager in Engineer's Goggles to see the workstation it has claimed and, on Shift, its trades. Sneak-right-click it with a wrench and it gives that workstation up, and won't walk straight back to it." },
       { "date": "2026-11-03", "title": "2.6.0: the Clockwork Jetpack", "body": "A [[mainspring]] on your back with brass fans and da Vinci wings. It flies like Create Jetpack on wind instead of air, glides like an Elytra with a boost, and has its own slot, so your chestplate and backpack stay on. Wind it at a **Jetpack Winding Station** on any shaft." },
       { "date": "2026-11-01", "title": "2.5.1: a harder fight in the ruins", "body": "Fixes from the first days of 2.5.0. What sleeps in the ruins no longer locks on to one player, can't be pinned or trapped, and is harder to read." },

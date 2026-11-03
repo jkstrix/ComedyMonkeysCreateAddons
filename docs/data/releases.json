@@ -1,5 +1,28 @@
 [
   {
+    "version": "2.6.2",
+    "from": "2.6.1",
+    "date": "2026-11-03",
+    "title": "A faster jetpack boost",
+    "summary": "The [[clockwork-jetpack]]'s boost now outruns firework rockets, and Jump with Sneak holds you level.",
+    "highlights": [],
+    "sections": [
+      {
+        "title": "Changed",
+        "icon": "rotate",
+        "body": [
+          {
+            "list": [
+              "**The boost keeps speeding you up.** Hold Jump with the wings out and the [[clockwork-jetpack]] goes faster and faster, up to 37.5 blocks a second: a quarter faster than spamming firework rockets. It was 14. A full wind now carries you about 33 km.",
+              "**Jump and Sneak together hold you level.** In the air they bring you to a stop and keep you there, without switching hover on. On the ground they do nothing, so you don't hop up.",
+              "**For server owners:** the flight speed option is now `rocket_speed_modifier` (default 1.0), measured against rocket speed. The old `speed_modifier` is no longer read."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "version": "2.6.1",
     "from": "2.6.0",
     "date": "2026-11-03",

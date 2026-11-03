@@ -45,8 +45,11 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * chest Elytra (D23: one flyer at a time, the Clockwork Jetpack first only while its engine is on).
  */
 public final class JetpackFlight {
-	/** An Elytra's steady shallow glide, blocks a tick (about 8 blocks a second); boosting flies a little faster (D16). */
-	public static final double GLIDE_SPEED = 0.4;
+	/**
+	 * An Elytra kept going by firework rockets, blocks a tick (each rocket pulls towards 1.5 along the look: about 30
+	 * blocks a second); held, the boost keeps speeding up to this times the elytra boost (D16).
+	 */
+	public static final double ROCKET_SPEED = 1.5;
 	/** How hard the fans push along the look while under boosting speed. */
 	private static final double FLIGHT_THRUST = 0.06;
 	/** Toggle keys are taken at most this often (ticks), so a client can't flood its neighbours with sounds and states. */
@@ -173,8 +176,7 @@ public final class JetpackFlight {
 			sound(player, "wings_fold");
 		}
 		int keys = INPUT.getOrDefault(id, 0);
-		boolean up = (keys & JetpackInputPayload.UP) != 0, down = (keys & JetpackInputPayload.DOWN) != 0 && !player.onGround(),
-			moving = (keys & JetpackInputPayload.MOVING) != 0;
+		boolean up = up(player, keys), down = down(player, keys), moving = (keys & JetpackInputPayload.MOVING) != 0;
 		boolean wind = hasWind(player, jetpack) && works(player, jetpack);
 		// one flyer at a time (D23): a chest Elytra glides as normal, and gives way only while the jetpack is thrusting or hovering
 		if (!state.wings() && state.engine() && wind && (up || down || state.hover()) && player.isFallFlying()
@@ -336,8 +338,8 @@ public final class JetpackFlight {
 	// ---- the wearer's client moves them (called for the local player only)
 
 	/**
-	 * Moves the wearer for one tick, after vanilla's own movement: thrust towards the vertical speed (or, hovering with no
-	 * key held, the hover descend speed: 0 holds height exactly), the movement keys pushing at the horizontal speed; or,
+	 * Moves the wearer for one tick, after vanilla's own movement: thrust towards the vertical speed (0 with Jump and Sneak
+	 * both held, to stay level; or, hovering with no key held, the hover descend speed: 0 holds height exactly), the movement keys pushing at the horizontal speed; or,
 	 * with the wings out, the boost while Jump is held (without it, vanilla's glide is left alone). Returns whether the
 	 * jetpack was working.
 	 */
@@ -345,7 +347,7 @@ public final class JetpackFlight {
 		JetpackState state = state(player);
 		if (!hasWind(player, jetpack) || !works(player, jetpack))
 			return false;
-		boolean up = (keys & JetpackInputPayload.UP) != 0, down = (keys & JetpackInputPayload.DOWN) != 0 && !player.onGround();
+		boolean up = up(player, keys), down = down(player, keys);
 		if (state.wings()) {
 			if (!player.isFallFlying() || !up || !state.engine())
 				return false;
@@ -358,7 +360,7 @@ public final class JetpackFlight {
 		if (!up && !down && !hovering)
 			return false;
 		double vertical = CMConfig.Server.get(CMConfig.SERVER.jetpackVerticalSpeed);
-		double target = up ? vertical : down ? -vertical : CMConfig.Server.get(CMConfig.SERVER.jetpackHoverDescend);
+		double target = up && down ? 0 : up ? vertical : down ? -vertical : CMConfig.Server.get(CMConfig.SERVER.jetpackHoverDescend);
 		if (up && aboveLimit(player))
 			target = Math.min(target, 0);
 		double acceleration = CMConfig.Server.get(CMConfig.SERVER.jetpackAcceleration);
@@ -371,14 +373,27 @@ public final class JetpackFlight {
 		return true;
 	}
 
-	/** Boosting speed in flight mode, blocks a tick: an Elytra's shallow glide by the speed modifier and the elytra boost. */
+	/**
+	 * Jump thrusts up. Held with Sneak it holds height instead ({@link #move}): in the air both thrust to stay level, and
+	 * on the ground together they do nothing, so you don't hop up.
+	 */
+	private static boolean up(Player player, int keys) {
+		return (keys & JetpackInputPayload.UP) != 0 && !((keys & JetpackInputPayload.DOWN) != 0 && player.onGround());
+	}
+
+	/** Sneak thrusts down, only off the ground. */
+	private static boolean down(Player player, int keys) {
+		return (keys & JetpackInputPayload.DOWN) != 0 && !player.onGround();
+	}
+
+	/** Top boosting speed in flight mode, blocks a tick: a rocket-boosted Elytra's by the speed modifier and the elytra boost. */
 	public static double boostSpeed() {
-		return GLIDE_SPEED * CMConfig.Server.get(CMConfig.SERVER.jetpackFlightSpeedModifier) * CMConfig.Server.get(CMConfig.SERVER.jetpackElytraBoost);
+		return ROCKET_SPEED * CMConfig.Server.get(CMConfig.SERVER.jetpackFlightSpeedModifier) * CMConfig.Server.get(CMConfig.SERVER.jetpackElytraBoost);
 	}
 
 	/**
-	 * The boost on top of vanilla's Elytra glide while Jump is held (D16): the fans push along the look up to boosting
-	 * speed; looking level holds height, looking up climbs, looking down dives as an Elytra does.
+	 * The boost on top of vanilla's Elytra glide while Jump is held (D16): the fans keep pushing along the look, speeding
+	 * you up for as long as it's held, until top boosting speed; looking level holds height, looking up climbs, looking down dives as an Elytra does.
 	 */
 	private static void boost(Player player) {
 		Vec3 look = player.getLookAngle();
