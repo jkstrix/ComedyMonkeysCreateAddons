@@ -1,5 +1,57 @@
 [
   {
+    "version": "2.6.0",
+    "from": "2.5.1",
+    "date": "2026-11-03",
+    "title": "The Clockwork Jetpack",
+    "summary": "A jetpack wound like a clock, with da Vinci wings: Create Jetpack flight on wind instead of air, Elytra gliding with a boost, its own slot so your chestplate and backpack stay on, and a station that winds it from any shaft.",
+    "highlights": [
+      "clockwork-jetpack",
+      "jetpack-winding-station"
+    ],
+    "sections": [
+      {
+        "title": "Clockwork Jetpack",
+        "icon": "star",
+        "body": [
+          "Crafted from a [[mainspring]] and Precision Mechanisms. It flies exactly like Create Jetpack (Jump up, Sneak down, G engine, H hover, the same numbers), except that hover holds you dead still.",
+          {
+            "list": [
+              "**Flight mode:** J, or double-tap Jump, unfolds three-block canvas wings. They glide like an Elytra for free; hold Jump to boost at about 14 blocks a second.",
+              "**Its own Curios slot**, so a chestplate and a backpack stay on. With a backpack, the jetpack is built into it.",
+              "**The Netherite Clockwork Jetpack**, from the smithing table: Netherite armour, and it keeps flying in lava.",
+              "**No running sounds:** it clicks and whirs only when something starts or stops; in flight you hear the wind."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Jetpack Winding Station",
+        "icon": "rotate",
+        "body": [
+          {
+            "list": [
+              "**[[jetpack-winding-station]]** winds a hung jetpack, or the one on your back when you back into it, from a shaft below at a Copper Backtank's rate.",
+              "Right-click with an empty hand to swap your jetpack with the station's; comparators, funnels and Mechanical Arms work with it; a Ponder scene shows it all."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Overwound",
+        "icon": "bookmark",
+        "body": [
+          {
+            "list": [
+              "**A new enchantment** from Librarians, put on at an anvil: a third more wind a level, twice as much at III.",
+              "It goes on the **[[spring-engine]]** too, doubling what it holds, and stays with the engine when it's broken."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "version": "2.5.1",
     "from": "2.5.0",
     "date": "2026-11-01",

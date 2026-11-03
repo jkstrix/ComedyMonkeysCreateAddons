@@ -172,8 +172,9 @@ ingredient links all come from it.
 
 ## What's new (`releases.json`)
 
-One object per release, newest first; `#/whats-new` shows the newest, `#/whats-new/<version>` any
-other, and the home page links the newest. Add the next release at the top:
+One object per release, newest first. `#/whats-new` is one long page of every release, newest at the top, so
+the notes read as a history you scroll back through; `#/whats-new/<version>` scrolls to that one, and the home page
+links the newest. Give every release its own sections. Add the next release at the top:
 
 ```jsonc
 {

@@ -2096,7 +2096,7 @@
     "registry": [
       "comedymonkeysaddons:mainspring"
     ],
-    "summary": "A coiled steel spring the size of a door, torn from something that should not have been running. The heart of the [[spring-engine]].",
+    "summary": "A coiled steel spring the size of a door, torn from something that should not have been running. The heart of the [[spring-engine]] and the [[clockwork-jetpack]].",
     "tags": [
       "boss drop"
     ],
@@ -2106,9 +2106,9 @@
     ],
     "teach": {
       "what": "A boss drop: exactly one every time [[ruin-sleeper]] is brought down by a player.",
-      "why": "It is what makes a [[spring-engine]], the only block that stores rotation.",
+      "why": "It is what makes a [[spring-engine]], the only block that stores rotation, and a [[clockwork-jetpack]].",
       "when": "Late game, after the fight.",
-      "interacts": "Crafted with a Brass Casing, 4 Brass Sheets and 2 Shafts into the [[spring-engine]].",
+      "interacts": "Crafted with a Brass Casing, 4 Brass Sheets and 2 Shafts into the [[spring-engine]], or with Precision Mechanisms on Mechanical Crafters into the [[clockwork-jetpack]].",
       "mistakes": [
         "Expecting Looting to give more: it is always exactly one."
       ]
@@ -2117,11 +2117,209 @@
       "Dropped, always exactly one, when a player defeats [[ruin-sleeper]]."
     ],
     "uses": [
-      "The [[spring-engine]]."
+      "The [[spring-engine]].",
+      "The [[clockwork-jetpack]]."
     ],
     "related": [
       "spring-engine",
+      "clockwork-jetpack",
       "ruin-sleeper"
+    ]
+  },
+  {
+    "id": "clockwork-jetpack",
+    "name": "Clockwork Jetpack",
+    "registry": [
+      "comedymonkeysaddons:clockwork_jetpack",
+      "comedymonkeysaddons:netherite_clockwork_jetpack"
+    ],
+    "summary": "A [[mainspring]] on your back with brass fans and folding canvas wings: Create Jetpack flight on wind instead of air, worn in its own slot so your chestplate and backpack stay on.",
+    "tags": [
+      "equipment",
+      "flight"
+    ],
+    "stage": "end",
+    "requires": [
+      "mainspring",
+      "jetpack-winding-station"
+    ],
+    "teach": {
+      "what": "A jetpack wound like a clock. Hold Jump to rise and Sneak to drop, exactly as Create Jetpack flies; H holds you dead still in the air. Press J, or double-tap Jump, and da Vinci wings unfold: they glide like an Elytra for free, and holding Jump boosts you along your look.",
+      "why": "Flight without giving up your chestplate or your backpack, and Elytra-style travel that needs no fireworks.",
+      "when": "End game: it takes the [[mainspring]], so the fight comes first.",
+      "interacts": "Wound at a [[jetpack-winding-station]] on any shaft, as fast as a Copper Backtank fills. Overwound, from Librarians, holds more wind. With a backpack on, it's built into the pack.",
+      "mistakes": [
+        "Running dry while hovering high: you fall. With the wings out you glide down instead, so spread them before the wind runs out.",
+        "Trying to wear a backtank with it: the two never go on together, so take the jetpack off to dive with a Diving Helmet.",
+        "Taking the plain one into lava: it cuts out there. Only the Netherite one keeps going."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Thrust",
+        "value": "450",
+        "unit": "s a wind",
+        "gauge": 0.5
+      },
+      {
+        "label": "Hover",
+        "value": "900",
+        "unit": "s a wind",
+        "gauge": 1
+      },
+      {
+        "label": "Boost",
+        "value": "~14",
+        "unit": "blocks a second",
+        "gauge": 0.45
+      }
+    ],
+    "specs": [
+      [
+        "Worn",
+        "Its own Curios Jetpack slot (the chest without Curios)"
+      ],
+      [
+        "Armour",
+        "A Copper Backtank's (the Netherite one: a Netherite Backtank's)"
+      ],
+      [
+        "Wind",
+        "450 s of thrust, 900 s of hover or of boost; gliding is free"
+      ],
+      [
+        "Overwound",
+        "A third more wind a level: twice as much at III"
+      ],
+      [
+        "Wingspan",
+        "Three blocks"
+      ],
+      [
+        "Keys",
+        "Jump up, Sneak down, G engine, H hover, J wings (double-tap Jump too)"
+      ]
+    ],
+    "variants": [
+      {
+        "id": "netherite",
+        "name": "Netherite Clockwork Jetpack",
+        "registry": [
+          "comedymonkeysaddons:netherite_clockwork_jetpack"
+        ],
+        "summary": "Upgraded at a smithing table, keeping its wind and enchantments: Netherite armour, it doesn't burn, and it keeps flying in lava.",
+        "specs": [
+          [
+            "Armour",
+            "A Netherite Backtank's"
+          ],
+          [
+            "Lava",
+            "Keeps working"
+          ],
+          [
+            "Upgrade",
+            "Netherite Upgrade Template + Clockwork Jetpack + Netherite Ingot"
+          ]
+        ]
+      }
+    ],
+    "obtain": [
+      "Crafted on Mechanical Crafters from a [[mainspring]], Precision Mechanisms, brass and copper.",
+      "The Netherite one: the smithing table's Netherite upgrade, which keeps the wind and enchantments."
+    ],
+    "uses": [
+      "Jetpack flight, Create Jetpack's controls and numbers, except that hover holds you still.",
+      "Flight mode: Elytra gliding with a wind-powered boost.",
+      "Faster swimming with the engine on."
+    ],
+    "sections": [
+      {
+        "id": "controls",
+        "title": "Flying it",
+        "body": [
+          {
+            "table": {
+              "head": [
+                "Key",
+                "What it does"
+              ],
+              "rows": [
+                [
+                  "Jump / Sneak",
+                  "Rise / drop while the engine is on. Movement keys push you along"
+                ],
+                [
+                  "G",
+                  "Engine on or off (on by default). Off, it neither thrusts nor hovers"
+                ],
+                [
+                  "H",
+                  "Hover: hold your height with no key held"
+                ],
+                [
+                  "J, or double-tap Jump",
+                  "Spread or fold the wings, in the air only"
+                ],
+                [
+                  "Jump, wings out",
+                  "Boost along your look; a level gaze holds height"
+                ]
+              ]
+            }
+          },
+          "All the keys can be rebound. A small gauge on screen shows how wound it is, and the window in the drum on your back shows it to everyone else.",
+          {
+            "tip": "Double-tapping Jump means two short taps. Holding Jump to climb or boost never counts, so you won't fold the wings by accident."
+          }
+        ]
+      },
+      {
+        "id": "flight-mode",
+        "title": "Flight mode",
+        "body": [
+          "The wings glide exactly as an Elytra does, and gliding uses no wind. Hold Jump and the fans push you along your look at about 14 blocks a second, holding your height when you look level. That uses wind: a full wind is 15 minutes of boost.",
+          "Out of wind, the wings stay out and glide, so you always land. They fold by themselves when you land, swim or ride.",
+          {
+            "fact": "Once the wings are out, the drum slides in against the plate to fill the gap they left, and slides back out before they fold."
+          }
+        ]
+      },
+      {
+        "id": "backpacks",
+        "title": "With a backpack",
+        "body": [
+          "It has its own Curios slot, so a backpack stays on in the back slot. Worn together, the jetpack is built into the backpack: the drum stands through the pack's face, the fans hang underneath, and the wings fold away inside it.",
+          {
+            "warning": "A Copper Backtank or Create's own Jetpack can't be worn with it. One put in the chest pops back into your inventory."
+          }
+        ]
+      },
+      {
+        "id": "overwound",
+        "title": "Overwound",
+        "body": [
+          "An enchantment that holds more wind: a third more a level, twice as much at Overwound III. Librarians sell it, and it goes on at an anvil, never from an enchanting table. It goes on the [[spring-engine]] too, doubling what that holds."
+        ]
+      }
+    ],
+    "tips": [
+      "Hang it on a [[jetpack-winding-station]] with an empty hand while you work, and it's full when you come back.",
+      "An Elytra in the chest still works alongside it: it only gives way while the jetpack is thrusting or hovering."
+    ],
+    "facts": [
+      "Nothing on it runs quietly: being strapped to your back, it only clicks, whirs and snaps when something starts or stops. In flight you hear the wind, as with an Elytra."
+    ],
+    "related": [
+      "jetpack-winding-station",
+      "mainspring",
+      "spring-engine"
+    ],
+    "gallery": [
+      {
+        "src": "renders/clockwork-jetpack-wings.png",
+        "caption": "Flight mode: the wings out, three blocks tip to tip"
+      }
     ]
   }
 ]

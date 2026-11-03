@@ -239,3 +239,20 @@ New BigSoundBank downloads (CC0), in `bigsoundbank/`; cuts `cuts/lt_*.wav`. Per-
 | 0078.ogg | electric-fan-1 | https://bigsoundbank.com/sound-0078-electric-fan-1.html | (not used) |
 
 Also cut from files already here: 2143 and 2144 (lt_bulb_a, lt_bulb_b1 0-0.30, lt_bulb_b2 0.30-0.65), 2118 (lt_transformer 1.0-8.0).
+
+## Clockwork Jetpack (2026-11-03)
+Stage 2 real sounds for the Clockwork Jetpack and its Winding Station (design/sound/clockwork-jetpack/). Rung 2: Trade Bot's approved tick and wind takes (generated/sa3_tradebot_*), the Pressure Crucible's gear take (generated/sa3_crucible_gears_v1_x2), the Kenney packs (impactWood_light/medium, impactMetal_light/medium, impactBell_heavy, metalClick, metalLatch, creak1-3, toggle_001/002, beltHandle1/2, handleSmallLeather, card-slide-1) and the Juggernaut's cuts (jug_reel, jug_chime). Rung 3, new BigSoundBank recordings (all CC0), cut by design/sound/clockwork-jetpack/cuts.js:
+
+| File | Recording | Page | Cuts |
+|---|---|---|---|
+| 3545.ogg | drone-1 | https://bigsoundbank.com/drone-1-s3545.html | cj_fan_up_drone (0.3-2.6 s) |
+| 3548.ogg | drone-4 | https://bigsoundbank.com/drone-4-s3548.html | cj_fan_down_drone (10.6-11.8 s) |
+| 3547.ogg | drone-3 | https://bigsoundbank.com/drone-3-s3547.html | searched, not used |
+| 0078.ogg | electric-fan-1 | https://bigsoundbank.com/sound-0078-electric-fan-1.html | auditioned as cj_fan_up_fan, cj_fan_down_fan; not picked |
+| 1788.ogg | flag-2 | https://bigsoundbank.com/flag-2-s1788.html | cj_canvas_snap_a (0.1-0.6 s) |
+| 1787.ogg | flag-1 | https://bigsoundbank.com/flag-1-s1787.html | cj_canvas_snap_b (0.65-1.05 s) |
+| 1790.ogg | flag-4 | https://bigsoundbank.com/flag-4-s1790.html | cj_canvas_snap_c (0.35-0.85 s) |
+| 1789.ogg | flag-3 | https://bigsoundbank.com/flag-3-s1789.html | cj_canvas_slack (0.4-1.0 s) |
+| 0633.ogg | metal-slinky | https://bigsoundbank.com/metal-slinky-s0633.html | searched, not used |
+
+Searched with no usable result: BigSoundBank "umbrella" (only rain under an umbrella), "sail" (none), "toy" (no wind-up toys). Rung 4: one synth layer, the air whoosh in boost (no clean real air surge).

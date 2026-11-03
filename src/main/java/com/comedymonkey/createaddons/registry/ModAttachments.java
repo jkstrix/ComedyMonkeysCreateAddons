@@ -23,5 +23,10 @@ public final class ModAttachments {
 	public static final Supplier<AttachmentType<ClockCheck>> CLOCK_RESTOCK_CHECK = ATTACHMENT_TYPES.register("clock_check",
 		() -> AttachmentType.builder(() -> ClockCheck.NEVER).serialize(ClockCheck.CODEC).build());
 
+	/** On players: their Clockwork Jetpack toggles (engine, hover, wings). Saved, kept through death; sent by {@code JetpackStatePayload}. */
+	public static final Supplier<AttachmentType<com.comedymonkey.createaddons.content.jetpack.JetpackState>> JETPACK =
+		ATTACHMENT_TYPES.register("jetpack", () -> AttachmentType.builder(() -> com.comedymonkey.createaddons.content.jetpack.JetpackState.DEFAULT)
+			.serialize(com.comedymonkey.createaddons.content.jetpack.JetpackState.CODEC).copyOnDeath().build());
+
 	private ModAttachments() {}
 }

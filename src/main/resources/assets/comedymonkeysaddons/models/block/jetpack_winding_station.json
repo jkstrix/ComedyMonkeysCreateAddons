@@ -1,0 +1,652 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/clockwork_jetpack_walnut",
+    "clockwork_jetpack_steel": "comedymonkeysaddons:block/clockwork_jetpack_steel",
+    "clockwork_jetpack_base_top": "comedymonkeysaddons:block/clockwork_jetpack_base_top",
+    "clockwork_jetpack_socket": "comedymonkeysaddons:block/clockwork_jetpack_socket",
+    "clockwork_jetpack_collar": "comedymonkeysaddons:block/clockwork_jetpack_collar",
+    "clockwork_jetpack_walnut": "comedymonkeysaddons:block/clockwork_jetpack_walnut",
+    "clockwork_jetpack_brass": "comedymonkeysaddons:block/clockwork_jetpack_brass"
+  },
+  "elements": [
+    {
+      "name": "plinth",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        4,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            12,
+            15,
+            16
+          ],
+          "texture": "#clockwork_jetpack_steel"
+        },
+        "east": {
+          "uv": [
+            1,
+            12,
+            15,
+            16
+          ],
+          "texture": "#clockwork_jetpack_steel"
+        },
+        "south": {
+          "uv": [
+            1,
+            12,
+            15,
+            16
+          ],
+          "texture": "#clockwork_jetpack_steel"
+        },
+        "west": {
+          "uv": [
+            1,
+            12,
+            15,
+            16
+          ],
+          "texture": "#clockwork_jetpack_steel"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#clockwork_jetpack_base_top"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_socket"
+        }
+      }
+    },
+    {
+      "name": "gear_housing",
+      "from": [
+        5.5,
+        4,
+        10.5
+      ],
+      "to": [
+        10.5,
+        7,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "east": {
+          "uv": [
+            1,
+            9,
+            5.5,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            9,
+            10.5,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "west": {
+          "uv": [
+            10.5,
+            9,
+            15,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            10.5,
+            10.5,
+            15
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            1,
+            10.5,
+            5.5
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        }
+      }
+    },
+    {
+      "name": "post_l",
+      "from": [
+        6.5,
+        8,
+        12.5
+      ],
+      "to": [
+        7.5,
+        24.4,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.5,
+            0,
+            9.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        },
+        "east": {
+          "uv": [
+            0.5,
+            0,
+            3.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            0,
+            7.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        },
+        "west": {
+          "uv": [
+            12.5,
+            0,
+            15.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        }
+      }
+    },
+    {
+      "name": "post_r",
+      "from": [
+        8.5,
+        8,
+        12.5
+      ],
+      "to": [
+        9.5,
+        24.4,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            0,
+            7.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        },
+        "east": {
+          "uv": [
+            0.5,
+            0,
+            3.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        },
+        "south": {
+          "uv": [
+            8.5,
+            0,
+            9.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        },
+        "west": {
+          "uv": [
+            12.5,
+            0,
+            15.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        }
+      }
+    },
+    {
+      "name": "post_back",
+      "from": [
+        7.5,
+        8,
+        13.5
+      ],
+      "to": [
+        8.5,
+        24.4,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        },
+        "east": {
+          "uv": [
+            0.5,
+            0,
+            2.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        },
+        "west": {
+          "uv": [
+            13.5,
+            0,
+            15.5,
+            16
+          ],
+          "texture": "#clockwork_jetpack_walnut"
+        }
+      }
+    },
+    {
+      "name": "collar_low",
+      "from": [
+        6.25,
+        7,
+        12.25
+      ],
+      "to": [
+        9.75,
+        8,
+        15.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.25,
+            8,
+            9.75,
+            9
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "east": {
+          "uv": [
+            0.25,
+            8,
+            3.75,
+            9
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            6.25,
+            8,
+            9.75,
+            9
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "west": {
+          "uv": [
+            12.25,
+            8,
+            15.75,
+            9
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "up": {
+          "uv": [
+            6.25,
+            12.25,
+            9.75,
+            15.75
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            6.25,
+            0.25,
+            9.75,
+            3.75
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        }
+      }
+    },
+    {
+      "name": "collar_top",
+      "from": [
+        6.25,
+        24.4,
+        12.25
+      ],
+      "to": [
+        9.75,
+        25.4,
+        15.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.25,
+            6.6,
+            9.75,
+            7.6
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "east": {
+          "uv": [
+            0.25,
+            6.6,
+            3.75,
+            7.6
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            6.25,
+            6.6,
+            9.75,
+            7.6
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "west": {
+          "uv": [
+            12.25,
+            6.6,
+            15.75,
+            7.6
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "up": {
+          "uv": [
+            6.25,
+            12.25,
+            9.75,
+            15.75
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            6.25,
+            0.25,
+            9.75,
+            3.75
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        }
+      }
+    },
+    {
+      "name": "yoke",
+      "from": [
+        5,
+        24,
+        11.5
+      ],
+      "to": [
+        11,
+        24.75,
+        12.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            7.25,
+            11,
+            8
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "east": {
+          "uv": [
+            3.75,
+            7.25,
+            4.5,
+            8
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            5,
+            7.25,
+            11,
+            8
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "west": {
+          "uv": [
+            11.5,
+            7.25,
+            12.25,
+            8
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "up": {
+          "uv": [
+            5,
+            11.5,
+            11,
+            12.25
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            5,
+            3.75,
+            11,
+            4.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        }
+      }
+    },
+    {
+      "name": "hook_l",
+      "from": [
+        5.5,
+        23.5,
+        11
+      ],
+      "to": [
+        6.5,
+        24,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.5,
+            8,
+            10.5,
+            8.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "east": {
+          "uv": [
+            4.5,
+            8,
+            5,
+            8.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            5.5,
+            8,
+            6.5,
+            8.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "west": {
+          "uv": [
+            11,
+            8,
+            11.5,
+            8.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            11,
+            6.5,
+            11.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            4.5,
+            6.5,
+            5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        }
+      }
+    },
+    {
+      "name": "hook_r",
+      "from": [
+        9.5,
+        23.5,
+        11
+      ],
+      "to": [
+        10.5,
+        24,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            8,
+            6.5,
+            8.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "east": {
+          "uv": [
+            4.5,
+            8,
+            5,
+            8.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            9.5,
+            8,
+            10.5,
+            8.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "west": {
+          "uv": [
+            11,
+            8,
+            11.5,
+            8.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "up": {
+          "uv": [
+            9.5,
+            11,
+            10.5,
+            11.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            9.5,
+            4.5,
+            10.5,
+            5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        }
+      }
+    }
+  ]
+}

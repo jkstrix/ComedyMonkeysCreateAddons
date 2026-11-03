@@ -86,6 +86,9 @@ public class CMJeiPlugin implements IModPlugin {
 		info(registration, "floodlight", ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.FLOODLIGHT).get());
 		info(registration, "warning_beacon", ModItems.LIGHTS.get(com.comedymonkey.createaddons.content.light.LightKind.WARNING_BEACON).get());
 		info(registration, "festoon_lights", ModItems.FESTOON_LIGHTS.get());
+		// the Clockwork Jetpack: its keys and flight aren't in any recipe
+		info(registration, "clockwork_jetpack", ModItems.CLOCKWORK_JETPACK.get(), ModItems.NETHERITE_CLOCKWORK_JETPACK.get());
+		info(registration, "jetpack_winding_station", ModItems.JETPACK_WINDING_STATION.get());
 		// the Electric Lights: dyed in place, so there are no colour recipes to show it (P20)
 		info(registration, "light", ModItems.LIGHTS.values().stream().map(net.neoforged.neoforge.registries.DeferredItem::get)
 			.toArray(net.minecraft.world.level.ItemLike[]::new));

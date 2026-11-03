@@ -1857,6 +1857,51 @@
   ]
  },
  {
+  "id": "comedymonkeysaddons:jetpack_winding_station",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:shaft",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:brass_casing",
+     "count": 1
+    },
+    null
+   ],
+   [
+    null,
+    {
+     "item": "create:cogwheel",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:jetpack_winding_station",
+    "count": 1
+   }
+  ]
+ },
+ {
   "id": "comedymonkeysaddons:lava_generator",
   "type": "crafting_shaped",
   "machine": "minecraft",
@@ -3270,6 +3315,98 @@
   ]
  },
  {
+  "id": "comedymonkeysaddons:mechanical_crafting/clockwork_jetpack",
+  "type": "mechanical_crafting",
+  "machine": "create",
+  "grid": [
+   [
+    null,
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:shaft",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    null
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "comedymonkeysaddons:mainspring",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    },
+    {
+     "item": "create:chute",
+     "count": 1
+    },
+    {
+     "item": "create:precision_mechanism",
+     "count": 1
+    },
+    {
+     "item": "create:chute",
+     "count": 1
+    },
+    {
+     "item": "create:brass_sheet",
+     "tag": "c:plates/brass",
+     "count": 1
+    }
+   ],
+   [
+    null,
+    {
+     "item": "create:chute",
+     "count": 1
+    },
+    null,
+    {
+     "item": "create:chute",
+     "count": 1
+    },
+    null
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:clockwork_jetpack",
+    "count": 1
+   }
+  ]
+ },
+ {
   "id": "comedymonkeysaddons:mechanical_crafting/netherite_monster_cage",
   "type": "mechanical_crafting",
   "machine": "create",
@@ -4098,6 +4235,32 @@
   "outputs": [
    {
     "item": "comedymonkeysaddons:netherite_chest_upgrade",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:netherite_clockwork_jetpack_smithing",
+  "type": "smithing_transform",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "minecraft:netherite_upgrade_smithing_template",
+    "count": 1
+   },
+   {
+    "item": "comedymonkeysaddons:clockwork_jetpack",
+    "count": 1
+   },
+   {
+    "item": "minecraft:netherite_ingot",
+    "tag": "c:ingots/netherite",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:netherite_clockwork_jetpack",
     "count": 1
    }
   ]

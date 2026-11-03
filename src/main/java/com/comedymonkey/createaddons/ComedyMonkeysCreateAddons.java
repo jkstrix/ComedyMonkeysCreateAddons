@@ -109,6 +109,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.CageFieldGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.HelperBotGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.JuggernautGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.JetpackGameTests::register);
 		if (SableCompat.LOADED)
 			modBus.addListener(com.comedymonkey.createaddons.gametest.SableGameTests::register);
 		NeoForge.EVENT_BUS.addListener(TradeBotCommands::register);
@@ -147,6 +148,15 @@ public class ComedyMonkeysCreateAddons {
 		// fish follow Fish Food
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.tank.FishFood::onEntityJoin);
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> CuckooClocks.clear());
+		// the Clockwork Jetpack: the server spends wind and keeps the flight legal; its toggles reach whoever can see the wearer
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.jetpack.JetpackFlight::onPlayerTick);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.jetpack.JetpackFlight::onStartTracking);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.jetpack.JetpackFlight::onJoin);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.jetpack.JetpackFlight::onRespawn);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.jetpack.JetpackFlight::onChangedDimension);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.jetpack.JetpackFlight::onLogout);
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.jetpack.JetpackFlight::onEquipmentChange);
+		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.jetpack.JetpackFlight.clear());
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.FluidLines::onLevelTick);
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.PowerLines::onLevelTick);
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.FluidLines::onChunkUnload);
@@ -175,6 +185,8 @@ public class ComedyMonkeysCreateAddons {
 	}
 
 	private void registerCapabilities(RegisterCapabilitiesEvent event) {
+		// Funnels and Mechanical Arms hang a Clockwork Jetpack on its Winding Station, and take it off once it's full (jetpack spec D43)
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.JETPACK_WINDING_STATION.get(), (be, side) -> be.items());
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.WELLSPRING.get(),
 			(be, side) -> be.getTank());
 		// Automation (hoppers, funnels, Pipez...) fills upgraded chests past 64 per slot, and a double chest as one
@@ -285,6 +297,13 @@ public class ComedyMonkeysCreateAddons {
 			com.comedymonkey.createaddons.network.HelperBotStatusPayload.STREAM_CODEC,
 			(payload, context) -> context.enqueueWork(() -> com.comedymonkey.createaddons.client.helperbot.HelperBotClient.applyStatus(payload)));
 		event.registrar("1").playToServer(TradeBotStationPayload.TYPE, TradeBotStationPayload.STREAM_CODEC, TradeBotStationPayload::handle);
+		// the Clockwork Jetpack: its keys and controls up, its toggles down to whoever can see the wearer
+		event.registrar("1").playToServer(com.comedymonkey.createaddons.network.JetpackTogglePayload.TYPE,
+			com.comedymonkey.createaddons.network.JetpackTogglePayload.STREAM_CODEC, com.comedymonkey.createaddons.network.JetpackTogglePayload::handle);
+		event.registrar("1").playToServer(com.comedymonkey.createaddons.network.JetpackInputPayload.TYPE,
+			com.comedymonkey.createaddons.network.JetpackInputPayload.STREAM_CODEC, com.comedymonkey.createaddons.network.JetpackInputPayload::handle);
+		event.registrar("1").playToClient(com.comedymonkey.createaddons.network.JetpackStatePayload.TYPE,
+			com.comedymonkey.createaddons.network.JetpackStatePayload.STREAM_CODEC, com.comedymonkey.createaddons.network.JetpackStatePayload::handle);
 		// Covers on Pipez pipes
 		event.registrar("1").playToClient(PipeCoverPayload.TYPE, PipeCoverPayload.STREAM_CODEC,
 			(payload, context) -> context.enqueueWork(() -> PipeCoverClient.handle(payload)));
@@ -334,6 +353,13 @@ public class ComedyMonkeysCreateAddons {
 			// Stress impact per RPM, read from the config each time Create asks
 			BlockStressValues.IMPACTS.register(ModBlocks.PRESSURE_CRUCIBLE.get(), CMConfig.SERVER::crucibleStressImpact);
 			BlockStressValues.IMPACTS.register(ModBlocks.WINDING_KEY.get(), CMConfig.SERVER::windingKeyStressImpact);
+			// the Jetpack Winding Station loads its shaft exactly as a Copper Backtank does (jetpack spec D26), read from Create each time
+			BlockStressValues.IMPACTS.register(ModBlocks.JETPACK_WINDING_STATION.get(),
+				() -> BlockStressValues.getImpact(net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(
+					net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create", "copper_backtank"))));
+			registerCreateTooltip(ModItems.JETPACK_WINDING_STATION.get());
+			if (ModList.get().isLoaded(CURIOS_ID))
+				com.comedymonkey.createaddons.compat.curios.JetpackCurios.init();
 			BlockStressValues.IMPACTS.register(ModBlocks.CLOCKWORK_RECEIVER.get(), CMConfig.SERVER::clockworkReceiverStress);
 			registerCreateTooltip(ModItems.WINDING_KEY.get());
 			registerCreateTooltip(ModItems.SPRING_ENGINE.get());

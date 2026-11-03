@@ -157,6 +157,11 @@ public final class ModBlockEntities {
 			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlockEntity::new, ModBlocks.SPRING_ENGINE.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.jetpack.JetpackWindingStationBlockEntity>> JETPACK_WINDING_STATION =
+		BLOCK_ENTITY_TYPES.register("jetpack_winding_station",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.jetpack.JetpackWindingStationBlockEntity::new, ModBlocks.JETPACK_WINDING_STATION.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.tube.ClockworkTubeBlockEntity>> CLOCKWORK_TUBE =
 		BLOCK_ENTITY_TYPES.register("clockwork_tube",
 			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.tube.ClockworkTubeBlockEntity::new, ModBlocks.CLOCKWORK_TUBE.get()).build(null));

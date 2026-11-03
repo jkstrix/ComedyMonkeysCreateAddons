@@ -1,0 +1,32 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "pattern": [
+    " PSP ",
+    "PYXYP",
+    "PCYCP",
+    " C C "
+  ],
+  "key": {
+    "P": {
+      "tag": "c:plates/brass"
+    },
+    "S": {
+      "item": "create:shaft"
+    },
+    "Y": {
+      "item": "create:precision_mechanism"
+    },
+    "X": {
+      "item": "comedymonkeysaddons:mainspring"
+    },
+    "C": {
+      "item": "create:chute"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:clockwork_jetpack"
+  },
+  "show_notification": true
+}

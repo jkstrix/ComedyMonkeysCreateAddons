@@ -49,6 +49,13 @@ public class ComedyMonkeysCreateAddonsClient {
 		modBus.addListener(this::registerScreens);
 		modBus.addListener(this::registerModels);
 		modBus.addListener(this::registerClientExtensions);
+		// the Clockwork Jetpack: its keys, its wind gauge, drawn in the chest slot
+		modBus.addListener(com.comedymonkey.createaddons.client.jetpack.JetpackClient::registerKeys);
+		modBus.addListener(com.comedymonkey.createaddons.client.jetpack.JetpackClient::registerGui);
+		modBus.addListener(net.neoforged.neoforge.client.event.EntityRenderersEvent.AddLayers.class, com.comedymonkey.createaddons.client.jetpack.JetpackLayer::addLayers);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.jetpack.JetpackClient::onClientTick);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.jetpack.JetpackClient::onPlayerTick);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.jetpack.JetpackClient::onLogout);
 		// Fluid and Power Lines: tier and dye colours, encased lines drawn as their block, hidden lines through goggles
 		modBus.addListener(com.comedymonkey.createaddons.client.line.LineClient::registerBlockColors);
 		// Light Strips: built from parts by how they join, the lit diffuser tinted by dye and brightness
@@ -227,6 +234,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.CLOCKWORK_TUBE.get(), TubeRenderers.Tube::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.WINDING_KEY.get(), com.comedymonkey.createaddons.client.juggernaut.WindingKeyRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.SPRING_ENGINE.get(), com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.JETPACK_WINDING_STATION.get(), com.comedymonkey.createaddons.client.jetpack.JetpackWindingStationRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LAVA_GENERATOR.get(), ElectricRenderers.Generator::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.BATTERY.get(), BatteryRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.LIGHT.get(), LightRenderer::new);
@@ -268,6 +276,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		CobbleGeneratorRenderer.registerModels(event);
 		com.comedymonkey.createaddons.client.juggernaut.WindingKeyRenderer.registerModels(event);
 		com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer.registerModels(event);
+		com.comedymonkey.createaddons.client.jetpack.JetpackModel.registerModels(event);
 		MachineRenderers.registerModels(event);
 		AutoHarvesterRenderer.registerModels(event);
 		event.register(AnimalPenRenderer.MILK);
@@ -318,6 +327,17 @@ public class ComedyMonkeysCreateAddonsClient {
 				return renderer;
 			}
 		}, ModItems.BOTTLED_ANIMAL.get());
+		// the Clockwork Jetpacks as items: the jetpack itself, in 3D
+		event.registerItem(new IClientItemExtensions() {
+			private com.comedymonkey.createaddons.client.jetpack.JetpackItemRenderer renderer;
+
+			@Override
+			public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+				if (renderer == null)
+					renderer = new com.comedymonkey.createaddons.client.jetpack.JetpackItemRenderer();
+				return renderer;
+			}
+		}, ModItems.CLOCKWORK_JETPACK.get(), ModItems.NETHERITE_CLOCKWORK_JETPACK.get());
 		// The jars draw their monster inside the glass
 		event.registerItem(new IClientItemExtensions() {
 			private MonsterJarRenderer renderer;
@@ -361,6 +381,9 @@ public class ComedyMonkeysCreateAddonsClient {
 			ComedyMonkeysCreateAddons.asResource("tier"),
 			(stack, level, entity, seed) -> UpgradedBarrelItem.tierOf(stack).ordinal() / 10f));
 
+		// a Clockwork Jetpack in the Curios Jetpack slot
+		if (ModList.get().isLoaded(ComedyMonkeysCreateAddons.CURIOS_ID))
+			event.enqueueWork(com.comedymonkey.createaddons.compat.curios.client.JetpackCurioRenderer::register);
 		if (!ModList.get().isLoaded(ComedyMonkeysCreateAddons.AERONAUTICS_ID)
 			|| !ModList.get().isLoaded(ComedyMonkeysCreateAddons.CURIOS_ID))
 			return;

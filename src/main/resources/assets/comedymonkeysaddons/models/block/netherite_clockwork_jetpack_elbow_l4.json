@@ -1,0 +1,184 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/netherite_clockwork_jetpack_steel",
+    "netherite_clockwork_jetpack_rib": "comedymonkeysaddons:block/netherite_clockwork_jetpack_rib",
+    "netherite_clockwork_jetpack_brass": "comedymonkeysaddons:block/netherite_clockwork_jetpack_brass",
+    "netherite_clockwork_jetpack_membrane_out_4": "comedymonkeysaddons:block/netherite_clockwork_jetpack_membrane_out_4"
+  },
+  "elements": [
+    {
+      "name": "rib_out_L4",
+      "from": [
+        -11.75,
+        15,
+        5.699999999999999
+      ],
+      "to": [
+        -5.949999999999999,
+        15.5,
+        5.999999999999999
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.95,
+            0.5,
+            11.75,
+            1
+          ],
+          "texture": "#netherite_clockwork_jetpack_rib"
+        },
+        "east": {
+          "uv": [
+            10,
+            0.5,
+            10.3,
+            1
+          ],
+          "texture": "#netherite_clockwork_jetpack_rib"
+        },
+        "south": {
+          "uv": [
+            4.25,
+            0.5,
+            10.05,
+            1
+          ],
+          "texture": "#netherite_clockwork_jetpack_rib"
+        },
+        "west": {
+          "uv": [
+            5.7,
+            0.5,
+            6,
+            1
+          ],
+          "texture": "#netherite_clockwork_jetpack_rib"
+        },
+        "up": {
+          "uv": [
+            4.25,
+            5.7,
+            10.05,
+            6
+          ],
+          "texture": "#netherite_clockwork_jetpack_rib"
+        },
+        "down": {
+          "uv": [
+            4.25,
+            10,
+            10.05,
+            10.3
+          ],
+          "texture": "#netherite_clockwork_jetpack_rib"
+        }
+      }
+    },
+    {
+      "name": "ferrule_L4",
+      "from": [
+        -12.5,
+        14.9,
+        5.699999999999999
+      ],
+      "to": [
+        -11.75,
+        15.6,
+        5.999999999999999
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.75,
+            0.4,
+            12.5,
+            1.1
+          ],
+          "texture": "#netherite_clockwork_jetpack_brass"
+        },
+        "east": {
+          "uv": [
+            10,
+            0.4,
+            10.3,
+            1.1
+          ],
+          "texture": "#netherite_clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            3.5,
+            0.4,
+            4.25,
+            1.1
+          ],
+          "texture": "#netherite_clockwork_jetpack_brass"
+        },
+        "west": {
+          "uv": [
+            5.7,
+            0.4,
+            6,
+            1.1
+          ],
+          "texture": "#netherite_clockwork_jetpack_brass"
+        },
+        "up": {
+          "uv": [
+            3.5,
+            5.7,
+            4.25,
+            6
+          ],
+          "texture": "#netherite_clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            3.5,
+            10,
+            4.25,
+            10.3
+          ],
+          "texture": "#netherite_clockwork_jetpack_brass"
+        }
+      }
+    },
+    {
+      "name": "canvas_out_L4",
+      "from": [
+        -11.5,
+        15.5,
+        5.7749999999999995
+      ],
+      "to": [
+        -5.050000000000001,
+        18.6,
+        5.924999999999999
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            16,
+            16,
+            0
+          ],
+          "texture": "#netherite_clockwork_jetpack_membrane_out_4"
+        },
+        "south": {
+          "uv": [
+            16,
+            16,
+            0,
+            0
+          ],
+          "texture": "#netherite_clockwork_jetpack_membrane_out_4"
+        }
+      }
+    }
+  ]
+}

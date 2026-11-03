@@ -325,6 +325,9 @@ public final class ModBlocks {
 	/** The Mainspring's use (D34-D39): a two-block engine that stores rotation, wound in behind and let out in front. */
 	public static final DeferredBlock<com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlock> SPRING_ENGINE = BLOCKS.register("spring_engine",
 		() -> new com.comedymonkey.createaddons.content.juggernaut.SpringEngineBlock(machine()));
+	/** Where a Clockwork Jetpack is wound (jetpack spec D38-D45): a post it hangs on, wound from a shaft below. */
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.jetpack.JetpackWindingStationBlock> JETPACK_WINDING_STATION = BLOCKS.register("jetpack_winding_station",
+		() -> new com.comedymonkey.createaddons.content.jetpack.JetpackWindingStationBlock(machine().noOcclusion()));
 	public static final DeferredBlock<LavaGeneratorBlock> LAVA_GENERATOR = BLOCKS.register("lava_generator",
 		() -> new LavaGeneratorBlock(machine().lightLevel(state -> state.getValue(LavaGeneratorBlock.LIT) ? 9
 			: state.getValue(LavaGeneratorBlock.FUELLED) ? 4 : 0)));

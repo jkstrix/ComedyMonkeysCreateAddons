@@ -67,7 +67,8 @@
 @media (hover: none) { .star-btn { opacity: 1; } }
 
 /* a compact strip of cards (a release's highlights): narrower, no blurb, so a whole set fits on one row */
-.cards.compact { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+/* auto-fill, not auto-fit: a short row (a release that added two things) keeps the cards their usual size */
+.cards.compact { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 .cards.compact .card p, .cards.compact .card .meta .badge.stat { display: none; }
 .cards.compact .card .body { padding: 10px 12px 12px; }
 .cards.compact .card h3 { font-size: 15px; }

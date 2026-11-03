@@ -22,6 +22,8 @@ Status: **approved** (user, 2026-10-31; drafted in the Clockwork Dynamo texture 
 | Copper (Create's) | `#904931` … `#c87456`, rivets `#d67b5b` | Clean plates, no mottle | Copper-bodied machines (Wellspring, Incinerator): match Create there |
 | Walnut | `#4e3626` `#634532` `#6f4d36` | Planks | Containers, aviation accents, the Cuckoo Clock (the darker house walnut reads black in game) |
 | Carbon / rubber | `#26272a` `#323337` | Slight | Tyres, brushes, insulators |
+| Oiled canvas | `#6a604e` `#6f6552` `#756a55` (ceiling), selvedge `#5a5242` | A faint weave, two close shades | Wings and sails (the Clockwork Jetpack's da Vinci wings). Netherite gear dyes it crimson: `#46272b` `#4a2a2e` `#502e33` (user, 2026-11-03) |
+| Netherite trim | `#433d40` `#4d4649` `#5a5255`, rims `#2a2526` | Gentle | On Netherite-tier gear it replaces **every** brass part, rims darkest (user, 2026-11-03, the Netherite Clockwork Jetpack) |
 
 ## Colour meanings
 
@@ -38,6 +40,8 @@ Status: **approved** (user, 2026-10-31; drafted in the Clockwork Dynamo texture 
 ## Glow
 
 Small areas only, muted, never near-white. One light per meaning: the electric family's cyan lamp is `#4f8f99` edge, `#6fb7c4` centre. Lamps glow full-bright via `neoforge_data`; the unlit state is a dark lens, not a hole.
+
+Clockwork machines have no glow: the Mainspring seen through glass is their gauge (the Spring Engine, the Clockwork Jetpack).
 
 ## Age and wear
 

@@ -1,0 +1,36 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/clockwork_jetpack_steel",
+    "clockwork_jetpack_coil_0": "comedymonkeysaddons:block/clockwork_jetpack_coil_0"
+  },
+  "elements": [
+    {
+      "name": "coil_0",
+      "from": [
+        4,
+        8,
+        11.25
+      ],
+      "to": [
+        12,
+        16,
+        11.25
+      ],
+      "shade": false,
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_coil_0"
+        }
+      }
+    }
+  ]
+}

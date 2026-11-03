@@ -169,6 +169,20 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue springEngineMaxWindStress;
 		public final ModConfigSpec.BooleanValue juggernautRuins;
 		public final ModConfigSpec.BooleanValue juggernautEndRuins;
+		// the Clockwork Jetpack: Create Jetpack's options and defaults (spec D4), except hover descend (D5), plus flight
+		public final ModConfigSpec.IntValue jetpackSecondsPerWind;
+		public final ModConfigSpec.IntValue jetpackSecondsPerWindHover;
+		public final ModConfigSpec.IntValue jetpackSecondsPerWindFlight;
+		public final ModConfigSpec.DoubleValue jetpackHorizontalSpeed;
+		public final ModConfigSpec.DoubleValue jetpackVerticalSpeed;
+		public final ModConfigSpec.DoubleValue jetpackAcceleration;
+		public final ModConfigSpec.DoubleValue jetpackHoverDescend;
+		public final ModConfigSpec.DoubleValue jetpackSwimModifier;
+		public final ModConfigSpec.DoubleValue jetpackElytraBoost;
+		public final ModConfigSpec.DoubleValue jetpackFlightSpeedModifier;
+		public final ModConfigSpec.ConfigValue<List<? extends String>> jetpackEnchantments;
+		public final ModConfigSpec.BooleanValue jetpackEnchantmentsIsBlacklist;
+		public final ModConfigSpec.IntValue jetpackHeightAboveGroundLimit;
 
 		public final ModConfigSpec.BooleanValue pipezFeedsBlazeBurners;
 		public final ModConfigSpec.BooleanValue blazeBurnerPipezOnly;
@@ -749,6 +763,47 @@ public final class CMConfig {
 				.translation("comedymonkeysaddons.configuration.juggernautEndRuins").define("juggernautEndRuins", true);
 			builder.pop();
 
+			builder.comment("Clockwork Jetpack: the Mainspring on your back. The same options and defaults as Create Jetpack, except that hover",
+					"holds height (hover descend 0), plus its winged flight mode. Wound only at a Jetpack Winding Station.").push("clockworkJetpack");
+			builder.push("wind");
+			jetpackSecondsPerWind = builder.comment("Seconds of thrust a full wind gives.")
+				.translation("comedymonkeysaddons.configuration.jetpackSecondsPerWind").defineInRange("seconds_per_wind", 450, 1, 1_000_000);
+			jetpackSecondsPerWindHover = builder.comment("Seconds of hover a full wind gives.")
+				.translation("comedymonkeysaddons.configuration.jetpackSecondsPerWindHover").defineInRange("seconds_per_wind_hover", 900, 1, 1_000_000);
+			jetpackSecondsPerWindFlight = builder.comment("Seconds of boost in flight mode (holding Jump) a full wind gives; gliding uses none.")
+				.translation("comedymonkeysaddons.configuration.jetpackSecondsPerWindFlight").defineInRange("seconds_per_wind_flight", 900, 1, 1_000_000);
+			builder.pop();
+			builder.push("speed");
+			jetpackHorizontalSpeed = builder.comment("How hard the movement keys push you while thrusting.")
+				.translation("comedymonkeysaddons.configuration.jetpackHorizontalSpeed").defineInRange("horizontal", 0.02, 0.01, 100.0);
+			jetpackVerticalSpeed = builder.comment("How fast you rise holding Jump, or sink holding Sneak.")
+				.translation("comedymonkeysaddons.configuration.jetpackVerticalSpeed").defineInRange("vertical", 0.4, 0.01, 100.0);
+			jetpackAcceleration = builder.comment("How quickly you reach that vertical speed.")
+				.translation("comedymonkeysaddons.configuration.jetpackAcceleration").defineInRange("acceleration", 0.6, 0.01, 100.0);
+			jetpackHoverDescend = builder.comment("How fast you sink while hovering with no key held: 0 holds your height exactly (Create Jetpack: -0.03).")
+				.translation("comedymonkeysaddons.configuration.jetpackHoverDescend").defineInRange("hover_descend", 0.0, -100.0, 0.0);
+			jetpackSwimModifier = builder.comment("How much faster you swim with the engine on.")
+				.translation("comedymonkeysaddons.configuration.jetpackSwimModifier").defineInRange("swim_modifier", 1.8, 0.0, 100.0);
+			builder.pop();
+			builder.push("features");
+			jetpackElytraBoost = builder.comment("How much faster holding Jump in flight mode makes you go, on top of the speed modifier.")
+				.translation("comedymonkeysaddons.configuration.jetpackElytraBoost").defineInRange("elytra_boost", 1.25, 1.0, 100.0);
+			builder.pop();
+			builder.push("flight");
+			jetpackFlightSpeedModifier = builder.comment("Flight mode's boosting speed, against an Elytra's shallow glide (1.4 = 40% faster), before the elytra boost.")
+				.translation("comedymonkeysaddons.configuration.jetpackFlightSpeedModifier").defineInRange("speed_modifier", 1.4, 0.1, 10.0);
+			builder.pop();
+			builder.push("enchantments");
+			jetpackEnchantments = builder.comment("Enchantments the jetpack refuses (or, with is_blacklist false, the only ones it takes).")
+				.translation("comedymonkeysaddons.configuration.jetpackEnchantments")
+				.defineListAllowEmpty("list", List.of(), () -> "", o -> o instanceof String);
+			jetpackEnchantmentsIsBlacklist = builder.comment("Whether the list above is the ones it refuses (true) or the only ones it takes (false).")
+				.translation("comedymonkeysaddons.configuration.jetpackEnchantmentsIsBlacklist").define("is_blacklist", true);
+			builder.pop();
+			jetpackHeightAboveGroundLimit = builder.comment("How high above the ground the jetpack can lift you, in blocks (-1: no limit).")
+				.translation("comedymonkeysaddons.configuration.jetpackHeightAboveGroundLimit").defineInRange("heightAboveGroundLimit", -1, -1, 4096);
+			builder.pop();
+
 			builder.comment("Compatibility with other mods").push("modCompatibility");
 
 			pipezFeedsBlazeBurners = builder
@@ -1140,6 +1195,13 @@ public final class CMConfig {
 		public final ModConfigSpec.IntValue helperBotVoiceCooldown;
 		public final ModConfigSpec.BooleanValue lightColouredLight;
 		public final ModConfigSpec.BooleanValue lightColouredLightShadows;
+		// the Clockwork Jetpack's wind gauge: Create Jetpack's client options and defaults (spec D24)
+		public final ModConfigSpec.BooleanValue jetpackOverlay;
+		public final ModConfigSpec.IntValue jetpackOverlayX;
+		public final ModConfigSpec.IntValue jetpackOverlayY;
+		public final ModConfigSpec.DoubleValue jetpackOverlayScale;
+		public final ModConfigSpec.BooleanValue jetpackSeasonalEffects;
+		public final ModConfigSpec.BooleanValue jetpackDoubleTapWings;
 
 		Client(ModConfigSpec.Builder builder) {
 			builder.comment("Aviator's Goggles worn in the Curios head slot").push("aviatorsGoggles");
@@ -1174,6 +1236,21 @@ public final class CMConfig {
 				.comment("Solid blocks stop the coloured light, so it doesn't shine through walls. Costs more with many lights in view.")
 				.translation("comedymonkeysaddons.configuration.lightColouredLightShadows")
 				.define("lightColouredLightShadows", true);
+			builder.pop();
+
+			builder.comment("Clockwork Jetpack: its wind gauge").push("clockworkJetpack");
+			jetpackOverlay = builder.comment("Show the wind gauge while you wear a Clockwork Jetpack.")
+				.translation("comedymonkeysaddons.configuration.jetpackOverlay").define("overlay.enabled", true);
+			jetpackOverlayX = builder.comment("Where the gauge sits. Use negative values to position relative to the right/bottom of the screen")
+				.translation("comedymonkeysaddons.configuration.jetpackOverlayX").defineInRange("overlay.position.x", 6, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			jetpackOverlayY = builder.translation("comedymonkeysaddons.configuration.jetpackOverlayY")
+				.defineInRange("overlay.position.y", 6, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			jetpackOverlayScale = builder.translation("comedymonkeysaddons.configuration.jetpackOverlayScale")
+				.defineInRange("overlay.scale", 1.0, 0.0, Double.MAX_VALUE);
+			jetpackSeasonalEffects = builder.comment("Seasonal thrust: snowflakes in December, embers at Halloween.")
+				.translation("comedymonkeysaddons.configuration.jetpackSeasonalEffects").define("effects.seasonal", true);
+			jetpackDoubleTapWings = builder.comment("Double-tap Jump to spread or fold a Clockwork Jetpack's wings, as well as its wings key.")
+				.translation("comedymonkeysaddons.configuration.jetpackDoubleTapWings").define("controls.double_tap_wings", true);
 			builder.pop();
 		}
 	}

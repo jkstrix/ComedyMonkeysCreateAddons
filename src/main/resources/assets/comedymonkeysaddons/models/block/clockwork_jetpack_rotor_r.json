@@ -1,0 +1,357 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/clockwork_jetpack_steel",
+    "clockwork_jetpack_rotor_hub": "comedymonkeysaddons:block/clockwork_jetpack_rotor_hub",
+    "clockwork_jetpack_rotor": "comedymonkeysaddons:block/clockwork_jetpack_rotor"
+  },
+  "elements": [
+    {
+      "name": "rotor_hub_R",
+      "from": [
+        10.1,
+        4.2,
+        9.6
+      ],
+      "to": [
+        10.9,
+        4.45,
+        10.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.1,
+            11.55,
+            5.9,
+            11.8
+          ],
+          "texture": "#clockwork_jetpack_rotor_hub"
+        },
+        "east": {
+          "uv": [
+            5.6,
+            11.55,
+            6.4,
+            11.8
+          ],
+          "texture": "#clockwork_jetpack_rotor_hub"
+        },
+        "south": {
+          "uv": [
+            10.1,
+            11.55,
+            10.9,
+            11.8
+          ],
+          "texture": "#clockwork_jetpack_rotor_hub"
+        },
+        "west": {
+          "uv": [
+            9.6,
+            11.55,
+            10.4,
+            11.8
+          ],
+          "texture": "#clockwork_jetpack_rotor_hub"
+        },
+        "up": {
+          "uv": [
+            10.1,
+            9.6,
+            10.9,
+            10.4
+          ],
+          "texture": "#clockwork_jetpack_rotor_hub"
+        },
+        "down": {
+          "uv": [
+            10.1,
+            5.6,
+            10.9,
+            6.4
+          ],
+          "texture": "#clockwork_jetpack_rotor_hub"
+        }
+      }
+    },
+    {
+      "name": "rotor_a_R",
+      "from": [
+        10.9,
+        4.25,
+        9.8
+      ],
+      "to": [
+        11.7,
+        4.4,
+        10.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.3,
+            11.6,
+            5.1,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "east": {
+          "uv": [
+            5.8,
+            11.6,
+            6.2,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "south": {
+          "uv": [
+            10.9,
+            11.6,
+            11.7,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "west": {
+          "uv": [
+            9.8,
+            11.6,
+            10.2,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "up": {
+          "uv": [
+            10.9,
+            9.8,
+            11.7,
+            10.2
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "down": {
+          "uv": [
+            10.9,
+            5.8,
+            11.7,
+            6.2
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        }
+      }
+    },
+    {
+      "name": "rotor_b_R",
+      "from": [
+        9.3,
+        4.25,
+        9.8
+      ],
+      "to": [
+        10.1,
+        4.4,
+        10.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.9,
+            11.6,
+            6.7,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "east": {
+          "uv": [
+            5.8,
+            11.6,
+            6.2,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "south": {
+          "uv": [
+            9.3,
+            11.6,
+            10.1,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "west": {
+          "uv": [
+            9.8,
+            11.6,
+            10.2,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "up": {
+          "uv": [
+            9.3,
+            9.8,
+            10.1,
+            10.2
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "down": {
+          "uv": [
+            9.3,
+            5.8,
+            10.1,
+            6.2
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        }
+      }
+    },
+    {
+      "name": "rotor_c_R",
+      "from": [
+        10.3,
+        4.25,
+        10.4
+      ],
+      "to": [
+        10.7,
+        4.4,
+        11.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.3,
+            11.6,
+            5.7,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "east": {
+          "uv": [
+            4.8,
+            11.6,
+            5.6,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "south": {
+          "uv": [
+            10.3,
+            11.6,
+            10.7,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "west": {
+          "uv": [
+            10.4,
+            11.6,
+            11.2,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "up": {
+          "uv": [
+            10.3,
+            10.4,
+            10.7,
+            11.2
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "down": {
+          "uv": [
+            10.3,
+            4.8,
+            10.7,
+            5.6
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        }
+      }
+    },
+    {
+      "name": "rotor_d_R",
+      "from": [
+        10.3,
+        4.25,
+        8.8
+      ],
+      "to": [
+        10.7,
+        4.4,
+        9.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.3,
+            11.6,
+            5.7,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "east": {
+          "uv": [
+            6.4,
+            11.6,
+            7.2,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "south": {
+          "uv": [
+            10.3,
+            11.6,
+            10.7,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "west": {
+          "uv": [
+            8.8,
+            11.6,
+            9.6,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "up": {
+          "uv": [
+            10.3,
+            8.8,
+            10.7,
+            9.6
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        },
+        "down": {
+          "uv": [
+            10.3,
+            6.4,
+            10.7,
+            7.2
+          ],
+          "texture": "#clockwork_jetpack_rotor"
+        }
+      }
+    }
+  ]
+}

@@ -913,7 +913,9 @@ public final class LineGameTests {
 			BatteryGameTests.post(helper, landed);
 			helper.getBlockEntity(landed).loadWithComponents(held, helper.getLevel().registryAccess());
 		});
-		helper.runAtTickTime(25, () -> {
+		// the tower notices on its own next update, which a busy test server can put off a tick or two: wait for it (until
+		// the timeout) rather than looking at one fixed tick
+		helper.runAtTickTime(16, () -> helper.succeedWhen(() -> {
 			if (!BatteryGameTests.be(helper, master).spans().isEmpty())
 				helper.fail("the tower still holds the span to the post that was carried off");
 			int atTower = wiresDroppedAt(helper, master), atPost = wiresDroppedAt(helper, landed);
@@ -921,8 +923,7 @@ public final class LineGameTests {
 				helper.fail("the tower paid back " + atTower + " wire for a span its post pays for");
 			if (atPost != s.wires())
 				helper.fail("the post put down paid back " + atPost + " wire, not the span's " + s.wires());
-			helper.succeed();
-		});
+		}));
 	}
 
 	/** Generator, wire of one tier, a pole, a span of another, wire, motor: whether power gets from the one to the other. */

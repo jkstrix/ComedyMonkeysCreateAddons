@@ -34,6 +34,8 @@ public class CMPonderPlugin implements PonderPlugin {
 			.addStoryBoard("juggernaut_ritual", JuggernautScenes::ritual);
 		helper.forComponents(ModBlocks.SPRING_ENGINE.getId())
 			.addStoryBoard("spring_engine", JuggernautScenes::springEngine);
+		helper.forComponents(ModBlocks.JETPACK_WINDING_STATION.getId(), ModItems.CLOCKWORK_JETPACK.getId(), ModItems.NETHERITE_CLOCKWORK_JETPACK.getId())
+			.addStoryBoard("jetpack_winding_station", JetpackScenes::windingStation);
 		helper.forComponents(ModBlocks.WELLSPRING.getId())
 			.addStoryBoard("wellspring", WellspringScenes::wellspring);
 

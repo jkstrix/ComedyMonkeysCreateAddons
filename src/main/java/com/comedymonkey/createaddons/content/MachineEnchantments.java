@@ -24,7 +24,8 @@ import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 
 /**
  * Enchantments for machines, each for one machine's item and each I to III: <b>Bountiful</b> grows the Auto
- * Harvester's plant faster, <b>Fruitful</b> makes the Animal Pens breed faster. They're defined in data
+ * Harvester's plant faster, <b>Fruitful</b> makes the Animal Pens breed faster, <b>Overwound</b> gives the Clockwork Jetpacks
+ * and the Spring Engine more wind. They're defined in data
  * ({@code data/comedymonkeysaddons/enchantment/}), go on with an anvil, aren't offered by enchanting tables, and come
  * as books from Librarians: in their usual random book trades, and as extra Apprentice trades.
  */
@@ -33,6 +34,8 @@ public final class MachineEnchantments {
 	public static final ResourceKey<Enchantment> FRUITFUL = key("fruitful");
 	/** The Monster Cages: monsters arrive faster. */
 	public static final ResourceKey<Enchantment> MONSTROUS = key("monstrous");
+	/** The Clockwork Jetpacks and the Spring Engine: more wind, a third more a level (twice as much at III). */
+	public static final ResourceKey<Enchantment> OVERWOUND = key("overwound");
 	public static final int MAX_LEVEL = 3;
 	/** Librarian level the extra trades are unlocked at (2 = Apprentice). */
 	private static final int TRADE_LEVEL = 2;
@@ -60,7 +63,7 @@ public final class MachineEnchantments {
 	public static void addTrades(VillagerTradesEvent event) {
 		if (event.getType() != VillagerProfession.LIBRARIAN)
 			return;
-		for (ResourceKey<Enchantment> key : List.of(BOUNTIFUL, FRUITFUL, MONSTROUS))
+		for (ResourceKey<Enchantment> key : List.of(BOUNTIFUL, FRUITFUL, MONSTROUS, OVERWOUND))
 			event.getTrades().get(TRADE_LEVEL).add((trader, random) -> {
 				Optional<Holder.Reference<Enchantment>> enchantment =
 					trader.level().registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(key);

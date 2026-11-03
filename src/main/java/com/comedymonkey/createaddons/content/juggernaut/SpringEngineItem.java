@@ -19,7 +19,9 @@ public class SpringEngineItem extends BlockItem {
 
 	/** 0..1: never over full, even after the capacity was lowered in the config. */
 	static float fill(ItemStack stack) {
-		return Math.clamp((float) ((double) stack.getOrDefault(ModDataComponents.SPRING_WIND.get(), 0L) / SpringEngineBlockEntity.capacity()), 0f, 1f);
+		int overwound = com.comedymonkey.createaddons.content.MachineEnchantments.levelIn(stack.getTagEnchantments(),
+			com.comedymonkey.createaddons.content.MachineEnchantments.OVERWOUND);
+		return Math.clamp((float) ((double) stack.getOrDefault(ModDataComponents.SPRING_WIND.get(), 0L) / SpringEngineBlockEntity.capacity(overwound)), 0f, 1f);
 	}
 
 	@Override

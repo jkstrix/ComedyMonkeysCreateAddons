@@ -1,0 +1,424 @@
+<title>Clockwork Jetpack</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of short blocks like the other spec quick reads; a live mode switcher (pack, wings, wind gauge) as the centrepiece. Palette: Juggernaut brass, blued steel, walnut, muted spring-steel blue for wind */
+:root {
+  --bg: #e6e5e0; --surface: #f2f1ec; --fg: #23232a; --muted: #5e5f66; --line: #cac8c1;
+  --steel: #3d434b; --steel-hi: #4c535c; --brass: #8f7638; --brass-hi: #b08f45; --walnut: #634532;
+  --wing: #a08446; --wing-web: #c9b98e; --wind: #4b7f93; --wind-soft: #d3e2e7; --thrust: #9aa7ad;
+  --ok: #4c7a46; --warn: #a3712a; --figure: #6b6e6a;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #19191c; --surface: #222327; --fg: #e4e3de; --muted: #a0a1a6; --line: #38393f;
+  --steel: #30353c; --steel-hi: #454b54; --brass: #b08f45; --brass-hi: #c9a75a; --walnut: #6f4d36;
+  --wing: #b8984f; --wing-web: #4d4532; --wind: #82b6c8; --wind-soft: #1f3138; --thrust: #6d787d;
+  --ok: #84b07c; --warn: #d4a35a; --figure: #7c7f79; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #19191c; --surface: #222327; --fg: #e4e3de; --muted: #a0a1a6; --line: #38393f;
+  --steel: #30353c; --steel-hi: #454b54; --brass: #b08f45; --brass-hi: #c9a75a; --walnut: #6f4d36;
+  --wing: #b8984f; --wing-web: #4d4532; --wind: #82b6c8; --wind-soft: #1f3138; --thrust: #6d787d;
+  --ok: #84b07c; --warn: #d4a35a; --figure: #7c7f79; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.15rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+kbd { font: 500 .8em/1 var(--mono); padding: 2px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 3px; background: var(--surface) }
+
+header { display: grid; gap: 14px }
+.band { height: 10px; border-radius: 2px; background: linear-gradient(90deg, var(--brass) 0 44%, var(--bg) 44% 45%, var(--steel) 45% 80%, var(--bg) 80% 81%, var(--walnut) 81% 92%, var(--bg) 92% 93%, var(--wind) 93% 100%) }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { padding: 8px 0 8px 14px; border-left: 3px solid var(--brass); font-weight: 500 }
+
+.rig { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; display: grid }
+.modes { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px; border-bottom: 1px solid var(--line) }
+.modes button { font: 600 1rem/1 var(--display); letter-spacing: .02em; padding: 8px 14px; border-radius: 3px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer }
+.modes button[aria-pressed="true"] { background: var(--steel); border-color: var(--steel); color: #ece9df }
+.modes button:focus-visible { outline: 2px solid var(--wind); outline-offset: 2px }
+.stage { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 0 }
+@media (max-width: 640px) { .stage { grid-template-columns: 1fr } }
+.scene { padding: 8px; border-right: 1px solid var(--line) }
+@media (max-width: 640px) { .scene { border-right: 0; border-bottom: 1px solid var(--line) } }
+.scene svg { display: block; width: 100%; height: auto; max-height: 300px }
+.readout { padding: 16px; display: grid; gap: 12px; align-content: start }
+.readout h3 { font-size: 1.4rem }
+.readout .keys { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: .9rem }
+.gauge { display: grid; gap: 6px }
+.gauge .track { height: 14px; background: var(--wind-soft); border: 1px solid var(--line); border-radius: 2px; overflow: hidden }
+.gauge .fill { height: 100%; width: 100%; background: var(--wind); transition: width .2s linear }
+.gauge .row { display: flex; justify-content: space-between; font: 500 .8rem/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums }
+.gauge.low .fill { background: var(--warn) }
+.readout .what { color: var(--muted); font-size: .92rem }
+
+/* figure parts */
+.fig { fill: var(--figure) }
+.pack { fill: var(--steel-hi) }
+.pack-band { fill: var(--brass) }
+.spring { fill: none; stroke: var(--brass-hi); stroke-width: 2.2 }
+.nozzle { fill: var(--steel) }
+.ground { stroke: var(--line); stroke-width: 2 }
+.lbl { font: 500 11px var(--mono); fill: var(--muted) }
+.wing { transform-box: view-box; transition: transform .45s cubic-bezier(.3, 1.3, .5, 1) }
+.wing .spar { stroke: var(--wing); stroke-width: 3; stroke-linecap: round; fill: none }
+.wing .web { fill: var(--wing-web); stroke: var(--wing); stroke-width: 1 }
+#wingL { transform-origin: 152px 112px; transform: rotate(68deg) scale(.32) }
+#wingR { transform-origin: 188px 112px; transform: rotate(-68deg) scale(.32) }
+.flying #wingL, .flying #wingR { transform: rotate(0deg) scale(1) }
+.puff { fill: var(--thrust); opacity: 0 }
+.thrusting .puff { animation: puff .6s linear infinite }
+.thrusting .puff:nth-of-type(2) { animation-delay: .2s }
+.thrusting .puff:nth-of-type(3) { animation-delay: .4s }
+#body { transition: transform .45s ease }
+.hover #body { transform: translateY(-40px) }
+.thrust #body { transform: translateY(-60px) }
+.flying #body { transform: translateY(-50px) }
+.flying #figure { transform: rotate(78deg); transform-origin: 170px 120px; transform-box: view-box }
+#figure { transition: transform .45s ease }
+.speedline { stroke: var(--line); stroke-width: 2; stroke-linecap: round; opacity: 0 }
+.flying .speedline { opacity: 1; animation: whoosh .7s linear infinite }
+#escape { transform-origin: 170px 118px; transform-box: view-box }
+.running #escape { animation: tick 1s steps(6) infinite }
+.slow #escape { animation-duration: 2.4s }
+@keyframes puff { 0% { opacity: .8; transform: translateY(0) } 100% { opacity: 0; transform: translateY(26px) } }
+@keyframes whoosh { from { stroke-dashoffset: 0 } to { stroke-dashoffset: -40 } }
+@keyframes tick { to { transform: rotate(360deg) } }
+@media (prefers-reduced-motion: reduce) { .puff, .speedline, #escape, .wing, #body, #figure { animation: none !important; transition: none !important } .thrusting .puff { opacity: .6 } }
+
+.strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.strip div { background: var(--surface); padding: 12px 14px; display: grid; gap: 4px; align-content: start }
+.strip b { font: 600 1.5rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.strip span { color: var(--muted); font-size: .85rem }
+.strip .changed b { color: var(--wind) }
+
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: step }
+.loop li { counter-increment: step; display: grid; gap: 6px; align-content: start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.loop li::before { content: counter(step); font: 600 1.4rem/1 var(--display); color: var(--brass) }
+
+.recipe { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 20px; align-items: center }
+@media (max-width: 560px) { .recipe { grid-template-columns: 1fr } }
+.grid5 { display: grid; grid-template-columns: repeat(5, 40px); grid-template-rows: repeat(4, 40px); gap: 4px }
+.grid5 i { display: grid; place-items: center; font: 600 .82rem/1 var(--mono); border-radius: 3px; font-style: normal; border: 1px solid var(--line); background: var(--bg) }
+.grid5 i.e { background: transparent; border-color: transparent }
+.grid5 .P { background: var(--brass); color: #f2ecdc; border-color: var(--brass) }
+.grid5 .Y { background: var(--brass-hi); color: #2a2418; border-color: var(--brass-hi) }
+.grid5 .M { background: var(--wind); color: #f2f4f4; border-color: var(--wind) }
+.grid5 .C { background: var(--steel); color: #e8e8e4; border-color: var(--steel) }
+.grid5 .S { background: var(--figure); color: #f0f0ec; border-color: var(--figure) }
+.legend { display: grid; gap: 6px; font-size: .92rem }
+.legend b { font-family: var(--mono); display: inline-block; width: 1.6em }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.pairs > div { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 8px; align-content: start }
+.pairs ul { margin: 0; padding-left: 18px; display: grid; gap: 6px }
+.does h3 { color: var(--ok) }
+.doesnt h3 { color: var(--warn) }
+
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 24px }
+.qa div { display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.qa b { font-weight: 600 }
+.qa span { color: var(--muted) }
+
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center }
+.score .bar { height: 10px; background: var(--line); border-radius: 2px; overflow: hidden }
+.score .bar i { display: block; height: 100%; background: var(--wind) }
+.score b { font: 500 .85rem var(--mono); text-align: right; font-variant-numeric: tabular-nums }
+.score span { font-weight: 500 }
+.score p { grid-column: 1 / -1; color: var(--muted); font-size: .86rem; margin-top: -4px }
+.score.overall span, .score.overall b { font-weight: 700 }
+.score.overall .bar i { background: var(--brass) }
+@media (max-width: 480px) { .score { grid-template-columns: 1fr 48px } .score .bar { grid-column: 1 / -1; grid-row: 2 } .score p { grid-row: 3 } }
+
+.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.open div { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 6px; align-content: start }
+.open div p { color: var(--muted); font-size: .92rem }
+footer { color: var(--muted); font-size: .86rem; border-top: 1px solid var(--line); padding-top: 16px }
+footer code { font-family: var(--mono); font-size: .92em }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="band" aria-hidden="true"></div>
+    <p class="eyebrow">Systems spec · quick read</p>
+    <h1>Clockwork Jetpack</h1>
+    <p class="pitch">The Create Jetpack, run on a Juggernaut's Mainspring instead of air. It's worn in its own slot, so your chestplate and backpack stay on. Its brass wings unfold for powered flight.</p>
+    <div class="chips">
+      <span class="chip ready">Ready for development · 85%</span>
+      <span class="chip">End game</span>
+      <span class="chip">Curios: new Jetpack slot</span>
+      <span class="chip">45 decisions</span>
+      <span class="chip">New enchantment: Overwound</span>
+    </div>
+  </header>
+
+  <section aria-labelledby="h-idiot">
+    <h2 id="h-idiot">In ten lines</h2>
+    <ul class="idiot">
+      <li>Jetpack runs on a Mainspring, not air.</li>
+      <li>Wear it in the new Jetpack slot.</li>
+      <li>Chestplate and backpack stay on.</li>
+      <li>Wind it at a Jetpack Winding Station on a shaft.</li>
+      <li>Jump up, Sneak down, G engine, H hover.</li>
+      <li>Hover holds you completely still.</li>
+      <li>J in the air (or double-tap Jump): wings out, elytra glide; hold Jump to boost.</li>
+      <li>Flight is a bit faster than an elytra.</li>
+      <li>No wind with wings out: glide down safely.</li>
+      <li>Costs a Juggernaut's Mainspring; Netherite survives lava.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="h-modes">
+    <h2 id="h-modes">The four modes</h2>
+    <p class="sub">Pick a mode to see what the jetpack does and how fast the wind runs down. In the demo a full wind lasts 15 seconds, and the real times are shown underneath.</p>
+    <div class="rig" id="rig">
+      <div class="modes" role="group" aria-label="Mode">
+        <button type="button" id="m-thrust" data-mode="thrust" aria-pressed="true">Jetpack</button>
+        <button type="button" id="m-hover" data-mode="hover" aria-pressed="false">Hover</button>
+        <button type="button" id="m-flight" data-mode="flight" aria-pressed="false">Flight</button>
+        <button type="button" id="m-empty" data-mode="empty" aria-pressed="false">Out of wind</button>
+      </div>
+      <div class="stage">
+        <div class="scene" id="scene">
+          <svg viewBox="0 0 340 240" role="img" aria-labelledby="sceneTitle">
+            <title id="sceneTitle">A figure wearing the Clockwork Jetpack</title>
+            <line class="ground" x1="10" y1="222" x2="330" y2="222"/>
+            <g id="body">
+              <line class="speedline" x1="40" y1="80" x2="110" y2="80" stroke-dasharray="14 10"/>
+              <line class="speedline" x1="20" y1="120" x2="100" y2="120" stroke-dasharray="20 12"/>
+              <line class="speedline" x1="50" y1="160" x2="115" y2="160" stroke-dasharray="10 10"/>
+              <g id="figure">
+                <g id="wingL" class="wing">
+                  <path class="web" d="M152 112 L70 92 L84 118 L72 140 L152 128 Z"/>
+                  <path class="spar" d="M152 112 L70 92 M152 120 L84 118 M152 126 L72 140"/>
+                </g>
+                <g id="wingR" class="wing">
+                  <path class="web" d="M188 112 L270 92 L256 118 L268 140 L188 128 Z"/>
+                  <path class="spar" d="M188 112 L270 92 M188 120 L256 118 M188 126 L268 140"/>
+                </g>
+                <rect class="fig" x="158" y="56" width="24" height="24" rx="2"/>
+                <rect class="fig" x="154" y="82" width="32" height="60" rx="2"/>
+                <rect class="fig" x="156" y="144" width="12" height="62" rx="2"/>
+                <rect class="fig" x="172" y="144" width="12" height="62" rx="2"/>
+                <rect class="pack" x="150" y="88" width="40" height="52" rx="3"/>
+                <rect class="pack-band" x="150" y="96" width="40" height="5"/>
+                <circle class="spring" cx="170" cy="118" r="11"/>
+                <g id="escape"><path class="spring" d="M170 118 m-6 0 a6 6 0 1 1 6 6 a3 3 0 1 1 -3 -3"/></g>
+                <rect class="nozzle" x="153" y="140" width="10" height="9" rx="1"/>
+                <rect class="nozzle" x="177" y="140" width="10" height="9" rx="1"/>
+                <g class="puffs">
+                  <circle class="puff" cx="158" cy="154" r="4"/>
+                  <circle class="puff" cx="182" cy="158" r="4"/>
+                  <circle class="puff" cx="170" cy="156" r="3"/>
+                </g>
+              </g>
+            </g>
+            <text class="lbl" x="14" y="236" id="sceneLbl">Jump to thrust up</text>
+          </svg>
+        </div>
+        <div class="readout">
+          <h3 id="modeName">Jetpack</h3>
+          <div class="keys" id="modeKeys"></div>
+          <div class="gauge" id="gauge">
+            <div class="track"><div class="fill" id="fill"></div></div>
+            <div class="row"><span>Wind</span><span id="pct">100%</span></div>
+          </div>
+          <p class="what" id="modeWhat"></p>
+          <p class="eyebrow" id="modeTime"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-numbers">
+    <h2 id="h-numbers">Key numbers</h2>
+    <p class="sub">Same options and defaults as Create Jetpack 5.2.1. The ones in blue are new or changed.</p>
+    <div class="strip">
+      <div><b>450 s</b><span>thrust per full wind</span></div>
+      <div><b>900 s</b><span>hover per full wind</span></div>
+      <div class="changed"><b>900 s</b><span>flight per full wind (new)</span></div>
+      <div class="changed"><b>0</b><span>hover descend (Create: −0.03)</span></div>
+      <div class="changed"><b>×1.4</b><span>flight boost speed vs elytra (new)</span></div>
+      <div><b>×1.25</b><span>on top while boosting: ~14 b/s</span></div>
+      <div><b>0.4 / 0.02</b><span>vertical / horizontal speed</span></div>
+      <div><b>×1.8</b><span>thrust under water</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-overwound">
+    <h2 id="h-overwound">Overwound</h2>
+    <p class="sub">A new enchantment that adds wind, so every mode lasts longer. It replaces Create's Capacity on the jetpack and also goes on the Spring Engine. Books come from Librarians and are applied at an anvil, never from the enchanting table.</p>
+    <div class="strip">
+      <div><b>×1.33</b><span>Overwound I</span></div>
+      <div><b>×1.67</b><span>Overwound II</span></div>
+      <div class="changed"><b>×2</b><span>Overwound III: 900 s thrust, 1,800 s hover or flight</span></div>
+      <div><b>2 hours</b><span>Spring Engine at III, 16,384 SU</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-loop">
+    <h2 id="h-loop">How you use it</h2>
+    <ol class="loop">
+      <li><b>Earn the spring</b><span>Beat a Clockwork Juggernaut. One Mainspring per kill.</span></li>
+      <li><b>Build it</b><span>Mechanical Crafters, in Create Jetpack's pattern.</span></li>
+      <li><b>Wind it</b><span>At its Winding Station on a shaft: hang it there, or back in wearing it.</span></li>
+      <li><b>Wear it</b><span>In the Jetpack slot, next to your backpack and chestplate.</span></li>
+      <li><b>Fly</b><span>Hop with the jetpack, then press <kbd>J</kbd> for wings and go far.</span></li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="h-recipe">
+    <h2 id="h-recipe">Recipe</h2>
+    <div class="recipe">
+      <div class="grid5" role="img" aria-label="Mechanical Crafter grid: row one blank, brass sheet, shaft, brass sheet, blank; row two brass sheet, precision mechanism, Mainspring, precision mechanism, brass sheet; row three brass sheet, chute, precision mechanism, chute, brass sheet; row four blank, chute, blank, chute, blank">
+        <i class="e"></i><i class="P">P</i><i class="S">S</i><i class="P">P</i><i class="e"></i>
+        <i class="P">P</i><i class="Y">Y</i><i class="M">M</i><i class="Y">Y</i><i class="P">P</i>
+        <i class="P">P</i><i class="C">C</i><i class="Y">Y</i><i class="C">C</i><i class="P">P</i>
+        <i class="e"></i><i class="C">C</i><i class="e"></i><i class="C">C</i><i class="e"></i>
+      </div>
+      <div class="legend">
+        <span><b>M</b>Mainspring, in place of the Copper Backtank</span>
+        <span><b>Y</b>Precision Mechanism; the centre one replaces the Elytra</span>
+        <span><b>P</b>Brass Sheet × 6</span>
+        <span><b>C</b>Chute × 4</span>
+        <span><b>S</b>Shaft</span>
+        <span>Netherite: smithing with an Upgrade Template and a Netherite Ingot.</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-rules">
+    <h2 id="h-rules">Rules</h2>
+    <div class="pairs">
+      <div class="does">
+        <h3>Does</h3>
+        <ul>
+          <li>Fly exactly like Create's Jetpack, same keys.</li>
+          <li>Give backtank armour, in the slot or the chest.</li>
+          <li>Let Create's own Jetpacks use the Jetpack slot too (with armour).</li>
+          <li>Keep its wind as a block, item, through death and smithing.</li>
+          <li>Glide safely when it runs dry with the wings out.</li>
+          <li>Take Overwound I–III for more wind; III doubles it.</li>
+          <li>Go in the chest slot when Curios isn't installed.</li>
+        </ul>
+      </div>
+      <div class="doesnt">
+        <h3>Doesn't</h3>
+        <ul>
+          <li>Hold air or feed a Diving Helmet.</li>
+          <li>Fly together with a chest jetpack or elytra; one at a time, Clockwork first.</li>
+          <li>Open its wings underwater or while riding anything.</li>
+          <li>Wind itself, or get placed as a block; only its Winding Station winds it.</li>
+          <li>Use wind in Creative.</li>
+          <li>Take Create's Capacity; Overwound replaces it.</li>
+          <li>Add any new source of Mainsprings.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-whatif">
+    <h2 id="h-whatif">What if…?</h2>
+    <div class="qa">
+      <div><b>…it runs out while hovering high?</b><span>You fall. At 10% left a warning sounds and the key ticks slower.</span></div>
+      <div><b>…I put a backtank or Create Jetpack in the chest?</b><span>It can't be worn with this one: it pops back into your inventory.</span></div>
+      <div><b>…I dive into water in flight mode?</b><span>The wings fold; jetpack mode with swim thrust takes over.</span></div>
+      <div><b>…I sit on a train seat mid-flight?</b><span>Flight stops and the wings fold.</span></div>
+      <div><b>…I back into the Winding Station?</b><span>Sneak with your back to it: the arm swings out and winds the key you're wearing.</span></div>
+      <div><b>…the station breaks with a jetpack on it?</b><span>The jetpack drops, with its wind.</span></div>
+      <div><b>…both jetpack mods are installed?</b><span>G and H toggle both; only one flies.</span></div>
+      <div><b>…there's no Curios?</b><span>It goes in the chest slot and works the same.</span></div>
+      <div><b>…I fly into lava?</b><span>The Netherite one keeps flying; the plain one doesn't burn as an item.</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-scores">
+    <h2 id="h-scores">Readiness</h2>
+    <div class="scores">
+      <div class="score"><span>Gameplay</span><div class="bar"><i style="width:95%"></i></div><b>95%</b><p>Flight-mode climb rate and dive cap get tuned in play.</p></div>
+      <div class="score"><span>World integration</span><div class="bar"><i style="width:90%"></i></div><b>90%</b><p>The slot icon and seasonal effects wait on the art brief.</p></div>
+      <div class="score"><span>Balance</span><div class="bar"><i style="width:85%"></i></div><b>85%</b><p>Armour stacking in the slot is accepted but untested; check how the boost speed feels.</p></div>
+      <div class="score"><span>Progression</span><div class="bar"><i style="width:95%"></i></div><b>95%</b><p>Set by the Juggernaut; no advancement named yet.</p></div>
+      <div class="score"><span>Automation</span><div class="bar"><i style="width:90%"></i></div><b>90%</b><p>The winding rate and stress are read from Create's Copper Backtank.</p></div>
+      <div class="score"><span>Edge cases</span><div class="bar"><i style="width:90%"></i></div><b>90%</b><p>Create Jetpack can't be worn with it; its keys sharing G/H is untested with both mods installed.</p></div>
+      <div class="score overall"><span>Overall</span><div class="bar"><i style="width:85%"></i></div><b>85%</b><p>The lowest area sets it: balance.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-open">
+    <h2 id="h-open">Still to settle</h2>
+    <div class="open">
+      <div><h3>The look</h3><p>Wings, thrusters, where the Mainspring shows, what the thrust looks like instead of air, the Netherite version and the slot icon. These go to the art brief.</p></div>
+      <div><h3>Tuning in play</h3><p>Boost speed (raised to ~14 b/s after the first test), climb rate and armour stacking. The defaults are approved; the feel gets checked in game.</p></div>
+    </div>
+  </section>
+
+  <footer>Full spec: <code>design/specs/clockwork-jetpack.md</code> (decisions D1–D45); Spring Engine change in <code>clockwork-juggernaut.md</code> D63. Reference: Create Jetpack 5.2.1 config and recipe, read from the jar on 2026-11-03.</footer>
+</div>
+
+<script>
+(function () {
+  var MODES = {
+    thrust: { name: "Jetpack", keys: ["Jump up", "Sneak down", "G engine"], what: "Create Jetpack's movement exactly. Hold Jump to rise, Sneak to drop, steer with the movement keys.", secs: 450, real: "450 s per full wind", lbl: "Jump to thrust up", cls: "thrust thrusting running" },
+    hover: { name: "Hover", keys: ["H hover", "Jump / Sneak adjust"], what: "Holds you in the air. Hover descend is 0, so you stay at exactly this height.", secs: 900, real: "900 s per full wind", lbl: "Holding height, descend 0", cls: "hover thrusting running" },
+    flight: { name: "Flight", keys: ["J wings", "Look to steer", "Hold Jump to boost"], what: "The wings unfold and you glide exactly like an elytra, for free. Hold Jump to boost along your look, about 14 blocks a second.", secs: 900, real: "900 s of boost per full wind; gliding is free", lbl: "Wings out, boosting", cls: "flying running" },
+    empty: { name: "Out of wind", keys: ["Wings stay out"], what: "With the wings out it becomes a plain elytra glide, so you land safely. In jetpack or hover mode you fall.", secs: 0, real: "A warning at 10%, then the key ticks slower", lbl: "Unpowered glide down", cls: "flying" }
+  };
+  var DEMO = 15, rig = document.getElementById("rig"), scene = document.getElementById("scene");
+  var fill = document.getElementById("fill"), pct = document.getElementById("pct"), gauge = document.getElementById("gauge");
+  var mode = "thrust", wind = 1, last = null;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function set(m) {
+    mode = m;
+    var d = MODES[m];
+    rig.querySelectorAll(".modes button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.mode === m)) });
+    scene.className = "scene " + d.cls;
+    document.getElementById("modeName").textContent = d.name;
+    document.getElementById("modeKeys").innerHTML = d.keys.map(function (k) { return "<kbd>" + k + "</kbd>" }).join("");
+    document.getElementById("modeWhat").textContent = d.what;
+    document.getElementById("modeTime").textContent = d.real;
+    document.getElementById("sceneLbl").textContent = d.lbl;
+    wind = m === "empty" ? 0 : 1;
+    draw();
+  }
+  function draw() {
+    var p = Math.round(wind * 100);
+    fill.style.width = p + "%";
+    pct.textContent = p + "%";
+    gauge.classList.toggle("low", wind <= .1);
+    scene.classList.toggle("slow", wind > 0 && wind <= .1);
+  }
+  function tick(t) {
+    if (last !== null && MODES[mode].secs) {
+      var rate = (450 / MODES[mode].secs) / DEMO; // thrust drains the demo wind in DEMO seconds; hover and flight take twice as long
+      wind -= rate * (t - last) / 1000;
+      if (wind <= 0) { wind = 0; set("empty"); }
+      draw();
+    }
+    last = t;
+    requestAnimationFrame(tick);
+  }
+  rig.querySelectorAll(".modes button").forEach(function (b) { b.addEventListener("click", function () { set(b.dataset.mode) }) });
+  set("thrust");
+  if (!reduce) requestAnimationFrame(tick);
+})();
+</script>

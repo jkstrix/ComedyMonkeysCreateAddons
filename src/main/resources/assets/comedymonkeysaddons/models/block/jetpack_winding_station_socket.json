@@ -1,0 +1,81 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/clockwork_jetpack_walnut",
+    "clockwork_jetpack_socket_face": "comedymonkeysaddons:block/clockwork_jetpack_socket_face",
+    "clockwork_jetpack_brass": "comedymonkeysaddons:block/clockwork_jetpack_brass"
+  },
+  "elements": [
+    {
+      "name": "socket",
+      "from": [
+        6.75,
+        18.75,
+        6.75
+      ],
+      "to": [
+        9.25,
+        21.25,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_socket_face"
+        },
+        "east": {
+          "uv": [
+            8,
+            10.75,
+            9.25,
+            13.25
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_socket_face"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            10.75,
+            8,
+            13.25
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "up": {
+          "uv": [
+            6.75,
+            6.75,
+            9.25,
+            8
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            6.75,
+            8,
+            9.25,
+            9.25
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        }
+      }
+    }
+  ]
+}

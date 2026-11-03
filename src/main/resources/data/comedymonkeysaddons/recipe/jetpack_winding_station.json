@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PSP",
+    " B ",
+    " G "
+  ],
+  "key": {
+    "P": {
+      "tag": "c:plates/brass"
+    },
+    "S": {
+      "item": "create:shaft"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    },
+    "G": {
+      "item": "create:cogwheel"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "comedymonkeysaddons:jetpack_winding_station"
+  }
+}

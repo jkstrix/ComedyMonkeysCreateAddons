@@ -36,6 +36,10 @@ public final class ModDataComponents {
 	public static final Supplier<DataComponentType<Long>> SPRING_WIND = DATA_COMPONENTS.registerComponentType("spring_wind",
 		builder -> builder.persistent(com.mojang.serialization.Codec.LONG).networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_LONG));
 
+	/** On a Clockwork Jetpack: the wind in its Mainspring, in ticks of thrust (jetpack spec D12). */
+	public static final Supplier<DataComponentType<Integer>> JETPACK_WIND = DATA_COMPONENTS.registerComponentType("jetpack_wind",
+		builder -> builder.persistent(com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE)).networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
+
 	/**
 	 * The most FE a Battery item can say it holds, whatever the config: the highest either the Battery's or an Industrial
 	 * Battery block's capacity can be set to (a block of a tower carries its share, up to that).

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "comedymonkeysaddons:block/jetpack_winding_station"
+    },
+    "facing=east": {
+      "model": "comedymonkeysaddons:block/jetpack_winding_station",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "comedymonkeysaddons:block/jetpack_winding_station",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "comedymonkeysaddons:block/jetpack_winding_station",
+      "y": 270
+    }
+  }
+}

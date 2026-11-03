@@ -334,16 +334,7 @@ public final class JuggernautGameTests {
 	public static void theRuinClaimsOnlyItsOwnColumns(GameTestHelper helper) {
 		BlockPos ground = helper.absolutePos(new BlockPos(12, 1, 12));
 		// a field laid, its hall 60 blocks below, so one of its columns (3 or more high, on bare ground) stands on this spot
-		RuinField probe = new RuinField(BlockPos.ZERO, 40, 777L, false), field = null;
-		for (int dx = -40; dx <= 40 && field == null; dx++)
-			for (int dz = -40; dz <= 40 && field == null; dz++) {
-				if (probe.height(dx, dz) < 3)
-					continue;
-				RuinField f = new RuinField(new BlockPos(ground.getX() - dx, ground.getY() - 60, ground.getZ() - dz), 40, 777L, false);
-				if (f.height(ground.getX(), ground.getZ()) >= 3 && !f.paved(ground.getX(), ground.getZ()))
-					field = f;
-			}
-		helper.assertTrue(field != null, "no column to try");
+		RuinField field = fieldWithColumnAt(helper, ground, false, 3);
 		int top = field.height(ground.getX(), ground.getZ());
 		helper.setBlock(new BlockPos(12, 1, 12), Blocks.STONE);
 		for (int h = 0; h < top; h++)
@@ -370,18 +361,39 @@ public final class JuggernautGameTests {
 		helper.succeed();
 	}
 
-	/** A field whose column (at least {@code minTop} high, not on its paving) stands at {@code spot}'s x and z. */
+	/**
+	 * A field whose column (at least {@code minTop} high, not on its paving) stands at {@code spot}'s x and z, its hall 60
+	 * blocks below. A field's columns move with it, but whether it paved a spot is hashed from the spot's world position,
+	 * which every candidate column shares and which changes with wherever the test lands: so a spot may be paved under
+	 * all of one seed's columns. The next seed hashes it afresh (32 seeds all paving it: about one in 10^16).
+	 */
 	private static RuinField fieldWithColumnAt(GameTestHelper helper, BlockPos spot, boolean end, int minTop) {
-		RuinField probe = new RuinField(BlockPos.ZERO, 40, 777L, end);
-		for (int dx = -40; dx <= 40; dx++)
-			for (int dz = -40; dz <= 40; dz++) {
-				if (probe.height(dx, dz) < minTop)
-					continue;
-				RuinField f = new RuinField(new BlockPos(spot.getX() - dx, spot.getY() - 60, spot.getZ() - dz), 40, 777L, end);
-				if (f.height(spot.getX(), spot.getZ()) >= minTop && !f.paved(spot.getX(), spot.getZ()))
-					return f;
-			}
+		for (long seed = 777L; seed < 777L + 32; seed++) {
+			RuinField probe = new RuinField(BlockPos.ZERO, 40, seed, end);
+			for (int dx = -40; dx <= 40; dx++)
+				for (int dz = -40; dz <= 40; dz++) {
+					if (probe.height(dx, dz) < minTop)
+						continue;
+					RuinField f = new RuinField(new BlockPos(spot.getX() - dx, spot.getY() - 60, spot.getZ() - dz), 40, seed, end);
+					if (f.height(spot.getX(), spot.getZ()) >= minTop && !f.paved(spot.getX(), spot.getZ()))
+						return f;
+				}
+		}
 		throw new net.minecraft.gametest.framework.GameTestAssertException("no column to try");
+	}
+
+	/**
+	 * The column tests above stand a column on a spot wherever the test lands: the search finds one at any world position
+	 * (it used to fail now and then, at spots its one seed had paved under every column).
+	 */
+	@GameTest(template = COURSE)
+	public static void aRuinColumnCanBeFoundAnywhere(GameTestHelper helper) {
+		java.util.Random r = new java.util.Random(4242L);
+		for (int i = 0; i < 64; i++) {
+			BlockPos spot = new BlockPos(r.nextInt(2_000_000) - 1_000_000, 2, r.nextInt(2_000_000) - 1_000_000);
+			fieldWithColumnAt(helper, spot, i % 2 == 0, 3);
+		}
+		helper.succeed();
 	}
 
 	/**

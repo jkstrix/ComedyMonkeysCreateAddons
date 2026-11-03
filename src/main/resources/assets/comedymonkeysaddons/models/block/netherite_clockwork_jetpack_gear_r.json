@@ -1,0 +1,72 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/netherite_clockwork_jetpack_steel",
+    "netherite_clockwork_jetpack_brass": "comedymonkeysaddons:block/netherite_clockwork_jetpack_brass",
+    "netherite_clockwork_jetpack_gear": "comedymonkeysaddons:block/netherite_clockwork_jetpack_gear"
+  },
+  "elements": [
+    {
+      "name": "gear_R",
+      "from": [
+        9.5,
+        7.25,
+        11.9
+      ],
+      "to": [
+        11.5,
+        9.25,
+        12.4
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            3.6,
+            6.75,
+            4.1,
+            8.75
+          ],
+          "texture": "#netherite_clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_gear"
+        },
+        "west": {
+          "uv": [
+            11.9,
+            6.75,
+            12.4,
+            8.75
+          ],
+          "texture": "#netherite_clockwork_jetpack_brass"
+        },
+        "up": {
+          "uv": [
+            9.5,
+            11.9,
+            11.5,
+            12.4
+          ],
+          "texture": "#netherite_clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            9.5,
+            3.6,
+            11.5,
+            4.1
+          ],
+          "texture": "#netherite_clockwork_jetpack_brass"
+        }
+      }
+    }
+  ]
+}

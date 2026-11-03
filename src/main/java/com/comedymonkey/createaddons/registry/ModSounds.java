@@ -54,6 +54,9 @@ public final class ModSounds {
 	/** The Clockwork Juggernaut's sounds, from the entries {@code design/sound/clockwork-juggernaut/export-game.js} writes. */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> JUGGERNAUT = registerPrefixed("clockwork_juggernaut.");
 
+	/** The Clockwork Jetpack's and its Winding Station's sounds, from the entries {@code design/sound/clockwork-jetpack/export-game.js} writes. */
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> JETPACK = registerPrefixed("clockwork_jetpack.");
+
 	/** The Electric Lights' sounds (design/sound/electric-lights): lit lights are silent, these mark changes. */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> LIGHTS = registerPrefixed("lights.");
 
@@ -68,6 +71,13 @@ public final class ModSounds {
 	@org.jetbrains.annotations.Nullable
 	public static SoundEvent juggernaut(String id) {
 		DeferredHolder<SoundEvent, SoundEvent> holder = JUGGERNAUT.get(id);
+		return holder == null ? null : holder.get();
+	}
+
+	/** One of the Clockwork Jetpack's sounds, or null for an id the sound design doesn't have. */
+	@org.jetbrains.annotations.Nullable
+	public static SoundEvent jetpack(String id) {
+		DeferredHolder<SoundEvent, SoundEvent> holder = JETPACK.get(id);
 		return holder == null ? null : holder.get();
 	}
 

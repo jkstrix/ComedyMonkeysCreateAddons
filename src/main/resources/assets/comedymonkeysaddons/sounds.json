@@ -2830,5 +2830,176 @@
       "comedymonkeysaddons:clockwork_dynamo/adjust_1",
       "comedymonkeysaddons:clockwork_dynamo/adjust_2"
     ]
+  },
+  "clockwork_jetpack.wings_unfold": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.wings_unfold",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_jetpack/wings_unfold_1",
+      "comedymonkeysaddons:clockwork_jetpack/wings_unfold_2",
+      "comedymonkeysaddons:clockwork_jetpack/wings_unfold_3"
+    ]
+  },
+  "clockwork_jetpack.wings_fold": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.wings_fold",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_jetpack/wings_fold_1",
+      "comedymonkeysaddons:clockwork_jetpack/wings_fold_2",
+      "comedymonkeysaddons:clockwork_jetpack/wings_fold_3"
+    ]
+  },
+  "clockwork_jetpack.run_down": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.run_down",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_jetpack/run_down_1",
+      "comedymonkeysaddons:clockwork_jetpack/run_down_2"
+    ]
+  },
+  "clockwork_jetpack.engine_on": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.engine_on",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_jetpack/engine_on_1",
+      "comedymonkeysaddons:clockwork_jetpack/engine_on_2"
+    ]
+  },
+  "clockwork_jetpack.engine_off": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.engine_off",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_jetpack/engine_off_1",
+      "comedymonkeysaddons:clockwork_jetpack/engine_off_2"
+    ]
+  },
+  "clockwork_jetpack.hover_on": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.hover_on",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/hover_on_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/hover_on_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_jetpack.hover_off": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.hover_off",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/hover_off_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/hover_off_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_jetpack.boost": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.boost",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_jetpack/boost_1",
+      "comedymonkeysaddons:clockwork_jetpack/boost_2",
+      "comedymonkeysaddons:clockwork_jetpack/boost_3"
+    ]
+  },
+  "clockwork_jetpack.wind_low": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.wind_low",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/wind_low_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/wind_low_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_jetpack.equip": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.equip",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/equip_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/equip_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_jetpack.station_hang": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.station_hang",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/station_hang_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/station_hang_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_jetpack.station_take": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.station_take",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/station_take_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/station_take_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_jetpack.station_boom": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.station_boom",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/station_boom_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/station_boom_2",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_jetpack.station_engage": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.station_engage",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_jetpack/station_engage_1",
+      "comedymonkeysaddons:clockwork_jetpack/station_engage_2"
+    ]
+  },
+  "clockwork_jetpack.station_winding": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.station_winding",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/station_winding",
+        "attenuation_distance": 8
+      }
+    ]
+  },
+  "clockwork_jetpack.station_full": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.station_full",
+    "sounds": [
+      "comedymonkeysaddons:clockwork_jetpack/station_full_1"
+    ]
+  },
+  "clockwork_jetpack.station_release": {
+    "subtitle": "subtitles.comedymonkeysaddons.clockwork_jetpack.station_release",
+    "sounds": [
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/station_release_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "comedymonkeysaddons:clockwork_jetpack/station_release_2",
+        "attenuation_distance": 8
+      }
+    ]
   }
 }

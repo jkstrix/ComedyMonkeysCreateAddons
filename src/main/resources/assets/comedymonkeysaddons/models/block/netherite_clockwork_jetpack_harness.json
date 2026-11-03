@@ -1,0 +1,888 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/netherite_clockwork_jetpack_steel",
+    "netherite_clockwork_jetpack_strap": "comedymonkeysaddons:block/netherite_clockwork_jetpack_strap",
+    "netherite_clockwork_jetpack_buckle": "comedymonkeysaddons:block/netherite_clockwork_jetpack_buckle"
+  },
+  "elements": [
+    {
+      "name": "strap_top_0",
+      "from": [
+        5,
+        17,
+        -2.75
+      ],
+      "to": [
+        6.5,
+        17.5,
+        4.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.5,
+            14.5,
+            11,
+            15
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "east": {
+          "uv": [
+            0,
+            14.5,
+            7,
+            15
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "south": {
+          "uv": [
+            5,
+            14.5,
+            6.5,
+            15
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "west": {
+          "uv": [
+            9,
+            14.5,
+            16,
+            15
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "up": {
+          "uv": [
+            5,
+            9,
+            6.5,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "down": {
+          "uv": [
+            5,
+            0,
+            6.5,
+            7
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        }
+      }
+    },
+    {
+      "name": "strap_front_0",
+      "from": [
+        5,
+        9,
+        -2.75
+      ],
+      "to": [
+        6.5,
+        17,
+        -2.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.5,
+            0,
+            11,
+            8
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "east": {
+          "uv": [
+            2.25,
+            0,
+            2.75,
+            8
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "west": {
+          "uv": [
+            13.25,
+            0,
+            13.75,
+            8
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "up": {
+          "uv": [
+            5,
+            13.25,
+            6.5,
+            13.75
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "down": {
+          "uv": [
+            5,
+            2.25,
+            6.5,
+            2.75
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        }
+      }
+    },
+    {
+      "name": "strap_back_0",
+      "from": [
+        5,
+        16,
+        3.75
+      ],
+      "to": [
+        6.5,
+        17,
+        4.25
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            11.75,
+            15,
+            12.25,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "south": {
+          "uv": [
+            5,
+            15,
+            6.5,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "west": {
+          "uv": [
+            3.75,
+            15,
+            4.25,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "up": {
+          "uv": [
+            5,
+            3.75,
+            6.5,
+            4.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "down": {
+          "uv": [
+            5,
+            11.75,
+            6.5,
+            12.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        }
+      }
+    },
+    {
+      "name": "strap_buckle_0",
+      "from": [
+        4.75,
+        12,
+        -3
+      ],
+      "to": [
+        6.75,
+        13.5,
+        -2.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "east": {
+          "uv": [
+            2.75,
+            2.5,
+            3,
+            4
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "west": {
+          "uv": [
+            13,
+            2.5,
+            13.25,
+            4
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "up": {
+          "uv": [
+            4.75,
+            13,
+            6.75,
+            13.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "down": {
+          "uv": [
+            4.75,
+            2.75,
+            6.75,
+            3
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        }
+      }
+    },
+    {
+      "name": "strap_top_1",
+      "from": [
+        9.5,
+        17,
+        -2.75
+      ],
+      "to": [
+        11,
+        17.5,
+        4.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            14.5,
+            6.5,
+            15
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "east": {
+          "uv": [
+            0,
+            14.5,
+            7,
+            15
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "south": {
+          "uv": [
+            9.5,
+            14.5,
+            11,
+            15
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "west": {
+          "uv": [
+            9,
+            14.5,
+            16,
+            15
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "up": {
+          "uv": [
+            9.5,
+            9,
+            11,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "down": {
+          "uv": [
+            9.5,
+            0,
+            11,
+            7
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        }
+      }
+    },
+    {
+      "name": "strap_front_1",
+      "from": [
+        9.5,
+        9,
+        -2.75
+      ],
+      "to": [
+        11,
+        17,
+        -2.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            0,
+            6.5,
+            8
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "east": {
+          "uv": [
+            2.25,
+            0,
+            2.75,
+            8
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "west": {
+          "uv": [
+            13.25,
+            0,
+            13.75,
+            8
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "up": {
+          "uv": [
+            9.5,
+            13.25,
+            11,
+            13.75
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "down": {
+          "uv": [
+            9.5,
+            2.25,
+            11,
+            2.75
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        }
+      }
+    },
+    {
+      "name": "strap_back_1",
+      "from": [
+        9.5,
+        16,
+        3.75
+      ],
+      "to": [
+        11,
+        17,
+        4.25
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            11.75,
+            15,
+            12.25,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "south": {
+          "uv": [
+            9.5,
+            15,
+            11,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "west": {
+          "uv": [
+            3.75,
+            15,
+            4.25,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "up": {
+          "uv": [
+            9.5,
+            3.75,
+            11,
+            4.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "down": {
+          "uv": [
+            9.5,
+            11.75,
+            11,
+            12.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        }
+      }
+    },
+    {
+      "name": "strap_buckle_1",
+      "from": [
+        9.25,
+        12,
+        -3
+      ],
+      "to": [
+        11.25,
+        13.5,
+        -2.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "east": {
+          "uv": [
+            2.75,
+            2.5,
+            3,
+            4
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "west": {
+          "uv": [
+            13,
+            2.5,
+            13.25,
+            4
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "up": {
+          "uv": [
+            9.25,
+            13,
+            11.25,
+            13.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "down": {
+          "uv": [
+            9.25,
+            2.75,
+            11.25,
+            3
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        }
+      }
+    },
+    {
+      "name": "belt_front",
+      "from": [
+        3,
+        5,
+        -2.75
+      ],
+      "to": [
+        13,
+        6.5,
+        -2.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            9.5,
+            13,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "east": {
+          "uv": [
+            2.25,
+            9.5,
+            2.75,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "west": {
+          "uv": [
+            13.25,
+            9.5,
+            13.75,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "up": {
+          "uv": [
+            3,
+            13.25,
+            13,
+            13.75
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "down": {
+          "uv": [
+            3,
+            2.25,
+            13,
+            2.75
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        }
+      }
+    },
+    {
+      "name": "belt_side_0",
+      "from": [
+        2.5,
+        5,
+        -2.75
+      ],
+      "to": [
+        3,
+        6.5,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13,
+            9.5,
+            13.5,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "east": {
+          "uv": [
+            0,
+            9.5,
+            6.75,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            9.5,
+            3,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "west": {
+          "uv": [
+            9.25,
+            9.5,
+            16,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            9.25,
+            3,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "down": {
+          "uv": [
+            2.5,
+            0,
+            3,
+            6.75
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        }
+      }
+    },
+    {
+      "name": "belt_side_1",
+      "from": [
+        13,
+        5,
+        -2.75
+      ],
+      "to": [
+        13.5,
+        6.5,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            9.5,
+            3,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "east": {
+          "uv": [
+            0,
+            9.5,
+            6.75,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "south": {
+          "uv": [
+            13,
+            9.5,
+            13.5,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "west": {
+          "uv": [
+            9.25,
+            9.5,
+            16,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "up": {
+          "uv": [
+            13,
+            9.25,
+            13.5,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "down": {
+          "uv": [
+            13,
+            0,
+            13.5,
+            6.75
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        }
+      }
+    },
+    {
+      "name": "belt_back_0",
+      "from": [
+        3,
+        5,
+        3.75
+      ],
+      "to": [
+        4,
+        6.5,
+        4.25
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            11.75,
+            9.5,
+            12.25,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "south": {
+          "uv": [
+            3,
+            9.5,
+            4,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "west": {
+          "uv": [
+            3.75,
+            9.5,
+            4.25,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "up": {
+          "uv": [
+            3,
+            3.75,
+            4,
+            4.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "down": {
+          "uv": [
+            3,
+            11.75,
+            4,
+            12.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        }
+      }
+    },
+    {
+      "name": "belt_back_1",
+      "from": [
+        12,
+        5,
+        3.75
+      ],
+      "to": [
+        13,
+        6.5,
+        4.25
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            11.75,
+            9.5,
+            12.25,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "south": {
+          "uv": [
+            12,
+            9.5,
+            13,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "west": {
+          "uv": [
+            3.75,
+            9.5,
+            4.25,
+            11
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "up": {
+          "uv": [
+            12,
+            3.75,
+            13,
+            4.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        },
+        "down": {
+          "uv": [
+            12,
+            11.75,
+            13,
+            12.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_strap"
+        }
+      }
+    },
+    {
+      "name": "belt_buckle",
+      "from": [
+        7,
+        4.75,
+        -3
+      ],
+      "to": [
+        9,
+        6.75,
+        -2.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "east": {
+          "uv": [
+            2.75,
+            9.25,
+            3,
+            11.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "west": {
+          "uv": [
+            13,
+            9.25,
+            13.25,
+            11.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "up": {
+          "uv": [
+            7,
+            13,
+            9,
+            13.25
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        },
+        "down": {
+          "uv": [
+            7,
+            2.75,
+            9,
+            3
+          ],
+          "texture": "#netherite_clockwork_jetpack_buckle"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "tag": "c:ingots/netherite"
+  },
+  "base": {
+    "item": "comedymonkeysaddons:clockwork_jetpack"
+  },
+  "result": {
+    "id": "comedymonkeysaddons:netherite_clockwork_jetpack"
+  },
+  "template": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  }
+}

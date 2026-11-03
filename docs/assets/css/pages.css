@@ -189,6 +189,14 @@
 .release-sec .prose h4:first-child { margin-top: 0; }
 @media (min-width: 1800px) { .release { columns: 3; } }
 @media (max-width: 1000px) { .release { columns: 1; } }
+/* the history: one release after another, each under a rule with its version large */
+.release-history { display: flex; flex-direction: column; gap: 48px; }
+.release-entry { scroll-margin-top: calc(var(--topbar) + 16px); display: flex; flex-direction: column; gap: 18px; }
+.release-entry + .release-entry { padding-top: 40px; border-top: 1px solid var(--line); }
+.release-head h2 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 16px; font-size: clamp(28px, 3.4vw, 40px); text-transform: uppercase; color: var(--copper-hi); margin: 6px 0 8px; }
+.release-head h2 span { font-size: .55em; color: var(--text); letter-spacing: .02em; }
+.release-head p { color: var(--muted); max-width: 52em; }
+.release-entry .release { margin-top: 2px; }
 .new-flag { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; padding: 6px 12px 6px 6px; border-radius: 20px; background: rgba(98, 182, 177, .08); border: 1px solid rgba(98, 182, 177, .35); font: 600 12px var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--cyan); transition: background .2s; }
 .new-flag:hover { background: rgba(98, 182, 177, .16); }
 .new-flag b { background: var(--cyan); color: #0e2222; border-radius: 12px; padding: 3px 8px; font-weight: 700; }

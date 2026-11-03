@@ -2977,6 +2977,10 @@
       [
         "Size",
         "Two blocks: winding end behind, output end in front"
+      ],
+      [
+        "Overwound",
+        "A third more a level: twice as much at III (Librarians, anvil)"
       ]
     ],
     "power": {
@@ -2996,7 +3000,8 @@
     "rules": [
       "The winding end's value box sets the stress it takes; the output end's sets its speed and direction.",
       "Full, it stops taking stress from its winding network.",
-      "Unloaded, it simply waits, like any Create machine."
+      "Unloaded, it simply waits, like any Create machine.",
+      "Overwound (from Librarians, at an anvil) holds more: twice as much at III. Broken, it keeps its enchantment."
     ],
     "setups": [
       {
@@ -3040,7 +3045,123 @@
     "related": [
       "mainspring",
       "ruin-sleeper",
-      "magma-engine"
+      "magma-engine",
+      "clockwork-jetpack"
+    ]
+  },
+  {
+    "id": "jetpack-winding-station",
+    "name": "Jetpack Winding Station",
+    "registry": [
+      "comedymonkeysaddons:jetpack_winding_station"
+    ],
+    "summary": "A coat stand for a flying machine: hang a [[clockwork-jetpack]] on it, or back into it wearing one, and a brass boom winds it from the shaft below.",
+    "tags": [
+      "equipment",
+      "charging"
+    ],
+    "stage": "end",
+    "requires": [],
+    "teach": {
+      "what": "Turned from a shaft underneath, it winds a [[clockwork-jetpack]] hung on its hooks, or the one on the back of a player who backs into it. Its boom reaches out, fits its socket over the key and turns it.",
+      "why": "It is the only way to wind the jetpack.",
+      "when": "Build it before you need the jetpack: it's cheap, brass and a casing.",
+      "interacts": "It fills at a Copper Backtank's rate and takes its stress. A comparator reads how wound the hung jetpack is; funnels and Mechanical Arms can hang one and take it off once it's full.",
+      "mistakes": [
+        "Turning it too slowly: a Hand Crank takes about ten minutes for a full wind.",
+        "Expecting a funnel to take a half-wound jetpack: it only lets go of a full one."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Full wind",
+        "value": "9",
+        "unit": "s at 256 RPM",
+        "gauge": 0.9
+      },
+      {
+        "label": "Stress",
+        "value": "4",
+        "unit": "SU per RPM",
+        "gauge": 0.2
+      }
+    ],
+    "specs": [
+      [
+        "Shaft",
+        "From below"
+      ],
+      [
+        "Rate",
+        "A Copper Backtank's: faster the faster it turns"
+      ],
+      [
+        "Comparator",
+        "Reads the hung jetpack's wind"
+      ],
+      [
+        "Size",
+        "One block, its boom standing most of a block above"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM (a Copper Backtank's)",
+      "speed": "Any; faster winds faster"
+    },
+    "inputs": [
+      "Rotation from a shaft below.",
+      "A Clockwork Jetpack, by hand, funnel or Mechanical Arm."
+    ],
+    "outputs": [
+      "A wound jetpack: on its hooks, or on your back."
+    ],
+    "throughput": [
+      "A full wind in about 9 seconds at 256 RPM; about ten and a half minutes on a Hand Crank. Overwound jetpacks take longer, as they hold more."
+    ],
+    "rules": [
+      "Right-click it with a jetpack to hang it on. With an empty hand, right-click to swap: the one on your back goes on the station, or the station's goes on your back (into your inventory if your slot is taken).",
+      "Stand on the block in front with your back to it and sneak: it winds the jetpack you're wearing until you step away.",
+      "Funnels and arms only take a full jetpack off. Breaking the station drops the jetpack with its wind."
+    ],
+    "setups": [
+      {
+        "title": "A charging stand by the door",
+        "body": [
+          "A Hand Crank or a small water wheel under it, and the jetpack lives on it between flights. Back into it on your way past to top up without taking it off."
+        ]
+      },
+      {
+        "title": "Spring-powered",
+        "body": [
+          "Put it on a [[spring-engine]] and it winds even when your factory is idle."
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "title": "Winding",
+        "steps": [
+          {
+            "label": "A shaft below",
+            "kind": "source"
+          },
+          {
+            "ref": "jetpack-winding-station",
+            "kind": "machine",
+            "via": "any speed"
+          },
+          {
+            "ref": "clockwork-jetpack",
+            "kind": "result",
+            "via": "wound"
+          }
+        ]
+      }
+    ],
+    "related": [
+      "clockwork-jetpack",
+      "spring-engine"
     ]
   },
   {

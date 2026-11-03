@@ -1,0 +1,141 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/clockwork_jetpack_walnut",
+    "clockwork_jetpack_axle": "comedymonkeysaddons:block/clockwork_jetpack_axle",
+    "clockwork_jetpack_brass": "comedymonkeysaddons:block/clockwork_jetpack_brass"
+  },
+  "elements": [
+    {
+      "name": "boom_inner",
+      "from": [
+        7.65,
+        25.65,
+        7.1
+      ],
+      "to": [
+        8.35,
+        26.35,
+        12.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.65,
+            5.65,
+            8.35,
+            6.35
+          ],
+          "texture": "#clockwork_jetpack_axle"
+        },
+        "east": {
+          "uv": [
+            3.25,
+            5.65,
+            8.9,
+            6.35
+          ],
+          "texture": "#clockwork_jetpack_axle"
+        },
+        "south": {
+          "uv": [
+            7.65,
+            5.65,
+            8.35,
+            6.35
+          ],
+          "texture": "#clockwork_jetpack_axle"
+        },
+        "west": {
+          "uv": [
+            7.1,
+            5.65,
+            12.75,
+            6.35
+          ],
+          "texture": "#clockwork_jetpack_axle"
+        },
+        "up": {
+          "uv": [
+            7.65,
+            7.1,
+            8.35,
+            12.75
+          ],
+          "texture": "#clockwork_jetpack_axle"
+        },
+        "down": {
+          "uv": [
+            7.65,
+            3.25,
+            8.35,
+            8.9
+          ],
+          "texture": "#clockwork_jetpack_axle"
+        }
+      }
+    },
+    {
+      "name": "drop_link",
+      "from": [
+        7.65,
+        21.25,
+        6.975
+      ],
+      "to": [
+        8.35,
+        25.65,
+        7.775
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.65,
+            6.35,
+            8.35,
+            10.75
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "east": {
+          "uv": [
+            8.225,
+            6.35,
+            9.025,
+            10.75
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            7.65,
+            6.35,
+            8.35,
+            10.75
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "west": {
+          "uv": [
+            6.975,
+            6.35,
+            7.775,
+            10.75
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            7.65,
+            8.225,
+            8.35,
+            9.025
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        }
+      }
+    }
+  ]
+}

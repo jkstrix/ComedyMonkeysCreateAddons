@@ -1,0 +1,226 @@
+{
+ "wings_unfold": {
+  "variants": 3,
+  "sources": [
+   "kenney-rpg-audio/Audio/creak1.ogg",
+   "kenney-impact-sounds/Audio/impactWood_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactWood_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactWood_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactWood_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactWood_light_004.ogg",
+   "kenney-rpg-audio/Audio/metalClick.ogg",
+   "bigsoundbank/cuts/cj_canvas_snap_a.wav",
+   "bigsoundbank/cuts/cj_canvas_snap_b.wav",
+   "bigsoundbank/cuts/cj_canvas_snap_c.wav",
+   "kenney-rpg-audio/Audio/creak2.ogg"
+  ],
+  "synth": []
+ },
+ "wings_fold": {
+  "variants": 3,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalClick.ogg",
+   "bigsoundbank/cuts/cj_canvas_slack.wav",
+   "kenney-impact-sounds/Audio/impactWood_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactWood_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactWood_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactWood_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactWood_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "run_down": {
+  "variants": 2,
+  "sources": [
+   "generated/sa3_tradebot_tick_1.wav",
+   "generated/sa3_tradebot_tick_2.wav",
+   "generated/sa3_tradebot_tick_3.wav",
+   "generated/sa3_tradebot_tick_4.wav",
+   "bigsoundbank/cuts/cj_fan_down_drone.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "engine_on": {
+  "variants": 2,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalClick.ogg",
+   "bigsoundbank/cuts/cj_fan_up_drone.wav",
+   "generated/sa3_tradebot_tick_1.wav",
+   "generated/sa3_tradebot_tick_2.wav",
+   "generated/sa3_tradebot_tick_3.wav",
+   "generated/sa3_tradebot_tick_4.wav"
+  ],
+  "synth": []
+ },
+ "engine_off": {
+  "variants": 2,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalClick.ogg",
+   "bigsoundbank/cuts/cj_fan_down_drone.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "hover_on": {
+  "variants": 2,
+  "sources": [
+   "kenney-interface-sounds/Audio/toggle_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "hover_off": {
+  "variants": 2,
+  "sources": [
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg",
+   "kenney-interface-sounds/Audio/toggle_002.ogg"
+  ],
+  "synth": []
+ },
+ "boost": {
+  "variants": 3,
+  "sources": [
+   "bigsoundbank/cuts/cj_fan_up_drone.wav",
+   "generated/sa3_tradebot_wind_1.wav",
+   "generated/sa3_tradebot_wind_2.wav",
+   "generated/sa3_tradebot_wind_3.wav",
+   "generated/sa3_tradebot_wind_4.wav"
+  ],
+  "synth": [
+   "whoosh"
+  ]
+ },
+ "wind_low": {
+  "variants": 2,
+  "sources": [
+   "generated/sa3_tradebot_tick_1.wav",
+   "generated/sa3_tradebot_tick_2.wav",
+   "generated/sa3_tradebot_tick_3.wav",
+   "generated/sa3_tradebot_tick_4.wav",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "equip": {
+  "variants": 2,
+  "sources": [
+   "kenney-rpg-audio/Audio/beltHandle1.ogg",
+   "kenney-rpg-audio/Audio/beltHandle2.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "rails_extend": {
+  "variants": 1,
+  "sources": [
+   "kenney-casino-audio/Audio/card-slide-1.ogg",
+   "kenney-rpg-audio/Audio/metalLatch.ogg"
+  ],
+  "synth": []
+ },
+ "station_hang": {
+  "variants": 2,
+  "sources": [
+   "kenney-impact-sounds/Audio/impactWood_medium_000.ogg",
+   "kenney-impact-sounds/Audio/impactWood_medium_001.ogg",
+   "kenney-impact-sounds/Audio/impactWood_medium_002.ogg",
+   "kenney-impact-sounds/Audio/impactWood_medium_003.ogg",
+   "kenney-impact-sounds/Audio/impactWood_medium_004.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg"
+  ],
+  "synth": []
+ },
+ "station_take": {
+  "variants": 2,
+  "sources": [
+   "kenney-impact-sounds/Audio/impactMetal_light_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_light_004.ogg",
+   "kenney-rpg-audio/Audio/handleSmallLeather.ogg",
+   "kenney-rpg-audio/Audio/handleSmallLeather2.ogg"
+  ],
+  "synth": []
+ },
+ "station_boom": {
+  "variants": 2,
+  "sources": [
+   "bigsoundbank/cuts/jug_reel.wav",
+   "kenney-rpg-audio/Audio/creak1.ogg",
+   "kenney-rpg-audio/Audio/creak3.ogg"
+  ],
+  "synth": []
+ },
+ "station_engage": {
+  "variants": 2,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalLatch.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_medium_000.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_medium_001.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_medium_002.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_medium_003.ogg",
+   "kenney-impact-sounds/Audio/impactMetal_medium_004.ogg"
+  ],
+  "synth": []
+ },
+ "station_winding": {
+  "variants": 1,
+  "sources": [
+   "generated/sa3_tradebot_wind_1.wav",
+   "generated/sa3_tradebot_wind_2.wav",
+   "generated/sa3_tradebot_wind_3.wav",
+   "generated/sa3_tradebot_wind_4.wav",
+   "kenney-rpg-audio/Audio/metalClick.ogg",
+   "generated/sa3_crucible_gears_v1_x2.wav"
+  ],
+  "synth": []
+ },
+ "station_full": {
+  "variants": 1,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalClick.ogg",
+   "bigsoundbank/cuts/jug_chime.wav"
+  ],
+  "synth": []
+ },
+ "station_release": {
+  "variants": 2,
+  "sources": [
+   "kenney-rpg-audio/Audio/metalClick.ogg",
+   "kenney-rpg-audio/Audio/creak2.ogg",
+   "kenney-rpg-audio/Audio/creak3.ogg",
+   "bigsoundbank/cuts/jug_reel.wav"
+  ],
+  "synth": []
+ }
+}

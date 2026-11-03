@@ -1,0 +1,150 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/clockwork_jetpack_steel",
+    "clockwork_jetpack_rib": "comedymonkeysaddons:block/clockwork_jetpack_rib",
+    "clockwork_jetpack_brass": "comedymonkeysaddons:block/clockwork_jetpack_brass"
+  },
+  "elements": [
+    {
+      "name": "rib_out_R1",
+      "from": [
+        22.45,
+        15,
+        7.5
+      ],
+      "to": [
+        31.25,
+        15.75,
+        7.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.75,
+            0.25,
+            9.55,
+            1
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        },
+        "east": {
+          "uv": [
+            8.2,
+            0.25,
+            8.5,
+            1
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        },
+        "south": {
+          "uv": [
+            6.45,
+            0.25,
+            15.25,
+            1
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            0.25,
+            7.8,
+            1
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        },
+        "up": {
+          "uv": [
+            6.45,
+            7.5,
+            15.25,
+            7.8
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        },
+        "down": {
+          "uv": [
+            6.45,
+            8.2,
+            15.25,
+            8.5
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        }
+      }
+    },
+    {
+      "name": "ferrule_R1",
+      "from": [
+        31.25,
+        14.9,
+        7.5
+      ],
+      "to": [
+        32,
+        15.85,
+        7.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.15,
+            0.75,
+            1.1
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "east": {
+          "uv": [
+            8.2,
+            0.15,
+            8.5,
+            1.1
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            15.25,
+            0.15,
+            16,
+            1.1
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            0.15,
+            7.8,
+            1.1
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "up": {
+          "uv": [
+            15.25,
+            7.5,
+            16,
+            7.8
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            15.25,
+            8.2,
+            16,
+            8.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        }
+      }
+    }
+  ]
+}

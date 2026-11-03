@@ -1,0 +1,284 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/clockwork_jetpack_steel",
+    "clockwork_jetpack_duct": "comedymonkeysaddons:block/clockwork_jetpack_duct",
+    "clockwork_jetpack_steel_plain": "comedymonkeysaddons:block/clockwork_jetpack_steel_plain",
+    "clockwork_jetpack_collar": "comedymonkeysaddons:block/clockwork_jetpack_collar",
+    "clockwork_jetpack_throat": "comedymonkeysaddons:block/clockwork_jetpack_throat"
+  },
+  "elements": [
+    {
+      "name": "duct_L",
+      "from": [
+        4,
+        4,
+        8.5
+      ],
+      "to": [
+        7,
+        8,
+        11.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_duct"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_duct"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_duct"
+        },
+        "up": {
+          "uv": [
+            4,
+            8.5,
+            7,
+            11.5
+          ],
+          "texture": "#clockwork_jetpack_steel_plain"
+        }
+      }
+    },
+    {
+      "name": "collar_L",
+      "from": [
+        3.75,
+        4,
+        8.25
+      ],
+      "to": [
+        7.25,
+        4.75,
+        11.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.75,
+            11.25,
+            12.25,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            11.25,
+            7.75,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "south": {
+          "uv": [
+            3.75,
+            11.25,
+            7.25,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "west": {
+          "uv": [
+            8.25,
+            11.25,
+            11.75,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "up": {
+          "uv": [
+            3.75,
+            8.25,
+            7.25,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        }
+      }
+    },
+    {
+      "name": "throat_L",
+      "from": [
+        4.05,
+        4.9,
+        8.55
+      ],
+      "to": [
+        6.95,
+        4.9,
+        11.45
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_throat"
+        }
+      }
+    },
+    {
+      "name": "duct_R",
+      "from": [
+        9,
+        4,
+        8.5
+      ],
+      "to": [
+        12,
+        8,
+        11.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_duct"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_duct"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_duct"
+        },
+        "up": {
+          "uv": [
+            9,
+            8.5,
+            12,
+            11.5
+          ],
+          "texture": "#clockwork_jetpack_steel_plain"
+        }
+      }
+    },
+    {
+      "name": "collar_R",
+      "from": [
+        8.75,
+        4,
+        8.25
+      ],
+      "to": [
+        12.25,
+        4.75,
+        11.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.75,
+            11.25,
+            7.25,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            11.25,
+            7.75,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "south": {
+          "uv": [
+            8.75,
+            11.25,
+            12.25,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "west": {
+          "uv": [
+            8.25,
+            11.25,
+            11.75,
+            12
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        },
+        "up": {
+          "uv": [
+            8.75,
+            8.25,
+            12.25,
+            11.75
+          ],
+          "texture": "#clockwork_jetpack_collar"
+        }
+      }
+    },
+    {
+      "name": "throat_R",
+      "from": [
+        9.05,
+        4.9,
+        8.55
+      ],
+      "to": [
+        11.95,
+        4.9,
+        11.45
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_throat"
+        }
+      }
+    }
+  ]
+}

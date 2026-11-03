@@ -1,0 +1,20 @@
+{
+  "clockwork_jetpack.wings_unfold": 0.4508,
+  "clockwork_jetpack.wings_fold": 0.3881,
+  "clockwork_jetpack.run_down": 0.3342,
+  "clockwork_jetpack.engine_on": 0.4775,
+  "clockwork_jetpack.engine_off": 0.2564,
+  "clockwork_jetpack.hover_on": 0.1393,
+  "clockwork_jetpack.hover_off": 0.0975,
+  "clockwork_jetpack.boost": 0.1675,
+  "clockwork_jetpack.wind_low": 0.1879,
+  "clockwork_jetpack.equip": 0.2158,
+  "clockwork_jetpack.rails_extend": 0.2285,
+  "clockwork_jetpack.station_hang": 0.4306,
+  "clockwork_jetpack.station_take": 0.2535,
+  "clockwork_jetpack.station_boom": 0.1425,
+  "clockwork_jetpack.station_engage": 0.4456,
+  "clockwork_jetpack.station_winding": 0.1879,
+  "clockwork_jetpack.station_full": 0.1945,
+  "clockwork_jetpack.station_release": 0.2084
+}

@@ -53,6 +53,8 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 	private int lastComparator = -1;
 	/** The winding end: whether it was taking stress last time it told its network. */
 	private boolean wasWinding;
+	/** The output end: its level of Overwound, from the item it was placed as; kept when it's broken (D63). */
+	private int overwound;
 
 	ScrollValueBehaviour speedSetting, stressSetting;
 
@@ -64,8 +66,19 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 		return SpringEngineBlock.isOutput(getBlockState());
 	}
 
+	/** What a Spring Engine holds with no Overwound, in SU-ticks. */
 	public static long capacity() {
 		return CMConfig.Server.get(CMConfig.SERVER.springEngineCapacity) * 20;
+	}
+
+	/** What one holds at this level of Overwound: a third more a level, twice as much at III (Juggernaut spec D63). */
+	public static long capacity(int overwound) {
+		return capacity() * (3 + Math.max(0, overwound)) / 3;
+	}
+
+	/** What this engine holds (the output end keeps the Overwound it was placed with). */
+	public long capacityHere() {
+		return capacity(overwound);
 	}
 
 	private static int maxStress() {
@@ -111,20 +124,20 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 
 	/** Game tests and Ponder: set the wind held (output end). */
 	public void setStored(long stored) {
-		this.stored = Math.max(0, Math.min(capacity(), stored));
+		this.stored = Math.max(0, Math.min(capacityHere(), stored));
 		shownFill = fill();
 	}
 
 	/** Ponder: show this end wound to {@code fill} (0..1); on the output end it holds that much too. */
 	public void showFill(float fill) {
 		if (isOutput())
-			setStored((long) (fill * capacity()));
+			setStored((long) (fill * capacityHere()));
 		shownFill = Mth.clamp(fill, 0, 1);
 	}
 
 	/** How wound, 0..1: never more than full, even after the capacity was lowered in the config. */
 	public float fill() {
-		return isOutput() ? Mth.clamp((float) ((double) stored / capacity()), 0, 1) : shownFill;
+		return isOutput() ? Mth.clamp((float) ((double) stored / capacityHere()), 0, 1) : shownFill;
 	}
 
 	/** How wound it looks (either end), for the renderer. */
@@ -183,7 +196,7 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 	/** The winding end: turning into an engine that has room left. */
 	private boolean winding() {
 		SpringEngineBlockEntity out = output();
-		return out != null && out.stored < capacity();
+		return out != null && out.stored < out.capacityHere();
 	}
 
 	private void reportStress() {
@@ -241,11 +254,11 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 
 	/** Wind in from the winding end (SU-ticks), lossless, up to full. */
 	void add(long amount) {
-		boolean wasEmpty = stored <= 0, wasFull = stored >= capacity();
-		stored = Math.min(capacity(), stored + amount);
+		boolean wasEmpty = stored <= 0, wasFull = stored >= capacityHere();
+		stored = Math.min(capacityHere(), stored + amount);
 		if (wasEmpty && stored > 0)
 			updateGeneratedRotation(); // it can give again
-		if (!wasFull && stored >= capacity()) {
+		if (!wasFull && stored >= capacityHere()) {
 			sound("engine_full", 1);
 			// D41: "Tightly Wound", for whoever is by when it fills
 			ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.SPRING_ENGINE_FULL, ItemStack.EMPTY, 0);
@@ -296,10 +309,10 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
 		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).add(getBlockState().getBlock().getName().copy().append(":")).forGoggles(tooltip);
 		SpringEngineBlockEntity out = output();
-		long held = out == null ? 0 : out.stored;
+		long held = out == null ? 0 : out.stored, holds = out == null ? capacity() : out.capacityHere();
 		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID)
-			.translate("gui.goggles.spring_engine.wound", String.format(Locale.ROOT, "%.1f", 100.0 * held / capacity()),
-				String.format(Locale.ROOT, "%,d", held / 20 / 60), String.format(Locale.ROOT, "%,d", capacity() / 20 / 60))
+			.translate("gui.goggles.spring_engine.wound", String.format(Locale.ROOT, "%.1f", 100.0 * held / holds),
+				String.format(Locale.ROOT, "%,d", held / 20 / 60), String.format(Locale.ROOT, "%,d", holds / 20 / 60))
 			.style(ChatFormatting.GOLD)
 			.forGoggles(tooltip, 1);
 		// at full stress, how long what's in it lasts
@@ -318,6 +331,8 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 		if (isOutput()) {
 			tag.putLong("Stored", stored);
 			tag.putBoolean("Powered", powered);
+			if (overwound > 0)
+				tag.putInt("Overwound", overwound);
 		}
 		tag.putFloat("Fill", shownFill);
 	}
@@ -327,7 +342,8 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 		super.read(tag, registries, clientPacket);
 		// wound full and then the capacity lowered in the config: it reads back as full, not 200% (which the renderer has
 		// no frame for and the comparator no level)
-		stored = Math.max(0, Math.min(capacity(), tag.getLong("Stored")));
+		overwound = tag.getInt("Overwound");
+		stored = Math.max(0, Math.min(capacityHere(), tag.getLong("Stored")));
 		powered = tag.getBoolean("Powered");
 		shownFill = Mth.clamp(tag.getFloat("Fill"), 0, 1);
 	}
@@ -338,12 +354,24 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 		super.collectImplicitComponents(components);
 		if (isOutput() && stored > 0)
 			components.set(ModDataComponents.SPRING_WIND.get(), stored);
+		// its Overwound goes back on the item (D63)
+		if (isOutput() && overwound > 0 && level != null)
+			level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
+				.get(com.comedymonkey.createaddons.content.MachineEnchantments.OVERWOUND).ifPresent(enchantment -> {
+					net.minecraft.world.item.enchantment.ItemEnchantments.Mutable enchantments =
+						new net.minecraft.world.item.enchantment.ItemEnchantments.Mutable(net.minecraft.world.item.enchantment.ItemEnchantments.EMPTY);
+					enchantments.set(enchantment, overwound);
+					components.set(net.minecraft.core.component.DataComponents.ENCHANTMENTS, enchantments.toImmutable());
+				});
 	}
 
 	@Override
 	protected void applyImplicitComponents(DataComponentInput input) {
 		super.applyImplicitComponents(input);
-		stored = Math.max(0, Math.min(capacity(), input.getOrDefault(ModDataComponents.SPRING_WIND.get(), 0L)));
+		overwound = com.comedymonkey.createaddons.content.MachineEnchantments.levelIn(
+			input.getOrDefault(net.minecraft.core.component.DataComponents.ENCHANTMENTS, net.minecraft.world.item.enchantment.ItemEnchantments.EMPTY),
+			com.comedymonkey.createaddons.content.MachineEnchantments.OVERWOUND);
+		stored = Math.max(0, Math.min(capacityHere(), input.getOrDefault(ModDataComponents.SPRING_WIND.get(), 0L)));
 		shownFill = fill();
 	}
 
@@ -352,6 +380,7 @@ public class SpringEngineBlockEntity extends GeneratingKineticBlockEntity {
 	public void removeComponentsFromTag(CompoundTag tag) {
 		super.removeComponentsFromTag(tag);
 		tag.remove("Stored");
+		tag.remove("Overwound");
 	}
 
 	public Direction facing() {

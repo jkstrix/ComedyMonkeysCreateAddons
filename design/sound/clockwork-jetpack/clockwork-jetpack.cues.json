@@ -1,0 +1,2200 @@
+{
+  "namespace": "clockwork_jetpack",
+  "events": {
+    "wings_unfold": {
+      "subtitle": "Clockwork Jetpack spreads its wings",
+      "group": "Signature sounds",
+      "layers": [
+        {
+          "type": "creak",
+          "at": 0,
+          "gain": 0.18,
+          "f": 420,
+          "dur": 0.06
+        },
+        {
+          "type": "clack",
+          "at": 0.2,
+          "gain": 0.45,
+          "f": 900,
+          "dur": 0.07
+        },
+        {
+          "type": "whoosh",
+          "at": 0.16,
+          "gain": 0.12,
+          "f": 1400,
+          "f2": 700,
+          "dur": 0.06
+        },
+        {
+          "type": "clack",
+          "at": 0.25,
+          "gain": 0.405,
+          "f": 900,
+          "dur": 0.07
+        },
+        {
+          "type": "whoosh",
+          "at": 0.21,
+          "gain": 0.108,
+          "f": 1400,
+          "f2": 700,
+          "dur": 0.06
+        },
+        {
+          "type": "clack",
+          "at": 0.30000000000000004,
+          "gain": 0.36000000000000004,
+          "f": 900,
+          "dur": 0.07
+        },
+        {
+          "type": "whoosh",
+          "at": 0.26000000000000006,
+          "gain": 0.096,
+          "f": 1400,
+          "f2": 700,
+          "dur": 0.06
+        },
+        {
+          "type": "clack",
+          "at": 0.35,
+          "gain": 0.315,
+          "f": 900,
+          "dur": 0.07
+        },
+        {
+          "type": "whoosh",
+          "at": 0.31,
+          "gain": 0.08399999999999999,
+          "f": 1400,
+          "f2": 700,
+          "dur": 0.06
+        },
+        {
+          "type": "clack",
+          "at": 0.4,
+          "gain": 0.27,
+          "f": 900,
+          "dur": 0.07
+        },
+        {
+          "type": "whoosh",
+          "at": 0.36000000000000004,
+          "gain": 0.072,
+          "f": 1400,
+          "f2": 700,
+          "dur": 0.06
+        },
+        {
+          "type": "click",
+          "at": 0.48,
+          "gain": 0.24,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.483,
+          "gain": 0.048,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "click",
+          "at": 0.52,
+          "gain": 0.24,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.523,
+          "gain": 0.048,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "click",
+          "at": 0.56,
+          "gain": 0.24,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.5630000000000001,
+          "gain": 0.048,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "click",
+          "at": 0.6,
+          "gain": 0.24,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.603,
+          "gain": 0.048,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "click",
+          "at": 0.6399999999999999,
+          "gain": 0.24,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.6429999999999999,
+          "gain": 0.048,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "whoosh",
+          "at": 0.42,
+          "gain": 0.35,
+          "f": 260,
+          "f2": 140,
+          "dur": 0.18
+        },
+        {
+          "type": "thud",
+          "at": 0.52,
+          "gain": 0.25,
+          "f": 140,
+          "dur": 0.12
+        },
+        {
+          "type": "creak",
+          "at": 0.6,
+          "gain": 0.12,
+          "f": 300,
+          "dur": 0.15
+        }
+      ],
+      "real": {
+        "variants": 3,
+        "target": -27,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.08,
+          "at": 0.004
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "creak1",
+            "at": 0,
+            "gain": 0.25,
+            "pitch": 1.4,
+            "trim": [
+              0,
+              0.12
+            ],
+            "fadeOut": 0.05
+          },
+          {
+            "pick": [
+              "impactWood_light_000",
+              "impactWood_light_001",
+              "impactWood_light_002",
+              "impactWood_light_003",
+              "impactWood_light_004"
+            ],
+            "at": 0.2,
+            "gain": 0.8,
+            "pitch": 1.4000000000000001,
+            "highpass": 300
+          },
+          {
+            "pick": [
+              "impactWood_light_000",
+              "impactWood_light_001",
+              "impactWood_light_002",
+              "impactWood_light_003",
+              "impactWood_light_004"
+            ],
+            "at": 0.25,
+            "gain": 0.7200000000000001,
+            "pitch": 1.4500000000000002,
+            "highpass": 300
+          },
+          {
+            "pick": [
+              "impactWood_light_000",
+              "impactWood_light_001",
+              "impactWood_light_002",
+              "impactWood_light_003",
+              "impactWood_light_004"
+            ],
+            "at": 0.30000000000000004,
+            "gain": 0.6400000000000001,
+            "pitch": 1.5,
+            "highpass": 300
+          },
+          {
+            "pick": [
+              "impactWood_light_000",
+              "impactWood_light_001",
+              "impactWood_light_002",
+              "impactWood_light_003",
+              "impactWood_light_004"
+            ],
+            "at": 0.35,
+            "gain": 0.5599999999999999,
+            "pitch": 1.55,
+            "highpass": 300
+          },
+          {
+            "pick": [
+              "impactWood_light_000",
+              "impactWood_light_001",
+              "impactWood_light_002",
+              "impactWood_light_003",
+              "impactWood_light_004"
+            ],
+            "at": 0.4,
+            "gain": 0.48,
+            "pitch": 1.6,
+            "highpass": 300
+          },
+          {
+            "src": "metalClick",
+            "at": 0.48,
+            "gain": 0.36000000000000004,
+            "pitch": 1.6
+          },
+          {
+            "src": "metalClick",
+            "at": 0.52,
+            "gain": 0.36000000000000004,
+            "pitch": 1.6
+          },
+          {
+            "src": "metalClick",
+            "at": 0.56,
+            "gain": 0.36000000000000004,
+            "pitch": 1.6
+          },
+          {
+            "src": "metalClick",
+            "at": 0.6,
+            "gain": 0.36000000000000004,
+            "pitch": 1.6
+          },
+          {
+            "src": "metalClick",
+            "at": 0.6399999999999999,
+            "gain": 0.36000000000000004,
+            "pitch": 1.6
+          },
+          {
+            "pick": [
+              "cj_canvas_snap_a",
+              "cj_canvas_snap_b",
+              "cj_canvas_snap_c"
+            ],
+            "at": 0.42,
+            "gain": 1,
+            "pitch": 0.85,
+            "highpass": 120
+          },
+          {
+            "src": "creak2",
+            "at": 0.6,
+            "gain": 0.18,
+            "pitch": 1.3,
+            "trim": [
+              0,
+              0.2
+            ],
+            "fadeOut": 0.1
+          }
+        ],
+        "level": 0.4508
+      }
+    },
+    "wings_fold": {
+      "subtitle": "Clockwork Jetpack folds its wings",
+      "group": "Signature sounds",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0.05,
+          "gain": 0.21,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.053000000000000005,
+          "gain": 0.041999999999999996,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "click",
+          "at": 0.08,
+          "gain": 0.21,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.083,
+          "gain": 0.041999999999999996,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "click",
+          "at": 0.11,
+          "gain": 0.21,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.113,
+          "gain": 0.041999999999999996,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "click",
+          "at": 0.14,
+          "gain": 0.21,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.14300000000000002,
+          "gain": 0.041999999999999996,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "click",
+          "at": 0.16999999999999998,
+          "gain": 0.21,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.173,
+          "gain": 0.041999999999999996,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "whoosh",
+          "at": 0.12,
+          "gain": 0.2,
+          "f": 300,
+          "f2": 600,
+          "dur": 0.15
+        },
+        {
+          "type": "clack",
+          "at": 0.30000000000000004,
+          "gain": 0.36000000000000004,
+          "f": 900,
+          "dur": 0.07
+        },
+        {
+          "type": "whoosh",
+          "at": 0.26000000000000006,
+          "gain": 0.096,
+          "f": 1400,
+          "f2": 700,
+          "dur": 0.06
+        },
+        {
+          "type": "clack",
+          "at": 0.35,
+          "gain": 0.3375,
+          "f": 900,
+          "dur": 0.07
+        },
+        {
+          "type": "whoosh",
+          "at": 0.31,
+          "gain": 0.09,
+          "f": 1400,
+          "f2": 700,
+          "dur": 0.06
+        },
+        {
+          "type": "clack",
+          "at": 0.4,
+          "gain": 0.31500000000000006,
+          "f": 900,
+          "dur": 0.07
+        },
+        {
+          "type": "whoosh",
+          "at": 0.36000000000000004,
+          "gain": 0.084,
+          "f": 1400,
+          "f2": 700,
+          "dur": 0.06
+        },
+        {
+          "type": "clack",
+          "at": 0.45000000000000007,
+          "gain": 0.29250000000000004,
+          "f": 900,
+          "dur": 0.07
+        },
+        {
+          "type": "whoosh",
+          "at": 0.4100000000000001,
+          "gain": 0.078,
+          "f": 1400,
+          "f2": 700,
+          "dur": 0.06
+        },
+        {
+          "type": "clack",
+          "at": 0.5,
+          "gain": 0.2700000000000001,
+          "f": 900,
+          "dur": 0.07
+        },
+        {
+          "type": "whoosh",
+          "at": 0.46,
+          "gain": 0.07200000000000001,
+          "f": 1400,
+          "f2": 700,
+          "dur": 0.06
+        },
+        {
+          "type": "clack",
+          "at": 0.57,
+          "gain": 0.12,
+          "f": 1100,
+          "dur": 0.05
+        }
+      ],
+      "real": {
+        "variants": 3,
+        "target": -28,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.08,
+          "at": 0.004
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "metalClick",
+            "at": 0.05,
+            "gain": 0.315,
+            "pitch": 1.6
+          },
+          {
+            "src": "metalClick",
+            "at": 0.08,
+            "gain": 0.315,
+            "pitch": 1.6
+          },
+          {
+            "src": "metalClick",
+            "at": 0.11,
+            "gain": 0.315,
+            "pitch": 1.6
+          },
+          {
+            "src": "metalClick",
+            "at": 0.14,
+            "gain": 0.315,
+            "pitch": 1.6
+          },
+          {
+            "src": "metalClick",
+            "at": 0.16999999999999998,
+            "gain": 0.315,
+            "pitch": 1.6
+          },
+          {
+            "src": "cj_canvas_slack",
+            "at": 0.1,
+            "gain": 0.6,
+            "pitch": 0.9,
+            "fadeOut": 0.2
+          },
+          {
+            "pick": [
+              "impactWood_light_000",
+              "impactWood_light_001",
+              "impactWood_light_002",
+              "impactWood_light_003",
+              "impactWood_light_004"
+            ],
+            "at": 0.3,
+            "gain": 0.6400000000000001,
+            "pitch": 1.6,
+            "highpass": 300
+          },
+          {
+            "pick": [
+              "impactWood_light_000",
+              "impactWood_light_001",
+              "impactWood_light_002",
+              "impactWood_light_003",
+              "impactWood_light_004"
+            ],
+            "at": 0.35,
+            "gain": 0.6000000000000001,
+            "pitch": 1.56,
+            "highpass": 300
+          },
+          {
+            "pick": [
+              "impactWood_light_000",
+              "impactWood_light_001",
+              "impactWood_light_002",
+              "impactWood_light_003",
+              "impactWood_light_004"
+            ],
+            "at": 0.4,
+            "gain": 0.56,
+            "pitch": 1.52,
+            "highpass": 300
+          },
+          {
+            "pick": [
+              "impactWood_light_000",
+              "impactWood_light_001",
+              "impactWood_light_002",
+              "impactWood_light_003",
+              "impactWood_light_004"
+            ],
+            "at": 0.45,
+            "gain": 0.52,
+            "pitch": 1.48,
+            "highpass": 300
+          },
+          {
+            "pick": [
+              "impactWood_light_000",
+              "impactWood_light_001",
+              "impactWood_light_002",
+              "impactWood_light_003",
+              "impactWood_light_004"
+            ],
+            "at": 0.5,
+            "gain": 0.4800000000000001,
+            "pitch": 1.4400000000000002,
+            "highpass": 300
+          },
+          {
+            "pick": [
+              "impactWood_light_000",
+              "impactWood_light_001",
+              "impactWood_light_002",
+              "impactWood_light_003",
+              "impactWood_light_004"
+            ],
+            "at": 0.57,
+            "gain": 0.15,
+            "pitch": 1.9
+          }
+        ],
+        "level": 0.3881
+      }
+    },
+    "run_down": {
+      "subtitle": "Clockwork Jetpack winds down",
+      "group": "Signature sounds",
+      "layers": [
+        {
+          "type": "tick",
+          "at": 0,
+          "gain": 0.375,
+          "f": 2900,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 0.004,
+          "gain": 0.06,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "tick",
+          "at": 0.1,
+          "gain": 0.35,
+          "f": 2780,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 0.10400000000000001,
+          "gain": 0.055999999999999994,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "tick",
+          "at": 0.21,
+          "gain": 0.325,
+          "f": 2660,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 0.214,
+          "gain": 0.052000000000000005,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "tick",
+          "at": 0.34,
+          "gain": 0.3,
+          "f": 2540,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 0.34400000000000003,
+          "gain": 0.048,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "tick",
+          "at": 0.5,
+          "gain": 0.275,
+          "f": 2420,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 0.504,
+          "gain": 0.044000000000000004,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "tick",
+          "at": 0.69,
+          "gain": 0.25,
+          "f": 2300,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 0.694,
+          "gain": 0.04,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "tick",
+          "at": 0.92,
+          "gain": 0.22499999999999998,
+          "f": 2180,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 0.924,
+          "gain": 0.036,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "tick",
+          "at": 1.2,
+          "gain": 0.19999999999999998,
+          "f": 2060,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 1.204,
+          "gain": 0.032,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "tick",
+          "at": 1.55,
+          "gain": 0.175,
+          "f": 1940,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 1.554,
+          "gain": 0.027999999999999997,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.2,
+          "f": 190,
+          "f2": 60,
+          "dur": 1.6
+        },
+        {
+          "type": "clink",
+          "at": 1.6,
+          "gain": 0.3,
+          "f": 1500,
+          "dur": 0.15
+        },
+        {
+          "type": "tick",
+          "at": 1.78,
+          "gain": 0.25,
+          "f": 2200,
+          "dur": 0.04
+        },
+        {
+          "type": "tick",
+          "at": 1.86,
+          "gain": 0.12,
+          "f": 2100,
+          "dur": 0.04
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -27,
+        "vary": {
+          "pitch": 0.02,
+          "gain": 0.05
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 0,
+            "gain": 0.9,
+            "pitch": 1.3,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 0.1,
+            "gain": 0.8300000000000001,
+            "pitch": 1.26,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 0.21,
+            "gain": 0.76,
+            "pitch": 1.22,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 0.34,
+            "gain": 0.69,
+            "pitch": 1.1800000000000002,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 0.5,
+            "gain": 0.62,
+            "pitch": 1.1400000000000001,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 0.69,
+            "gain": 0.55,
+            "pitch": 1.1,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 0.92,
+            "gain": 0.48,
+            "pitch": 1.06,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 1.2,
+            "gain": 0.41,
+            "pitch": 1.02,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 1.55,
+            "gain": 0.33999999999999997,
+            "pitch": 0.98,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "cj_fan_down_drone"
+            ],
+            "at": 0,
+            "gain": 0.6,
+            "pitch": 0.75,
+            "trim": [
+              0,
+              1.1
+            ],
+            "fadeIn": 0.02,
+            "fadeOut": 0.6,
+            "lowpass": 2400
+          },
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 1.6,
+            "gain": 0.35,
+            "pitch": 1.3
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 1.78,
+            "gain": 0.3,
+            "pitch": 0.95,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 1.86,
+            "gain": 0.15,
+            "pitch": 0.92,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          }
+        ],
+        "level": 0.3342
+      }
+    },
+    "engine_on": {
+      "subtitle": "Clockwork Jetpack starts",
+      "group": "Controls",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.36,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.003,
+          "gain": 0.072,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "servo",
+          "at": 0.04,
+          "gain": 0.22,
+          "f": 60,
+          "f2": 190,
+          "dur": 0.5
+        },
+        {
+          "type": "whoosh",
+          "at": 0.04,
+          "gain": 0.12,
+          "f": 600,
+          "f2": 900,
+          "dur": 0.5
+        },
+        {
+          "type": "tick",
+          "at": 0.3,
+          "gain": 0.5,
+          "f": 2900,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 0.304,
+          "gain": 0.08,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "tick",
+          "at": 0.38,
+          "gain": 0.5,
+          "f": 2900,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 0.384,
+          "gain": 0.08,
+          "f": 1900,
+          "dur": 0.12
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -27,
+        "vary": {
+          "pitch": 0.03,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "metalClick",
+            "at": 0,
+            "gain": 0.8,
+            "pitch": 1.2
+          },
+          {
+            "pick": [
+              "cj_fan_up_drone"
+            ],
+            "at": 0.03,
+            "gain": 0.9,
+            "pitch": 0.75,
+            "trim": [
+              0,
+              1.2
+            ],
+            "fadeIn": 0.25,
+            "fadeOut": 0.35,
+            "lowpass": 2600
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 0.3,
+            "gain": 0.6,
+            "pitch": 1.25,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 0.38,
+            "gain": 0.45,
+            "pitch": 1.3,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          }
+        ],
+        "level": 0.4775
+      }
+    },
+    "engine_off": {
+      "subtitle": "Clockwork Jetpack stops",
+      "group": "Controls",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.36,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.003,
+          "gain": 0.072,
+          "f": 2600,
+          "dur": 0.12
+        },
+        {
+          "type": "servo",
+          "at": 0.02,
+          "gain": 0.22,
+          "f": 190,
+          "f2": 50,
+          "dur": 0.6
+        },
+        {
+          "type": "whoosh",
+          "at": 0.02,
+          "gain": 0.12,
+          "f": 600,
+          "f2": 900,
+          "dur": 0.6
+        },
+        {
+          "type": "clink",
+          "at": 0.45,
+          "gain": 0.2,
+          "f": 1500,
+          "dur": 0.12
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -28,
+        "vary": {
+          "pitch": 0.03,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "metalClick",
+            "at": 0,
+            "gain": 0.8,
+            "pitch": 1.1
+          },
+          {
+            "pick": [
+              "cj_fan_down_drone"
+            ],
+            "at": 0.02,
+            "gain": 0.9,
+            "pitch": 0.75,
+            "trim": [
+              0,
+              1.1
+            ],
+            "fadeIn": 0.02,
+            "fadeOut": 0.6,
+            "lowpass": 2400
+          },
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0.45,
+            "gain": 0.3,
+            "pitch": 1.4
+          }
+        ],
+        "level": 0.2564
+      }
+    },
+    "hover_on": {
+      "subtitle": "Clockwork Jetpack holds",
+      "group": "Controls",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.4,
+          "dur": 0.03
+        },
+        {
+          "type": "clink",
+          "at": 0.06,
+          "gain": 0.15,
+          "f": 1700,
+          "dur": 0.15
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -34,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "toggle_001",
+            "at": 0,
+            "gain": 0.8
+          },
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0.05,
+            "gain": 0.25,
+            "pitch": 1.6
+          }
+        ],
+        "level": 0.1393
+      }
+    },
+    "hover_off": {
+      "subtitle": "Clockwork Jetpack lets go",
+      "group": "Controls",
+      "layers": [
+        {
+          "type": "clink",
+          "at": 0,
+          "gain": 0.15,
+          "f": 1400,
+          "dur": 0.15
+        },
+        {
+          "type": "click",
+          "at": 0.05,
+          "gain": 0.3,
+          "dur": 0.03
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -34,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0,
+            "gain": 0.25,
+            "pitch": 1.4
+          },
+          {
+            "src": "toggle_002",
+            "at": 0.05,
+            "gain": 0.8
+          }
+        ],
+        "level": 0.0975
+      }
+    },
+    "boost": {
+      "subtitle": "Clockwork Jetpack surges",
+      "group": "Controls",
+      "layers": [
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.308,
+          "f": 190,
+          "f2": 280,
+          "dur": 0.5
+        },
+        {
+          "type": "whoosh",
+          "at": 0,
+          "gain": 0.16799999999999998,
+          "f": 600,
+          "f2": 900,
+          "dur": 0.5
+        },
+        {
+          "type": "whoosh",
+          "at": 0,
+          "gain": 0.3,
+          "f": 400,
+          "f2": 1100,
+          "dur": 0.45
+        },
+        {
+          "type": "ratchet",
+          "at": 0,
+          "gain": 0.13999999999999999,
+          "rate": 24,
+          "f": 2200,
+          "dur": 0.2
+        }
+      ],
+      "real": {
+        "variants": 3,
+        "target": -30,
+        "vary": {
+          "pitch": 0.05,
+          "gain": 0.08
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "cj_fan_up_drone"
+            ],
+            "at": 0,
+            "gain": 0.9,
+            "pitch": 0.95,
+            "trim": [
+              0.6,
+              1.2
+            ],
+            "fadeIn": 0.08,
+            "fadeOut": 0.2,
+            "lowpass": 3000
+          },
+          {
+            "type": "whoosh",
+            "at": 0,
+            "gain": 0.25,
+            "f": 400,
+            "f2": 1100,
+            "dur": 0.45
+          },
+          {
+            "pick": [
+              "sa3_tradebot_wind_1",
+              "sa3_tradebot_wind_2",
+              "sa3_tradebot_wind_3",
+              "sa3_tradebot_wind_4"
+            ],
+            "at": 0,
+            "gain": 0.35,
+            "pitch": 1.4,
+            "trim": [
+              0,
+              0.2
+            ],
+            "fadeOut": 0.08
+          }
+        ],
+        "level": 0.1675
+      }
+    },
+    "wind_low": {
+      "subtitle": "Clockwork Jetpack runs low",
+      "group": "Controls",
+      "layers": [
+        {
+          "type": "tick",
+          "at": 0,
+          "gain": 0.45,
+          "f": 2400,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 0.004,
+          "gain": 0.07200000000000001,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "tick",
+          "at": 0.12,
+          "gain": 0.3,
+          "f": 2300,
+          "dur": 0.04
+        },
+        {
+          "type": "clink",
+          "at": 0.124,
+          "gain": 0.048,
+          "f": 1900,
+          "dur": 0.12
+        },
+        {
+          "type": "clink",
+          "at": 0.3,
+          "gain": 0.12,
+          "f": 1300,
+          "dur": 0.12
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -32,
+        "vary": {
+          "pitch": 0.02,
+          "gain": 0.05
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 0,
+            "gain": 0.9,
+            "pitch": 1,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "sa3_tradebot_tick_1",
+              "sa3_tradebot_tick_2",
+              "sa3_tradebot_tick_3",
+              "sa3_tradebot_tick_4"
+            ],
+            "at": 0.12,
+            "gain": 0.6,
+            "pitch": 0.95,
+            "trim": [
+              0,
+              0.18
+            ],
+            "fadeOut": 0.06
+          },
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0.3,
+            "gain": 0.25,
+            "pitch": 1
+          }
+        ],
+        "level": 0.1879
+      }
+    },
+    "equip": {
+      "subtitle": "Clockwork Jetpack buckles on",
+      "group": "Controls",
+      "layers": [
+        {
+          "type": "rustle",
+          "at": 0,
+          "gain": 0.25,
+          "density": 10,
+          "dur": 0.25
+        },
+        {
+          "type": "clink",
+          "at": 0.2,
+          "gain": 0.3,
+          "f": 1600,
+          "dur": 0.15
+        },
+        {
+          "type": "clink",
+          "at": 0.32,
+          "gain": 0.25,
+          "f": 1750,
+          "dur": 0.15
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -32,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "beltHandle1",
+              "beltHandle2"
+            ],
+            "at": 0,
+            "gain": 0.7
+          },
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0.2,
+            "gain": 0.3,
+            "pitch": 1.5
+          },
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0.32,
+            "gain": 0.25,
+            "pitch": 1.65
+          }
+        ],
+        "level": 0.2158
+      }
+    },
+    "rails_extend": {
+      "subtitle": "Clockwork Jetpack rails slide out",
+      "group": "Controls",
+      "layers": [
+        {
+          "type": "scrape",
+          "at": 0,
+          "gain": 0.2,
+          "f": 1800,
+          "dur": 0.25
+        },
+        {
+          "type": "click",
+          "at": 0.28,
+          "gain": 0.3,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.28300000000000003,
+          "gain": 0.06,
+          "f": 2600,
+          "dur": 0.12
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "target": -34,
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "card-slide-1",
+            "at": 0,
+            "gain": 0.6,
+            "pitch": 0.7,
+            "lowpass": 5000
+          },
+          {
+            "src": "metalLatch",
+            "at": 0.28,
+            "gain": 0.5,
+            "pitch": 1.3
+          }
+        ],
+        "level": 0.2285
+      }
+    },
+    "station_hang": {
+      "subtitle": "Jetpack hung up",
+      "group": "Winding Station",
+      "layers": [
+        {
+          "type": "clack",
+          "at": 0,
+          "gain": 0.4,
+          "f": 500,
+          "dur": 0.1
+        },
+        {
+          "type": "clink",
+          "at": 0.04,
+          "gain": 0.25,
+          "f": 1400,
+          "dur": 0.2
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -31,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "impactWood_medium_000",
+              "impactWood_medium_001",
+              "impactWood_medium_002",
+              "impactWood_medium_003",
+              "impactWood_medium_004"
+            ],
+            "at": 0,
+            "gain": 0.8,
+            "pitch": 1.1
+          },
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0.04,
+            "gain": 0.35,
+            "pitch": 1.2
+          }
+        ],
+        "level": 0.4306
+      }
+    },
+    "station_take": {
+      "subtitle": "Jetpack taken down",
+      "group": "Winding Station",
+      "layers": [
+        {
+          "type": "clink",
+          "at": 0,
+          "gain": 0.22,
+          "f": 1500,
+          "dur": 0.18
+        },
+        {
+          "type": "rustle",
+          "at": 0.02,
+          "gain": 0.15,
+          "density": 8,
+          "dur": 0.15
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -32,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "pick": [
+              "impactMetal_light_000",
+              "impactMetal_light_001",
+              "impactMetal_light_002",
+              "impactMetal_light_003",
+              "impactMetal_light_004"
+            ],
+            "at": 0,
+            "gain": 0.35,
+            "pitch": 1.25
+          },
+          {
+            "pick": [
+              "handleSmallLeather",
+              "handleSmallLeather2"
+            ],
+            "at": 0.02,
+            "gain": 0.6
+          }
+        ],
+        "level": 0.2535
+      }
+    },
+    "station_boom": {
+      "subtitle": "Winding Station reaches out",
+      "group": "Winding Station",
+      "layers": [
+        {
+          "type": "scrape",
+          "at": 0,
+          "gain": 0.15,
+          "f": 1500,
+          "dur": 0.3
+        },
+        {
+          "type": "creak",
+          "at": 0.3,
+          "gain": 0.2,
+          "f": 380,
+          "dur": 0.3
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -32,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "jug_reel",
+            "at": 0,
+            "gain": 0.5,
+            "pitch": 1.1,
+            "trim": [
+              0,
+              0.32
+            ],
+            "fadeOut": 0.08
+          },
+          {
+            "pick": [
+              "creak1",
+              "creak3"
+            ],
+            "at": 0.3,
+            "gain": 0.3,
+            "pitch": 1.2,
+            "trim": [
+              0,
+              0.3
+            ],
+            "fadeOut": 0.12
+          }
+        ],
+        "level": 0.1425
+      }
+    },
+    "station_engage": {
+      "subtitle": "Winding Station takes the key",
+      "group": "Winding Station",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.45,
+          "dur": 0.03
+        },
+        {
+          "type": "clang",
+          "at": 0.005,
+          "gain": 0.15,
+          "f": 700,
+          "dur": 0.3
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -30,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "metalLatch",
+            "at": 0,
+            "gain": 0.9
+          },
+          {
+            "pick": [
+              "impactMetal_medium_000",
+              "impactMetal_medium_001",
+              "impactMetal_medium_002",
+              "impactMetal_medium_003",
+              "impactMetal_medium_004"
+            ],
+            "at": 0.005,
+            "gain": 0.35,
+            "pitch": 1.3
+          }
+        ],
+        "level": 0.4456
+      }
+    },
+    "station_winding": {
+      "subtitle": "Winding Station winds",
+      "group": "Winding Station",
+      "layers": [
+        {
+          "type": "ratchet",
+          "at": 0,
+          "gain": 0.27999999999999997,
+          "rate": 6,
+          "f": 2200,
+          "dur": 2
+        },
+        {
+          "type": "servo",
+          "at": 0,
+          "gain": 0.12,
+          "f": 110,
+          "f2": 110,
+          "dur": 2
+        },
+        {
+          "type": "click",
+          "at": 0.17,
+          "gain": 0.2,
+          "dur": 0.02
+        },
+        {
+          "type": "click",
+          "at": 0.5,
+          "gain": 0.2,
+          "dur": 0.02
+        },
+        {
+          "type": "click",
+          "at": 0.83,
+          "gain": 0.2,
+          "dur": 0.02
+        },
+        {
+          "type": "click",
+          "at": 1.17,
+          "gain": 0.2,
+          "dur": 0.02
+        },
+        {
+          "type": "click",
+          "at": 1.5,
+          "gain": 0.2,
+          "dur": 0.02
+        },
+        {
+          "type": "click",
+          "at": 1.83,
+          "gain": 0.2,
+          "dur": 0.02
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "target": -36,
+        "loop": 2,
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "sa3_tradebot_wind_1",
+            "at": 0,
+            "gain": 0.8,
+            "fadeIn": 0.05,
+            "fadeOut": 0.08
+          },
+          {
+            "src": "sa3_tradebot_wind_2",
+            "at": 0.68,
+            "gain": 0.8,
+            "fadeIn": 0.05,
+            "fadeOut": 0.08
+          },
+          {
+            "src": "sa3_tradebot_wind_3",
+            "at": 1.36,
+            "gain": 0.8,
+            "fadeIn": 0.05,
+            "fadeOut": 0.08
+          },
+          {
+            "src": "sa3_tradebot_wind_4",
+            "at": 2,
+            "gain": 0.8,
+            "fadeIn": 0.05,
+            "fadeOut": 0.08
+          },
+          {
+            "src": "metalClick",
+            "at": 0.17,
+            "gain": 0.18,
+            "pitch": 1.7
+          },
+          {
+            "src": "metalClick",
+            "at": 0.5,
+            "gain": 0.18,
+            "pitch": 1.7
+          },
+          {
+            "src": "metalClick",
+            "at": 0.83,
+            "gain": 0.18,
+            "pitch": 1.7
+          },
+          {
+            "src": "metalClick",
+            "at": 1.17,
+            "gain": 0.18,
+            "pitch": 1.7
+          },
+          {
+            "src": "metalClick",
+            "at": 1.5,
+            "gain": 0.18,
+            "pitch": 1.7
+          },
+          {
+            "src": "metalClick",
+            "at": 1.83,
+            "gain": 0.18,
+            "pitch": 1.7
+          },
+          {
+            "src": "metalClick",
+            "at": 2.17,
+            "gain": 0.18,
+            "pitch": 1.7
+          },
+          {
+            "src": "sa3_crucible_gears_v1_x2",
+            "at": 0,
+            "gain": 0.12,
+            "trim": [
+              0,
+              2.4
+            ],
+            "fadeIn": 0.05,
+            "fadeOut": 0.05,
+            "lowpass": 2000
+          }
+        ],
+        "level": 0.1879
+      }
+    },
+    "station_full": {
+      "subtitle": "Jetpack fully wound",
+      "group": "Winding Station",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.35,
+          "dur": 0.03
+        },
+        {
+          "type": "ping",
+          "at": 0.03,
+          "gain": 0.4,
+          "f": 1320,
+          "dur": 1
+        },
+        {
+          "type": "ping",
+          "at": 0.18,
+          "gain": 0.25,
+          "f": 1760,
+          "dur": 0.9
+        }
+      ],
+      "real": {
+        "variants": 1,
+        "target": -27,
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "metalClick",
+            "at": 0,
+            "gain": 0.6
+          },
+          {
+            "src": "jug_chime",
+            "at": 0.03,
+            "gain": 0.9,
+            "pitch": 1.5,
+            "trim": [
+              0,
+              1.3
+            ],
+            "fadeOut": 0.6
+          }
+        ],
+        "level": 0.1945
+      }
+    },
+    "station_release": {
+      "subtitle": "Winding Station lets go",
+      "group": "Winding Station",
+      "layers": [
+        {
+          "type": "click",
+          "at": 0,
+          "gain": 0.3,
+          "dur": 0.03
+        },
+        {
+          "type": "creak",
+          "at": 0.05,
+          "gain": 0.18,
+          "f": 360,
+          "dur": 0.3
+        },
+        {
+          "type": "scrape",
+          "at": 0.45,
+          "gain": 0.12,
+          "f": 1500,
+          "dur": 0.25
+        }
+      ],
+      "real": {
+        "variants": 2,
+        "target": -32,
+        "vary": {
+          "pitch": 0.04,
+          "gain": 0.06
+        },
+        "post": {
+          "lowpass": 9000
+        },
+        "layers": [
+          {
+            "src": "metalClick",
+            "at": 0,
+            "gain": 0.6
+          },
+          {
+            "pick": [
+              "creak2",
+              "creak3"
+            ],
+            "at": 0.05,
+            "gain": 0.3,
+            "pitch": 1.15,
+            "trim": [
+              0,
+              0.3
+            ],
+            "fadeOut": 0.12
+          },
+          {
+            "src": "jug_reel",
+            "at": 0.45,
+            "gain": 0.4,
+            "pitch": 1.2,
+            "trim": [
+              0,
+              0.25
+            ],
+            "fadeOut": 0.08
+          }
+        ],
+        "level": 0.2084
+      }
+    }
+  },
+  "clips": {
+    "wings_unfold": [
+      [
+        0,
+        "wings_unfold"
+      ]
+    ],
+    "wings_fold": [
+      [
+        0,
+        "wings_fold"
+      ]
+    ],
+    "run_down": [
+      [
+        0,
+        "run_down"
+      ]
+    ],
+    "coil_states": [
+      [
+        3,
+        "wind_low"
+      ]
+    ],
+    "station_hang": [
+      [
+        0.1,
+        "station_boom"
+      ],
+      [
+        0.6,
+        "station_engage"
+      ],
+      [
+        0.8,
+        "station_winding"
+      ],
+      [
+        2.8,
+        "station_winding"
+      ],
+      [
+        4.9,
+        "station_full"
+      ],
+      [
+        5,
+        "station_release"
+      ]
+    ],
+    "station_back_in": [
+      [
+        0.1,
+        "station_boom"
+      ],
+      [
+        0.6,
+        "station_engage"
+      ],
+      [
+        0.8,
+        "station_winding"
+      ],
+      [
+        2.8,
+        "station_winding"
+      ],
+      [
+        4.9,
+        "station_full"
+      ],
+      [
+        5,
+        "station_release"
+      ]
+    ],
+    "standoff": [
+      [
+        0.1,
+        "rails_extend"
+      ]
+    ]
+  }
+}

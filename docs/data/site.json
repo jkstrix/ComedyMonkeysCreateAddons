@@ -1,6 +1,6 @@
 {
   "modName": "ComedyMonkey's Create Addons",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "minecraft": "1.21.1",
   "create": "6.0.10",
   "neoforge": "21.1.248",
@@ -63,7 +63,7 @@
       "accent": "& machinery",
       "text": "Stone from nothing, herds in a single block, lava turned into grid power, and a clockwork shopkeeper who sells your goods to villagers. Every machine here is taught from the first block to full automation."
     },
-    "latest": ["clockwork-tubes", "clockwork-dynamo", "electric-lights", "light-assembly", "ruin-sleeper", "clockwork-ruins", "spring-engine", "helper-bot", "fish-tank", "monster-cage", "netherite-monster-cage", "battery", "fluid-lines", "power-lines"],
+    "latest": ["clockwork-jetpack", "jetpack-winding-station", "clockwork-tubes", "clockwork-dynamo", "electric-lights", "light-assembly", "ruin-sleeper", "clockwork-ruins", "spring-engine", "helper-bot", "fish-tank", "monster-cage", "netherite-monster-cage", "battery", "fluid-lines", "power-lines"],
     "featuredMachines": ["pressure-crucible", "geothermal-turbine", "magma-engine", "auto-harvester", "animal-pen", "cobblestone-generator", "electric-motor", "cuckoo-clock"],
     "featuredBlocks": ["upgraded-chest", "fluid-lines", "power-lines", "flight-instruments"],
     "featuredMobs": ["trade-bot", "helper-bot", "contained-wither", "armed-drowned", "blue-axolotl"],
@@ -76,6 +76,7 @@
       ]
     },
     "notes": [
+      { "date": "2026-11-03", "title": "2.6.0: the Clockwork Jetpack", "body": "A [[mainspring]] on your back with brass fans and da Vinci wings. It flies like Create Jetpack on wind instead of air, glides like an Elytra with a boost, and has its own slot, so your chestplate and backpack stay on. Wind it at a **Jetpack Winding Station** on any shaft." },
       { "date": "2026-11-01", "title": "2.5.1: a harder fight in the ruins", "body": "Fixes from the first days of 2.5.0. What sleeps in the ruins no longer locks on to one player, can't be pinned or trapped, and is harder to read." },
       { "date": "2026-10-31", "title": "Clockwork Tubes", "body": "Gather items from many places into one, any way you like, without belts: **Clockwork Inlets** gulp them up from chests, depots, belts or the floor, glass tubes carry them, and one **Clockwork Receiver** pulls them out through the middle of its hollow cog." },
       { "date": "2026-10-31", "title": "Clockwork Dynamo", "body": "The Electric Motor run backwards, built from the bots' own parts: any Create power becomes electricity, water wheels and windmills included. It loses a quarter on the way, so a motor and a dynamo can never run each other." },

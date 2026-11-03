@@ -1,0 +1,184 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/clockwork_jetpack_steel",
+    "clockwork_jetpack_rib": "comedymonkeysaddons:block/clockwork_jetpack_rib",
+    "clockwork_jetpack_canvas_plain": "comedymonkeysaddons:block/clockwork_jetpack_canvas_plain",
+    "clockwork_jetpack_brass": "comedymonkeysaddons:block/clockwork_jetpack_brass"
+  },
+  "elements": [
+    {
+      "name": "rib_R2",
+      "from": [
+        11.5,
+        15,
+        7.199999999999999
+      ],
+      "to": [
+        21.05,
+        15.5,
+        7.499999999999999
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.5,
+            9.55,
+            1
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        },
+        "east": {
+          "uv": [
+            8.5,
+            0.5,
+            8.8,
+            1
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        },
+        "south": {
+          "uv": [
+            6.45,
+            0.5,
+            16,
+            1
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        },
+        "west": {
+          "uv": [
+            7.2,
+            0.5,
+            7.5,
+            1
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        },
+        "up": {
+          "uv": [
+            6.45,
+            7.2,
+            16,
+            7.5
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        },
+        "down": {
+          "uv": [
+            6.45,
+            8.5,
+            16,
+            8.8
+          ],
+          "texture": "#clockwork_jetpack_rib"
+        }
+      }
+    },
+    {
+      "name": "canvas_R2",
+      "from": [
+        12.644177314197165,
+        12,
+        7.2749999999999995
+      ],
+      "to": [
+        21.95,
+        15,
+        7.424999999999999
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            0,
+            1.036,
+            16
+          ],
+          "texture": "#clockwork_jetpack_canvas_plain"
+        },
+        "south": {
+          "uv": [
+            1.036,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_canvas_plain"
+        }
+      }
+    },
+    {
+      "name": "knuckle_R2",
+      "from": [
+        21.05,
+        15,
+        6.8999999999999995
+      ],
+      "to": [
+        21.95,
+        15.5,
+        7.499999999999999
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.05,
+            0.5,
+            10.95,
+            1
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "east": {
+          "uv": [
+            8.5,
+            0.5,
+            9.1,
+            1
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            5.05,
+            0.5,
+            5.95,
+            1
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "west": {
+          "uv": [
+            6.9,
+            0.5,
+            7.5,
+            1
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "up": {
+          "uv": [
+            5.05,
+            6.9,
+            5.95,
+            7.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            5.05,
+            8.5,
+            5.95,
+            9.1
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        }
+      }
+    }
+  ]
+}

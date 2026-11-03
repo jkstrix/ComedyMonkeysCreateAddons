@@ -1,0 +1,72 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/clockwork_jetpack_steel",
+    "clockwork_jetpack_brass": "comedymonkeysaddons:block/clockwork_jetpack_brass",
+    "clockwork_jetpack_hub_cap": "comedymonkeysaddons:block/clockwork_jetpack_hub_cap"
+  },
+  "elements": [
+    {
+      "name": "hub_cap_R",
+      "from": [
+        10.75,
+        14.25,
+        8.1
+      ],
+      "to": [
+        12.25,
+        15.75,
+        8.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7.5,
+            0.25,
+            7.9,
+            1.75
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#clockwork_jetpack_hub_cap"
+        },
+        "west": {
+          "uv": [
+            8.1,
+            0.25,
+            8.5,
+            1.75
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "up": {
+          "uv": [
+            10.75,
+            8.1,
+            12.25,
+            8.5
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        },
+        "down": {
+          "uv": [
+            10.75,
+            7.5,
+            12.25,
+            7.9
+          ],
+          "texture": "#clockwork_jetpack_brass"
+        }
+      }
+    }
+  ]
+}

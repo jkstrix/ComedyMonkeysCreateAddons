@@ -136,6 +136,12 @@ public final class ModItems {
 	public static final DeferredItem<com.comedymonkey.createaddons.content.juggernaut.SpringEngineItem> SPRING_ENGINE = ITEMS.register("spring_engine",
 		() -> new com.comedymonkey.createaddons.content.juggernaut.SpringEngineItem(ModBlocks.SPRING_ENGINE.get(), new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE)));
 	public static final DeferredItem<BlockItem> WINDING_KEY = ITEMS.registerSimpleBlockItem(ModBlocks.WINDING_KEY, new Item.Properties().rarity(net.minecraft.world.item.Rarity.RARE));
+	/** The Mainspring on your back (jetpack spec): a Copper Backtank's armour; the Netherite one a Netherite Backtank's, fire-proof (D19, D20). */
+	public static final DeferredItem<com.comedymonkey.createaddons.content.jetpack.ClockworkJetpackItem> CLOCKWORK_JETPACK = ITEMS.register("clockwork_jetpack",
+		() -> new com.comedymonkey.createaddons.content.jetpack.ClockworkJetpackItem(com.simibubi.create.content.equipment.armor.AllArmorMaterials.COPPER, new Item.Properties().rarity(Rarity.EPIC)));
+	public static final DeferredItem<com.comedymonkey.createaddons.content.jetpack.ClockworkJetpackItem> NETHERITE_CLOCKWORK_JETPACK = ITEMS.register("netherite_clockwork_jetpack",
+		() -> new com.comedymonkey.createaddons.content.jetpack.ClockworkJetpackItem(net.minecraft.world.item.ArmorMaterials.NETHERITE, new Item.Properties().rarity(Rarity.EPIC).fireResistant()));
+	public static final DeferredItem<BlockItem> JETPACK_WINDING_STATION = ITEMS.registerSimpleBlockItem(ModBlocks.JETPACK_WINDING_STATION);
 	public static final DeferredItem<com.comedymonkey.createaddons.content.electric.BatteryItem> BATTERY = ITEMS.register("battery",
 		() -> new com.comedymonkey.createaddons.content.electric.BatteryItem(ModBlocks.BATTERY.get(), new Item.Properties()));
 	public static final DeferredItem<BlockItem> GEOTHERMAL_CASING = ITEMS.registerSimpleBlockItem(ModBlocks.GEOTHERMAL_CASING);
