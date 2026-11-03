@@ -105,6 +105,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LightGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.BatteryGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.TankGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.VillagerWorkstationGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.CagePerformanceGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.CageFieldGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.HelperBotGameTests::register);
@@ -145,6 +146,9 @@ public class ComedyMonkeysCreateAddons {
 		NeoForge.EVENT_BUS.addListener(AnimalCapture::onEntityInteract);
 		// Iron and Netherite Jars catch monsters for the Monster Cages
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.cage.MonsterCapture::onEntityInteract);
+		// sneak-right-click a villager with a wrench: it gives up its workstation (and leaves that one alone a while)
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.VillagerWorkstations::onEntityInteract);
+		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.VillagerWorkstations.clear());
 		// fish follow Fish Food
 		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.tank.FishFood::onEntityJoin);
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> CuckooClocks.clear());
@@ -304,6 +308,12 @@ public class ComedyMonkeysCreateAddons {
 			com.comedymonkey.createaddons.network.JetpackInputPayload.STREAM_CODEC, com.comedymonkey.createaddons.network.JetpackInputPayload::handle);
 		event.registrar("1").playToClient(com.comedymonkey.createaddons.network.JetpackStatePayload.TYPE,
 			com.comedymonkey.createaddons.network.JetpackStatePayload.STREAM_CODEC, com.comedymonkey.createaddons.network.JetpackStatePayload::handle);
+		// Engineer's Goggles on villagers and workstations: the client asks, the server answers
+		event.registrar("1").playToServer(com.comedymonkey.createaddons.network.WorkstationQueryPayload.TYPE,
+			com.comedymonkey.createaddons.network.WorkstationQueryPayload.STREAM_CODEC, com.comedymonkey.createaddons.network.WorkstationQueryPayload::handle);
+		event.registrar("1").playToClient(com.comedymonkey.createaddons.network.WorkstationViewPayload.TYPE,
+			com.comedymonkey.createaddons.network.WorkstationViewPayload.STREAM_CODEC,
+			(payload, context) -> context.enqueueWork(() -> com.comedymonkey.createaddons.client.VillagerGoggles.accept(payload)));
 		// Covers on Pipez pipes
 		event.registrar("1").playToClient(PipeCoverPayload.TYPE, PipeCoverPayload.STREAM_CODEC,
 			(payload, context) -> context.enqueueWork(() -> PipeCoverClient.handle(payload)));

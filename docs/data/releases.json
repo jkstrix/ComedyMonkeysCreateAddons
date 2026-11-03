@@ -1,5 +1,30 @@
 [
   {
+    "version": "2.6.1",
+    "from": "2.6.0",
+    "date": "2026-11-03",
+    "title": "Villagers through the goggles",
+    "summary": "Engineer's Goggles show which workstation a villager has claimed and what it trades, and a wrench makes it give that workstation up.",
+    "highlights": [],
+    "sections": [
+      {
+        "title": "Villagers and their workstations",
+        "icon": "search",
+        "body": [
+          "Wear Engineer's Goggles and look at a villager or a workstation for a goggle box like Create's own. Seated villagers count too, in a Create seat or on a contraption.",
+          {
+            "list": [
+              "**A villager** shows its profession, its level and the workstation it has claimed. Hold Shift for its trades, drawn like the trading screen; used-up trades are greyed out.",
+              "**A workstation** shows the villager that claimed it, or that it's free.",
+              "**Hold a wrench** and the other half is outlined: the villager's workstation, or the workstation's villager.",
+              "**Sneak + right-click a villager with a wrench** and it gives its workstation up. One that never traded loses its profession, as in vanilla, so you can reroll a librarian's book. One that has traded looks for another workstation of its kind. For 2 minutes it won't take back the one it gave up, so it can't walk straight back to it."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "version": "2.6.0",
     "from": "2.5.1",
     "date": "2026-11-03",

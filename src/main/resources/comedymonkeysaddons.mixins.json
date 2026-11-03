@@ -10,6 +10,7 @@
     "PipeTileEntityMixin",
     "SeatEntityMixin",
     "VillagerMixin",
+    "AcquirePoiMixin",
     "StockTickerBlockEntityMixin",
     "RecipeApplierMixin",
     "ContraptionMixin",

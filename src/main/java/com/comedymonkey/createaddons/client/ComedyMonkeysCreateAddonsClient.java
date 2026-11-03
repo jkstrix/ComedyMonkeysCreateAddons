@@ -52,6 +52,9 @@ public class ComedyMonkeysCreateAddonsClient {
 		// the Clockwork Jetpack: its keys, its wind gauge, drawn in the chest slot
 		modBus.addListener(com.comedymonkey.createaddons.client.jetpack.JetpackClient::registerKeys);
 		modBus.addListener(com.comedymonkey.createaddons.client.jetpack.JetpackClient::registerGui);
+		// Engineer's Goggles on villagers and their workstations
+		modBus.addListener(VillagerGoggles::registerGui);
+		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(VillagerGoggles::onClientTick);
 		modBus.addListener(net.neoforged.neoforge.client.event.EntityRenderersEvent.AddLayers.class, com.comedymonkey.createaddons.client.jetpack.JetpackLayer::addLayers);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.jetpack.JetpackClient::onClientTick);
 		net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.client.jetpack.JetpackClient::onPlayerTick);
