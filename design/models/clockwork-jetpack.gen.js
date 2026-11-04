@@ -24,8 +24,12 @@ const PAL = {
   netherite: {
     field: '#3b3536', field2: '#3f383a', hi: '#4a4344', lo: '#2e2a2b', seam: '#272324',
     canvas: ['#46272b', '#4a2a2e', '#502e33'], canvasDark: '#381e22', wood: ['#2e2523', '#3a2e2a', '#443631'], ribDark: '#231c1a',
-    metal: ['#433d40', '#4d4649', '#5a5255'], metalDark: '#2a2526', metalDeep: '#1f1b1c', // netherite in place of the brass, darker rims (user, 2026-11-03)
-    ductField: ['#2a2526', '#3a3436'], ductRivet: '#4d4649',
+    // netherite in place of the brass, darker rims (user, 2026-11-03); shades from vanilla netherite armour, as worn gear
+    // (visual-language, 2026-11-04: the Trade Master texture review), at the values the grey trim had
+    // the ducts' deep, field and rivet shades step like the brass version's (deep only a shade under the field): the
+    // armour's darkest shades read as holes there (user, 2026-11-04)
+    metal: ['#49393f', '#51444e', '#5d565d'], metalDark: '#241f20', metalDeep: '#322727',
+    ductField: ['#3f303b', '#49393f'], ductRivet: '#5d565d',
   },
 };
 const LEATHER = ['#3b2a1f', '#46321f'], CARBON = ['#26272a', '#323337'];
@@ -456,7 +460,7 @@ const ICON_MAP = [
 ];
 const ICON_COL = {
   plain: { k: '#1d2024', S: '#6d757f', s: '#5a616b', w: '#2f343b', o: '#9aa4ac', b: '#a3873f', B: '#b08f45', d: '#8f7638', c: '#9a8e74', r: '#7a5a40' },
-  netherite: { k: '#161314', S: '#5d5456', s: '#4a4344', w: '#2a2526', o: '#9aa4ac', b: '#6a6265', B: '#7a7175', d: '#3a3436', c: '#7a4049', r: '#4e3c34' },
+  netherite: { k: '#161314', S: '#5d5456', s: '#4a4344', w: '#241f20', o: '#9aa4ac', b: '#5d565d', B: '#766a76', d: '#3f303b', c: '#7a4049', r: '#4e3c34' },
 };
 function icon(cols) {
   const d = new Uint8Array(16 * 16 * 4);

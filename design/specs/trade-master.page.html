@@ -1,0 +1,425 @@
+<title>Trade Master</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the house quick-read column (as Helper Bot and Monster Cage): material band, idiot test first, a "how a gauge gets filled" diagram as the centrepiece, then numbers, rules, what-ifs, open items, scores */
+:root {
+  --bg: #e6e6e1; --surface: #f2f2ee; --fg: #22231f; --muted: #5f6058; --line: #c9c8c0;
+  --accent: #8a6626; --accent-soft: #e9dcc0; --iron: #4a4d50; --iron-hi: #5d6164;
+  --copper: #8a5233; --glow: #b9772f; --rail: #6b6e6a; --emerald: #3f7a5c; --emerald-soft: #d3e3d8;
+  --ok: #4c7a46; --warn: #a3712a;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
+  --copper: #b9764d; --glow: #d99a4a; --rail: #8a8c86; --emerald: #7cb894; --emerald-soft: #24352b;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --accent: #c9a058; --accent-soft: #3a3222; --iron: #3a3c3e; --iron-hi: #4b4e51;
+  --copper: #b9764d; --glow: #d99a4a; --rail: #8a8c86; --emerald: #7cb894; --emerald-soft: #24352b;
+  --ok: #84b07c; --warn: #d4a35a; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.15rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+code { font: .85em var(--mono) }
+
+header { display: grid; gap: 14px }
+.band { height: 10px; border-radius: 2px; background: linear-gradient(90deg, var(--iron) 0 40%, var(--bg) 40% 42%, var(--accent) 42% 66%, var(--bg) 66% 68%, var(--emerald) 68% 86%, var(--bg) 86% 88%, var(--copper) 88% 100%) }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .78rem/1 var(--mono); padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { padding: 8px 0 8px 14px; border-left: 3px solid var(--accent); font-weight: 500 }
+
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: step }
+.loop li { counter-increment: step; display: grid; gap: 6px; align-content: start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px }
+.loop li::before { content: counter(step); font: 600 1.4rem/1 var(--display); color: var(--accent) }
+
+.diagram { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 12px 8px }
+.diagram svg { display: block; width: 100%; min-width: 660px; height: auto }
+.lbl { font: 500 11px var(--mono); fill: var(--fg) }
+.lbl.dim { fill: var(--muted) }
+.lbl.big { font: 600 15px var(--display); }
+.lbl.ok { fill: var(--ok) }
+.lbl.em { fill: var(--emerald) }
+.lbl.acc { fill: var(--accent) }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px }
+.steps li { padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--iron-hi); border-radius: 3px; display: grid; gap: 4px; align-content: start }
+.steps li.go { border-left-color: var(--ok) }
+.steps li.em { border-left-color: var(--emerald) }
+.steps .when { font: 500 .75rem/1.3 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em }
+
+.numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px }
+.num { padding: 12px 14px; border-top: 3px solid var(--accent); background: var(--surface); display: grid; gap: 2px }
+.num b { font: 600 1.4rem/1.1 var(--display); font-variant-numeric: tabular-nums }
+.num span { color: var(--muted); font-size: .85rem }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px }
+.pairs ul { margin: 0; padding: 14px 16px 14px 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; display: grid; gap: 6px }
+.pairs > div { display: grid; gap: 8px; align-content: start }
+.does h3 { color: var(--ok) }
+.doesnt h3 { color: var(--warn) }
+
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 24px }
+.qa div { display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.qa b { font-weight: 600 }
+.qa span { color: var(--muted) }
+
+.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px }
+.watch { display: grid; gap: 8px; align-content: start; padding: 14px 16px; border: 1px dashed var(--warn); border-radius: 3px }
+.watch.ok { border-color: var(--accent) }
+.watch h3 { color: var(--warn) }
+.watch.ok h3 { color: var(--accent) }
+.watch ul { margin: 0; padding-left: 18px; display: grid; gap: 4px }
+
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center }
+.score .track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden }
+.score .fill { height: 100%; background: var(--ok) }
+.score .why { grid-column: 2 / -1; color: var(--muted); font-size: .85rem; margin-top: -6px }
+.score b { text-align: right; font: 500 .85rem var(--mono); font-variant-numeric: tabular-nums }
+.score.total span { font-weight: 600 }
+@media (max-width: 520px) { .score { grid-template-columns: 1fr 44px } .score .track { grid-column: 1 / -1; order: 3 } .score .why { grid-column: 1 / -1; margin-top: 0 } }
+.recipes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px }
+.recipe { display: grid; gap: 12px; align-content: start; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; min-width: 0 }
+.recipe .how { font: 500 .75rem/1.3 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em }
+.grid { display: grid; gap: 4px; width: max-content; max-width: 100% }
+.grid.g5 { grid-template-columns: repeat(5, 44px) }
+.grid.g3 { grid-template-columns: repeat(3, 44px) }
+.slot { height: 44px; display: grid; place-items: center; font: 600 .8rem/1 var(--mono); border: 2px solid var(--line); border-radius: 3px; background: var(--bg); color: var(--fg) }
+.slot.none { border-style: dashed; background: transparent }
+.slot.br { border-color: var(--accent) }
+.slot.st { border-color: var(--iron-hi) }
+.slot.pm { border-color: var(--glow) }
+.slot.em { border-color: var(--emerald); background: var(--emerald-soft) }
+.slot.lk, .slot.ga { border-color: var(--copper) }
+.slot.ca { border-color: var(--accent); background: var(--accent-soft) }
+.slot.tu { border-color: var(--glow) }
+.slot.an { border-color: var(--rail) }
+.slot.bot, .slot.out { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--surface) }
+.legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: .9rem }
+.legend li { display: grid; grid-template-columns: 34px 1fr auto; gap: 8px; align-items: center }
+.legend code { font-weight: 600 }
+.legend span:last-child { color: var(--muted); font: 500 .8rem var(--mono); font-variant-numeric: tabular-nums }
+.makes { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-weight: 500 }
+.makes .slot { width: 44px }
+.seq { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center }
+.seq li { padding: 6px 10px; border: 1px solid var(--line); border-radius: 3px; background: var(--bg); font-size: .88rem }
+.seq li.end { border-color: var(--accent); background: var(--accent-soft); font-weight: 600 }
+.seq li.arrow { border: 0; background: none; padding: 0 2px; color: var(--muted) }
+.chip.prop { border-color: var(--warn); color: var(--warn) }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px }
+</style>
+<div class="wrap">
+  <header>
+    <div class="band" aria-hidden="true"></div>
+    <p class="eyebrow">ComedyMonkey's Create Addons · Logistics</p>
+    <h1>Trade Master</h1>
+    <p class="pitch">The Trade Bot, upgraded and bearded. Stick Factory Gauges on your chests and he keeps them full by trading with villagers: he buys what's missing and sells your surplus to pay for it.</p>
+    <div class="chips">
+      <span class="chip ready">Design ready: 85%</span>
+      <span class="chip">Late game</span>
+      <span class="chip">5×5 upgrade of a Trade Bot</span>
+      <span class="chip">Look: modelled, in review</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>In ten lines</h2>
+    <ul class="idiot">
+      <li>Upgraded Trade Bot with a beard. Costs a lot.</li>
+      <li>Tune him to a Create logistics network.</li>
+      <li>Hatches on every chest he uses. They're cheap.</li>
+      <li>Put Factory Gauges on hatches: "keep N here".</li>
+      <li>Low gauge: fetch owned stock, then buy the rest.</li>
+      <li>Pays with spare emeralds, or sells surplus first.</li>
+      <li>Never sells or spends below any gauge.</li>
+      <li>Never pays above base price. Restocks still limit him.</li>
+      <li>Carries by hand, 64 blocks, seated villagers only.</li>
+      <li>No hatch on a chest? He never touches it.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>How you use him</h2>
+    <ol class="loop">
+      <li><h3>Upgrade a Trade Bot</h3><p>5×5 mechanical crafter, with a new Trade Ledger. He keeps the old bot's reputation.</p></li>
+      <li><h3>Tune and place</h3><p>Right-click a Stock Link with him, then place his station. FE from below.</p></li>
+      <li><h3>Fit Trade Hatches</h3><p>On every chest he takes from or fills. Cheap, and no Packagers needed.</p></li>
+      <li><h3>Add gauges</h3><p>Factory Gauges on the hatches he fills: "2 stacks of bookshelves", "4 stacks of emeralds".</p></li>
+      <li><h3>Seat villagers</h3><p>Sellers of what you want, buyers of what you have spare.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>How a gauge gets filled</h2>
+    <p class="sub">Every chest he uses has a Trade Hatch. No gauges: he takes from it. Gauges: he fills it to what they ask. No Packagers, and chests without a hatch don't exist for him.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 720 330" role="img" aria-label="Input hatch chests on the left, the Trade Master in the middle, seated villagers on the right, and three hatch chests along the bottom with gauges for emeralds, bookshelves and terracotta. Step 1: he fetches stock you already own. Step 2: if emeralds are short, he sells surplus. Step 3: he buys from seated villagers. Step 4: he delivers into the hatch chest whose gauge wanted it.">
+        <!-- input hatch chests -->
+        <text x="20" y="28" class="lbl big">Input hatches</text>
+        <g>
+          <rect x="20" y="44" width="56" height="40" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
+          <rect x="76" y="48" width="10" height="32" fill="var(--copper)" stroke="var(--iron-hi)"></rect>
+          <rect x="100" y="44" width="56" height="40" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
+          <rect x="156" y="48" width="10" height="32" fill="var(--copper)" stroke="var(--iron-hi)"></rect>
+          <text x="20" y="116" class="lbl dim">Hatch, no gauges</text>
+          <text x="20" y="130" class="lbl dim">(spare goods, emeralds)</text>
+        </g>
+        <!-- trade master -->
+        <rect x="320" y="70" width="44" height="60" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
+        <rect x="326" y="44" width="32" height="26" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
+        <circle cx="335" cy="56" r="3.5" fill="var(--glow)"></circle><circle cx="349" cy="56" r="3.5" fill="var(--glow)"></circle>
+        <path d="M328 70 Q342 92 356 70 Z" fill="var(--muted)" stroke="var(--iron-hi)"></path>
+        <circle cx="342" cy="140" r="9" fill="var(--iron)" stroke="var(--iron-hi)"></circle>
+        <text x="342" y="168" text-anchor="middle" class="lbl big">Trade Master</text>
+        <text x="342" y="184" text-anchor="middle" class="lbl dim">64-block reach</text>
+        <!-- villagers -->
+        <text x="560" y="28" class="lbl big">Seated villagers</text>
+        <g>
+          <rect x="566" y="50" width="26" height="40" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"></rect>
+          <rect x="560" y="90" width="38" height="10" fill="var(--rail)"></rect>
+          <rect x="626" y="50" width="26" height="40" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"></rect>
+          <rect x="620" y="90" width="38" height="10" fill="var(--rail)"></rect>
+          <text x="560" y="118" class="lbl dim">real trades, real restocks</text>
+          <text x="560" y="132" class="lbl dim">never above base price</text>
+        </g>
+        <!-- arrows -->
+        <path d="M170 64 L312 80" fill="none" stroke="var(--ok)" stroke-width="2"></path>
+        <path d="M312 80 l-9 -6 l1 10 z" fill="var(--ok)"></path>
+        <text x="200" y="58" class="lbl ok">1 fetch what you own</text>
+        <path d="M372 76 L552 66" fill="none" stroke="var(--emerald)" stroke-width="2" stroke-dasharray="5 3"></path>
+        <path d="M552 66 l-9 -5 l0 10 z" fill="var(--emerald)"></path>
+        <text x="392" y="60" class="lbl em">2 sell surplus (if short)</text>
+        <path d="M552 98 L372 108" fill="none" stroke="var(--accent)" stroke-width="2"></path>
+        <path d="M372 108 l9 -5 l0 10 z" fill="var(--accent)"></path>
+        <text x="408" y="124" class="lbl acc">3 buy what's missing</text>
+        <path d="M342 196 L342 226" fill="none" stroke="var(--ok)" stroke-width="2"></path>
+        <path d="M342 232 l-6 -9 h12 z" fill="var(--ok)"></path>
+        <text x="352" y="216" class="lbl ok">4 deliver</text>
+        <!-- hatch chests -->
+        <line x1="20" y1="240" x2="700" y2="240" stroke="var(--line)"></line>
+        <g>
+          <rect x="120" y="262" width="60" height="40" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
+          <rect x="180" y="266" width="12" height="32" fill="var(--copper)" stroke="var(--iron-hi)"></rect>
+          <circle cx="200" cy="282" r="7" fill="var(--emerald-soft)" stroke="var(--emerald)" stroke-width="2"></circle>
+          <text x="120" y="320" class="lbl em">emeralds · 4 stacks</text>
+        </g>
+        <g>
+          <rect x="310" y="262" width="60" height="40" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
+          <rect x="370" y="266" width="12" height="32" fill="var(--copper)" stroke="var(--iron-hi)"></rect>
+          <circle cx="390" cy="282" r="7" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"></circle>
+          <text x="310" y="320" class="lbl acc">bookshelves · 2 stacks</text>
+        </g>
+        <g>
+          <rect x="500" y="262" width="60" height="40" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
+          <rect x="560" y="266" width="12" height="32" fill="var(--copper)" stroke="var(--iron-hi)"></rect>
+          <circle cx="582" cy="272" r="5" fill="var(--copper)" stroke="var(--iron-hi)"></circle>
+          <circle cx="596" cy="272" r="5" fill="var(--copper)" stroke="var(--iron-hi)"></circle>
+          <circle cx="582" cy="290" r="5" fill="var(--copper)" stroke="var(--iron-hi)"></circle>
+          <circle cx="596" cy="290" r="5" fill="var(--copper)" stroke="var(--iron-hi)"></circle>
+          <text x="500" y="320" class="lbl">terracotta · 4 gauges</text>
+        </g>
+        <text x="20" y="258" class="lbl dim">Hatch chests</text>
+        <text x="20" y="272" class="lbl dim">(chest + hatch + gauges)</text>
+      </svg>
+    </div>
+    <ul class="steps">
+      <li class="go"><span class="when">First</span><b>Fetch it if you already own it</b><span class="sub">He never buys what's sitting in another chest.</span></li>
+      <li><span class="when">Then</span><b>Pay with spare emeralds</b><span class="sub">Only emeralds above any emerald gauge. That gauge is your savings floor.</span></li>
+      <li class="em"><span class="when">If short</span><b>Sell the most plentiful thing</b><span class="sub">Never below its own gauges. Sells only when emeralds are needed.</span></li>
+      <li class="go"><span class="when">Last</span><b>Buy, deliver, tidy up</b><span class="sub">Extra goes in the gauge's chest. Change goes back where it came from.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Key numbers</h2>
+    <div class="numbers">
+      <div class="num"><b>64 blocks</b><span>reach from his station, for chests and villagers</span></div>
+      <div class="num"><b>27 stacks</b><span>per trip, plus his emerald pouch</span></div>
+      <div class="num"><b>2</b><span>Trade Masters per player (separate from 4 Trade Bots)</span></div>
+      <div class="num"><b>Base price</b><span>the most he'll ever pay</span></div>
+      <div class="num"><b>4 gauges</b><span>per hatch face, so 16 terracottas fit on one hatch</span></div>
+      <div class="num"><b>1 visit</b><span>one trade animation per villager, every useful trade in it</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Recipes</h2>
+    <p class="sub">The Trade Master costs a Trade Bot, roughly twice that again in Create parts, and 4 netherite. Trade Hatches stay cheap, because you'll want one on every chest he fills.</p>
+    <div class="recipes">
+      <div class="recipe">
+        <div class="chips"><span class="chip ready">Approved</span></div>
+        <h3>Trade Master</h3>
+        <p class="how">Mechanical crafting · 5×5</p>
+        <div class="grid g5" role="img" aria-label="5 by 5 grid. Row 1: netherite sheet, brass sheet, stock link, brass sheet, netherite sheet. Row 2: brass sheet, precision mechanism, trade ledger, precision mechanism, brass sheet. Row 3: factory gauge, emerald block, trade bot, emerald block, factory gauge. Row 4: brass sheet, precision mechanism, brass casing, precision mechanism, brass sheet. Row 5: netherite sheet, brass sheet, brass sheet, brass sheet, netherite sheet.">
+          <span class="slot st">N</span><span class="slot br">S</span><span class="slot lk">K</span><span class="slot br">S</span><span class="slot st">N</span>
+          <span class="slot br">S</span><span class="slot pm">P</span><span class="slot ca">L</span><span class="slot pm">P</span><span class="slot br">S</span>
+          <span class="slot ga">G</span><span class="slot em">E</span><span class="slot bot">T</span><span class="slot em">E</span><span class="slot ga">G</span>
+          <span class="slot br">S</span><span class="slot pm">P</span><span class="slot ca">C</span><span class="slot pm">P</span><span class="slot br">S</span>
+          <span class="slot st">N</span><span class="slot br">S</span><span class="slot br">S</span><span class="slot br">S</span><span class="slot st">N</span>
+        </div>
+        <ul class="legend">
+          <li><code>T</code><span>Trade Bot (packed, keeps his data)</span><span>×1</span></li>
+          <li><code>L</code><span>Trade Ledger (below)</span><span>×1</span></li>
+          <li><code>K</code><span>Stock Link</span><span>×1</span></li>
+          <li><code>G</code><span>Factory Gauge</span><span>×2</span></li>
+          <li><code>P</code><span>Precision Mechanism</span><span>×4</span></li>
+          <li><code>E</code><span>Block of Emerald</span><span>×2</span></li>
+          <li><code>C</code><span>Brass Casing</span><span>×1</span></li>
+          <li><code>N</code><span>Netherite Sheet (new, below)</span><span>×4</span></li>
+          <li><code>S</code><span>Brass Sheet</span><span>×9</span></li>
+        </ul>
+      </div>
+      <div class="recipe">
+        <div class="chips"><span class="chip ready">Approved</span></div>
+        <h3>Trade Ledger</h3>
+        <p class="how">Sequenced assembly · 1 loop</p>
+        <ol class="seq" aria-label="Book, then deploy a precision mechanism, deploy a block of emerald, deploy an electron tube, press, giving a Trade Ledger">
+          <li>Book</li><li class="arrow" aria-hidden="true">→</li>
+          <li>Deploy Precision Mechanism</li><li class="arrow" aria-hidden="true">→</li>
+          <li>Deploy Block of Emerald</li><li class="arrow" aria-hidden="true">→</li>
+          <li>Deploy Electron Tube</li><li class="arrow" aria-hidden="true">→</li>
+          <li>Press</li><li class="arrow" aria-hidden="true">→</li>
+          <li class="end">Trade Ledger</li>
+        </ol>
+        <p class="sub">One crafting component, used only by the Trade Master. Every assembly succeeds; nothing is scrapped.</p>
+      </div>
+      <div class="recipe">
+        <div class="chips"><span class="chip ready">Approved</span><span class="chip">New item</span></div>
+        <h3>Netherite Sheet</h3>
+        <p class="how">Mechanical Press</p>
+        <ol class="seq" aria-label="One netherite ingot, pressed, gives one netherite sheet">
+          <li>Netherite Ingot</li><li class="arrow" aria-hidden="true">→</li>
+          <li>Press</li><li class="arrow" aria-hidden="true">→</li>
+          <li class="end">Netherite Sheet</li>
+        </ol>
+        <p class="sub">One ingot gives one sheet. Netherite sheets from other mods work too. 4 sheets cost 16 ancient debris, which keeps the Trade Master end-game.</p>
+      </div>
+      <div class="recipe">
+        <div class="chips"><span class="chip ready">Approved: cheap</span></div>
+        <h3>Trade Hatch</h3>
+        <p class="how">Crafting table · shaped</p>
+        <div class="makes">
+          <div class="grid g3" role="img" aria-label="3 by 3 grid, middle column only: electron tube on top, andesite casing in the middle, brass sheet at the bottom.">
+            <span class="slot none"></span><span class="slot tu">T</span><span class="slot none"></span>
+            <span class="slot none"></span><span class="slot an">A</span><span class="slot none"></span>
+            <span class="slot none"></span><span class="slot br">S</span><span class="slot none"></span>
+          </div>
+          <span aria-hidden="true">→</span><span class="slot out">H</span><span>×1</span>
+        </div>
+        <ul class="legend">
+          <li><code>T</code><span>Electron Tube</span><span>×1</span></li>
+          <li><code>A</code><span>Andesite Casing</span><span>×1</span></li>
+          <li><code>S</code><span>Brass Sheet</span><span>×1</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Rules</h2>
+    <div class="pairs">
+      <div class="does">
+        <h3>He does</h3>
+        <ul>
+          <li>Fill gauges on Trade Hatches tuned to his network</li>
+          <li>Use stock you already own before trading</li>
+          <li>Sell anything in his hatch chests above its gauges</li>
+          <li>Keep the Trade Bot's reputation and charge</li>
+          <li>Work unattended wherever his area is loaded</li>
+          <li>Go home at night, in storms, and to charge</li>
+        </ul>
+      </div>
+      <div class="doesnt">
+        <h3>He doesn't</h3>
+        <ul>
+          <li>Listen to gauges that aren't on a Trade Hatch</li>
+          <li>Take anything below a gauge, to sell or to spend</li>
+          <li>Pay prices that demand has pushed above base</li>
+          <li>Trade with villagers who aren't seated</li>
+          <li>Need Packagers or packages: he carries everything himself</li>
+          <li>Touch chests without a Trade Hatch</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What if…?</h2>
+    <div class="qa">
+      <div><b>Nobody in range sells it?</b><span>The gauge is listed as "nobody sells this". He doesn't go looking.</span></div>
+      <div><b>The hatch chest is too far away?</b><span>Listed as "out of range". He never goes there.</span></div>
+      <div><b>No spare emeralds and nothing to sell?</b><span>He waits. The gauge stays missing.</span></div>
+      <div><b>A trade gives more than needed?</b><span>The extra goes into that chest anyway. Gauges are floors.</span></div>
+      <div><b>A hatch is broken mid-trip?</b><span>Goods go back where they came from. Nothing is lost.</span></div>
+      <div><b>Two Trade Masters want one gauge?</b><span>First come, first served. The other picks another gauge.</span></div>
+      <div><b>Prices went up after heavy trading?</b><span>He skips that offer until a restock.</span></div>
+      <div><b>He'd sell my diamonds?</b><span>Only if they're in a hatch chest with no gauge for them. Keep them in a chest without a hatch.</span></div>
+      <div><b>A trade needs a book as well?</b><span>He fetches the book from his hatch chests too, or skips the trade.</span></div>
+      <div><b>Where does trade XP go?</b><span>As Nuggets of Experience, to a hatch chest with a nugget gauge. Banked until there is one.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Still open</h2>
+    <div class="open">
+      <div class="watch ok">
+        <h3>Approved defaults</h3>
+        <ul>
+          <li>15 Trade Master defaults (tuning, screen, priority, goggles, Ponder…)</li>
+          <li>9 Trade Hatch defaults (cheap recipe, any container, network lock…)</li>
+        </ul>
+      </div>
+      <div class="watch">
+        <h3>Set at implementation</h3>
+        <ul>
+          <li>Netherite Sheet texture (previewed first)</li>
+          <li>Charge cost of courier trips (playtest)</li>
+          <li>Proof that gauges on hatches can be redirected in Create 6.0.10</li>
+        </ul>
+      </div>
+      <div class="watch">
+        <h3>Parked for later</h3>
+        <ul>
+          <li>Display Link source: what he's buying, on a board</li>
+          <li>Riding trains, minecarts and seats</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Design readiness</h2>
+    <div class="scores">
+      <div class="score"><span>Gameplay</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><p class="why">Every decision made; Display Link parked by choice.</p></div>
+      <div class="score"><span>World integration</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><p class="why">The gauge-on-hatch mixin and tuning from the station need proving in code.</p></div>
+      <div class="score"><span>Balance</span><div class="track"><div class="fill" style="width:85%"></div></div><b>85%</b><p class="why">Recipe amounts and courier charge cost need a playtest.</p></div>
+      <div class="score"><span>Progression</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><p class="why">The Trade Ledger's sequence is proposed, not tested in JEI.</p></div>
+      <div class="score"><span>Automation</span><div class="track"><div class="fill" style="width:92%"></div></div><b>92%</b><p class="why">No packages by choice; a Packager on the same chest bridges to Create.</p></div>
+      <div class="score"><span>Edge cases</span><div class="track"><div class="fill" style="width:92%"></div></div><b>92%</b><p class="why">Hatches on moving contraptions and mid-trip removals need game tests.</p></div>
+      <div class="score total"><span>Overall</span><div class="track"><div class="fill" style="width:85%"></div></div><b>85%</b><p class="why">The lowest area (balance): ready to build, with numbers to tune in playtesting.</p></div>
+    </div>
+  </section>
+
+  <footer>Full spec: <code>design/specs/trade-master.md</code> (37 decisions, rules, balance, Create integration, development checklist). Builds on <code>design/specs/trade-bot.md</code>.</footer>
+</div>

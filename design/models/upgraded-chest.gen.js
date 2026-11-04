@@ -18,7 +18,8 @@ const METAL = {
   iron: { s: ['#363b42', '#4a5059', '#555b63', '#5f656e'], hi: '#767b82' },
   gold: { s: ['#6e5a2a', '#8f7638', '#9c8240', '#b08f45'], hi: '#c9a75a' },
   diamond: { s: ['#24282d', '#2f343b', '#3c424a', '#4a5059'], hi: '#5f656e', gem: ['#4f8a96', '#6fb7c4'] },
-  netherite: { s: ['#211c1e', '#2b2729', '#3a3438', '#443c40'], hi: '#6b6266' },
+  // vanilla's netherite block, as on the Netherite Monster Cage (visual-language, 2026-11-04: blocks follow the block)
+  netherite: { s: ['#241e1f', '#31292a', '#3a3233', '#443a3b'], hi: '#5d5052' },
 };
 // a step lighter than the house walnut's darkest: in game the side shading darkens it further ("very dark in game")
 const WOOD = ['#4e3626', '#634532', '#6f4d36'], SEAM = '#3b2a1f', INSET = '#33251b', DEEP = ['#45311f', '#4e3626', '#5a3f2c'];

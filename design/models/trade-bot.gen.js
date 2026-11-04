@@ -6,8 +6,13 @@ const crypto = require('crypto');
 const path = require('path');
 
 const ARGS = process.argv.slice(2);
-const OUT = ARGS.find((a) => !a.startsWith('--')) || path.resolve(__dirname, 'trade-bot.bbmodel');
+// --variant=<file>: a character built on Trade Bot (the Trade Master). The variant module swaps palettes and adds parts
+// through the hooks below; his clips, rig and sound cues stay Trade Bot's. Without it, the output is unchanged.
+const VARIANT_ARG = ARGS.find((a) => a.startsWith('--variant='));
+const VAR = VARIANT_ARG ? require(path.resolve(__dirname, VARIANT_ARG.slice('--variant='.length))) : null;
+const OUT = ARGS.find((a) => !a.startsWith('--')) || path.resolve(__dirname, VAR ? VAR.slug + '.bbmodel' : 'trade-bot.bbmodel');
 const GAME = ARGS.includes('--game'); // also write the in-game assets (trade-bot.game-export.js)
+if (VAR && GAME) throw new Error('--game is not wired up for variants yet');
 // approved sounds: each clip's cues become sound keyframes on its Effects track, pointing at the real OGG files
 const SOUND_DIR = path.resolve(__dirname, '../sound');
 const CUES = fs.existsSync(path.join(SOUND_DIR, 'trade-bot.cues.json')) ? JSON.parse(fs.readFileSync(path.join(SOUND_DIR, 'trade-bot.cues.json'), 'utf8')) : null;
@@ -46,6 +51,7 @@ const P = {
   villagerBrow: ['#3a2a20'],
   cushion: ['#6e3530', '#7a3d36', '#84453d'],
 };
+if (VAR && VAR.palette) Object.assign(P, VAR.palette);
 const rgb = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16), 255];
 function hash(x, y, s) {
   let h = (x * 374761393 + y * 668265263 + s * 2147483647) | 0;
@@ -421,6 +427,8 @@ const ITEM_PROPS = ['prop_chest', 'prop_barrel', 'prop_depot', 'prop_belt', 'pro
 // which prop each clip shows (all others are hidden)
 const CLIP_PROPS = { chest_take: 'prop_chest', chest_put: 'prop_chest', barrel_take: 'prop_barrel', barrel_put: 'prop_barrel', depot_place: 'prop_depot', depot_take: 'prop_depot', belt_place: 'prop_belt', hop_on_slab: 'prop_slab', hop_off_slab: 'prop_slab', hop_on_block: 'prop_block', hop_off_block: 'prop_block', chest_take_high: 'prop_chest_high', chest_put_high: 'prop_chest_high', trade_villager: 'prop_villager', trade_villager_open: 'prop_villager' };
 
+if (VAR && VAR.model) VAR.model({ bot, station, G, C, P, mot, hash });
+
 // ---------- build: pack UVs, paint, emit ----------
 const tex = new Uint8Array(TEX * TEX * 4);
 const cubes = [];
@@ -491,7 +499,7 @@ function png(w, h, data) {
   return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk('IHDR', ihdr), chunk('IDAT', zlib.deflateSync(raw)), chunk('IEND', Buffer.alloc(0))]);
 }
 const pngBuf = png(TEX, TEX, tex);
-fs.writeFileSync(path.resolve(path.dirname(OUT), 'trade-bot.png'), pngBuf);
+fs.writeFileSync(path.resolve(path.dirname(OUT), VAR ? VAR.slug + '.png' : 'trade-bot.png'), pngBuf);
 
 const elements = [], groups = [], groupByName = {};
 function emit(n) {
@@ -2216,14 +2224,16 @@ const HIDE_WHEEL = SPOT_WHEEL + hideSpin(HIDE_L), HIDE_KEY = SPOT_KEY + 90 * HID
 }
 
 for (const [n, T, L] of ALL_CLIPS) armClipReport(n, T, L);
+// variants add derived motion for their own bones (never touching Trade Bot's tracks) and run their own checks
+if (VAR && VAR.after) VAR.after({ ALL_CLIPS, animations, groupByName, chainMatrix, m4inv, M4, ARM_POINTS, BODY_BOXES, HEAD, uuid, r2, FPS, V, addV, smooth, lin, seg, station });
 
 const bb = {
   meta: { format_version: '5.0', model_format: 'modded_entity', box_uv: true },
-  name: 'trade_bot', model_identifier: 'trade_bot', modded_entity_entity_class: '', modded_entity_version: '1.17', modded_entity_flip_y: true,
+  name: VAR ? VAR.id : 'trade_bot', model_identifier: VAR ? VAR.id : 'trade_bot', modded_entity_entity_class: '', modded_entity_version: '1.17', modded_entity_flip_y: true,
   visible_box: [1, 1.5, 0], variable_placeholders: '', variable_placeholder_buttons: [], timeline_setups: [], unhandled_root_fields: {},
   resolution: { width: TEX, height: TEX },
   elements, groups, outliner,
-  textures: [{ path: '', name: 'trade_bot.png', folder: '', namespace: '', id: '0', group: '', width: TEX, height: TEX, uv_width: TEX, uv_height: TEX, particle: false, use_as_default: false, layers_enabled: false, sync_to_project: '', render_mode: 'default', render_sides: 'auto', pbr_channel: 'color', frame_time: 1, frame_order_type: 'loop', frame_order: '', frame_interpolate: false, visible: true, internal: true, saved: false, uuid: uuid(), source: 'data:image/png;base64,' + pngBuf.toString('base64') }],
+  textures: [{ path: '', name: (VAR ? VAR.id : 'trade_bot') + '.png', folder: '', namespace: '', id: '0', group: '', width: TEX, height: TEX, uv_width: TEX, uv_height: TEX, particle: false, use_as_default: false, layers_enabled: false, sync_to_project: '', render_mode: 'default', render_sides: 'auto', pbr_channel: 'color', frame_time: 1, frame_order_type: 'loop', frame_order: '', frame_interpolate: false, visible: true, internal: true, saved: false, uuid: uuid(), source: 'data:image/png;base64,' + pngBuf.toString('base64') }],
   animations,
 };
 fs.writeFileSync(OUT, JSON.stringify(bb));
