@@ -1079,12 +1079,12 @@ public final class TradeBotGameTests {
 	}
 
 	/** A sell-to-villager offer: {@code count} goods for an emerald, {@code maxUses} times, 2 villager XP each. */
-	private static MerchantOffer offer(net.minecraft.world.item.Item goods, int count, int maxUses) {
+	static MerchantOffer offer(net.minecraft.world.item.Item goods, int count, int maxUses) {
 		return new MerchantOffer(new ItemCost(goods, count), java.util.Optional.empty(), new ItemStack(Items.EMERALD), 0, maxUses, 2, 0.05f, 0);
 	}
 
 	/** A grown villager of {@code profession} with just these offers, sat in the Create seat at {@code seat}. */
-	private static Villager seated(GameTestHelper helper, BlockPos seat, VillagerProfession profession, MerchantOffer... offers) {
+	static Villager seated(GameTestHelper helper, BlockPos seat, VillagerProfession profession, MerchantOffer... offers) {
 		Villager villager = helper.spawn(EntityType.VILLAGER, seat);
 		villager.setVillagerData(villager.getVillagerData().setProfession(profession).setLevel(1));
 		villager.setVillagerXp(1); // with some XP it keeps its profession away from a job site
@@ -1104,7 +1104,7 @@ public final class TradeBotGameTests {
 		be.setRole(helper.absolutePos(output), TradeBotLinks.Role.DELIVERS);
 	}
 
-	private static void fill(GameTestHelper helper, BlockPos pos, ItemStack... stacks) {
+	static void fill(GameTestHelper helper, BlockPos pos, ItemStack... stacks) {
 		IItemHandler handler = helper.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, helper.absolutePos(pos), null);
 		if (handler == null)
 			helper.fail("no inventory at " + pos.toShortString());
@@ -1116,7 +1116,7 @@ public final class TradeBotGameTests {
 		return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("create", "experience_nugget"));
 	}
 
-	private static int count(GameTestHelper helper, BlockPos pos, net.minecraft.world.item.Item item) {
+	static int count(GameTestHelper helper, BlockPos pos, net.minecraft.world.item.Item item) {
 		IItemHandler handler = helper.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, helper.absolutePos(pos), null);
 		int total = 0;
 		if (handler != null)

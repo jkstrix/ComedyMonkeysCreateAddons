@@ -7,6 +7,7 @@ import { recent, seenCount, isGoalDone } from '../core/storage.js';
 import { picture, entryPic, entryCard, dossier, categoryTile, listItem, stats, row } from '../ui/components.js';
 import { icon } from '../ui/icons.js';
 import { gear } from '../ui/gear.js';
+import { latestRelease } from './releases.js';
 
 export function homePage(view) {
   const h = db.site.home ?? {};
@@ -30,7 +31,7 @@ export function homePage(view) {
           <a class="btn primary" href="#/guide${db.category.get('guide')?.entries[0] ? `/${db.category.get('guide').entries[0].id}` : ''}">${icon('book')}Start the guide</a>
           <a class="btn" href="#/progression">${icon('steps')}What to build next</a>
         </div>
-        ${db.releases[0] ? `<a class="new-flag" href="#/whats-new"><b>New in ${esc(db.releases[0].version)}</b>${esc(db.releases[0].title ?? "See what's changed")} ${icon('arrow')}</a>` : ''}
+        ${latestRelease() ? `<a class="new-flag" href="#/whats-new"><b>New in ${esc(latestRelease().version)}</b>${esc(latestRelease().title ?? "See what's changed")} ${icon('arrow')}</a>` : ''}
         <div class="progress"><div class="bar"><i style="width:${total ? Math.max(2, seen / total * 100) : 0}%"></i></div>Viewed ${seen} of ${plural(total, 'entry', 'entries')}</div>
       </div>
     </header>

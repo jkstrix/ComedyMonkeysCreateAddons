@@ -1,0 +1,72 @@
+<title>Trade Master Screen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+<style>
+  :root { --bg: #23262a; --fg: #d6d8d4; --muted: #8f918b; color-scheme: dark; }
+  body { background: var(--bg); color: var(--fg); font: 15px/1.55 system-ui, sans-serif;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px; }
+  h1 { font-size: 22px; margin: 0 0 6px; text-wrap: balance; }
+  p { margin: 0 0 14px; max-width: 72ch; color: var(--muted); }
+  b { color: var(--fg); }
+  ul { margin: 0 0 18px; padding-left: 20px; color: var(--muted); max-width: 72ch; }
+  .scroll { overflow-x: auto; max-width: 100%; }
+  .station { position: relative; width: calc(212px * 3); height: calc(230px * 3); background: url(trade_master_station.png) 0 0 / calc(256px * 3) auto no-repeat; image-rendering: pixelated; }
+  .gfill { position: absolute; height: 36px; background: url(trade_master_station.png) 0 calc(-234px * 3) / calc(256px * 3) auto no-repeat; image-rendering: pixelated; }
+  .thumb { position: absolute; left: 603px; width: 12px; background: #4e4a44; box-shadow: inset 3px 3px 0 #615c55, inset -3px -3px 0 #2a2622; }
+  .t { position: absolute; font-family: VT323, ui-monospace, monospace; font-size: 27px; line-height: 1; white-space: nowrap; }
+  .title { color: #e6dee0; left: 0; width: 100%; text-align: center; top: 9px; }
+  .label { color: #d6d8d4; } .dist { color: #a8aca8; } .ok { color: #8fbf6a; } .warn { color: #d9a25a; } .dim { color: #6e6b64; }
+  .icon { position: absolute; left: 30px; width: 48px; height: 48px; display: grid; place-items: center; font: 600 15px/1 system-ui; color: #222; border-radius: 2px; }
+</style>
+
+<h1>Trade Master station screen</h1>
+<p>Netherite band, with the <b>Working on</b> row back: the gauge he's filling gets its own row, and every other gauge on his network goes in a list below that scrolls with the mouse wheel when there are more than five. His reach stays 64 blocks from the station. Example: he's out buying bookshelves at 72%, with eight gauges on his boards. An enchanted book is named by its enchantment (Mending), as that's what its gauge counts; hovering a row shows the item's tooltip.</p>
+<ul>
+  <li><b>Top:</b> what he's doing (Fetching, Selling, Buying, Delivering, Putting things away; or docked, charging, paused) and his charge.</li>
+  <li><b>Network:</b> connected, and how many board chests he can see in range; "No Trade Boards in range" if none.</li>
+  <li><b>Working on:</b> the gauge he's filling, how full it is and what's coming; "nothing to fill" when he's home.</li>
+  <li><b>Other gauges</b>, in this order: ones he can't fill and why (nobody sells this, out of range, can't pay); ones waiting their turn, or that another Trade Master is filling; then full ones.</li>
+  <li><b>Call home</b>, as Trade Bot's. No container links: he works only through his network.</li>
+</ul>
+<div class="scroll">
+  <div class="station">
+    <div class="t title">Trade Master</div>
+    <div class="t label" style="left:30px;top:63px">Buying</div>
+    <div class="t dist" style="left:390px;top:63px">72%</div>
+    <div class="gfill" style="left:447px;top:57px;width:120px"></div>
+    <div class="t dist" style="left:24px;top:108px">Network</div>
+    <div class="t ok" style="left:30px;top:153px">Connected</div>
+    <div class="t dist" style="right:30px;top:153px">4 board chests</div>
+
+    <div class="t dist" style="left:24px;top:204px">Working on</div>
+    <div class="icon" style="top:237px;background:#8a6a3c">Bs</div>
+    <div class="t label" style="left:90px;top:249px">Bookshelf</div>
+    <div class="t ok" style="right:36px;top:249px">3 / 8 · 5 coming</div>
+
+    <div class="t dist" style="left:24px;top:300px">Other gauges</div>
+    <div class="t dist" style="right:24px;top:300px">7</div>
+
+    <div class="icon" style="top:336px;background:#a9c4c8">Gl</div>
+    <div class="t label" style="left:90px;top:348px">Glass</div>
+    <div class="t warn" style="right:42px;top:348px">nobody sells this</div>
+
+    <div class="icon" style="top:390px;background:#9b6fb7">Eb</div>
+    <div class="t label" style="left:90px;top:402px">Mending</div>
+    <div class="t warn" style="right:42px;top:402px">out of range</div>
+
+    <div class="icon" style="top:444px;background:#3e9a5a">Em</div>
+    <div class="t label" style="left:90px;top:456px">Emerald</div>
+    <div class="t dist" style="right:42px;top:456px">40 / 64</div>
+
+    <div class="icon" style="top:498px;background:#d8c9b8">Te</div>
+    <div class="t label" style="left:90px;top:510px">White Terracotta</div>
+    <div class="t dim" style="right:42px;top:510px">another Trade Master</div>
+
+    <div class="icon" style="top:552px;background:#c9b25a">Wh</div>
+    <div class="t label" style="left:90px;top:564px">Wheat</div>
+    <div class="t dim" style="right:42px;top:564px">64 / 64</div>
+
+    <div class="thumb" style="top:333px;height:193px"></div>
+    <div class="t label" style="left:18px;width:600px;text-align:center;top:636px">Call home</div>
+  </div>
+</div>

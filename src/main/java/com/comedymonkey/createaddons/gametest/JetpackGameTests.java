@@ -3,6 +3,7 @@ package com.comedymonkey.createaddons.gametest;
 import java.util.List;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.content.MachineEnchantments;
 import com.comedymonkey.createaddons.content.jetpack.JetpackFlight;
 import com.comedymonkey.createaddons.content.jetpack.JetpackState;
@@ -189,6 +190,67 @@ public final class JetpackGameTests {
 		for (EquipmentSlot slot : EquipmentSlot.values())
 			player.setItemSlot(slot, ItemStack.EMPTY);
 		return player;
+	}
+
+	/**
+	 * The jetpack's advancements (approved 2026-11-04): Liftoff on thrust, Station Keeping on hover, Clockwork Wings when
+	 * they spread, What Goes Up when the wind runs out in the air, Overwound for wearing III, and The Floor Is Lava for a
+	 * Netherite one running in lava. A plain one in lava earns nothing (it doesn't run there).
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void flyingEarnsTheJetpacksAdvancements(GameTestHelper helper) {
+		ServerPlayer player = player(helper);
+		java.util.Set<String> earned = java.util.concurrent.ConcurrentHashMap.newKeySet();
+		ModAdvancements.Award listener = (who, action, value) -> {
+			if (who.equals(player.getUUID()) && (!action.equals(ModAdvancements.JETPACK_OVERWOUND) || value >= 3))
+				earned.add(action);
+		};
+		ModAdvancements.TEST_AWARDS.add(listener);
+		try {
+			ItemStack jetpack = new ItemStack(ModItems.CLOCKWORK_JETPACK.get());
+			jetpack.enchant(enchantment(helper, MachineEnchantments.OVERWOUND), 3);
+			Jetpacks.setWind(jetpack, 1000);
+			player.setItemSlot(EquipmentSlot.CHEST, jetpack);
+			player.setOnGround(false);
+			JetpackFlight.setInput(player, JetpackInputPayload.UP);
+			JetpackFlight.serverTick(player);
+			JetpackFlight.serverTick(player);
+			helper.assertTrue(earned.contains(ModAdvancements.JETPACK_FLIGHT), "thrust: Liftoff");
+			helper.assertTrue(earned.contains(ModAdvancements.JETPACK_OVERWOUND), "wearing Overwound III");
+			JetpackFlight.setInput(player, 0);
+			player.setData(ModAttachments.JETPACK, JetpackState.DEFAULT.withHover(true));
+			JetpackFlight.serverTick(player);
+			helper.assertTrue(earned.contains(ModAdvancements.JETPACK_HOVER), "hover holding him: Station Keeping");
+			player.setData(ModAttachments.JETPACK, JetpackState.DEFAULT);
+			JetpackFlight.toggle(player, com.comedymonkey.createaddons.network.JetpackTogglePayload.Toggle.WINGS);
+			helper.assertTrue(earned.contains(ModAdvancements.JETPACK_WINGS), "the wings spread: Clockwork Wings");
+			player.setData(ModAttachments.JETPACK, JetpackState.DEFAULT);
+			player.stopFallFlying(); // the glide over: the engine thrusts again
+			Jetpacks.setWind(player.getItemBySlot(EquipmentSlot.CHEST), 3);
+			JetpackFlight.setInput(player, JetpackInputPayload.UP);
+			for (int i = 0; i < 6; i++)
+				JetpackFlight.serverTick(player);
+			helper.assertTrue(earned.contains(ModAdvancements.JETPACK_RUN_DOWN), "out of wind in the air: What Goes Up");
+			// lava: the plain one doesn't run there; the Netherite one does
+			BlockPos lava = new BlockPos(10, 2, 10);
+			helper.setBlock(lava, net.minecraft.world.level.block.Blocks.LAVA);
+			Vec3 in = helper.absoluteVec(new Vec3(10.5, 2.1, 10.5));
+			player.moveTo(in.x, in.y, in.z, 0, 0);
+			player.baseTick(); // reads the fluid he's in
+			Jetpacks.setWind(player.getItemBySlot(EquipmentSlot.CHEST), 1000);
+			for (int i = 0; i < 3; i++)
+				JetpackFlight.serverTick(player);
+			helper.assertFalse(earned.contains(ModAdvancements.JETPACK_LAVA), "a plain jetpack in lava");
+			ItemStack netherite = new ItemStack(ModItems.NETHERITE_CLOCKWORK_JETPACK.get());
+			Jetpacks.setWind(netherite, 1000);
+			player.setItemSlot(EquipmentSlot.CHEST, netherite);
+			for (int i = 0; i < 3; i++)
+				JetpackFlight.serverTick(player);
+			helper.assertTrue(earned.contains(ModAdvancements.JETPACK_LAVA), "a Netherite jetpack in lava: The Floor Is Lava");
+			helper.succeed();
+		} finally {
+			ModAdvancements.TEST_AWARDS.remove(listener);
+		}
 	}
 
 	/** D12: 40 ticks of thrust spend 40 of wind; 40 of hover, 20; on the ground nothing runs. */

@@ -1105,6 +1105,131 @@
     ]
   },
   {
+    "id": "trade-board",
+    "name": "Trade Board",
+    "registry": [
+      "comedymonkeysaddons:trade_board"
+    ],
+    "summary": "A thin board you hang on a chest's face: it marks the chest as one the [[trade-master|Trade Master]] may use, and holds the Factory Gauges that tell him what to keep in it.",
+    "tags": [
+      "trading",
+      "logistics"
+    ],
+    "stage": "end",
+    "teach": {
+      "what": "A plain board that hangs on any face of a container, like an item frame. Tuned to a [[trade-master|Trade Master]]'s network, it makes that container one of his: with no gauges an input, with Factory Gauges on its face (up to four) an output he keeps filled.",
+      "why": "He only sees and uses chests with a board on them, so the boards decide what he may sell, and the gauges on them what he buys.",
+      "when": "Once you have a [[trade-master|Trade Master]]. They're cheap, as you'll want one on every chest he uses.",
+      "interacts": "Factory Gauges on the board's face count only the chest behind it, and Create never orders anything for them. Hold a gauge and clicks go through the board, so it's placed on the chest's face as usual.",
+      "mistakes": [
+        "Placing it untuned. Right-click his station or a Stock Link with it first; right-click the air to clear it.",
+        "Gauges on another face of the chest. Only gauges on the board's own face count."
+      ]
+    },
+    "specs": [
+      [
+        "Recipe",
+        "Electron Tube over Andesite Casing over Brass Sheet (shaped), makes 1"
+      ],
+      [
+        "Gauges",
+        "Up to 4 on its face, as on a Packager's side"
+      ],
+      [
+        "Breaking",
+        "Drops itself, still tuned; only players allowed on its network can break it"
+      ]
+    ],
+    "obtain": [
+      "Crafting table: an Electron Tube, an Andesite Casing and a Brass Sheet in a column."
+    ],
+    "uses": [
+      "Hung on the chests a [[trade-master|Trade Master]] takes from and fills."
+    ],
+    "related": [
+      "trade-master"
+    ]
+  },
+  {
+    "id": "trade-ledger",
+    "name": "Trade Ledger",
+    "registry": [
+      "comedymonkeysaddons:trade_ledger",
+      "comedymonkeysaddons:incomplete_trade_ledger"
+    ],
+    "summary": "A brass-bound book of accounts: the part that turns a Trade Bot into a [[trade-master|Trade Master]].",
+    "tags": [
+      "crafting component",
+      "trading"
+    ],
+    "stage": "end",
+    "teach": {
+      "what": "A crafting part, made by sequenced assembly on a book.",
+      "why": "It goes in the middle of the [[trade-master|Trade Master]]'s upgrade, above the Trade Bot.",
+      "when": "When you're ready to upgrade a [[trade-bot|Trade Bot]].",
+      "interacts": "Deployers add a Precision Mechanism, an Emerald Block and an Electron Tube to a book, and a Mechanical Press finishes it, in one loop.",
+      "mistakes": [
+        "Expecting scrap. It never fails."
+      ]
+    },
+    "specs": [
+      [
+        "Recipe",
+        "Sequenced assembly on a book: Precision Mechanism, Emerald Block, Electron Tube, then pressed (1 loop)"
+      ]
+    ],
+    "obtain": [
+      "Sequenced assembly, as above."
+    ],
+    "uses": [
+      "1 in the [[trade-master|Trade Master]]'s upgrade."
+    ],
+    "related": [
+      "trade-master",
+      "trade-bot"
+    ]
+  },
+  {
+    "id": "netherite-sheet",
+    "name": "Netherite Sheet",
+    "registry": [
+      "comedymonkeysaddons:netherite_sheet"
+    ],
+    "summary": "A Netherite Ingot pressed flat, like Create's other sheets.",
+    "tags": [
+      "crafting component"
+    ],
+    "stage": "end",
+    "teach": {
+      "what": "A metal sheet: one Netherite Ingot in a Mechanical Press makes one.",
+      "why": "The [[trade-master|Trade Master]]'s upgrade takes 4, for the corners of its grid.",
+      "when": "When you're ready to upgrade a [[trade-bot|Trade Bot]]: 4 sheets cost 16 ancient debris.",
+      "interacts": "It's tagged `c:plates/netherite`, and recipes use the tag, so other mods' netherite sheets work too.",
+      "mistakes": [
+        "Crafting it on a table. It's pressed, like Create's sheets."
+      ]
+    },
+    "specs": [
+      [
+        "Recipe",
+        "1 Netherite Ingot in a Mechanical Press"
+      ],
+      [
+        "Tag",
+        "`c:plates/netherite`"
+      ]
+    ],
+    "obtain": [
+      "Mechanical Press: a Netherite Ingot."
+    ],
+    "uses": [
+      "4 in the [[trade-master|Trade Master]]'s upgrade."
+    ],
+    "related": [
+      "trade-master"
+    ]
+  },
+  {
     "id": "capture-bottle",
     "name": "Capture Bottle",
     "registry": [
@@ -2312,7 +2437,8 @@
       "An Elytra in the chest still works alongside it: it only gives way while the jetpack is thrusting or hovering."
     ],
     "facts": [
-      "Nothing on it runs quietly: being strapped to your back, it only clicks, whirs and snaps when something starts or stops. In flight you hear the wind, as with an Elytra."
+      "Nothing on it runs quietly: being strapped to your back, it only clicks, whirs and snaps when something starts or stops. In flight you hear the wind, as with an Elytra.",
+      "Its advancements: Wound and Ready, Liftoff, Clockwork Wings, Station Keeping, What Goes Up, Overwound (wearing III) and The Floor Is Lava (a Netherite one through lava)."
     ],
     "related": [
       "jetpack-winding-station",

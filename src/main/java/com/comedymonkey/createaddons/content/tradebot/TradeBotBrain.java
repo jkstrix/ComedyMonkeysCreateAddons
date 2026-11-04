@@ -20,10 +20,17 @@ import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipRoot;
+import com.comedymonkey.createaddons.content.tradebot.master.ErrandHost;
+import com.comedymonkey.createaddons.content.tradebot.master.GaugeClaims;
+import com.comedymonkey.createaddons.content.tradebot.master.GaugePlanner;
+import com.comedymonkey.createaddons.content.tradebot.master.MasterErrand;
+import com.comedymonkey.createaddons.content.tradebot.master.MasterStatus;
+import com.comedymonkey.createaddons.content.tradebot.master.TradeNetwork;
 import com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion.Route;
 import com.comedymonkey.createaddons.content.tradebot.react.CornerFinder;
 import com.comedymonkey.createaddons.content.tradebot.react.Reactions;
 import com.comedymonkey.createaddons.content.tradebot.trade.Buyers;
+import com.comedymonkey.createaddons.content.tradebot.trade.Deal;
 import com.comedymonkey.createaddons.content.tradebot.trade.InputSnapshot;
 import com.comedymonkey.createaddons.content.tradebot.trade.TradeDemand;
 import com.comedymonkey.createaddons.content.tradebot.trade.TradeSpot;
@@ -50,7 +57,9 @@ import net.minecraft.world.phys.Vec3;
  * What Trade Bot is doing (server): docked at home, leaving, out on a job, rolling home and docking. While docked he
  * checks every few seconds whether there's a trip worth making (D47, D52), and goes on his own. Wherever he is, he
  * heads home when his station's redstone pauses him, at night, in a thunderstorm, or when his charge only just covers
- * the way back (D3, D32, D38, D49). {@code /tradebot goto} sends him on test trips.
+ * the way back (D3, D32, D38, D49). {@code /tradebot goto} sends him on test trips. The Trade Master plans differently
+ * (design/specs/trade-master.md): his trips are {@link MasterErrand}s for the gauges on his network, planned by
+ * {@link GaugePlanner}; the rest of the brain (moving, visits, trades, interruptions) is the same.
  */
 public class TradeBotBrain {
 	public static final String LEAVE = "action_comes_in";
@@ -110,6 +119,16 @@ public class TradeBotBrain {
 	private Job job;
 	@Nullable
 	private BotWork work;
+	/** The Trade Master's current trip, instead of a {@link Job}. */
+	@Nullable
+	private MasterErrand errand;
+	private boolean errandCheered;
+	/** Gauges he couldn't do anything for, when he last planned (P3), for his station's screen and goggles. */
+	private List<GaugePlanner.Problem> problems = List.of();
+	private final ErrandHost host = new Host();
+	/** His network as he last read it, planning: its board chests and gauges, for his station's screen. */
+	@Nullable
+	private TradeNetwork lastNetwork;
 	/** Which input goes first next time, so they take turns (D47). */
 	private int roundRobin;
 	/** A trip to put his load back that put nothing back: not again until this time, unless his links or load change. */
@@ -243,6 +262,210 @@ public class TradeBotBrain {
 		return true;
 	}
 
+	/**
+	 * The Trade Master's trip, if there's one worth making (design/specs/trade-master.md "Picking a job"): it's day,
+	 * he isn't paused (P9), his station is on a network, and a gauge on one of his boards is unmet that he can do
+	 * something for, the emptiest first (P4); his charge covers the round trip and the trades (D28). With nothing to
+	 * fill but something still in his load, he puts it away. The gauge is claimed for him (P8, D24).
+	 */
+	public boolean fillGauges() {
+		if (!(station() instanceof TradeBotStationBlockEntity station) || station.frequency() == null || station.isPaused()
+			|| !bot.level().isDay() || bot.level().isThundering())
+			return false;
+		bot.forgetOldVillagers();
+		long now = bot.level().getGameTime();
+		TradeNetwork network = TradeNetwork.read(bot.level(), station.frequency(), station.getBlockPos(), CMConfig.SERVER.tradeBotRange());
+		lastNetwork = network;
+		List<TradeNetwork.Gauge> gauges = network.gauges();
+		if (gauges.size() >= ModAdvancements.TRADE_MASTER_STOCKED_GAUGES && network.outOfRange.isEmpty()
+			&& GaugePlanner.unmetEmptiestFirst(network).isEmpty())
+			bot.awardOwner(ModAdvancements.TRADE_MASTER_STOCKED, gauges.size()); // "Fully Stocked"
+		List<GaugePlanner.Trader> traders = new ArrayList<>();
+		Vec3 home = Vec3.atCenterOf(station.getBlockPos());
+		for (AbstractVillager villager : Buyers.near(bot, station.getBlockPos()))
+			if (!unreachable.blocked(villager.getUUID(), now) && TradeSpot.plan(bot, villager) != null)
+				traders.add(new GaugePlanner.Trader(villager.getUUID(), villager.position().distanceTo(home), bot.reputationWith(villager.getUUID()),
+					List.copyOf(villager.getOffers())));
+		GaugePlanner.Result result = GaugePlanner.plan(network, traders, bot.getEmeralds(), freeSlots(),
+			gauge -> GaugeClaims.claimedByOther(bot.level(), gauge, bot.getUUID(), now));
+		problems = result.problems();
+		GaugePlanner.Plan plan = result.plan();
+		if (plan == null)
+			return !isEmpty(bot.getLoad()) && putAway(network, now);
+		double far = plan.takes().keySet().stream().mapToDouble(pos -> bot.position().distanceTo(Vec3.atCenterOf(pos))).max().orElse(0);
+		far = Math.max(far, bot.position().distanceTo(Vec3.atCenterOf(plan.gauge().container())));
+		for (GaugePlanner.Trader trader : traders)
+			if (plan.buyers().contains(trader.id()) || plan.sellers().contains(trader.id()))
+				far = Math.max(far, trader.distance());
+		int tradesAhead = plan.buyers().size() + plan.sellers().size();
+		if (bot.getCharge() < (far * 3 + 4) * CMConfig.SERVER.tradeBotFePerBlock() + tradesAhead * CMConfig.SERVER.tradeBotFePerTrade())
+			return false; // he stays home and charges
+		if (!GaugeClaims.claim(bot.level(), plan.gauge().panel(), bot.getUUID(), plan.promised(), now))
+			return false;
+		for (UUID villager : plan.buyers())
+			VillagerClaims.claim(villager, bot.getUUID(), now);
+		for (UUID villager : plan.sellers())
+			VillagerClaims.claim(villager, bot.getUUID(), now);
+		if (debugging())
+			debug("fills {} x{} at {}: courier {}, buys {}, sells {} (promised {})", plan.gauge().kind().getHoverName().getString(),
+				plan.gauge().amount(), plan.gauge().container().toShortString(), plan.courier(), plan.buy(), plan.sellKinds(), plan.promised());
+		return startErrand(new MasterErrand(bot, plan, network));
+	}
+
+	/** Home with something in his load and no gauge to fill: a trip to put it away, unless the last one put nothing away. */
+	private boolean putAway(TradeNetwork network, long now) {
+		if (now < returnBlockedUntil || network.stores.isEmpty())
+			return false;
+		double far = network.stores.stream().mapToDouble(store -> bot.position().distanceTo(Vec3.atCenterOf(store.pos))).max().orElse(0);
+		if (bot.getCharge() < (far * 3 + 4) * CMConfig.SERVER.tradeBotFePerBlock())
+			return false;
+		return startErrand(MasterErrand.putAway(bot, network));
+	}
+
+	private boolean startErrand(MasterErrand next) {
+		job = null;
+		errand = next;
+		errandCheered = false;
+		goals.clear();
+		visited.clear();
+		commanded = false;
+		if (bot.isDocked())
+			return leave();
+		nextJobStep();
+		return true;
+	}
+
+	/** The Trade Master's current or last trip (for tests). */
+	@Nullable
+	public MasterErrand errand() {
+		return errand;
+	}
+
+	/** Gauges he couldn't do anything for when he last planned, and why (P3). */
+	public List<GaugePlanner.Problem> problems() {
+		return problems;
+	}
+
+	/** What his station's screen and goggles show (P2, P3, P11): his network as he last saw it, and what he's doing now. */
+	public MasterStatus masterStatus() {
+		MasterErrand e = errand;
+		boolean out = e != null && !bot.isDocked() && e.stage() != MasterErrand.Stage.DONE
+			&& task != Task.RETURNING && task != Task.DOCKING && task != Task.HOME;
+		MasterStatus.Activity activity = null;
+		ItemStack working = ItemStack.EMPTY;
+		int level = 0, amount = 0, coming = 0;
+		if (out) {
+			activity = switch (e.stage()) {
+				case TAKE -> MasterStatus.Activity.FETCHING;
+				case SELL -> MasterStatus.Activity.SELLING;
+				case BUY -> MasterStatus.Activity.BUYING;
+				case DELIVER -> MasterStatus.Activity.DELIVERING;
+				default -> MasterStatus.Activity.TIDYING;
+			};
+			if (e.gauge() != null) {
+				working = e.gauge().kind();
+				amount = e.gauge().amount();
+				coming = e.promised();
+				level = countIn(e.gauge().container(), working, 0);
+			}
+		}
+		// every other gauge: the ones he can't fill (and why), waiting or another's, then full (the screen's order)
+		TradeNetwork network = lastNetwork;
+		List<MasterStatus.Line> others = new ArrayList<>();
+		if (network != null) {
+			long now = bot.level().getGameTime();
+			List<TradeNetwork.Gauge> all = new ArrayList<>(network.gauges());
+			all.addAll(network.outOfRange);
+			for (TradeNetwork.Gauge gauge : all) {
+				if (out && e.gauge() != null && e.gauge().panel().equals(gauge.panel()))
+					continue;
+				TradeNetwork.Store store = network.store(gauge.container());
+				int has = countIn(gauge.container(), gauge.kind(), store == null ? 0 : store.count(gauge.kind()));
+				GaugePlanner.Reason why = problems.stream().filter(p -> p.gauge().panel().equals(gauge.panel())).map(GaugePlanner.Problem::reason)
+					.findFirst().orElse(null);
+				MasterStatus.State state = has >= gauge.amount() ? MasterStatus.State.FULL : why != null ? MasterStatus.State.CANT
+					: GaugeClaims.claimedByOther(bot.level(), gauge.panel(), bot.getUUID(), now) ? MasterStatus.State.OTHER_MASTER
+					: MasterStatus.State.WAITING;
+				others.add(new MasterStatus.Line(gauge.kind(), has, gauge.amount(), state, state == MasterStatus.State.CANT ? why : null));
+			}
+			others.sort(java.util.Comparator.comparingInt(line -> line.state() == MasterStatus.State.OTHER_MASTER ? 1 : line.state().ordinal()));
+		}
+		int gauges = network == null ? 0 : network.gauges().size() + network.outOfRange.size();
+		return new MasterStatus(network == null ? 0 : network.stores.size(), gauges, activity, working, level, amount, coming,
+			others.size() > MasterStatus.MAX_LINES ? others.subList(0, MasterStatus.MAX_LINES) : others);
+	}
+
+	/** How many of {@code kind} the container holds now, if it's loaded; {@code otherwise}, if not. */
+	private int countIn(BlockPos container, ItemStack kind, int otherwise) {
+		var handler = handlerAt(container, null);
+		if (handler == null)
+			return otherwise;
+		int count = 0;
+		for (int slot = 0; slot < handler.getSlots(); slot++)
+			if (ItemStack.isSameItemSameComponents(handler.getStackInSlot(slot), kind))
+				count += handler.getStackInSlot(slot).getCount();
+		return count;
+	}
+
+	private int freeSlots() {
+		int free = 0;
+		for (int slot = 0; slot < bot.getLoad().getSlots(); slot++)
+			if (bot.getLoad().getStackInSlot(slot).isEmpty())
+				free++;
+		return free;
+	}
+
+	/** The next stop of his errand; once it's done, a cheer for a good day's trading (D9), and home. */
+	private void errandStep() {
+		MasterErrand e = errand;
+		switch (e.next(host)) {
+			case BUSY -> {}
+			case LATER -> set(Task.PLANNING);
+			case DONE -> {
+				if (e.gauge() != null)
+					GaugeClaims.release(bot.level(), e.gauge().panel(), bot.getUUID());
+				if (e.trades() > 0 && !errandCheered) {
+					errandCheered = true;
+					resumeTask = Task.RETURNING;
+					react("expr_happy", null);
+					return;
+				}
+				set(Task.RETURNING);
+			}
+		}
+	}
+
+	/** What his errands ask of the brain: the same visits and trades as Trade Bot's jobs. */
+	private final class Host implements ErrandHost {
+		@Override
+		public TradeBotEntity bot() {
+			return bot;
+		}
+
+		@Override
+		public Route visit(BlockPos container, ContainerWork.Mode mode, ContainerWork.Wanted wanted) {
+			ContainerVisit visit = ContainerVisit.plan(bot, container);
+			return visit == null ? Route.NONE : approach(visit, mode, wanted);
+		}
+
+		@Override
+		public Route trade(AbstractVillager villager, Deal deal, Set<Direction> failed) {
+			long now = bot.level().getGameTime();
+			UUID id = villager.getUUID();
+			if (unreachable.blocked(id, now))
+				return Route.NONE;
+			TradeSpot spot = TradeSpot.plan(bot, villager, failed);
+			if (spot == null || !VillagerClaims.claim(id, bot.getUUID(), now))
+				return Route.NONE;
+			Route route = approach(new TradeWork(bot, spot, TradeBotBrain.this::canAffordTrade, deal));
+			if (route != Route.PLANNED)
+				VillagerClaims.release(id, bot.getUUID());
+			if (route == Route.NONE)
+				unreachable.mark(id, spot.seat(), now, true);
+			return route;
+		}
+	}
+
 	/** His station, if its chunk is loaded (nothing he does loads it). */
 	@Nullable
 	private TradeBotStationBlockEntity station() {
@@ -269,6 +492,20 @@ public class TradeBotBrain {
 	 * them once the trading's over or he's on his way home.
 	 */
 	private void renewPlanned() {
+		MasterErrand e = errand;
+		if (e != null) {
+			long now = bot.level().getGameTime();
+			boolean out = task != Task.RETURNING && task != Task.DOCKING && task != Task.HOME && task != Task.STRANDED;
+			if (now % 20 == 0 && out) {
+				if (e.gauge() != null && e.promised() > 0)
+					GaugeClaims.claim(bot.level(), e.gauge().panel(), bot.getUUID(), e.promised(), now);
+				else if (e.gauge() != null)
+					GaugeClaims.release(bot.level(), e.gauge().panel(), bot.getUUID());
+				for (UUID villager : e.villagersAhead())
+					VillagerClaims.claim(villager, bot.getUUID(), now);
+			}
+			return;
+		}
 		Job j = job;
 		if (j == null || j.planned.isEmpty())
 			return;
@@ -375,6 +612,7 @@ public class TradeBotBrain {
 			return true;
 		abortWork();
 		VillagerClaims.releaseAll(bot.getUUID());
+		GaugeClaims.releaseAll(bot.getUUID());
 		bot.motion.setFleeing(false);
 		threat = null;
 		bot.motion.stop();
@@ -398,6 +636,10 @@ public class TradeBotBrain {
 
 	/** The next stop: inputs with something wanted, then buyers, then the output (if he has earnings), then returns; then home. */
 	private void nextJobStep() {
+		if (errand != null) {
+			errandStep();
+			return;
+		}
 		Job j = job;
 		if (j == null) {
 			set(Task.RETURNING);
@@ -711,14 +953,16 @@ public class TradeBotBrain {
 					set(Task.RETURNING);
 				else if (bot.isDocked() && ticks >= SCHEDULE_TICKS) {
 					ticks = 0;
-					if (!trade())
+					if (bot.kind() == BotKind.TRADE_MASTER)
+						fillGauges();
+					else if (!trade())
 						returnLoad(); // nothing to sell: put back anything left in his load
 				}
 			}
 			case LEAVING -> {
 				Clip clip = bot.clip();
 				if (!clip.name().equals(LEAVE) || clip.finished(bot.clipElapsed(0)))
-					if (job != null)
+					if (job != null || errand != null)
 						nextJobStep();
 					else
 						set(!goals.isEmpty() ? Task.GOING : Task.RETURNING);
@@ -774,9 +1018,18 @@ public class TradeBotBrain {
 							}
 							noWay |= route == Route.NONE;
 							job.done.add(villager);
+						} else if (errand != null) {
+							// another side next time it's tried; with none left, it's out of reach for a while
+							errand.sideFailed(villager, trade.side());
+							if (TradeSpot.plan(bot, trade.villager(), Set.of(trade.side())) != null) {
+								nextJobStep();
+								return;
+							}
 						}
 						unreachable.mark(villager, TradeSpot.seatOf(trade.villager()), bot.level().getGameTime(), noWay);
-					} else if (job != null && job.phase == Phase.TAKING)
+					} else if (errand != null)
+						errand.containerUnreachable();
+					else if (job != null && job.phase == Phase.TAKING)
 						job.input++;
 					else if (job != null && job.phase == Phase.DELIVERING)
 						job.phase = Phase.RETURNING_ITEMS; // can't reach the output: keep the earnings, return the items
@@ -791,7 +1044,9 @@ public class TradeBotBrain {
 						tradeDone(trade);
 						return;
 					}
-					if (job != null && w instanceof ContainerWork c) {
+					if (errand != null && w instanceof ContainerWork c)
+						errand.containerDone(c);
+					else if (job != null && w instanceof ContainerWork c) {
 						switch (c.mode()) {
 							case TAKE -> {
 								job.taken += c.moved();
@@ -866,6 +1121,13 @@ public class TradeBotBrain {
 					set(Task.HOME);
 					if (job != null && job.emeralds >= ModAdvancements.TRADE_BOT_STACK_EMERALDS)
 						bot.awardOwner(ModAdvancements.TRADE_BOT_STACK, job.emeralds);
+					GaugeClaims.releaseAll(bot.getUUID());
+					// a gauge trip that delivered nothing and traded nothing (a seller wouldn't, after all): a minute's rest, as
+					// Trade Bot's; a trip to put things away that put nothing away: a long while
+					if (errand != null && (errand.plan() != null ? errand.delivered() == 0 && errand.trades() == 0 : errand.returned() == 0))
+						ticks = SCHEDULE_TICKS - NO_TRADE_REST_TICKS;
+					if (errand != null && errand.plan() == null && errand.returned() == 0 && !isEmpty(bot.getLoad()))
+						returnBlockedUntil = bot.level().getGameTime() + RETURN_BLOCKED_TICKS;
 					// nothing sold, or a trip to put things back that couldn't put it all: give it a minute before trying again
 					if (job != null && (job.trading && job.trades == 0 || job.returnOnly && !isEmpty(bot.getLoad())))
 						ticks = SCHEDULE_TICKS - NO_TRADE_REST_TICKS;
@@ -1038,6 +1300,7 @@ public class TradeBotBrain {
 			resumeTask = task == Task.REACTING || task.name().startsWith("SCARED_") ? resumeTask : task;
 		abortWork();
 		VillagerClaims.releaseAll(bot.getUUID());
+		GaugeClaims.releaseAll(bot.getUUID());
 		bot.motion.halt();
 		bot.motion.setFleeing(false);
 		threat = null;
@@ -1055,7 +1318,7 @@ public class TradeBotBrain {
 	private void resume() {
 		switch (resumeTask) {
 			case APPROACHING, WORKING, SHRUGGING, WAITING_OUTPUT, WAITING_TURN, PLANNING -> {
-				if (job != null)
+				if (job != null || errand != null)
 					nextJobStep();
 				else
 					set(Task.RETURNING);
@@ -1088,6 +1351,8 @@ public class TradeBotBrain {
 			trade.abort();
 			if (job != null)
 				job.calledOff.add(villager);
+			if (errand != null)
+				errand.calledOff(villager);
 			bot.playClip(SHRUG_CLIP);
 			set(Task.SHRUGGING);
 			return;
@@ -1096,7 +1361,10 @@ public class TradeBotBrain {
 			job.trades += trade.trades();
 		if (debugging())
 			debug("{} trades with {} in one clip", trade.trades(), trade.villager().getName().getString());
-		if (trade.traded() && trade.stillThere() && canAffordTrade() && !shouldGoHome() && TradeWork.offerFor(bot, trade.villager()) != null) {
+		boolean again = trade.traded() && trade.stillThere() && canAffordTrade() && !shouldGoHome() && trade.wouldTradeAgain();
+		if (errand != null)
+			errand.tradeDone(trade, again);
+		if (again) {
 			work = trade;
 			trade.start();
 			return;
@@ -1113,6 +1381,8 @@ public class TradeBotBrain {
 		work = null;
 		if (job != null)
 			job.calledOff.add(trade.villager().getUUID());
+		if (errand != null)
+			errand.calledOff(trade.villager().getUUID());
 		if (!bot.motion.canHalt()) {
 			bot.motion.stop();
 			nextJobStep();

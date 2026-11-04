@@ -48,6 +48,12 @@ public final class ModSounds {
 	/** The Pressure Crucible's sounds: the gears, the screw's creak, the crunch and the burner's fire. */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> CRUCIBLE = registerPrefixed("pressure_crucible.");
 
+	/**
+	 * The Trade Master's: Trade Bot's sounds on the same files, with his own subtitles (design/specs/trade-master.md
+	 * D39), from the {@code trade_master.*} entries that {@code design/sound/export-trade-master.js} writes.
+	 */
+	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> TRADE_MASTER = registerPrefixed("trade_master.");
+
 	/** Helper Bot's sounds, from the {@code helper_bot.*} entries that {@code design/sound/helper-bot/export-game.js} writes. */
 	public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> HELPER_BOT = registerPrefixed("helper_bot.");
 
@@ -165,6 +171,16 @@ public final class ModSounds {
 			throw new UncheckedIOException(e);
 		}
 		return Collections.unmodifiableMap(sounds);
+	}
+
+	/** One of a bot's sounds, Trade Bot's or the Trade Master's own by its kind; throws for an unknown id. */
+	public static SoundEvent bot(com.comedymonkey.createaddons.content.tradebot.BotKind kind, String id) {
+		if (kind != com.comedymonkey.createaddons.content.tradebot.BotKind.TRADE_MASTER)
+			return tradeBot(id);
+		DeferredHolder<SoundEvent, SoundEvent> holder = TRADE_MASTER.get(id);
+		if (holder == null)
+			throw new IllegalArgumentException("no Trade Master sound " + id);
+		return holder.get();
 	}
 
 	/** One of Trade Bot's sounds; throws for an unknown id, since ids are fixed by the sound design. */

@@ -41,6 +41,15 @@
           ],
           "texture": "#trade_board_board_edge"
         },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#trade_board_board_edge"
+        },
         "west": {
           "uv": [
             15.25,

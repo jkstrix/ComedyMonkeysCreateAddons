@@ -59,6 +59,30 @@ public final class ModAdvancements {
 	public static final String TRADE_BOT_SCARED = "trade_bot_scared";
 	public static final String TRADE_BOT_WOUND_UP = "trade_bot_wound_up";
 	public static final String TRADE_BOT_SOAKED = "trade_bot_soaked";
+	/** A Trade Master delivered into a gauge's chest (design/specs/trade-master.md P14). Value: how many. */
+	public static final String TRADE_MASTER_FILL = "trade_master_fill";
+	/** He sold surplus and bought what a gauge wanted with it, in one trip. */
+	public static final String TRADE_MASTER_SUPPLY_CHAIN = "trade_master_supply_chain";
+	/** He bought an enchanted book for a gauge. */
+	public static final String TRADE_MASTER_BOOK = "trade_master_book";
+	/** Every gauge on his boards full at once. Value: how many gauges. */
+	public static final String TRADE_MASTER_STOCKED = "trade_master_stocked";
+	/** A Jetpack Winding Station wound a jetpack full ("Wound and Ready"). */
+	public static final String JETPACK_WOUND = "jetpack_wound";
+	/** The jetpack's engine lifted its wearer ("Liftoff"). */
+	public static final String JETPACK_FLIGHT = "jetpack_flight";
+	/** Its wings spread ("Clockwork Wings"). */
+	public static final String JETPACK_WINGS = "jetpack_wings";
+	/** Its hover held its wearer in the air ("Station Keeping"). */
+	public static final String JETPACK_HOVER = "jetpack_hover";
+	/** It ran out of wind in mid-air ("What Goes Up"). */
+	public static final String JETPACK_RUN_DOWN = "jetpack_run_down";
+	/** Worn with Overwound. Value: the level ("Overwound" asks for III). */
+	public static final String JETPACK_OVERWOUND = "jetpack_overwound";
+	/** A Netherite Clockwork Jetpack running in lava ("The Floor Is Lava"). */
+	public static final String JETPACK_LAVA = "jetpack_lava";
+	/** Gauges that have to be full at once for "Fully Stocked". */
+	public static final int TRADE_MASTER_STOCKED_GAUGES = 8;
 	public static final String INTAKE_FITTED = "intake_fitted";
 	public static final String LINE_ENCASED = "line_encased";
 	/** Value: the span's length in blocks. */
@@ -88,9 +112,29 @@ public final class ModAdvancements {
 		void awarded(Level level, BlockPos pos, String action, int range);
 	}
 
+	/**
+	 * Game tests: told of every award to a player, and of every award to a bot's owner, online or not (a test's owner
+	 * never is). Empty in play.
+	 */
+	public static final List<Award> TEST_AWARDS = new CopyOnWriteArrayList<>();
+
+	@FunctionalInterface
+	public interface Award {
+		void awarded(java.util.UUID player, String action, int value);
+	}
+
+	/** For game tests: a bot earned its owner {@code action} (whether or not they're online to get it). */
+	public static void ownerAwarded(java.util.UUID owner, String action, int value) {
+		for (Award listener : TEST_AWARDS)
+			listener.awarded(owner, action, value);
+	}
+
 	private ModAdvancements() {}
 
 	public static void award(Player player, String action, ItemStack stack, int value) {
+		if (player != null)
+			for (Award listener : TEST_AWARDS)
+				listener.awarded(player.getUUID(), action, value);
 		if (player instanceof ServerPlayer serverPlayer)
 			ACTION.get().trigger(serverPlayer, action, stack, value);
 	}

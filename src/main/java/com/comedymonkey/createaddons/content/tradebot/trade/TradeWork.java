@@ -14,10 +14,8 @@ import com.comedymonkey.createaddons.content.tradebot.work.BotWork;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.items.ItemStackHandler;
 
 /**
  * A visit's trades with a seated villager, all in one clip (D63, refining D35): he grips the goods from his drawer,
@@ -25,7 +23,8 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * real prices and stock (D17), paid into his emerald pouch (D48), with the XP vanilla would have dropped banked for
  * Nuggets of Experience (D57). He stops when the villager buys nothing more he carries, or his charge only covers a
  * trade and the way home. Until that beat he checks the villager is still seated, still there and not trading with a
- * player; if not, the visit is off and he keeps everything (D46).
+ * player; if not, the visit is off and he keeps everything (D46). What the trades are is its {@link Deal}: Trade Bot
+ * sells; the Trade Master also buys (design/specs/trade-master.md D17).
  */
 public class TradeWork implements BotWork {
 	public static final String CLIP = "trade_villager", CLIP_OPEN = "trade_villager_open";
@@ -36,13 +35,28 @@ public class TradeWork implements BotWork {
 	private final TradeSpot spot;
 	/** Whether his charge allows one more trade (and still the way home). */
 	private final BooleanSupplier affordable;
+	private final Deal deal;
 	private int trades;
 	private boolean done, failed;
 
 	public TradeWork(TradeBotEntity bot, TradeSpot spot, BooleanSupplier affordable) {
+		this(bot, spot, affordable, Deal.SELL_ANYTHING);
+	}
+
+	public TradeWork(TradeBotEntity bot, TradeSpot spot, BooleanSupplier affordable, Deal deal) {
 		this.bot = bot;
 		this.spot = spot;
 		this.affordable = affordable;
+		this.deal = deal;
+	}
+
+	public Deal deal() {
+		return deal;
+	}
+
+	/** The villager would make another of this visit's trades with what he carries now. */
+	public boolean wouldTradeAgain() {
+		return deal.next(bot, spot.villager()) != null;
 	}
 
 	public AbstractVillager villager() {
@@ -148,21 +162,17 @@ public class TradeWork implements BotWork {
 
 	private boolean trade() {
 		AbstractVillager villager = spot.villager();
-		MerchantOffer offer = offerFor(bot, villager);
+		MerchantOffer offer = deal.next(bot, villager);
 		if (offer == null)
 			return false;
 		int price = BotPricing.cost(offer, bot.reputationWith(villager.getUUID()));
-		ItemStackHandler load = bot.getLoad();
-		int left = price;
-		for (int slot = 0; slot < load.getSlots() && left > 0; slot++)
-			if (offer.getItemCostA().test(load.getStackInSlot(slot)))
-				left -= load.extractItem(slot, left, false).getCount();
+		deal.make(bot, villager, offer);
 		int xp = villager instanceof TradeBotCustomer customer ? customer.comedymonkeysaddons$botTrade(offer) : wanderingTrade(villager, offer);
 		if (com.comedymonkey.createaddons.content.tradebot.move.TradeBotMotion.debug)
-			com.mojang.logging.LogUtils.getLogger().info("[Trade Bot {}] sold {} x{} to {} for {} emeralds, {} XP (uses {}/{})", bot.getId(),
-				offer.getBaseCostA().getHoverName().getString(), price, villager.getName().getString(), offer.getResult().getCount(), xp, offer.getUses(),
-				offer.getMaxUses());
-		bot.addEarnings(offer.getResult().getCount(), xp);
+			com.mojang.logging.LogUtils.getLogger().info("[Trade Bot {}] traded {} x{} with {} for {} x{}, {} XP (uses {}/{})", bot.getId(),
+				offer.getBaseCostA().getHoverName().getString(), price, villager.getName().getString(), offer.getResult().getHoverName().getString(),
+				offer.getResult().getCount(), xp, offer.getUses(), offer.getMaxUses());
+		bot.addEarnings(0, xp);
 		bot.tradedWith(villager.getUUID());
 		bot.addCharge(-CMConfig.SERVER.tradeBotFePerTrade());
 		villager.playSound(villager.getNotifyTradeSound(), 1, villager.getVoicePitch());
@@ -188,20 +198,6 @@ public class TradeWork implements BotWork {
 	/** The first offer of the villager's he can sell into with what he's carrying, at his price; null if none. */
 	@Nullable
 	public static MerchantOffer offerFor(TradeBotEntity bot, AbstractVillager villager) {
-		int reputation = bot.reputationWith(villager.getUUID());
-		for (MerchantOffer offer : villager.getOffers())
-			if (BotPricing.buys(offer) && carried(bot.getLoad(), offer) >= BotPricing.cost(offer, reputation))
-				return offer;
-		return null;
-	}
-
-	private static int carried(ItemStackHandler load, MerchantOffer offer) {
-		int count = 0;
-		for (int slot = 0; slot < load.getSlots(); slot++) {
-			ItemStack stack = load.getStackInSlot(slot);
-			if (offer.getItemCostA().test(stack))
-				count += stack.getCount();
-		}
-		return count;
+		return Deal.SELL_ANYTHING.next(bot, villager);
 	}
 }

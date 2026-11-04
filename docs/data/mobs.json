@@ -143,6 +143,142 @@
     ]
   },
   {
+    "id": "trade-master",
+    "name": "Trade Master",
+    "registry": [
+      "comedymonkeysaddons:trade_master"
+    ],
+    "summary": "Trade Bot upgraded, bearded and monocled: he keeps the chests on your Create network stocked, fetching, selling your surplus and buying from seated villagers to fill your Factory Gauges.",
+    "tags": [
+      "robot",
+      "trading",
+      "logistics",
+      "automation"
+    ],
+    "stage": "end",
+    "requires": [
+      "trade-bot",
+      "trade-ledger",
+      "netherite-sheet",
+      "trade-board"
+    ],
+    "kind": "Mod creature",
+    "threat": 0,
+    "rarity": 1,
+    "teach": {
+      "what": "A [[trade-bot|Trade Bot]] upgraded on Mechanical Crafters: the same body and manners in netherite plates, with a whisker beard, a monocle and a ledger on his back. You put Factory Gauges on [[trade-board|Trade Boards]] hung on your chests, and he keeps those chests filled to what the gauges ask, by fetching, selling and buying.",
+      "why": "Create's logistics can move what you have; it can't get what villagers sell. He fills the gap: bookshelves, glass, enchanted books, Bottles o' Enchanting, paid for by your base's own surplus, at no more than base price.",
+      "when": "Late game. The upgrade uses up a Trade Bot and needs a [[trade-ledger]], a Stock Link, 2 Factory Gauges and 4 [[netherite-sheet|Netherite Sheets]] (16 ancient debris), and he works through a Create logistics network.",
+      "interacts": "Tune him to a network with his item on a Stock Link before you place him. [[trade-board|Trade Boards]] tuned to it mark the chests he may use: with no gauges a board makes its chest an input, with gauges an output he fills. He trades only with villagers on Create seats, as Trade Bot does, and a [[cuckoo-clock]] sets how often they restock.",
+      "mistakes": [
+        "Gauges straight on a chest or on a Packager. He only counts gauges on a [[trade-board|Trade Board]]'s face.",
+        "Leaving things in a boarded chest you don't want sold. Anything above its gauges is fair game; keep it in a chest without a board.",
+        "Expecting him to pay any price. He never pays above a villager's base price, and waits for a restock instead.",
+        "Boards more than 64 blocks from his station. They show as out of range on his screen, and he never goes."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Health",
+        "value": "20",
+        "unit": "HP",
+        "gauge": 0.2
+      },
+      {
+        "label": "Full charge",
+        "value": "100,000",
+        "unit": "FE",
+        "gauge": 1
+      },
+      {
+        "label": "Range",
+        "value": "64",
+        "unit": "blocks",
+        "gauge": 0.25
+      }
+    ],
+    "specs": [
+      [
+        "Load",
+        "27 stacks, mixed, plus an unlimited emerald pouch"
+      ],
+      [
+        "Board chests",
+        "Any number, within 64 blocks of his station"
+      ],
+      [
+        "Gauges per board",
+        "Up to 4, on the board's face"
+      ],
+      [
+        "Prices",
+        "Never above a villager's base price"
+      ],
+      [
+        "Per player",
+        "2, apart from your Trade Bots"
+      ],
+      [
+        "Charge, running cost, comparator",
+        "As [[trade-bot|Trade Bot]]'s"
+      ]
+    ],
+    "behaviour": [
+      "Trade Bot's manners, unchanged: the same eager salesman, the same fears, waves and glares, the same sounds.",
+      "His monocle pops out when he's startled and swings back into place; his whisker beard hangs and squashes as he leans.",
+      "Docked, his violet eyes go dark and his station glows instead."
+    ],
+    "spawning": [
+      "He never spawns. You upgrade a packed [[trade-bot|Trade Bot]] in the middle of a 5x5 Mechanical Crafting grid; he keeps the Trade Bot's charge, earnings and reputation, but not his container links.",
+      "He is a Stock Link himself: placed as he comes, his station starts a network of its own. To join one you already have, right-click one of its Stock Links with his item before placing him.",
+      "Sneak + Wrench on his station packs him back into the item, his network and all."
+    ],
+    "ai": [
+      "By day, he works on the emptiest short gauge on his boards first, by share of its amount. Another Trade Master on the same network takes other gauges.",
+      "He fetches the gauge's item from his other board chests first, only what's above their own gauges.",
+      "Then he buys the rest from seated villagers, the cheapest per item first, then the nearest, never above base price. A trade that also needs an item, such as a book, takes it from his chests, or is skipped.",
+      "He pays from his pouch, then from spare emeralds in his chests, then by selling what his chests hold the most of. He never takes anything from a chest below a gauge's amount for it, to sell or to spend.",
+      "He delivers everything into the gauge's chest, the odd extra included, and puts leftovers back where they came from.",
+      "Create's gauge shows what he has on its way as promised, and Create never orders anything for a gauge on a board.",
+      "A trip that bought nothing (a seller wouldn't trade after all) earns him a minute's rest before he tries again."
+    ],
+    "attacks": [
+      "None. He never fights, and monsters never target him."
+    ],
+    "weaknesses": [
+      "As [[trade-bot|Trade Bot]]: he winds down instead of dying, in water until he's dry, and hides from monsters he can see."
+    ],
+    "loot": [
+      "He drops nothing and never loses his load.",
+      "Spare emeralds go to a chest with an Emerald gauge, else an input; **Nuggets of Experience** only to a chest with a Nugget of Experience gauge, else he banks them."
+    ],
+    "farming": [
+      "Put a [[trade-board|Trade Board]] on every chest he should use. No gauges: an input he takes from. Gauges: an output he fills.",
+      "An Emerald gauge on one board chest is a savings floor: he fills it by selling, and never spends below it.",
+      "A gauge for each terracotta colour on one board, a bookshelf gauge on another: each chest's gauges choose what ends up in it."
+    ],
+    "strategies": [
+      "Keep surplus you're happy to sell in input board chests; keep valuables in chests without a board.",
+      "His station's screen lists every gauge: the one he's filling, the ones he can't (nobody sells it, out of range, or he can't pay) and the full ones.",
+      "Seat a wide range of villagers: the more sellers, the more gauges he can fill, and the better his prices as his reputation grows."
+    ],
+    "tips": [
+      "Engineer's Goggles on his station show his network and what he's doing; on a board, its chest and each gauge's count.",
+      "An enchanted book gauge counts only that exact book, and his screen names it by its enchantment."
+    ],
+    "facts": [
+      "His advancements: Middle Management (the upgrade), Trade Master (his first filled gauge), Supply Chain (selling and buying for a gauge in one trip), Book Club (an enchanted book) and Fully Stocked (8 gauges full at once).",
+      "He shares every animation and sound with Trade Bot; only his subtitles say Trade Master."
+    ],
+    "related": [
+      "trade-bot",
+      "trade-board",
+      "trade-ledger",
+      "netherite-sheet",
+      "cuckoo-clock"
+    ]
+  },
+  {
     "id": "helper-bot",
     "name": "Helper Bot",
     "registry": [

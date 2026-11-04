@@ -547,6 +547,8 @@ public final class TradeBotEntity extends PathfinderMob {
 
 	/** An advancement for his owner, if they're online (what he does earns them credit, wherever they are). */
 	public void awardOwner(String action, int value) {
+		if (owner != null)
+			com.comedymonkey.createaddons.advancement.ModAdvancements.ownerAwarded(owner, action, value);
 		if (owner != null && level() instanceof ServerLevel server) {
 			net.minecraft.server.level.ServerPlayer player = server.getServer().getPlayerList().getPlayer(owner);
 			if (player != null)
@@ -715,7 +717,7 @@ public final class TradeBotEntity extends PathfinderMob {
 	}
 
 	private void playCue(String event) {
-		SoundEvent sound = ModSounds.TRADE_BOT.containsKey(event) ? ModSounds.tradeBot(event) : null;
+		SoundEvent sound = ModSounds.TRADE_BOT.containsKey(event) ? ModSounds.bot(kind(), event) : null;
 		if (sound != null)
 			level().playLocalSound(getX(), getY(), getZ(), sound, SoundSource.NEUTRAL, 1, 1, false);
 	}
@@ -888,7 +890,7 @@ public final class TradeBotEntity extends PathfinderMob {
 	@Override
 	@Nullable
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return ModSounds.tradeBot("bonk");
+		return ModSounds.bot(kind(), "bonk");
 	}
 
 	@Override

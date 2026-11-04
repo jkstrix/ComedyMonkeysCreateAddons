@@ -103,6 +103,9 @@ function convert(j) {
     case 'minecraft:crafting_shaped':
     case 'create:mechanical_crafting':
       return { ...base, grid: grid(j.pattern, j.key), outputs: [result(j.result)] };
+    // the Trade Master's upgrade is Create's mechanical crafting that keeps the Trade Bot's data
+    case `${MOD}:trade_master_upgrade`:
+      return { type: 'mechanical_crafting', machine: 'create', grid: grid(j.pattern, j.key), outputs: [result(j.result)] };
     case 'minecraft:crafting_shapeless':
       return { ...base, inputs: merge(j.ingredients.map(i => ingredient(i))), outputs: [result(j.result)] };
     case 'minecraft:stonecutting':
@@ -127,6 +130,7 @@ function convert(j) {
     case 'create:splashing':
     case 'create:crushing':
     case 'create:milling':
+    case 'create:pressing':
       return {
         ...base, inputs: merge(j.ingredients.map(i => ingredient(i))), outputs: j.results.map(result),
         ...(j.heat_requirement ? { heat: j.heat_requirement } : {}),

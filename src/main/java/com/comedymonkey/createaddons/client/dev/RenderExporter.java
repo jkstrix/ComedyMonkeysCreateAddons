@@ -632,7 +632,7 @@ public final class RenderExporter {
 	/**
 	 * {@code !use <item> <x> <y> <z> <face>}: a fake player uses the item on that face of that block (x y z as ~ offsets
 	 * from the scene's origin), exactly as a player's click would, for things a command can't place properly: wires
-	 * laid on a face, fittings clipped onto a line.
+	 * laid on a face, fittings clipped onto a line, a Trade Board hung on a chest (tuned first, as it must be).
 	 */
 	private static void use(BlockPos origin, String step) {
 		String[] p = step.split("\\s+");
@@ -646,6 +646,8 @@ public final class RenderExporter {
 				net.minecraft.core.Direction face = net.minecraft.core.Direction.byName(p[5]);
 				var player = net.neoforged.neoforge.common.util.FakePlayerFactory.getMinecraft(level);
 				ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(p[1])));
+				if (stack.getItem() instanceof com.comedymonkey.createaddons.content.tradebot.board.TradeBoardItem)
+					com.comedymonkey.createaddons.content.tradebot.board.TradeBoardItem.tune(stack, java.util.UUID.nameUUIDFromBytes("renders".getBytes()));
 				player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, stack);
 				Vec3 at = Vec3.atCenterOf(pos).add(Vec3.atLowerCornerOf(face.getNormal()).scale(0.5));
 				player.moveTo(at.x + face.getStepX(), at.y + face.getStepY() - 1, at.z + face.getStepZ(), 0, 0);

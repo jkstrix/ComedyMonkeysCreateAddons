@@ -54,12 +54,12 @@ public final class TradeBotScenes {
 		});
 	}
 
-	private static void play(CreateSceneBuilder scene, ElementLink<EntityElement> bot, String clip) {
+	static void play(CreateSceneBuilder scene, ElementLink<EntityElement> bot, String clip) {
 		scene.world().modifyEntity(bot, e -> ((TradeBotEntity) e).playClip(clip));
 	}
 
 	/** Lets a physical clip (hopping out of the station) finish, then puts him where it ended, as the server would. */
-	private static void playPhysical(CreateSceneBuilder scene, ElementLink<EntityElement> bot, String name) {
+	static void playPhysical(CreateSceneBuilder scene, ElementLink<EntityElement> bot, String name) {
 		play(scene, bot, name);
 		Clip clip = ClipLibrary.get().clip(name);
 		scene.idle((int) Math.ceil(clip.length() * 20));
@@ -74,7 +74,7 @@ public final class TradeBotScenes {
 	}
 
 	/** Rolls him through {@code points} at his cruising speed, turning toward each, and stops facing {@code yaw}. */
-	private static void roll(CreateSceneBuilder scene, ElementLink<EntityElement> bot, Vec3 from, List<Vec3> points, float yaw) {
+	static void roll(CreateSceneBuilder scene, ElementLink<EntityElement> bot, Vec3 from, List<Vec3> points, float yaw) {
 		play(scene, bot, "start_rolling");
 		Vec3 at = from;
 		boolean rolling = false;

@@ -61,15 +61,18 @@ public class TradeBoardItem extends Item {
 		return frequency(stack) != null;
 	}
 
+	/**
+	 * Before the block's own click (so a chest doesn't just open, and his station doesn't open its screen): on a Trade
+	 * Master's station or any Create link, take its network; on a container's face, hang there. Anything else is the
+	 * block's as usual.
+	 */
 	@Override
-	public InteractionResult useOn(UseOnContext context) {
+	public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
 		Level level = context.getLevel();
 		Player player = context.getPlayer();
-		ItemStack stack = context.getItemInHand();
 		BlockPos clicked = context.getClickedPos();
 		if (player == null)
-			return InteractionResult.FAIL;
-		// on a Trade Master's station or any Create link: take its network
+			return InteractionResult.PASS;
 		LogisticallyLinkedBehaviour link = BlockEntityBehaviour.get(level, clicked, LogisticallyLinkedBehaviour.TYPE);
 		if (link != null && !player.isShiftKeyDown()) {
 			if (level.isClientSide)
@@ -80,13 +83,25 @@ public class TradeBoardItem extends Item {
 			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_board.tuned"), true);
 			return InteractionResult.SUCCESS;
 		}
-		// on a container's face: hang it there
+		if (level.getCapability(Capabilities.ItemHandler.BLOCK, clicked, context.getClickedFace()) == null)
+			return InteractionResult.PASS;
+		return hang(context, stack);
+	}
+
+	/** Clicked on something that isn't a container (and didn't use the click itself): it only hangs on containers. */
+	@Override
+	public InteractionResult useOn(UseOnContext context) {
+		if (context.getPlayer() != null && !context.getLevel().isClientSide)
+			context.getPlayer().displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_board.no_container"), true);
+		return InteractionResult.FAIL;
+	}
+
+	/** Hangs it on the clicked face of a container, if it's tuned and there's no board there already. */
+	private InteractionResult hang(UseOnContext context, ItemStack stack) {
+		Level level = context.getLevel();
+		Player player = context.getPlayer();
+		BlockPos clicked = context.getClickedPos();
 		Direction face = context.getClickedFace();
-		if (level.getCapability(Capabilities.ItemHandler.BLOCK, clicked, face) == null) {
-			if (!level.isClientSide)
-				player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_board.no_container"), true);
-			return InteractionResult.FAIL;
-		}
 		UUID frequency = frequency(stack);
 		if (frequency == null) {
 			if (!level.isClientSide)

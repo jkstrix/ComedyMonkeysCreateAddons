@@ -1,0 +1,32 @@
+{
+  "parent": "comedymonkeysaddons:trade_master_fill",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:trade_board"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.trade_master_stocked"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.trade_master_stocked.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "trade_master_stocked",
+        "min_value": 8
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

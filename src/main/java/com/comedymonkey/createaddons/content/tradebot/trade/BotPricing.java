@@ -32,6 +32,19 @@ public final class BotPricing {
 			&& !offer.getBaseCostA().is(Items.EMERALD);
 	}
 
+	/** An offer the Trade Master can buy from: anything but emeralds for its price, still in stock (design/specs/trade-master.md D17). */
+	public static boolean sells(MerchantOffer offer) {
+		return !offer.isOutOfStock() && !offer.getResult().isEmpty() && !offer.getResult().is(Items.EMERALD);
+	}
+
+	/**
+	 * The Trade Master never pays above the base price (design/specs/trade-master.md D32): with his reputation, demand
+	 * hasn't pushed the offer's price over what it costs with none. He waits for a restock instead.
+	 */
+	public static boolean withinBase(MerchantOffer offer, int reputation) {
+		return cost(offer, reputation) <= offer.getBaseCostA().getCount();
+	}
+
 	/** His reputation after one more trade. */
 	public static int raise(int reputation) {
 		return Math.min(MAX_REPUTATION, Math.max(0, reputation) + REPUTATION_PER_TRADE);

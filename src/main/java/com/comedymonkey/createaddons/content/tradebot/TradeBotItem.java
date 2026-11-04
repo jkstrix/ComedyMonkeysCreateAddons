@@ -52,14 +52,14 @@ public class TradeBotItem extends BlockItem {
 		if (!result.consumesAction() || !(context.getLevel() instanceof ServerLevel level) || player == null)
 			return result;
 		if (populate(level, pos, player.getUUID(), data, name) != null)
-			level.playSound(null, pos, ModSounds.tradeBot("winder_engage"), SoundSource.BLOCKS, 1, 1);
+			level.playSound(null, pos, ModSounds.bot(kind, "winder_engage"), SoundSource.BLOCKS, 1, 1);
 		return result;
 	}
 
 	/**
 	 * The Trade Master's item is tuned like Create's logistics items (design/specs/trade-master.md P1): right-click any
 	 * Create link (a Stock Link, a gauge, another Trade Master's station) to take its network; placed, his station keeps
-	 * it. Untuned, he starts a network of his own.
+	 * it. Untuned, his station starts a network of its own: he is its Stock Link (user, 2026-11-04).
 	 */
 	@Override
 	public InteractionResult useOn(UseOnContext context) {

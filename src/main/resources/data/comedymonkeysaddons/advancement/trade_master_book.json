@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:trade_master_fill",
+  "display": {
+    "icon": {
+      "id": "minecraft:enchanted_book"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.trade_master_book"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.trade_master_book.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "trade_master_book"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

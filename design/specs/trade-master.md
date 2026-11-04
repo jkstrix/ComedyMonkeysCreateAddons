@@ -66,9 +66,9 @@ This is the v1 spec's parked **"v2: Trade Ledger upgrade"** (advanced jobs: buyi
 | D41 | Board form (refines D31, D34, H2) | **Thin, hung like an item frame** on one face of the container (an entity; it takes no block space). **Factory Gauges placed on that same face** count for him: they sit on the board's four places, up to four, the same as on a Packager's side. Gauges on any other face are ignored. The first, full-block design was dropped ("ugly"); the thin hatch after it (a grille with a letterbox flap and a bulb) became a **plain flat board**: "Can we change it to a trade board, the hatch looks silly and isn't required" | user, 2026-11-04 |
 
 ## Approved defaults (D33)
-P1. **Tuning:** as Create's logistics items: right-click a Stock Link (or any block on the network) with the Trade Master item, then place him. A locked network only lets in players allowed to use it.
-P2. **Station screen:** the network he's on, the gauges he's working on, gauges he can't fill (and why), charge, and **Call home**. No container links: the Trade Master works only through his network.
-P3. **Can't-fill feedback:** a gauge whose item no seated villager in range sells, or whose chest is out of range, is listed as "nobody sells this" or "out of range" on the screen and in goggles. He never wanders off for it.
+P1. **Tuning:** as Create's logistics items: right-click a Stock Link (or any block on the network) with the Trade Master item, then place him. A locked network only lets in players allowed to use it. *He is the Stock Link* (user, 2026-11-04, replacing a brief "he can't be placed untuned"): "he shouldn't require a stock link at all, he is the stock link". Placed untuned, his station starts a network of its own; tuning him first only joins an existing one.
+P2. **Station screen:** the network he's on, the gauges he's working on, gauges he can't fill (and why), charge, and **Call home**. No container links: the Trade Master works only through his network. *Layout approved 2026-11-04* ([preview](../gui/trade-master-station-preview.html)): his **netherite band** (user's pick over Trade Bot's brass); status and charge; **Network** (the board chests he can see); a **Working on** row ("I liked the working on row"); and **every other gauge** on his network in a list that scrolls ("the list could get long"): can't fill and why, then waiting or another Trade Master's, then full. **No limit on how many board chests he uses**, only his 64-block reach (D28, H7). An enchanted book is named by its enchantment ("Mending"), as that's what its gauge counts (P7; user: "enchanted book should be the type of book").
+P3. **Can't-fill feedback:** a gauge whose item no seated villager in range sells, or whose chest is out of range, is listed as "nobody sells this" or "out of range" on the screen and in goggles. He never wanders off for it. A third reason, **"can't pay"**: someone sells it, but he can't raise the emeralds or lacks a second cost item such as a book (P6); shown in the approved screen.
 P4. **Priority:** the emptiest gauge first (by share of its amount); the cheapest seller at his prices, then the nearest; all of a villager's useful trades in one visit (Trade Bot D63).
 P5. **Selling choice:** when he needs emeralds, he sells what his board chests hold the **most** of (that isn't held up by a gauge), so scarce items go last.
 P6. **Two-item trades:** if a trade also costs an item (a book for an enchanted book), he fetches that from his board chests too; if it's missing, he skips the trade.
@@ -79,18 +79,18 @@ P10. **The upgrade carries over** the Trade Bot's owner, reputation and charge; 
 P11. **Goggles:** network connected or not, the current task, the gauge he's serving, charge.
 P12. **Ponder:** two scenes: "Joining a network" (tuning, the station) and "Filling gauges" (buying, selling for an emerald gauge, leftovers).
 P13. **Sounds:** *changed 2026-11-04:* **the same sounds as Trade Bot** (user: "the animations and noises should be the same").
-P14. **Advancement:** "Trade Master": he fills a gauge for the first time.
+P14. **Advancement:** "Trade Master": he fills a gauge for the first time. *Approved 2026-11-04, with four more:* Middle Management (the upgrade), Supply Chain (selling surplus and buying for a gauge in one trip), Book Club (buying an enchanted book for a gauge) and Fully Stocked (8 gauges on his boards full at once, a challenge).
 P15. **Display Link source:** parked for a later version (what he's buying, on a display board).
 
 ## Trade Board defaults (D37)
 H1. **Name:** Trade Board.
 H2. **Placement:** against any item container (chest, barrel, item vault, the mod's upgraded chests), facing it; several per container allowed.
-H3. **Tuning:** like Create's logistics items: right-click his station or any block on his network with the board, then place.
+H3. **Tuning:** like Create's logistics items: right-click his station or any block on his network with the board, then place. The board acts before the block's own click, so hanging one on a chest doesn't open the chest.
 H4. **Recipe:** cheap, because you need several: crafting table, andesite casing + brass sheet + electron tube, makes 1. Layout (approved 2026-11-04): shaped, middle column `T / A / S` (electron tube over andesite casing over brass sheet). The user asked that boards be **cheap**.
 H5. **Access:** follows the network's lock; only allowed players can tune or break it.
 H6. **Breaking:** drops itself; gauges on it pop off, as on any block.
 H7. **Range:** a board more than 64 blocks from his station counts as "out of range" (P3).
-H8. **Goggles:** its container, network, gauges and their status.
+H8. **Goggles:** its container, network, gauges and their status. A board is an entity and Create's goggles read only blocks, so a client mixin draws its readout the way Create draws a block's (user's pick, 2026-11-04): the container, "Input" with no gauges, else each gauge with its count and what's on its way.
 H9. **Look:** a plain flat board in the bots' andesite and steel, no moving parts (D41; brief design/briefs/trade-board.md), previewed in Blockbench first.
 
 ## Open Questions

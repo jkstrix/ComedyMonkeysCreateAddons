@@ -1,0 +1,35 @@
+{
+  "parent": "comedymonkeysaddons:trade_bot",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:trade_master"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.trade_master"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.trade_master.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "comedymonkeysaddons:trade_master"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

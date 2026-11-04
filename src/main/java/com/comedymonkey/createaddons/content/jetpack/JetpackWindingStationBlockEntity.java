@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModSounds;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
@@ -255,8 +256,10 @@ public class JetpackWindingStationBlockEntity extends KineticBlockEntity {
 		boolean wasFull = Jetpacks.full(jetpack);
 		Jetpacks.setWind(jetpack, Jetpacks.wind(jetpack) + airPerStep(rpm) * Jetpacks.windPerAir());
 		timer = waitAfterStep(rpm);
-		if (!wasFull && Jetpacks.full(jetpack))
+		if (!wasFull && Jetpacks.full(jetpack)) {
 			sound("station_full");
+			ModAdvancements.awardNearby(level, worldPosition, ModAdvancements.JETPACK_WOUND, jetpack, 0); // "Wound and Ready"
+		}
 		if (level != null)
 			level.blockEntityChanged(worldPosition); // saved; the comparator hears of it when its level changes (tick)
 	}

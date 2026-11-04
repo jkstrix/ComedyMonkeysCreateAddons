@@ -119,10 +119,18 @@ public final class TradeBotStationBlock extends Block implements IBE<TradeBotSta
 		return InteractionResult.SUCCESS;
 	}
 
-	/** Other mods' wrenches (the c:tools/wrench tag) pack it up too. */
+	/**
+	 * Other mods' wrenches (the c:tools/wrench tag) pack it up too. A Trade Master's station is a Stock Link (spec D18):
+	 * Create's network items (Factory Gauges, links) and his own item, right-clicked on it, tune to his network as on
+	 * any Create link, instead of opening the screen.
+	 */
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
 		InteractionHand hand, BlockHitResult hit) {
+		if (kind == BotKind.TRADE_MASTER && !player.isShiftKeyDown()
+			&& (stack.getItem() instanceof com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedBlockItem
+				|| stack.getItem() instanceof TradeBotItem item && item.kind() == BotKind.TRADE_MASTER))
+			return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
 		if (!Wrenches.isWrench(stack) || stack.getItem() instanceof com.simibubi.create.content.equipment.wrench.WrenchItem)
 			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		if (!player.isShiftKeyDown())
@@ -143,7 +151,10 @@ public final class TradeBotStationBlock extends Block implements IBE<TradeBotSta
 			return InteractionResult.sidedSuccess(level.isClientSide);
 		}
 		if (level.isClientSide)
-			com.comedymonkey.createaddons.client.tradebot.TradeBotStationScreen.open(pos);
+			if (kind == BotKind.TRADE_MASTER)
+				com.comedymonkey.createaddons.client.tradebot.TradeMasterStationScreen.open(pos);
+			else
+				com.comedymonkey.createaddons.client.tradebot.TradeBotStationScreen.open(pos);
 		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 

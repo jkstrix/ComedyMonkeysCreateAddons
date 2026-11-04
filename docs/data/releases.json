@@ -1,5 +1,47 @@
 [
   {
+    "version": "2.7.0",
+    "from": "2.6.3",
+    "upcoming": true,
+    "title": "The Trade Master",
+    "summary": "[[trade-bot|Trade Bot]], upgraded: he keeps the chests on your Create network stocked, fetching, selling your surplus and buying from seated villagers to fill your Factory Gauges. And the [[clockwork-jetpack]] gets its advancements.",
+    "highlights": [
+      "trade-master",
+      "trade-board",
+      "trade-ledger",
+      "netherite-sheet"
+    ],
+    "sections": [
+      {
+        "title": "Trade Master",
+        "icon": "star",
+        "body": [
+          "A [[trade-bot|Trade Bot]] upgraded on Mechanical Crafters with a [[trade-ledger]] and [[netherite-sheet|Netherite Sheets]]: the same body and manners, with a whisker beard, a monocle that pops when he's startled, and a ledger on his back. He is a Stock Link himself.",
+          {
+            "list": [
+              "**Factory Gauges are his orders:** put them on [[trade-board|Trade Boards]] hung on your chests, and he keeps those chests filled to what they ask.",
+              "**He fetches first**, from your other board chests, then **buys** the rest from seated villagers, never above base price, and pays by **selling** your surplus.",
+              "**Your stock is safe:** he never takes anything from a chest below a gauge's amount, and chests without a board don't exist for him.",
+              "**His station's screen** lists every gauge: the one he's filling, the ones he can't (and why), and the full ones."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Advancements",
+        "icon": "bookmark",
+        "body": [
+          {
+            "list": [
+              "**The Trade Master:** Middle Management, Trade Master, Supply Chain, Book Club and Fully Stocked.",
+              "**The [[clockwork-jetpack]]**, which had none: Wound and Ready, Liftoff, Clockwork Wings, Station Keeping, What Goes Up, Overwound and The Floor Is Lava."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "version": "2.6.3",
     "from": "2.6.2",
     "date": "2026-11-03",

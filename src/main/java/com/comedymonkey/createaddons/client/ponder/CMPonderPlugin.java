@@ -138,6 +138,10 @@ public class CMPonderPlugin implements PonderPlugin {
 			.addStoryBoard("trade_bot", TradeBotScenes::station)
 			.addStoryBoard("trade_bot_linking", TradeBotScenes::linking)
 			.addStoryBoard("trade_bot_trading", TradeBotScenes::trading);
+		// the Trade Master: joining a network, filling gauges
+		helper.forComponents(ModBlocks.TRADE_MASTER.getId(), ModItems.TRADE_BOARD.getId())
+			.addStoryBoard("trade_master", TradeMasterScenes::network)
+			.addStoryBoard("trade_master_gauges", TradeMasterScenes::gauges);
 		// Helper Bot: driving a train, keeping shop
 		helper.forComponents(ModBlocks.HELPER_BOT.getId())
 			.addStoryBoard("helper_bot_driving", HelperBotScenes::driving)

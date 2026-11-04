@@ -24,7 +24,8 @@
     "StockKeeperRequestScreenMixin",
     "VeilRenderSystemMixin",
     "FlywheelSourceFileMixin",
-    "LevelRendererVeilFlywheelMixin"
+    "LevelRendererVeilFlywheelMixin",
+    "GoggleOverlayRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 0

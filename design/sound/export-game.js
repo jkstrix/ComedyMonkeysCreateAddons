@@ -42,3 +42,5 @@ for (const [id, ev] of Object.entries(cues.events)) {
 fs.writeFileSync(soundsPath, JSON.stringify(sounds, null, 2) + '\n');
 fs.writeFileSync(langPath, JSON.stringify(lang, null, 2) + '\n');
 console.log(`exported ${Object.keys(sounds).filter((k) => k.startsWith('trade_bot.')).length} sound events, ${files} files`);
+// the Trade Master's events, on these same files, with his own subtitles
+require('./export-trade-master.js').exportTradeMaster();

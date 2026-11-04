@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:flight_instruments",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:jetpack_winding_station"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.jetpack_wound"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.jetpack_wound.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "jetpack_wound"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

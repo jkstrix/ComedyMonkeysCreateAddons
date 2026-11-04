@@ -31,7 +31,8 @@ T.paint('rim_edge', (u, v) => (hash(u, v, 5) > 0.5 ? TB.steel[0] : TB.steel[1]))
 const K = 'tb:';
 const t = (k) => K + k;
 const D = 16; // the container's face
-const board = [C('board', [0, 0, D - 0.75], [16, 16, D], { north: t('board'), south: null, all: t('board_edge') })];
+// its back is drawn too: on a chest, a pixel narrower than the block, it hangs a pixel clear and the back shows at an angle
+const board = [C('board', [0, 0, D - 0.75], [16, 16, D], { north: t('board'), south: t('board_edge'), all: t('board_edge') })];
 // the rim, half a pixel proud of the board, round its edge: four bars that meet, not a plate behind
 const R = { north: t('rim'), south: null, all: t('rim_edge') };
 const z0 = D - 1.25, z1 = D - 0.75;

@@ -1,6 +1,7 @@
 // What's new: every release in releases.json on one long page, newest first, like a release-note history you scroll
 // back through. Each release has its heading, the cards of the entries it added (highlights) and its sections, which
-// are ordinary body blocks. #/whats-new starts at the top; #/whats-new/<version> scrolls to that release.
+// are ordinary body blocks. #/whats-new starts at the top; #/whats-new/<version> scrolls to that release. A release
+// marked "upcoming" isn't out yet: it reads "Coming soon in <version>", and "latest" is the newest one that is.
 
 import { db, entriesOf } from '../core/data.js';
 import { esc, md } from '../core/text.js';
@@ -10,15 +11,21 @@ import { gear } from '../ui/gear.js';
 
 const anchor = v => 'v-' + String(v).replace(/[^\w-]/g, '-');
 
-function release(r, i) {
+/** The newest release that's out (not "upcoming"). */
+export const latestRelease = () => db.releases.find(r => !r.upcoming);
+
+function release(r) {
+  const latest = r === latestRelease();
+  const kicker = r.upcoming ? `// COMING SOON IN ${esc(r.version)}${r.from ? ` · AFTER ${esc(r.from)}` : ''}`
+    : `// VERSION ${esc(r.version)}${r.from ? ` · SINCE ${esc(r.from)}` : ''}${r.date ? ` · ${esc(r.date)}` : ''}${latest ? ' · LATEST' : ''}`;
   return `
-    <article class="release-entry${i === 0 ? ' latest' : ''}" id="${anchor(r.version)}">
+    <article class="release-entry${latest ? ' latest' : ''}${r.upcoming ? ' upcoming' : ''}" id="${anchor(r.version)}">
       <header class="release-head">
-        <div class="kicker">// VERSION ${esc(r.version)}${r.from ? ` · SINCE ${esc(r.from)}` : ''}${r.date ? ` · ${esc(r.date)}` : ''}${i === 0 ? ' · LATEST' : ''}</div>
-        <h2>${esc(r.version)}${r.title ? `<span>${esc(r.title)}</span>` : ''}</h2>
+        <div class="kicker">${kicker}</div>
+        <h2>${r.upcoming ? `Coming soon in ${esc(r.version)}` : esc(r.version)}${r.title ? `<span>${esc(r.title)}</span>` : ''}</h2>
         ${r.summary ? `<p>${md(r.summary)}</p>` : ''}
       </header>
-      ${r.highlights?.length ? `<h3 class="sec-title">New in ${esc(r.version)}</h3><div class="cards compact">${entriesOf(r.highlights).map(entryCard).join('')}</div>` : ''}
+      ${r.highlights?.length ? `<h3 class="sec-title">${r.upcoming ? 'Coming' : 'New'} in ${esc(r.version)}</h3><div class="cards compact">${entriesOf(r.highlights).map(entryCard).join('')}</div>` : ''}
       <div class="release">
         ${(r.sections ?? []).map(s => `<div class="release-sec reveal"><h2>${icon(s.icon ?? 'cog')}${esc(s.title)}</h2>${body(s.body)}</div>`).join('')}
       </div>
@@ -41,7 +48,7 @@ export function releasesPage(view, version) {
       <h1>What's new</h1>
       <p>Every release, newest first. Scroll back through the history, or jump to one.</p>
       <nav class="chips" aria-label="Releases">${all.map((r, i) =>
-        `<a class="chip${(target ? r === target : i === 0) ? ' on' : ''}" href="#/whats-new/${encodeURIComponent(r.version)}">${esc(r.version)}</a>`).join('')}</nav>
+        `<a class="chip${(target ? r === target : i === 0) ? ' on' : ''}" href="#/whats-new/${encodeURIComponent(r.version)}">${esc(r.version)}${r.upcoming ? ' (soon)' : ''}</a>`).join('')}</nav>
     </section>
     <section class="sec release-history">${all.map(release).join('')}</section>`;
 

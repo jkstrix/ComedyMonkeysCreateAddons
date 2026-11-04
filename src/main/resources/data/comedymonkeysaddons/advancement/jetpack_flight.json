@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:jetpack_wound",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:clockwork_jetpack"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.jetpack_flight"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.jetpack_flight.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "jetpack_flight"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

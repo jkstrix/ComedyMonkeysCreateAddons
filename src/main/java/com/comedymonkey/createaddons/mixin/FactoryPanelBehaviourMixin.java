@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.comedymonkey.createaddons.content.tradebot.board.TradeBoardEntity;
 import com.comedymonkey.createaddons.content.tradebot.board.TradeBoards;
+import com.comedymonkey.createaddons.content.tradebot.master.GaugeClaims;
 import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelBehaviour;
 import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelBlock;
 import com.simibubi.create.content.logistics.packager.InventorySummary;
@@ -22,7 +23,8 @@ import net.neoforged.neoforge.items.IItemHandler;
 /**
  * Factory Gauges on a Trade Board's face (design/specs/trade-master.md D31, D41): the gauge counts only the container
  * the board hangs on, and Create never orders anything for it; the Trade Master fills it. Gauges anywhere else stay
- * Create's. Whether a gauge is on a board is looked up once a second, not every tick.
+ * Create's. What he has on its way shows as promised (D24). Whether a gauge is on a board is looked up once a second,
+ * not every tick.
  */
 @Mixin(FactoryPanelBehaviour.class)
 public abstract class FactoryPanelBehaviourMixin {
@@ -52,6 +54,15 @@ public abstract class FactoryPanelBehaviourMixin {
 	private void comedymonkeysaddons$noOrdersOnABoard(CallbackInfo ci) {
 		if (comedymonkeysaddons$board() != null)
 			ci.cancel();
+	}
+
+	/** On a board: what a Trade Master has on its way to it (D24), shown as promised and not ordered twice. */
+	@Inject(method = "getPromised", at = @At("HEAD"), cancellable = true, require = 1)
+	private void comedymonkeysaddons$promisedByHim(CallbackInfoReturnable<Integer> cir) {
+		if (comedymonkeysaddons$board() == null)
+			return;
+		FactoryPanelBehaviour self = (FactoryPanelBehaviour) (Object) this;
+		cir.setReturnValue(GaugeClaims.promised(self.getWorld(), self.getPanelPosition(), self.getWorld().getGameTime()));
 	}
 
 	/** The board this gauge sits in (its block's space, on the same face), server side; null if none. */

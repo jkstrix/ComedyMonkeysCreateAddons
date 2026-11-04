@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:trade_master",
+  "display": {
+    "icon": {
+      "id": "create:factory_gauge"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.trade_master_fill"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.trade_master_fill.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "trade_master_fill"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

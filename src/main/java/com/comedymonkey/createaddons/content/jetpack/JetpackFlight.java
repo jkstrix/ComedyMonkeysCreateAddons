@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.advancement.ModAdvancements;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.mixin.ServerGamePacketListenerImplAccessor;
 import com.comedymonkey.createaddons.network.JetpackInputPayload;
@@ -71,7 +72,7 @@ public final class JetpackFlight {
 	/** Server: when each player last toggled something (game time). */
 	private static final Map<UUID, Long> LAST_TOGGLE = new HashMap<>();
 
-	private static final int WAS_RUNNING = 1, WAS_BOOSTING = 2;
+	private static final int WAS_RUNNING = 1, WAS_BOOSTING = 2, WAS_HOVERING = 4;
 
 	private JetpackFlight() {}
 
@@ -163,10 +164,11 @@ public final class JetpackFlight {
 					state = state.withWings(false);
 					player.stopFallFlying();
 					sound(player, "wings_fold");
-				} else if (canSpreadWings(player)) {
+					} else if (canSpreadWings(player)) {
 					state = state.withWings(true);
 					player.startFallFlying();
 					sound(player, "wings_unfold");
+					ModAdvancements.award(player, ModAdvancements.JETPACK_WINGS);
 				}
 			}
 		}
@@ -252,9 +254,29 @@ public final class JetpackFlight {
 		int was = WAS.getOrDefault(id, 0);
 		if (boosting && (was & WAS_BOOSTING) == 0)
 			sound(player, "boost");
-		WAS.put(id, (running ? WAS_RUNNING : 0) | (boosting ? WAS_BOOSTING : 0));
+		boolean held = running && !state.wings() && !up && !down && hovering(player, state);
+		advancements(player, jetpack, state, was, running && up && !state.wings(), held);
+		WAS.put(id, (running ? WAS_RUNNING : 0) | (boosting ? WAS_BOOSTING : 0) | (held ? WAS_HOVERING : 0));
 		if (use > 0 && !player.isCreative())
 			spend(player, jetpack, use);
+	}
+
+	/**
+	 * The jetpack's advancements, as its flight changes: lifted off on the engine, held still by hover, a Netherite one
+	 * running in lava; and, once a second while it's worn, Overwound's level.
+	 */
+	private static void advancements(ServerPlayer player, ItemStack jetpack, JetpackState state, int was, boolean lifting, boolean held) {
+		if (lifting && (was & WAS_RUNNING) == 0)
+			ModAdvancements.award(player, ModAdvancements.JETPACK_FLIGHT);
+		if (held && (was & WAS_HOVERING) == 0)
+			ModAdvancements.award(player, ModAdvancements.JETPACK_HOVER);
+		if (player.tickCount % 20 == 0) {
+			int overwound = Jetpacks.overwound(jetpack);
+			if (overwound > 0)
+				ModAdvancements.award(player, ModAdvancements.JETPACK_OVERWOUND, jetpack, overwound);
+			if (player.isInLava() && state.engine() && jetpack.is(ModItems.NETHERITE_CLOCKWORK_JETPACK.get()) && (was & WAS_RUNNING) != 0)
+				ModAdvancements.award(player, ModAdvancements.JETPACK_LAVA);
+		}
 	}
 
 	/**
@@ -277,6 +299,8 @@ public final class JetpackFlight {
 		if (Jetpacks.wind(jetpack) <= 0) {
 			SPENT.remove(id);
 			sound(player, "run_down");
+			if (!player.onGround() && !player.isInWater())
+				ModAdvancements.award(player, ModAdvancements.JETPACK_RUN_DOWN); // "What Goes Up"
 		} else if (before > 0.1f && after <= 0.1f)
 			sound(player, "wind_low"); // once, as it crosses 10% (sound doc: never repeated)
 	}

@@ -12,6 +12,7 @@ A NeoForge add-on for **Create** (Minecraft 1.21.1). Mod id: `comedymonkeysaddon
 - **Fish Tank** and **Brass Fish Tank**: the Animal Pen for fish, squid and axolotls, breeding underwater on **Fish Food**, with the rare blue axolotl.
 - **Cuckoo Clock**: a Black Forest wall clock that sets the villagers around it to restock at **8:00 and 12:00**, and chimes the hour with a cuckoo and a carved villager.
 - **Trade Bot**: a one-wheeled clockwork robot who sells the goods in your chests to **villagers sitting on Create seats**, brings home the emeralds (and the trades' XP as Nuggets of Experience), and lives in a winding station charged with FE.
+- **Trade Master**: Trade Bot upgraded, with a beard and a monocle. He keeps the chests on your **Create logistics network** stocked: put **Factory Gauges** on cheap **Trade Boards** hung on your chests, and he fetches, sells your surplus and **buys from villagers** to fill them.
 - **Magma Engine** and **Supercharged Magma Engine**: lava-burning engines with four and eight Portable Engines' worth of power.
 - **String Tangler** (cobwebs from string and slime) and **Stone Infuser** (Create's ore-bearing stones from cobblestone and metal nuggets).
 - **Incinerator**: destroys any item or fluid, and heats a boiler while it burns.
@@ -231,6 +232,19 @@ A one-wheeled clockwork shopkeeper with big binocular eyes. He lives docked in h
 - **Engineer's Goggles** on his station show his charge, what he's doing, his containers and today's trades. `/tradebot trade` sends him out now.
 - Recipe: 5x5 Mechanical Crafting: brass sheets, Electron Tubes, Precision Mechanisms, an Emerald Block, Andesite and Brass Casing, Cogwheels and an **FE Coil** (4 copper sheets around redstone dust).
 
+## Trade Master
+
+Trade Bot upgraded: the same body and manners, netherite plates, a whisker beard, a monocle that pops when he's startled, and a ledger on his back. He doesn't sell what you link him to; he **keeps your gauges full**.
+
+- **Upgrading**: put a packed Trade Bot in the middle of a 5x5 Mechanical Crafting grid with a **Trade Ledger**, a Stock Link, 2 Factory Gauges, 4 Precision Mechanisms, 2 Emerald Blocks, a Brass Casing, 4 **Netherite Sheets** and brass sheets. He keeps the Trade Bot's charge, earnings and reputation. The **Trade Ledger** is sequenced assembly on a book (Precision Mechanism, Emerald Block, Electron Tube, then pressed); a **Netherite Sheet** is a Netherite Ingot in a Mechanical Press (any `c:plates/netherite` works). You can have **2** of him, apart from your Trade Bots.
+- **His network**: he is a Stock Link himself: placed as he comes, his station starts a network of its own, and boards and gauges tune from it. To join a network you already have, right-click one of its Stock Links (or any block on it) with his item before placing him.
+- **Trade Boards**: thin boards you hang on any face of a container, tuned to his network the same way (right-click his station or a Stock Link with one; right-click the air to clear it). Cheap: an Electron Tube over an Andesite Casing over a Brass Sheet. A board with **no gauges** makes the chest an **input** he may take from; put **Factory Gauges on the board's face** (up to four, as on a Packager's side) and it's an **output** he keeps filled. Gauges on a board count only that chest, and Create never orders anything for them. **Chests without a board don't exist for him**: keep there anything he mustn't sell. He uses every board within 64 blocks of his station.
+- **Filling a gauge**: by day he takes the emptiest short gauge first. He fetches what his other board chests hold, then buys the rest from **seated villagers**, the cheapest first and **never above the base price**. He pays from his pouch, then spare emeralds in his chests, then by selling what his chests hold the most of. A trade that also needs an item, such as a book, takes it from his chests. Everything goes into the gauge's chest, extra included; leftovers go back where they came from.
+- **The rules that protect your stock**: he **never takes anything from a chest below a gauge's amount** for it, to sell or to spend. An **Emerald gauge** is a savings floor, filled by selling; his spare emeralds go there. **Nuggets of Experience** go only to a chest with a Nugget of Experience gauge; otherwise he banks them.
+- **Several on one network**: each gauge is filled by one Trade Master at a time, and Create's gauge shows what he has on its way as promised.
+- **His station's screen**: his charge, what he's doing, the board chests he can see, the gauge he's working on, and every other gauge (scrolling), with why he can't fill any he can't: nobody sells it, it's out of range, or he can't pay. **Call home** sends him back. **Engineer's Goggles** show the same on his station, and on a board its chest and each gauge's count.
+- Everything else is Trade Bot's: power from underneath, the hops and doors, his fears, winding down instead of dying, the redstone pause and the comparator.
+
 ## Magma Engine
 
 A lava-burning V-twin: by default **64 RPM and 8,192 SU**, four times a Portable Engine, for **10 mB of lava a second**. The shaft comes out of the middle of its front, which points at you when placed, any way up, sideways, up or down (sneak to point it away). It holds 4 buckets; pipes fill it on **any side but the front** (a Fluid Wellspring with Lava Upgrades runs it forever), or right-click with a lava bucket. While it burns, its two pistons pump in and out of their finned cylinders, the spoked flywheel turns with the shaft, the firebox glows through the spokes, and each exhaust chugs a puff of smoke in time. With no lava it sputters to a stop. Speed, capacity and lava use are configurable.
@@ -353,7 +367,7 @@ Mods → Create → Config → *Access configs of other mods* → ComedyMonkey's
 - **Monster Cages**: capacity and seconds per monster for each tier, stress per RPM, chow per kind of monster, Monstrous's bonus, water per monster and the Flooded tanks, the Netherite cage's FE (field, farming, buffer), the warning, the time between escapes, the alarm range, whether Withers escape at all, and how loud the caged monsters are.
 - **Fish Tanks**: capacity, seconds per breeding, water per birth, water held and stress per RPM, for each tank.
 - **Cuckoo Clock**: stress (SU, at any speed) and how far it reaches villagers (blocks).
-- **Trade Bot**: his range from the station, bots per player, the station's charge rate and buffer, a full charge, FE per block and per trade, and how near a monster has to be to scare him.
+- **Trade Bot**: his range from the station, bots per player (and Trade Masters per player, apart), the station's charge rate and buffer, a full charge, FE per block and per trade, and how near a monster has to be to scare him.
 - **Magma Engine** and **Supercharged Magma Engine**: each has its own speed, stress capacity per RPM and lava burned per second.
 - **Electricity**: the Electric Motor's maximum stress and FE drawn per SU (the Clockwork Dynamo shares them); the Clockwork Dynamo's efficiency; the Lava Generator's and Geothermal Turbine's FE per tick and lava (and the turbine's water) per second.
 - **Create Aeronautics**: Compact Gyroscope strength, damping, lean correction, full-strength speed and stress; Torque Rotor thrust per RPM and stress.

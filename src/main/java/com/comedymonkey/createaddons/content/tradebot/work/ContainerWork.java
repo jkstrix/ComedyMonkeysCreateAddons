@@ -53,7 +53,11 @@ public class ContainerWork implements BotWork {
 
 	private final TradeBotEntity bot;
 	private final ContainerVisit visit;
-	public enum Mode { TAKE, RETURN, DELIVER_EARNINGS }
+	/**
+	 * What he does there. The Trade Master (design/specs/trade-master.md D30) delivers emeralds and nuggets apart: his
+	 * emeralds (pouch and carried) to an emerald gauge's chest, nuggets only to a Nugget of Experience gauge's.
+	 */
+	public enum Mode { TAKE, RETURN, DELIVER_EARNINGS, DELIVER_EMERALDS, DELIVER_NUGGETS }
 
 	private final Mode mode;
 	private final boolean taking;
@@ -119,7 +123,9 @@ public class ContainerWork implements BotWork {
 			movedCount = switch (mode) {
 				case TAKE -> take();
 				case RETURN -> put();
-				case DELIVER_EARNINGS -> deliverEarnings();
+				case DELIVER_EARNINGS -> deliverEarnings(true, true);
+				case DELIVER_EMERALDS -> deliverEmeralds();
+				case DELIVER_NUGGETS -> deliverEarnings(false, true);
 			};
 			moved = true;
 		}
@@ -171,13 +177,23 @@ public class ContainerWork implements BotWork {
 		return move(bot.getLoad(), to, wanted, movedStacks);
 	}
 
+	/** His pouch's emeralds and the emeralds he carries; what doesn't fit stays with him. */
+	private int deliverEmeralds() {
+		IItemHandler to = handler();
+		if (to == null)
+			return 0;
+		int carried = move(bot.getLoad(), to, Wanted.all(stack -> stack.is(Items.EMERALD)), movedStacks);
+		emeraldsDelivered += carried;
+		return carried + deliverEarnings(true, false);
+	}
+
 	/** Emeralds from the pouch, in stacks, then a nugget for every 3 XP banked; whatever doesn't fit stays with him. */
-	private int deliverEarnings() {
+	private int deliverEarnings(boolean emeralds, boolean nuggets) {
 		IItemHandler to = handler();
 		if (to == null)
 			return 0;
 		int total = 0;
-		while (bot.getEmeralds() > 0) {
+		while (emeralds && bot.getEmeralds() > 0) {
 			int count = (int) Math.min(64, bot.getEmeralds());
 			ItemStack left = ItemHandlerHelper.insertItemStacked(to, new ItemStack(Items.EMERALD, count), false);
 			int put = count - left.getCount();
@@ -188,7 +204,7 @@ public class ContainerWork implements BotWork {
 				break;
 		}
 		Item nugget = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("create", "experience_nugget"));
-		while (bot.getXpBank() >= TradeBotEntity.XP_PER_NUGGET) {
+		while (nuggets && bot.getXpBank() >= TradeBotEntity.XP_PER_NUGGET) {
 			int count = Math.min(64, bot.getXpBank() / TradeBotEntity.XP_PER_NUGGET);
 			ItemStack left = ItemHandlerHelper.insertItemStacked(to, new ItemStack(nugget, count), false);
 			int put = count - left.getCount();

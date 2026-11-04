@@ -1,11 +1,11 @@
 // Writes the approved Trade Board (design/models/trade-board.gen.js, brief design/briefs/trade-board.md) into the mod:
 // the board, drawn by its entity renderer in the board's own space (hung on a north-facing face: the container's face at
-// z 16), its item model (the board in 3D, the inventory view fitted to the slot), and only the trade_board_* textures
+// z 16), its item model (the board in 3D, face-on in the inventory as it hangs), and only the trade_board_* textures
 // they use.
 // Usage: node design/models/trade-board.export.js
 const fs = require('fs');
 const path = require('path');
-const { ASSETS, fitGui } = require('./process-box.lib.js');
+const { ASSETS } = require('./process-box.lib.js');
 const { blockModel } = require('./block-model.lib.js');
 // the generator rewrites its Blockbench preview as it loads; send that to a scratch file, not over the approved one
 process.argv[2] = path.join(require('os').tmpdir(), 'trade-board.export-scratch.bbmodel');
@@ -26,11 +26,11 @@ const write = (kind, name, extra = {}) => {
 };
 write('block', 'trade_board');
 // the item: the board as it hangs, turned to face the viewer in the inventory
-const item = blockModel(ref, all, 'tb:board');
 write('item', 'trade_board', {
   gui_light: 'front',
   display: {
-    gui: { ...fitGui(item.elements), rotation: [0, 180, 0] },
+    // face-on, as it hangs (fitGui frames a corner-on view, which a flat board isn't)
+    gui: { rotation: [0, 180, 0], translation: [0, 0, 0], scale: [0.85, 0.85, 0.85] },
     fixed: { rotation: [0, 180, 0], translation: [0, 0, 7], scale: [1, 1, 1] },
     ground: { rotation: [0, 0, 0], translation: [0, 2, 0], scale: [0.5, 0.5, 0.5] },
     thirdperson_righthand: { rotation: [75, 45, 0], translation: [0, 2.5, 0], scale: [0.4, 0.4, 0.4] },

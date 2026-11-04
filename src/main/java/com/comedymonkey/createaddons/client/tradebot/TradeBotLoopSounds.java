@@ -73,7 +73,7 @@ public final class TradeBotLoopSounds {
 				}
 			}
 			if (bot.isCharging() && bot.tickCount % RATCHET_TICKS == 0)
-				mc.level.playLocalSound(bot.getX(), bot.getY(), bot.getZ(), ModSounds.tradeBot("key_rattle"), SoundSource.NEUTRAL, 0.35f,
+				mc.level.playLocalSound(bot.getX(), bot.getY(), bot.getZ(), ModSounds.bot(bot.kind(), "key_rattle"), SoundSource.NEUTRAL, 0.35f,
 					0.95f + 0.1f * bot.getRandom().nextFloat(), false);
 		}
 	}
@@ -92,7 +92,7 @@ public final class TradeBotLoopSounds {
 		private int age;
 
 		LoopSound(TradeBotEntity bot, Loop loop) {
-			super(ModSounds.tradeBot(loop.event), SoundSource.NEUTRAL, SoundInstance.createUnseededRandom());
+			super(ModSounds.bot(bot.kind(), loop.event), SoundSource.NEUTRAL, SoundInstance.createUnseededRandom());
 			this.bot = bot;
 			this.loop = loop;
 			looping = true;

@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
 import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.electric.EnergyBuffer;
+import com.comedymonkey.createaddons.content.tradebot.master.GaugeNames;
+import com.comedymonkey.createaddons.content.tradebot.master.MasterStatus;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModDataComponents;
 import com.comedymonkey.createaddons.registry.ModSounds;
@@ -69,6 +71,10 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 	private int botEntityId = -1;
 	private int lastSignal = -1;
 	private int syncedEnergy = -1;
+	/** A Trade Master's network, task and problems, as last seen (P2, P3, P11); and what was last sent of it. */
+	private MasterStatus masterStatus = MasterStatus.NONE;
+	@Nullable
+	private CompoundTag masterSynced;
 
 	public TradeBotStationBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.TRADE_BOT_STATION.get(), pos, state);
@@ -328,6 +334,15 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 			lastSignal = signal;
 			level.updateNeighbourForOutputSignal(worldPosition, state.getBlock());
 		}
+		if (link != null && tradeBot != null && level.getGameTime() % 20 == 0) {
+			MasterStatus now = tradeBot.brain.masterStatus();
+			CompoundTag tag = now.save(level.registryAccess());
+			if (!tag.equals(masterSynced)) {
+				masterSynced = tag;
+				masterStatus = now;
+				changed = true;
+			}
+		}
 		if (level.getGameTime() % 10 == 0 && Math.abs(energy.getEnergyStored() - syncedEnergy) > energy.getMaxEnergyStored() / 100) {
 			syncedEnergy = energy.getEnergyStored();
 			changed = true;
@@ -356,6 +371,11 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 
 	public boolean isPaused() {
 		return paused;
+	}
+
+	/** A Trade Master's network, what he's doing and the gauges he can't fill (client: as last sent). */
+	public MasterStatus masterStatus() {
+		return masterStatus;
 	}
 
 	void setPaused(boolean paused) {
@@ -402,7 +422,7 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 			TradeBotRegistry.get(player.server).remove(bot);
 		if (tradeBot != null)
 			tradeBot.packUp();
-		level.playSound(null, worldPosition, ModSounds.tradeBot("winder_release"), SoundSource.BLOCKS, 1, 1);
+		level.playSound(null, worldPosition, ModSounds.bot(kind(), "winder_release"), SoundSource.BLOCKS, 1, 1);
 		level.removeBlock(worldPosition, false);
 		if (!player.getInventory().add(stack))
 			player.drop(stack, false);
@@ -447,7 +467,8 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 
 	@Override
 	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.trade_bot").forGoggles(tooltip);
+		boolean master = kind() == BotKind.TRADE_MASTER;
+		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate(master ? "gui.goggles.trade_master" : "gui.goggles.trade_bot").forGoggles(tooltip);
 		int full = CMConfig.SERVER.tradeBotFullCharge();
 		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID)
 			.translate("gui.goggles.trade_bot.charge", String.format(Locale.ROOT, "%.0f%%", 100f * botCharge / full))
@@ -455,17 +476,40 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID)
 			.translate("gui.goggles.trade_bot.station", String.format(Locale.ROOT, "%,d / %,d FE", energy.getEnergyStored(), energy.getMaxEnergyStored()))
 			.style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
-		String status = bot == null ? "no_bot" : botWoundDown ? "wound_down" : paused ? "paused" : botDocked ? "docked" : "working";
+		String status = bot == null ? (master ? "no_master" : "no_bot") : botWoundDown ? "wound_down" : paused ? "paused" : botDocked ? "docked" : "working";
 		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.trade_bot.status." + status)
 			.style(botWoundDown ? ChatFormatting.RED : botDocked || bot == null ? ChatFormatting.GOLD : ChatFormatting.GREEN).forGoggles(tooltip, 1);
-		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID)
-			.translate("gui.goggles.trade_bot.links", inputs.size(), MAX_INPUTS,
-				Component.translatable(output != null ? "comedymonkeysaddons.gui.goggles.trade_bot.output_set"
-					: "comedymonkeysaddons.gui.goggles.trade_bot.output_unset"))
-			.style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
+		if (master)
+			masterGoggles(tooltip);
+		else
+			new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID)
+				.translate("gui.goggles.trade_bot.links", inputs.size(), MAX_INPUTS,
+					Component.translatable(output != null ? "comedymonkeysaddons.gui.goggles.trade_bot.output_set"
+						: "comedymonkeysaddons.gui.goggles.trade_bot.output_unset"))
+				.style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
 		new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.trade_bot.trades_today", tradesToday())
 			.style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
 		return true;
+	}
+
+	/**
+	 * The Trade Master's lines (design/specs/trade-master.md P11): the boards and gauges he can see, what he's doing for
+	 * which gauge, and how many gauges he can't fill (the screen says why).
+	 */
+	private void masterGoggles(List<Component> tooltip) {
+		MasterStatus status = masterStatus;
+		if (status.boards() == 0)
+			new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.trade_master.no_boards").style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
+		else
+			new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.trade_master.network", status.boards(), status.gauges())
+				.style(ChatFormatting.GRAY).forGoggles(tooltip, 1);
+		if (status.activity() != null && !status.working().isEmpty())
+			new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.trade_master.working",
+				Component.translatable("comedymonkeysaddons.gui.trade_master.activity." + status.activity().name().toLowerCase(Locale.ROOT)),
+				GaugeNames.of(status.working()), status.level(), status.amount()).style(ChatFormatting.GREEN).forGoggles(tooltip, 1);
+		if (status.cantFill() > 0)
+			new LangBuilder(ComedyMonkeysCreateAddons.MOD_ID).translate("gui.goggles.trade_master.cant_fill", status.cantFill())
+				.style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
 	}
 
 	// ---- saving
@@ -493,6 +537,8 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		tag.putLong("TradesDay", tradesDay);
 		if (clientPacket)
 			tag.putInt("BotEntity", botEntityId);
+		if (clientPacket && masterSynced != null)
+			tag.put("Master", masterSynced);
 	}
 
 	@Override
@@ -514,6 +560,8 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		tradesDay = tag.contains("TradesDay") ? tag.getLong("TradesDay") : -1;
 		if (clientPacket)
 			botEntityId = tag.getInt("BotEntity");
+		if (clientPacket)
+			masterStatus = tag.contains("Master") ? MasterStatus.load(tag.getCompound("Master"), registries) : MasterStatus.NONE;
 	}
 
 	private static CompoundTag wrap(Tag pos) {

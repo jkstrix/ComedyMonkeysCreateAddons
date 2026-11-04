@@ -49,6 +49,7 @@
     "mixing": { "label": "Mixing", "machine": "create:mechanical_mixer" },
     "crushing": { "label": "Crushing", "machine": "create:crushing_wheel" },
     "milling": { "label": "Milling", "machine": "create:millstone" },
+    "pressing": { "label": "Pressing", "machine": "create:mechanical_press" },
     "deploying": { "label": "Deploying", "machine": "create:deployer" },
     "filling": { "label": "Filling", "machine": "create:spout" },
     "splashing": { "label": "Bulk Washing", "machine": "create:encased_fan" },
@@ -104,9 +105,10 @@
         "Run a [[cobblestone-generator]] from a shaft",
         "Upgrade a chest with a [[chest-upgrades|Copper Chest Upgrade]]",
         "Plant a sapling in an [[auto-harvester]]",
-        "Catch an animal in a [[capture-bottle]] and start an [[animal-pen]]"
+        "Catch an animal in a [[capture-bottle]] and start an [[animal-pen]]",
+        "Pull items down a line of [[clockwork-tubes|Clockwork Tubes]]"
       ],
-      "entries": ["upgrade-template", "cobblestone-generator", "chest-upgrades", "auto-harvester", "animal-pen", "monster-cage", "fluid-lines", "incinerator"]
+      "entries": ["upgrade-template", "cobblestone-generator", "chest-upgrades", "auto-harvester", "animal-pen", "monster-cage", "fluid-lines", "incinerator", "string-tangler", "stone-infuser", "clockwork-tubes", "helper-bot"]
     },
     {
       "id": "mid", "title": "Mid game", "era": "the brass age",
@@ -117,9 +119,10 @@
         "Press your first Emerald in the [[pressure-crucible]]",
         "Run a [[magma-engine]] on Wellspring lava",
         "Drive an [[electric-motor]] from a [[lava-generator]]",
-        "Store FE in a [[battery]]"
+        "Store FE in a [[battery]]",
+        "Light your base with [[electric-lights|Electric Lights]] on [[power-lines|Power Lines]]"
       ],
-      "entries": ["fluid-wellspring", "pressure-crucible", "magma-engine", "lava-generator", "power-lines", "electric-motor", "clockwork-dynamo", "battery", "cuckoo-clock"]
+      "entries": ["fluid-wellspring", "pressure-crucible", "magma-engine", "lava-generator", "power-lines", "electric-motor", "clockwork-dynamo", "battery", "cuckoo-clock", "electric-lights", "flight-instruments", "torque-rotor"]
     },
     {
       "id": "advanced", "title": "Advanced", "era": "heat and power",
@@ -141,9 +144,11 @@
         "Form an Industrial [[battery]]",
         "Cage a Wither in a [[netherite-monster-cage]]",
         "Breed a [[blue-axolotl]] in a Fish Tank",
-        "Upgrade a chest to Netherite"
+        "Upgrade a chest to Netherite",
+        "Fly with a [[clockwork-jetpack]]",
+        "Keep a gauge full with a [[trade-master|Trade Master]]"
       ],
-      "entries": ["netherite-monster-cage", "netherite-jar", "contained-wither", "blue-axolotl"]
+      "entries": ["netherite-monster-cage", "netherite-jar", "contained-wither", "blue-axolotl", "clockwork-jetpack", "jetpack-winding-station", "spring-engine", "trade-master"]
     }
   ],
 
