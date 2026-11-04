@@ -10,6 +10,10 @@
       "required": false
     },
     {
+      "id": "comedymonkeysaddons:trade_master",
+      "required": false
+    },
+    {
       "id": "comedymonkeysaddons:netherite_monster_cage",
       "required": false
     }

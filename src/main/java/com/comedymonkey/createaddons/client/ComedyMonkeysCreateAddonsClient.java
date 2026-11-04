@@ -250,6 +250,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerRenderers(event);
 		event.registerEntityRenderer(ModEntities.TRADE_BOT.get(), TradeBotRenderer::new);
+		event.registerEntityRenderer(ModEntities.TRADE_BOARD.get(), com.comedymonkey.createaddons.client.tradebot.TradeBoardRenderer::new);
 		event.registerEntityRenderer(ModEntities.TRADE_MASTER.get(),
 			context -> new TradeBotRenderer(context, com.comedymonkey.createaddons.content.tradebot.BotKind.TRADE_MASTER));
 		event.registerEntityRenderer(ModEntities.CLOCKWORK_JUGGERNAUT.get(), com.comedymonkey.createaddons.client.juggernaut.JuggernautRenderer::new);
@@ -273,6 +274,7 @@ public class ComedyMonkeysCreateAddonsClient {
 			for (ChestType type : ChestType.values())
 				event.register(UpgradedChestRenderer.lidModel(tier, type));
 		WellspringRenderer.registerModels(event);
+		com.comedymonkey.createaddons.client.tradebot.TradeBoardRenderer.registerModels(event);
 		FluidLineRenderer.registerModels(event);
 		com.comedymonkey.createaddons.client.line.PowerLineModel.registerModels(event);
 		com.comedymonkey.createaddons.client.line.PowerLineRenderer.registerModels(event);
@@ -312,6 +314,16 @@ public class ComedyMonkeysCreateAddonsClient {
 				return renderer;
 			}
 		}, ModItems.TRADE_BOT.get());
+		event.registerItem(new IClientItemExtensions() {
+			private TradeBotItemRenderer renderer;
+
+			@Override
+			public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
+				if (renderer == null)
+					renderer = new TradeBotItemRenderer(com.comedymonkey.createaddons.content.tradebot.BotKind.TRADE_MASTER);
+				return renderer;
+			}
+		}, ModItems.TRADE_MASTER.get());
 		event.registerItem(new IClientItemExtensions() {
 			private com.comedymonkey.createaddons.client.helperbot.HelperBotItemRenderer renderer;
 
@@ -365,6 +377,8 @@ public class ComedyMonkeysCreateAddonsClient {
 			com.comedymonkey.createaddons.client.helperbot.HelperBotModels::layer);
 		event.registerLayerDefinition(TradeBotGeometry.STATION_LAYER, TradeBotGeometry::stationLayer);
 		event.registerLayerDefinition(TradeBotGeometry.STATION_GLOW_LAYER, TradeBotGeometry::stationGlowLayer);
+		event.registerLayerDefinition(TradeBotGeometry.MASTER_STATION_LAYER, TradeBotGeometry::masterStationLayer);
+		event.registerLayerDefinition(TradeBotGeometry.MASTER_STATION_GLOW_LAYER, TradeBotGeometry::masterStationGlowLayer);
 		// The goggles renderer is a Curios one, so its class can't even be loaded without Curios
 		if (ModList.get().isLoaded(ComedyMonkeysCreateAddons.AERONAUTICS_ID)
 			&& ModList.get().isLoaded(ComedyMonkeysCreateAddons.CURIOS_ID))
@@ -376,6 +390,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.enqueueWork(com.comedymonkey.createaddons.client.parts.MachineVisuals::register);
 		// Helper Bot's clips (a big file) are read now, in the background, rather than on the first frame he's seen
 		com.comedymonkey.createaddons.client.helperbot.HelperBotRig.preload();
+		// Trade Boards step aside for clicks while you hold a gauge or a board
+		com.comedymonkey.createaddons.content.tradebot.board.TradeBoards.clientPlayer = () -> net.minecraft.client.Minecraft.getInstance().player;
 		// Upgraded chest item picks its tier's model (0 copper .. 0.3 diamond)
 		event.enqueueWork(() -> ItemProperties.register(ModItems.UPGRADED_CHEST.get(),
 			ComedyMonkeysCreateAddons.asResource("tier"),

@@ -65,6 +65,9 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.FISH_FOOD.get());
 				output.accept(ModItems.CUCKOO_CLOCK.get());
 				output.accept(ModItems.TRADE_BOT.get());
+				output.accept(ModItems.TRADE_MASTER.get());
+				output.accept(ModItems.TRADE_LEDGER.get());
+				output.accept(ModItems.TRADE_BOARD.get());
 				output.accept(ModItems.WINDING_KEY.get());
 				output.accept(ModItems.MAINSPRING.get());
 				output.accept(ModItems.SPRING_ENGINE.get());
@@ -93,6 +96,7 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.CLOCKWORK_INLET.get());
 				output.accept(ModItems.BRASS_CLOCKWORK_INLET.get());
 				output.accept(ModItems.FE_COIL.get());
+				output.accept(ModItems.NETHERITE_SHEET.get());
 				output.accept(ModItems.GEOTHERMAL_CONTROLLER.get());
 				output.accept(ModItems.GEOTHERMAL_CASING.get());
 				output.accept(ModItems.GEOTHERMAL_CORE.get());

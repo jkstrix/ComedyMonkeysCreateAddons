@@ -12,6 +12,7 @@
     "VillagerMixin",
     "AcquirePoiMixin",
     "StockTickerBlockEntityMixin",
+    "FactoryPanelBehaviourMixin",
     "RecipeApplierMixin",
     "ContraptionMixin",
     "LivingEntityFallFlyingMixin",

@@ -38,5 +38,9 @@ public final class ModRecipes {
 	public static final DeferredHolder<RecipeSerializer<?>, HelperBotDyeRecipe.Serializer> HELPER_BOT_DYE_SERIALIZER =
 		SERIALIZERS.register("helper_bot_dye", HelperBotDyeRecipe.Serializer::new);
 
+	/** The Trade Master from a Trade Bot: Create's mechanical crafting, keeping the Trade Bot's data. */
+	public static final DeferredHolder<RecipeSerializer<?>, com.comedymonkey.createaddons.content.tradebot.TradeMasterUpgradeRecipe.Serializer> TRADE_MASTER_UPGRADE_SERIALIZER =
+		SERIALIZERS.register("trade_master_upgrade", com.comedymonkey.createaddons.content.tradebot.TradeMasterUpgradeRecipe.Serializer::new);
+
 	private ModRecipes() {}
 }

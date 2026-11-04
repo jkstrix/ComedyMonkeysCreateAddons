@@ -27,7 +27,8 @@ import net.minecraft.world.level.saveddata.SavedData;
 public class TradeBotRegistry extends SavedData {
 	private static final String NAME = "comedymonkeysaddons_trade_bots";
 
-	public record Home(ResourceKey<Level> dimension, BlockPos station) {}
+	/** Where a bot's station is, and which kind he is (Trade Masters are counted apart, design/specs/trade-master.md D29). */
+	public record Home(ResourceKey<Level> dimension, BlockPos station, BotKind kind) {}
 
 	private final Map<UUID, Map<UUID, Home>> byOwner = new HashMap<>();
 	/** Bounded by the stations placed: an entry goes when its station is packed or removed ({@link #remove}). */
@@ -37,9 +38,10 @@ public class TradeBotRegistry extends SavedData {
 		return server.overworld().getDataStorage().computeIfAbsent(new Factory<>(TradeBotRegistry::new, TradeBotRegistry::load), NAME);
 	}
 
-	public int count(UUID owner) {
+	/** How many bots of this kind {@code owner} has placed. */
+	public int count(UUID owner, BotKind kind) {
 		Map<UUID, Home> bots = byOwner.get(owner);
-		return bots == null ? 0 : bots.size();
+		return bots == null ? 0 : (int) bots.values().stream().filter(home -> home.kind() == kind).count();
 	}
 
 	public void add(UUID owner, UUID bot, Home home) {
@@ -75,6 +77,7 @@ public class TradeBotRegistry extends SavedData {
 			entry.putUUID("Bot", bot);
 			entry.putString("Dimension", home.dimension().location().toString());
 			entry.put("Station", NbtUtils.writeBlockPos(home.station()));
+			entry.putString("Kind", home.kind().id());
 			owners.add(entry);
 		}));
 		tag.put("Bots", owners);
@@ -91,7 +94,7 @@ public class TradeBotRegistry extends SavedData {
 			CompoundTag entry = (CompoundTag) t;
 			ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(entry.getString("Dimension")));
 			BlockPos station = NbtUtils.readBlockPos(entry, "Station").orElse(BlockPos.ZERO);
-			registry.byOwner.computeIfAbsent(entry.getUUID("Owner"), o -> new HashMap<>()).put(entry.getUUID("Bot"), new Home(dimension, station));
+			registry.byOwner.computeIfAbsent(entry.getUUID("Owner"), o -> new HashMap<>()).put(entry.getUUID("Bot"), new Home(dimension, station, BotKind.byId(entry.getString("Kind"))));
 		}
 		for (Tag t : tag.getList("Gone", Tag.TAG_INT_ARRAY))
 			registry.gone.add(NbtUtils.loadUUID(t));

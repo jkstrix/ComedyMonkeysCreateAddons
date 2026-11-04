@@ -20,7 +20,7 @@ Two assets, as for Trade Bot:
 1. **Trade Master**: character, 24 px tall (1.5 blocks), `modded_entity` (box UV), code-driven animation from the preview timings. **Trade Bot's rig, bone for bone, plus four new bones** (Rig Requirements).
 2. **Trade Master Station**: the Trade Bot Station with his netherite trim (proposed below). The same geometry and rig.
 
-Later, in their own briefs: the Trade Hatch, the Trade Ledger item and the Netherite Sheet item.
+Later, in their own briefs: the Trade Board, the Trade Ledger item and the Netherite Sheet item.
 
 ## Fantasy
 The Trade Bot who made it: a bearded old clockwork merchant with a monocle and a ledger, who runs the whole shop from his network.

@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import org.joml.Matrix4f;
 
+import com.comedymonkey.createaddons.content.tradebot.BotKind;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotStationBlock;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotStationBlockEntity;
 
@@ -32,7 +33,6 @@ import net.minecraft.world.phys.Vec3;
  * copied onto the instance trees. There's one station per Trade Bot, so this costs little.
  */
 public final class TradeBotStationVisual extends AbstractBlockEntityVisual<TradeBotStationBlockEntity> implements SimpleDynamicVisual {
-	private static final Material MODEL = material(TradeBotRenderer.TEXTURE, false), GLOW = material(TradeBotRenderer.GLOW, true);
 
 	/** The station's bones, posed as the renderer poses them, and its instance trees, bone by bone. */
 	private final ModelPart root;
@@ -54,10 +54,12 @@ public final class TradeBotStationVisual extends AbstractBlockEntityVisual<Trade
 	public TradeBotStationVisual(VisualizationContext context, TradeBotStationBlockEntity be, float partialTick) {
 		super(context, be, partialTick);
 		embedded = context instanceof dev.engine_room.flywheel.api.visualization.VisualEmbedding;
-		root = Minecraft.getInstance().getEntityModels().bakeLayer(TradeBotGeometry.STATION_LAYER);
-		parts = TradeBotGeometry.get().parts(root, "station");
-		tree = InstanceTree.create(instancerProvider(), ModelTrees.of(TradeBotGeometry.STATION_LAYER, MODEL));
-		glowTree = InstanceTree.create(instancerProvider(), ModelTrees.of(TradeBotGeometry.STATION_GLOW_LAYER, GLOW));
+		// Trade Bot's station or the Trade Master's: its own geometry and textures
+		BotKind kind = be.kind();
+		root = Minecraft.getInstance().getEntityModels().bakeLayer(TradeBotGeometry.stationLayerOf(kind));
+		parts = TradeBotGeometry.of(kind).parts(root, "station");
+		tree = InstanceTree.create(instancerProvider(), ModelTrees.of(TradeBotGeometry.stationLayerOf(kind), material(kind.texture(), false)));
+		glowTree = InstanceTree.create(instancerProvider(), ModelTrees.of(TradeBotGeometry.stationGlowLayerOf(kind), material(kind.glowTexture(), true)));
 		index(tree, nodes);
 		index(glowTree, glowNodes);
 		glowTree.traverse(i -> i.light(LightTexture.FULL_BRIGHT).setChanged());

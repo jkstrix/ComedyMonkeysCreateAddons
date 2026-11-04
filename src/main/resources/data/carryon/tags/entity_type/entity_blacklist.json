@@ -5,6 +5,10 @@
       "id": "comedymonkeysaddons:trade_bot",
       "required": false
     },
+    {
+      "id": "comedymonkeysaddons:trade_master",
+      "required": false
+    },
     "comedymonkeysaddons:clockwork_juggernaut"
   ]
 }

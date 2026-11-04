@@ -1,0 +1,662 @@
+{
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:item/trade_ledger_cover_plain",
+    "trade_ledger_edge": "comedymonkeysaddons:item/trade_ledger_edge",
+    "trade_ledger_cover_plain": "comedymonkeysaddons:item/trade_ledger_cover_plain",
+    "trade_ledger_pages": "comedymonkeysaddons:item/trade_ledger_pages",
+    "trade_ledger_cover": "comedymonkeysaddons:item/trade_ledger_cover",
+    "trade_ledger_spine": "comedymonkeysaddons:item/trade_ledger_spine",
+    "trade_ledger_emerald": "comedymonkeysaddons:item/trade_ledger_emerald",
+    "trade_ledger_brass": "comedymonkeysaddons:item/trade_ledger_brass",
+    "trade_ledger_brass_dark": "comedymonkeysaddons:item/trade_ledger_brass_dark",
+    "trade_ledger_tube": "comedymonkeysaddons:item/trade_ledger_tube"
+  },
+  "elements": [
+    {
+      "name": "cover_bottom",
+      "from": [
+        3,
+        0,
+        1.5
+      ],
+      "to": [
+        13.5,
+        0.5,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            15.5,
+            13,
+            16
+          ],
+          "texture": "#trade_ledger_edge"
+        },
+        "east": {
+          "uv": [
+            1.5,
+            15.5,
+            14.5,
+            16
+          ],
+          "texture": "#trade_ledger_edge"
+        },
+        "south": {
+          "uv": [
+            3,
+            15.5,
+            13.5,
+            16
+          ],
+          "texture": "#trade_ledger_edge"
+        },
+        "down": {
+          "uv": [
+            3,
+            1.5,
+            13.5,
+            14.5
+          ],
+          "texture": "#trade_ledger_cover_plain"
+        }
+      }
+    },
+    {
+      "name": "pages",
+      "from": [
+        3,
+        0.5,
+        2
+      ],
+      "to": [
+        13,
+        3.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            12.5,
+            13,
+            15.5
+          ],
+          "texture": "#trade_ledger_pages"
+        },
+        "east": {
+          "uv": [
+            2,
+            12.5,
+            14,
+            15.5
+          ],
+          "texture": "#trade_ledger_pages"
+        },
+        "south": {
+          "uv": [
+            3,
+            12.5,
+            13,
+            15.5
+          ],
+          "texture": "#trade_ledger_pages"
+        }
+      }
+    },
+    {
+      "name": "cover_top",
+      "from": [
+        3,
+        3.5,
+        1.5
+      ],
+      "to": [
+        13.5,
+        4,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            12,
+            13,
+            12.5
+          ],
+          "texture": "#trade_ledger_edge"
+        },
+        "east": {
+          "uv": [
+            1.5,
+            12,
+            14.5,
+            12.5
+          ],
+          "texture": "#trade_ledger_edge"
+        },
+        "south": {
+          "uv": [
+            3,
+            12,
+            13.5,
+            12.5
+          ],
+          "texture": "#trade_ledger_edge"
+        },
+        "up": {
+          "uv": [
+            3,
+            1.5,
+            13.5,
+            14.5
+          ],
+          "texture": "#trade_ledger_cover"
+        },
+        "down": {
+          "uv": [
+            3,
+            1.5,
+            13.5,
+            14.5
+          ],
+          "texture": "#trade_ledger_edge"
+        }
+      }
+    },
+    {
+      "name": "spine",
+      "from": [
+        2,
+        0,
+        1.5
+      ],
+      "to": [
+        3,
+        4,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13,
+            12,
+            14,
+            16
+          ],
+          "texture": "#trade_ledger_edge"
+        },
+        "south": {
+          "uv": [
+            2,
+            12,
+            3,
+            16
+          ],
+          "texture": "#trade_ledger_edge"
+        },
+        "west": {
+          "uv": [
+            1.5,
+            12,
+            14.5,
+            16
+          ],
+          "texture": "#trade_ledger_spine"
+        },
+        "up": {
+          "uv": [
+            2,
+            1.5,
+            3,
+            14.5
+          ],
+          "texture": "#trade_ledger_edge"
+        },
+        "down": {
+          "uv": [
+            2,
+            1.5,
+            3,
+            14.5
+          ],
+          "texture": "#trade_ledger_edge"
+        }
+      }
+    },
+    {
+      "name": "gem",
+      "from": [
+        7.5,
+        4,
+        7.25
+      ],
+      "to": [
+        9,
+        4.5,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            11.5,
+            8.5,
+            12
+          ],
+          "texture": "#trade_ledger_emerald"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            11.5,
+            8.75,
+            12
+          ],
+          "texture": "#trade_ledger_emerald"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            11.5,
+            9,
+            12
+          ],
+          "texture": "#trade_ledger_emerald"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            11.5,
+            8.75,
+            12
+          ],
+          "texture": "#trade_ledger_emerald"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            7.25,
+            9,
+            8.75
+          ],
+          "texture": "#trade_ledger_emerald"
+        },
+        "down": {
+          "uv": [
+            7.5,
+            7.25,
+            9,
+            8.75
+          ],
+          "texture": "#trade_ledger_emerald"
+        }
+      }
+    },
+    {
+      "name": "clasp_tab",
+      "from": [
+        12,
+        4,
+        7.25
+      ],
+      "to": [
+        14,
+        4.25,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            11.75,
+            4,
+            12
+          ],
+          "texture": "#trade_ledger_brass"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            11.75,
+            8.75,
+            12
+          ],
+          "texture": "#trade_ledger_brass"
+        },
+        "south": {
+          "uv": [
+            12,
+            11.75,
+            14,
+            12
+          ],
+          "texture": "#trade_ledger_brass"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            11.75,
+            8.75,
+            12
+          ],
+          "texture": "#trade_ledger_brass"
+        },
+        "up": {
+          "uv": [
+            12,
+            7.25,
+            14,
+            8.75
+          ],
+          "texture": "#trade_ledger_brass"
+        }
+      }
+    },
+    {
+      "name": "clasp_strap",
+      "from": [
+        13.5,
+        1.75,
+        7.25
+      ],
+      "to": [
+        14,
+        4,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            12,
+            2.5,
+            14.25
+          ],
+          "texture": "#trade_ledger_brass"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            12,
+            8.75,
+            14.25
+          ],
+          "texture": "#trade_ledger_brass"
+        },
+        "south": {
+          "uv": [
+            13.5,
+            12,
+            14,
+            14.25
+          ],
+          "texture": "#trade_ledger_brass"
+        },
+        "up": {
+          "uv": [
+            13.5,
+            7.25,
+            14,
+            8.75
+          ],
+          "texture": "#trade_ledger_brass"
+        },
+        "down": {
+          "uv": [
+            13.5,
+            7.25,
+            14,
+            8.75
+          ],
+          "texture": "#trade_ledger_brass"
+        }
+      }
+    },
+    {
+      "name": "tube_base",
+      "from": [
+        9.5,
+        1.5,
+        0.75
+      ],
+      "to": [
+        10.5,
+        2.5,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.5,
+            13.5,
+            6.5,
+            14.5
+          ],
+          "texture": "#trade_ledger_brass_dark"
+        },
+        "east": {
+          "uv": [
+            14,
+            13.5,
+            15.25,
+            14.5
+          ],
+          "texture": "#trade_ledger_brass_dark"
+        },
+        "west": {
+          "uv": [
+            0.75,
+            13.5,
+            2,
+            14.5
+          ],
+          "texture": "#trade_ledger_brass_dark"
+        },
+        "up": {
+          "uv": [
+            9.5,
+            0.75,
+            10.5,
+            2
+          ],
+          "texture": "#trade_ledger_brass_dark"
+        },
+        "down": {
+          "uv": [
+            9.5,
+            14,
+            10.5,
+            15.25
+          ],
+          "texture": "#trade_ledger_brass_dark"
+        }
+      }
+    },
+    {
+      "name": "tube_bulb",
+      "from": [
+        9.6,
+        1.6,
+        -0.5
+      ],
+      "to": [
+        10.4,
+        2.4,
+        0.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5.6,
+            13.6,
+            6.4,
+            14.4
+          ],
+          "texture": "#trade_ledger_tube"
+        },
+        "east": {
+          "uv": [
+            0,
+            13.6,
+            1.25,
+            14.4
+          ],
+          "texture": "#trade_ledger_tube"
+        },
+        "west": {
+          "uv": [
+            14.75,
+            13.6,
+            16,
+            14.4
+          ],
+          "texture": "#trade_ledger_tube"
+        },
+        "up": {
+          "uv": [
+            9.6,
+            14.75,
+            10.4,
+            16
+          ],
+          "texture": "#trade_ledger_tube"
+        },
+        "down": {
+          "uv": [
+            9.6,
+            0,
+            10.4,
+            1.25
+          ],
+          "texture": "#trade_ledger_tube"
+        }
+      }
+    }
+  ],
+  "gui_light": "side",
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        -0.15,
+        4.334,
+        0
+      ],
+      "scale": [
+        0.849,
+        0.849,
+        0.849
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        -2
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  }
+}

@@ -88,7 +88,7 @@ Now that this asset exists, are there earlier assets that should be revisited fo
 | Netherite Monster Cage | Checked: already follows vanilla's block | — | None |
 | Trade Bot, Helper Bot | Checked: the Trade Master borrows from them and adds nothing they lack; their eye colours stay their own | — | None |
 
-For later briefs: the **Netherite Sheet** item is a pressed ingot, so it should use the block/ingot ramp. The **Trade Hatch** should borrow the Trade Master's bot parts (brass flap, andesite).
+For later briefs: the **Netherite Sheet** item is a pressed ingot, so it should use the block/ingot ramp. The **Trade Board** should borrow the Trade Master's bot parts (brass flap, andesite).
 
 ## Proposed visual-language updates
 - **Materials:** replace the "Netherite trim" row with **"Netherite"**, two ramps from vanilla: **armour** (worn gear and bot plating) `#241f20` `#322727` `#3f303b` `#51444e`, edge `#5d565d`; **block** (blocks and ingot-made items) `#31292a` `#3a3233` `#443a3b`, highlight `#5d5052`. On Netherite-tier gear it still replaces every brass part (user, 2026-11-03).

@@ -97,6 +97,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(ModEntities::registerAttributes);
 		// Trade Bot's test courses (run with ./gradlew runGameTestServer, or /test in a dev world)
 		modBus.addListener(TradeBotGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.TradeMasterGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.StorageGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.MachineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.DynamoGameTests::register);

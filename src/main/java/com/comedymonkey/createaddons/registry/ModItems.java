@@ -86,6 +86,10 @@ public final class ModItems {
 	public static final DeferredItem<TradeBotItem> TRADE_BOT = ITEMS.register("trade_bot",
 		() -> new TradeBotItem(ModBlocks.TRADE_BOT.get(), new Item.Properties().stacksTo(1)));
 
+	/** The Trade Master on his station, as one item (design/specs/trade-master.md D16). */
+	public static final DeferredItem<TradeBotItem> TRADE_MASTER = ITEMS.register("trade_master",
+		() -> new TradeBotItem(ModBlocks.TRADE_MASTER.get(), new Item.Properties().stacksTo(1)));
+
 	/** The Clockwork Juggernaut's spring, his only guaranteed drop (D30): the heart of the Spring Engine. */
 	public static final DeferredItem<Item> MAINSPRING = ITEMS.registerSimpleItem("mainspring",
 		new Item.Properties().stacksTo(16).rarity(Rarity.EPIC).fireResistant());
@@ -172,6 +176,13 @@ public final class ModItems {
 	public static final DeferredItem<Item> EMERALD_DUST = ITEMS.registerSimpleItem("emerald_dust");
 	/** Trade Bot's FE part (D56), for later electric machines too. */
 	public static final DeferredItem<Item> FE_COIL = ITEMS.registerSimpleItem("fe_coil");
+	/** One more of Create's sheets: a netherite ingot through the Mechanical Press (design/specs/trade-master.md D38). */
+	public static final DeferredItem<Item> NETHERITE_SHEET = ITEMS.registerSimpleItem("netherite_sheet", new Item.Properties().fireResistant());
+	/** The Trade Master's account book, the heart of his upgrade (D27): made by sequenced assembly. */
+	public static final DeferredItem<Item> TRADE_LEDGER = ITEMS.registerSimpleItem("trade_ledger", new Item.Properties().stacksTo(16));
+	/** Hung on a chest's face, it's one of the Trade Master's chests (D41); cheap, as you need one per chest (H4). */
+	public static final DeferredItem<com.comedymonkey.createaddons.content.tradebot.board.TradeBoardItem> TRADE_BOARD = ITEMS.register("trade_board",
+		() -> new com.comedymonkey.createaddons.content.tradebot.board.TradeBoardItem(new Item.Properties()));
 	/** Pipez Covers: copycat-style covers for Pipez pipes (they only do anything with Pipez installed). */
 	public static final DeferredItem<PipeCoverItem> SNUG_PIPEZ_COVER = ITEMS.registerItem("snug_pipez_cover",
 		p -> new PipeCoverItem(p, PipeCover.Kind.SNUG));
@@ -227,6 +238,9 @@ public final class ModItems {
 		() -> new ChestUpgradeItem(ChestTier.NETHERITE, new Item.Properties().stacksTo(16).rarity(Rarity.EPIC).fireResistant()));
 
 	// Transitional items for the sequenced assembly recipes
+	public static final DeferredItem<SequencedAssemblyItem> INCOMPLETE_TRADE_LEDGER = ITEMS.register(
+		"incomplete_trade_ledger", () -> new SequencedAssemblyItem(new Item.Properties().stacksTo(1)));
+
 	public static final DeferredItem<SequencedAssemblyItem> INCOMPLETE_UPGRADE_TEMPLATE = ITEMS.register(
 		"incomplete_upgrade_template", () -> new SequencedAssemblyItem(new Item.Properties().stacksTo(1)));
 

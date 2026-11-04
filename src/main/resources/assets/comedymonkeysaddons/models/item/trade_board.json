@@ -1,0 +1,436 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/trade_board_board",
+    "trade_board_board": "comedymonkeysaddons:block/trade_board_board",
+    "trade_board_board_edge": "comedymonkeysaddons:block/trade_board_board_edge",
+    "trade_board_rim": "comedymonkeysaddons:block/trade_board_rim",
+    "trade_board_rim_edge": "comedymonkeysaddons:block/trade_board_rim_edge"
+  },
+  "elements": [
+    {
+      "name": "board",
+      "from": [
+        0,
+        0,
+        15.25
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#trade_board_board"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.75,
+            16
+          ],
+          "texture": "#trade_board_board_edge"
+        },
+        "west": {
+          "uv": [
+            15.25,
+            0,
+            16,
+            16
+          ],
+          "texture": "#trade_board_board_edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            15.25,
+            16,
+            16
+          ],
+          "texture": "#trade_board_board_edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            0.75
+          ],
+          "texture": "#trade_board_board_edge"
+        }
+      }
+    },
+    {
+      "name": "rim_top",
+      "from": [
+        0,
+        15,
+        14.75
+      ],
+      "to": [
+        16,
+        16,
+        15.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#trade_board_rim"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            0,
+            1.25,
+            1
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "west": {
+          "uv": [
+            14.75,
+            0,
+            15.25,
+            1
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            14.75,
+            16,
+            15.25
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.75,
+            16,
+            1.25
+          ],
+          "texture": "#trade_board_rim_edge"
+        }
+      }
+    },
+    {
+      "name": "rim_bottom",
+      "from": [
+        0,
+        0,
+        14.75
+      ],
+      "to": [
+        16,
+        1,
+        15.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#trade_board_rim"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            15,
+            1.25,
+            16
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "west": {
+          "uv": [
+            14.75,
+            15,
+            15.25,
+            16
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            14.75,
+            16,
+            15.25
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.75,
+            16,
+            1.25
+          ],
+          "texture": "#trade_board_rim_edge"
+        }
+      }
+    },
+    {
+      "name": "rim_left",
+      "from": [
+        0,
+        1,
+        14.75
+      ],
+      "to": [
+        1,
+        15,
+        15.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            15,
+            1,
+            16,
+            15
+          ],
+          "texture": "#trade_board_rim"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            1,
+            1.25,
+            15
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "west": {
+          "uv": [
+            14.75,
+            1,
+            15.25,
+            15
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            14.75,
+            1,
+            15.25
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.75,
+            1,
+            1.25
+          ],
+          "texture": "#trade_board_rim_edge"
+        }
+      }
+    },
+    {
+      "name": "rim_right",
+      "from": [
+        15,
+        1,
+        14.75
+      ],
+      "to": [
+        16,
+        15,
+        15.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            1,
+            1,
+            15
+          ],
+          "texture": "#trade_board_rim"
+        },
+        "east": {
+          "uv": [
+            0.75,
+            1,
+            1.25,
+            15
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "west": {
+          "uv": [
+            14.75,
+            1,
+            15.25,
+            15
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "up": {
+          "uv": [
+            15,
+            14.75,
+            16,
+            15.25
+          ],
+          "texture": "#trade_board_rim_edge"
+        },
+        "down": {
+          "uv": [
+            15,
+            0.75,
+            16,
+            1.25
+          ],
+          "texture": "#trade_board_rim_edge"
+        }
+      }
+    }
+  ],
+  "gui_light": "front",
+  "display": {
+    "gui": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        3.842,
+        -1.921,
+        0
+      ],
+      "scale": [
+        0.737,
+        0.737,
+        0.737
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        7
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    }
+  }
+}

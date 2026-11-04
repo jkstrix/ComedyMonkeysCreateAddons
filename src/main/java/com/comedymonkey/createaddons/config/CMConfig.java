@@ -149,6 +149,7 @@ public final class CMConfig {
 
 		public final ModConfigSpec.IntValue tradeBotRange;
 		public final ModConfigSpec.IntValue tradeBotsPerPlayer;
+		public final ModConfigSpec.IntValue tradeMastersPerPlayer;
 		public final ModConfigSpec.IntValue tradeBotChargeFePerTick;
 		public final ModConfigSpec.IntValue tradeBotStationBuffer;
 		public final ModConfigSpec.IntValue tradeBotFullCharge;
@@ -697,6 +698,10 @@ public final class CMConfig {
 				.comment("How many Trade Bots each player can have placed at once.")
 				.translation("comedymonkeysaddons.configuration.tradeBotsPerPlayer")
 				.defineInRange("tradeBotsPerPlayer", 4, 1, 64);
+			tradeMastersPerPlayer = builder
+				.comment("How many Trade Masters each player can have placed at once (counted apart from Trade Bots).")
+				.translation("comedymonkeysaddons.configuration.tradeMastersPerPlayer")
+				.defineInRange("tradeMastersPerPlayer", 2, 1, 64);
 			tradeBotChargeFePerTick = builder
 				.comment("FE a tick his station puts into him while he's docked.")
 				.translation("comedymonkeysaddons.configuration.tradeBotChargeFePerTick")
@@ -1151,6 +1156,10 @@ public final class CMConfig {
 
 		public int tradeBotsPerPlayer() {
 			return get(tradeBotsPerPlayer);
+		}
+
+		public int tradeMastersPerPlayer() {
+			return get(tradeMastersPerPlayer);
 		}
 
 		public int tradeBotChargeFePerTick() {

@@ -46,6 +46,9 @@ public final class TradeBotGeometry {
 	public static final ModelLayerLocation STATION_GLOW_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_bot"), "station_glow");
 	/** The Trade Master: Trade Bot's bones plus his own (beard, monocle, chain, ledger, Stock Link bulb). */
 	public static final ModelLayerLocation MASTER_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_master"), "main");
+	/** His station: Trade Bot's, its plinth in netherite. */
+	public static final ModelLayerLocation MASTER_STATION_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_master"), "station");
+	public static final ModelLayerLocation MASTER_STATION_GLOW_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_master"), "station_glow");
 
 	public record Bone(String name, @Nullable String parent, float[] pivot, float[] rotation, List<Cube> cubes) {}
 
@@ -101,6 +104,23 @@ public final class TradeBotGeometry {
 
 	public static ModelLayerLocation layerOf(BotKind kind) {
 		return kind == BotKind.TRADE_MASTER ? MASTER_LAYER : BOT_LAYER;
+	}
+
+	public static LayerDefinition masterStationLayer() {
+		return of(BotKind.TRADE_MASTER).layer("station");
+	}
+
+	public static LayerDefinition masterStationGlowLayer() {
+		TradeBotGeometry geometry = of(BotKind.TRADE_MASTER);
+		return geometry.layer(GlowModel.glowing(geometry, BotKind.TRADE_MASTER.glowTexture()), "station");
+	}
+
+	public static ModelLayerLocation stationLayerOf(BotKind kind) {
+		return kind == BotKind.TRADE_MASTER ? MASTER_STATION_LAYER : STATION_LAYER;
+	}
+
+	public static ModelLayerLocation stationGlowLayerOf(BotKind kind) {
+		return kind == BotKind.TRADE_MASTER ? MASTER_STATION_GLOW_LAYER : STATION_GLOW_LAYER;
 	}
 
 	public static LayerDefinition stationLayer() {

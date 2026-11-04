@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "T",
+    "A",
+    "S"
+  ],
+  "key": {
+    "T": {
+      "item": "create:electron_tube"
+    },
+    "A": {
+      "item": "create:andesite_casing"
+    },
+    "S": {
+      "tag": "c:plates/brass"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:trade_board",
+    "count": 1
+  }
+}

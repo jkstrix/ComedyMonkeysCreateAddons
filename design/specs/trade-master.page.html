@@ -148,14 +148,14 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
     <ul class="idiot">
       <li>Upgraded Trade Bot with a beard. Costs a lot.</li>
       <li>Tune him to a Create logistics network.</li>
-      <li>Hatches on every chest he uses. They're cheap.</li>
-      <li>Put Factory Gauges on hatches: "keep N here".</li>
+      <li>Boards on every chest he uses. They're cheap.</li>
+      <li>Put Factory Gauges on boards: "keep N here".</li>
       <li>Low gauge: fetch owned stock, then buy the rest.</li>
       <li>Pays with spare emeralds, or sells surplus first.</li>
       <li>Never sells or spends below any gauge.</li>
       <li>Never pays above base price. Restocks still limit him.</li>
       <li>Carries by hand, 64 blocks, seated villagers only.</li>
-      <li>No hatch on a chest? He never touches it.</li>
+      <li>No board on a chest? He never touches it.</li>
     </ul>
   </section>
 
@@ -164,25 +164,25 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
     <ol class="loop">
       <li><h3>Upgrade a Trade Bot</h3><p>5×5 mechanical crafter, with a new Trade Ledger. He keeps the old bot's reputation.</p></li>
       <li><h3>Tune and place</h3><p>Right-click a Stock Link with him, then place his station. FE from below.</p></li>
-      <li><h3>Fit Trade Hatches</h3><p>On every chest he takes from or fills. Cheap, and no Packagers needed.</p></li>
-      <li><h3>Add gauges</h3><p>Factory Gauges on the hatches he fills: "2 stacks of bookshelves", "4 stacks of emeralds".</p></li>
+      <li><h3>Fit Trade Boards</h3><p>On every chest he takes from or fills. Cheap, and no Packagers needed.</p></li>
+      <li><h3>Add gauges</h3><p>Factory Gauges on the boards he fills: "2 stacks of bookshelves", "4 stacks of emeralds".</p></li>
       <li><h3>Seat villagers</h3><p>Sellers of what you want, buyers of what you have spare.</p></li>
     </ol>
   </section>
 
   <section>
     <h2>How a gauge gets filled</h2>
-    <p class="sub">Every chest he uses has a Trade Hatch. No gauges: he takes from it. Gauges: he fills it to what they ask. No Packagers, and chests without a hatch don't exist for him.</p>
+    <p class="sub">Every chest he uses has a Trade Board. No gauges: he takes from it. Gauges: he fills it to what they ask. No Packagers, and chests without a board don't exist for him.</p>
     <div class="diagram">
-      <svg viewBox="0 0 720 330" role="img" aria-label="Input hatch chests on the left, the Trade Master in the middle, seated villagers on the right, and three hatch chests along the bottom with gauges for emeralds, bookshelves and terracotta. Step 1: he fetches stock you already own. Step 2: if emeralds are short, he sells surplus. Step 3: he buys from seated villagers. Step 4: he delivers into the hatch chest whose gauge wanted it.">
-        <!-- input hatch chests -->
-        <text x="20" y="28" class="lbl big">Input hatches</text>
+      <svg viewBox="0 0 720 330" role="img" aria-label="Input board chests on the left, the Trade Master in the middle, seated villagers on the right, and three board chests along the bottom with gauges for emeralds, bookshelves and terracotta. Step 1: he fetches stock you already own. Step 2: if emeralds are short, he sells surplus. Step 3: he buys from seated villagers. Step 4: he delivers into the board chest whose gauge wanted it.">
+        <!-- input board chests -->
+        <text x="20" y="28" class="lbl big">Input boards</text>
         <g>
           <rect x="20" y="44" width="56" height="40" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
           <rect x="76" y="48" width="10" height="32" fill="var(--copper)" stroke="var(--iron-hi)"></rect>
           <rect x="100" y="44" width="56" height="40" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
           <rect x="156" y="48" width="10" height="32" fill="var(--copper)" stroke="var(--iron-hi)"></rect>
-          <text x="20" y="116" class="lbl dim">Hatch, no gauges</text>
+          <text x="20" y="116" class="lbl dim">Board, no gauges</text>
           <text x="20" y="130" class="lbl dim">(spare goods, emeralds)</text>
         </g>
         <!-- trade master -->
@@ -216,7 +216,7 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
         <path d="M342 196 L342 226" fill="none" stroke="var(--ok)" stroke-width="2"></path>
         <path d="M342 232 l-6 -9 h12 z" fill="var(--ok)"></path>
         <text x="352" y="216" class="lbl ok">4 deliver</text>
-        <!-- hatch chests -->
+        <!-- board chests -->
         <line x1="20" y1="240" x2="700" y2="240" stroke="var(--line)"></line>
         <g>
           <rect x="120" y="262" width="60" height="40" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"></rect>
@@ -239,8 +239,8 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
           <circle cx="596" cy="290" r="5" fill="var(--copper)" stroke="var(--iron-hi)"></circle>
           <text x="500" y="320" class="lbl">terracotta · 4 gauges</text>
         </g>
-        <text x="20" y="258" class="lbl dim">Hatch chests</text>
-        <text x="20" y="272" class="lbl dim">(chest + hatch + gauges)</text>
+        <text x="20" y="258" class="lbl dim">Board chests</text>
+        <text x="20" y="272" class="lbl dim">(chest + board + gauges)</text>
       </svg>
     </div>
     <ul class="steps">
@@ -258,14 +258,14 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
       <div class="num"><b>27 stacks</b><span>per trip, plus his emerald pouch</span></div>
       <div class="num"><b>2</b><span>Trade Masters per player (separate from 4 Trade Bots)</span></div>
       <div class="num"><b>Base price</b><span>the most he'll ever pay</span></div>
-      <div class="num"><b>4 gauges</b><span>per hatch face, so 16 terracottas fit on one hatch</span></div>
+      <div class="num"><b>4 gauges</b><span>per board face, so 16 terracottas fit on one board</span></div>
       <div class="num"><b>1 visit</b><span>one trade animation per villager, every useful trade in it</span></div>
     </div>
   </section>
 
   <section>
     <h2>Recipes</h2>
-    <p class="sub">The Trade Master costs a Trade Bot, roughly twice that again in Create parts, and 4 netherite. Trade Hatches stay cheap, because you'll want one on every chest he fills.</p>
+    <p class="sub">The Trade Master costs a Trade Bot, roughly twice that again in Create parts, and 4 netherite. Trade Boards stay cheap, because you'll want one on every chest he fills.</p>
     <div class="recipes">
       <div class="recipe">
         <div class="chips"><span class="chip ready">Approved</span></div>
@@ -317,7 +317,7 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
       </div>
       <div class="recipe">
         <div class="chips"><span class="chip ready">Approved: cheap</span></div>
-        <h3>Trade Hatch</h3>
+        <h3>Trade Board</h3>
         <p class="how">Crafting table · shaped</p>
         <div class="makes">
           <div class="grid g3" role="img" aria-label="3 by 3 grid, middle column only: electron tube on top, andesite casing in the middle, brass sheet at the bottom.">
@@ -325,7 +325,7 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
             <span class="slot none"></span><span class="slot an">A</span><span class="slot none"></span>
             <span class="slot none"></span><span class="slot br">S</span><span class="slot none"></span>
           </div>
-          <span aria-hidden="true">→</span><span class="slot out">H</span><span>×1</span>
+          <span aria-hidden="true">→</span><span class="slot out">B</span><span>×1</span>
         </div>
         <ul class="legend">
           <li><code>T</code><span>Electron Tube</span><span>×1</span></li>
@@ -342,9 +342,9 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
       <div class="does">
         <h3>He does</h3>
         <ul>
-          <li>Fill gauges on Trade Hatches tuned to his network</li>
+          <li>Fill gauges on Trade Boards tuned to his network</li>
           <li>Use stock you already own before trading</li>
-          <li>Sell anything in his hatch chests above its gauges</li>
+          <li>Sell anything in his board chests above its gauges</li>
           <li>Keep the Trade Bot's reputation and charge</li>
           <li>Work unattended wherever his area is loaded</li>
           <li>Go home at night, in storms, and to charge</li>
@@ -353,12 +353,12 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
       <div class="doesnt">
         <h3>He doesn't</h3>
         <ul>
-          <li>Listen to gauges that aren't on a Trade Hatch</li>
+          <li>Listen to gauges that aren't on a Trade Board</li>
           <li>Take anything below a gauge, to sell or to spend</li>
           <li>Pay prices that demand has pushed above base</li>
           <li>Trade with villagers who aren't seated</li>
           <li>Need Packagers or packages: he carries everything himself</li>
-          <li>Touch chests without a Trade Hatch</li>
+          <li>Touch chests without a Trade Board</li>
         </ul>
       </div>
     </div>
@@ -368,15 +368,15 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
     <h2>What if…?</h2>
     <div class="qa">
       <div><b>Nobody in range sells it?</b><span>The gauge is listed as "nobody sells this". He doesn't go looking.</span></div>
-      <div><b>The hatch chest is too far away?</b><span>Listed as "out of range". He never goes there.</span></div>
+      <div><b>The board chest is too far away?</b><span>Listed as "out of range". He never goes there.</span></div>
       <div><b>No spare emeralds and nothing to sell?</b><span>He waits. The gauge stays missing.</span></div>
       <div><b>A trade gives more than needed?</b><span>The extra goes into that chest anyway. Gauges are floors.</span></div>
-      <div><b>A hatch is broken mid-trip?</b><span>Goods go back where they came from. Nothing is lost.</span></div>
+      <div><b>A board is broken mid-trip?</b><span>Goods go back where they came from. Nothing is lost.</span></div>
       <div><b>Two Trade Masters want one gauge?</b><span>First come, first served. The other picks another gauge.</span></div>
       <div><b>Prices went up after heavy trading?</b><span>He skips that offer until a restock.</span></div>
-      <div><b>He'd sell my diamonds?</b><span>Only if they're in a hatch chest with no gauge for them. Keep them in a chest without a hatch.</span></div>
-      <div><b>A trade needs a book as well?</b><span>He fetches the book from his hatch chests too, or skips the trade.</span></div>
-      <div><b>Where does trade XP go?</b><span>As Nuggets of Experience, to a hatch chest with a nugget gauge. Banked until there is one.</span></div>
+      <div><b>He'd sell my diamonds?</b><span>Only if they're in a board chest with no gauge for them. Keep them in a chest without a board.</span></div>
+      <div><b>A trade needs a book as well?</b><span>He fetches the book from his board chests too, or skips the trade.</span></div>
+      <div><b>Where does trade XP go?</b><span>As Nuggets of Experience, to a board chest with a nugget gauge. Banked until there is one.</span></div>
     </div>
   </section>
 
@@ -387,7 +387,7 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
         <h3>Approved defaults</h3>
         <ul>
           <li>15 Trade Master defaults (tuning, screen, priority, goggles, Ponder…)</li>
-          <li>9 Trade Hatch defaults (cheap recipe, any container, network lock…)</li>
+          <li>9 Trade Board defaults (cheap recipe, any container, network lock…)</li>
         </ul>
       </div>
       <div class="watch">
@@ -395,7 +395,6 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
         <ul>
           <li>Netherite Sheet texture (previewed first)</li>
           <li>Charge cost of courier trips (playtest)</li>
-          <li>Proof that gauges on hatches can be redirected in Create 6.0.10</li>
         </ul>
       </div>
       <div class="watch">
@@ -412,11 +411,11 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--lin
     <h2>Design readiness</h2>
     <div class="scores">
       <div class="score"><span>Gameplay</span><div class="track"><div class="fill" style="width:95%"></div></div><b>95%</b><p class="why">Every decision made; Display Link parked by choice.</p></div>
-      <div class="score"><span>World integration</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><p class="why">The gauge-on-hatch mixin and tuning from the station need proving in code.</p></div>
+      <div class="score"><span>World integration</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><p class="why">The gauge-on-board mixin and tuning from the station are proven in game tests; contraptions untested.</p></div>
       <div class="score"><span>Balance</span><div class="track"><div class="fill" style="width:85%"></div></div><b>85%</b><p class="why">Recipe amounts and courier charge cost need a playtest.</p></div>
       <div class="score"><span>Progression</span><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b><p class="why">The Trade Ledger's sequence is proposed, not tested in JEI.</p></div>
       <div class="score"><span>Automation</span><div class="track"><div class="fill" style="width:92%"></div></div><b>92%</b><p class="why">No packages by choice; a Packager on the same chest bridges to Create.</p></div>
-      <div class="score"><span>Edge cases</span><div class="track"><div class="fill" style="width:92%"></div></div><b>92%</b><p class="why">Hatches on moving contraptions and mid-trip removals need game tests.</p></div>
+      <div class="score"><span>Edge cases</span><div class="track"><div class="fill" style="width:92%"></div></div><b>92%</b><p class="why">Boards on moving contraptions and mid-trip removals need game tests.</p></div>
       <div class="score total"><span>Overall</span><div class="track"><div class="fill" style="width:85%"></div></div><b>85%</b><p class="why">The lowest area (balance): ready to build, with numbers to tune in playtesting.</p></div>
     </div>
   </section>

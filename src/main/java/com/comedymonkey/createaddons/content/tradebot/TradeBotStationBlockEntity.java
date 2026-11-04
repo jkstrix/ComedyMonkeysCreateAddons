@@ -13,11 +13,11 @@ import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.electric.EnergyBuffer;
 import com.comedymonkey.createaddons.registry.ModBlockEntities;
 import com.comedymonkey.createaddons.registry.ModDataComponents;
-import com.comedymonkey.createaddons.registry.ModItems;
 import com.comedymonkey.createaddons.registry.ModSounds;
 import com.comedymonkey.createaddons.network.TradeBotStationPayload;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.content.logistics.packagerLink.LogisticallyLinkedBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.createmod.catnip.lang.LangBuilder;
@@ -85,8 +85,26 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 			level.blockEntityChanged(worldPosition);
 	}
 
+	/** A Trade Master's network (design/specs/trade-master.md P1, D18): his station is a Create link; Trade Bot's isn't. */
+	@Nullable
+	private LogisticallyLinkedBehaviour link;
+
 	@Override
-	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {}
+	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+		if (kind() == BotKind.TRADE_MASTER)
+			behaviours.add(link = new LogisticallyLinkedBehaviour(this, false));
+	}
+
+	/** The network a Trade Master's station is tuned to; null for Trade Bot's. */
+	@Nullable
+	public java.util.UUID frequency() {
+		return link == null ? null : link.freqId;
+	}
+
+	/** Whose station this is (Trade Bot's or the Trade Master's), from its block. */
+	public BotKind kind() {
+		return getBlockState().getBlock() instanceof TradeBotStationBlock block ? block.kind() : BotKind.TRADE_BOT;
+	}
 
 	/** Takes FE from underneath only (and from no side, for things that ask without one). */
 	@Nullable
@@ -373,8 +391,10 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 			return;
 		}
 		TradeBotData data = tradeBot != null ? tradeBot.toData(inputs, Optional.ofNullable(output)) : TradeBotData.EMPTY;
-		ItemStack stack = new ItemStack(ModItems.TRADE_BOT.get());
+		ItemStack stack = new ItemStack(kind().item());
 		stack.set(ModDataComponents.TRADE_BOT_DATA.get(), data);
+		if (link != null)
+			TradeBotItem.keepFrequency(stack, link.freqId, getType());
 		if (tradeBot != null && tradeBot.hasCustomName())
 			stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, tradeBot.getCustomName());
 		packing = true;

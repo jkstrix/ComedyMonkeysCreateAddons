@@ -1,0 +1,44 @@
+{
+  "type": "comedymonkeysaddons:trade_master_upgrade",
+  "accept_mirrored": false,
+  "category": "misc",
+  "pattern": [
+    "NSKSN",
+    "SPLPS",
+    "GETEG",
+    "SPCPS",
+    "NSSSN"
+  ],
+  "key": {
+    "T": {
+      "item": "comedymonkeysaddons:trade_bot"
+    },
+    "L": {
+      "item": "comedymonkeysaddons:trade_ledger"
+    },
+    "K": {
+      "item": "create:stock_link"
+    },
+    "G": {
+      "item": "create:factory_gauge"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "E": {
+      "item": "minecraft:emerald_block"
+    },
+    "C": {
+      "item": "create:brass_casing"
+    },
+    "N": {
+      "tag": "c:plates/netherite"
+    },
+    "S": {
+      "tag": "c:plates/brass"
+    }
+  },
+  "result": {
+    "id": "comedymonkeysaddons:trade_master"
+  }
+}

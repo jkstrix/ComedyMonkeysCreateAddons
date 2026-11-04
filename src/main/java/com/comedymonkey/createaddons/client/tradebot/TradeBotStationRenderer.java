@@ -1,7 +1,9 @@
 package com.comedymonkey.createaddons.client.tradebot;
 
+import java.util.EnumMap;
 import java.util.Map;
 
+import com.comedymonkey.createaddons.content.tradebot.BotKind;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotEntity;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotStationBlock;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotStationBlockEntity;
@@ -24,15 +26,18 @@ import net.minecraft.world.phys.Vec3;
  * and its winder keeps turning while it charges him.
  */
 public class TradeBotStationRenderer extends SafeBlockEntityRenderer<TradeBotStationBlockEntity> {
-	private final ModelPart root;
-	private final Map<String, ModelPart> parts;
-	/** Just the cubes with any glow on them, posed as the station is. */
-	private final GlowModel glow;
+	/** One station model per kind (Trade Bot's, the Trade Master's), and just its cubes with any glow on them. */
+	private record Station(ModelPart root, Map<String, ModelPart> parts, GlowModel glow) {}
+
+	private final Map<BotKind, Station> stations = new EnumMap<>(BotKind.class);
 
 	public TradeBotStationRenderer(BlockEntityRendererProvider.Context context) {
-		root = context.bakeLayer(TradeBotGeometry.STATION_LAYER);
-		parts = TradeBotGeometry.get().parts(root, "station");
-		glow = GlowModel.of(parts, "station");
+		for (BotKind kind : BotKind.values()) {
+			ModelPart root = context.bakeLayer(TradeBotGeometry.stationLayerOf(kind));
+			TradeBotGeometry geometry = TradeBotGeometry.of(kind);
+			Map<String, ModelPart> parts = geometry.parts(root, "station");
+			stations.put(kind, new Station(root, parts, GlowModel.of(geometry, kind.glowTexture(), parts, "station")));
+		}
 	}
 
 	@Override
@@ -40,8 +45,9 @@ public class TradeBotStationRenderer extends SafeBlockEntityRenderer<TradeBotSta
 		// with Flywheel on, its visual draws it (TradeBotStationVisual)
 		if (com.comedymonkey.createaddons.client.parts.PartSink.instanced(be))
 			return;
-		pose(parts, root, be, partialTicks, null);
-		render(ms, buffers, light, overlay, be.facing(), root, glow);
+		Station station = stations.get(be.kind());
+		pose(station.parts(), station.root(), be, partialTicks, null);
+		render(ms, buffers, light, overlay, be.facing(), station.root(), station.glow(), be.kind());
 	}
 
 	/**
@@ -69,15 +75,15 @@ public class TradeBotStationRenderer extends SafeBlockEntityRenderer<TradeBotSta
 	 * then its glowing cubes at full brightness.
 	 */
 	static void render(PoseStack ms, MultiBufferSource buffers, int light, int overlay, Direction facing, ModelPart model,
-					   GlowModel glow) {
+					   GlowModel glow, BotKind kind) {
 		Vec3 dock = TradeBotStationBlock.dockPoint(BlockPos.ZERO, facing);
 		ms.pushPose();
 		ms.translate(dock.x, dock.y, dock.z);
 		ms.mulPose(Axis.YP.rotationDegrees(180 - facing.toYRot()));
 		ms.scale(-1, -1, 1);
 		ms.translate(0, -1.501, 0);
-		model.render(ms, buffers.getBuffer(RenderType.entityCutoutNoCull(TradeBotRenderer.TEXTURE)), light, overlay);
-		glow.render(ms, buffers.getBuffer(RenderType.entityCutoutNoCull(TradeBotRenderer.GLOW)), overlay);
+		model.render(ms, buffers.getBuffer(RenderType.entityCutoutNoCull(kind.texture())), light, overlay);
+		glow.render(ms, buffers.getBuffer(RenderType.entityCutoutNoCull(kind.glowTexture())), overlay);
 		ms.popPose();
 	}
 

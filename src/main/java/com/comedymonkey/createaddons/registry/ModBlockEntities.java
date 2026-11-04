@@ -77,7 +77,7 @@ public final class ModBlockEntities {
 
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TradeBotStationBlockEntity>> TRADE_BOT_STATION =
 		BLOCK_ENTITY_TYPES.register("trade_bot",
-			() -> BlockEntityType.Builder.of(TradeBotStationBlockEntity::new, ModBlocks.TRADE_BOT.get()).build(null));
+			() -> BlockEntityType.Builder.of(TradeBotStationBlockEntity::new, ModBlocks.TRADE_BOT.get(), ModBlocks.TRADE_MASTER.get()).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AnimalPenBlockEntity>> ANIMAL_PEN =

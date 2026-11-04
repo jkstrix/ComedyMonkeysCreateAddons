@@ -27,6 +27,12 @@ public final class ModEntities {
 		() -> EntityType.Builder.of(TradeBotEntity::new, MobCategory.MISC).sized(0.6f, 1.5f).clientTrackingRange(10)
 			.updateInterval(1).build("trade_master"));
 
+	/** The Trade Board: hung flat on a container's face like an item frame (design/specs/trade-master.md D41). */
+	public static final DeferredHolder<EntityType<?>, EntityType<com.comedymonkey.createaddons.content.tradebot.board.TradeBoardEntity>> TRADE_BOARD =
+		ENTITY_TYPES.register("trade_board", () -> EntityType.Builder.<com.comedymonkey.createaddons.content.tradebot.board.TradeBoardEntity>of(
+			com.comedymonkey.createaddons.content.tradebot.board.TradeBoardEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).eyeHeight(0)
+			.clientTrackingRange(10).updateInterval(Integer.MAX_VALUE).build("trade_board"));
+
 	/** The boss: 6 wide to match his shield pauldrons, 7 blocks tall (D20); fire and lava can't touch him (D50). */
 	public static final DeferredHolder<EntityType<?>, EntityType<ClockworkJuggernaut>> CLOCKWORK_JUGGERNAUT = ENTITY_TYPES.register("clockwork_juggernaut",
 		() -> EntityType.Builder.of(ClockworkJuggernaut::new, MobCategory.MONSTER).sized(6f, 7f).fireImmune().clientTrackingRange(10)

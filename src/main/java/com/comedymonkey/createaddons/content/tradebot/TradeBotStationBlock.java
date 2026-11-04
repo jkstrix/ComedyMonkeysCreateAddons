@@ -55,9 +55,21 @@ public final class TradeBotStationBlock extends Block implements IBE<TradeBotSta
 			SHAPES.put(facing, Shapes.or(rotated(facing, 1, 0, 1, 15, 4, 15), rotated(facing, 6.5, 4, 13, 9.5, 15, 15)));
 	}
 
+	/** Whose station it is: Trade Bot's, or the Trade Master's. */
+	private final BotKind kind;
+
 	public TradeBotStationBlock(Properties properties) {
+		this(properties, BotKind.TRADE_BOT);
+	}
+
+	public TradeBotStationBlock(Properties properties, BotKind kind) {
 		super(properties);
+		this.kind = kind;
 		registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(GLOW, false));
+	}
+
+	public BotKind kind() {
+		return kind;
 	}
 
 	@Override

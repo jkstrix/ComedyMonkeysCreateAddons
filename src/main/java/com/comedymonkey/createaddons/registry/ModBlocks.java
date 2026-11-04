@@ -365,6 +365,18 @@ public final class ModBlocks {
 			.pushReaction(PushReaction.BLOCK)
 			.lightLevel(state -> state.getValue(TradeBotStationBlock.GLOW) ? 4 : 0)));
 
+	/** The Trade Master's station (design/specs/trade-master.md): Trade Bot's, with its plinth in netherite. */
+	public static final DeferredBlock<TradeBotStationBlock> TRADE_MASTER = BLOCKS.register("trade_master",
+		() -> new TradeBotStationBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.METAL)
+			.strength(-1.0f, 3600000.0f)
+			.sound(SoundType.NETHERITE_BLOCK)
+			.noOcclusion()
+			.noLootTable()
+			.pushReaction(PushReaction.BLOCK)
+			.lightLevel(state -> state.getValue(TradeBotStationBlock.GLOW) ? 4 : 0),
+			com.comedymonkey.createaddons.content.tradebot.BotKind.TRADE_MASTER));
+
 	// ---- Electric Lights (design/specs/electric-lights.md): break fast with a pickaxe (P30), never pushed (they hold a block entity)
 	public static final java.util.Map<com.comedymonkey.createaddons.content.light.LightKind, DeferredBlock<com.comedymonkey.createaddons.content.light.LightBlock>> LIGHTS =
 		registerLights();

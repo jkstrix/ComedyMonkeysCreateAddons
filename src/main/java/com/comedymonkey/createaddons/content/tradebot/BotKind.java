@@ -3,10 +3,15 @@ package com.comedymonkey.createaddons.content.tradebot;
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.config.CMConfig;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
+import com.comedymonkey.createaddons.registry.ModEntities;
+import com.comedymonkey.createaddons.registry.ModItems;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 
 /**
  * Which robot a {@link TradeBotEntity} is: Trade Bot, or the Trade Master built on him (design/plans/trade-master.md).
@@ -46,6 +51,28 @@ public enum BotKind {
 
 	public ResourceLocation glowTexture() {
 		return ComedyMonkeysCreateAddons.asResource("textures/entity/" + id + "_glow.png");
+	}
+
+	public EntityType<TradeBotEntity> entityType() {
+		return this == TRADE_MASTER ? ModEntities.TRADE_MASTER.get() : ModEntities.TRADE_BOT.get();
+	}
+
+	/** The item he packs into, on his station. */
+	public Item item() {
+		return this == TRADE_MASTER ? ModItems.TRADE_MASTER.get() : ModItems.TRADE_BOT.get();
+	}
+
+	/** How many of this kind each player may have placed (Trade Masters are counted apart, D29). */
+	public int perPlayer() {
+		return this == TRADE_MASTER ? CMConfig.SERVER.tradeMastersPerPlayer() : CMConfig.SERVER.tradeBotsPerPlayer();
+	}
+
+	/** The kind with this id; Trade Bot for anything else (old saves have none). */
+	public static BotKind byId(String id) {
+		for (BotKind kind : values())
+			if (kind.id.equals(id))
+				return kind;
+		return TRADE_BOT;
 	}
 
 	public ClipLibrary clips() {

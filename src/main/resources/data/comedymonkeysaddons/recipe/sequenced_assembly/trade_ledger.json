@@ -1,0 +1,78 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:book"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "id": "comedymonkeysaddons:trade_ledger"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_trade_ledger"
+        },
+        {
+          "item": "create:precision_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_trade_ledger"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_trade_ledger"
+        },
+        {
+          "item": "minecraft:emerald_block"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_trade_ledger"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_trade_ledger"
+        },
+        {
+          "item": "create:electron_tube"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_trade_ledger"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "comedymonkeysaddons:incomplete_trade_ledger"
+        }
+      ],
+      "results": [
+        {
+          "id": "comedymonkeysaddons:incomplete_trade_ledger"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "comedymonkeysaddons:incomplete_trade_ledger"
+  }
+}
