@@ -390,4 +390,4 @@ function after(ctx) {
   else console.error('trade master clearance: every clip clear (arms, beard, chain, ledger vs station)');
 }
 
-module.exports = { slug: 'trade-master', id: 'trade_master', palette, model, after };
+module.exports = { slug: 'trade-master', id: 'trade_master', palette, model, after, glowBones: ['aerial_bulb_glow'] };

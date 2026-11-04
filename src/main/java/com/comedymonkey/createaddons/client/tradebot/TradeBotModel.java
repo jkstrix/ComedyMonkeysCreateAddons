@@ -27,8 +27,13 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 	private final Map<String, ModelPart> parts;
 
 	public TradeBotModel(ModelPart root) {
+		this(root, TradeBotGeometry.get());
+	}
+
+	/** Another kind's model (the Trade Master's), baked from his own geometry. */
+	public TradeBotModel(ModelPart root, TradeBotGeometry geometry) {
 		this.root = root;
-		this.parts = TradeBotGeometry.get().parts(root, TradeBotGeometry.BOT_ROOTS);
+		this.parts = geometry.parts(root, TradeBotGeometry.BOT_ROOTS);
 	}
 
 	@Override
@@ -62,10 +67,11 @@ public class TradeBotModel extends HierarchicalModel<TradeBotEntity> {
 	 */
 	public static void pose(Map<String, ModelPart> parts, TradeBotEntity bot, ClipPlayback playback, double now) {
 		playback.observe(bot.clip(), bot.clipStartTime(), bot.clipSpeed(), now);
-		Clip clip = playback.clip();
+		// the same clip's timings, with his own parts' tracks (the Trade Master's beard and monocle)
+		Clip clip = bot.kind().own(playback.clip());
 		if (clip == null)
 			return;
-		Clip old = playback.fadeFrom(now);
+		Clip old = bot.kind().own(playback.fadeFrom(now));
 		pose(parts, clip, clip.localTime(playback.elapsed(now)), old, old == null ? 0 : old.localTime(playback.fadeFromElapsed(now)),
 			playback.fade(now));
 	}

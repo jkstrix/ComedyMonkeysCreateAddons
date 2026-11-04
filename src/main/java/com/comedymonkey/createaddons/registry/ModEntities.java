@@ -22,6 +22,11 @@ public final class ModEntities {
 		() -> EntityType.Builder.of(TradeBotEntity::new, MobCategory.MISC).sized(0.6f, 1.5f).clientTrackingRange(10)
 			.updateInterval(1).build("trade_bot"));
 
+	/** The Trade Master (design/specs/trade-master.md): Trade Bot upgraded, the same body, so the same size and tracking. */
+	public static final DeferredHolder<EntityType<?>, EntityType<TradeBotEntity>> TRADE_MASTER = ENTITY_TYPES.register("trade_master",
+		() -> EntityType.Builder.of(TradeBotEntity::new, MobCategory.MISC).sized(0.6f, 1.5f).clientTrackingRange(10)
+			.updateInterval(1).build("trade_master"));
+
 	/** The boss: 6 wide to match his shield pauldrons, 7 blocks tall (D20); fire and lava can't touch him (D50). */
 	public static final DeferredHolder<EntityType<?>, EntityType<ClockworkJuggernaut>> CLOCKWORK_JUGGERNAUT = ENTITY_TYPES.register("clockwork_juggernaut",
 		() -> EntityType.Builder.of(ClockworkJuggernaut::new, MobCategory.MONSTER).sized(6f, 7f).fireImmune().clientTrackingRange(10)
@@ -36,6 +41,7 @@ public final class ModEntities {
 
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
 		event.put(TRADE_BOT.get(), TradeBotEntity.createAttributes().build());
+		event.put(TRADE_MASTER.get(), TradeBotEntity.createAttributes().build());
 		event.put(CLOCKWORK_JUGGERNAUT.get(), ClockworkJuggernaut.createAttributes().build());
 	}
 }

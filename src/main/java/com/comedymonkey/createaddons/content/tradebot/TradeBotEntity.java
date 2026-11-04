@@ -19,6 +19,7 @@ import com.comedymonkey.createaddons.content.tradebot.clip.ClipLibrary;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipClock;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipPlayback;
 import com.comedymonkey.createaddons.content.tradebot.clip.ClipRoot;
+import com.comedymonkey.createaddons.registry.ModEntities;
 import com.comedymonkey.createaddons.registry.ModSounds;
 
 import net.minecraft.core.BlockPos;
@@ -328,6 +329,11 @@ public final class TradeBotEntity extends PathfinderMob {
 		this.station = station;
 		applyData(data);
 		dockAt(station, facing);
+	}
+
+	/** Trade Bot, or the Trade Master built on him: told apart by entity type. */
+	public BotKind kind() {
+		return getType() == ModEntities.TRADE_MASTER.get() ? BotKind.TRADE_MASTER : BotKind.TRADE_BOT;
 	}
 
 	@Nullable

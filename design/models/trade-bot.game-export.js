@@ -1,8 +1,9 @@
-// Game export for Trade Bot, called by trade-bot.gen.js with --game. Writes into the mod's resources:
-//   textures/entity/trade_bot.png       bot + station cubes, plus the trade props (lobbed package, emerald), re-packed
-//   textures/entity/trade_bot_glow.png  the same layout with only the glowing cubes, drawn full bright in game
-//   trade_bot/geometry.json             bones (pivot, rotation) and cubes (from, to, uv) in Blockbench units
-//   trade_bot/clips.json                every clip's sampled tracks, step tracks, root mode and sound cues
+// Game export for Trade Bot (and characters built on him, such as the Trade Master), called by trade-bot.gen.js with
+// --game. Writes into the mod's resources, under the character's id (trade_bot unless a variant says otherwise):
+//   textures/entity/<id>.png       bot + station cubes, plus the trade props (lobbed package, emerald), re-packed
+//   textures/entity/<id>_glow.png  the same layout with only the glowing cubes, drawn full bright in game
+//   <id>/geometry.json             bones (pivot, rotation) and cubes (from, to, uv) in Blockbench units
+//   <id>/clips.json                every clip's sampled tracks, step tracks, root mode and sound cues
 // Geometry and tracks stay in Blockbench's frame (Y up, front -Z, right +X); the game converts them in one place.
 const fs = require('fs');
 const path = require('path');
@@ -16,11 +17,12 @@ const rootMode = (name) => (PHYSICAL.includes(name) ? 'physical' : GAME.includes
 // glowing cubes live under these bones; they're painted into the glow texture too
 const GLOW_BONES = ['iris_glow_left', 'iris_glow_right', 'lamp_glow', 'station_glow'];
 
-module.exports = function exportGame({ bot, station, props = [], propDrop = 0, paintCube, png, animations, cues }) {
+module.exports = function exportGame({ bot, station, props = [], propDrop = 0, paintCube, png, animations, cues, id = 'trade_bot', glowBones = [] }) {
+  const glowing = [...GLOW_BONES, ...glowBones];
   // bones and cubes of the two in-game roots, parents first
   const bones = [], cubes = [];
   function walk(n, parent, glow) {
-    const isGlow = glow || GLOW_BONES.includes(n.name);
+    const isGlow = glow || glowing.includes(n.name);
     const bone = { name: n.name, parent, pivot: n.origin, rotation: n.rot, cubes: [] };
     bones.push(bone);
     for (const k of n.kids) {
@@ -59,14 +61,14 @@ module.exports = function exportGame({ bot, station, props = [], propDrop = 0, p
     if (c.glow) paintCube(c.node, c.uv, glow, size);
   }
   fs.mkdirSync(path.join(RES, 'textures/entity'), { recursive: true });
-  fs.writeFileSync(path.join(RES, 'textures/entity/trade_bot.png'), png(size, size, tex));
-  fs.writeFileSync(path.join(RES, 'textures/entity/trade_bot_glow.png'), png(size, size, glow));
+  fs.writeFileSync(path.join(RES, `textures/entity/${id}.png`), png(size, size, tex));
+  fs.writeFileSync(path.join(RES, `textures/entity/${id}_glow.png`), png(size, size, glow));
 
   const keep = new Set(bones.map((b) => b.name));
   keep.delete('station'); // the station root never moves in game (it's a block); the preview parks it per clip
-  fs.mkdirSync(path.join(RES, 'trade_bot'), { recursive: true });
+  fs.mkdirSync(path.join(RES, id), { recursive: true });
   const geometry = { texture: [size, size], bones: bones.map(({ name, parent, pivot, rotation, cubes: cs }) => ({ name, parent, pivot, rotation, cubes: cs })) };
-  fs.writeFileSync(path.join(RES, 'trade_bot/geometry.json'), JSON.stringify(geometry, null, 1) + '\n');
+  fs.writeFileSync(path.join(RES, `${id}/geometry.json`), JSON.stringify(geometry, null, 1) + '\n');
 
   // clips: sampled channels become flat arrays at the clip's frame rate; step keys stay as keys
   const num = (s) => +(+s).toFixed(3);
@@ -90,7 +92,7 @@ module.exports = function exportGame({ bot, station, props = [], propDrop = 0, p
     }
     return { name: a.name, length: a.length, mode: a.loop, root: rootMode(a.name), tracks, steps, cues: (cues && cues.clips[a.name]) || [] };
   });
-  fs.writeFileSync(path.join(RES, 'trade_bot/clips.json'), JSON.stringify({ clips }) + '\n');
+  fs.writeFileSync(path.join(RES, `${id}/clips.json`), JSON.stringify({ clips }) + '\n');
   const kb = (f) => Math.round(fs.statSync(path.join(RES, f)).size / 1024) + ' KB';
-  console.error(`game export: ${bones.length} bones, ${cubes.length} cubes, texture ${size}px, ${clips.length} clips (${kb('trade_bot/clips.json')})`);
+  console.error(`game export: ${bones.length} bones, ${cubes.length} cubes, texture ${size}px, ${clips.length} clips (${kb(`${id}/clips.json`)})`);
 };

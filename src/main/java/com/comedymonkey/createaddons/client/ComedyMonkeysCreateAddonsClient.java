@@ -250,6 +250,8 @@ public class ComedyMonkeysCreateAddonsClient {
 		if (SableCompat.LOADED)
 			AeronauticsRenderers.registerRenderers(event);
 		event.registerEntityRenderer(ModEntities.TRADE_BOT.get(), TradeBotRenderer::new);
+		event.registerEntityRenderer(ModEntities.TRADE_MASTER.get(),
+			context -> new TradeBotRenderer(context, com.comedymonkey.createaddons.content.tradebot.BotKind.TRADE_MASTER));
 		event.registerEntityRenderer(ModEntities.CLOCKWORK_JUGGERNAUT.get(), com.comedymonkey.createaddons.client.juggernaut.JuggernautRenderer::new);
 		event.registerEntityRenderer(ModEntities.THROWN_COG.get(), context -> new net.minecraft.client.renderer.entity.ThrownItemRenderer<>(context, 2.5f, false));
 		event.registerBlockEntityRenderer(ModBlockEntities.TRADE_BOT_STATION.get(), TradeBotStationRenderer::new);
@@ -356,6 +358,7 @@ public class ComedyMonkeysCreateAddonsClient {
 
 	private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(TradeBotGeometry.BOT_LAYER, TradeBotGeometry::botLayer);
+		event.registerLayerDefinition(TradeBotGeometry.MASTER_LAYER, TradeBotGeometry::masterLayer);
 		event.registerLayerDefinition(com.comedymonkey.createaddons.client.juggernaut.JuggernautModel.LAYER,
 			com.comedymonkey.createaddons.client.juggernaut.JuggernautModel::layer);
 		event.registerLayerDefinition(com.comedymonkey.createaddons.client.helperbot.HelperBotModels.LAYER,

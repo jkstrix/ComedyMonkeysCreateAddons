@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.tradebot.BotKind;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -43,6 +44,8 @@ public final class TradeBotGeometry {
 	public static final ModelLayerLocation BOT_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_bot"), "main");
 	public static final ModelLayerLocation STATION_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_bot"), "station");
 	public static final ModelLayerLocation STATION_GLOW_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_bot"), "station_glow");
+	/** The Trade Master: Trade Bot's bones plus his own (beard, monocle, chain, ledger, Stock Link bulb). */
+	public static final ModelLayerLocation MASTER_LAYER = new ModelLayerLocation(ComedyMonkeysCreateAddons.asResource("trade_master"), "main");
 
 	public record Bone(String name, @Nullable String parent, float[] pivot, float[] rotation, List<Cube> cubes) {}
 
@@ -85,6 +88,19 @@ public final class TradeBotGeometry {
 
 	public static LayerDefinition botLayer() {
 		return get().layer(BOT_ROOTS);
+	}
+
+	public static LayerDefinition masterLayer() {
+		return of(BotKind.TRADE_MASTER.geometryPath()).layer(BOT_ROOTS);
+	}
+
+	/** This kind's geometry, and the layer his model is baked from. */
+	public static TradeBotGeometry of(BotKind kind) {
+		return of(kind.geometryPath());
+	}
+
+	public static ModelLayerLocation layerOf(BotKind kind) {
+		return kind == BotKind.TRADE_MASTER ? MASTER_LAYER : BOT_LAYER;
 	}
 
 	public static LayerDefinition stationLayer() {

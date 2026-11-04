@@ -12,7 +12,6 @@ const VARIANT_ARG = ARGS.find((a) => a.startsWith('--variant='));
 const VAR = VARIANT_ARG ? require(path.resolve(__dirname, VARIANT_ARG.slice('--variant='.length))) : null;
 const OUT = ARGS.find((a) => !a.startsWith('--')) || path.resolve(__dirname, VAR ? VAR.slug + '.bbmodel' : 'trade-bot.bbmodel');
 const GAME = ARGS.includes('--game'); // also write the in-game assets (trade-bot.game-export.js)
-if (VAR && GAME) throw new Error('--game is not wired up for variants yet');
 // approved sounds: each clip's cues become sound keyframes on its Effects track, pointing at the real OGG files
 const SOUND_DIR = path.resolve(__dirname, '../sound');
 const CUES = fs.existsSync(path.join(SOUND_DIR, 'trade-bot.cues.json')) ? JSON.parse(fs.readFileSync(path.join(SOUND_DIR, 'trade-bot.cues.json'), 'utf8')) : null;
@@ -2240,4 +2239,5 @@ fs.writeFileSync(OUT, JSON.stringify(bb));
 console.error('wrote', OUT, elements.length, 'cubes', groups.length, 'groups', animations.length, 'animations');
 // the lobbed package and the emerald paid back are drawn in game too (the rest of the villager prop stays preview-only)
 const TRADE_PROPS = propVillager.kids.filter((k) => k.name === 'trade_package' || k.name === 'trade_emerald');
-if (GAME) require('./trade-bot.game-export.js')({ bot, station, props: TRADE_PROPS, propDrop: PROP_DROP, paintCube, png, animations, cues: CUES });
+if (GAME) require('./trade-bot.game-export.js')({ bot, station, props: TRADE_PROPS, propDrop: PROP_DROP, paintCube, png, animations, cues: CUES,
+  ...(VAR ? { id: VAR.id, glowBones: VAR.glowBones || [] } : {}) });

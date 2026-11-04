@@ -1375,6 +1375,7 @@
   "subtitles.comedymonkeysaddons.trade_bot.wheel_freespin": "Trade Bot's wheel whirs",
   "subtitles.comedymonkeysaddons.trade_bot.wheee": "Trade Bot goes wheee",
   "entity.comedymonkeysaddons.trade_bot": "Trade Bot",
+  "entity.comedymonkeysaddons.trade_master": "Trade Master",
   "commands.comedymonkeysaddons.tradebot.clip": "Playing %s (%s s) on the nearest Trade Bot",
   "commands.comedymonkeysaddons.tradebot.no_clip": "Trade Bot has no clip by that name",
   "commands.comedymonkeysaddons.tradebot.no_bot": "No Trade Bot within 32 blocks",

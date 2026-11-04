@@ -1,6 +1,7 @@
 package com.comedymonkey.createaddons.client.tradebot;
 
 import com.comedymonkey.createaddons.ComedyMonkeysCreateAddons;
+import com.comedymonkey.createaddons.content.tradebot.BotKind;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotEntity;
 import com.comedymonkey.createaddons.content.tradebot.clip.Clip;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -23,14 +24,23 @@ public final class TradeBotRenderer extends MobRenderer<TradeBotEntity, TradeBot
 	public static final ResourceLocation TEXTURE = ComedyMonkeysCreateAddons.asResource("textures/entity/trade_bot.png");
 	public static final ResourceLocation GLOW = ComedyMonkeysCreateAddons.asResource("textures/entity/trade_bot_glow.png");
 
+	private final BotKind kind;
+
 	public TradeBotRenderer(EntityRendererProvider.Context context) {
-		super(context, new TradeBotModel(context.bakeLayer(TradeBotGeometry.BOT_LAYER)), 0.35f);
-		addLayer(new Glow(this, GlowModel.of(getModel().parts(), TradeBotGeometry.BOT_ROOTS)));
+		this(context, BotKind.TRADE_BOT);
+	}
+
+	/** One kind's renderer: his own model, texture and glow (the Trade Master's beard, monocle and Stock Link bulb). */
+	public TradeBotRenderer(EntityRendererProvider.Context context, BotKind kind) {
+		super(context, new TradeBotModel(context.bakeLayer(TradeBotGeometry.layerOf(kind)), TradeBotGeometry.of(kind)), 0.35f);
+		this.kind = kind;
+		addLayer(new Glow(this, GlowModel.of(TradeBotGeometry.of(kind), kind.glowTexture(), getModel().parts(), TradeBotGeometry.BOT_ROOTS),
+			kind.glowTexture()));
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(TradeBotEntity bot) {
-		return TEXTURE;
+		return kind.texture();
 	}
 
 	@Override
@@ -59,16 +69,18 @@ public final class TradeBotRenderer extends MobRenderer<TradeBotEntity, TradeBot
 	private static class Glow extends RenderLayer<TradeBotEntity, TradeBotModel> {
 		/** Just the cubes with any glow on them, posed as he is. */
 		private final GlowModel glow;
+		private final ResourceLocation texture;
 
-		Glow(RenderLayerParent<TradeBotEntity, TradeBotModel> parent, GlowModel glow) {
+		Glow(RenderLayerParent<TradeBotEntity, TradeBotModel> parent, GlowModel glow, ResourceLocation texture) {
 			super(parent);
 			this.glow = glow;
+			this.texture = texture;
 		}
 
 		@Override
 		public void render(PoseStack poseStack, MultiBufferSource buffers, int light, TradeBotEntity bot, float limbSwing,
 			float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-			glow.render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(GLOW)), OverlayTexture.NO_OVERLAY);
+			glow.render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(texture)), OverlayTexture.NO_OVERLAY);
 		}
 	}
 }
