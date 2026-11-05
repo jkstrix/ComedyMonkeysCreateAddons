@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.content.chest.UpgradedChestBlock;
 import com.comedymonkey.createaddons.content.tradebot.TradeBotEntity;
+import com.comedymonkey.createaddons.content.tradebot.move.Floors;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -75,7 +76,7 @@ public record ContainerVisit(BlockPos container, ContainerKind kind, Direction s
 			if (Math.abs(between.getX() - container.getX()) + Math.abs(between.getZ() - container.getZ()) > 3)
 				return null;
 		}
-		Vec3 stand = new Vec3(point.x, WalkNodeEvaluator.getFloorLevel(level, standBlock), point.z);
+		Vec3 stand = new Vec3(point.x, Floors.height(level, standBlock), point.z);
 		return new ContainerVisit(container, kind, side, standBlock, stand, side.getOpposite().toYRot());
 	}
 }

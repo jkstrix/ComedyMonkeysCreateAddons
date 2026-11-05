@@ -278,7 +278,9 @@ public final class TradeBotEntity extends PathfinderMob {
 		clearFire();
 		fallDistance = 0;
 		setDeltaMovement(Vec3.ZERO);
-		teleportTo(at.x, at.y, at.z);
+		// on top of any carpet or snow in front of the station, not inside it
+		double floor = com.comedymonkey.createaddons.content.tradebot.move.Floors.height(level(), BlockPos.containing(at));
+		teleportTo(at.x, Math.max(at.y, floor), at.z);
 		motion.resetTravel(); // put back, not rolled: the jump costs nothing
 		setYRot(facing.toYRot());
 		if (rundown != Rundown.DAMAGE)

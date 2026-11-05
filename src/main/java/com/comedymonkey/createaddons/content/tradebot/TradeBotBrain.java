@@ -1446,15 +1446,20 @@ public class TradeBotBrain {
 		Vector3f travel = ClipRoot.travel(clip, clip.length(), new Vector3f());
 		Vec3 landing = ClipRoot.place(from, facing.toYRot(), travel);
 		float scale = 1;
-		if (!standable(BlockPos.containing(landing))) {
-			Vec3 front = Vec3.atBottomCenterOf(station.relative(facing));
-			if (!standable(station.relative(facing)))
+		BlockPos landsIn = BlockPos.containing(landing);
+		if (!standable(landsIn)) {
+			landsIn = station.relative(facing);
+			Vec3 front = Vec3.atBottomCenterOf(landsIn);
+			if (!standable(landsIn))
 				return false;
 			scale = (float) (horizontal(front.subtract(from)) / Math.abs(travel.z));
 		}
+		// he lands on the floor's top: on carpet or snow, not a pixel inside it
+		double drop = com.comedymonkey.createaddons.content.tradebot.move.Floors.height(bot.level(), landsIn) - from.y;
+		float lift = Math.abs(travel.y) > 1e-3 ? (float) (drop / travel.y) : 1;
 		bot.setYRot(facing.toYRot());
 		bot.leaveDock();
-		bot.playClip(clip, 1, scale);
+		bot.playClip(clip, 1, scale, lift);
 		set(Task.LEAVING);
 		return true;
 	}

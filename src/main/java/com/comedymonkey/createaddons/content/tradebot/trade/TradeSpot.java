@@ -7,6 +7,7 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import com.comedymonkey.createaddons.content.tradebot.TradeBotEntity;
+import com.comedymonkey.createaddons.content.tradebot.move.Floors;
 import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;
 
 import net.minecraft.core.BlockPos;
@@ -50,7 +51,7 @@ public record TradeSpot(AbstractVillager villager, BlockPos seat, Direction side
 			PathType between = WalkNodeEvaluator.getPathTypeStatic(bot, gap);
 			boolean open = between == PathType.WALKABLE || between == PathType.OPEN;
 			Vec3 point = Vec3.atBottomCenterOf(seat).add(side.getStepX() * SEAT_DISTANCE, 0, side.getStepZ() * SEAT_DISTANCE);
-			double floor = WalkNodeEvaluator.getFloorLevel(level, standBlock);
+			double floor = Floors.height(level, standBlock);
 			Vec3 stand = new Vec3(point.x, floor, point.z);
 			// he has to fit there: with a wall just behind the spot, he stands back on the block's centre instead
 			if (!fits(bot, stand))
