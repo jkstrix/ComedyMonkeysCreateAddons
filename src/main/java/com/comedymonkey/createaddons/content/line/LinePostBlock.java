@@ -55,7 +55,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * insulator and up to four branches, each a crossarm with an insulator of its own. A wire running under the foot joins
  * the head's top insulator. A pole joins the cables on it of one colour (brass feeding copper of its colour).
  */
-public class LinePostBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock {
+public class LinePostBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock,
+	com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement {
 	public static final MapCodec<LinePostBlock> CODEC = simpleCodec(LinePostBlock::new);
 	/** The way the post points: out of the face it stands on. */
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -275,9 +276,24 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 			// the wires beside the foot see the post (or stop seeing it)
 			PowerLineBlock.relinkAround(level, pos);
 		}
-		// put there by a command or a structure: its place in the pole is worked out next tick
-		if (!oldState.is(this) && !level.isClientSide)
+		// put there by a command, a structure or a Schematicannon (none tell their neighbours): its place in the pole, and
+		// the places of the posts it now stands on or holds up, are worked out next tick
+		if (!oldState.is(this) && !level.isClientSide) {
 			level.scheduleTick(pos, this, 1);
+			Direction facing = state.getValue(FACING);
+			for (BlockPos p : new BlockPos[] {pos.relative(facing), pos.relative(facing.getOpposite())}) {
+				// (never loads a chunk to look)
+				if (!level.isLoaded(p) || !level.getBlockState(p).is(this))
+					continue;
+				// built over a head with spans hung from it (a player can't: getStateForPlacement), they come down first,
+				// paid back as if it were broken
+				if (p.equals(pos.relative(facing.getOpposite())) && level.getBlockState(p).getValue(ROLE).isHead()
+					&& level.getBlockEntity(p) instanceof LinePostBlockEntity below && !below.spans().isEmpty())
+					for (ItemStack wire : below.takeDownAll())
+						Block.popResource(level, p, wire);
+				level.scheduleTick(p, this, 1);
+			}
+		}
 	}
 
 	@Override
@@ -361,6 +377,25 @@ public class LinePostBlock extends BaseEntityBlock implements IWrenchable, Simpl
 	private static void give(Level level, BlockPos pos, @Nullable Player player, ItemStack item) {
 		if (player == null || !player.getInventory().add(item))
 			Block.popResource(level, pos, item);
+	}
+
+	/**
+	 * Printed by a Schematicannon: the post, and one for each branch (as it drops: a Lamp Post's arms are its heads'), and
+	 * the Power Lines of every span this end draws (the far end's copy is free, so each span is paid for once).
+	 */
+	@Override
+	public com.simibubi.create.content.schematics.requirement.ItemRequirement getRequiredItems(BlockState state, @Nullable BlockEntity be) {
+		int posts = 1;
+		if (!(this instanceof com.comedymonkey.createaddons.content.light.LampPostBlock))
+			for (BooleanProperty b : BRANCHES.values())
+				if (state.getValue(b))
+					posts++;
+		var cost = new com.comedymonkey.createaddons.content.PrintCost().add(new ItemStack(asItem(), posts));
+		if (be instanceof LinePostBlockEntity post)
+			for (Span s : post.spans())
+				if (s.owner())
+					cost.addExact(LinePostBlockEntity.wireFor(s));
+		return cost.build();
 	}
 
 	// ---------- turning (structures, schematics, contraptions) ----------

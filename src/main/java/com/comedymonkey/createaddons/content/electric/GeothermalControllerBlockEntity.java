@@ -443,6 +443,13 @@ public final class GeothermalControllerBlockEntity extends SmartBlockEntity impl
 		reading.write(tag);
 	}
 
+	/** What a Schematicannon prints with it: the output set on its screen (not its fluids or charge). */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		super.writeSafe(tag, registries);
+		tag.putInt("OutputTenths", outputTenths);
+	}
+
 	@Override
 	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.read(tag, registries, clientPacket);

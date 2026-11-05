@@ -578,6 +578,47 @@ public final class LineGameTests {
 		helper.succeed();
 	}
 
+	/**
+	 * A schematicannon prints a dyed line (a covered cable) in its colour, and spends dyed lines of that colour on it, one
+	 * a wire for a Power Line: it goes the way the cannon does (safe data, the cost read from a block entity loaded from
+	 * that data, then placed with it).
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void schematicannonKeepsTheDye(GameTestHelper helper) {
+		var level = helper.getLevel();
+		Block[] lines = {ModBlocks.COPPER_POWER_LINE.get(), ModBlocks.BRASS_POWER_LINE.get(), ModBlocks.COPPER_FLUID_LINE.get(), ModBlocks.BRASS_FLUID_LINE.get()};
+		for (int i = 0; i < lines.length; i++) {
+			Block line = lines[i];
+			boolean power = line instanceof PowerLineBlock;
+			BlockPos from = new BlockPos(1 + i, 1, 3), to = from.south(2);
+			for (BlockPos p : new BlockPos[] {from, to})
+				helper.setBlock(p.north(), Blocks.STONE);
+			var state = power ? line.defaultBlockState().setValue(PowerLineBlock.FACES.get(Direction.DOWN), true)
+				.setValue(PowerLineBlock.FACES.get(Direction.NORTH), true) : line.defaultBlockState();
+			helper.setBlock(from, state);
+			if (!(helper.getBlockEntity(from) instanceof LineBlockEntity source))
+				throw new IllegalStateException("no line at " + from);
+			source.setDye(DyeColor.RED);
+			String name = line.getName().getString();
+
+			var data = com.simibubi.create.foundation.utility.BlockHelper.prepareBlockEntityData(level, state, source);
+			var costed = ((net.minecraft.world.level.block.EntityBlock) line).newBlockEntity(helper.absolutePos(to), state);
+			if (data != null && costed != null)
+				costed.loadWithComponents(data, level.registryAccess());
+			var cost = com.simibubi.create.content.schematics.requirement.ItemRequirement.of(state, costed).getRequiredItems();
+			ItemStack red = new ItemStack(line, power ? 2 : 1);
+			red.set(com.comedymonkey.createaddons.registry.ModDataComponents.LINE_DYE.get(), DyeColor.RED);
+			if (cost.size() != 1 || !cost.get(0).matches(red) || cost.get(0).matches(new ItemStack(line, red.getCount()))
+				|| cost.get(0).stack.getCount() != red.getCount())
+				helper.fail("a red " + name + " costs " + cost.stream().map(r -> r.stack).toList() + ", not " + red);
+
+			com.simibubi.create.foundation.utility.BlockHelper.placeSchematicBlock(level, state, helper.absolutePos(to), red, data);
+			if (!(helper.getBlockEntity(to) instanceof LineBlockEntity printed) || printed.dye() != DyeColor.RED)
+				helper.fail("a red " + name + " was printed " + (helper.getBlockEntity(to) instanceof LineBlockEntity p ? String.valueOf(p.dye()) : "missing"));
+		}
+		helper.succeed();
+	}
+
 	/** An encased line keeps working. */
 	@GameTest(template = COURSE, timeoutTicks = 80)
 	public static void encasedLineKeepsWorking(GameTestHelper helper) {

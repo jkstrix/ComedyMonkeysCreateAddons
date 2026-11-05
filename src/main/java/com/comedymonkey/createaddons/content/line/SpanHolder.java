@@ -35,6 +35,27 @@ public interface SpanHolder {
 	/** Spans whose far end is gone or no longer holds them come down (only the owner end pays the wire back). */
 	void dropBrokenSpans();
 
+	/** A span printed here (by a Schematicannon) is held at its far end too now: it's an ordinary span, done waiting. */
+	default void confirmPrinted(Span span) {}
+
+	/**
+	 * Whether a printed span's far end may still come (the cannon hasn't got there yet): nothing there, or a post or
+	 * battery not finished yet. Anything else there, and the span comes down.
+	 */
+	static boolean mayStillBePrinted(Level level, BlockPos far) {
+		BlockState state = level.getBlockState(far);
+		return state.isAir() || state.getBlock() instanceof LinePostBlock
+			|| state.getBlock() instanceof com.comedymonkey.createaddons.content.electric.BatteryBlock;
+	}
+
+	/** The block at pos, if it's loaded (a server level never loads a chunk to look); null if it isn't. */
+	@Nullable
+	static BlockState stateIfLoaded(@Nullable Level level, BlockPos pos) {
+		if (level == null || level instanceof net.minecraft.server.level.ServerLevel server && !server.isLoaded(pos))
+			return null;
+		return level.getBlockState(pos);
+	}
+
 	/** An Industrial Battery: it only takes spans to posts, and never draws them. */
 	default boolean isBattery() {
 		return false;

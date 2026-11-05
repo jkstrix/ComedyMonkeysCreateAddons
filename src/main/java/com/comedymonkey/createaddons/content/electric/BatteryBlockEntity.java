@@ -51,7 +51,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
  * draws the moving parts), the tower's height and the way its front faces. Each block shows its own tile of the tower.
  */
 public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, SpanHolder, SpanHolder.Part,
-	com.comedymonkey.createaddons.content.line.PowerGrid.Store {
+	com.comedymonkey.createaddons.content.line.PowerGrid.Store, com.simibubi.create.api.contraption.transformable.TransformableBlockEntity {
 	/** Which tile of the tower a formed block shows (the tile models' index, by height, layer and place, turned to its front). */
 	public record Tile(int height, int layer, int ix, int iz, Direction facing) {}
 
@@ -71,6 +71,16 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 	BlockPos formedAt;
 	/** A master's spans of Power Line, from its four insulators (front-left, front-right, back-left, back-right) to posts. */
 	private final List<Span> spans = new ArrayList<>();
+	/**
+	 * Printed by a Schematicannon: the front of the tower it was printed from (its tower forms facing so, whichever block
+	 * the cannon finished it with), until it forms.
+	 */
+	@Nullable
+	Direction printedFront;
+	/** Printed as a tower's master: the spans it had, put on once its tower forms here (see BatteryTowers.form). */
+	private final List<Span> printedSpans = new ArrayList<>();
+	/** Printed spans whose post isn't printed yet: they wait for it (rather than come down as a span to nothing would). */
+	private final List<Span> waiting = new ArrayList<>();
 	/** Server: what's on each side, for pushing into machines. */
 	@SuppressWarnings({"unchecked", "rawtypes"}) // a generic array has to be made raw
 	private final BlockCapabilityCache<IEnergyStorage, Direction>[] sides = new BlockCapabilityCache[4];
@@ -339,10 +349,17 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 			if (!level.isLoaded(far))
 				continue;
 			SpanHolder h = SpanHolder.at(level, far);
-			if (h == null || !h.spans().contains(sp.reversed())) {
-				spans.remove(sp);
-				changed = true;
+			// printed, and its post not printed yet (nothing there yet, or a post not finished): it waits
+			if (h == null && waiting.contains(sp) && SpanHolder.mayStillBePrinted(level, far))
+				continue;
+			if (h != null && h.spans().contains(sp.reversed())) {
+				confirmPrinted(sp);
+				h.confirmPrinted(sp.reversed());
+				continue;
 			}
+			spans.remove(sp);
+			waiting.remove(sp);
+			changed = true;
 		}
 		if (changed)
 			spansChanged();
@@ -369,6 +386,109 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 	void giveSpans(List<Span> back) {
 		spans.addAll(back);
 		spansChanged();
+	}
+
+	/**
+	 * Its tower formed with it as master: the spans it was printed with go on, each waiting for its post (or, where the
+	 * post is printed already and holds it, an ordinary span at both ends at once).
+	 */
+	void takePrintedSpans() {
+		if (printedSpans.isEmpty())
+			return;
+		for (Span s : printedSpans)
+			if (!spans.contains(s)) {
+				spans.add(s);
+				SpanHolder far = level != null && level.isLoaded(worldPosition.offset(s.offset())) ? SpanHolder.at(level, worldPosition.offset(s.offset())) : null;
+				if (far != null && far.spans().contains(s.reversed()))
+					far.confirmPrinted(s.reversed());
+				else
+					waiting.add(s);
+			}
+		printedSpans.clear();
+		spansChanged();
+	}
+
+	/** Formed (or found not to be printed into a tower after all): what it was printed with is done with. */
+	void forgetPrinted() {
+		if (printedFront != null || !printedSpans.isEmpty()) {
+			printedFront = null;
+			printedSpans.clear();
+			setChanged();
+		}
+	}
+
+	@Override
+	public void confirmPrinted(Span s) {
+		if (waiting.remove(s))
+			setChanged();
+	}
+
+	/** Whether a printed span here still waits for its post. */
+	public boolean waitingForPost() {
+		return !waiting.isEmpty() || !printedSpans.isEmpty();
+	}
+
+	/**
+	 * What a Schematicannon prints with it: its tower's front (so the printed tower faces the same way), and, the master,
+	 * its spans (paid for by the posts' ends). Not its charge.
+	 */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		super.writeSafe(tag, registries);
+		// (from the blockstate: in a schematic its saved master is where the tower stood, not where it's printed)
+		if (getBlockState().getBlock() instanceof BatteryBlock && getBlockState().getValue(BatteryBlock.FORMED) && master != null)
+			tag.putString("PrintedFront", towerFacing.getSerializedName());
+		if (!spans.isEmpty() && level != null)
+			tag.put("PrintedSpans", saveSpans(com.comedymonkey.createaddons.content.line.SpanPrinting.printable(level, worldPosition, this)));
+	}
+
+	private static ListTag saveSpans(List<Span> list) {
+		ListTag out = new ListTag();
+		for (Span sp : list)
+			out.add(sp.save());
+		return out;
+	}
+
+	private static void loadSpans(CompoundTag tag, String key, List<Span> into) {
+		into.clear();
+		for (Tag t : tag.getList(key, Tag.TAG_COMPOUND))
+			into.add(Span.load((CompoundTag) t));
+	}
+
+	/**
+	 * Turned or mirrored with a schematic or a contraption: its tower's front turns, and its spans' ways to their posts.
+	 * Its insulators go round with the front; mirrored, its left ones are its right ones.
+	 */
+	@Override
+	public void transform(net.minecraft.world.level.block.entity.BlockEntity be, com.simibubi.create.content.contraptions.StructureTransform transform) {
+		// (a tower stands upright: a turn about a level axis leaves its front as it was)
+		towerFacing = horizontal(transform.rotateFacing(transform.mirrorFacing(towerFacing)), towerFacing);
+		if (printedFront != null)
+			printedFront = horizontal(transform.rotateFacing(transform.mirrorFacing(printedFront)), printedFront);
+		turnSpans(spans, transform);
+		turnSpans(printedSpans, transform);
+		turnSpans(waiting, transform);
+		setChanged();
+	}
+
+	private static Direction horizontal(Direction turned, Direction was) {
+		return turned.getAxis().isHorizontal() ? turned : was;
+	}
+
+	private void turnSpans(List<Span> list, com.simibubi.create.content.contraptions.StructureTransform transform) {
+		boolean mirrored = transform.mirror != null && transform.mirror != net.minecraft.world.level.block.Mirror.NONE;
+		List<Span> turned = new ArrayList<>();
+		for (Span s : list) {
+			BlockPos offset = transform.applyWithoutOffset(s.offset());
+			BlockState far = SpanHolder.stateIfLoaded(level, worldPosition.offset(offset));
+			Direction farFacing = far != null && far.getBlock() instanceof com.comedymonkey.createaddons.content.line.LinePostBlock
+				? far.getValue(com.comedymonkey.createaddons.content.line.LinePostBlock.FACING) : Direction.UP;
+			turned.add(new Span(mirrored ? s.from() ^ 1 : s.from(), offset,
+				com.comedymonkey.createaddons.content.line.LinePostBlockEntity.turnInsulator(s.to(), farFacing, transform),
+				s.tier(), s.dye(), s.owner(), s.wires()));
+		}
+		list.clear();
+		list.addAll(turned);
 	}
 
 	private void spansChanged() {
@@ -803,6 +923,14 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 				list.add(sp.save());
 			tag.put("Spans", list);
 		}
+		if (!clientPacket) {
+			if (printedFront != null)
+				tag.putString("PrintedFront", printedFront.getSerializedName());
+			if (!printedSpans.isEmpty())
+				tag.put("PrintedSpans", saveSpans(printedSpans));
+			if (!waiting.isEmpty())
+				tag.put("Waiting", saveSpans(waiting));
+		}
 		if (clientPacket) {
 			tag.putFloat("Fill", shownFill);
 			tag.putByte("Flow", shownFlow);
@@ -834,6 +962,12 @@ public class BatteryBlockEntity extends SmartBlockEntity implements IHaveGoggleI
 		spans.clear();
 		for (Tag t : tag.getList("Spans", Tag.TAG_COMPOUND))
 			spans.add(Span.load((CompoundTag) t));
+		if (!clientPacket) {
+			Direction pf = tag.contains("PrintedFront") ? Direction.byName(tag.getString("PrintedFront")) : null;
+			printedFront = pf == null || pf.getAxis().isVertical() ? null : pf;
+			loadSpans(tag, "PrintedSpans", printedSpans);
+			loadSpans(tag, "Waiting", waiting);
+		}
 		// what it shows: sent to the client (and written into Ponder's structures)
 		if (tag.contains("Fill")) {
 			shownFill = tag.getFloat("Fill");

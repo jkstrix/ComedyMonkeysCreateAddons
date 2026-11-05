@@ -205,6 +205,14 @@ public class ClockworkTubeBlockEntity extends SmartBlockEntity implements IHaveG
 			tag.putInt("Refusals", r);
 	}
 
+	/** What a Schematicannon prints with it: the sides a wrench shut (turned with it: see transform). */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		super.writeSafe(tag, registries);
+		if (shut != 0)
+			tag.putByte("Shut", (byte) shut);
+	}
+
 	@Override
 	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.read(tag, registries, clientPacket);

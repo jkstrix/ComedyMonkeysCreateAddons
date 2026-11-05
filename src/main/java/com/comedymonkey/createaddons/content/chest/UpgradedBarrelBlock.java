@@ -42,7 +42,8 @@ import net.minecraft.world.phys.BlockHitResult;
  * upgrade on a vanilla barrel and turned back into one when the upgrade is removed. Breaking it drops a barrel plus
  * the upgrade.
  */
-public final class UpgradedBarrelBlock extends BaseEntityBlock implements IWrenchable, TieredStorageBlock {
+public final class UpgradedBarrelBlock extends BaseEntityBlock implements IWrenchable, TieredStorageBlock,
+	com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement {
 	public static final MapCodec<UpgradedBarrelBlock> CODEC = simpleCodec(UpgradedBarrelBlock::new);
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final EnumProperty<ChestTier> TIER = UpgradedChestBlock.TIER;
@@ -148,6 +149,16 @@ public final class UpgradedBarrelBlock extends BaseEntityBlock implements IWrenc
 	@SuppressWarnings("deprecation") // NeoForge's pick-block asks this one, and Create's Display Link screen calls it directly
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
 		return UpgradedBarrelItem.of(state.getValue(TIER));
+	}
+
+	/**
+	 * Printed by a Schematicannon: what breaking it gives back, a barrel and the upgrade for its tier (an Upgraded Barrel
+	 * has no item a survival player can have).
+	 */
+	@Override
+	public com.simibubi.create.content.schematics.requirement.ItemRequirement getRequiredItems(BlockState state, @Nullable BlockEntity be) {
+		return new com.comedymonkey.createaddons.content.PrintCost().add(new ItemStack(net.minecraft.world.item.Items.BARREL))
+			.add(new ItemStack(state.getValue(TIER).upgradeItem())).build();
 	}
 
 	// ---------------------------------------------------------------- TieredStorageBlock

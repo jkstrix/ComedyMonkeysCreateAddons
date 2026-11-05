@@ -104,6 +104,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.TubeGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LightGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.SchematicannonGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.BatteryGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.TankGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.VillagerWorkstationGameTests::register);
@@ -133,6 +134,9 @@ public class ComedyMonkeysCreateAddons {
 		NeoForge.EVENT_BUS.addListener(TradeBotPicking::onLeftClickBlock);
 		NeoForge.EVENT_BUS.addListener(TradeBotPicking::onLogout);
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> TradeBotPicking.clear());
+		// the wires round blocks a Schematicannon printed link up at the end of each tick
+		NeoForge.EVENT_BUS.addListener(com.comedymonkey.createaddons.content.line.PrintedRelinks::onLevelTick);
+		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.line.PrintedRelinks.clear());
 		NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> com.comedymonkey.createaddons.content.tradebot.trade.VillagerClaims.clear());
 
 		// Both specs show up in Create's "Access configs of other mods" screen

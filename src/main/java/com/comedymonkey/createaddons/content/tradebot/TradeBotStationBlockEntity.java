@@ -43,7 +43,8 @@ import net.minecraft.world.level.block.state.BlockState;
  * Trade Bot's station: FE comes in from underneath (D16) and goes into him while he's docked (D21). It knows its
  * owner, its bot, and the containers it's linked to (D19, D22); a redstone signal keeps him home (D38).
  */
-public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation,
+	com.simibubi.create.api.contraption.transformable.TransformableBlockEntity {
 	public static final int MAX_INPUTS = 4;
 	/** Comparator strengths (D58). */
 	public static final int SIGNAL_NONE = 0, SIGNAL_DOCKED = 5, SIGNAL_WORKING = 10, SIGNAL_OUT_OF_CHARGE = 15;
@@ -301,6 +302,8 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 		super.tick();
 		if (level == null || level.isClientSide)
 			return;
+		if (printPending)
+			printBot();
 		TradeBotEntity tradeBot = findBot();
 		boolean docked = tradeBot != null && tradeBot.isDocked();
 		if (docked) {
@@ -394,7 +397,7 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 	void pack(ServerPlayer player) {
 		if (level == null)
 			return;
-		if (owner != null && !TradeBotOwnership.canControl(player, owner)) {
+		if (!TradeBotOwnership.canPackUp(player, owner)) {
 			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.not_yours"), true);
 			return;
 		}
@@ -512,6 +515,66 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 				.style(ChatFormatting.GOLD).forGoggles(tooltip, 1);
 	}
 
+	// ---- schematics
+
+	/**
+	 * What a Schematicannon prints with it: its links, whether it's paused (and a Trade Master's network: Create's), and
+	 * that a bot comes with it (he's paid for: see TradeBotStationBlock.getRequiredItems). Not its owner, charge or bot.
+	 */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		super.writeSafe(tag, registries);
+		ListTag list = new ListTag();
+		for (BlockPos input : inputs)
+			list.add(NbtUtils.writeBlockPos(input));
+		tag.put("Inputs", list);
+		if (output != null)
+			tag.put("Output", NbtUtils.writeBlockPos(output));
+		tag.putBoolean("Paused", paused);
+		tag.putBoolean("PrintedBot", true);
+	}
+
+	/** Turned or mirrored with a schematic or a contraption: the containers it links to turn with it. */
+	@Override
+	public void transform(net.minecraft.world.level.block.entity.BlockEntity be, com.simibubi.create.content.contraptions.StructureTransform transform) {
+		List<BlockPos> turned = inputs.stream().map(transform::applyWithoutOffset).toList();
+		inputs.clear();
+		inputs.addAll(turned);
+		if (output != null)
+			output = transform.applyWithoutOffset(output);
+		setChanged();
+	}
+
+	/**
+	 * Printed by a Schematicannon, its bot nobody's: he stays docked and doesn't work until someone packs him up and places
+	 * him (as their own, within their limit: user, 2026-11-05).
+	 */
+	public boolean waitsForOwner() {
+		return TradeBotOwnership.NOBODY.equals(owner);
+	}
+
+	/** Printed by a Schematicannon: its bot docks at its next tick (unless one is in it by then: placed from an item). */
+	private boolean printPending;
+
+	/**
+	 * Printed by a Schematicannon: a new bot docks in it, nobody's (TradeBotOwnership.NOBODY), with its links that are in
+	 * range (a schematic file can say anything; the containers themselves may not be printed yet).
+	 */
+	private void printBot() {
+		printPending = false;
+		if (!(level instanceof ServerLevel server) || bot != null || isRemoved())
+			return;
+		List<BlockPos> takes = inputs.stream().filter(this::printableLink).limit(MAX_INPUTS).toList();
+		BlockPos delivers = output != null && printableLink(output) ? output : null;
+		TradeBotItem.populate(server, worldPosition, TradeBotOwnership.NOBODY,
+			new TradeBotData(0, 0, 0, java.util.Map.of(), net.minecraft.world.item.component.ItemContainerContents.EMPTY,
+				takes, Optional.ofNullable(delivers)), null);
+	}
+
+	private boolean printableLink(BlockPos relative) {
+		return TradeBotLinks.inRange(worldPosition, worldPosition.offset(relative));
+	}
+
 	// ---- saving
 
 	@Override
@@ -562,6 +625,8 @@ public class TradeBotStationBlockEntity extends SmartBlockEntity implements IHav
 			botEntityId = tag.getInt("BotEntity");
 		if (clientPacket)
 			masterStatus = tag.contains("Master") ? MasterStatus.load(tag.getCompound("Master"), registries) : MasterStatus.NONE;
+		if (!clientPacket && tag.getBoolean("PrintedBot") && level instanceof ServerLevel)
+			printPending = true;
 	}
 
 	private static CompoundTag wrap(Tag pos) {

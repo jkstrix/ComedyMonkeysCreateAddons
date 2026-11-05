@@ -39,7 +39,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
-public final class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInformation, MenuProvider, Clearable {
+public final class WellspringBlockEntity extends BlockEntity implements IHaveGoggleInformation, MenuProvider, Clearable,
+	com.simibubi.create.api.schematic.nbt.PartialSafeNBT {
 	private static final int SYNC_INTERVAL = 10;
 	/** Longest a small change in the level waits to reach clients (for the screen's and goggles' exact mB). */
 	private static final int SLOW_SYNC_TICKS = 40;
@@ -439,6 +440,19 @@ public final class WellspringBlockEntity extends BlockEntity implements IHaveGog
 	}
 
 	// ---------------------------------------------------------------- persistence & sync
+
+	/** What a Schematicannon prints with it: its upgrades (each paid for: see WellspringBlock.getRequiredItems), not its fluid. */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		// only Wellspring upgrades, one to a slot each may hold (a schematic file can say anything)
+		net.neoforged.neoforge.items.ItemStackHandler printed = new net.neoforged.neoforge.items.ItemStackHandler(upgrades.getSlots());
+		for (int i = 0; i < upgrades.getSlots(); i++) {
+			ItemStack stack = upgrades.getStackInSlot(i);
+			if (stack.getItem() instanceof WellspringUpgradeItem upgrade && upgrades.isItemValid(i, new ItemStack(upgrade)))
+				printed.setStackInSlot(i, new ItemStack(upgrade));
+		}
+		tag.put("UpgradeSlots", printed.serializeNBT(registries));
+	}
 
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {

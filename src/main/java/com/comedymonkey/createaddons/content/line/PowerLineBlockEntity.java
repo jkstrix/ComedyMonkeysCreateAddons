@@ -111,8 +111,13 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 			changed(false);
 			rerenderOnClients();
 			// no longer a straight run (something joined it on the side), or for a Splitter a junction: the fitting comes off
-			if (fitting() != Fitting.NONE && state.getBlock() instanceof PowerLineBlock wire && wire.sideFor(fitting(), level, worldPosition, state) == null)
-				removeFitting(null);
+			// (a printed one waits for the lines round it to be printed, and is settled once they are)
+			if (fitting() != Fitting.NONE && state.getBlock() instanceof PowerLineBlock wire) {
+				if (wire.sideFor(fitting(), level, worldPosition, state) != null)
+					fittingSettled();
+				else if (!printedFitting())
+					removeFitting(null);
+			}
 		}
 	}
 
@@ -391,7 +396,7 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 
 	/** A Splitter from before they went on junctions, on a straight piece: it comes off (given back) when it loads. */
 	private void dropStraightSplitter() {
-		if (fitting() == Fitting.SPLITTER && level != null && getBlockState().getBlock() instanceof PowerLineBlock wire
+		if (fitting() == Fitting.SPLITTER && !printedFitting() && level != null && getBlockState().getBlock() instanceof PowerLineBlock wire
 			&& wire.junctionSide(level, worldPosition, getBlockState()) == null)
 			removeFitting(null);
 	}
@@ -471,6 +476,13 @@ public class PowerLineBlockEntity extends LineBlockEntity implements NetworkRead
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 		tag.putIntArray("Links", links);
+		tag.putByteArray("Priority", priority);
+	}
+
+	/** Printed by a Schematicannon: a Splitter's branch priorities too (its links are worked out where it lands). */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		super.writeSafe(tag, registries);
 		tag.putByteArray("Priority", priority);
 	}
 

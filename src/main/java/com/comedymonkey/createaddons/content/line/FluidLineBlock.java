@@ -46,7 +46,8 @@ import net.neoforged.neoforge.capabilities.Capabilities;
  * same tier, and the same colour unless a wrench joined them), or a block that holds fluid (a tank), or draws from a
  * tank through an Intake. The fluid only moves from Intakes (see {@link FluidLines}); the line holds none itself.
  */
-public final class FluidLineBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LineBlock {
+public final class FluidLineBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LineBlock,
+	com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement {
 	public static final MapCodec<FluidLineBlock> CODEC = simpleCodec(p -> new FluidLineBlock(LineTier.COPPER, p));
 	public static final Map<Direction, EnumProperty<LineSide>> SIDES = new EnumMap<>(Direction.class);
 	/** Anything but a straight piece through the block (a bend, a junction, an end) has a round hub in the middle. */
@@ -342,9 +343,14 @@ public final class FluidLineBlock extends BaseEntityBlock implements IWrenchable
 		super.onPlace(state, level, pos, oldState, movedByPiston);
 		if (state != oldState && level instanceof ServerLevel server) {
 			FluidLines.of(server).changed(pos);
+			// (a printed fitting waits for the lines round it to be printed, and is settled once its run is straight)
 			if (oldState.is(this) && level.getBlockEntity(pos) instanceof LineBlockEntity be && be.fitting() != Fitting.NONE
-				&& be.fitting() != Fitting.INTAKE && straightSide(level, pos, state) == null)
-				be.removeFitting(null);
+				&& be.fitting() != Fitting.INTAKE) {
+				if (straightSide(level, pos, state) != null)
+					be.fittingSettled();
+				else if (!be.printedFitting())
+					be.removeFitting(null);
+			}
 		}
 		// put there some other way than by hand (a command, a structure, a schematic): its sides are worked out next tick
 		if (!oldState.is(this) && !level.isClientSide)
@@ -361,6 +367,13 @@ public final class FluidLineBlock extends BaseEntityBlock implements IWrenchable
 	public ItemStack getCloneItemStack(BlockState state, net.minecraft.world.phys.HitResult target, net.minecraft.world.level.LevelReader level, BlockPos pos,
 		Player player) {
 		return LineItem.of(this, level, pos);
+	}
+
+	/** Printed by a Schematicannon: a line of its colour. */
+	@Override
+	public com.simibubi.create.content.schematics.requirement.ItemRequirement getRequiredItems(BlockState state,
+			@org.jetbrains.annotations.Nullable net.minecraft.world.level.block.entity.BlockEntity be) {
+		return LineItem.printed(this, be, 1);
 	}
 
 	@Override

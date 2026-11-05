@@ -45,7 +45,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * Power Line on that block (or the post) feeds its run (LightMounts). A dye colours the run's bulbs, the wrench steps
  * their brightness, shears take it down.
  */
-public final class FestoonHookBlock extends BaseEntityBlock implements IWrenchable, LitBlock {
+public final class FestoonHookBlock extends BaseEntityBlock implements IWrenchable, LitBlock,
+	com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement {
 	public static final MapCodec<FestoonHookBlock> CODEC = simpleCodec(FestoonHookBlock::new);
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final BooleanProperty POST = BooleanProperty.create("post");
@@ -97,6 +98,18 @@ public final class FestoonHookBlock extends BaseEntityBlock implements IWrenchab
 		return canSurvive(state, level, pos) ? state : Blocks.AIR.defaultBlockState();
 	}
 
+	/** Turned with a schematic or a contraption, it keeps facing out of its wall (else it'd face a side with nothing to hold it). */
+	@Override
+	protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+	}
+
+	@Override
+	@SuppressWarnings("deprecation") // BlockState.rotate inside mirror() is vanilla's own pattern
+	protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+		return state.rotate(mirror.getRotation(state.getValue(FACING)));
+	}
+
 	@Override
 	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState old, boolean moving) {
 		super.onPlace(state, level, pos, old, moving);
@@ -144,6 +157,19 @@ public final class FestoonHookBlock extends BaseEntityBlock implements IWrenchab
 	@SuppressWarnings("deprecation") // NeoForge's pick-block asks this one, and Create's Display Link screen calls it directly
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
 		return new ItemStack(ModItems.FESTOON_LIGHTS.get());
+	}
+
+	/**
+	 * Printed by a Schematicannon: the Festoon Lights of the strings it holds (a hook is made by hanging them, so it has
+	 * no item of its own; the far hook's end of each string is free).
+	 */
+	@Override
+	public com.simibubi.create.content.schematics.requirement.ItemRequirement getRequiredItems(BlockState state, @Nullable BlockEntity be) {
+		int n = be instanceof FestoonBlockEntity hook ? hook.heldCost() : 0;
+		if (n <= 0)
+			return com.simibubi.create.content.schematics.requirement.ItemRequirement.NONE;
+		return new com.simibubi.create.content.schematics.requirement.ItemRequirement(
+			com.simibubi.create.content.schematics.requirement.ItemRequirement.ItemUseType.CONSUME, new ItemStack(ModItems.FESTOON_LIGHTS.get(), n));
 	}
 
 	/** Lights don't tick: a scheduled tick wakes its run's piece (to come on, run out, end a flicker). */

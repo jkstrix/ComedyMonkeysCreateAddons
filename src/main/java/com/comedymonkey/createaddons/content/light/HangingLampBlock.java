@@ -65,7 +65,8 @@ public final class HangingLampBlock extends LightBlock {
 		if (!state.hasProperty(HUNG))
 			return null;
 		BlockPos p = pos.above();
-		// (hung with no cable over it: set down by a command or a contraption; it falls at the next update)
+		// (hung with no cable over it: printed before its cable, or set down by a command or a contraption; it falls when
+		// what's over it changes and still isn't its cable)
 		if (state.getValue(HUNG) && !(level.getBlockState(p).getBlock() instanceof HangingCableBlock))
 			return null;
 		for (int i = 0; i <= MAX_DROP; i++) {
@@ -86,21 +87,35 @@ public final class HangingLampBlock extends LightBlock {
 		return super.canSurvive(state, level, pos);
 	}
 
-	/** Hung, it looks for its cable again a tick later (as the cable does: HangingCableBlock.updateShape). */
+	/**
+	 * Hung, its cable taken away from over it: it looks for its cable again a tick later (as the cable does:
+	 * HangingCableBlock.updateShape). Only the block over it matters: a Schematicannon prints the lamp before the cable it
+	 * hangs on, and it waits for it whatever else changes round it.
+	 */
 	@Override
 	protected BlockState updateShape(BlockState state, Direction dir, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
+		if (state.getValue(HUNG) && dir == Direction.UP && !canSurvive(state, level, pos)) {
+			if (state.getValue(WATERLOGGED))
+				level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+			if (level.getBlockEntity(pos) instanceof LightBlockEntity be)
+				be.checkHanging();
+			level.scheduleTick(pos, this, 1);
+			return state;
+		}
+		// (waiting for its cable: not brought down by LightBlock's check)
 		if (state.getValue(HUNG) && !canSurvive(state, level, pos)) {
 			if (state.getValue(WATERLOGGED))
 				level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-			level.scheduleTick(pos, this, 1);
 			return state;
 		}
 		return super.updateShape(state, dir, neighbour, level, pos, neighbourPos);
 	}
 
+	/** It falls only when its cable went (a light's own ticks are for its power: one waiting for its cable stays put). */
 	@Override
 	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-		if (state.getValue(HUNG) && !canSurvive(state, level, pos)) {
+		if (state.getValue(HUNG) && level.getBlockEntity(pos) instanceof LightBlockEntity be && be.takeHangingCheck()
+			&& !canSurvive(state, level, pos)) {
 			level.destroyBlock(pos, true);
 			return;
 		}

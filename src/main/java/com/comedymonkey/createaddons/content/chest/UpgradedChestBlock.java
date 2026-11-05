@@ -50,7 +50,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * upgrade on a vanilla chest, and turned back into one when its upgrade is removed. A chest (single or double) holds
  * one upgrade; breaking it drops a chest, and the upgrade if no other half remains to keep it. The body is a block model; the lid is drawn by {@code UpgradedChestRenderer} so it can open.
  */
-public final class UpgradedChestBlock extends BaseEntityBlock implements IWrenchable, TieredStorageBlock {
+public final class UpgradedChestBlock extends BaseEntityBlock implements IWrenchable, TieredStorageBlock,
+	com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement {
 	public static final MapCodec<UpgradedChestBlock> CODEC = simpleCodec(UpgradedChestBlock::new);
 	// Same property objects as vanilla chests, so ChestBlock.getConnectedDirection works on both
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -268,6 +269,16 @@ public final class UpgradedChestBlock extends BaseEntityBlock implements IWrench
 	@Override
 	protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
 		return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos));
+	}
+
+	/**
+	 * Printed by a Schematicannon: what breaking it gives back, a chest and the upgrade for its tier (an Upgraded Chest has
+	 * no item a survival player can have).
+	 */
+	@Override
+	public com.simibubi.create.content.schematics.requirement.ItemRequirement getRequiredItems(BlockState state, @Nullable BlockEntity be) {
+		return new com.comedymonkey.createaddons.content.PrintCost().add(new ItemStack(net.minecraft.world.item.Items.CHEST))
+			.add(new ItemStack(state.getValue(TIER).upgradeItem())).build();
 	}
 
 	/** Pick-block gives the chest's own item, with its tier (never the contents: stacks over 99 can't go on an item). */

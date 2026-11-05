@@ -49,7 +49,8 @@ import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
  * contraptions). Opening sets the block's {@code open} state, which hides the static lid and lets
  * {@code UpgradedChestRenderer} animate it; the state is cleared once the closing animation has finished.
  */
-public final class UpgradedChestBlockEntity extends BaseContainerBlockEntity implements IHaveGoggleInformation, UpgradedStorage {
+public final class UpgradedChestBlockEntity extends BaseContainerBlockEntity implements IHaveGoggleInformation, UpgradedStorage,
+	com.simibubi.create.api.schematic.nbt.PartialSafeNBT {
 	private static final int LID_EVENT = 1;
 	/** Vanilla's lid closes over 10 ticks; leave a little slack before showing the static lid again. */
 	static final int LID_CLOSE_TICKS = 12;
@@ -352,6 +353,13 @@ public final class UpgradedChestBlockEntity extends BaseContainerBlockEntity imp
 	}
 
 	// ---------------------------------------------------------------- persistence
+
+	/** What a Schematicannon prints with it: its name (not its contents). */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		if (getCustomName() != null)
+			tag.putString("CustomName", net.minecraft.network.chat.Component.Serializer.toJson(getCustomName(), registries));
+	}
 
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {

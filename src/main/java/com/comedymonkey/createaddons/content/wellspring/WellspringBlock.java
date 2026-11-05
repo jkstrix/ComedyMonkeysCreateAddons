@@ -28,7 +28,8 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidUtil;
 
-public final class WellspringBlock extends BaseEntityBlock implements IWrenchable {
+public final class WellspringBlock extends BaseEntityBlock implements IWrenchable,
+	com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement {
 	public static final MapCodec<WellspringBlock> CODEC = simpleCodec(WellspringBlock::new);
 
 	/** Fluid the wellspring is set up for (from its upgrades, or else its contents). Drives lamp colour and light. */
@@ -62,6 +63,17 @@ public final class WellspringBlock extends BaseEntityBlock implements IWrenchabl
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new WellspringBlockEntity(pos, state);
+	}
+
+	/** Printed by a Schematicannon: the Wellspring, and each upgrade in it (so it makes the same fluid, as much of it). */
+	@Override
+	public com.simibubi.create.content.schematics.requirement.ItemRequirement getRequiredItems(BlockState state, @Nullable BlockEntity be) {
+		var cost = new com.comedymonkey.createaddons.content.PrintCost().add(new ItemStack(this));
+		if (be instanceof WellspringBlockEntity w)
+			for (int i = 0; i < w.getUpgrades().getSlots(); i++)
+				if (w.getUpgrades().getStackInSlot(i).getItem() instanceof WellspringUpgradeItem upgrade)
+					cost.add(new ItemStack(upgrade));
+		return cost.build();
 	}
 
 	@Nullable

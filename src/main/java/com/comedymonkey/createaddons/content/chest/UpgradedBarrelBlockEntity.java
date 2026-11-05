@@ -37,7 +37,8 @@ import net.minecraft.world.level.block.state.BlockState;
  * An upgraded barrel: like an upgraded chest (tiered stack size and slots, oversized stacks saved safely), but a
  * full block whose front shows open while someone is using it, like a vanilla barrel.
  */
-public final class UpgradedBarrelBlockEntity extends BaseContainerBlockEntity implements IHaveGoggleInformation, UpgradedStorage {
+public final class UpgradedBarrelBlockEntity extends BaseContainerBlockEntity implements IHaveGoggleInformation, UpgradedStorage,
+	com.simibubi.create.api.schematic.nbt.PartialSafeNBT {
 	private NonNullList<ItemStack> items;
 	/** Set (not saved) once the upgrade has been taken out, just before the barrel turns back into a vanilla one. */
 	private boolean upgradeTaken;
@@ -196,6 +197,13 @@ public final class UpgradedBarrelBlockEntity extends BaseContainerBlockEntity im
 	}
 
 	// ---------------------------------------------------------------- persistence
+
+	/** What a Schematicannon prints with it: its name (not its contents). */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		if (getCustomName() != null)
+			tag.putString("CustomName", net.minecraft.network.chat.Component.Serializer.toJson(getCustomName(), registries));
+	}
 
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {

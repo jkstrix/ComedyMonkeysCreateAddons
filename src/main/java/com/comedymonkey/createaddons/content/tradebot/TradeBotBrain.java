@@ -243,7 +243,7 @@ public class TradeBotBrain {
 	 */
 	public boolean trade() {
 		if (!(station() instanceof TradeBotStationBlockEntity station) || station.outputPosition() == null
-			|| station.isPaused() || !bot.level().isDay() || bot.level().isThundering())
+			|| station.isPaused() || station.waitsForOwner() || !bot.level().isDay() || bot.level().isThundering())
 			return false;
 		bot.forgetOldVillagers(); // only now, before planning, so the prices he plans with hold for the trip
 		InputSnapshot stock = snapshot(station.inputPositions());
@@ -270,7 +270,7 @@ public class TradeBotBrain {
 	 */
 	public boolean fillGauges() {
 		if (!(station() instanceof TradeBotStationBlockEntity station) || station.frequency() == null || station.isPaused()
-			|| !bot.level().isDay() || bot.level().isThundering())
+			|| station.waitsForOwner() || !bot.level().isDay() || bot.level().isThundering())
 			return false;
 		bot.forgetOldVillagers();
 		long now = bot.level().getGameTime();

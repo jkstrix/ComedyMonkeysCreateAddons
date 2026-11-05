@@ -27,6 +27,11 @@ public class FestoonBlockEntity extends RunLightBlockEntity {
 	public record Span(BlockPos other, Direction facing, boolean held, boolean paid) {}
 
 	private final List<Span> spans = new ArrayList<>();
+	/**
+	 * The far hooks of strings a Schematicannon printed here that aren't printed yet: those strings wait for them (rather
+	 * than come down, taking the hook with them). Once the far hook holds the string too it's an ordinary one.
+	 */
+	private final List<BlockPos> printed = new ArrayList<>();
 	/** The spots of light it put along the strings it holds. */
 	private final List<BlockPos> spots = new ArrayList<>();
 
@@ -101,10 +106,21 @@ public class FestoonBlockEntity extends RunLightBlockEntity {
 		boolean changed = false;
 		for (java.util.Iterator<Span> it = spans.iterator(); it.hasNext();) {
 			Span s = it.next();
-			if (!level.isLoaded(s.other())
-				|| level.getBlockEntity(s.other()) instanceof FestoonBlockEntity far && far.partners().contains(worldPosition))
+			if (!level.isLoaded(s.other()))
+				continue;
+			if (level.getBlockEntity(s.other()) instanceof FestoonBlockEntity far && far.partners().contains(worldPosition)) {
+				// both hooks hold it: an ordinary string at both now
+				if (printed.remove(s.other()))
+					setChanged();
+				if (far.printed.remove(worldPosition))
+					far.setChanged();
+				continue;
+			}
+			// printed, and its far hook not printed yet (nothing there yet): it waits
+			if (printed.contains(s.other()) && level.getBlockState(s.other()).isAir())
 				continue;
 			it.remove();
+			printed.remove(s.other());
 			changed = true;
 			if (s.held() && s.paid())
 				net.minecraft.world.level.block.Block.popResource(level, worldPosition,
@@ -150,17 +166,87 @@ public class FestoonBlockEntity extends RunLightBlockEntity {
 	// ---------- saving and syncing ----------
 
 	private void writeSpans(CompoundTag tag) {
+		writeSpans(tag, false);
+	}
+
+	/**
+	 * Its strings; {@code print}: as a Schematicannon prints them, waiting for their far hooks, paid for (the holding
+	 * hook's cost) at both ends as a hung string is. A schematic file can say anything, so only a string a player could
+	 * have hung prints: to another hook in the schematic that holds it back (one end holding it), facing as that hook
+	 * faces, in reach.
+	 */
+	private void writeSpans(CompoundTag tag, boolean print) {
 		ListTag list = new ListTag();
 		for (Span s : spans) {
+			if (print && !printable(s))
+				continue;
 			CompoundTag t = new CompoundTag();
 			// (from this hook: carried off with its far hook by a contraption, the string still joins them)
 			t.putLong("Off", s.other().subtract(worldPosition).asLong());
 			t.putInt("Facing", s.facing().get3DDataValue());
 			t.putBoolean("Held", s.held());
-			t.putBoolean("Paid", s.paid());
+			t.putBoolean("Paid", print || s.paid());
+			if (print || printed.contains(s.other()))
+				t.putBoolean("Printed", true);
 			list.add(t);
 		}
 		tag.put("Spans", list);
+	}
+
+	private boolean printable(Span s) {
+		if (level == null || s.other().equals(worldPosition) || length(s) > Festoons.reach())
+			return false;
+		if (!(level.getBlockEntity(s.other()) instanceof FestoonBlockEntity far)
+			|| !(far.getBlockState().getBlock() instanceof FestoonHookBlock) || far.getBlockState().getValue(FestoonHookBlock.FACING) != s.facing())
+			return false;
+		for (Span back : far.spans)
+			if (back.other().equals(worldPosition) && back.held() != s.held() && back.facing() == facing())
+				return true;
+		return false;
+	}
+
+	/** What a Schematicannon prints with it: its brightness and its strings (see FestoonHookBlock.getRequiredItems). */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		super.writeSafe(tag, registries);
+		writeSpans(tag, true);
+	}
+
+	/** Turned or mirrored with a schematic or a contraption: each string's far hook, and the way it faces, turn with it. */
+	@Override
+	public void transform(net.minecraft.world.level.block.entity.BlockEntity be, com.simibubi.create.content.contraptions.StructureTransform transform) {
+		super.transform(be, transform);
+		List<Span> turned = new ArrayList<>();
+		List<BlockPos> turnedPrinted = new ArrayList<>();
+		for (Span s : spans) {
+			BlockPos other = worldPosition.offset(transform.applyWithoutOffset(s.other().subtract(worldPosition)));
+			// the far hook faces as Create turns hooks: mirrored, and turned only about an upright axis (a hook faces level)
+			Direction facing = transform.mirrorFacing(s.facing());
+			if (transform.rotationAxis == null || transform.rotationAxis == Direction.Axis.Y)
+				facing = transform.rotateFacing(facing);
+			turned.add(new Span(other, facing.getAxis().isHorizontal() ? facing : s.facing(), s.held(), s.paid()));
+			if (printed.contains(s.other()))
+				turnedPrinted.add(other);
+		}
+		spans.clear();
+		spans.addAll(turned);
+		printed.clear();
+		printed.addAll(turnedPrinted);
+		setChanged();
+	}
+
+	/** The Festoon Lights the strings it holds took (what a Schematicannon spends on printing it). */
+	public int heldCost() {
+		int n = 0;
+		for (Span s : spans)
+			if (s.held())
+				n += Festoons.cost(length(s));
+		return n;
+	}
+
+	/** Whether a printed string here still waits for its far hook. */
+	public boolean waitingForFarHook() {
+		return !printed.isEmpty();
 	}
 
 	/** Client hook: the strings it holds changed (with Flywheel, its visual lays them out again). */
@@ -169,10 +255,13 @@ public class FestoonBlockEntity extends RunLightBlockEntity {
 	private void readSpans(CompoundTag tag) {
 		List<Span> before = level != null && level.isClientSide ? List.copyOf(spans) : null;
 		spans.clear();
+		printed.clear();
 		for (Tag t : tag.getList("Spans", Tag.TAG_COMPOUND)) {
 			CompoundTag c = (CompoundTag) t;
 			BlockPos other = c.contains("Off") ? worldPosition.offset(BlockPos.of(c.getLong("Off"))) : BlockPos.of(c.getLong("To"));
 			spans.add(new Span(other, Direction.from3DDataValue(c.getInt("Facing")), c.getBoolean("Held"), c.getBoolean("Paid")));
+			if (c.getBoolean("Printed"))
+				printed.add(other);
 		}
 		if (before != null && !before.equals(spans))
 			clientSpansChanged.accept(this);

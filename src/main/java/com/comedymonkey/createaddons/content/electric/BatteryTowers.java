@@ -141,7 +141,8 @@ public final class BatteryTowers {
 				}
 				state = level.getBlockState(pos);
 			}
-			Direction facing = state.getValue(BatteryBlock.FACING);
+			// printed by a Schematicannon: the front of the tower it was printed from, else its own
+			Direction facing = be.printedFront != null ? be.printedFront : state.getValue(BatteryBlock.FACING);
 			// each footprint it could complete, lowest corner first; once one forms it's taken
 			for (int x0 = pos.getX() - 2; x0 <= pos.getX(); x0++)
 				for (int z0 = pos.getZ() - 2; z0 <= pos.getZ(); z0++)
@@ -277,6 +278,12 @@ public final class BatteryTowers {
 		List<com.comedymonkey.createaddons.content.line.Span> back = LOOSE.remove(master);
 		if (back != null && level.getBlockEntity(master) instanceof BatteryBlockEntity m)
 			m.giveSpans(back);
+		// printed by a Schematicannon: the master's spans go on, and what the blocks were printed with is done with
+		if (level.getBlockEntity(master) instanceof BatteryBlockEntity m)
+			m.takePrintedSpans();
+		for (BlockPos p : blocks)
+			if (level.getBlockEntity(p) instanceof BatteryBlockEntity be)
+				be.forgetPrinted();
 		// a tower on this footprint that came apart with another master (one layer up or down): its cables move over
 		for (BlockPos old : new ArrayList<>(LOOSE.keySet()))
 			if (old.getX() == master.getX() && old.getZ() == master.getZ() && old.getY() >= t.bottom() - MAX && old.getY() <= t.top()

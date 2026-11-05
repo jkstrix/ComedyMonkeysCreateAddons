@@ -36,7 +36,8 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
  * (P3). Switched off (its circuit reaches no power at all) it goes out at once. Coming on, lights wait up to a second
  * at random, so a street lights up as a ripple (P5); the High-Bay and Yard Light warm up (P4), drawn by the renderer.
  */
-public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IHaveGoggleInformation {
+public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IHaveGoggleInformation,
+	com.simibubi.create.api.schematic.nbt.PartialSafeNBT, com.simibubi.create.api.contraption.transformable.TransformableBlockEntity {
 	/** Ticks a flicker lasts, going out or coming back. */
 	public static final int FLICKER_TICKS = 20;
 	/** Ticks the sodium lamps take to warm up. */
@@ -87,6 +88,8 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 	private double aimShownAt = Double.NaN;
 	/** On the client: switched off (for the goggles). */
 	private boolean cutShown;
+	/** A hung lamp whose cable went from over it: its next tick looks whether it still hangs (saved, with that tick). */
+	private boolean hangingCheck;
 
 	private final IEnergyStorage storage = new IEnergyStorage() {
 		@Override
@@ -266,6 +269,18 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 			show(false);
 		}
 		sync();
+	}
+
+	/** A hung lamp's cable went from over it: see HangingLampBlock.tick. */
+	void checkHanging() {
+		hangingCheck = true;
+	}
+
+	/** Whether its cable went since its last tick (and forgets it). */
+	boolean takeHangingCheck() {
+		boolean was = hangingCheck;
+		hangingCheck = false;
+		return was;
 	}
 
 	@Override
@@ -499,6 +514,8 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 		settle();
 		tag.putDouble("Energy", energy);
 		tag.putBoolean("Starved", starved);
+		if (hangingCheck)
+			tag.putBoolean("HangingCheck", true);
 	}
 
 	@Override
@@ -507,7 +524,28 @@ public class LightBlockEntity extends BlockEntity implements PowerLines.Lamp, IH
 		readLooks(tag);
 		energy = tag.getDouble("Energy");
 		starved = tag.getBoolean("Starved");
+		hangingCheck = tag.getBoolean("HangingCheck");
 		settled = -1;
+	}
+
+	/** What a Schematicannon prints with it: its brightness step, and where a Floodlight is aimed (its spot follows once it lights). */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		tag.putInt("Step", step);
+		if (aim != null)
+			tag.putLong("AimOffset", aim.subtract(worldPosition).asLong());
+		if (aimFace != null)
+			tag.putInt("AimFace", aimFace.get3DDataValue());
+	}
+
+	/** Turned or mirrored with a schematic or a contraption: a Floodlight's aim turns with it. */
+	@Override
+	public void transform(BlockEntity be, com.simibubi.create.content.contraptions.StructureTransform transform) {
+		if (aim != null)
+			aim = worldPosition.offset(transform.applyWithoutOffset(aim.subtract(worldPosition)));
+		if (aimFace != null)
+			aimFace = transform.rotateFacing(transform.mirrorFacing(aimFace));
+		setChanged();
 	}
 
 	private void writeLooks(CompoundTag tag) {

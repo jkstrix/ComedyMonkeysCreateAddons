@@ -15,6 +15,7 @@
     "FactoryPanelBehaviourMixin",
     "RecipeApplierMixin",
     "ContraptionMixin",
+    "SchematicPlacementMixin",
     "LivingEntityFallFlyingMixin",
     "ServerGamePacketListenerImplAccessor"
   ],

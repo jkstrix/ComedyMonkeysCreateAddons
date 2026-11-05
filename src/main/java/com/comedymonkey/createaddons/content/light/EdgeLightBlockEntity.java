@@ -62,6 +62,7 @@ public class EdgeLightBlockEntity extends RunLightBlockEntity implements com.sim
 	/** Turned with a contraption or schematic: each edge turns with the block. */
 	@Override
 	public void transform(net.minecraft.world.level.block.entity.BlockEntity be, com.simibubi.create.content.contraptions.StructureTransform transform) {
+		super.transform(be, transform);
 		int turned = 0;
 		for (Direction face : Direction.values())
 			for (Direction side : com.comedymonkey.createaddons.content.line.WireLink.across(face))
@@ -71,9 +72,10 @@ public class EdgeLightBlockEntity extends RunLightBlockEntity implements com.sim
 		setChanged();
 	}
 
-	/** What a schematic keeps of it: its edges (so a Schematicannon prints the trim where it was). */
+	/** What a schematic keeps of it: its brightness, and its edges (so a Schematicannon prints the trim where it was). */
 	@Override
 	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		super.writeSafe(tag, registries);
 		tag.putInt("Edges", edges);
 	}
 

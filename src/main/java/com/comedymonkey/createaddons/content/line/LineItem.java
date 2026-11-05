@@ -29,6 +29,26 @@ public class LineItem extends BlockItem {
 		return stack;
 	}
 
+	/**
+	 * What a Schematicannon spends on {@code count} lines of this block as {@code be} is: lines of exactly its colour
+	 * (plain ones for a plain line, so a covered cable is printed from covered cable), its fitting, and the block it's
+	 * encased in.
+	 */
+	public static com.simibubi.create.content.schematics.requirement.ItemRequirement printed(Block block,
+			@Nullable net.minecraft.world.level.block.entity.BlockEntity be, int count) {
+		ItemStack stack = new ItemStack(block, Math.max(1, count));
+		if (be instanceof LineBlockEntity line && line.dye() != null)
+			stack.set(ModDataComponents.LINE_DYE.get(), line.dye());
+		var cost = new com.comedymonkey.createaddons.content.PrintCost().addExact(stack);
+		if (be instanceof LineBlockEntity line) {
+			if (line.fitting() != Fitting.NONE)
+				cost.add(new ItemStack(line.fitting().item()));
+			if (line.encasing() != null && line.encasing().getBlock().asItem() != net.minecraft.world.item.Items.AIR)
+				cost.add(new ItemStack(line.encasing().getBlock().asItem()));
+		}
+		return cost.build();
+	}
+
 	/** A line's name with its colour in front, if it's dyed. */
 	public static Component named(@Nullable DyeColor dye, Component name) {
 		if (dye == null)

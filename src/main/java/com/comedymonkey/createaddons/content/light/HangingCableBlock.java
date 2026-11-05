@@ -112,9 +112,10 @@ public final class HangingCableBlock extends Block implements SimpleWaterloggedB
 	protected BlockState updateShape(BlockState state, Direction dir, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
 		if (state.getValue(WATERLOGGED))
 			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-		// it looks again a tick later, so a hanging lamp set down a block at a time (a Create contraption landing, a
-		// schematicannon) isn't brought down before its last block is in
-		if (!canSurvive(state, level, pos))
+		// it looks again a tick later, so a hanging lamp set down a block at a time (a Create contraption landing) isn't
+		// brought down before its last block is in; only when what's over or under it changed (a Schematicannon prints a
+		// cable from the bottom up, before its ceiling: it waits for it whatever else changes round it)
+		if (dir.getAxis() == Direction.Axis.Y && !canSurvive(state, level, pos))
 			level.scheduleTick(pos, this, 1);
 		return state;
 	}

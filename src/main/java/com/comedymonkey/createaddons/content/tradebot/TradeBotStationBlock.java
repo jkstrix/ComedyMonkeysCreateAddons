@@ -40,7 +40,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * docked (design/specs/trade-bot.md D2, D16, D21). Only its owner's wrench can pack it up (D27, D51); nothing else
  * breaks it. The block-entity renderer draws all of it, from the same geometry as the bot.
  */
-public final class TradeBotStationBlock extends Block implements IBE<TradeBotStationBlockEntity>, IWrenchable {
+public final class TradeBotStationBlock extends Block implements IBE<TradeBotStationBlockEntity>, IWrenchable,
+	com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	/** He's docked and charging: the station glows (a little light, muted like his irises). */
 	public static final BooleanProperty GLOW = BooleanProperty.create("glow");
@@ -173,6 +174,28 @@ public final class TradeBotStationBlock extends Block implements IBE<TradeBotSta
 	@Override
 	protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
 		return level.getBlockEntity(pos) instanceof TradeBotStationBlockEntity station ? station.comparatorOutput() : 0;
+	}
+
+	/**
+	 * Printed by a Schematicannon: a Trade Bot (or Trade Master) on his station, who docks in it new. One that's been out
+	 * (emeralds, an XP bank or a load on him) won't do: what he had would be lost.
+	 */
+	@Override
+	public com.simibubi.create.content.schematics.requirement.ItemRequirement getRequiredItems(BlockState state,
+			@org.jetbrains.annotations.Nullable net.minecraft.world.level.block.entity.BlockEntity be) {
+		net.minecraft.world.item.Item item = kind.item();
+		return new com.simibubi.create.content.schematics.requirement.ItemRequirement(
+			new com.simibubi.create.content.schematics.requirement.ItemRequirement.StackRequirement(new ItemStack(item),
+				com.simibubi.create.content.schematics.requirement.ItemRequirement.ItemUseType.CONSUME) {
+				@Override
+				public boolean matches(ItemStack other) {
+					if (!other.is(item))
+						return false;
+					TradeBotData data = other.get(com.comedymonkey.createaddons.registry.ModDataComponents.TRADE_BOT_DATA.get());
+					return data == null || data.emeralds() == 0 && data.xpBank() == 0
+						&& data.load().equals(net.minecraft.world.item.component.ItemContainerContents.EMPTY);
+				}
+			});
 	}
 
 	/** However it goes (creative breaking, a command), its bot goes with it unless it was packed up properly. */

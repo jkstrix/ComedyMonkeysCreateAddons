@@ -733,7 +733,9 @@ public final class TradeBotEntity extends PathfinderMob {
 			return super.mobInteract(player, hand);
 		if (level().isClientSide)
 			return InteractionResult.SUCCESS;
-		if (!TradeBotOwnership.canControl(player, owner)) {
+		// (a printed bot is nobody's: nobody controls him, but anyone may wind him up when he's run down, so he can go
+		// home and be packed up)
+		if (!TradeBotOwnership.canControl(player, owner) && !(rundown != null && TradeBotOwnership.NOBODY.equals(owner))) {
 			player.displayClientMessage(Component.translatable("message.comedymonkeysaddons.trade_bot.not_yours"), true);
 			return InteractionResult.CONSUME;
 		}

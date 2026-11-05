@@ -49,7 +49,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * block, and ducks into one block under anything solid (D17, D22). He turns to face Train Controls that face him (D21).
  * His look and animation are all client side (the renderer, and {@link HelperBotMovement} on contraptions).
  */
-public final class HelperBotBlock extends HorizontalDirectionalBlock implements EntityBlock, IWrenchable {
+public final class HelperBotBlock extends HorizontalDirectionalBlock implements EntityBlock, IWrenchable,
+	com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement {
 	public static final MapCodec<HelperBotBlock> CODEC = simpleCodec(HelperBotBlock::new);
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	/** Something solid above: his body slides down his post and he ducks. */
@@ -129,6 +130,26 @@ public final class HelperBotBlock extends HorizontalDirectionalBlock implements 
 	protected boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
 		BlockEntity be = level.getBlockEntity(pos);
 		return be != null && be.triggerEvent(id, param);
+	}
+
+	/**
+	 * Printed by a Schematicannon: a Helper Bot of his colour (his name is printed free, so the one paid with may have any
+	 * name, or none).
+	 */
+	@Override
+	public com.simibubi.create.content.schematics.requirement.ItemRequirement getRequiredItems(BlockState state, @org.jetbrains.annotations.Nullable BlockEntity be) {
+		net.minecraft.world.item.DyeColor dye = be instanceof HelperBotBlockEntity bot ? bot.dye() : null;
+		ItemStack stack = new ItemStack(this);
+		if (dye != null)
+			stack.set(ModDataComponents.HELPER_BOT_DYE.get(), dye);
+		return new com.simibubi.create.content.schematics.requirement.ItemRequirement(
+			new com.simibubi.create.content.schematics.requirement.ItemRequirement.StackRequirement(stack,
+				com.simibubi.create.content.schematics.requirement.ItemRequirement.ItemUseType.CONSUME) {
+				@Override
+				public boolean matches(ItemStack other) {
+					return other.is(asItem()) && java.util.Objects.equals(other.get(ModDataComponents.HELPER_BOT_DYE.get()), dye);
+				}
+			});
 	}
 
 	/** Picking him keeps his colour and his name, as breaking him does. */

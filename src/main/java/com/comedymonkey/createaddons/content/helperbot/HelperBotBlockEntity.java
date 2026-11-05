@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * Helper Bot's block entity. All it keeps is his colour (D36); everything about how he moves and sounds is worked out
  * on the client, from where he is and what's around him.
  */
-public class HelperBotBlockEntity extends BlockEntity implements IHaveGoggleInformation {
+public class HelperBotBlockEntity extends BlockEntity implements IHaveGoggleInformation, com.simibubi.create.api.schematic.nbt.PartialSafeNBT {
 	/** The NBT key of his colour, also read from contraption block data. */
 	public static final String DYE = "Dye";
 	private static final String NAME = "CustomName";
@@ -116,6 +116,12 @@ public class HelperBotBlockEntity extends BlockEntity implements IHaveGoggleInfo
 	@Nullable
 	public static DyeColor dyeOf(CompoundTag tag) {
 		return tag.contains(DYE) ? DyeColor.byName(tag.getString(DYE), null) : null;
+	}
+
+	/** What a Schematicannon prints with him: his colour (paid for: see HelperBotBlock.getRequiredItems) and his name. */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		saveAdditional(tag, registries);
 	}
 
 	@Override

@@ -46,7 +46,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * of them in one block), clipped down, and folds round inside and outside corners to the next. Power runs along it from
  * anything that gives FE to anything that takes it (see {@link PowerLines}), and up Line Posts into hanging spans.
  */
-public final class PowerLineBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LineBlock {
+public final class PowerLineBlock extends BaseEntityBlock implements IWrenchable, SimpleWaterloggedBlock, LineBlock,
+	com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement {
 	public static final MapCodec<PowerLineBlock> CODEC = simpleCodec(p -> new PowerLineBlock(LineTier.COPPER, p));
 	/** Per direction: a wire lies against that face of the block. */
 	public static final Map<Direction, BooleanProperty> FACES = new EnumMap<>(Direction.class);
@@ -194,6 +195,12 @@ public final class PowerLineBlock extends BaseEntityBlock implements IWrenchable
 	/** One wire of this block as an item, with its dye. */
 	private ItemStack wireItem(Level level, BlockPos pos) {
 		return LineItem.of(this, level, pos);
+	}
+
+	/** Printed by a Schematicannon: a wire of its colour for each face it lies on (as it drops). */
+	@Override
+	public com.simibubi.create.content.schematics.requirement.ItemRequirement getRequiredItems(BlockState state, @Nullable BlockEntity be) {
+		return LineItem.printed(this, be, faceCount(state));
 	}
 
 	/** Picked, a wire of its colour. */

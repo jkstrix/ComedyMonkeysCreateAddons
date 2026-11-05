@@ -42,9 +42,14 @@ import net.neoforged.neoforge.fluids.FluidStack;
  * that affects where things flow is saved, sent to clients and makes the line's network be worked out again.
  */
 public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggleInformation,
-	com.simibubi.create.api.contraption.transformable.TransformableBlockEntity {
+	com.simibubi.create.api.contraption.transformable.TransformableBlockEntity, com.simibubi.create.api.schematic.nbt.PartialSafeNBT {
 	@Nullable
 	private DyeColor dye;
+	/**
+	 * Its fitting was printed by a Schematicannon, and the lines it needs round it (a Splitter's branches) aren't all
+	 * printed yet: it stays on until they are, rather than come off as a fitting with nothing round it would.
+	 */
+	private boolean printedFitting;
 	private final Map<Direction, Joint> joints = new EnumMap<>(Direction.class);
 	private Fitting fitting = Fitting.NONE;
 	/** The Intake's side (the tank it faces), or the side an in-line fitting is turned towards (its axis). */
@@ -431,6 +436,15 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
+		// printed over a line that's already here (a Schematicannon replacing blocks): its own fitting and casing come off
+		// first, given back as if it were broken
+		if (tag.getBoolean("Print") && level instanceof ServerLevel) {
+			if (fitting != Fitting.NONE && fitting.item() != null)
+				Block.popResource(level, worldPosition, new ItemStack(fitting.item()));
+			if (encasing != null)
+				Block.popResource(level, worldPosition, new ItemStack(encasing.getBlock()));
+		}
+		printedFitting = tag.getBoolean("PrintedFitting");
 		BlockState oldEncasing = encasing;
 		DyeColor oldDye = dye;
 		Fitting oldFitting = fitting;
@@ -473,9 +487,24 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 		}
 	}
 
+	/** Whether its printed fitting still waits for the lines it needs round it (see {@link #printedFitting}). */
+	public boolean printedFitting() {
+		return printedFitting;
+	}
+
+	/** Its fitting is where it belongs now: from here on it comes off as any fitting does when the line changes. */
+	public void fittingSettled() {
+		if (printedFitting) {
+			printedFitting = false;
+			setChanged();
+		}
+	}
+
 	private void write(CompoundTag tag, HolderLookup.Provider registries) {
 		if (dye != null)
 			tag.putInt("Dye", dye.getId());
+		if (printedFitting)
+			tag.putBoolean("PrintedFitting", true);
 		if (!joints.isEmpty()) {
 			CompoundTag j = new CompoundTag();
 			joints.forEach((d, joint) -> j.putInt(d.getSerializedName(), joint.ordinal()));
@@ -521,6 +550,27 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 	@Override
 	public Packet<ClientGamePacketListener> getUpdatePacket() {
 		return ClientboundBlockEntityDataPacket.create(this);
+	}
+
+	/**
+	 * What a Schematicannon prints with it: its dye, the joints a wrench changed, its fitting with its settings, and the
+	 * block it's encased in (all paid for: see LineItem.printed). Not its readings or the fluid in it. A fitting this kind
+	 * of line doesn't take, or an encasing a player couldn't have put on, isn't printed (a schematic file can say anything).
+	 */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		write(tag, registries);
+		tag.putBoolean("Print", true);
+		if (fitting != Fitting.NONE)
+			tag.putBoolean("PrintedFitting", true);
+		if (fitting != Fitting.NONE && !(getBlockState().getBlock() instanceof LineBlock line && line.takes(fitting))) {
+			tag.remove("Fitting");
+			tag.remove("FittingSide");
+			tag.remove("Filter");
+		}
+		if (encasing != null && (level == null || encasing.getBlock().asItem() == net.minecraft.world.item.Items.AIR
+			|| !LineInteractions.encasable(encasing.getBlock(), level, worldPosition)))
+			tag.remove("Encasing");
 	}
 
 	// the dye travels with the item when the line is broken or picked

@@ -373,6 +373,13 @@ public final class ClockworkDynamoBlockEntity extends KineticBlockEntity impleme
 		reading.write(tag);
 	}
 
+	/** What a Schematicannon prints with it: the stress set on it (not its charge). */
+	@Override
+	public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
+		super.writeSafe(tag, registries);
+		tag.putInt("StressSetting", stress);
+	}
+
 	@Override
 	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.read(tag, registries, clientPacket);
