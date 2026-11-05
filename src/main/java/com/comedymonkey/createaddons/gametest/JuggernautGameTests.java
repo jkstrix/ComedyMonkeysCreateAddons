@@ -39,6 +39,7 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
@@ -557,6 +558,80 @@ public final class JuggernautGameTests {
 				"he should stand where he was, is at " + helper.relativeVec(j.position()));
 			helper.succeed();
 		});
+	}
+
+	/**
+	 * Snow terraces falling south (+Z) a block a block from a 6-high plateau to the floor, or with {@code cliff} the
+	 * plateau running on to z = 12 and dropping straight to the floor.
+	 */
+	private static void terraces(GameTestHelper helper, boolean cliff) {
+		for (int z = 0; z <= 23; z++) {
+			int h = cliff ? (z <= 12 ? 6 : 0) : Mth.clamp(14 - z, 0, 6);
+			for (int x = 0; x <= 23; x++)
+				for (int y = 0; y < h; y++)
+					helper.setBlock(new BlockPos(x, y, z), Blocks.SNOW_BLOCK);
+		}
+	}
+
+	/** Him, still, centred at {@code (12.5, y, z)} facing south. */
+	private static ClockworkJuggernaut standAt(GameTestHelper helper, double y, double z) {
+		ClockworkJuggernaut j = spawn(helper);
+		BlockPos at = helper.absolutePos(new BlockPos(12, 0, 0));
+		j.moveTo(at.getX() + 0.5, at.getY() + y, at.getZ() + z, 0, 0);
+		return j;
+	}
+
+	/**
+	 * The user's "the juggernaut is getting stuck on this terrain" (snowy terraces): stood on the top step of a slope
+	 * that falls a block a block under his wide footprint, the ground past his edge is a step down from the ground
+	 * under it, not a cliff from his feet; a real cliff there still stops him (D56).
+	 */
+	@GameTest(template = COURSE)
+	public static void aSlopeIsGroundButACliffIsnt(GameTestHelper helper) {
+		terraces(helper, false);
+		ClockworkJuggernaut j = standAt(helper, 6, 9.5);
+		helper.assertTrue(j.safeAhead(new Vec3(0, 0, 1), 1), "a block down the slope should be walkable");
+		helper.assertTrue(j.safeAhead(new Vec3(0, 0, 1), 6), "six blocks down the slope should be walkable");
+		ClockworkJuggernaut up = standAt(helper, 0, 20.5);
+		helper.assertTrue(up.safeAhead(new Vec3(0, 0, -1), 6), "six blocks up the slope should be walkable");
+		j.discard();
+		up.discard();
+		for (int z = 0; z <= 23; z++)
+			for (int x = 0; x <= 23; x++)
+				for (int y = 0; y < 6; y++)
+					helper.setBlock(new BlockPos(x, y, z), Blocks.AIR);
+		terraces(helper, true);
+		ClockworkJuggernaut edge = standAt(helper, 6, 9.5);
+		helper.assertFalse(edge.safeAhead(new Vec3(0, 0, 1), 1), "a 6-block drop past his edge should stop him");
+		ClockworkJuggernaut foot = standAt(helper, 0, 16.5);
+		helper.assertFalse(foot.safeAhead(new Vec3(0, 0, -1), 1), "a 6-block wall past his edge should stop him");
+		helper.succeed();
+	}
+
+	/** Down terraced snow to them, and (below) up it to them: he gets there, as on flat ground. */
+	@GameTest(template = COURSE, timeoutTicks = 400)
+	public static void heWalksDownTerracedSnow(GameTestHelper helper) {
+		terraces(helper, false);
+		ClockworkJuggernaut j = standAt(helper, 6, 4.5);
+		ArmorStand dummy = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(12, 0, 21));
+		dummy.setInvulnerable(true);
+		j.setTarget(dummy);
+		helper.succeedWhen(() -> helper.assertTrue(j.horizontalDistance(dummy) < 7,
+			"he should have come within 7 blocks, is " + String.format("%.1f", j.horizontalDistance(dummy)) + " away at "
+				+ helper.relativeVec(j.position()) + ", " + j.clip().name()));
+	}
+
+	@GameTest(template = COURSE, timeoutTicks = 400)
+	public static void heWalksUpTerracedSnow(GameTestHelper helper) {
+		terraces(helper, false);
+		ClockworkJuggernaut j = standAt(helper, 0, 20.5);
+		j.setYRot(180);
+		ArmorStand dummy = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(12, 6, 2));
+		dummy.setInvulnerable(true);
+		j.setTarget(dummy);
+		helper.succeedWhen(() -> helper.assertTrue(j.horizontalDistance(dummy) < 7,
+			"he should have come within 7 blocks, is " + String.format("%.1f", j.horizontalDistance(dummy)) + " away at "
+				+ helper.relativeVec(j.position()) + ", " + j.clip().name()));
 	}
 
 	/**

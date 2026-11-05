@@ -1761,24 +1761,53 @@ public final class ClockworkJuggernaut extends Monster {
 
 	/**
 	 * Is the ground {@code ahead} blocks past his front edge walkable: no drop deeper than 3 (D56) and no wall taller than
-	 * he can step (2)?
+	 * he can step (3)?
 	 */
-	boolean safeAhead(Vec3 dir, double ahead) {
-		double reach = getBbWidth() / 2 + ahead;
+	public boolean safeAhead(Vec3 dir, double ahead) {
+		return !Double.isNaN(groundAhead(dir, ahead));
+	}
+
+	/**
+	 * The ground {@code ahead} blocks past his front edge (the height he'd stand at there), walked a block at a time from
+	 * the ground under that edge: each block no more than 3 down from the last (D56) nor a wall more than 3 up; NaN if
+	 * it isn't walkable. A slope is ground however far it falls or climbs in all (the user's "the juggernaut is getting
+	 * stuck on this terrain", snowy terraces): his wide footprint stands on its highest step, so judged from his feet a
+	 * slope a block past his edge looked a cliff.
+	 */
+	private double groundAhead(Vec3 dir, double ahead) {
+		double half = getBbWidth() / 2, end = half + ahead, centre = Double.NaN;
 		for (double side : new double[] { -2, 0, 2 }) {
-			Vec3 p = position().add(dir.scale(reach)).add(-dir.z * side, 0, dir.x * side);
-			BlockPos base = BlockPos.containing(p.x, getY() + 0.5, p.z);
-			// ground at his feet's level or up to 3 below (a block at foot level is a step up)
-			boolean ground = false;
-			for (int dy = 0; dy >= -4 && !ground; dy--)
-				ground = solid(base.offset(0, dy, 0));
-			if (!ground) // water over a drop is still a drop
-				return false;
-			for (int dy = 3; dy <= 6; dy++)
-				if (solid(base.offset(0, dy, 0)) && !crumbles(base.offset(0, dy, 0)))
-					return false;
+			Vec3 line = position().add(-dir.z * side, 0, dir.x * side);
+			// under his front edge: whatever's under him is his to stand on, however far down
+			int g = groundBelow(line.add(dir.scale(half - 0.5)), Mth.floor(getY() + 0.5), 8);
+			for (double t = half + 0.5; g != Integer.MIN_VALUE; t += 1) {
+				Vec3 p = line.add(dir.scale(Math.min(t, end)));
+				int next = groundBelow(p, g + 2, 6); // a step up of up to 3, or down of up to 3
+				if (next != Integer.MIN_VALUE)
+					for (int y = g + 3; y <= Math.max(g, next) + 6; y++) {
+						BlockPos at = BlockPos.containing(p.x, y, p.z);
+						if (solid(at) && !crumbles(at))
+							next = Integer.MIN_VALUE; // a wall too tall to step, or no room under it
+					}
+				g = next;
+				if (t >= end)
+					break;
+			}
+			if (g == Integer.MIN_VALUE)
+				return Double.NaN;
+			if (side == 0)
+				centre = g;
 		}
-		return true;
+		return centre;
+	}
+
+	/** The height of the first ground at or below {@code top} at {@code p}, looking {@code depth} blocks down; water over a
+	 * drop is still a drop. {@link Integer#MIN_VALUE} for none. */
+	private int groundBelow(Vec3 p, int top, int depth) {
+		for (int y = top; y >= top - depth; y--)
+			if (solid(BlockPos.containing(p.x, y, p.z)))
+				return y + 1;
+		return Integer.MIN_VALUE;
 	}
 
 	private boolean solid(BlockPos pos) {
@@ -1786,15 +1815,17 @@ public final class ClockworkJuggernaut extends Monster {
 		return !state.getCollisionShape(level(), pos).isEmpty();
 	}
 
-	/** Can he walk up to them: a straight walkable line, and not far above or below him? */
+	/**
+	 * Can he walk up to them: a straight walkable line (up or down a hill as well), which, if they're near enough to walk
+	 * it all, ends at their feet, not under a pillar they're up nor over a pit they're down?
+	 */
 	private boolean canReach(LivingEntity target) {
-		if (Math.abs(target.getY() - getY()) > 5)
-			return false;
 		double d = horizontalDistance(target);
 		if (d < CLOSE)
-			return true;
+			return Math.abs(target.getY() - getY()) <= 5;
 		Vec3 dir = target.position().subtract(position()).multiply(1, 0, 1).normalize();
-		return safeAhead(dir, 1) && safeAhead(dir, Math.min(d - getBbWidth() / 2, 6));
+		double ahead = d - getBbWidth() / 2, ground = groundAhead(dir, Math.min(ahead, 6));
+		return !Double.isNaN(ground) && (ahead > 6 || Math.abs(target.getY() - ground) <= 3);
 	}
 
 	// ---- hitting
