@@ -1,6 +1,6 @@
 {
   "modName": "ComedyMonkey's Create Addons",
-  "version": "2.6.3",
+  "version": "2.6.4",
   "minecraft": "1.21.1",
   "create": "6.0.10",
   "neoforge": "21.1.248",
@@ -77,6 +77,7 @@
       ]
     },
     "notes": [
+      { "date": "2026-11-05", "title": "2.6.4: carpet and slopes", "body": "[[trade-bot|Trade Bot]] trades and empties chests from carpet, snow and other low blocks. What sleeps in the ruins no longer gets stuck on hillsides." },
       { "date": "2026-11-03", "title": "2.6.3: stairs and stonecutters", "body": "Hovering with the [[clockwork-jetpack]], you walk down stairs and off slabs as normal. [[trade-bot|Trade Bot]] lands on stonecutters instead of sinking into them, and rolls round a step when that's quicker than hopping it." },
       { "date": "2026-11-03", "title": "2.6.2: a faster jetpack boost", "body": "Hold Jump with the wings out and the [[clockwork-jetpack]] keeps speeding up, to a quarter faster than spamming firework rockets. Jump and Sneak together hold you level in the air." },
       { "date": "2026-11-03", "title": "2.6.1: villagers through the goggles", "body": "Look at a villager in Engineer's Goggles to see the workstation it has claimed and, on Shift, its trades. Sneak-right-click it with a wrench and it gives that workstation up, and won't walk straight back to it." },

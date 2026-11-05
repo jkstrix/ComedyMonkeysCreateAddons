@@ -1,7 +1,7 @@
 [
   {
     "version": "2.7.0",
-    "from": "2.6.3",
+    "from": "2.6.4",
     "upcoming": true,
     "title": "The Trade Master",
     "summary": "[[trade-bot|Trade Bot]], upgraded: he keeps the chests on your Create network stocked, fetching, selling your surplus and buying from seated villagers to fill your Factory Gauges. And the [[clockwork-jetpack]] gets its advancements.",
@@ -35,6 +35,28 @@
             "list": [
               "**The Trade Master:** Middle Management, Trade Master, Supply Chain, Book Club and Fully Stocked.",
               "**The [[clockwork-jetpack]]**, which had none: Wound and Ready, Liftoff, Clockwork Wings, Station Keeping, What Goes Up, Overwound and The Floor Is Lava."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "version": "2.6.4",
+    "from": "2.6.3",
+    "date": "2026-11-05",
+    "title": "Carpet and slopes",
+    "summary": "[[trade-bot|Trade Bot]] works from carpeted floors, and [[ruin-sleeper]] walks up and down hillsides.",
+    "highlights": [],
+    "sections": [
+      {
+        "title": "Fixed",
+        "icon": "check",
+        "body": [
+          {
+            "list": [
+              "**[[trade-bot|Trade Bot]] couldn't trade from carpet.** On a carpeted floor he found nowhere to stand, so he never traded there or used the chests. He now stands on top of carpet, snow layers, repeaters, comparators and daylight sensors, trades and empties chests from them, and hops out of his station onto them.",
+              "**[[ruin-sleeper]] got stuck on hillsides.** On terraced slopes, snowy ones most of all, it stopped as if at a cliff edge. It now walks up and down slopes of any length, a block at a time, and still won't step off a real cliff."
             ]
           }
         ]
