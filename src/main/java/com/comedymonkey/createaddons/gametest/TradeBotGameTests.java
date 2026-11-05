@@ -403,6 +403,132 @@ public final class TradeBotGameTests {
 		});
 	}
 
+	/** The low blocks he can stand on: carpet, snow and redstone parts lift him off the floor below. */
+	private static List<BlockState> lowFloors() {
+		return List.of(
+			Blocks.AIR.defaultBlockState(),
+			Blocks.WHITE_CARPET.defaultBlockState(),
+			Blocks.MOSS_CARPET.defaultBlockState(),
+			Blocks.SNOW.defaultBlockState().setValue(net.minecraft.world.level.block.SnowLayerBlock.LAYERS, 2),
+			Blocks.SNOW.defaultBlockState().setValue(net.minecraft.world.level.block.SnowLayerBlock.LAYERS, 4),
+			Blocks.DAYLIGHT_DETECTOR.defaultBlockState(),
+			Blocks.REPEATER.defaultBlockState(),
+			Blocks.COMPARATOR.defaultBlockState(),
+			Blocks.STONE_PRESSURE_PLATE.defaultBlockState());
+	}
+
+	/** Where he stands on {@code pos}: the top of what's in it, or the floor under it. */
+	private static double topOf(GameTestHelper helper, BlockPos pos) {
+		return topAt(helper, helper.absolutePos(pos));
+	}
+
+	/** As {@link #topOf(GameTestHelper, BlockPos)}, for a block's absolute position. */
+	private static double topAt(GameTestHelper helper, BlockPos at) {
+		net.minecraft.world.phys.shapes.VoxelShape shape = helper.getLevel().getBlockState(at).getCollisionShape(helper.getLevel(), at);
+		return at.getY() + (shape.isEmpty() ? 0 : shape.max(Direction.Axis.Y));
+	}
+
+	/**
+	 * Each low block in the spot he'd trade from, in front of a booth walled in on its other sides, and around a chest:
+	 * he plans to stand on top of it (user, 2026-11-05: "trade bot can't trade if he's on carpet"). Planning stood him
+	 * on the floor under the carpet, where he didn't fit, so there was nowhere to trade from.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 100, batch = "trade_bot_plans_spots_on_low_floors")
+	public static void plansSpotsOnLowFloors(GameTestHelper helper) {
+		floor(helper, 0, 0, 0, 23, 23, FLOOR);
+		TradeBotEntity bot = station(helper, new BlockPos(22, 1, 22), Direction.WEST);
+		List<BlockState> floors = lowFloors();
+		record Booth(BlockState floor, BlockPos stand, Villager villager) {}
+		List<Booth> booths = new ArrayList<>();
+		for (int i = 0; i < floors.size(); i++) {
+			int x = 2 + 4 * (i % 5), z0 = 1 + 7 * (i / 5);
+			BlockPos stand = new BlockPos(x, 1, z0), seat = stand.south(2);
+			booth(helper, stand.south(), Blocks.LECTERN);
+			// walls on the spots on its other sides
+			for (BlockPos wall : List.of(seat.south(2), seat.east(2), seat.west(2)))
+				solid(helper, wall.getX(), 1, wall.getZ(), wall.getX(), 2, wall.getZ(), WALL);
+			helper.setBlock(stand, floors.get(i));
+			booths.add(new Booth(floors.get(i), stand, seated(helper, seat, VillagerProfession.LIBRARIAN, offer(Items.PAPER, 24, 16))));
+		}
+		// chests with a low block all round them
+		List<BlockState> ringed = List.of(Blocks.WHITE_CARPET.defaultBlockState(),
+			Blocks.SNOW.defaultBlockState().setValue(net.minecraft.world.level.block.SnowLayerBlock.LAYERS, 3));
+		List<BlockPos> chests = new ArrayList<>();
+		for (int i = 0; i < ringed.size(); i++) {
+			BlockPos chest = new BlockPos(4 + 8 * i, 1, 18);
+			for (int dx = -2; dx <= 2; dx++)
+				for (int dz = -2; dz <= 2; dz++)
+					helper.setBlock(chest.offset(dx, 0, dz), ringed.get(i));
+			helper.setBlock(chest, Blocks.CHEST.defaultBlockState().setValue(net.minecraft.world.level.block.ChestBlock.FACING, Direction.SOUTH));
+			chests.add(chest);
+		}
+		helper.runAfterDelay(5, () -> {
+			List<String> wrong = new ArrayList<>();
+			for (Booth booth : booths) {
+				String name = booth.floor.isAir() ? "bare floor" : booth.floor.toString();
+				com.comedymonkey.createaddons.content.tradebot.trade.TradeSpot spot =
+					com.comedymonkey.createaddons.content.tradebot.trade.TradeSpot.plan(bot, booth.villager);
+				double top = topOf(helper, booth.stand);
+				if (spot == null)
+					wrong.add(name + ": nowhere to trade from");
+				else if (!spot.standBlock().equals(helper.absolutePos(booth.stand)))
+					wrong.add(name + ": trades from " + helper.relativePos(spot.standBlock()).toShortString() + ", not its spot");
+				else if (Math.abs(spot.stand().y - top) > 1e-6)
+					wrong.add(String.format(Locale.ROOT, "%s: stands at %.4f, not on top at %.4f", name, spot.stand().y, top));
+			}
+			for (int i = 0; i < chests.size(); i++) {
+				com.comedymonkey.createaddons.content.tradebot.work.ContainerVisit visit =
+					com.comedymonkey.createaddons.content.tradebot.work.ContainerVisit.plan(bot, helper.absolutePos(chests.get(i)));
+				String name = "chest in " + ringed.get(i);
+				if (visit == null)
+					wrong.add(name + ": nowhere to stand");
+				else if (Math.abs(visit.stand().y - topAt(helper, visit.standBlock())) > 1e-6)
+					wrong.add(String.format(Locale.ROOT, "%s: stands at %.4f, not on top at %.4f", name, visit.stand().y, topAt(helper, visit.standBlock())));
+			}
+			if (!wrong.isEmpty())
+				helper.fail(String.join("; ", wrong));
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * The trading hall with carpet over the yard, aisle and gallery, and a different low block in each booth's spot: he
+	 * hops out of his cradle onto carpet, takes from a chest on carpet, trades from every spot and docks again.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 8000, batch = "trade_bot_trades_from_low_floors")
+	public static void tradesFromLowFloors(GameTestHelper helper) {
+		Hall hall = tradingHall(helper);
+		helper.getLevel().setDayTime(1000);
+		BlockPos input = new BlockPos(7, 1, 1), output = new BlockPos(10, 1, 1);
+		TradeBotEntity bot = station(helper, hall.station, Direction.SOUTH);
+		links(helper, hall.station, input, output);
+		List<BlockState> spots = List.of(Blocks.DAYLIGHT_DETECTOR.defaultBlockState(), Blocks.WHITE_CARPET.defaultBlockState(),
+			Blocks.SNOW.defaultBlockState().setValue(net.minecraft.world.level.block.SnowLayerBlock.LAYERS, 3), Blocks.REPEATER.defaultBlockState());
+		for (int i = 0; i < spots.size(); i++)
+			helper.setBlock(hall.spots.get(i), spots.get(i));
+		for (int x = 0; x <= 23; x++)
+			for (int y = 1; y <= 3; y++)
+				for (int z = 0; z <= 23; z++) {
+					BlockPos pos = new BlockPos(x, y, z);
+					BlockPos at = helper.absolutePos(pos.below());
+					if (helper.getBlockState(pos).isAir() && helper.getLevel().getBlockState(at).isFaceSturdy(helper.getLevel(), at, Direction.UP))
+						helper.setBlock(pos, Blocks.GRAY_CARPET.defaultBlockState());
+				}
+		fill(helper, input, new ItemStack(Items.WHEAT, 20), new ItemStack(Items.PAPER, 24), new ItemStack(Items.COAL, 15), new ItemStack(Items.GLASS_PANE, 11));
+		seated(helper, hall.seats.get(0), VillagerProfession.FARMER, offer(Items.WHEAT, 20, 16));
+		seated(helper, hall.seats.get(1), VillagerProfession.LIBRARIAN, offer(Items.PAPER, 24, 16));
+		seated(helper, hall.seats.get(2), VillagerProfession.TOOLSMITH, offer(Items.COAL, 15, 16));
+		seated(helper, hall.seats.get(3), VillagerProfession.CARTOGRAPHER, offer(Items.GLASS_PANE, 11, 16));
+		TradeBotStationBlockEntity station = (TradeBotStationBlockEntity) helper.getBlockEntity(hall.station);
+		TradeBotMotion.debug = true;
+		helper.succeedWhen(() -> {
+			if (station.tradesToday() < 4 || !bot.isDocked() || bot.brain.task() != TradeBotBrain.Task.HOME)
+				helper.fail(station.tradesToday() + " of 4 trades made (" + bot.brain.task() + ")");
+			if (count(helper, output, Items.EMERALD) != 4)
+				helper.fail("the output holds " + count(helper, output, Items.EMERALD) + " emeralds, not 4");
+		});
+	}
+
 	/**
 	 * A villager stands up just as he starts the trade (D46): it's off, he shrugs, keeps everything, and on the way
 	 * home puts the wheat back where it came from. No emerald, no use of the villager's stock.

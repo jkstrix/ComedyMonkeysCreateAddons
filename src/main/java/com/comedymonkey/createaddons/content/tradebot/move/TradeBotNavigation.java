@@ -45,6 +45,17 @@ public final class TradeBotNavigation extends GroundPathNavigation {
 		return true;
 	}
 
+	/**
+	 * Vanilla moves a target in a "solid" block up to the block above it, and a daylight sensor (or anything else low
+	 * but broad) counts as solid: a spot on one was never reached. A spot he can stand in is the target itself.
+	 */
+	@Override
+	public net.minecraft.world.level.pathfinder.Path createPath(BlockPos pos, int accuracy) {
+		if (level.isLoaded(pos) && WalkNodeEvaluator.getPathTypeStatic(mob, pos) == PathType.WALKABLE)
+			return createPath(java.util.Set.of(pos), accuracy);
+		return super.createPath(pos, accuracy);
+	}
+
 	@Override
 	protected PathFinder createPathFinder(int maxVisitedNodes) {
 		nodeEvaluator = new NodeEvaluator();
@@ -89,13 +100,13 @@ public final class TradeBotNavigation extends GroundPathNavigation {
 		@Override
 		public int getNeighbors(Node[] out, Node node) {
 			int n = super.getNeighbors(out, node);
-			double floor = getFloorLevel(node.asBlockPos());
+			double floor = Floors.height(currentContext.level(), node.asBlockPos());
 			for (int i = 0; i < n; i++) {
 				Node next = out[i];
 				float own = malus.computeIfAbsent(next, k -> k.costMalus);
 				if (own < 0)
 					continue;
-				next.costMalus = hop(floor, getFloorLevel(next.asBlockPos())) ? own + HOP_COST : own;
+				next.costMalus = hop(floor, Floors.height(currentContext.level(), next.asBlockPos())) ? own + HOP_COST : own;
 			}
 			return n;
 		}

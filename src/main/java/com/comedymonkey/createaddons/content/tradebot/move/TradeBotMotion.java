@@ -563,7 +563,7 @@ public class TradeBotMotion {
 
 	/** The centre of a waypoint block, at its floor height (a slab's top, a stair's top...). */
 	static Vec3 floorCentre(Level level, BlockPos node) {
-		return new Vec3(node.getX() + 0.5, WalkNodeEvaluator.getFloorLevel(level, node), node.getZ() + 0.5);
+		return new Vec3(node.getX() + 0.5, Floors.height(level, node), node.getZ() + 0.5);
 	}
 
 	/** Where the current brake should end: the waypoint before a step, or the end of the route. */
