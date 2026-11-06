@@ -2,9 +2,9 @@
   {
     "version": "2.7.0",
     "from": "2.6.4",
-    "upcoming": true,
+    "date": "2026-11-06",
     "title": "The Trade Master",
-    "summary": "[[trade-bot|Trade Bot]], upgraded: he keeps the chests on your Create network stocked, fetching, selling your surplus and buying from seated villagers to fill your Factory Gauges. And the [[clockwork-jetpack]] gets its advancements.",
+    "summary": "[[trade-bot|Trade Bot]], upgraded: he keeps the chests on your Create network stocked, fetching, selling your surplus and buying from seated villagers to fill your Factory Gauges. The Schematicannon now prints the mod's blocks as you built them, and the [[clockwork-jetpack]] gets its advancements.",
     "highlights": [
       "trade-master",
       "trade-board",
@@ -23,6 +23,22 @@
               "**He fetches first**, from your other board chests, then **buys** the rest from seated villagers, never above base price, and pays by **selling** your surplus.",
               "**Your stock is safe:** he never takes anything from a chest below a gauge's amount, and chests without a board don't exist for him.",
               "**His station's screen** lists every gauge: the one he's filling, the ones he can't (and why), and the full ones."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Schematicannon",
+        "icon": "layers",
+        "body": [
+          "Schematics of your builds now print the way you built them, and the cannon charges for everything it places. Only settings print: fluid, power, items and readings start empty.",
+          {
+            "list": [
+              "**Lines:** [[power-lines|Power Lines]] keep their dye, and [[fluid-lines|Fluid Lines]] and Power Lines keep their fittings and encasings. Wires hanging between [[line-post|Line Posts]] and [[battery|Battery]] towers are strung again and charged by their real length, as long as both ends are in the schematic.",
+              "**[[electric-lights|Lights]]:** lamp posts, Bollards and floor lights connect and light up, Pendant Lamps and Chandeliers hang on their cable, and every light keeps its brightness and aim. [[festoon-lights|Festoon Lights]] hang between their hooks again.",
+              "**Machines keep their settings:** [[clockwork-tubes]], [[electric-motor|Electric Motors]], the [[clockwork-dynamo]] and the [[geothermal-turbine]].",
+              "**[[wellspring|Wellsprings]]** keep their upgrades, charged one by one. **[[upgraded-chest|Upgraded Chests]] and [[upgraded-barrel|Barrels]]** cost a plain chest or barrel plus their tier's upgrade, and keep their names.",
+              "**[[helper-bot|Helper Bot]]** costs a Helper Bot of the same colour. **A [[trade-bot|Trade Bot]] station** costs a Trade Bot and comes with him and his links. He belongs to nobody and stays docked until a player packs him up and places him."
             ]
           }
         ]
