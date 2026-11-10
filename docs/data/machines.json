@@ -1332,7 +1332,7 @@
     "teach": {
       "what": "A stone generator's box with a little dripstone cave inside: water stands on a dripstone ceiling, four Pointed Dripstone hang from it, and a trip hammer on a spindle in the middle. The four grow their tips together, then the hammer goes round, cracking each tip off into the store.",
       "why": "Vanilla Pointed Dripstone grows painfully slowly, and farms for it are huge. One of these makes about 720 an hour at 256 RPM, for Dripstone Blocks, the Drip Templates of [[fluid-wellspring]] upgrades, or traps.",
-      "when": "Early: it needs Andesite Alloy, 2 Mechanical Drills, Andesite Casing, 2 Dripstone Blocks and a Fluid Pipe, four Pointed Dripstone from a dripstone cave to seed it, and a steady water supply.",
+      "when": "Early: it needs Andesite Alloy, 2 Iron Blocks, Andesite Casing, 2 Dripstone Blocks and a Fluid Pipe, four Pointed Dripstone from a dripstone cave to seed it, and a steady water supply.",
       "interacts": "Water comes in through any side but the window and the back (the top and bottom too) from Create pipes, [[fluid-lines|Fluid Lines]] or a [[fluid-wellspring]]; funnels, hoppers, chutes and arms take the Pointed Dripstone out from any side.",
       "mistakes": [
         "It needs all four seed Pointed Dripstone: right-click it with them. They stay in; the Wrench screen gives them back.",
@@ -1412,7 +1412,7 @@
         "specs": [
           [
             "Recipe",
-            "Andesite Alloy, 2 Mechanical Drills, Andesite Casing, 2 Dripstone Blocks, a Fluid Pipe"
+            "Andesite Alloy, 2 Iron Blocks, Andesite Casing, 2 Dripstone Blocks, a Fluid Pipe"
           ]
         ]
       },

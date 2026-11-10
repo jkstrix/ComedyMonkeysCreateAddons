@@ -4448,7 +4448,7 @@
    ],
    [
     {
-     "item": "create:mechanical_drill",
+     "item": "minecraft:iron_block",
      "count": 1
     },
     {
@@ -4456,7 +4456,7 @@
      "count": 1
     },
     {
-     "item": "create:mechanical_drill",
+     "item": "minecraft:iron_block",
      "count": 1
     }
    ],

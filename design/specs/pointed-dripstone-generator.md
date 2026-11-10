@@ -42,7 +42,7 @@ through its wrench screen.
 | D24 | Moved | Pistons, contraptions and Aeronautics moves keep its seed, water, output and growth; it **doesn't run while moving** | user, round 2 |
 | D25 | Facing | The window faces you when placed (4 horizontal facings) | user, round 2 (family rules) |
 | D26 | Dimensions | **Works anywhere**, the Nether included: it's sealed, like a Create Fluid Tank | user, round 3 |
-| D27 | Recipe | Crafting table, the family recipe: andesite alloy, 2 Mechanical Drills, an andesite casing, 2 Dripstone Blocks and a Create Fluid Pipe. Wireless: the generator + a Create Transmitter, shapeless, as the family | user, round 2 |
+| D27 | Recipe | Crafting table: andesite alloy, **2 Iron Blocks** (the hammer is a swinging block of iron, not a drill: user, 2026-11-10), an andesite casing, 2 Dripstone Blocks and a Create Fluid Pipe. Wireless: the generator + a Create Transmitter, shapeless, as the family | user, round 2 |
 | D28 | Teaching | Its own **Ponder scene, "Drip, Drip, Drop"**; a JEI info page; one advancement, **"Biggest Drip"** ("Grow Pointed Dripstone in a Pointed Dripstone Generator") | user, rounds 2 and 3 |
 | D29 | Goggles | Header "Pointed Dripstone Generator:", stored / 64, water / 1,000 mB, then one status: Switched off by redstone · Full · Needs 4 Pointed Dripstone · Needs water · Needs rotation · N per minute; then Create's kinetic and stress lines | family rule (goggles show stored and status), user round 2 |
 | D30 | Look | The sealed process-box shell with a window showing the four stalactites and the new tip growing; designed later by the art director and previewed in Blockbench first | existing mod rules (family look, preview in Blockbench first) |
@@ -88,7 +88,7 @@ up and the output emptied.
 
 ## Progression
 
-**Early to mid game (the andesite age).** It needs two Mechanical Drills, an andesite casing and a Fluid Pipe, plus two
+**Early to mid game (the andesite age).** It needs two Iron Blocks, an andesite casing and a Fluid Pipe, plus two
 Dripstone Blocks and four Pointed Dripstone from a dripstone cave, and a steady water supply (a Create pump on a water
 source, or a Wellspring). It unlocks easy Pointed Dripstone for Dripstone Blocks, the Wellspring's Drip Templates (two
 Pointed Dripstone each) and dripstone traps.
@@ -98,7 +98,7 @@ Pointed Dripstone each) and dripstone traps.
 - **Output against vanilla**: about 720 an hour at 256 RPM (D35, doubled from 360 by growing all four at once),
   against roughly 60 an hour from a big 100-column vanilla farm: about a dozen big farms in one block, judged as the
   cages and tanks are, for 1,024 SU and 72 buckets of water an hour (D12, D13, D35).
-- **Cost**: two drills and a pipe up front; stress and water while running. Faster rotation is faster but costs more SU.
+- **Cost**: two Iron Blocks and a pipe up front; stress and water while running. Faster rotation is faster but costs more SU.
 - **Exploits checked**:
   - Seed duplication: the seed is kept, not crafted back; breaking drops it once (it lives in the block entity only).
   - Breaking mid-growth: the growth is lost, never paid out early.
@@ -159,7 +159,7 @@ and rotation sets the pace.
 
 # HOW PLAYERS USE IT
 
-- Craft it from alloy, two drills, a casing, two Dripstone Blocks and a pipe.
+- Craft it from alloy, two Iron Blocks, a casing, two Dripstone Blocks and a pipe.
 - Right-click it with four Pointed Dripstone.
 - Pipe water into a side; turn a shaft in the back.
 - Pull the output with funnels, or open it with a Wrench.
