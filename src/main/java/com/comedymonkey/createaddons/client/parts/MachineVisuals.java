@@ -33,6 +33,8 @@ public final class MachineVisuals {
 	/** At client setup, once the block entity types exist. */
 	public static void register() {
 		visual(ModBlockEntities.COBBLE_GENERATOR, CobbleGeneratorRenderer::parts, false);
+		// the water, the stalactites and the tray stay with its renderer
+		visual(ModBlockEntities.POINTED_DRIPSTONE_GENERATOR, com.comedymonkey.createaddons.client.PointedDripstoneGeneratorRenderer::parts, false);
 		visual(ModBlockEntities.MAGMA_ENGINE, MagmaEngineRenderer::parts, true);
 		visual(ModBlockEntities.ELECTRIC_MOTOR, ElectricRenderers.Motor::parts, true);
 		visual(ModBlockEntities.CLOCKWORK_DYNAMO, ElectricRenderers.Dynamo::parts, true);

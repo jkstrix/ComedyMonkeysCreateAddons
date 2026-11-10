@@ -1062,14 +1062,14 @@
   {
     "id": "stone-generation",
     "name": "Stone Generation",
-    "summary": "One-block cobblestone, basalt, blackstone and tuff generators, paced like a Mechanical Drill, and what each stone feeds in the rest of the mod.",
+    "summary": "One-block cobblestone, basalt, blackstone and tuff generators, paced like a Mechanical Drill, the Pointed Dripstone Generator beside them, and what each stone feeds in the rest of the mod.",
     "image": "renders/cobblestone-generator--brass.png",
     "tags": [
       "resources"
     ],
     "stage": "early",
     "teach": {
-      "what": "Shaft-driven boxes where water or ice meets lava and a drill mines the stone that forms. The [[cobblestone-generator]], [[basalt-generator]] and [[blackstone-generator]] come in Andesite, Brass and Wireless versions; the [[tuff-generator]] in plain and Wireless.",
+      "what": "Shaft-driven boxes where water or ice meets lava and a drill mines the stone that forms. The [[cobblestone-generator]], [[basalt-generator]] and [[blackstone-generator]] come in Andesite, Brass and Wireless versions; the [[tuff-generator]] in plain and Wireless. The [[pointed-dripstone-generator]] is their cousin: seeded with four Pointed Dripstone and fed water, it grows four tips at a time and hammers them off, one every 5 seconds at 256 RPM.",
       "why": "Stone is the raw material of the dust lines: crushed cobblestone gives [[emerald-dust]], netherrack made from it gives [[netherite-dust]], blackstone gives [[quartz-dust]], tuff gives metal nuggets for the [[stone-infuser]].",
       "when": "Very early: the Andesite generator needs only Andesite Alloy, two drills, casing and a bucket of each fluid (the buckets come back).",
       "interacts": "Output leaves only through item transport (hoppers, chutes, funnels, Pipez, arms) from any side. A redstone signal (or a Redstone Link frequency on a Wireless one) switches it off with no stress.",
@@ -1134,6 +1134,14 @@
                   "64",
                   "As the Andesite ones",
                   "10 ticks"
+                ],
+                [
+                  "[[pointed-dripstone-generator|Pointed Dripstone]]",
+                  "Pointed Dripstone",
+                  "4 (one per strike)",
+                  "64",
+                  "4 SU per RPM",
+                  "20 s for four (needs 100 mB water each)"
                 ]
               ]
             }
@@ -1289,6 +1297,10 @@
                   "Andesite Alloy, a lava bucket, 2 Mechanical Drills, Andesite Casing, a water bucket and 2 gravel"
                 ],
                 [
+                  "[[pointed-dripstone-generator|Pointed Dripstone]]",
+                  "Andesite Alloy, 2 Mechanical Drills, Andesite Casing, 2 Dripstone Blocks and a Fluid Pipe"
+                ],
+                [
                   "Wireless (any)",
                   "The generator and a Transmitter, shapeless"
                 ]
@@ -1303,6 +1315,7 @@
       "basalt-generator",
       "blackstone-generator",
       "tuff-generator",
+      "pointed-dripstone-generator",
       "precious-dusts",
       "stone-infuser",
       "pressure-crucible"

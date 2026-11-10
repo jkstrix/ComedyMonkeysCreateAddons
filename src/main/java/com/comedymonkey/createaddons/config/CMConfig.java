@@ -64,6 +64,10 @@ public final class CMConfig {
 		public final ModConfigSpec.DoubleValue crucibleStressImpact;
 		public final ModConfigSpec.DoubleValue andesiteCobbleGenStressImpact;
 		public final ModConfigSpec.DoubleValue brassCobbleGenStressImpact;
+		public final ModConfigSpec.DoubleValue dripstoneGeneratorSeconds;
+		public final ModConfigSpec.IntValue dripstoneGeneratorWater;
+		public final ModConfigSpec.IntValue dripstoneGeneratorTank;
+		public final ModConfigSpec.DoubleValue dripstoneGeneratorStressImpact;
 		public final ModConfigSpec.IntValue harvesterStress;
 		public final ModConfigSpec.IntValue harvesterCropSeconds;
 		public final ModConfigSpec.IntValue harvesterTreeSeconds;
@@ -272,6 +276,27 @@ public final class CMConfig {
 				.comment("Stress impact per RPM of the Brass Cobblestone Generator.")
 				.translation("comedymonkeysaddons.configuration.brassCobbleGenStressImpact")
 				.defineInRange("brassStressImpact", 16.0, 0.0, 1024.0);
+			builder.pop();
+
+			builder.comment("Pointed Dripstone Generators. Four seed Pointed Dripstone grow their tips together, then a hammer",
+					"goes round knocking each off into the store; faster rotation grows them faster.")
+				.push("pointedDripstoneGenerators");
+			dripstoneGeneratorSeconds = builder
+				.comment("Seconds per Pointed Dripstone at 256 RPM (twice as long at 128, and so on). It grows four at a time: the four", "take four times this, of which the round of knocks is a fixed 8 s.")
+				.translation("comedymonkeysaddons.configuration.dripstoneGeneratorSeconds")
+				.defineInRange("secondsAt256Rpm", 5.0, 2.5, 3600.0);
+			dripstoneGeneratorWater = builder
+				.comment("Water each Pointed Dripstone takes, in millibuckets.")
+				.translation("comedymonkeysaddons.configuration.dripstoneGeneratorWater")
+				.defineInRange("waterPerPiece", 100, 0, 100000);
+			dripstoneGeneratorTank = builder
+				.comment("How much water it holds, in millibuckets.")
+				.translation("comedymonkeysaddons.configuration.dripstoneGeneratorTank")
+				.defineInRange("tank", 1000, 1, 1000000);
+			dripstoneGeneratorStressImpact = builder
+				.comment("Stress impact per RPM (a Mechanical Drill is 4).")
+				.translation("comedymonkeysaddons.configuration.dripstoneGeneratorStressImpact")
+				.defineInRange("stressImpact", 4.0, 0.0, 1024.0);
 			builder.pop();
 
 			builder.comment("Auto Harvester: grows a crop or sapling and harvests it. It uses the same stress at any speed and",
@@ -927,6 +952,22 @@ public final class CMConfig {
 
 		public double andesiteCobbleGenStressImpact() {
 			return SERVER_SPEC.isLoaded() ? andesiteCobbleGenStressImpact.get() : andesiteCobbleGenStressImpact.getDefault();
+		}
+
+		public double dripstoneGeneratorSeconds() {
+			return get(dripstoneGeneratorSeconds);
+		}
+
+		public int dripstoneGeneratorWater() {
+			return get(dripstoneGeneratorWater);
+		}
+
+		public int dripstoneGeneratorTank() {
+			return get(dripstoneGeneratorTank);
+		}
+
+		public double dripstoneGeneratorStressImpact() {
+			return get(dripstoneGeneratorStressImpact);
 		}
 
 		public double brassCobbleGenStressImpact() {

@@ -104,6 +104,9 @@ public class CMPonderPlugin implements PonderPlugin {
 			.addStoryBoard("stone_infuser", MachineScenes::infuser);
 		helper.forComponents(ModBlocks.TUFF_GENERATOR.getId(), ModBlocks.WIRELESS_TUFF_GENERATOR.getId())
 			.addStoryBoard("tuff_generator", MachineScenes::tuff);
+		// on the Tuff Generator's schematic (the generator is swapped in)
+		helper.forComponents(ModBlocks.POINTED_DRIPSTONE_GENERATOR.getId(), ModBlocks.WIRELESS_POINTED_DRIPSTONE_GENERATOR.getId())
+			.addStoryBoard("tuff_generator", DripstoneGeneratorScenes::generator);
 		helper.forComponents(ModItems.BATTERY.getId())
 			.addStoryBoard("battery", BatteryScenes::battery)
 			.addStoryBoard("industrial_battery", BatteryScenes::industrialBattery);
@@ -172,6 +175,7 @@ public class CMPonderPlugin implements PonderPlugin {
 			.add(ModBlocks.STRING_TANGLER.getId())
 			.add(ModBlocks.STONE_INFUSER.getId())
 			.add(ModBlocks.TUFF_GENERATOR.getId())
+			.add(ModBlocks.POINTED_DRIPSTONE_GENERATOR.getId())
 			.add(ModBlocks.AUTO_HARVESTER.getId())
 			.add(ModBlocks.ANIMAL_PEN.getId())
 			.add(ModBlocks.BRASS_ANIMAL_PEN.getId())

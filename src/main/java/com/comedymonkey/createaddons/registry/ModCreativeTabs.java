@@ -48,6 +48,8 @@ public final class ModCreativeTabs {
 				output.accept(ModItems.WIRELESS_BRASS_BLACKSTONE_GENERATOR.get());
 				output.accept(ModItems.TUFF_GENERATOR.get());
 				output.accept(ModItems.WIRELESS_TUFF_GENERATOR.get());
+				output.accept(ModItems.POINTED_DRIPSTONE_GENERATOR.get());
+				output.accept(ModItems.WIRELESS_POINTED_DRIPSTONE_GENERATOR.get());
 				output.accept(ModItems.AUTO_HARVESTER.get());
 				output.accept(ModItems.ANIMAL_PEN.get());
 				output.accept(ModItems.BRASS_ANIMAL_PEN.get());

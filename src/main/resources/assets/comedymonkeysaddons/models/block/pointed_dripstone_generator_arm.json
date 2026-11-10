@@ -1,0 +1,142 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "comedymonkeysaddons:block/pointed_dripstone_generator_hammer",
+    "pointed_dripstone_generator_arm": "comedymonkeysaddons:block/pointed_dripstone_generator_arm",
+    "pointed_dripstone_generator_hammer_face": "comedymonkeysaddons:block/pointed_dripstone_generator_hammer_face",
+    "pointed_dripstone_generator_hammer": "comedymonkeysaddons:block/pointed_dripstone_generator_hammer"
+  },
+  "elements": [
+    {
+      "name": "arm",
+      "from": [
+        8.75,
+        5.65,
+        7.2
+      ],
+      "to": [
+        11.493,
+        6.25,
+        7.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.507,
+            9.75,
+            7.25,
+            10.35
+          ],
+          "texture": "#pointed_dripstone_generator_arm"
+        },
+        "east": {
+          "uv": [
+            8.2,
+            9.75,
+            8.8,
+            10.35
+          ],
+          "texture": "#pointed_dripstone_generator_arm"
+        },
+        "south": {
+          "uv": [
+            8.75,
+            9.75,
+            11.493,
+            10.35
+          ],
+          "texture": "#pointed_dripstone_generator_arm"
+        },
+        "up": {
+          "uv": [
+            8.75,
+            7.2,
+            11.493,
+            7.8
+          ],
+          "texture": "#pointed_dripstone_generator_arm"
+        },
+        "down": {
+          "uv": [
+            8.75,
+            8.2,
+            11.493,
+            8.8
+          ],
+          "texture": "#pointed_dripstone_generator_arm"
+        }
+      }
+    },
+    {
+      "name": "head",
+      "from": [
+        11.493,
+        5.2,
+        6.75
+      ],
+      "to": [
+        12.993,
+        6.7,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.007,
+            9.3,
+            4.507,
+            10.8
+          ],
+          "texture": "#pointed_dripstone_generator_hammer_face"
+        },
+        "east": {
+          "uv": [
+            7.75,
+            9.3,
+            9.25,
+            10.8
+          ],
+          "texture": "#pointed_dripstone_generator_hammer"
+        },
+        "south": {
+          "uv": [
+            11.493,
+            9.3,
+            12.993,
+            10.8
+          ],
+          "texture": "#pointed_dripstone_generator_hammer_face"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            9.3,
+            8.25,
+            10.8
+          ],
+          "texture": "#pointed_dripstone_generator_hammer"
+        },
+        "up": {
+          "uv": [
+            11.493,
+            6.75,
+            12.993,
+            8.25
+          ],
+          "texture": "#pointed_dripstone_generator_hammer"
+        },
+        "down": {
+          "uv": [
+            11.493,
+            7.75,
+            12.993,
+            9.25
+          ],
+          "texture": "#pointed_dripstone_generator_hammer"
+        }
+      }
+    }
+  ]
+}

@@ -42,5 +42,8 @@ public final class ModMenus {
 	public static final DeferredHolder<MenuType<?>, MenuType<com.comedymonkey.createaddons.content.tank.FishTankMenu>> FISH_TANK =
 		MENUS.register("fish_tank", () -> IMenuTypeExtension.create(com.comedymonkey.createaddons.content.tank.FishTankMenu::new));
 
+	public static final DeferredHolder<MenuType<?>, MenuType<com.comedymonkey.createaddons.content.dripstone.PointedDripstoneGeneratorMenu>> POINTED_DRIPSTONE_GENERATOR =
+		MENUS.register("pointed_dripstone_generator", () -> IMenuTypeExtension.create(com.comedymonkey.createaddons.content.dripstone.PointedDripstoneGeneratorMenu::new));
+
 	private ModMenus() {}
 }

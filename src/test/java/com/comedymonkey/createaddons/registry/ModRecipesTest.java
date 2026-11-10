@@ -23,6 +23,7 @@ class ModRecipesTest {
 		"tuff_generator.json", "wireless_andesite_cobble_generator.json", "wireless_andesite_basalt_generator.json",
 		"wireless_andesite_blackstone_generator.json", "wireless_brass_cobble_generator.json",
 		"wireless_brass_basalt_generator.json", "wireless_brass_blackstone_generator.json", "wireless_tuff_generator.json",
+		"pointed_dripstone_generator.json", "wireless_pointed_dripstone_generator.json",
 	};
 
 	@Test

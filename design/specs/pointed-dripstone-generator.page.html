@@ -1,0 +1,265 @@
+<title>Pointed Dripstone Generator</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the house quick-read column (as Trade Master and Helper Bot): material band, idiot test first, the block's faces and the loop as the centrepiece, then numbers, rules, what-ifs, open items, scores */
+:root {
+  --bg: #e5e4df; --surface: #f1f0ec; --fg: #22221f; --muted: #5e5d56; --line: #c8c6be;
+  --drip: #8a6a52; --drip-soft: #e6dbd0; --water: #3e6e85; --water-soft: #d3e1e8;
+  --andesite: #6f726c; --andesite-hi: #868982; --ok: #4c7a46; --warn: #a3712a;
+  --display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --drip: #c09a7c; --drip-soft: #3a2f27; --water: #79abc4; --water-soft: #20313a;
+  --andesite: #4a4d48; --andesite-hi: #5c605a; --ok: #84b07c; --warn: #d4a35a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a1a18; --surface: #23231f; --fg: #e4e2da; --muted: #a09e94; --line: #393832;
+  --drip: #c09a7c; --drip-soft: #3a2f27; --water: #79abc4; --water-soft: #20313a;
+  --andesite: #4a4d48; --andesite-hi: #5c605a; --ok: #84b07c; --warn: #d4a35a; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 960px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1 }
+h1 { font-size: clamp(2.3rem, 7vw, 3.5rem); font-weight: 700 }
+h2 { font-size: 1.7rem }
+h3 { font-size: 1.15rem }
+p { margin: 0 }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sub { color: var(--muted); max-width: 62ch }
+code { font: .85em var(--mono) }
+
+header { display: grid; gap: 14px }
+.band { height: 10px; border-radius: 2px; background: linear-gradient(90deg, var(--andesite) 0 44%, var(--bg) 44% 46%, var(--drip) 46% 74%, var(--bg) 74% 76%, var(--water) 76% 100%) }
+.pitch { font-size: 1.15rem; max-width: 60ch }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 .8rem/1 var(--mono); padding: 7px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface) }
+.chip.ready { border-color: var(--ok); color: var(--ok) }
+
+.idiot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 24px }
+.idiot li { display: flex; gap: 10px; align-items: baseline; font-size: 1.05rem; padding: 8px 0; border-bottom: 1px solid var(--line) }
+.idiot li::before { content: ""; flex: none; width: 8px; height: 12px; background: var(--drip); clip-path: polygon(0 0, 100% 0, 50% 100%) }
+
+/* faces diagram + loop */
+.centre { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 32px; align-items: center }
+@media (max-width: 720px) { .centre { grid-template-columns: 1fr } }
+.faces { width: 100%; max-width: 340px; height: auto; display: block; margin: 0 auto }
+.faces text { font-family: var(--mono); font-size: 11px; fill: var(--fg) }
+.faces .lbl { fill: var(--muted); font-size: 10px }
+.loop { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px }
+.loop li { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px }
+.loop .n { font: 600 1.3rem/1 var(--display); color: var(--drip) }
+.loop b { font-family: var(--display); font-size: 1.1rem; font-weight: 600; display: block }
+.loop span { color: var(--muted) }
+.loop li.again { background: transparent; border-style: dashed }
+
+/* numbers */
+.strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 4px; overflow: hidden }
+.stat { background: var(--surface); padding: 14px; display: grid; gap: 4px }
+.stat .v { font: 600 1.6rem/1 var(--display); font-variant-numeric: tabular-nums }
+.stat .k { font-size: .85rem; color: var(--muted) }
+.pace { display: grid; gap: 8px }
+.bar { display: grid; grid-template-columns: 92px 1fr 64px; gap: 10px; align-items: center; font: .85rem var(--mono); font-variant-numeric: tabular-nums }
+.bar .track { height: 14px; background: var(--drip-soft); border-radius: 2px; overflow: hidden }
+.bar .fill { height: 100%; background: var(--drip) }
+.bar.vanilla .track { background: var(--water-soft) }
+.bar.vanilla .fill { background: var(--water) }
+.bar .r { text-align: right }
+
+/* does / doesn't */
+.pairs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px }
+@media (max-width: 640px) { .pairs { grid-template-columns: 1fr } }
+.col { display: grid; gap: 8px; align-content: start }
+.col h3 { padding-bottom: 6px; border-bottom: 2px solid var(--ok) }
+.col.no h3 { border-color: var(--warn) }
+.col ul { margin: 0; padding-left: 18px; display: grid; gap: 6px }
+
+.whatif { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px }
+.qa { padding: 12px 14px; border-left: 3px solid var(--water); background: var(--surface); display: grid; gap: 4px; min-width: 0 }
+.qa .q { font-weight: 600 }
+.qa .a { color: var(--muted) }
+
+.open { display: grid; gap: 8px }
+.open div { display: flex; gap: 10px; align-items: baseline }
+.tag { font: 500 .7rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 4px 6px; border-radius: 3px; border: 1px solid var(--line); flex: none }
+.tag.next { color: var(--water); border-color: var(--water) }
+.tag.test { color: var(--warn); border-color: var(--warn) }
+
+.scores { display: grid; gap: 10px }
+.score { display: grid; grid-template-columns: 150px 1fr 44px; gap: 12px; align-items: center }
+.score .track { height: 10px; background: var(--line); border-radius: 2px; overflow: hidden }
+.score .fill { height: 100%; background: var(--ok) }
+.score .pct { font: 500 .9rem var(--mono); text-align: right; font-variant-numeric: tabular-nums }
+.score .why { grid-column: 2 / 4; font-size: .85rem; color: var(--muted); margin-top: -6px }
+.score.total { padding-top: 10px; border-top: 1px solid var(--line) }
+.score.total .name { font-weight: 600 }
+@media (max-width: 520px) { .score { grid-template-columns: 1fr 44px } .score .track { grid-column: 1 / 3; grid-row: 2 } .score .why { grid-column: 1 / 3 } }
+
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="band" aria-hidden="true"></div>
+    <p class="eyebrow">Systems spec · quick read</p>
+    <h1>Pointed Dripstone Generator</h1>
+    <p class="pitch">A stone-generator cousin that grows Pointed Dripstone. Four in by hand, water piped in, a shaft in the back.</p>
+    <div class="chips">
+      <span class="chip ready">Ready for development · 95%</span>
+      <span class="chip">Andesite + Wireless Andesite</span>
+      <span class="chip">Stone generator family</span>
+    </div>
+  </header>
+
+  <section>
+    <p class="eyebrow">If you read nothing else</p>
+    <ul class="idiot">
+      <li>Makes Pointed Dripstone inside a block.</li>
+      <li>A hammer knocks each grown tip off.</li>
+      <li>Put four Pointed Dripstone in by hand.</li>
+      <li>Pipe water into a side.</li>
+      <li>Turn a shaft into the back.</li>
+      <li>All four grow, then the hammer knocks each off.</li>
+      <li>One every 5 seconds at 256 RPM.</li>
+      <li>Uses 100 mB of water each.</li>
+      <li>Holds 64; full, it stops.</li>
+      <li>Funnels or the Wrench screen take them out.</li>
+      <li>No stress when stopped; the Wrench screen returns the seed.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>How it works</h2>
+    <div class="centre">
+      <svg class="faces" viewBox="0 0 340 300" role="img" aria-labelledby="facesT">
+        <title id="facesT">Seen from above: window at the front, shaft at the back, water into the left and right sides, output from any side</title>
+        <rect x="90" y="70" width="160" height="160" rx="6" fill="var(--andesite)" stroke="var(--andesite-hi)" stroke-width="3"/>
+        <rect x="110" y="90" width="120" height="120" rx="3" fill="var(--surface)" opacity=".18"/>
+        <!-- four stalactites, from above -->
+        <g fill="var(--drip)">
+          <polygon points="140,120 152,120 146,140"/><polygon points="188,120 200,120 194,140"/>
+          <polygon points="140,160 152,160 146,180"/><polygon points="188,160 200,160 194,180"/>
+        </g>
+        <circle cx="170" cy="150" r="6" fill="var(--water)"/>
+        <!-- front window -->
+        <rect x="120" y="226" width="100" height="8" rx="2" fill="var(--water-soft)" stroke="var(--water)"/>
+        <text x="170" y="256" text-anchor="middle">Front: window</text>
+        <text x="170" y="272" text-anchor="middle" class="lbl">faces you when placed</text>
+        <!-- back shaft -->
+        <rect x="160" y="40" width="20" height="34" fill="var(--andesite-hi)"/>
+        <text x="170" y="26" text-anchor="middle">Back: shaft (SU)</text>
+        <!-- water sides -->
+        <path d="M30 150 H86" stroke="var(--water)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M254 150 H310" stroke="var(--water)" stroke-width="6" stroke-linecap="round"/>
+        <text x="40" y="136" text-anchor="middle">Water</text>
+        <text x="300" y="136" text-anchor="middle">Water</text>
+        <text x="170" y="296" text-anchor="middle" class="lbl">Output: funnels from any side</text>
+      </svg>
+      <ol class="loop">
+        <li><span class="n">1</span><div><b>Seed it</b><span>Right-click with Pointed Dripstone. It takes four and keeps them.</span></div></li>
+        <li><span class="n">2</span><div><b>Water it</b><span>Pipe water into any side but the front and back. Tank: 1,000 mB.</span></div></li>
+        <li><span class="n">3</span><div><b>Turn it</b><span>A shaft into the back. Faster rotation grows faster.</span></div></li>
+        <li><span class="n">4</span><div><b>It grows</b><span>All four tips grow together, taking 400 mB (100 a piece) as they start.</span></div></li>
+        <li><span class="n">5</span><div><b>Knock!</b><span>The hammer goes round the four, cracking each tip off: one drops into the store on every strike. Automatic: you never harvest.</span></div></li>
+        <li><span class="n">6</span><div><b>Take them</b><span>Funnels, hoppers, chutes or arms, or by hand in the Wrench screen.</span></div></li>
+        <li class="again"><span class="n">↻</span><div><b>Keep it fed</b><span>Water, rotation and an emptied output keep it running.</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>The numbers</h2>
+    <div class="strip">
+      <div class="stat"><span class="v">5 s</span><span class="k">per piece at 256 RPM (four every 20 s)</span></div>
+      <div class="stat"><span class="v">100 mB</span><span class="k">water per piece</span></div>
+      <div class="stat"><span class="v">1,000 mB</span><span class="k">water tank</span></div>
+      <div class="stat"><span class="v">64</span><span class="k">held, then it stops</span></div>
+      <div class="stat"><span class="v">4 SU/RPM</span><span class="k">stress, 0 when idle</span></div>
+    </div>
+    <p class="sub">Pointed Dripstone an hour, by shaft speed. A cycle of four is 400 × 256 ÷ RPM ticks; the hammer's round of knocks is a fixed 8 s of it. All of these are config values.</p>
+    <div class="pace" role="list">
+      <div class="bar" role="listitem"><span>256 RPM</span><span class="track"><span class="fill" style="display:block;width:100%"></span></span><span class="r">720/h</span></div>
+      <div class="bar" role="listitem"><span>128 RPM</span><span class="track"><span class="fill" style="display:block;width:50%"></span></span><span class="r">360/h</span></div>
+      <div class="bar" role="listitem"><span>64 RPM</span><span class="track"><span class="fill" style="display:block;width:25%"></span></span><span class="r">180/h</span></div>
+      <div class="bar" role="listitem"><span>32 RPM</span><span class="track"><span class="fill" style="display:block;width:12.5%"></span></span><span class="r">90/h</span></div>
+      <div class="bar vanilla" role="listitem"><span>Vanilla farm</span><span class="track"><span class="fill" style="display:block;width:8.3%"></span></span><span class="r">~60/h</span></div>
+    </div>
+    <p class="sub">A big 100-column vanilla farm makes about 60 an hour. Like the cages and tanks, it's judged against the best vanilla farm, and its pace is limited by SU and water, not by cutting what it makes.</p>
+  </section>
+
+  <section>
+    <h2>Rules</h2>
+    <div class="pairs">
+      <div class="col">
+        <h3>Does</h3>
+        <ul>
+          <li>Keep the four seed Pointed Dripstone, and drop them when broken.</li>
+          <li>Take water from pipes, Fluid Lines or a Wellspring.</li>
+          <li>Let funnels pull its output from any side.</li>
+          <li>Hand out its output and seed in the Wrench screen, with quick moves.</li>
+          <li>Switch off with redstone, or a Redstone Link (Wireless).</li>
+          <li>Show how full it is on a comparator.</li>
+          <li>Work in every dimension, the Nether included.</li>
+        </ul>
+      </div>
+      <div class="col no">
+        <h3>Doesn't</h3>
+        <ul>
+          <li>Take the seed from funnels or Deployers: hand only.</li>
+          <li>Accept lava or any fluid but water.</li>
+          <li>Take water through the front or the back.</li>
+          <li>Put stress on the network while it's stopped.</li>
+          <li>Grow while riding a contraption (it keeps everything).</li>
+          <li>Come in a Brass tier.</li>
+          <li>Glow: there's no lava inside.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What if…?</h2>
+    <div class="whatif">
+      <div class="qa"><span class="q">…it's broken mid-growth?</span><span class="a">That growth is lost. The seed and the output drop; the water is lost.</span></div>
+      <div class="qa"><span class="q">…the water runs out mid-growth?</span><span class="a">The piece already paid for finishes. The next one waits for water.</span></div>
+      <div class="qa"><span class="q">…it has only three seeds?</span><span class="a">It waits, showing "Needs 4 Pointed Dripstone".</span></div>
+      <div class="qa"><span class="q">…someone pipes in lava?</span><span class="a">Refused. Water only.</span></div>
+      <div class="qa"><span class="q">…it's overstressed or stopped?</span><span class="a">It idles at no stress, and a half-grown piece waits.</span></div>
+      <div class="qa"><span class="q">…its chunk unloads?</span><span class="a">Nothing happens until it loads again. No catch-up.</span></div>
+      <div class="qa"><span class="q">…a contraption carries it?</span><span class="a">It keeps its seed, water, output and growth, but doesn't grow while moving.</span></div>
+      <div class="qa"><span class="q">…a Deployer offers it Pointed Dripstone?</span><span class="a">Nothing: the seed is hand only and the output takes no inserts.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What's next</h2>
+    <div class="open">
+      <div><span class="tag next">Done</span><span>Built and in game: all four tips grow together, then the hammer goes round knocking each off (approved in Blockbench).</span></div>
+      <div><span class="tag next">Next</span><span>Names approved: advancement "Biggest Drip", Ponder "Drip, Drip, Drop".</span></div>
+      <div><span class="tag test">Play-test</span><span>The 5-second pace in a real world. It's a config value, so it's easy to tune.</span></div>
+    </div>
+    <p class="sub">No open design questions.</p>
+  </section>
+
+  <section>
+    <h2>Completeness</h2>
+    <div class="scores">
+      <div class="score"><span class="name">Gameplay</span><span class="track"><span class="fill" style="display:block;width:100%"></span></span><span class="pct">100%</span><span class="why">Loop, seed, water, pace, output and screen all decided.</span></div>
+      <div class="score"><span class="name">World integration</span><span class="track"><span class="fill" style="display:block;width:100%"></span></span><span class="pct">100%</span><span class="why">Dimensions, chunk unloading and multiplayer covered; sealed, so no weather.</span></div>
+      <div class="score"><span class="name">Balance</span><span class="track"><span class="fill" style="display:block;width:95%"></span></span><span class="pct">95%</span><span class="why">Judged against vanilla farms; the pace hasn't been play-tested yet.</span></div>
+      <div class="score"><span class="name">Progression</span><span class="track"><span class="fill" style="display:block;width:100%"></span></span><span class="pct">100%</span><span class="why">Andesite age; unlocks Drip Templates and Dripstone Blocks.</span></div>
+      <div class="score"><span class="name">Automation</span><span class="track"><span class="fill" style="display:block;width:100%"></span></span><span class="pct">100%</span><span class="why">Every step automates except seeding, by decision.</span></div>
+      <div class="score"><span class="name">Edge cases</span><span class="track"><span class="fill" style="display:block;width:95%"></span></span><span class="pct">95%</span><span class="why">Covered on paper; what the window shows when idle or dry comes with the art brief.</span></div>
+      <div class="score total"><span class="name">Overall readiness</span><span class="track"><span class="fill" style="display:block;width:95%"></span></span><span class="pct">95%</span><span class="why">The lowest area sets it. Development can start; the art brief runs alongside.</span></div>
+    </div>
+  </section>
+
+  <footer>Full spec: <code>design/specs/pointed-dripstone-generator.md</code> · ComedyMonkey's Create Addons</footer>
+</div>

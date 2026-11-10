@@ -127,6 +127,8 @@ public final class ModItems {
 	public static final DeferredItem<BlockItem> STONE_INFUSER = ITEMS.registerSimpleBlockItem(ModBlocks.STONE_INFUSER);
 	public static final DeferredItem<BlockItem> TUFF_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.TUFF_GENERATOR);
 	public static final DeferredItem<BlockItem> WIRELESS_TUFF_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.WIRELESS_TUFF_GENERATOR);
+	public static final DeferredItem<BlockItem> POINTED_DRIPSTONE_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.POINTED_DRIPSTONE_GENERATOR);
+	public static final DeferredItem<BlockItem> WIRELESS_POINTED_DRIPSTONE_GENERATOR = ITEMS.registerSimpleBlockItem(ModBlocks.WIRELESS_POINTED_DRIPSTONE_GENERATOR);
 	public static final DeferredItem<BlockItem> MAGMA_ENGINE = ITEMS.registerSimpleBlockItem(ModBlocks.MAGMA_ENGINE);
 	public static final DeferredItem<BlockItem> SUPERCHARGED_MAGMA_ENGINE =
 		ITEMS.registerSimpleBlockItem(ModBlocks.SUPERCHARGED_MAGMA_ENGINE);

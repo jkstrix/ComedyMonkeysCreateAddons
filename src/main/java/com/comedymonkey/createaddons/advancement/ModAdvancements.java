@@ -85,6 +85,8 @@ public final class ModAdvancements {
 	public static final int TRADE_MASTER_STOCKED_GAUGES = 8;
 	public static final String INTAKE_FITTED = "intake_fitted";
 	public static final String LINE_ENCASED = "line_encased";
+	/** A Pointed Dripstone Generator knocked off a Pointed Dripstone it grew ("Biggest Drip"). */
+	public static final String DRIPSTONE_GROWN = "dripstone_grown";
 	/** Value: the span's length in blocks. */
 	public static final String SPAN_HUNG = "span_hung";
 	/** A Clockwork Juggernaut woken by the ritual ("Wound Up", D41). */

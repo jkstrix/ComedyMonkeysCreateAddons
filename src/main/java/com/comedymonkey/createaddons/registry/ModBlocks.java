@@ -139,6 +139,14 @@ public final class ModBlocks {
 	public static final DeferredBlock<CobbleGeneratorBlock> TUFF_GENERATOR = andesiteGenerator("tuff_generator", GeneratorProduct.TUFF, false);
 	public static final DeferredBlock<CobbleGeneratorBlock> WIRELESS_TUFF_GENERATOR = andesiteGenerator("wireless_tuff_generator", GeneratorProduct.TUFF, true);
 
+	// Pointed Dripstone Generators: the stone generators' Andesite box, with no glow (there's no lava inside)
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.dripstone.PointedDripstoneGeneratorBlock> POINTED_DRIPSTONE_GENERATOR =
+		BLOCKS.register("pointed_dripstone_generator", () -> new com.comedymonkey.createaddons.content.dripstone.PointedDripstoneGeneratorBlock(
+			BlockBehaviour.Properties.ofFullCopy(ANDESITE_COBBLE_GENERATOR.get()).lightLevel(state -> 0), false));
+	public static final DeferredBlock<com.comedymonkey.createaddons.content.dripstone.PointedDripstoneGeneratorBlock> WIRELESS_POINTED_DRIPSTONE_GENERATOR =
+		BLOCKS.register("wireless_pointed_dripstone_generator", () -> new com.comedymonkey.createaddons.content.dripstone.PointedDripstoneGeneratorBlock(
+			BlockBehaviour.Properties.ofFullCopy(ANDESITE_COBBLE_GENERATOR.get()).lightLevel(state -> 0), true));
+
 	/** Every generator: Andesite, Brass and their wireless versions of each product, and the two Tuff ones. */
 	public static List<DeferredBlock<CobbleGeneratorBlock>> generators() {
 		return List.of(ANDESITE_COBBLE_GENERATOR, BRASS_COBBLE_GENERATOR, WIRELESS_ANDESITE_COBBLE_GENERATOR,

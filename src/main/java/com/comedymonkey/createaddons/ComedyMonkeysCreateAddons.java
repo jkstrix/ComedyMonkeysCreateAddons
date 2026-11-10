@@ -104,6 +104,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.TubeGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LineGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.CopperWashingGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.DripstoneGeneratorGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LightGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.SchematicannonGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.BatteryGameTests::register);
@@ -207,6 +208,12 @@ public class ComedyMonkeysCreateAddons {
 		// Cobblestone out of the generators, from any side
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.COBBLE_GENERATOR.get(),
 			(be, side) -> be.getOutputHandler());
+		// Pointed Dripstone out from any side; water in from the sides (not the window or the shaft)
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.POINTED_DRIPSTONE_GENERATOR.get(),
+			(be, side) -> be.getOutputHandler());
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.POINTED_DRIPSTONE_GENERATOR.get(),
+			(be, side) -> side == null || side.getAxis() != be.getBlockState()
+				.getValue(com.comedymonkey.createaddons.content.dripstone.PointedDripstoneGeneratorBlock.FACING).getAxis() ? be.getWaterHandler() : null);
 		// The harvest out from any side; a seed or sapling in, while it's empty
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.AUTO_HARVESTER.get(),
 			(be, side) -> be.getAutomationHandler());
@@ -385,6 +392,10 @@ public class ComedyMonkeysCreateAddons {
 				BlockStressValues.IMPACTS.register(block, block.perCycle() > 1
 					? CMConfig.SERVER::brassCobbleGenStressImpact : CMConfig.SERVER::andesiteCobbleGenStressImpact);
 				registerCreateTooltip(block.asItem());
+			}
+			for (var generator : java.util.List.of(ModBlocks.POINTED_DRIPSTONE_GENERATOR, ModBlocks.WIRELESS_POINTED_DRIPSTONE_GENERATOR)) {
+				BlockStressValues.IMPACTS.register(generator.get(), CMConfig.SERVER::dripstoneGeneratorStressImpact);
+				registerCreateTooltip(generator.get().asItem());
 			}
 
 			registerCreateTooltip(ModItems.AUTO_HARVESTER.get());

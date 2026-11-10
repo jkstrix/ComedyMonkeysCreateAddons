@@ -1,5 +1,33 @@
 [
   {
+    "version": "2.8.0",
+    "from": "2.7.1",
+    "date": "2026-11-10",
+    "title": "The Pointed Dripstone Generator",
+    "summary": "A one-block dripstone cave for the stone generator family: the [[pointed-dripstone-generator]] grows four Pointed Dripstone at a time and hammers them off, one every 5 seconds at 256 RPM.",
+    "highlights": [
+      "pointed-dripstone-generator"
+    ],
+    "sections": [
+      {
+        "title": "Pointed Dripstone Generator",
+        "icon": "star",
+        "body": [
+          "A stone generator's box with a little dripstone cave inside. Seed it with four Pointed Dripstone, pipe water into a side and turn a shaft in its back: the four grow their tips together, then a trip hammer goes round, cracking each tip off into the store.",
+          {
+            "list": [
+              "**One every 5 seconds at 256 RPM**, about 720 an hour; slower rotation grows them more slowly.",
+              "**100 mB of water a piece**, from Create pipes, [[fluid-lines|Fluid Lines]] or a [[fluid-wellspring]].",
+              "**Every strike drops one**, with vanilla's dripstone break sound; funnels take them out from any side, or take them by hand in its Wrench screen.",
+              "**Stops with no stress** when full, switched off by redstone, missing a seed or out of water. A Wireless one switches off from anywhere on its frequency.",
+              "Its Ponder scene is \"Drip, Drip, Drop\", and its advancement \"Biggest Drip\"."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "version": "2.7.1",
     "from": "2.7.0",
     "date": "2026-11-10",

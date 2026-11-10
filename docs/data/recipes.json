@@ -4428,6 +4428,58 @@
   ]
  },
  {
+  "id": "comedymonkeysaddons:pointed_dripstone_generator",
+  "type": "crafting_shaped",
+  "machine": "minecraft",
+  "grid": [
+   [
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    },
+    {
+     "item": "create:fluid_pipe",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_alloy",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    },
+    {
+     "item": "create:andesite_casing",
+     "count": 1
+    },
+    {
+     "item": "create:mechanical_drill",
+     "count": 1
+    }
+   ],
+   [
+    {
+     "item": "minecraft:dripstone_block",
+     "count": 1
+    },
+    null,
+    {
+     "item": "minecraft:dripstone_block",
+     "count": 1
+    }
+   ]
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:pointed_dripstone_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
   "id": "comedymonkeysaddons:pressing/netherite_sheet",
   "type": "pressing",
   "machine": "create",
@@ -5888,6 +5940,27 @@
   "outputs": [
    {
     "item": "comedymonkeysaddons:wireless_brass_cobble_generator",
+    "count": 1
+   }
+  ]
+ },
+ {
+  "id": "comedymonkeysaddons:wireless_pointed_dripstone_generator",
+  "type": "crafting_shapeless",
+  "machine": "minecraft",
+  "inputs": [
+   {
+    "item": "comedymonkeysaddons:pointed_dripstone_generator",
+    "count": 1
+   },
+   {
+    "item": "create:transmitter",
+    "count": 1
+   }
+  ],
+  "outputs": [
+   {
+    "item": "comedymonkeysaddons:wireless_pointed_dripstone_generator",
     "count": 1
    }
   ]

@@ -82,6 +82,7 @@ public class CMJeiPlugin implements IModPlugin {
 	public void registerRecipes(IRecipeRegistration registration) {
 		lineInfo(registration);
 		copperWashing(registration);
+		info(registration, "pointed_dripstone_generator", ModItems.POINTED_DRIPSTONE_GENERATOR.get(), ModItems.WIRELESS_POINTED_DRIPSTONE_GENERATOR.get());
 		if (Minecraft.getInstance().level == null)
 			return;
 		registration.addRecipes(CrucibleCategory.TYPE,

@@ -706,7 +706,8 @@
       "tuff-generator",
       "stone-generation",
       "pressure-crucible",
-      "stone-infuser"
+      "stone-infuser",
+      "pointed-dripstone-generator"
     ]
   },
   {
@@ -1309,6 +1310,138 @@
     "related": [
       "stone-infuser",
       "cobblestone-generator",
+      "stone-generation",
+      "pointed-dripstone-generator"
+    ]
+  },
+  {
+    "id": "pointed-dripstone-generator",
+    "name": "Pointed Dripstone Generator",
+    "registry": [
+      "comedymonkeysaddons:pointed_dripstone_generator",
+      "comedymonkeysaddons:wireless_pointed_dripstone_generator"
+    ],
+    "summary": "A one-block dripstone cave: four seed stalactites grow their tips together, then a little hammer knocks each one off, one every 5 seconds at 256 RPM.",
+    "tags": [
+      "stone",
+      "dripstone",
+      "redstone"
+    ],
+    "stage": "early",
+    "requires": [],
+    "teach": {
+      "what": "A stone generator's box with a little dripstone cave inside: water stands on a dripstone ceiling, four Pointed Dripstone hang from it, and a trip hammer on a spindle in the middle. The four grow their tips together, then the hammer goes round, cracking each tip off into the store.",
+      "why": "Vanilla Pointed Dripstone grows painfully slowly, and farms for it are huge. One of these makes about 720 an hour at 256 RPM, for Dripstone Blocks, the Drip Templates of [[fluid-wellspring]] upgrades, or traps.",
+      "when": "Early: it needs Andesite Alloy, 2 Mechanical Drills, Andesite Casing, 2 Dripstone Blocks and a Fluid Pipe, four Pointed Dripstone from a dripstone cave to seed it, and a steady water supply.",
+      "interacts": "Water comes in through any side but the window and the back (the top and bottom too) from Create pipes, [[fluid-lines|Fluid Lines]] or a [[fluid-wellspring]]; funnels, hoppers, chutes and arms take the Pointed Dripstone out from any side.",
+      "mistakes": [
+        "It needs all four seed Pointed Dripstone: right-click it with them. They stay in; the Wrench screen gives them back.",
+        "Water goes in through any side but the window and the back (the top and bottom too), and nothing but water goes in.",
+        "Power it through the back only, and empty it or it stops when it holds a stack."
+      ]
+    },
+    "stats": [
+      {
+        "label": "Stress",
+        "value": "4",
+        "unit": "SU per RPM",
+        "gauge": 0.25
+      },
+      {
+        "label": "Per piece at 256 RPM",
+        "value": "5",
+        "unit": "s"
+      },
+      {
+        "label": "Holds",
+        "value": "64",
+        "unit": "Pointed Dripstone"
+      }
+    ],
+    "specs": [
+      [
+        "Cycle",
+        "Four Pointed Dripstone every 20 s at 256 RPM: 12 s growing, then 8 s of knocking (the knocks take the same time at any speed)"
+      ],
+      [
+        "Water",
+        "100 mB a piece, 400 mB as the four start growing; holds 1,000 mB"
+      ],
+      [
+        "Stress",
+        "4 SU per RPM, none when idle"
+      ],
+      [
+        "Shaft",
+        "Back only"
+      ],
+      [
+        "Seed",
+        "Four Pointed Dripstone, by hand; they stay in"
+      ]
+    ],
+    "power": {
+      "kind": "rotation",
+      "stress": "4 SU per RPM; none when idle",
+      "speed": "Any; four per 400 × 256 ÷ RPM ticks"
+    },
+    "inputs": [
+      "Rotation through the back.",
+      "Water through any side but the window and the back (100 mB a piece).",
+      "Four Pointed Dripstone by hand, once."
+    ],
+    "outputs": [
+      "Pointed Dripstone, pulled from any side by item transport, or by hand in its Wrench screen."
+    ],
+    "throughput": [
+      "About 720 Pointed Dripstone an hour at 256 RPM, 180 at 64 RPM."
+    ],
+    "rules": [
+      "Stops, with no stress, when full, switched off by redstone, missing a seed or out of water.",
+      "Right-click with a Wrench for its screen: the seed, the growth and water gauges, and the store, with quick moves.",
+      "Craft it with a Transmitter (shapeless) for the Wireless one."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "name": "Pointed Dripstone Generator",
+        "registry": [
+          "comedymonkeysaddons:pointed_dripstone_generator"
+        ],
+        "summary": "Four at a time, holds a stack.",
+        "specs": [
+          [
+            "Recipe",
+            "Andesite Alloy, 2 Mechanical Drills, Andesite Casing, 2 Dripstone Blocks, a Fluid Pipe"
+          ]
+        ]
+      },
+      {
+        "id": "wireless",
+        "name": "Wireless Pointed Dripstone Generator",
+        "registry": [
+          "comedymonkeysaddons:wireless_pointed_dripstone_generator"
+        ],
+        "summary": "Switch it off from anywhere on its frequency.",
+        "specs": [
+          [
+            "Recipe",
+            "Pointed Dripstone Generator + a Transmitter"
+          ]
+        ]
+      }
+    ],
+    "tips": [
+      "Every strike of the hammer drops one Pointed Dripstone, with vanilla's own dripstone break sound.",
+      "The Ponder scene is called \"Drip, Drip, Drop\"."
+    ],
+    "facts": [
+      "Its advancement is called \"Biggest Drip\"."
+    ],
+    "related": [
+      "tuff-generator",
+      "cobblestone-generator",
+      "fluid-wellspring",
       "stone-generation"
     ]
   },

@@ -214,6 +214,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.register(ModMenus.ANIMAL_PEN.get(), AnimalPenScreen::new);
 		event.register(ModMenus.MONSTER_CAGE.get(), MonsterCageScreen::new);
 		event.register(ModMenus.FISH_TANK.get(), FishTankScreen::new);
+		event.register(ModMenus.POINTED_DRIPSTONE_GENERATOR.get(), PointedDripstoneGeneratorScreen::new);
 	}
 
 	private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -224,6 +225,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.registerBlockEntityRenderer(ModBlockEntities.UPGRADED_CHEST.get(), UpgradedChestRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.PRESSURE_CRUCIBLE.get(), PressureCrucibleRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.COBBLE_GENERATOR.get(), CobbleGeneratorRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntities.POINTED_DRIPSTONE_GENERATOR.get(), PointedDripstoneGeneratorRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.AUTO_HARVESTER.get(), AutoHarvesterRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.CUCKOO_CLOCK.get(), CuckooClockRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntities.ANIMAL_PEN.get(), AnimalPenRenderer::new);
@@ -281,6 +283,7 @@ public class ComedyMonkeysCreateAddonsClient {
 		event.register(com.comedymonkey.createaddons.client.line.LinePostVisual.SEGMENT);
 		PressureCrucibleRenderer.registerModels(event);
 		CobbleGeneratorRenderer.registerModels(event);
+		PointedDripstoneGeneratorRenderer.registerModels(event);
 		com.comedymonkey.createaddons.client.juggernaut.WindingKeyRenderer.registerModels(event);
 		com.comedymonkey.createaddons.client.juggernaut.SpringEngineRenderer.registerModels(event);
 		com.comedymonkey.createaddons.client.jetpack.JetpackModel.registerModels(event);

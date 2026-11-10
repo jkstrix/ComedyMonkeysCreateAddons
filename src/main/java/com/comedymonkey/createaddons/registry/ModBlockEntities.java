@@ -61,6 +61,12 @@ public final class ModBlockEntities {
 				ModBlocks.generators().stream().map(DeferredBlock::get).toArray(Block[]::new)).build(null));
 
 	@SuppressWarnings("DataFlowIssue")
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.comedymonkey.createaddons.content.dripstone.PointedDripstoneGeneratorBlockEntity>> POINTED_DRIPSTONE_GENERATOR =
+		BLOCK_ENTITY_TYPES.register("pointed_dripstone_generator",
+			() -> BlockEntityType.Builder.of(com.comedymonkey.createaddons.content.dripstone.PointedDripstoneGeneratorBlockEntity::new,
+				ModBlocks.POINTED_DRIPSTONE_GENERATOR.get(), ModBlocks.WIRELESS_POINTED_DRIPSTONE_GENERATOR.get()).build(null));
+
+	@SuppressWarnings("DataFlowIssue")
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AutoHarvesterBlockEntity>> AUTO_HARVESTER =
 		BLOCK_ENTITY_TYPES.register("auto_harvester",
 			() -> BlockEntityType.Builder.of(AutoHarvesterBlockEntity::new, ModBlocks.AUTO_HARVESTER.get()).build(null));

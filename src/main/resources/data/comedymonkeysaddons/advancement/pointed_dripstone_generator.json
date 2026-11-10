@@ -1,0 +1,31 @@
+{
+  "parent": "comedymonkeysaddons:andesite_cobble_generator",
+  "display": {
+    "icon": {
+      "id": "comedymonkeysaddons:pointed_dripstone_generator"
+    },
+    "title": {
+      "translate": "advancements.comedymonkeysaddons.pointed_dripstone_generator"
+    },
+    "description": {
+      "translate": "advancements.comedymonkeysaddons.pointed_dripstone_generator.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "comedymonkeysaddons:action",
+      "conditions": {
+        "action": "dripstone_grown"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}
