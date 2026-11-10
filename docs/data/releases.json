@@ -1,5 +1,42 @@
 [
   {
+    "version": "2.7.1",
+    "from": "2.7.0",
+    "date": "2026-11-10",
+    "title": "Washing copper",
+    "summary": "Bulk washing ages copper a stage at a time. Encased [[fluid-lines|Fluid Lines]] and [[power-lines|Power Lines]] light like the block hiding them, and goggles show hidden lines whole.",
+    "highlights": [],
+    "sections": [
+      {
+        "title": "Bulk washing ages copper",
+        "icon": "drop",
+        "body": [
+          "An Encased Fan through water now ages copper one stage a pass: Copper to Exposed, Weathered and Oxidized, where it stops. For the next stage, the item has to leave the fan's stream and come back (picked up, or sent round through a funnel or chute), so it's easy to stop at the shade you want.",
+          {
+            "list": [
+              "**Any copper that weathers**, from any mod: blocks, cut copper, stairs, slabs, doors, trapdoors, bulbs, grates, and Create's shingles and tiles.",
+              "**Waxed copper is left alone:** the wax keeps it as it is, as it does in the rain.",
+              "**The stack keeps its count and name.** Washing recipes still come first.",
+              "**Every stage is listed** on Create's Bulk Washing page in JEI."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Fixed",
+        "icon": "check",
+        "body": [
+          {
+            "list": [
+              "**Encased lines didn't take the light.** A [[fluid-lines|Fluid Line]] or [[power-lines|Power Line]] hidden in a block let light and daylight through it, and had no shading in its corners. It now lights exactly like the block hiding it. Lines already encased fix themselves when their chunk loads.",
+              "**Goggles showed hidden lines as stray coloured squares.** Hidden lines now show whole, as a faint cyan outline through the blocks. It appears while you wear Engineer's Goggles **and hold a Fluid Line or Power Line**, so it's there while you work on your lines and out of the way the rest of the time."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "version": "2.7.0",
     "from": "2.6.4",
     "date": "2026-11-06",

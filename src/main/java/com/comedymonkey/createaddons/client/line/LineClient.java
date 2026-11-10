@@ -16,7 +16,6 @@ import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -99,17 +98,29 @@ public final class LineClient {
 		}
 	}
 
-	/** Wearing Engineer's Goggles, every encased line nearby shows as a faint cyan outline through its encasing. */
+	/** A Fluid Line or Power Line in either hand. */
+	static boolean holdingLine(net.minecraft.world.entity.player.Player player) {
+		for (ItemStack stack : new ItemStack[] {player.getMainHandItem(), player.getOffhandItem()})
+			if (stack.is(ModItems.COPPER_FLUID_LINE.get()) || stack.is(ModItems.BRASS_FLUID_LINE.get()) || stack.is(ModItems.COPPER_POWER_LINE.get())
+				|| stack.is(ModItems.BRASS_POWER_LINE.get()))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Wearing Engineer's Goggles and holding a line, every encased line nearby shows whole, as a faint cyan outline seen
+	 * through its encasing and anything in front of it.
+	 */
 	public static void drawHiddenLines(RenderLevelStageEvent event) {
 		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS)
 			return;
 		Minecraft mc = Minecraft.getInstance();
-		if (mc.level == null || mc.player == null || !GogglesItem.isWearingGoggles(mc.player))
+		if (mc.level == null || mc.player == null || !GogglesItem.isWearingGoggles(mc.player) || !holdingLine(mc.player))
 			return;
 		Vec3 cam = event.getCamera().getPosition();
 		BlockPos centre = mc.player.blockPosition();
 		MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
-		VertexConsumer lines = buffers.getBuffer(RenderType.lines());
+		VertexConsumer lines = buffers.getBuffer(XrayLines.TYPE);
 		PoseStack ms = event.getPoseStack();
 		int cx = centre.getX() >> 4, cz = centre.getZ() >> 4;
 		for (int x = cx - 1; x <= cx + 1; x++)
@@ -127,9 +138,10 @@ public final class LineClient {
 						continue;
 					VoxelShape shape = block.lineShape(be.getBlockState(), mc.level, pos);
 					LevelRenderer.renderVoxelShape(ms, lines, shape, pos.getX() - cam.x, pos.getY() - cam.y, pos.getZ() - cam.z,
-						0x6f / 255f, 0xb7 / 255f, 0xc4 / 255f, 0.5f, true);
+						// one colour, the whole line's outline (true would colour each box of the shape differently)
+						0x6f / 255f, 0xb7 / 255f, 0xc4 / 255f, 0.5f, false);
 				}
 			}
-		buffers.endBatch(RenderType.lines());
+		buffers.endBatch(XrayLines.TYPE);
 	}
 }

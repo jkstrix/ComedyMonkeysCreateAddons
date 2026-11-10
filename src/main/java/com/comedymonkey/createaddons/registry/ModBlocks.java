@@ -19,6 +19,7 @@ import com.comedymonkey.createaddons.content.electric.BatteryBlock;
 import com.comedymonkey.createaddons.content.electric.LavaGeneratorBlock;
 import com.comedymonkey.createaddons.content.incinerator.IncineratorBlock;
 import com.comedymonkey.createaddons.content.line.FluidLineBlock;
+import com.comedymonkey.createaddons.content.line.LineBlock;
 import com.comedymonkey.createaddons.content.line.LinePostBlock;
 import com.comedymonkey.createaddons.content.line.PowerLineBlock;
 import com.comedymonkey.createaddons.content.line.LineTier;
@@ -276,11 +277,12 @@ public final class ModBlocks {
 			.mapColor(color)
 			.strength(0.3f)
 			.sound(SoundType.WOOL)
-			.noOcclusion()
-			.noCollission()
+			// a bare wire hides nothing and casts no shadow; encased, it's solid (see LineBlock.ENCASED). Nothing walks
+			// into a bare wire: PowerLineBlock gives it no collision shape (not noCollission(), which would also stop an
+			// encased wire occluding)
 			.isRedstoneConductor((state, level, pos) -> false)
 			.isSuffocating((state, level, pos) -> false)
-			.isViewBlocking((state, level, pos) -> false);
+			.isViewBlocking((state, level, pos) -> LineBlock.encased(state));
 	}
 
 	private static BlockBehaviour.Properties lineProperties(MapColor color) {
@@ -288,11 +290,11 @@ public final class ModBlocks {
 			.mapColor(color)
 			.strength(1.0f, 3.0f)
 			.sound(SoundType.COPPER)
-			// a thin pipe through the block: its neighbours' faces show round it
-			.noOcclusion()
+			// a thin pipe through the block: its neighbours' faces show round it, and light passes; encased, it's solid
+			// (see LineBlock.ENCASED)
 			.isRedstoneConductor((state, level, pos) -> false)
 			.isSuffocating((state, level, pos) -> false)
-			.isViewBlocking((state, level, pos) -> false);
+			.isViewBlocking((state, level, pos) -> LineBlock.encased(state));
 	}
 
 	/** Not an item: just the look of a Pipez Cover with no block on it yet. */

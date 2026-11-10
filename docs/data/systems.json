@@ -426,7 +426,7 @@
         "title": "Hiding lines",
         "body": [
           "Right-click any line with a plain, solid full block (stone, planks, casing; not glass or anything with a block entity) to encase it. The line works exactly as before, fittings and all. The block is used up from your hand, and sneak + Wrench gives it back.",
-          "With Engineer's Goggles on, hidden lines within 16 blocks show as a faint outline, and the Wrench reaches the hidden fitting first.",
+          "Wear Engineer's Goggles and hold a Fluid Line or Power Line, and hidden lines within 16 blocks show whole, as a faint outline through the blocks. With goggles on, the Wrench reaches the hidden fitting first.",
           {
             "heading": "Through a wall"
           },

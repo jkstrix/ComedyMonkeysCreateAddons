@@ -100,7 +100,7 @@ public final class LineScenes {
 		scene.world().modifyBlockEntityNBT(util.select().position(mid), FluidLineBlockEntity.class,
 			nbt -> nbt.put("Encasing", NbtUtils.writeBlockState(Blocks.STONE_BRICKS.defaultBlockState())), true);
 		scene.overlay().showText(100)
-			.text("Right-click a line with any full block to encase it. It keeps working, and Engineer's Goggles show where it runs")
+			.text("Right-click a line with any full block to encase it. It keeps working. Wear Engineer's Goggles and hold a line to see where it runs")
 			.pointAt(util.vector().topOf(mid))
 			.placeNearTarget()
 			.attachKeyFrame();

@@ -103,6 +103,7 @@ public class ComedyMonkeysCreateAddons {
 		modBus.addListener(com.comedymonkey.createaddons.gametest.DynamoGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.TubeGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LineGameTests::register);
+		modBus.addListener(com.comedymonkey.createaddons.gametest.CopperWashingGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.LightGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.SchematicannonGameTests::register);
 		modBus.addListener(com.comedymonkey.createaddons.gametest.BatteryGameTests::register);

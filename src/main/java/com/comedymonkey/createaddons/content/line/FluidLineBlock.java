@@ -65,7 +65,7 @@ public final class FluidLineBlock extends BaseEntityBlock implements IWrenchable
 	public FluidLineBlock(LineTier tier, Properties properties) {
 		super(properties);
 		this.tier = tier;
-		BlockState state = stateDefinition.any().setValue(HUB, true).setValue(WATERLOGGED, false);
+		BlockState state = stateDefinition.any().setValue(HUB, true).setValue(WATERLOGGED, false).setValue(ENCASED, false);
 		for (EnumProperty<LineSide> side : SIDES.values())
 			state = state.setValue(side, LineSide.NONE);
 		registerDefaultState(state);
@@ -83,7 +83,7 @@ public final class FluidLineBlock extends BaseEntityBlock implements IWrenchable
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		SIDES.values().forEach(builder::add);
-		builder.add(HUB, WATERLOGGED);
+		builder.add(HUB, WATERLOGGED, ENCASED);
 	}
 
 	public static LineSide side(BlockState state, Direction d) {
@@ -207,9 +207,24 @@ public final class FluidLineBlock extends BaseEntityBlock implements IWrenchable
 
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		if (level.getBlockEntity(pos) instanceof LineBlockEntity be && be.encasing() != null)
+		if (LineBlock.encased(state) || level.getBlockEntity(pos) instanceof LineBlockEntity be && be.encasing() != null)
 			return Shapes.block();
 		return shapes.computeIfAbsent(state, FluidLineBlock::makeShape);
+	}
+
+	@Override
+	protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return LineBlock.occlusionShape(state);
+	}
+
+	@Override
+	protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+		return !LineBlock.encased(state) && super.propagatesSkylightDown(state, level, pos);
+	}
+
+	@Override
+	protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+		return LineBlock.shadeBrightness(state);
 	}
 
 	@Override
@@ -359,6 +374,8 @@ public final class FluidLineBlock extends BaseEntityBlock implements IWrenchable
 
 	@Override
 	protected void tick(BlockState state, ServerLevel level, BlockPos pos, net.minecraft.util.RandomSource random) {
+		if (level.getBlockEntity(pos) instanceof LineBlockEntity be)
+			be.syncEncased();
 		refresh(level, pos);
 	}
 

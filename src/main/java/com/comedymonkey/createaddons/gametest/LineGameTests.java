@@ -631,6 +631,66 @@ public final class LineGameTests {
 		});
 	}
 
+	/** Whether the line at {@code pos} lights as a solid block: blocks light and sky, shades for ambient occlusion. */
+	private static void checkLightsSolid(GameTestHelper helper, BlockPos pos, boolean solid, String what) {
+		var level = helper.getLevel();
+		BlockPos at = helper.absolutePos(pos);
+		var state = level.getBlockState(at);
+		if ((state.getLightBlock(level, at) == 15) != solid)
+			helper.fail(what + " blocks " + state.getLightBlock(level, at) + " light");
+		if (state.propagatesSkylightDown(level, at) == solid)
+			helper.fail(what + (solid ? " lets the sky through" : " shuts the sky out"));
+		if ((state.getShadeBrightness(level, at) < 1f) != solid)
+			helper.fail(what + (solid ? " casts no ambient occlusion" : " casts ambient occlusion"));
+		if (state.isViewBlocking(level, at) != solid || state.isSolidRender(level, at) != solid)
+			helper.fail(what + (solid ? " doesn't count as solid for lighting" : " counts as solid for lighting"));
+	}
+
+	/**
+	 * An encased line, Fluid or Power, lights as the block it's encased in: it blocks light and sky and shades its
+	 * corners, as the casing would; the casing off, it's a bare line again that light passes.
+	 */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void encasedLinesLightAsTheirCasing(GameTestHelper helper) {
+		BlockPos pipe = new BlockPos(1, 2, 1), cable = new BlockPos(3, 2, 1);
+		helper.setBlock(pipe, ModBlocks.COPPER_FLUID_LINE.get().defaultBlockState());
+		helper.setBlock(cable.below(), Blocks.STONE);
+		wire(helper, ModBlocks.BRASS_POWER_LINE.get(), cable, Direction.DOWN);
+		checkLightsSolid(helper, pipe, false, "a bare Fluid Line");
+		checkLightsSolid(helper, cable, false, "a bare Power Line");
+		for (BlockPos p : new BlockPos[] {pipe, cable}) {
+			if (!(helper.getBlockEntity(p) instanceof LineBlockEntity be))
+				throw new IllegalStateException("no line at " + p);
+			be.setEncasing(Blocks.STONE_BRICKS.defaultBlockState());
+		}
+		checkLightsSolid(helper, pipe, true, "an encased Fluid Line");
+		checkLightsSolid(helper, cable, true, "an encased Power Line");
+		for (BlockPos p : new BlockPos[] {pipe, cable})
+			((LineBlockEntity) helper.getBlockEntity(p)).setEncasing(null);
+		checkLightsSolid(helper, pipe, false, "a Fluid Line with its casing off");
+		checkLightsSolid(helper, cable, false, "a Power Line with its casing off");
+		helper.succeed();
+	}
+
+	/** A line saved encased before encasing was part of its block state is put in step when it next ticks. */
+	@GameTest(template = COURSE, timeoutTicks = 20)
+	public static void encasedLineFromAnOldSaveLightsSolid(GameTestHelper helper) {
+		BlockPos pipe = new BlockPos(1, 2, 1);
+		helper.setBlock(pipe, ModBlocks.COPPER_FLUID_LINE.get().defaultBlockState());
+		LineBlockEntity be = line(helper, pipe);
+		be.setEncasing(Blocks.STONE_BRICKS.defaultBlockState());
+		// as an old save loads: the encasing in the block entity, the block state not encased
+		helper.getLevel().setBlock(helper.absolutePos(pipe),
+			helper.getBlockState(pipe).setValue(com.comedymonkey.createaddons.content.line.LineBlock.ENCASED, false), Block.UPDATE_CLIENTS);
+		if (line(helper, pipe).encasing() == null)
+			helper.fail("the block entity lost its encasing");
+		be.onLoad();
+		helper.runAtTickTime(5, () -> {
+			checkLightsSolid(helper, pipe, true, "an encased Fluid Line from an old save");
+			helper.succeed();
+		});
+	}
+
 	// ---------- Power Lines ----------
 
 	/** One block of wire lying on {@code face}. */

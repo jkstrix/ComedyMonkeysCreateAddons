@@ -361,6 +361,21 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 		encasing = state;
 		settingChanged();
 		rerender();
+		syncEncased();
+	}
+
+	/** Whether the block state says encased (see {@link LineBlock#ENCASED}) when this has an encasing, or not when it hasn't. */
+	boolean encasedInStep() {
+		BlockState state = getBlockState();
+		return !state.hasProperty(LineBlock.ENCASED) || state.getValue(LineBlock.ENCASED) == (encasing != null);
+	}
+
+	/** Puts the block state in step with the encasing, so the line lights as the block it's encased in, or as a bare line. */
+	public void syncEncased() {
+		Level here = level;
+		if (here == null || here.isClientSide || encasedInStep())
+			return;
+		here.setBlock(worldPosition, getBlockState().setValue(LineBlock.ENCASED, encasing != null), Block.UPDATE_ALL);
 	}
 
 	/** Set by the network each tick; sent to clients only when it moves noticeably (or now and then), for the needle. */
@@ -604,7 +619,8 @@ public abstract class LineBlockEntity extends BlockEntity implements IHaveGoggle
 		super.onLoad();
 		if (level instanceof ServerLevel server) {
 			networkLoaded(server);
-			if (staleJoins) {
+			// encased before encasing was part of the block state: put in step next tick
+			if (staleJoins || !encasedInStep()) {
 				staleJoins = false;
 				setChanged();
 				server.scheduleTick(worldPosition, getBlockState().getBlock(), 1);

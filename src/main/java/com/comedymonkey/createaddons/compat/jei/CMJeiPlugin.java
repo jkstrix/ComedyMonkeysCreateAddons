@@ -54,9 +54,34 @@ public class CMJeiPlugin implements IModPlugin {
 				new net.minecraft.world.item.ItemStack(com.comedymonkey.createaddons.registry.ModItems.FULL_PIPEZ_COVER.get())));
 	}
 
+	/** Create's Bulk Washing page. */
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private static final mezz.jei.api.recipe.RecipeType<net.minecraft.world.item.crafting.RecipeHolder<com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe>> FAN_WASHING =
+		new mezz.jei.api.recipe.RecipeType(ResourceLocation.fromNamespaceAndPath("create", "fan_washing"), net.minecraft.world.item.crafting.RecipeHolder.class);
+
+	/**
+	 * Washing ages copper a stage (see CopperWashing): done in code, for any mod's copper, so its stages are shown on
+	 * Create's Bulk Washing page as recipes made here.
+	 */
+	private static void copperWashing(IRecipeRegistration registration) {
+		java.util.List<net.minecraft.world.item.crafting.RecipeHolder<com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe>> recipes = new java.util.ArrayList<>();
+		for (var stage : com.comedymonkey.createaddons.content.CopperWashing.stages()) {
+			ResourceLocation from = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stage.getKey());
+			ResourceLocation id = ComedyMonkeysCreateAddons.asResource("washing/copper/" + from.getNamespace() + "/" + from.getPath());
+			recipes.add(new net.minecraft.world.item.crafting.RecipeHolder<>(id,
+				new com.simibubi.create.content.processing.recipe.StandardProcessingRecipe.Builder<>(
+					com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe::new, id)
+					.require(stage.getKey())
+					.output(stage.getValue())
+					.build()));
+		}
+		registration.addRecipes(FAN_WASHING, recipes);
+	}
+
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
 		lineInfo(registration);
+		copperWashing(registration);
 		if (Minecraft.getInstance().level == null)
 			return;
 		registration.addRecipes(CrucibleCategory.TYPE,

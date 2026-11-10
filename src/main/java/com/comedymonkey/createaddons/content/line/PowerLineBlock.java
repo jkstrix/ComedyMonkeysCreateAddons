@@ -63,7 +63,7 @@ public final class PowerLineBlock extends BaseEntityBlock implements IWrenchable
 	public PowerLineBlock(LineTier tier, Properties properties) {
 		super(properties);
 		this.tier = tier;
-		BlockState state = stateDefinition.any().setValue(WATERLOGGED, false);
+		BlockState state = stateDefinition.any().setValue(WATERLOGGED, false).setValue(ENCASED, false);
 		for (BooleanProperty p : FACES.values())
 			state = state.setValue(p, false);
 		registerDefaultState(state);
@@ -81,7 +81,7 @@ public final class PowerLineBlock extends BaseEntityBlock implements IWrenchable
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		FACES.values().forEach(builder::add);
-		builder.add(WATERLOGGED);
+		builder.add(WATERLOGGED, ENCASED);
 	}
 
 	public static boolean hasFace(BlockState state, Direction face) {
@@ -252,8 +252,10 @@ public final class PowerLineBlock extends BaseEntityBlock implements IWrenchable
 	/** A wire whose data was reloaded (see LineBlockEntity) works its links out again. */
 	@Override
 	protected void tick(BlockState state, ServerLevel level, BlockPos pos, net.minecraft.util.RandomSource random) {
-		if (level.getBlockEntity(pos) instanceof PowerLineBlockEntity be)
+		if (level.getBlockEntity(pos) instanceof PowerLineBlockEntity be) {
+			be.syncEncased();
 			be.relink();
+		}
 	}
 
 	@Override
@@ -349,6 +351,8 @@ public final class PowerLineBlock extends BaseEntityBlock implements IWrenchable
 
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		if (LineBlock.encased(state))
+			return Shapes.block();
 		if (level.getBlockEntity(pos) instanceof PowerLineBlockEntity be)
 			return be.encasing() != null ? Shapes.block() : be.wireShape();
 		VoxelShape out = Shapes.empty();
@@ -360,7 +364,22 @@ public final class PowerLineBlock extends BaseEntityBlock implements IWrenchable
 
 	@Override
 	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return level.getBlockEntity(pos) instanceof LineBlockEntity be && be.encasing() != null ? Shapes.block() : Shapes.empty();
+		return LineBlock.encased(state) || level.getBlockEntity(pos) instanceof LineBlockEntity be && be.encasing() != null ? Shapes.block() : Shapes.empty();
+	}
+
+	@Override
+	protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return LineBlock.occlusionShape(state);
+	}
+
+	@Override
+	protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+		return !LineBlock.encased(state) && super.propagatesSkylightDown(state, level, pos);
+	}
+
+	@Override
+	protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+		return LineBlock.shadeBrightness(state);
 	}
 
 	@Override

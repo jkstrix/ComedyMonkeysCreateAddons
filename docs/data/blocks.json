@@ -419,7 +419,7 @@
       "Without a [[fluid-splitter]], the line shares **evenly** between the ends that can take more.",
       "One fluid per line at a time. If two could flow, the first Intake in turn wins that tick; set each Intake's filter, or use a [[filter]], to keep fluids apart.",
       "The window shows the fluid creeping out from the Intake (a block every 8 ticks on copper, every 3 on brass) and draining back when the supply stops. That's only the look: the line still stores nothing, so breaking it never spills or duplicates fluid.",
-      "**Encase** a line by right-clicking it with any plain, solid full block (not glass or anything with a block entity). It keeps working; sneak + Wrench gives the block back. With Engineer's Goggles on, hidden lines within 16 blocks show as a faint outline.",
+      "**Encase** a line by right-clicking it with any plain, solid full block (not glass or anything with a block entity). It keeps working, and lights like the block hiding it; sneak + Wrench gives the block back. Wear Engineer's Goggles and hold a Fluid Line or Power Line, and hidden lines within 16 blocks show whole, as a faint outline through the blocks.",
       "The Wrench takes off a fitting, or cuts or rejoins the joint on the side you hit. It can never join two colours.",
       "Copper lines don't oxidise, so there's nothing to wax.",
       "Parts of a line in unloaded chunks are skipped: ends there get nothing, and nothing is lost or queued.",
